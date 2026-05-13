@@ -1,0 +1,26 @@
+{
+  "name": "agent-operating-kit",
+  "version": "0.1.0",
+  "hooks": {
+    "pre": [
+      "pre_project_sync",
+      "pre_scope_check",
+      "pre_agent_select",
+      "pre_worktree",
+      "pre_risk_check"
+    ],
+    "after": [
+      "after_agent_summary",
+      "after_qa_verdict",
+      "after_github_update",
+      "after_pr_ready",
+      "after_escalation",
+      "after_done"
+    ]
+  },
+  "commands": {
+    "pre": "./scripts/aok hooks pre",
+    "after": "./scripts/aok hooks after",
+    "validate": "./scripts/aok project validate"
+  }
+}

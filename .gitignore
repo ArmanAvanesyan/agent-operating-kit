@@ -1,0 +1,7 @@
+.DS_Store
+__pycache__/
+*.pyc
+.aok-backups/
+.aok-tmp/
+dist/
+build/

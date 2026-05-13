@@ -1,0 +1,678 @@
+#!/usr/bin/env python3
+"""Agent Operating Kit command line interface."""
+
+from __future__ import annotations
+
+import argparse
+import difflib
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Iterable
+
+
+KIT_ROOT = Path(__file__).resolve().parents[1]
+PLUGIN_NAME = "agent-operating-kit"
+MARKETPLACE_NAME = "private-local"
+MARKETPLACE_DISPLAY = "Private Local"
+
+
+class AokError(RuntimeError):
+    pass
+
+
+def run(cmd: list[str], cwd: Path | None = None, check: bool = True) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(cmd, cwd=cwd, text=True, capture_output=True, check=check)
+
+
+def command_exists(name: str) -> bool:
+    return shutil.which(name) is not None
+
+
+def print_result(label: str, ok: bool, detail: str = "") -> None:
+    mark = "OK" if ok else "FAIL"
+    suffix = f" - {detail}" if detail else ""
+    print(f"{mark} {label}{suffix}")
+
+
+def load_json(path: Path, default: dict) -> dict:
+    if not path.exists():
+        return default
+    try:
+        return json.loads(path.read_text())
+    except json.JSONDecodeError as exc:
+        raise AokError(f"Invalid JSON in {path}: {exc}") from exc
+
+
+def write_json(path: Path, data: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, indent=2, sort_keys=False) + "\n")
+
+
+def marketplace_paths() -> tuple[Path, Path]:
+    root = Path.home() / ".agents" / "plugins"
+    return root / "marketplace.json", root / "plugins" / PLUGIN_NAME
+
+
+def cmd_install(_: argparse.Namespace) -> int:
+    missing = [name for name in ("git", "gh", "codex") if not command_exists(name)]
+    if missing:
+        print(f"Warning: missing commands: {', '.join(missing)}", file=sys.stderr)
+        print("Install continues, but `aok doctor` will fail until they are available.", file=sys.stderr)
+
+    marketplace, link_path = marketplace_paths()
+    link_path.parent.mkdir(parents=True, exist_ok=True)
+    if link_path.exists() or link_path.is_symlink():
+        if link_path.is_symlink() and link_path.resolve() == KIT_ROOT:
+            pass
+        else:
+            raise AokError(f"Refusing to replace existing plugin path: {link_path}")
+    else:
+        link_path.symlink_to(KIT_ROOT, target_is_directory=True)
+
+    data = load_json(
+        marketplace,
+        {"name": MARKETPLACE_NAME, "interface": {"displayName": MARKETPLACE_DISPLAY}, "plugins": []},
+    )
+    data.setdefault("name", MARKETPLACE_NAME)
+    data.setdefault("interface", {}).setdefault("displayName", MARKETPLACE_DISPLAY)
+    plugins = data.setdefault("plugins", [])
+    entry = {
+        "name": PLUGIN_NAME,
+        "source": {"source": "local", "path": f"./plugins/{PLUGIN_NAME}"},
+        "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
+        "category": "Productivity",
+    }
+    for idx, plugin in enumerate(plugins):
+        if plugin.get("name") == PLUGIN_NAME:
+            plugins[idx] = entry
+            break
+    else:
+        plugins.append(entry)
+    write_json(marketplace, data)
+
+    bin_dir = Path.home() / ".local" / "bin"
+    bin_dir.mkdir(parents=True, exist_ok=True)
+    bin_link = bin_dir / "aok"
+    if bin_link.exists() or bin_link.is_symlink():
+        if not (bin_link.is_symlink() and bin_link.resolve() == KIT_ROOT / "scripts" / "aok"):
+            raise AokError(f"Refusing to replace existing executable: {bin_link}")
+    else:
+        bin_link.symlink_to(KIT_ROOT / "scripts" / "aok")
+
+    print(f"Registered plugin in {marketplace}")
+    print(f"Plugin path: {link_path} -> {KIT_ROOT}")
+    print(f"CLI path: {bin_link}")
+    return 0
+
+
+def cmd_doctor(_: argparse.Namespace) -> int:
+    failed = False
+    for name in ("git", "gh", "codex"):
+        ok = command_exists(name)
+        print_result(f"command {name}", ok, shutil.which(name) or "not found")
+        failed = failed or not ok
+
+    required = [
+        KIT_ROOT / ".codex-plugin" / "plugin.json",
+        KIT_ROOT / "hooks.json",
+        KIT_ROOT / "templates" / "AGENTS.md",
+        KIT_ROOT / "templates" / "agents" / "workflow.md",
+        KIT_ROOT / "scripts" / "aok",
+    ]
+    for path in required:
+        ok = path.exists()
+        print_result(str(path.relative_to(KIT_ROOT)), ok)
+        failed = failed or not ok
+
+    marketplace, link_path = marketplace_paths()
+    print_result("marketplace", marketplace.exists(), str(marketplace))
+    print_result("plugin symlink", link_path.exists() and link_path.resolve() == KIT_ROOT, str(link_path))
+    return 1 if failed else 0
+
+
+def detect_workspace_kind(target: Path) -> str:
+    if (target / ".git").exists():
+        return "single-repo"
+    child_repos = [p for p in target.iterdir() if p.is_dir() and (p / ".git").exists()]
+    return "multi-repo" if child_repos else "plain-directory"
+
+
+def backup_file(path: Path, backup_root: Path, target: Path) -> Path:
+    rel = path.relative_to(target)
+    dest = backup_root / rel
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(path, dest)
+    return dest
+
+
+def unified_diff(old: str, new: str, old_label: str, new_label: str) -> str:
+    return "".join(
+        difflib.unified_diff(
+            old.splitlines(keepends=True),
+            new.splitlines(keepends=True),
+            fromfile=old_label,
+            tofile=new_label,
+        )
+    )
+
+
+def copy_template_tree(target: Path, force: bool = False) -> list[str]:
+    template_root = KIT_ROOT / "templates"
+    timestamp = datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
+    backup_root = target / ".aok-backups" / timestamp
+    changes: list[str] = []
+
+    for src in sorted(template_root.rglob("*")):
+        if src.is_dir():
+            continue
+        rel = src.relative_to(template_root)
+        dest = target / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        new_text = src.read_text()
+        if not dest.exists():
+            dest.write_text(new_text)
+            changes.append(f"created {rel}")
+            continue
+        old_text = dest.read_text()
+        if old_text == new_text:
+            changes.append(f"unchanged {rel}")
+            continue
+        if rel == Path("AGENTS.md") and not force:
+            proposed = target / "AGENTS.aok-proposed.md"
+            proposed.write_text(new_text)
+            diff_path = target / "AGENTS.aok.diff"
+            diff_path.write_text(unified_diff(old_text, new_text, "AGENTS.md", "AGENTS.aok-proposed.md"))
+            changes.append(f"preserved AGENTS.md; wrote {proposed.name} and {diff_path.name}")
+            continue
+        backup = backup_file(dest, backup_root, target)
+        dest.write_text(new_text)
+        changes.append(f"updated {rel}; backup {backup.relative_to(target)}")
+
+    meta = target / ".aok"
+    meta.mkdir(exist_ok=True)
+    (meta / "project.json").write_text(
+        json.dumps(
+            {
+                "initializedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                "workspaceKind": detect_workspace_kind(target),
+                "kitVersion": plugin_version(),
+            },
+            indent=2,
+        )
+        + "\n"
+    )
+    changes.append("wrote .aok/project.json")
+    return changes
+
+
+def plugin_version() -> str:
+    manifest = json.loads((KIT_ROOT / ".codex-plugin" / "plugin.json").read_text())
+    return str(manifest.get("version", "unknown"))
+
+
+def cmd_project_init(args: argparse.Namespace) -> int:
+    target = Path(args.path).resolve()
+    if not target.exists() or not target.is_dir():
+        raise AokError(f"Target is not a directory: {target}")
+    changes = copy_template_tree(target, force=args.force)
+    print(f"Initialized {target}")
+    print(f"Workspace kind: {detect_workspace_kind(target)}")
+    for change in changes:
+        print(f"- {change}")
+    return 0
+
+
+def validate_project(path: Path) -> list[str]:
+    missing = []
+    required = [
+        "AGENTS.md",
+        "agents/workflow.md",
+        "agents/github-project.md",
+        "agents/hooks.md",
+        "agents/tasks/task-template.md",
+        "agents/roles/orchestrator.md",
+        "agents/roles/implementer.md",
+        "agents/roles/qa-reality-checker.md",
+        "agents/roles/code-reviewer.md",
+        ".codex/config.toml",
+    ]
+    for rel in required:
+        if not (path / rel).exists():
+            missing.append(rel)
+    return missing
+
+
+def cmd_project_validate(args: argparse.Namespace) -> int:
+    target = Path(args.path).resolve()
+    missing = validate_project(target)
+    if missing:
+        print("Project validation failed. Missing:")
+        for rel in missing:
+            print(f"- {rel}")
+        return 1
+    print(f"Project validation passed: {target}")
+    return 0
+
+
+ISSUE_RE = re.compile(r"github\.com/(?P<owner>[^/]+)/(?P<repo>[^/]+)/issues/(?P<num>\d+)")
+PR_RE = re.compile(r"github\.com/(?P<owner>[^/]+)/(?P<repo>[^/]+)/pull/(?P<num>\d+)")
+
+
+def parse_github_ref(ref: str) -> tuple[str, str, str, str] | None:
+    for kind, regex in (("issue", ISSUE_RE), ("pr", PR_RE)):
+        match = regex.search(ref)
+        if match:
+            return kind, match.group("owner"), match.group("repo"), match.group("num")
+    return None
+
+
+def gh_view(ref: str) -> dict:
+    parsed = parse_github_ref(ref)
+    if not parsed:
+        raise AokError("Only GitHub issue and PR URLs are supported by this local CLI implementation.")
+    kind, owner, repo, num = parsed
+    full_repo = f"{owner}/{repo}"
+    if kind == "issue":
+        cmd = [
+            "gh",
+            "issue",
+            "view",
+            num,
+            "--repo",
+            full_repo,
+            "--comments",
+            "--json",
+            "title,body,labels,state,comments,assignees,milestone,projectItems,url",
+        ]
+    else:
+        cmd = [
+            "gh",
+            "pr",
+            "view",
+            num,
+            "--repo",
+            full_repo,
+            "--comments",
+            "--json",
+            "title,body,state,headRefName,baseRefName,files,commits,checks,reviews,comments,url",
+        ]
+    result = run(cmd)
+    data = json.loads(result.stdout)
+    data["_kind"] = kind
+    data["_repo"] = full_repo
+    data["_number"] = num
+    return data
+
+
+def cmd_task_sync(args: argparse.Namespace) -> int:
+    data = gh_view(args.ref)
+    print(json.dumps(data, indent=2))
+    return 0
+
+
+def extract_section(body: str, heading: str) -> str:
+    pattern = re.compile(rf"^##\s+{re.escape(heading)}\s*$", re.IGNORECASE | re.MULTILINE)
+    match = pattern.search(body or "")
+    if not match:
+        return ""
+    start = match.end()
+    next_heading = re.search(r"^##\s+", body[start:], re.MULTILINE)
+    end = start + next_heading.start() if next_heading else len(body)
+    return body[start:end].strip()
+
+
+def task_packet_markdown(data: dict) -> str:
+    body = data.get("body") or ""
+    problem = extract_section(body, "Problem") or data.get("title", "")
+    scope = extract_section(body, "Scope")
+    criteria = extract_section(body, "Acceptance Criteria")
+    target_repo = extract_section(body, "Target Repo") or data.get("_repo", "")
+    verification = extract_section(body, "Verification")
+    risks = extract_section(body, "Risks / Blockers")
+    url = data.get("url", "")
+    kind = data.get("_kind", "item")
+    issue = url if kind == "issue" else ""
+    pr = url if kind == "pr" else ""
+
+    return f"""# Agent Task Packet
+
+## Metadata
+
+| Field | Value |
+|---|---|
+| Project Item | |
+| Issue | {issue} |
+| Pull Request | {pr} |
+| Target Repo | {target_repo} |
+| Branch | |
+| Status | |
+| Phase | |
+| Priority | |
+| Attempt | 0 |
+| Primary Agent | |
+| QA Agent | |
+
+## Problem
+
+{problem}
+
+## Scope
+
+{scope or "In scope:\n-\n\nOut of scope:\n-"}
+
+## Acceptance Criteria
+
+{criteria or "- [ ]"}
+
+## Context
+
+Relevant files:
+-
+
+Relevant docs:
+-
+
+Dependencies:
+-
+
+Risks / Blockers:
+{risks or "-"}
+
+## Pre-Hook Results
+
+- `pre_project_sync`:
+- `pre_scope_check`:
+- `pre_agent_select`:
+- `pre_worktree`:
+- `pre_risk_check`:
+
+## Implementation Notes
+
+## Verification Plan
+
+{verification or "Commands or evidence required:\n-"}
+
+## QA Verdict
+
+Verdict: `PENDING`
+
+Evidence:
+-
+
+Failures:
+-
+
+## GitHub Update Log
+
+-
+
+## Final Summary
+"""
+
+
+def cmd_task_packet(args: argparse.Namespace) -> int:
+    data = gh_view(args.ref)
+    packet = task_packet_markdown(data)
+    if args.output:
+        out = Path(args.output)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(packet)
+        print(f"Wrote {out}")
+    else:
+        print(packet)
+    return 0
+
+
+def read_packet(path: str) -> str:
+    packet_path = Path(path)
+    if not packet_path.exists():
+        raise AokError(f"Task packet not found: {packet_path}")
+    return packet_path.read_text()
+
+
+def section_present(text: str, heading: str) -> bool:
+    return re.search(rf"^##\s+{re.escape(heading)}\s*$", text, re.MULTILINE) is not None
+
+
+def section_has_content(text: str, heading: str) -> bool:
+    content = extract_section(text, heading)
+    stripped = re.sub(r"[-\[\]\s`:_|]", "", content)
+    return bool(stripped)
+
+
+def cmd_hooks_pre(args: argparse.Namespace) -> int:
+    text = read_packet(args.packet)
+    checks = {
+        "Problem": section_has_content(text, "Problem"),
+        "Acceptance Criteria": section_has_content(text, "Acceptance Criteria"),
+        "Verification Plan": section_has_content(text, "Verification Plan"),
+        "Metadata": section_present(text, "Metadata"),
+    }
+    target_repo_ok = bool(re.search(r"\|\s*Target Repo\s*\|\s*[^|\s][^|]*\|", text))
+    checks["Target Repo"] = target_repo_ok
+    failed = [name for name, ok in checks.items() if not ok]
+    if failed:
+        print("Pre-hooks failed. Missing or incomplete:")
+        for name in failed:
+            print(f"- {name}")
+        return 1
+    print("Pre-hooks passed.")
+    print("- pre_project_sync: packet present")
+    print("- pre_scope_check: required scope fields present")
+    print("- pre_agent_select: role fields available")
+    print("- pre_worktree: run repo-local git checks before edits")
+    print("- pre_risk_check: inspect risks before implementation")
+    return 0
+
+
+def cmd_hooks_after(args: argparse.Namespace) -> int:
+    text = read_packet(args.packet)
+    has_qa = "Verdict: `PENDING`" not in text and "Verdict:" in text
+    has_summary = section_has_content(text, "Final Summary") or section_has_content(text, "Implementation Notes")
+    if not has_summary:
+        print("After-hooks warning: final summary or implementation notes are still empty.")
+    print("## Agent Update")
+    print()
+    print("Status:")
+    print("Agent:")
+    print("Summary:")
+    print("Verification:")
+    print("Evidence:")
+    print("Next:")
+    print("Blockers:")
+    if not has_qa:
+        print()
+        print("Warning: QA verdict is still pending.", file=sys.stderr)
+    return 0
+
+
+def candidate_history_files(path: Path) -> list[Path]:
+    names = []
+    for pattern in ("**/*.md", "**/*.txt", "**/*.log"):
+        names.extend(path.glob(pattern))
+    ignored_parts = {".git", "node_modules", "dist", "build", ".venv", "__pycache__"}
+    result = []
+    for item in sorted(set(names)):
+        if any(part in ignored_parts for part in item.parts):
+            continue
+        if item.is_file() and item.stat().st_size <= 500_000:
+            result.append(item)
+    return result
+
+
+def summarize_history(path: Path) -> str:
+    keywords = (
+        "Agent Update",
+        "Acceptance Criteria",
+        "Verification",
+        "QA",
+        "Verdict:",
+        "GitHub Update",
+        "Final Summary",
+        "Blocker",
+        "Escalation",
+    )
+    lines = ["# Agent History Import", ""]
+    lines.append(f"Source: {path}")
+    lines.append("")
+    files = candidate_history_files(path)
+    matched = 0
+    for file_path in files:
+        text = file_path.read_text(errors="ignore")
+        hits = [kw for kw in keywords if kw.lower() in text.lower()]
+        if not hits:
+            continue
+        matched += 1
+        rel = file_path.relative_to(path)
+        title_match = re.search(r"^#\s+(.+)$", text, re.MULTILINE)
+        title = title_match.group(1).strip() if title_match else rel.name
+        lines.append(f"## {rel}")
+        lines.append("")
+        lines.append(f"- Title: {title}")
+        lines.append(f"- Signals: {', '.join(hits)}")
+        first_update = re.search(r"^##\s+Agent Update\s*$", text, re.IGNORECASE | re.MULTILINE)
+        if first_update:
+            lines.append("- Contains agent update block")
+        final_summary = extract_section(text, "Final Summary")
+        if final_summary:
+            compact = " ".join(final_summary.split())[:240]
+            lines.append(f"- Final summary excerpt: {compact}")
+        lines.append("")
+    lines.append("## Result")
+    lines.append("")
+    lines.append(f"- Scanned files: {len(files)}")
+    lines.append(f"- Matched files: {matched}")
+    lines.append("- Hidden chat/session memory was not used.")
+    return "\n".join(lines) + "\n"
+
+
+def cmd_import_history(args: argparse.Namespace) -> int:
+    source = Path(args.path).resolve()
+    if not source.exists() or not source.is_dir():
+        raise AokError(f"Source is not a directory: {source}")
+    report = summarize_history(source)
+    if args.output:
+        out = Path(args.output)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(report)
+        print(f"Wrote {out}")
+    else:
+        print(report)
+    return 0
+
+
+def validate_kit() -> list[str]:
+    missing = []
+    required = [
+        ".codex-plugin/plugin.json",
+        "hooks.json",
+        "skills/agent-workflow/SKILL.md",
+        "skills/github-project-execution/SKILL.md",
+        "skills/code-review/SKILL.md",
+        "skills/qa-verification/SKILL.md",
+        "skills/project-bootstrap/SKILL.md",
+        "templates/AGENTS.md",
+        "templates/agents/workflow.md",
+        "scripts/aok",
+        "scripts/install.sh",
+        "scripts/project-init.sh",
+        "scripts/github-sync.sh",
+        "scripts/validate.sh",
+        "references/migration-from-existing-project.md",
+    ]
+    for rel in required:
+        if not (KIT_ROOT / rel).exists():
+            missing.append(rel)
+    for rel in (".codex-plugin/plugin.json", "hooks.json"):
+        path = KIT_ROOT / rel
+        if path.exists():
+            try:
+                json.loads(path.read_text())
+            except json.JSONDecodeError as exc:
+                missing.append(f"{rel}: invalid JSON: {exc}")
+    return missing
+
+
+def cmd_validate(_: argparse.Namespace) -> int:
+    missing = validate_kit()
+    if missing:
+        print("Kit validation failed:")
+        for item in missing:
+            print(f"- {item}")
+        return 1
+    print(f"Kit validation passed: {KIT_ROOT}")
+    return 0
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog="aok", description="Agent Operating Kit CLI")
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    sub.add_parser("install").set_defaults(func=cmd_install)
+    sub.add_parser("doctor").set_defaults(func=cmd_doctor)
+    sub.add_parser("validate").set_defaults(func=cmd_validate)
+
+    project = sub.add_parser("project")
+    project_sub = project.add_subparsers(dest="project_command", required=True)
+    project_init = project_sub.add_parser("init")
+    project_init.add_argument("path", nargs="?", default=".")
+    project_init.add_argument("--force", action="store_true", help="Replace AGENTS.md after creating a backup")
+    project_init.set_defaults(func=cmd_project_init)
+    project_validate = project_sub.add_parser("validate")
+    project_validate.add_argument("path", nargs="?", default=".")
+    project_validate.set_defaults(func=cmd_project_validate)
+
+    task = sub.add_parser("task")
+    task_sub = task.add_subparsers(dest="task_command", required=True)
+    task_sync = task_sub.add_parser("sync")
+    task_sync.add_argument("ref")
+    task_sync.set_defaults(func=cmd_task_sync)
+    task_packet = task_sub.add_parser("packet")
+    task_packet.add_argument("ref")
+    task_packet.add_argument("-o", "--output")
+    task_packet.set_defaults(func=cmd_task_packet)
+
+    hooks = sub.add_parser("hooks")
+    hooks_sub = hooks.add_subparsers(dest="hooks_command", required=True)
+    hooks_pre = hooks_sub.add_parser("pre")
+    hooks_pre.add_argument("packet")
+    hooks_pre.set_defaults(func=cmd_hooks_pre)
+    hooks_after = hooks_sub.add_parser("after")
+    hooks_after.add_argument("packet")
+    hooks_after.set_defaults(func=cmd_hooks_after)
+
+    importer = sub.add_parser("import")
+    import_sub = importer.add_subparsers(dest="import_command", required=True)
+    history = import_sub.add_parser("history")
+    history.add_argument("path", nargs="?", default=".")
+    history.add_argument("-o", "--output")
+    history.set_defaults(func=cmd_import_history)
+
+    return parser
+
+
+def main(argv: Iterable[str] | None = None) -> int:
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    try:
+        return args.func(args)
+    except subprocess.CalledProcessError as exc:
+        if exc.stderr:
+            print(exc.stderr, file=sys.stderr, end="")
+        if exc.stdout:
+            print(exc.stdout, file=sys.stderr, end="")
+        print(f"Command failed: {' '.join(exc.cmd)}", file=sys.stderr)
+        return exc.returncode or 1
+    except AokError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

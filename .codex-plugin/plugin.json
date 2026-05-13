@@ -1,0 +1,39 @@
+{
+  "name": "agent-operating-kit",
+  "version": "0.1.0",
+  "description": "Reusable private Codex operating kit for GitHub Project driven agent workflows.",
+  "author": {
+    "name": "Private",
+    "email": "private@example.com",
+    "url": "https://github.com"
+  },
+  "homepage": "https://github.com/ArmanAvanesyan/agent-operating-kit",
+  "repository": "https://github.com/ArmanAvanesyan/agent-operating-kit",
+  "license": "UNLICENSED",
+  "keywords": [
+    "codex",
+    "agents",
+    "github-projects",
+    "workflow"
+  ],
+  "skills": "./skills/",
+  "hooks": "./hooks.json",
+  "interface": {
+    "displayName": "Agent Operating Kit",
+    "shortDescription": "Reusable Codex workflows, hooks, roles, and project templates.",
+    "longDescription": "A private Codex plugin and CLI toolkit for GitHub Project driven agent execution across projects and devices.",
+    "developerName": "Private",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/ArmanAvanesyan/agent-operating-kit",
+    "defaultPrompt": [
+      "Initialize this repo with the agent operating kit.",
+      "Create a task packet from this GitHub issue.",
+      "Run pre-hooks and tell me what is blocked."
+    ],
+    "brandColor": "#2563EB"
+  }
+}

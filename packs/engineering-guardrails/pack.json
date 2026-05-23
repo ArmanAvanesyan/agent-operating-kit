@@ -1,0 +1,21 @@
+{
+  "name": "engineering-guardrails",
+  "kind": "pack",
+  "description": "Guardrail hooks for future annotations, production asserts, migration conventions, pre-commit freshness, and session reminders.",
+  "sourceRepo": "ArmanAvanesyan/claude-code-toolbox",
+  "supportedTargets": ["claude-code"],
+  "concepts": ["hook"],
+  "adapters": {
+    "claude-code": {
+      "pluginPath": "claude-code/plugin.json",
+      "readmePath": "claude-code/README.md",
+      "assets": [
+        "claude-code/scripts/check-future-annotations.py",
+        "claude-code/scripts/check-migration-conventions.py",
+        "claude-code/scripts/check-no-assert.py",
+        "claude-code/scripts/check-pre-commit.py",
+        "claude-code/scripts/session-start-reminder.py"
+      ]
+    }
+  }
+}

@@ -1,0 +1,773 @@
+# Production Deploy Runbook
+
+End-to-end guide for taking `{{PROJECT_NAME}}` from an empty GCP project to a
+live service. Follow top-to-bottom on first deploy. Sections 9+ are
+day-2 operations.
+
+`infra/README.md` is the quick-reference card. **This document is the
+step-by-step** — every command is copy-pasteable, every step has a
+verification, every failure mode has a recovery.
+
+---
+
+## 0. Conventions
+
+Set these shell variables once at the top of every session. Every command
+below assumes they exist.
+
+```bash
+export PROJECT_ID="your-gcp-project-id"
+export REGION="europe-west1"
+export SERVICE_NAME="{{PROJECT_NAME}}"
+export REPOSITORY="{{PROJECT_NAME}}"
+export SQL_INSTANCE="{{PROJECT_NAME}}-pg"
+export DB_NAME="{{PROJECT_NAME}}"
+export DB_USER="{{PROJECT_NAME}}"
+export GCS_BUCKET="{{PROJECT_NAME}}-prod-eu"
+export TASKS_QUEUE="{{PROJECT_NAME}}-jobs"
+export GITHUB_OWNER="your-github-org"
+export GITHUB_REPO="{{PROJECT_NAME}}"
+
+gcloud config set project "$PROJECT_ID"
+```
+
+If a step references `<PLACEHOLDER>` instead of `$VAR`, you must read its
+value from the previous step's output. Never hard-code secrets in scripts.
+
+---
+
+## 1. Pre-flight checks
+
+Before touching GCP, confirm:
+
+- [ ] You have `roles/owner` or equivalent on `$PROJECT_ID` (or each
+      individual role listed in §3.1).
+- [ ] `gcloud` CLI ≥ 470.0.0 (`gcloud --version`).
+- [ ] `gh` CLI ≥ 2.40 authenticated (`gh auth status`).
+- [ ] Billing is enabled on the GCP project
+      (`gcloud beta billing projects describe "$PROJECT_ID"`).
+- [ ] You have completed every "blocks deploy = Yes" row from `ACCOUNTS.md`.
+- [ ] Local repo at the commit you intend to deploy.
+      `git rev-parse HEAD` ↔ matches CI green on main.
+
+Skip any of these and a later step will fail in a harder-to-debug way.
+
+---
+
+## 2. Enable required APIs
+
+One-time, idempotent. Takes ~2 minutes.
+
+```bash
+gcloud services enable \
+  run.googleapis.com \
+  cloudbuild.googleapis.com \
+  artifactregistry.googleapis.com \
+  sqladmin.googleapis.com \
+  secretmanager.googleapis.com \
+  cloudtasks.googleapis.com \
+  cloudscheduler.googleapis.com \
+  storage.googleapis.com \
+  iam.googleapis.com \
+  iamcredentials.googleapis.com \
+  cloudtrace.googleapis.com \
+  logging.googleapis.com \
+  monitoring.googleapis.com
+```
+
+**Verify:** `gcloud services list --enabled | grep -E "run|sql|secret|tasks"` shows all four.
+
+---
+
+## 3. One-time GCP infrastructure
+
+### 3.1 Service accounts
+
+Three accounts, each with the minimum role set. **Never reuse one for
+multiple roles** — the auditability of who-did-what depends on this.
+
+```bash
+# Runtime service account (Cloud Run uses this to access GCS / Cloud SQL / Tasks)
+gcloud iam service-accounts create {{PROJECT_NAME}}-app \
+  --display-name="{{PROJECT_NAME}} runtime"
+
+# Deploy service account (GitHub Actions uses this via Workload Identity)
+gcloud iam service-accounts create {{PROJECT_NAME}}-deploy \
+  --display-name="{{PROJECT_NAME}} CI/CD"
+
+# Scheduler service account (Cloud Scheduler uses this to call admin endpoints)
+gcloud iam service-accounts create {{PROJECT_NAME}}-scheduler \
+  --display-name="{{PROJECT_NAME}} cron caller"
+```
+
+Grant runtime account the roles it needs:
+
+```bash
+APP_SA="{{PROJECT_NAME}}-app@${PROJECT_ID}.iam.gserviceaccount.com"
+
+for role in \
+  roles/cloudsql.client \
+  roles/storage.objectAdmin \
+  roles/cloudtasks.enqueuer \
+  roles/secretmanager.secretAccessor \
+  roles/cloudtrace.agent \
+  roles/logging.logWriter \
+  roles/monitoring.metricWriter ; do
+  gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+    --member="serviceAccount:${APP_SA}" \
+    --role="$role" \
+    --condition=None
+done
+```
+
+Grant deploy account the roles it needs:
+
+```bash
+DEPLOY_SA="{{PROJECT_NAME}}-deploy@${PROJECT_ID}.iam.gserviceaccount.com"
+
+for role in \
+  roles/run.admin \
+  roles/artifactregistry.writer \
+  roles/cloudbuild.builds.editor \
+  roles/iam.serviceAccountUser \
+  roles/storage.admin ; do
+  gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+    --member="serviceAccount:${DEPLOY_SA}" \
+    --role="$role" \
+    --condition=None
+done
+```
+
+Scheduler account needs only the run-invoker role — but only on **this
+service**, not project-wide. We grant that in §7 after the service exists.
+
+### 3.2 Artifact Registry
+
+```bash
+gcloud artifacts repositories create "$REPOSITORY" \
+  --repository-format=docker \
+  --location="$REGION" \
+  --description="{{PROJECT_NAME}} container images"
+```
+
+**Verify:** `gcloud artifacts repositories list --location="$REGION"`.
+
+### 3.3 Cloud Storage
+
+```bash
+gcloud storage buckets create "gs://${GCS_BUCKET}" \
+  --location="$REGION" \
+  --uniform-bucket-level-access \
+  --default-storage-class=STANDARD
+```
+
+Lifecycle policy — delete intermediate objects after 7 days (delete
+immediately post-processing in app code; this is a backstop for crash
+cases):
+
+```bash
+cat >/tmp/lifecycle.json <<'EOF'
+{
+  "lifecycle": {
+    "rule": [
+      {
+        "action": {"type": "Delete"},
+        "condition": {"age": 7, "matchesPrefix": ["uploads/"]}
+      }
+    ]
+  }
+}
+EOF
+gcloud storage buckets update "gs://${GCS_BUCKET}" \
+  --lifecycle-file=/tmp/lifecycle.json
+```
+
+**Verify:** `gcloud storage buckets describe "gs://${GCS_BUCKET}" | grep -i lifecycle`.
+
+### 3.4 Cloud SQL Postgres
+
+```bash
+gcloud sql instances create "$SQL_INSTANCE" \
+  --region="$REGION" \
+  --database-version=POSTGRES_16 \
+  --tier=db-f1-micro \
+  --storage-size=10GB \
+  --storage-type=SSD \
+  --backup \
+  --backup-start-time=03:00 \
+  --enable-point-in-time-recovery
+```
+
+This takes ~6 minutes. While it runs, continue to §3.5.
+
+Once it's up:
+
+```bash
+# Generate a strong password (alternative: use Secret Manager auto-generation)
+DB_PASSWORD=$(openssl rand -base64 32 | tr -d '=+/' | head -c 32)
+echo "DB_PASSWORD=$DB_PASSWORD"   # save this — you'll feed it into Secret Manager in §3.6
+
+gcloud sql users create "$DB_USER" \
+  --instance="$SQL_INSTANCE" \
+  --password="$DB_PASSWORD"
+
+gcloud sql databases create "$DB_NAME" --instance="$SQL_INSTANCE"
+```
+
+**Cloud SQL connection name** (you'll need this for the DATABASE_URL):
+
+```bash
+SQL_CONNECTION_NAME=$(gcloud sql instances describe "$SQL_INSTANCE" \
+  --format='value(connectionName)')
+echo "$SQL_CONNECTION_NAME"
+# Example: my-project:europe-west1:{{PROJECT_NAME}}-pg
+```
+
+### 3.5 Cloud Tasks queue (skip if you don't use background jobs)
+
+```bash
+gcloud tasks queues create "$TASKS_QUEUE" \
+  --location="$REGION" \
+  --max-attempts=5 \
+  --max-backoff=600s \
+  --min-backoff=10s \
+  --max-doublings=4 \
+  --max-dispatches-per-second=10 \
+  --max-concurrent-dispatches=20
+```
+
+**Verify:** `gcloud tasks queues describe "$TASKS_QUEUE" --location="$REGION"`.
+
+### 3.6 Secret Manager
+
+Create each secret your `cloud_run.yaml` references, then store its value.
+**Run each `printf | gcloud secrets versions add` in a fresh shell line so
+the secret isn't logged to history with `set -x` or pipe artifacts.**
+
+```bash
+# Helper — only used for the first version of each secret
+create_secret() {
+  local name="$1"
+  gcloud secrets create "$name" --replication-policy=automatic 2>/dev/null || true
+}
+
+# Edit this list to match the secret names in your cloud_run.yaml
+for s in \
+  {{PROJECT_NAME}}-database-url \
+  {{PROJECT_NAME}}-auth-provider-token \
+  {{PROJECT_NAME}}-auth-webhook-secret \
+  {{PROJECT_NAME}}-llm-api-key \
+  {{PROJECT_NAME}}-stripe-secret-key \
+  {{PROJECT_NAME}}-stripe-webhook-secret \
+  {{PROJECT_NAME}}-cron-secret \
+  {{PROJECT_NAME}}-sentry-dsn ; do
+  create_secret "$s"
+done
+
+# Store values — run each line interactively so the secret stays out of history
+read -rsp "LLM API key: " LLM_KEY  ; echo
+printf '%s' "$LLM_KEY" | gcloud secrets versions add {{PROJECT_NAME}}-llm-api-key --data-file=-
+
+read -rsp "Auth provider token: " AUTH_TOKEN ; echo
+printf '%s' "$AUTH_TOKEN" | gcloud secrets versions add {{PROJECT_NAME}}-auth-provider-token --data-file=-
+
+# Webhook secret — generate locally, save both here and for the provider's webhook config
+AUTH_WEBHOOK_SECRET=$(openssl rand -hex 32)
+echo "AUTH_WEBHOOK_SECRET=$AUTH_WEBHOOK_SECRET"   # save this for §6
+printf '%s' "$AUTH_WEBHOOK_SECRET" | gcloud secrets versions add {{PROJECT_NAME}}-auth-webhook-secret --data-file=-
+
+# Cron secret — generate locally
+CRON_SECRET=$(openssl rand -hex 32)
+echo "CRON_SECRET=$CRON_SECRET"   # save this for §7
+printf '%s' "$CRON_SECRET" | gcloud secrets versions add {{PROJECT_NAME}}-cron-secret --data-file=-
+
+# Stripe — fill in after §4
+# Sentry DSN — fill in after §3.7
+
+# DATABASE_URL — uses the password from §3.4
+DATABASE_URL="postgresql+asyncpg://${DB_USER}:${DB_PASSWORD}@/${DB_NAME}?host=/cloudsql/${SQL_CONNECTION_NAME}"
+printf '%s' "$DATABASE_URL" | gcloud secrets versions add {{PROJECT_NAME}}-database-url --data-file=-
+```
+
+**Verify:**
+```bash
+for s in {{PROJECT_NAME}}-database-url {{PROJECT_NAME}}-auth-provider-token \
+         {{PROJECT_NAME}}-auth-webhook-secret {{PROJECT_NAME}}-llm-api-key \
+         {{PROJECT_NAME}}-cron-secret ; do
+  versions=$(gcloud secrets versions list "$s" --format='value(name)' | wc -l)
+  echo "$s: $versions version(s)"
+done
+```
+Every secret must have ≥1 version. Stripe + Sentry come back in §4 and §3.7.
+
+### 3.7 Sentry (optional but recommended)
+
+Create a project in Sentry. Copy the DSN. Then:
+
+```bash
+read -rsp "Sentry DSN: " SENTRY_DSN ; echo
+printf '%s' "$SENTRY_DSN" | gcloud secrets versions add {{PROJECT_NAME}}-sentry-dsn --data-file=-
+```
+
+If you skip Sentry, still create an empty version so the Cloud Run secret
+mount doesn't 500 on startup:
+
+```bash
+printf '' | gcloud secrets versions add {{PROJECT_NAME}}-sentry-dsn --data-file=-
+```
+
+---
+
+## 4. Stripe configuration (skip if not charging users yet)
+
+### 4.1 API keys
+
+In the Stripe dashboard:
+1. Developers → API keys → reveal **Secret key (live)**. Copy it.
+2. Store:
+   ```bash
+   read -rsp "Stripe secret key: " STRIPE_SK ; echo
+   printf '%s' "$STRIPE_SK" | gcloud secrets versions add {{PROJECT_NAME}}-stripe-secret-key --data-file=-
+   ```
+
+### 4.2 Products and prices
+
+In the Stripe dashboard → Products → Add product. Create each tier with
+its price and recurrence. After creating each price, copy its
+`price_xxxxxxxxxxxxxx` ID. These go into the Cloud Run env (not Secret
+Manager — they're not secret). You'll set them in §5.2.
+
+### 4.3 Webhook endpoint
+
+Don't create the webhook yet — you need the Cloud Run service URL first
+(§5). Skip ahead and come back to §8.2 after first deploy.
+
+---
+
+## 5. First deploy via GitHub Actions
+
+### 5.1 Workload Identity Federation
+
+GitHub Actions authenticates to GCP without long-lived JSON keys.
+
+```bash
+# Create the pool
+gcloud iam workload-identity-pools create github-actions \
+  --location=global \
+  --display-name="GitHub Actions"
+
+# Create the OIDC provider inside the pool
+gcloud iam workload-identity-pools providers create-oidc github \
+  --location=global \
+  --workload-identity-pool=github-actions \
+  --display-name="GitHub OIDC" \
+  --issuer-uri=https://token.actions.githubusercontent.com \
+  --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.repository=assertion.repository" \
+  --attribute-condition="assertion.repository=='${GITHUB_OWNER}/${GITHUB_REPO}'"
+
+# Allow the GitHub repo to impersonate the deploy SA
+PROJECT_NUMBER=$(gcloud projects describe "$PROJECT_ID" --format='value(projectNumber)')
+gcloud iam service-accounts add-iam-policy-binding \
+  "${DEPLOY_SA}" \
+  --role=roles/iam.workloadIdentityUser \
+  --member="principalSet://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/github-actions/attribute.repository/${GITHUB_OWNER}/${GITHUB_REPO}"
+```
+
+Get the provider resource name (you'll need it as a GitHub secret):
+
+```bash
+PROVIDER="projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/github-actions/providers/github"
+echo "GCP_WORKLOAD_IDENTITY_PROVIDER=$PROVIDER"
+```
+
+### 5.2 GitHub repo secrets and variables
+
+Set these via `gh` or the web UI. Secrets first:
+
+```bash
+gh secret set GCP_PROJECT --body "$PROJECT_ID" --repo "$GITHUB_OWNER/$GITHUB_REPO"
+gh secret set GCP_WORKLOAD_IDENTITY_PROVIDER --body "$PROVIDER" --repo "$GITHUB_OWNER/$GITHUB_REPO"
+gh secret set GCP_DEPLOY_SERVICE_ACCOUNT --body "$DEPLOY_SA" --repo "$GITHUB_OWNER/$GITHUB_REPO"
+```
+
+Stripe price IDs are *not secret* but are environment-specific. Add them as
+**repo variables** so the deploy workflow can substitute them.
+
+> **Note:** `infra/cloud_run.yaml` does not currently substitute these. If
+> the prices need to live in the service spec, add `__STRIPE_PRICE_<TIER>__`
+> placeholders to `cloud_run.yaml` and a matching `sed` step in
+> `deploy.yml`.
+
+### 5.3 Trigger the deploy
+
+Two options.
+
+**A. Via `gh` CLI:**
+```bash
+gh workflow run deploy.yml --repo "$GITHUB_OWNER/$GITHUB_REPO" \
+  -f environment=staging
+# Watch:
+gh run watch --repo "$GITHUB_OWNER/$GITHUB_REPO"
+```
+
+**B. Via the web UI:** Actions → Deploy to Cloud Run → Run workflow → pick
+`staging` or `production`.
+
+**Verify:** The final workflow step is "Smoke check" — it must return
+`Healthy`. If it doesn't, see §10.
+
+```bash
+SERVICE_URL=$(gcloud run services describe "$SERVICE_NAME" \
+  --region="$REGION" --format='value(status.url)')
+echo "$SERVICE_URL"
+curl -sf "$SERVICE_URL/healthz" -m 5 ; echo
+# Expected: {"status":"ok"}
+```
+
+---
+
+## 6. Database migrations
+
+The first deploy of a Cloud Run revision does NOT run Alembic migrations.
+Run them once, manually, via a one-shot Cloud Run Job or local Cloud SQL
+Auth Proxy.
+
+**Local approach (easier first time):**
+
+```bash
+# Install proxy: https://cloud.google.com/sql/docs/postgres/sql-proxy
+./cloud-sql-proxy "$SQL_CONNECTION_NAME" &
+PROXY_PID=$!
+
+export DATABASE_URL="postgresql+asyncpg://${DB_USER}:${DB_PASSWORD}@127.0.0.1:5432/${DB_NAME}"
+uv run alembic upgrade head
+
+kill $PROXY_PID
+```
+
+**Verify:** Connect with `psql` and `\dt` should list every table your
+schema declares plus `alembic_version`.
+
+---
+
+## 7. Cloud Scheduler cron jobs (skip if you don't have cron)
+
+Now that the service is up, register any periodic admin calls.
+
+First, grant the scheduler SA invoker rights on this specific service:
+
+```bash
+SCHEDULER_SA="{{PROJECT_NAME}}-scheduler@${PROJECT_ID}.iam.gserviceaccount.com"
+
+gcloud run services add-iam-policy-binding "$SERVICE_NAME" \
+  --region="$REGION" \
+  --member="serviceAccount:${SCHEDULER_SA}" \
+  --role=roles/run.invoker
+```
+
+Then create your jobs. Example pattern (replace the URI path with your
+actual admin endpoint, and the schedule with the cron expression you need):
+
+```bash
+CRON_SECRET_VALUE=$(gcloud secrets versions access latest --secret={{PROJECT_NAME}}-cron-secret)
+
+gcloud scheduler jobs create http {{PROJECT_NAME}}-example-job \
+  --location="$REGION" \
+  --schedule="*/5 * * * *" \
+  --uri="${SERVICE_URL}/api/admin/example" \
+  --http-method=POST \
+  --headers="X-Cron-Secret=${CRON_SECRET_VALUE}" \
+  --oidc-service-account-email="$SCHEDULER_SA" \
+  --oidc-token-audience="${SERVICE_URL}/api/admin/example"
+```
+
+**Verify by forcing a run:**
+
+```bash
+gcloud scheduler jobs run {{PROJECT_NAME}}-example-job --location="$REGION"
+gcloud logging read 'resource.type=cloud_run_revision
+  AND resource.labels.service_name='"$SERVICE_NAME"'
+  AND httpRequest.requestUrl=~"example"' \
+  --limit=5 --format='value(timestamp,httpRequest.status)'
+# Expect: 200 status
+```
+
+---
+
+## 8. Webhooks
+
+### 8.1 Identity-provider webhook
+
+Configure your auth provider's webhook URL to point at your Cloud Run
+service. Example for a generic webhook:
+
+```bash
+AUTH_TOKEN=$(gcloud secrets versions access latest --secret={{PROJECT_NAME}}-auth-provider-token)
+AUTH_SECRET=$(gcloud secrets versions access latest --secret={{PROJECT_NAME}}-auth-webhook-secret)
+
+# Provider-specific call to register the webhook URL
+# Example shape (this varies by provider):
+#   POST https://api.provider.com/webhooks
+#   { "url": "${SERVICE_URL}/webhook", "secret_token": "${AUTH_SECRET}" }
+```
+
+### 8.2 Stripe webhook
+
+In the Stripe dashboard → Developers → Webhooks → Add endpoint:
+
+- **Endpoint URL:** `${SERVICE_URL}/api/webhooks/stripe`
+- **Events to send:** the ones your billing code actually handles. Common starter set:
+  - `checkout.session.completed`
+  - `customer.subscription.updated`
+  - `customer.subscription.deleted`
+  - `invoice.paid`
+
+After creating, copy the **signing secret** (`whsec_...`). Store:
+
+```bash
+read -rsp "Stripe webhook signing secret: " STRIPE_WHSEC ; echo
+printf '%s' "$STRIPE_WHSEC" | gcloud secrets versions add {{PROJECT_NAME}}-stripe-webhook-secret --data-file=-
+```
+
+**Re-deploy** so the new secret version is picked up (Cloud Run mounts
+secrets at startup, not request time):
+
+```bash
+gh workflow run deploy.yml --repo "$GITHUB_OWNER/$GITHUB_REPO" \
+  -f environment=production
+```
+
+**Verify** by clicking "Send test webhook" in the Stripe dashboard → choose
+`checkout.session.completed`. Confirm 200 response in Stripe and a
+corresponding row in your billing-events table.
+
+---
+
+## 9. End-to-end smoke test
+
+Exercise a full happy path through your production service. For each
+critical pipeline stage, identify:
+
+| Stage | Where to check | Expected |
+|---|---|---|
+| Webhook received | Cloud Run logs | `POST /webhook 200` |
+| Job created | DB | row with `status='queued'` |
+| Cloud Task enqueued | Cloud Tasks console | task visible in the queue |
+| Worker dispatched | Cloud Run logs | `POST /worker/process 200` |
+| Pipeline ran | Logs | each stage transition logged |
+| Output delivered | end-user surface | the user sees the expected result |
+| Job marked done | DB | `status='done'` |
+| Usage tracked | usage / metering table | counter incremented |
+
+If any of these fail, see §10.
+
+---
+
+## 10. Common failures and recovery
+
+### 10.1 `/healthz` returns 503 right after deploy
+
+Most likely the secret mount failed (a referenced secret has no version,
+or the runtime SA lacks `secretmanager.secretAccessor`).
+
+```bash
+# Check the latest revision's status
+gcloud run revisions list \
+  --service="$SERVICE_NAME" --region="$REGION" \
+  --format='table(name,status.conditions[0].type,status.conditions[0].message)' \
+  --limit=3
+```
+
+Look for a `ContainerHealthy: False` row. Fix the underlying secret or
+IAM binding, then redeploy (§5.3).
+
+### 10.2 Identity-provider webhook returns 401
+
+The provider says the webhook is rejecting requests. Almost always the
+shared secret stored in Secret Manager doesn't match what's configured at
+the provider. Either re-register the webhook with the right value, or
+update Secret Manager + redeploy.
+
+### 10.3 Worker returns 401 to Cloud Tasks
+
+`POST /worker/process 401` in Cloud Run logs. Cloud Tasks OIDC audience
+mismatch. Verify the audience claim matches your worker URL.
+
+```bash
+gcloud run services describe "$SERVICE_NAME" --region="$REGION" \
+  --format='value(spec.template.spec.containers[0].env)' \
+  | tr ';' '\n' | grep WORKER_PROCESS_URL
+```
+
+If it's empty or doesn't match the service's actual URL, edit
+`infra/cloud_run.yaml` to set `WORKER_PROCESS_URL` explicitly and
+redeploy.
+
+### 10.4 Cloud SQL connection refused
+
+```
+sqlalchemy.exc.OperationalError: connection refused
+```
+
+The `cloudsql-instances` annotation in `cloud_run.yaml` must contain the
+correct `__PROJECT__:europe-west1:{{PROJECT_NAME}}-pg` triple. The deploy
+workflow's sed substitution should handle this. Verify:
+
+```bash
+gcloud run services describe "$SERVICE_NAME" --region="$REGION" \
+  --format='value(metadata.annotations,spec.template.metadata.annotations)' \
+  | grep cloudsql
+```
+
+If the value is literal `__PROJECT__`, the substitution didn't run —
+re-trigger the workflow.
+
+### 10.5 Stripe webhook signature error
+
+`POST /api/webhooks/stripe 400 "Invalid signature"`. Either:
+
+- The webhook secret in Secret Manager doesn't match Stripe (you regenerated
+  it in Stripe and forgot to update Secret Manager).
+- A body-modifying proxy is in front of Cloud Run (Cloud Armor, custom
+  domain redirect that strips request body) — Stripe signs the *raw* body.
+
+Fix: refresh `{{PROJECT_NAME}}-stripe-webhook-secret`, redeploy, retry the
+test webhook.
+
+---
+
+## 11. Rollback
+
+Cloud Run keeps the previous revision automatically. To roll back:
+
+```bash
+# List recent revisions
+gcloud run revisions list \
+  --service="$SERVICE_NAME" --region="$REGION" \
+  --format='table(name,creationTimestamp,active)' \
+  --limit=10
+
+# Identify the last-known-good revision name, then route 100% to it
+gcloud run services update-traffic "$SERVICE_NAME" \
+  --region="$REGION" \
+  --to-revisions=<good-revision-name>=100
+```
+
+**Verify:** `curl -sf "$SERVICE_URL/healthz"` returns 200 and the active
+revision matches.
+
+**Database migrations** are NOT auto-rolled back. If the bad deploy
+introduced a migration, you must:
+
+1. `alembic downgrade -1` against the live DB (via Cloud SQL Auth Proxy)
+2. Confirm the previous code revision works with the older schema
+3. Plan the forward fix
+
+This is why every migration must round-trip cleanly in CI (the
+`alembic-roundtrip` CI job catches this — don't merge a migration that
+fails it).
+
+---
+
+## 12. Day-2 operations
+
+### 12.1 Re-deploy after a code change
+
+Same as §5.3 — trigger `deploy.yml` via `workflow_dispatch`. Auto-deploy
+on merge to `main` is currently **not** wired (intentional, manual control
+for Phase 1-2). To enable, add `push: branches: [main]` to the trigger
+block in `.github/workflows/deploy.yml`.
+
+### 12.2 Secret rotation
+
+Every secret can be rotated by adding a new version:
+
+```bash
+printf '%s' "$NEW_VALUE" | gcloud secrets versions add {{PROJECT_NAME}}-llm-api-key --data-file=-
+gcloud run services update "$SERVICE_NAME" --region="$REGION"  # forces new revision = new secret pull
+```
+
+Cloud Run mounts secrets at container start. Rotating without redeploy
+leaves the old value in memory.
+
+Rotation cadence (suggested, not enforced):
+
+| Secret | Rotate every |
+|---|---|
+| Auth provider token | only on suspected compromise |
+| Webhook secrets | 90 days |
+| Cron secret | 90 days |
+| Stripe keys | only on suspected compromise (rotation breaks live subs until updated) |
+| Database password | 180 days |
+| API keys (LLM / ML providers) | per vendor rotation policy |
+
+### 12.3 Scaling decisions
+
+`infra/cloud_run.yaml` sets `maxScale: 5`. Before raising it:
+
+- **Cloud SQL connection limit.** `db-f1-micro` allows 25 concurrent
+  connections. With pgbouncer-safe pooling, each Cloud Run instance opens
+  ~5 connections. 5 instances × 5 = 25 — at the limit. Increase Cloud SQL
+  tier *before* raising max instances above 5, or enable Cloud SQL
+  connection pooling.
+- **Cloud Tasks dispatch rate.** Currently `max-dispatches-per-second=10`.
+  If pipeline jobs become a bottleneck, raise this and the queue's
+  `max-concurrent-dispatches`.
+
+### 12.4 Logs and metrics
+
+- **App logs:** `gcloud logging read 'resource.type=cloud_run_revision AND resource.labels.service_name="'"$SERVICE_NAME"'"' --limit=50 --format=json`
+- **Errors only:** filter on `severity>=ERROR`
+- **Sentry:** errors auto-flow if `{{PROJECT_NAME}}-sentry-dsn` is set
+
+### 12.5 Customer support runbook
+
+Build out service-specific support paths here. Common patterns:
+
+- "I paid but didn't get my plan upgrade":
+  1. Find the customer's billing events.
+  2. If the relevant `checkout.session.completed` is absent, the Stripe
+     webhook didn't reach us — check Stripe dashboard → Webhook attempts.
+  3. If it's present but plan didn't update, the handler crashed —
+     `gcloud logging read` for the specific event_id.
+- "I submitted X but got nothing back":
+  1. Find the job in the DB.
+  2. Status `queued` for too long → recovery cron will pick it up. If not,
+     check the error column.
+  3. Status `failed` → check the failing stage column.
+
+---
+
+## 13. Known gaps before public launch
+
+Replace this section with real, project-specific items. Common patterns:
+
+1. **Environment variables that aren't yet wired through.** Anything in
+   the app config that reads from a missing env var → must be added to
+   `cloud_run.yaml` (either as a literal or a secret ref).
+2. **Privacy policy / ToS endpoint.** Required by most ID providers and
+   likely by EU jurisdictions.
+3. **Auto-deploy on merge is not enabled.** Manual `workflow_dispatch` is
+   the only path until you trust the manual flow.
+4. **No real eval baseline.** If quality is a P0 requirement, you must
+   have measured it before public launch.
+
+---
+
+## Appendix: minimum cost estimate
+
+Phase 1 (pre-customer) baseline, monthly:
+
+| Resource | Cost |
+|---|---|
+| Cloud Run (min=0, idle) | $0 |
+| Cloud SQL `db-f1-micro` | ~$8 |
+| GCS standard (1 GB) | ~$0.02 |
+| Cloud Tasks | $0 (well under free tier) |
+| Cloud Scheduler (~2 jobs) | $0 (free tier) |
+| Secret Manager (~9 secrets, low access) | ~$0.50 |
+| Artifact Registry (1 GB) | ~$0.10 |
+| **Total fixed** | **~$9/month** |
+
+Add per-request external API costs on top — see your Tech Stack design doc
+for the full cost model.

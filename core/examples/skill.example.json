@@ -1,0 +1,17 @@
+{
+  "name": "qa-verification",
+  "kind": "skill",
+  "description": "Validate completion against acceptance criteria.",
+  "source": {
+    "bodyPath": "skills/qa-verification/SKILL.md"
+  },
+  "targets": {
+    "codex": {
+      "renderAs": "skill",
+      "path": "skills/qa-verification/SKILL.md"
+    },
+    "claude-code": {
+      "renderAs": "skill"
+    }
+  }
+}

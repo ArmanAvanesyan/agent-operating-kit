@@ -1,0 +1,64 @@
+name: Deploy to Cloud Run
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        type: choice
+        options: [staging, production]
+        default: staging
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  REGION: europe-west1
+  REPOSITORY: {{PROJECT_NAME}}
+  SERVICE_NAME: {{PROJECT_NAME}}
+
+jobs:
+  deploy:
+    name: Build + Deploy
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_DEPLOY_SERVICE_ACCOUNT }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT }}
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+
+      - name: Build and push image
+        run: |
+          IMAGE=${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/${{ env.REPOSITORY }}/app:${{ github.sha }}
+          docker build -t $IMAGE .
+          docker push $IMAGE
+          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
+
+      - name: Substitute placeholders in service spec
+        run: |
+          sed -i "s|__IMAGE__|${IMAGE}|g" infra/cloud_run.yaml
+          sed -i "s|__PROJECT__|${{ secrets.GCP_PROJECT }}|g" infra/cloud_run.yaml
+
+      - name: Deploy to Cloud Run
+        run: gcloud run services replace infra/cloud_run.yaml --region ${{ env.REGION }}
+
+      - name: Smoke check
+        run: |
+          URL=$(gcloud run services describe ${{ env.SERVICE_NAME }} --region ${{ env.REGION }} --format='value(status.url)')
+          for i in 1 2 3 4 5; do
+            if curl -sf "$URL/healthz" -m 10; then echo "Healthy"; exit 0; fi
+            sleep 5
+          done
+          echo "Health check failed"; exit 1

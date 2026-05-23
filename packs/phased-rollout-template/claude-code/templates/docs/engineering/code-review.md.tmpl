@@ -1,0 +1,126 @@
+# Code review standards
+
+Project-specific. Generic Python review concerns (style, type hints, etc.) are handled by ruff + mypy. This doc covers what humans (and `engineering-code-reviewer` subagent) actually need to look for.
+
+## 1. Universal PR checklist
+
+Run through these on every PR. Phrased as yes/no questions for mechanical checking:
+
+1. Do all new or modified HTTP endpoints have the correct FastAPI auth dependency injected (not just documented)?
+2. Does any new code log, print, or store customer content or PII — and if so, is it intentional and compliant with your retention policy?
+3. Do new Alembic migrations pass the round-trip test (`upgrade` then `downgrade`) and follow the CI-enforced naming convention?
+4. Are all secrets referenced via Secret Manager / settings — no hardcoded strings, no `.env` values committed?
+5. Does the PR touch any pipeline / billing / auth code without a corresponding test change?
+6. If the PR changes ML or LLM behavior, is it using the Strategy interface rather than calling a provider directly?
+7. Does the PR bump the prompt version constant if the prompt text changes **semantics** — not just whitespace?
+8. Is every new external call (webhook, Postgres, GCS) wrapped with a timeout and a failure path that doesn't silently swallow errors?
+9. If this is a schema change, does the migration include a data migration where rows already exist, or is dropping/altering a column safe given current data?
+10. Does the PR description match what the diff actually does — no stale template text, no omitted eval delta table for prompt changes?
+
+## 2. Blocking vs suggesting
+
+### Blocking (merge is off until resolved)
+
+- **Security boundary violation:** auth dependency missing, secret exposed in code or logs, customer content leaking to an unintended sink. Irreversible in production.
+- **Data integrity risk:** Alembic migration that cannot be safely rolled back, or a schema change that would corrupt existing rows on deploy.
+- **CI-breaking change:** mypy strict error, ruff violation, coverage drop below 70%, failing Alembic round-trip. The CI gate already set the bar.
+
+### Suggestions (author can defer to a follow-up issue)
+
+- Test coverage exists but misses an edge case in a non-hot path (e.g., a formatting helper).
+- Naming or structure is unclear but not actively misleading; document intent in a `TODO` linked to an issue.
+- Performance concern in a non-critical path (e.g., a webhook handler that runs once per upload, not per word).
+
+## 3. Per-change-type review focus
+
+For each PR `type` tag, what to check first:
+
+| Type | First thing to check |
+|---|---|
+| **feat** | The auth boundary. New features most often introduce new routes or bot commands; missing auth dependency is the easiest thing to forget. |
+| **fix** | A regression test that fails on the pre-fix code and passes after. A fix without a test is a fix that will regress. |
+| **refactor** | mypy still passes in strict mode across `app/`. Refactors break annotations silently. |
+| **perf** | The benchmark or query-plan diff. Without a measurement, a perf PR is speculation. |
+| **eval** | The eval delta table in the PR description. If it's missing or shows a regression with no explanation, stop there. |
+| **prompt** | The prompt version constant was bumped. Semantic changes that share a version corrupt eval history. |
+| **infra** | Run the Alembic round-trip yourself. CI catches convention errors, not logic errors in the SQL. |
+| **docs** | Referenced file paths, env vars, and commands still match the codebase. Stale docs are worse than no docs. |
+
+## 4. Test requirements per change type
+
+| Type | Required |
+|---|---|
+| **feat** | Unit tests for new logic + 1 integration test exercising the route or bot command end-to-end. Coverage ≥ 70% global. |
+| **fix** | Regression test that fails on pre-fix code. Non-negotiable regardless of size. |
+| **refactor** | No new tests if behavior is unchanged, but all existing tests must pass. If you can't make that claim, the refactor changed behavior — write tests. |
+| **eval / prompt** | Eval suite re-run; delta table must show no regression OR document/justify the trade-off. Unit tests on prompt-loading logic if that path changed. |
+| **infra** | Alembic round-trip is CI-enforced. For Cloud Run config changes, a staging deploy with smoke test before merging. |
+
+## 5. Documentation requirements
+
+When the PR must update each:
+
+- **`REPO-STRUCTURE.md`** — when a new sub-package or top-level module is added.
+- **An ADR (or new ADR)** — when a decision changes how external-service adapters are structured, how secrets are accessed, or how pipeline stages are ordered.
+- **`CONTRIBUTING.md`** — when local dev setup changes (new required env vars, changed migration workflow, new CI gate).
+- **Module-level docstrings** — when a public function/class changes its contract (parameters, return type, raised exceptions). NOT for implementation-only changes.
+- **`CLAUDE.md`** — when subagent review delegation rules change or a new hot zone is designated.
+- **`README.md`** — only when user-facing setup instructions change (install steps, env vars a deployer must set).
+
+## 6. PR size guidance
+
+- **>400 lines** of non-generated, non-migration code, OR **>8 files across different sub-packages** → split.
+- A PR crossing two of {auth, pipeline, billing, storage} in one diff is almost always doing two things → split into two PRs.
+- **>800 lines** OR **>12 files** → meta-issue + stacked PR series. Each stack entry independently mergeable, or at minimum independently reviewable.
+
+## 7. Self-review before delegating to a subagent
+
+The subagent can't run the service or verify intent. Before delegating, confirm:
+
+- The service actually behaves as expected in a local smoke test.
+- The Alembic migration applies cleanly against a real Postgres instance, not just passes the round-trip unit test.
+- The PR does what the description says. The subagent reviews the diff, not the original intent.
+- Any eval or prompt change has a delta table from a real run, not a placeholder.
+- No customer data or fixtures committed as test data — the NDA scan in CI is a heuristic, not a guarantee.
+
+## 8. Project-specific gotchas (every reviewer watches for these)
+
+### A. Customer content in observability sinks
+
+Structured logging and Sentry breadcrumbs are the most likely paths for customer content to leak. Generic Python review looks for hardcoded secrets; this project also needs review of what gets passed to `logger.info()`, `span.set_attribute()`, and Sentry `extras`. Privacy obligation = **blocking concern**, not a style note.
+
+### B. Provider calls outside the Strategy interface
+
+If a developer imports a provider SDK (`openai`, `anthropic`, `groq`, `google.cloud.speech`) directly in non-adapter code, the adapter ADR is silently violated. Code works, CI passes, the next provider swap breaks in a non-obvious place. **Every new import of a provider SDK outside the designated adapter package is a blocker.**
+
+### C. Prompt version drift
+
+The eval suite is keyed on prompt version identifiers. If a developer edits prompt text without bumping the version, historical eval results become meaningless — future runs compare against a baseline that no longer matches the prompt that produced it. Invisible in CI; invisible to a subagent reviewing only the diff unless it explicitly checks. **Flag any diff that changes a prompt file without a corresponding version constant change.**
+
+## 9. What NOT to comment on
+
+At 1-3 devs, the cost of enforcing these outweighs the benefit:
+
+- Duplicate code blocks **<15 lines** in test files.
+- Missing type hints in pytest fixtures and `conftest.py` (mypy strict scoped to `app/`, not tests).
+- Single-file utility modules without a module-level docstring.
+- `TODO` comments that reference an open issue number.
+- Line length in SQL strings inside migration files.
+
+## 10. CODEOWNERS
+
+```
+# Global fallback — replace with the actual GitHub handle of the project owner
+*                          @owner-handle
+
+# Security and auth hot zone — human review required
+app/routes/admin.py        @owner-handle
+app/billing/               @owner-handle
+
+# Prompt and eval changes — human review required
+prompts/                   @owner-handle
+eval/                      @owner-handle
+
+# Migration changes — review every column addition
+alembic/                   @owner-handle
+```

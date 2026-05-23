@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ArmanAvanesyan/agent-operating-kit/schemas/pack.schema.json",
+  "title": "AOK Pack",
+  "type": "object",
+  "required": ["name", "kind", "description", "sourceRepo", "supportedTargets", "concepts", "adapters"],
+  "properties": {
+    "name": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "kind": { "const": "pack" },
+    "description": { "type": "string", "minLength": 1 },
+    "sourceRepo": { "type": "string", "minLength": 1 },
+    "supportedTargets": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["codex", "claude-code", "cursor", "opencode", "gemini", "openclaw", "hermes-agent"]
+      },
+      "minItems": 1
+    },
+    "concepts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["task-packet", "role", "hook", "skill", "template", "pack", "mcp-config"]
+      },
+      "minItems": 1
+    },
+    "adapters": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "pluginPath": { "type": "string" },
+          "readmePath": { "type": "string" },
+          "assets": { "type": "array", "items": { "type": "string" } },
+          "notes": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

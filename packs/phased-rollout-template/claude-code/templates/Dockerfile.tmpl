@@ -1,0 +1,58 @@
+# syntax=docker/dockerfile:1.7
+
+# ── Builder stage ──────────────────────────────────────────────────────
+FROM python:3.12-slim AS builder
+
+ENV UV_LINK_MODE=copy \
+    UV_COMPILE_BYTECODE=1 \
+    UV_PYTHON_DOWNLOADS=never
+
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:0.5.11 /uv /uvx /bin/
+
+WORKDIR /app
+COPY pyproject.toml ./
+COPY README.md ./
+
+# Install dependencies (no dev extras in prod image)
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --no-dev --no-install-project
+
+# Copy source
+COPY app ./app
+# Uncomment the next lines if your project has alembic migrations or prompts/:
+# COPY alembic ./alembic
+# COPY alembic.ini ./
+# COPY prompts ./prompts
+
+# Install project itself
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --no-dev
+
+# ── Runtime stage ──────────────────────────────────────────────────────
+FROM python:3.12-slim
+
+# System dependencies for the app. Trim this list to what you actually use:
+#   ffmpeg     — audio/video processing
+#   libmagic1  — file type detection via python-magic
+# If you don't need either, drop the whole RUN block.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ffmpeg libmagic1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Non-root user
+RUN useradd -u 10001 -m -s /usr/sbin/nologin appuser
+
+WORKDIR /app
+COPY --from=builder --chown=appuser:appuser /app /app
+
+ENV PATH="/app/.venv/bin:$PATH" \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PORT=8080
+
+USER appuser
+EXPOSE 8080
+
+# Cloud Run sets PORT env var
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT}"]

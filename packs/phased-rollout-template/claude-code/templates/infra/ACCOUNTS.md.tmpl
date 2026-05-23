@@ -1,0 +1,232 @@
+# Pre-Deploy Accounts Checklist
+
+Every external service you need to register with **before** running
+`infra/DEPLOY.md`. Times are realistic active time. Save each credential
+into a password manager or a temporary `secrets.txt` you'll feed into
+`gcloud secrets versions add` (DEPLOY.md §3.6).
+
+This template is the structure that worked for a real production rollout
+— 9 services, ordered by deploy-blocking status. Edit the list to match
+the services your project actually uses; keep the format (For / URL /
+Time / Steps / Save / Cost / Skip-OK) for each entry so the table at the
+bottom stays accurate.
+
+---
+
+## 1. GitHub
+**For:** code repo + CI/CD via GitHub Actions
+**URL:** https://github.com
+**Required:** admin rights on the repo so you can set Actions secrets and
+variables in DEPLOY.md §5.2.
+**Save:** nothing new.
+**Cost:** free.
+
+---
+
+## 2. Google Cloud Platform
+**For:** runs the entire service (Cloud Run, Cloud SQL, GCS, Tasks,
+Scheduler, Secret Manager)
+**URL:** https://console.cloud.google.com/
+**Time:** 15 min
+**Steps:**
+1. Sign in with a Google account (Workspace or personal).
+2. Create a new project → save the **Project ID** (not the name).
+3. **Enable billing.** Billing → Link a billing account → add a credit
+   card. Without this every `gcloud` command fails. New accounts get $300
+   free credit good for 90 days.
+4. Install `gcloud` CLI locally: https://cloud.google.com/sdk/docs/install
+5. `gcloud auth login` and `gcloud config set project <PROJECT_ID>`
+
+**Save:** `PROJECT_ID`
+**Cost:** ~$9/month fixed (mostly Cloud SQL micro instance) once the
+trial credit runs out.
+
+---
+
+## 3. Primary identity provider (e.g., Telegram BotFather, Auth0, Clerk, Cognito)
+**For:** the authentication front-door for your users
+**URL:** depends on provider
+**Time:** 3–15 min
+**Steps:**
+1. Sign up / create an app or bot.
+2. Configure the redirect/webhook URL placeholder — you'll replace it with
+   your Cloud Run URL after first deploy.
+3. Copy the application secret / bot token.
+4. Generate a webhook secret locally if your provider supports one:
+   `openssl rand -hex 32`. Save it.
+
+**Save:**
+- `AUTH_PROVIDER_TOKEN` (or `BOT_TOKEN` / `CLIENT_SECRET` / etc.)
+- `AUTH_WEBHOOK_SECRET` (if applicable)
+
+**Cost:** usually free at low volume.
+
+---
+
+## 4. Primary ML / AI provider (e.g., OpenAI, Anthropic, Groq, Gemini, AWS Bedrock)
+**For:** the main inference call (transcription, summarization, generation
+— whatever this product does)
+**URL:** depends on provider
+**Time:** 5 min
+**Steps:**
+1. Sign up.
+2. Console → API Keys → Create API Key → name it
+   `{{PROJECT_NAME}}-prod`.
+3. Copy immediately — most providers do not show the key again.
+
+**Save:** `LLM_API_KEY`
+**Cost:** pay-per-token usually; budget for $0.01–$0.10 per request
+depending on model + length.
+
+---
+
+## 5. Secondary / fallback ML provider (optional but recommended)
+**For:** A/B testing and fallback when the primary provider has an outage
+**URL:** depends on provider
+**Time:** 3 min
+**Steps:**
+1. Sign in (often the same Google / Microsoft account as your primary
+   cloud — simplifies billing).
+2. Create API key → copy it.
+
+**Save:** `LLM_FALLBACK_API_KEY`
+**Cost:** usually has a free tier sufficient for fallback duty.
+**Skip-OK:** yes for Phase 1, no for Phase 3+.
+
+---
+
+## 6. Stripe (or Paddle / LemonSqueezy / Chargebee)
+**For:** subscription billing
+**URL:** https://dashboard.stripe.com/register
+**Time:** 30–60 min (the longest because of identity verification)
+**Steps:**
+1. Sign up. Pick your country and business type. **Use a real legal
+   entity** — Stripe will ask for it.
+2. **Activate your account.** Business name, address, tax ID/SSN, and a
+   bank account for payouts. Verification can take a few hours to a day.
+3. Until activated, you can still build with **Test mode** keys. Start
+   the deploy with test keys, switch to live keys after activation.
+4. **Developers → API keys:**
+   - Test mode: copy `sk_test_...` for `STRIPE_SECRET_KEY` (use for
+     initial deploy).
+   - Live mode: rotate to `sk_live_...` after activation.
+5. **Products → Add product:** create your subscription tiers (e.g., Solo
+   / Team / Enterprise). Save each `price_xxx` ID.
+6. **Developers → Webhooks → Add endpoint** — skip this until after the
+   first Cloud Run deploy. You need a real URL. (See DEPLOY.md §8.2.)
+7. The webhook signing secret (`whsec_...`) is shown **once** when you
+   create the endpoint. Save it then.
+
+**Save:**
+- `STRIPE_SECRET_KEY` (start with test key)
+- `STRIPE_PRICE_<TIER>_MO` (one per subscription tier)
+- `STRIPE_WEBHOOK_SECRET` (after the webhook is created post-deploy)
+
+**Cost:** 2.9% + 30¢ per successful charge. No monthly fee.
+**Skip-OK:** yes if you're not charging users yet — drop this section in
+Phase 1.
+
+---
+
+## 7. Sentry — recommended
+**For:** real-time alerts when production breaks
+**URL:** https://sentry.io/signup/
+**Time:** 5 min
+**Steps:**
+1. Sign up. Free tier is 5k events/month — enough for Phase 1.
+2. Create organization → create a new project → Platform: **Python /
+   FastAPI** → name it `{{PROJECT_NAME}}`.
+3. Sentry shows you a DSN like
+   `https://abc...@o123.ingest.sentry.io/456`. Copy it.
+4. (Optional) Set up Slack/email alerts under Alerts → Issue Alert rules.
+
+**Save:** `SENTRY_DSN`
+**Cost:** free tier.
+**Skip-OK:** yes. Set the secret to an empty string if you skip (DEPLOY.md
+§3.7).
+
+---
+
+## 8. PostHog (or Mixpanel / Amplitude) — optional
+**For:** product analytics (funnel, retention, % of users who pay,
+average jobs per user)
+**URL:** https://app.posthog.com/signup
+**Time:** 5 min
+**Steps:**
+1. Sign up. EU or US data residency — pick based on your users' location.
+2. Create a project → name it `{{PROJECT_NAME}}`.
+3. Project settings → Project API key — copy it.
+
+**Save:** `POSTHOG_API_KEY`, `POSTHOG_HOST` (defaults to
+`https://us.posthog.com`)
+**Cost:** 1M events/month free.
+**Skip-OK:** yes. Leave the secret empty.
+
+---
+
+## 9. Domain registrar — optional
+**For:** vanity URL instead of
+`https://{{PROJECT_NAME}}-abc123-ew.a.run.app`
+**URLs:**
+- https://domains.google (now Gandi)
+- https://cloudflare.com/products/registrar (cheapest, at-cost pricing)
+- https://www.namecheap.com
+
+**Time:** 10 min + DNS propagation wait
+**Steps:**
+1. Buy a domain.
+2. After Cloud Run is deployed, map the domain via Cloud Run → Custom
+   Domains → Add mapping. Cloud Run gives you DNS records to add at your
+   registrar.
+
+**Cost:** $10–$15/year.
+**Skip-OK:** yes — the Cloud Run URL works fine for most webhook
+integrations.
+
+---
+
+## Order of operations (compressed)
+
+| Step | Service | Blocks deploy? | Active time |
+|---|---|---|---|
+| 1 | GitHub admin access | Yes | 0 min |
+| 2 | GCP project + billing | Yes | 15 min |
+| 3 | Primary identity provider | Yes | 3–15 min |
+| 4 | Primary ML provider | Yes | 5 min |
+| 5 | Fallback ML provider | No (Phase 1) | 3 min |
+| 6 | Stripe (test keys + products) | Yes, for billing flows | 30 min (+ verification wait) |
+| 7 | Sentry DSN | No | 5 min |
+| 8 | PostHog API key | No | 5 min |
+| 9 | Custom domain | No | 10 min + DNS wait |
+
+**Total active time:** ~75 min if you do everything. Start Stripe first —
+their identity verification can add up to a business day in the
+background.
+
+---
+
+## Quick credential checklist
+
+Paste this template into a temporary `secrets.txt` and fill it in as you
+go (edit to match the secrets your `cloud_run.yaml` actually references):
+
+```
+PROJECT_ID=
+AUTH_PROVIDER_TOKEN=
+AUTH_WEBHOOK_SECRET=
+LLM_API_KEY=
+LLM_FALLBACK_API_KEY=
+STRIPE_SECRET_KEY=
+STRIPE_PRICE_SOLO_MO=
+STRIPE_PRICE_TEAM_MO=
+STRIPE_WEBHOOK_SECRET=   # filled in after first deploy
+SENTRY_DSN=              # optional
+POSTHOG_API_KEY=         # optional
+CRON_SECRET=             # generate locally: openssl rand -hex 32
+```
+
+Once filled, you can run DEPLOY.md §3.6 in one sitting and feed every
+secret into Secret Manager.
+
+**Delete `secrets.txt` immediately after** — those values should only ever
+live in Secret Manager once deployed.

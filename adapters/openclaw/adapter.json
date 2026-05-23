@@ -1,0 +1,10 @@
+{
+  "name": "openclaw",
+  "kind": "tool-adapter",
+  "displayName": "OpenClaw",
+  "status": "scaffolded",
+  "supportedTargets": ["openclaw"],
+  "renders": ["task-packet", "role", "hook", "skill"],
+  "entrypoints": ["adapters/openclaw/README.md"],
+  "limitations": ["Package layout is a documented scaffold only."]
+}

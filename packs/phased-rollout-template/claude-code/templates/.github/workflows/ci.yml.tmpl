@@ -1,0 +1,183 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  PYTHON_VERSION: "3.12"
+  UV_VERSION: "0.5.11"
+
+jobs:
+  lint-and-typecheck:
+    name: Lint + typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+      - run: uv python install ${{ env.PYTHON_VERSION }}
+      - run: uv sync --all-extras
+      - name: Ruff (lint)
+        run: uv run ruff check .
+      - name: Ruff (format)
+        run: uv run ruff format --check .
+      - name: Mypy
+        run: uv run mypy app
+
+  test:
+    name: pytest (unit + integration)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: {{PROJECT_NAME}}
+          POSTGRES_PASSWORD: {{PROJECT_NAME}}
+          POSTGRES_DB: {{PROJECT_NAME}}_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+      - run: uv python install ${{ env.PYTHON_VERSION }}
+      - run: uv sync --all-extras
+      - name: Run migrations
+        env:
+          DATABASE_URL: postgresql+asyncpg://{{PROJECT_NAME}}:{{PROJECT_NAME}}@localhost:5432/{{PROJECT_NAME}}_test
+        run: uv run alembic upgrade head
+      - name: pytest
+        env:
+          DATABASE_URL: postgresql+asyncpg://{{PROJECT_NAME}}:{{PROJECT_NAME}}@localhost:5432/{{PROJECT_NAME}}_test
+        run: uv run pytest -x
+
+  alembic-roundtrip:
+    name: Alembic downgrade/upgrade roundtrip
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: {{PROJECT_NAME}}
+          POSTGRES_PASSWORD: {{PROJECT_NAME}}
+          POSTGRES_DB: {{PROJECT_NAME}}_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+      - run: uv python install ${{ env.PYTHON_VERSION }}
+      - run: uv sync --all-extras
+      - name: upgrade head -> downgrade -1 -> upgrade head
+        env:
+          DATABASE_URL: postgresql+asyncpg://{{PROJECT_NAME}}:{{PROJECT_NAME}}@localhost:5432/{{PROJECT_NAME}}_test
+        run: |
+          uv run alembic upgrade head
+          uv run alembic downgrade -1
+          uv run alembic upgrade head
+
+  migration-conventions:
+    name: Migration convention check (ADR-011)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify CONCURRENTLY indexes have autocommit + are in their own revision
+        run: |
+          # Grep for CONCURRENTLY without autocommit
+          # Note: grep -L exit code reflects pattern presence, not file listing — pipe to grep -q to check output
+          if grep -lE "CREATE INDEX CONCURRENTLY|DROP INDEX CONCURRENTLY" alembic/versions/*.py 2>/dev/null | xargs -r grep -L "autocommit" | grep -q .; then
+            echo "Found CONCURRENTLY index migration without autocommit_block() or execution_options autocommit"
+            exit 1
+          fi
+          # Verify CONCURRENTLY revisions don't also contain ALTER TABLE
+          for f in alembic/versions/*.py; do
+            if grep -q "CONCURRENTLY" "$f" 2>/dev/null; then
+              if grep -qE "ALTER TABLE|op\.add_column|op\.drop_column" "$f"; then
+                echo "$f mixes CONCURRENTLY with ALTER TABLE — split into separate revisions"
+                exit 1
+              fi
+            fi
+          done
+          echo "Migration conventions OK"
+
+  nda-data-check:
+    name: NDA / customer-data hygiene
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: No customer-data files committed
+        run: |
+          # Edit the directory list and the extension list to match what your project considers "customer data"
+          # (audio, video, transcripts, documents, screenshots, etc.).
+          if find eval/reference eval/gold_outputs tests/fixtures -type f \( -iname "*.m4a" -o -iname "*.mp3" -o -iname "*.wav" -o -iname "*.ogg" -o -iname "*.mp4" -o -iname "*.mov" -o -iname "*.webm" \) 2>/dev/null | grep .; then
+            echo "Customer-data files found in protected directories — must not be committed"
+            exit 1
+          fi
+          echo "No customer data leaked into repo"
+
+  pip-audit:
+    name: pip-audit (supply chain)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+      - run: uv python install ${{ env.PYTHON_VERSION }}
+      - run: uv sync --all-extras
+      - run: uv run pip-audit --skip-editable --desc on
+
+  hadolint:
+    name: hadolint (Dockerfile linting)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+          failure-threshold: warning
+          ignore: DL3006,DL3008,DL3013,DL3016,DL3018,DL3028
+
+  bandit:
+    name: bandit (SAST)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+      - run: uv python install ${{ env.PYTHON_VERSION }}
+      - run: uv sync --all-extras
+      - run: uv run bandit -r app/ -t B603,B604,B105,B106,B101,B608 --exclude tests/
+
+  eval-smoke:
+    name: Eval harness smoke (mocked)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+        with:
+          version: ${{ env.UV_VERSION }}
+      - run: uv python install ${{ env.PYTHON_VERSION }}
+      - run: uv sync --all-extras
+      # Replace with your project's eval harness invocation, or delete this job if you don't have one yet.
+      - run: uv run python -m eval.harness.runner --reference-set eval/fixtures/ --mock-judge --output-dir /tmp/eval-output
+      - run: ls /tmp/eval-output/*.json

@@ -1,0 +1,6 @@
+{
+  "name": "phased-rollout-template",
+  "version": "0.1.0",
+  "description": "Scaffold a new phased-rollout project with the standard CLAUDE.md + infra/ + CI pipeline + engineering docs.",
+  "author": "Arman Avanesyan"
+}

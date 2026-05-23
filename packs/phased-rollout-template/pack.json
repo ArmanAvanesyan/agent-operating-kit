@@ -1,0 +1,30 @@
+{
+  "name": "phased-rollout-template",
+  "kind": "pack",
+  "description": "Project scaffold templates for phased rollouts with CI, deploy docs, infra notes, and engineering process docs.",
+  "sourceRepo": "ArmanAvanesyan/claude-code-toolbox",
+  "supportedTargets": ["claude-code"],
+  "concepts": ["skill", "template"],
+  "adapters": {
+    "claude-code": {
+      "pluginPath": "claude-code/plugin.json",
+      "readmePath": "claude-code/README.md",
+      "assets": [
+        "claude-code/skills/init-phased-project.md",
+        "claude-code/templates/.dockerignore.tmpl",
+        "claude-code/templates/.github/workflows/ci.yml.tmpl",
+        "claude-code/templates/.github/workflows/deploy.yml.tmpl",
+        "claude-code/templates/CLAUDE.md.tmpl",
+        "claude-code/templates/Dockerfile.tmpl",
+        "claude-code/templates/docs/engineering/code-review.md.tmpl",
+        "claude-code/templates/docs/engineering/process.md.tmpl",
+        "claude-code/templates/docs/engineering/security.md.tmpl",
+        "claude-code/templates/infra/ACCOUNTS.md.tmpl",
+        "claude-code/templates/infra/DEPLOY.md.tmpl",
+        "claude-code/templates/infra/README.md.tmpl",
+        "claude-code/templates/infra/cloud_run.yaml.tmpl",
+        "claude-code/templates/pyproject.toml.tmpl"
+      ]
+    }
+  }
+}

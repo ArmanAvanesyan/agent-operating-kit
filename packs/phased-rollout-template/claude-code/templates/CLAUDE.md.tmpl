@@ -1,0 +1,103 @@
+# CLAUDE.md
+
+Guidance for Claude Code (claude.ai/code) when working in this repository.
+
+## Continuing a prior session?
+
+If this is a fresh `claude` session and you weren't part of the prior context, **read `SESSION-HANDOFF.md` next** (if it exists) — it should summarize what's been done, what's pending, the load-bearing decisions, and how to delegate to the right subagents.
+
+## Project
+
+`{{PROJECT_NAME}}` — {{PROJECT_DESCRIPTION}}
+
+**Status:** Phase 1 (validation, no production traffic). The single load-bearing requirement for this phase is the trust bar — what fraction of users say "this is good enough to forward as-is" or whatever the equivalent quality bar is for this product.
+
+## Phased rollout framing
+
+The codebase + ops posture is staged across four phases. Each phase lifts the bar without rewriting the previous one:
+
+| Phase | Posture | What's true |
+|---|---|---|
+| **1 — validation** | single dev, manual deploys, no real customer traffic | trust bar is the only gate; no SLOs |
+| **2 — early traffic** | invited beta users, manual deploys, basic monitoring | uptime is now a thing; rollback runbook required |
+| **3 — paid product** | Stripe billing live, GitHub Actions deploys, eval gates in CI | revenue at stake; data-deletion SLA enforced |
+| **4 — scale** | autoscaling, multi-region considerations, on-call rotation | classic prod posture |
+
+Most decisions in this repo lock in defaults for Phase 1-2 with explicit doors for Phase 3-4. Don't speculatively bypass the current phase's defaults.
+
+## Authoritative design documents
+
+If this project has external design documents (Notion workspace, Confluence, design repo, etc.), list them here. Treat those as the source of truth for product and architecture. Read them first when starting any non-trivial task.
+
+- **PRD** — product spec, requirements (P0/P1/P2), user stories. Replace this bullet with the actual link.
+- **System Design + ADRs** — architecture, all decisions, data model, cost model, eval strategy. Replace with the actual link.
+- **Tech Stack** — what we use and why; what we explicitly don't. Replace with the actual link.
+
+If a code-level question is answered authoritatively in the design docs, **trust the docs over your inference**. If you find a contradiction between docs and code, surface it — don't paper over.
+
+## Commands
+
+```bash
+# Setup
+uv sync --all-extras
+uv run pre-commit install
+
+# Local dev (assumes docker-compose with a postgres service)
+docker-compose up -d postgres
+uv run alembic upgrade head
+uv run uvicorn app.main:app --reload
+
+# Quality gate (run before any PR)
+uv run ruff check . --fix && uv run ruff format .
+uv run mypy app
+uv run pytest -x
+
+# Run a single test file or test by name
+uv run pytest tests/unit/path/test_foo.py -x
+uv run pytest -x -k "test_name"
+```
+
+## Architecture (one-line)
+
+Replace this paragraph with a one-sentence description of the deployment topology and the data flow through the major components. Example: "Single Cloud Run service (`app/`) with three FastAPI route prefixes — `/webhook`, `/api/*`, `/worker/process` — backed by Cloud SQL Postgres, Cloud Storage, Cloud Tasks."
+
+See `REPO-STRUCTURE.md` (if it exists) for the file-tree explanation.
+
+## Engineering standards (load-bearing — read before any non-trivial change)
+
+- **[docs/engineering/process.md](./docs/engineering/process.md)** — branching, Definition of Ready/Done, PR review process, deploy gates
+- **[docs/engineering/code-review.md](./docs/engineering/code-review.md)** — what every reviewer (you or human) must check; the project-specific gotchas
+- **[docs/engineering/security.md](./docs/engineering/security.md)** — threat model, secret discipline, audit logging
+
+If a task touches auth, secrets, stored data, or admin endpoints, read security.md first. Treat the security engineer's findings (when delegated to `engineering-security-engineer` subagent) as **blocking** — they're not suggestions.
+
+## Conventions Claude Code MUST follow
+
+1. **Database migrations** — `CREATE INDEX CONCURRENTLY` lives in its own Alembic revision file with `execution_options={"autocommit": True}`. CHECK constraints on enum-shaped columns are mandatory. The CI job `migration-conventions` enforces this — don't disable it.
+
+2. **NDA / customer data** — if this project handles customer data under NDA (audio, transcripts, internal documents, etc.), never check it into the repo, never log raw content, never include it in error messages or commit messages. The CI job `nda-data-check` is a heuristic backstop, not a guarantee.
+
+3. **Strategy-pattern adapters** — any external-service integration (ASR, LLM, payments, identity) should sit behind an interface so we can A/B test or fall back. Direct imports of provider SDKs outside the designated adapter package are a blocker in review. CI does not catch this; you must.
+
+4. **Single-service collapse is intentional** (until Phase 4) — don't propose splitting the codebase into separate deployable services unless there's a concrete scaling, isolation, or release-cadence reason. The role decomposition exists at the package level, not the deployment level.
+
+5. **Secrets via Secret Manager only** — no hardcoded API keys, no `.env` values committed, no provider tokens in commit messages or PR descriptions. All runtime secrets mount through Cloud Run's Secret Manager integration.
+
+## Subagent suggestions
+
+Some specialized work is well-served by particular subagents from `~/.claude/agents/`:
+
+- **`engineering-software-architect`** — for ADR drafting, system-level trade-off questions
+- **`engineering-database-optimizer`** — for schema changes, index strategy, query performance
+- **`engineering-code-reviewer`** — for PR review, especially auth and integration-edge cases
+- **`engineering-security-engineer`** — for anything touching auth, secrets, stored data, GDPR
+- **`engineering-incident-response-commander`** — for postmortems and on-call runbook writing
+
+Activate the appropriate one when a task crosses its domain.
+
+## Things to leave alone unless asked
+
+- The single-service architecture (don't split it speculatively)
+- The deterministic decision points in the pipeline (don't replace them with LLM-self-routing without an ADR)
+- The `~/.claude/agents/` content (those are global, not repo-specific)
+- The CI job set in `.github/workflows/ci.yml` — each job catches a real failure class; removing one to "speed up CI" is almost always wrong

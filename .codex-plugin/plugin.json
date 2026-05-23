@@ -1,28 +1,33 @@
 {
   "name": "agent-operating-kit",
   "version": "0.1.0",
-  "description": "Reusable private Codex operating kit for GitHub Project driven agent workflows.",
+  "description": "Cross-tool agent operating kit for task packets, roles, hooks, skills, packs, and adapters.",
   "author": {
-    "name": "Private",
-    "email": "private@example.com",
-    "url": "https://github.com"
+    "name": "Arman Avanesyan",
+    "url": "https://github.com/ArmanAvanesyan"
   },
   "homepage": "https://github.com/ArmanAvanesyan/agent-operating-kit",
   "repository": "https://github.com/ArmanAvanesyan/agent-operating-kit",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "keywords": [
     "codex",
+    "claude-code",
+    "cursor",
+    "opencode",
+    "gemini",
+    "openclaw",
+    "hermes-agent",
     "agents",
-    "github-projects",
-    "workflow"
+    "workflow",
+    "mcp"
   ],
   "skills": "./skills/",
   "hooks": "./hooks.json",
   "interface": {
     "displayName": "Agent Operating Kit",
-    "shortDescription": "Reusable Codex workflows, hooks, roles, and project templates.",
-    "longDescription": "A private Codex plugin and CLI toolkit for GitHub Project driven agent execution across projects and devices.",
-    "developerName": "Private",
+    "shortDescription": "Cross-tool workflows, hooks, roles, schemas, packs, and adapters.",
+    "longDescription": "A public cross-tool operating kit for agent workflows. AOK defines neutral task packets, roles, hooks, skills, and packs, then maps them into Codex, Claude Code, Cursor, OpenCode, Gemini, OpenClaw, Hermes Agent, and swarmd MCP workflows.",
+    "developerName": "Arman Avanesyan",
     "category": "Productivity",
     "capabilities": [
       "Interactive",

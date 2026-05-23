@@ -1,0 +1,6 @@
+{
+  "name": "ship-pipeline",
+  "version": "0.1.0",
+  "description": "Slash commands /ship-pr and /fix-ci for the full PR ship pipeline with CI auto-recovery",
+  "author": "Arman Avanesyan"
+}

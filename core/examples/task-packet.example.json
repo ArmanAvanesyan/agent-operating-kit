@@ -1,0 +1,21 @@
+{
+  "title": "Add webhook signature verification",
+  "spec": "Webhook requests must verify signatures before parsing payloads.",
+  "status": "ready",
+  "phase": "build",
+  "targetRepo": "example/service",
+  "assignee": "implementer",
+  "qaAssignee": "qa-reality-checker",
+  "acceptanceCriteria": ["Invalid signatures are rejected."],
+  "verification": {
+    "commands": ["make quality"],
+    "evidence": ["Unit test output"]
+  },
+  "links": {
+    "issue": "https://github.com/example/service/issues/1"
+  },
+  "swarmd": {
+    "gateCmd": "make quality",
+    "memoryNamespace": "decision"
+  }
+}

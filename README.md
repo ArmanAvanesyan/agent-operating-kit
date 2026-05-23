@@ -45,8 +45,7 @@ checkout.
 ```bash
 git clone https://github.com/ArmanAvanesyan/agent-operating-kit.git
 cd agent-operating-kit
-./scripts/install.sh
-./scripts/aok doctor
+./scripts/aok codex setup --project .
 ./scripts/aok validate
 ./scripts/aok render pack engineering-guardrails --target codex
 ```
@@ -90,6 +89,15 @@ actions. Project init installs `.codex/setup.sh`, `.codex/aok-action.sh`,
 Codex can read `.codex/environments/environment.toml` for setup and actions.
 The JSON manifest is AOK-owned metadata for validation and onboarding. See
 `docs/codex-local-environments.md`.
+
+For a single chat-friendly setup flow from the AOK checkout:
+
+```bash
+./scripts/aok codex setup --project .
+```
+
+Add `--claude` to also register the Claude Code marketplace, or `--report
+/path/to/report.md` to write the setup summary to disk.
 
 ## Claude Code First Success Path
 

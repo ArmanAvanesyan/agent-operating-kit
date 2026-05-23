@@ -370,6 +370,50 @@ def cmd_doctor(args: argparse.Namespace) -> int:
     return 0 if report["requiredOk"] else 1
 
 
+def cmd_codex_setup(args: argparse.Namespace) -> int:
+    install_args = argparse.Namespace(home=args.home, replace=args.replace)
+    cmd_install(install_args)
+
+    home = user_home(getattr(args, "home", None))
+    report_path = None
+    if getattr(args, "report", None):
+        report_path = Path(args.report).expanduser()
+    doctor_args = argparse.Namespace(home=str(home), json=False, report=str(report_path) if report_path else None)
+    doctor_code = cmd_doctor(doctor_args)
+
+    project_path = None
+    if getattr(args, "project", None):
+        project_path = Path(args.project).resolve()
+        cmd_project_init(argparse.Namespace(path=str(project_path), force=args.force_project_init))
+        cmd_project_validate(argparse.Namespace(path=str(project_path)))
+        cmd_codex_local_env_validate(argparse.Namespace(path=str(project_path), json=False))
+
+    if getattr(args, "claude", False):
+        cmd_claude_setup(
+            argparse.Namespace(
+                home=args.home,
+                settings=args.claude_settings,
+                marketplace_path=args.claude_marketplace_path,
+                enable=args.enable,
+            )
+        )
+
+    print("Codex setup summary:")
+    print(f"- install: {'updated' if args.replace else 'checked'} user registration")
+    print(f"- doctor: {'ok' if doctor_code == 0 else 'needs-attention'}")
+    if project_path is not None:
+        print(f"- project: initialized and validated {project_path}")
+    else:
+        print("- project: skipped")
+    if getattr(args, "claude", False):
+        enabled = ", ".join(enabled_pack_names(args.enable))
+        print(f"- claude: enabled marketplace plugins ({enabled})")
+    else:
+        print("- claude: skipped")
+
+    return 0 if doctor_code == 0 else 1
+
+
 def detect_workspace_kind(target: Path) -> str:
     if (target / ".git").exists():
         return "single-repo"
@@ -1860,6 +1904,26 @@ def build_parser() -> argparse.ArgumentParser:
 
     codex = sub.add_parser("codex")
     codex_sub = codex.add_subparsers(dest="codex_command", required=True)
+    codex_setup = codex_sub.add_parser("setup")
+    codex_setup.add_argument("--home", help="Home directory to register and inspect")
+    codex_setup.add_argument("--replace", action="store_true", help="Replace existing install links or wrappers")
+    codex_setup.add_argument("--report", help="Write a plain-language doctor report after setup")
+    codex_setup.add_argument("--project", help="Initialize and validate AOK files in the target project")
+    codex_setup.add_argument(
+        "--force-project-init",
+        action="store_true",
+        help="Allow project init to replace AGENTS.md after backing it up",
+    )
+    codex_setup.add_argument("--claude", action="store_true", help="Also register the Claude Code marketplace")
+    codex_setup.add_argument("--claude-settings", help="Claude Code settings file to update")
+    codex_setup.add_argument("--claude-marketplace-path", help="AOK Claude Code marketplace directory")
+    codex_setup.add_argument(
+        "--enable",
+        nargs="+",
+        default=["all"],
+        help="Claude plugin or pack names to enable when --claude is used",
+    )
+    codex_setup.set_defaults(func=cmd_codex_setup)
     local_env = codex_sub.add_parser("local-env")
     local_env_sub = local_env.add_subparsers(dest="local_env_command", required=True)
     local_env_init = local_env_sub.add_parser("init")

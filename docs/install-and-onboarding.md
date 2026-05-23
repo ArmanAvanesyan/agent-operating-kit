@@ -62,10 +62,12 @@ Technical users can verify the installed copy:
 ```bash
 git clone https://github.com/ArmanAvanesyan/agent-operating-kit.git
 cd agent-operating-kit
-./scripts/install.sh
-./scripts/aok doctor
+./scripts/aok codex setup --project .
 ./scripts/aok validate
 ```
+
+Use `./scripts/aok codex setup --project . --claude` when you want Codex and
+Claude Code configured in one pass.
 
 The installer writes:
 

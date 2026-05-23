@@ -706,12 +706,38 @@ def validate_packs(errors: list[str]) -> None:
                 errors.append(f"packs/{name}/pack.json: unknown adapter {adapter_name}")
 
 
+def validate_claude_code_marketplace(errors: list[str]) -> None:
+    marketplace_root = KIT_ROOT / "adapters" / "claude-code" / "marketplace"
+    marketplace = marketplace_root / ".claude-plugin" / "marketplace.json"
+    data = require_json(marketplace, errors)
+    if not data:
+        return
+    plugins = data.get("plugins")
+    if not isinstance(plugins, list) or not plugins:
+        errors.append(f"{marketplace.relative_to(KIT_ROOT)}: plugins must be a non-empty list")
+        return
+    for plugin in plugins:
+        name = plugin.get("name", "<unknown>")
+        source = plugin.get("source")
+        if not isinstance(source, str) or not source:
+            errors.append(f"{marketplace.relative_to(KIT_ROOT)}: plugin {name} missing source")
+            continue
+        resolved = (marketplace_root / source).resolve()
+        if not resolved.exists():
+            errors.append(f"{marketplace.relative_to(KIT_ROOT)}: plugin {name} source does not exist: {source}")
+        try:
+            resolved.relative_to(KIT_ROOT.resolve())
+        except ValueError:
+            errors.append(f"{marketplace.relative_to(KIT_ROOT)}: plugin {name} source escapes kit root: {source}")
+
+
 def validate_kit() -> list[str]:
     errors: list[str] = []
     validate_required_files(errors)
     validate_json_files(errors)
     validate_adapters(errors)
     validate_packs(errors)
+    validate_claude_code_marketplace(errors)
     return errors
 
 

@@ -5,6 +5,6 @@
   "status": "active",
   "supportedTargets": ["claude-code"],
   "renders": ["role", "hook", "skill", "pack", "mcp-config"],
-  "entrypoints": ["adapters/claude-code/marketplace/", "packs/*/claude-code/"],
+  "entrypoints": ["adapters/claude-code/marketplace/.claude-plugin/marketplace.json", "packs/*/claude-code/"],
   "limitations": ["Claude Code plugin hooks can depend on CLAUDE_PLUGIN_ROOT and remain adapter-specific."]
 }

@@ -7,7 +7,7 @@ while making AOK the source of truth.
 
 ## Render Shape
 
-- Marketplace metadata lives under `adapters/claude-code/marketplace/`.
+- Marketplace metadata lives under `adapters/claude-code/marketplace/.claude-plugin/`.
 - Pack-specific Claude Code assets live under `packs/*/claude-code/`.
 - Claude Code skills remain Markdown command/skill files.
 - Claude Code hooks remain plugin `plugin.json` command hooks.

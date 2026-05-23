@@ -64,6 +64,10 @@ def run(cmd: list[str], cwd: Path | None = None, check: bool = True) -> subproce
     return subprocess.run(cmd, cwd=cwd, text=True, capture_output=True, check=check)
 
 
+def is_windows_host() -> bool:
+    return os.name == "nt"
+
+
 def command_exists(name: str) -> bool:
     return shutil.which(name) is not None
 
@@ -180,6 +184,112 @@ def marketplace_paths(home: Path | None = None) -> tuple[Path, Path]:
     return root / "marketplace.json", root / "plugins" / PLUGIN_NAME
 
 
+def cli_shim_path(home: Path | None = None) -> Path:
+    home = home or Path.home()
+    bin_dir = home / ".local" / "bin"
+    return bin_dir / ("aok.cmd" if is_windows_host() else "aok")
+
+
+def remove_existing_path(path: Path) -> None:
+    if path.is_dir() and not path.is_symlink():
+        shutil.rmtree(path)
+    else:
+        path.unlink()
+
+
+def plugin_dir_looks_valid(path: Path) -> bool:
+    manifest_path = path / ".codex-plugin" / "plugin.json"
+    if not manifest_path.exists():
+        return False
+    try:
+        data = json.loads(manifest_path.read_text())
+    except json.JSONDecodeError:
+        return False
+    return data.get("name") == PLUGIN_NAME
+
+
+def create_windows_junction(link_path: Path, target: Path) -> bool:
+    result = subprocess.run(
+        ["cmd", "/c", "mklink", "/J", str(link_path), str(target)],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    return result.returncode == 0
+
+
+def ensure_plugin_path(link_path: Path, replace: bool) -> str:
+    current_matches = False
+    if link_path.exists() or link_path.is_symlink():
+        try:
+            current_matches = link_path.resolve() == KIT_ROOT
+        except OSError:
+            current_matches = False
+        if current_matches:
+            return "symlink" if link_path.is_symlink() else "junction"
+        if not replace:
+            raise AokError(f"Refusing to replace existing plugin path: {link_path}")
+        remove_existing_path(link_path)
+
+    if not is_windows_host():
+        link_path.symlink_to(KIT_ROOT, target_is_directory=True)
+        return "symlink"
+
+    if create_windows_junction(link_path, KIT_ROOT):
+        return "junction"
+    shutil.copytree(KIT_ROOT, link_path)
+    return "copy"
+
+
+def windows_cli_shim_text(target_script: Path) -> str:
+    target = str(target_script)
+    return (
+        "@echo off\n"
+        "setlocal\n"
+        "where py >nul 2>nul\n"
+        "if %ERRORLEVEL%==0 (\n"
+        f'  py -3 "{target}" %*\n'
+        ") else (\n"
+        f'  python "{target}" %*\n'
+        ")\n"
+    )
+
+
+def ensure_cli_shim(home: Path, replace: bool) -> tuple[Path, str]:
+    bin_dir = home / ".local" / "bin"
+    bin_dir.mkdir(parents=True, exist_ok=True)
+
+    if not is_windows_host():
+        bin_link = bin_dir / "aok"
+        if bin_link.exists() or bin_link.is_symlink():
+            if not (bin_link.is_symlink() and bin_link.resolve() == KIT_ROOT / "scripts" / "aok"):
+                if replace:
+                    remove_existing_path(bin_link)
+                    bin_link.symlink_to(KIT_ROOT / "scripts" / "aok")
+                else:
+                    raise AokError(f"Refusing to replace existing executable: {bin_link}")
+        else:
+            bin_link.symlink_to(KIT_ROOT / "scripts" / "aok")
+        return bin_link, "symlink"
+
+    bin_link = bin_dir / "aok.cmd"
+    shim_text = windows_cli_shim_text(KIT_ROOT / "scripts" / "aok")
+    if bin_link.exists():
+        if bin_link.read_text().replace("\r\n", "\n") != shim_text:
+            if not replace:
+                raise AokError(f"Refusing to replace existing executable: {bin_link}")
+            bin_link.unlink()
+            bin_link.write_text(shim_text, newline="\r\n")
+    else:
+        bin_link.write_text(shim_text, newline="\r\n")
+
+    legacy_unix_shim = bin_dir / "aok"
+    if legacy_unix_shim.exists() or legacy_unix_shim.is_symlink():
+        if replace:
+            remove_existing_path(legacy_unix_shim)
+    return bin_link, "cmd"
+
+
 def cmd_install(args: argparse.Namespace) -> int:
     home = user_home(getattr(args, "home", None))
     replace = bool(getattr(args, "replace", False))
@@ -190,19 +300,7 @@ def cmd_install(args: argparse.Namespace) -> int:
 
     marketplace, link_path = marketplace_paths(home)
     link_path.parent.mkdir(parents=True, exist_ok=True)
-    if link_path.exists() or link_path.is_symlink():
-        if link_path.is_symlink() and link_path.resolve() == KIT_ROOT:
-            pass
-        elif replace:
-            if link_path.is_dir() and not link_path.is_symlink():
-                shutil.rmtree(link_path)
-            else:
-                link_path.unlink()
-            link_path.symlink_to(KIT_ROOT, target_is_directory=True)
-        else:
-            raise AokError(f"Refusing to replace existing plugin path: {link_path}")
-    else:
-        link_path.symlink_to(KIT_ROOT, target_is_directory=True)
+    plugin_mode = ensure_plugin_path(link_path, replace)
 
     data = load_json(
         marketplace,
@@ -225,25 +323,11 @@ def cmd_install(args: argparse.Namespace) -> int:
         plugins.append(entry)
     write_json(marketplace, data)
 
-    bin_dir = home / ".local" / "bin"
-    bin_dir.mkdir(parents=True, exist_ok=True)
-    bin_link = bin_dir / "aok"
-    if bin_link.exists() or bin_link.is_symlink():
-        if not (bin_link.is_symlink() and bin_link.resolve() == KIT_ROOT / "scripts" / "aok"):
-            if replace:
-                if bin_link.is_dir() and not bin_link.is_symlink():
-                    shutil.rmtree(bin_link)
-                else:
-                    bin_link.unlink()
-                bin_link.symlink_to(KIT_ROOT / "scripts" / "aok")
-            else:
-                raise AokError(f"Refusing to replace existing executable: {bin_link}")
-    else:
-        bin_link.symlink_to(KIT_ROOT / "scripts" / "aok")
+    bin_link, shim_mode = ensure_cli_shim(home, replace)
 
     print(f"Registered plugin in {marketplace}")
-    print(f"Plugin path: {link_path} -> {KIT_ROOT}")
-    print(f"CLI path: {bin_link}")
+    print(f"Plugin path ({plugin_mode}): {link_path} -> {KIT_ROOT}")
+    print(f"CLI path ({shim_mode}): {bin_link}")
     return 0
 
 
@@ -262,6 +346,10 @@ def collect_doctor(home: Path | None = None) -> dict:
         KIT_ROOT / "scripts" / "aok",
     ]
     marketplace, link_path = marketplace_paths(home)
+    cli_path = cli_shim_path(home)
+    plugin_ok = link_path.exists() and (
+        link_path.resolve() == KIT_ROOT or (is_windows_host() and plugin_dir_looks_valid(link_path))
+    )
     commands = {
         name: {
             "ok": command_exists(name),
@@ -283,21 +371,21 @@ def collect_doctor(home: Path | None = None) -> dict:
             "path": str(marketplace),
             "ok": marketplace.exists(),
         },
-        "pluginSymlink": {
+        "pluginPath": {
             "path": str(link_path),
-            "ok": link_path.exists() and link_path.resolve() == KIT_ROOT,
+            "ok": plugin_ok,
             "target": str(KIT_ROOT),
         },
         "cliShim": {
-            "path": str(home / ".local" / "bin" / "aok"),
-            "ok": (home / ".local" / "bin" / "aok").exists(),
+            "path": str(cli_path),
+            "ok": cli_path.exists(),
         },
     }
     codex_local_environment = collect_codex_local_env(KIT_ROOT / "templates")
     required_ok = (
         all(item["ok"] for item in files)
         and install["marketplace"]["ok"]
-        and install["pluginSymlink"]["ok"]
+        and install["pluginPath"]["ok"]
         and codex_local_environment["templatesOk"]
     )
     return {
@@ -363,7 +451,7 @@ def cmd_doctor(args: argparse.Namespace) -> int:
             print_result(item["relativePath"], bool(item["ok"]))
         install = report["install"]
         print_result("marketplace", install["marketplace"]["ok"], install["marketplace"]["path"])
-        print_result("plugin symlink", install["pluginSymlink"]["ok"], install["pluginSymlink"]["path"])
+        print_result("plugin path", install["pluginPath"]["ok"], install["pluginPath"]["path"])
         print_result("CLI shim", install["cliShim"]["ok"], install["cliShim"]["path"])
         local_env = report["codexLocalEnvironment"]
         print_result("Codex local environment templates", local_env["templatesOk"], local_env["projectPath"])

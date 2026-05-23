@@ -1,0 +1,10 @@
+{
+  "name": "opencode",
+  "kind": "tool-adapter",
+  "displayName": "OpenCode",
+  "status": "scaffolded",
+  "supportedTargets": ["opencode"],
+  "renders": ["task-packet", "role", "hook", "skill", "mcp-config"],
+  "entrypoints": ["adapters/opencode/README.md"],
+  "limitations": ["Renderer is documented but not automated."]
+}

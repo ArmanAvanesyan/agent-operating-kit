@@ -20,6 +20,15 @@ KIT_ROOT = Path(__file__).resolve().parents[1]
 PLUGIN_NAME = "agent-operating-kit"
 MARKETPLACE_NAME = "private-local"
 MARKETPLACE_DISPLAY = "Private Local"
+SUPPORTED_TARGETS = (
+    "codex",
+    "claude-code",
+    "cursor",
+    "opencode",
+    "gemini",
+    "openclaw",
+    "hermes-agent",
+)
 
 
 class AokError(RuntimeError):
@@ -567,11 +576,35 @@ def cmd_import_history(args: argparse.Namespace) -> int:
     return 0
 
 
-def validate_kit() -> list[str]:
-    missing = []
+def require_json(path: Path, errors: list[str]) -> dict | None:
+    try:
+        return json.loads(path.read_text())
+    except FileNotFoundError:
+        errors.append(f"{path.relative_to(KIT_ROOT)}: missing")
+    except json.JSONDecodeError as exc:
+        errors.append(f"{path.relative_to(KIT_ROOT)}: invalid JSON: {exc}")
+    return None
+
+
+def validate_required_files(errors: list[str]) -> None:
     required = [
+        "README.md",
+        "LICENSE",
         ".codex-plugin/plugin.json",
         "hooks.json",
+        "core/model.md",
+        "core/examples/skill.example.json",
+        "core/examples/role.example.json",
+        "core/examples/hook.example.json",
+        "core/examples/task-packet.example.json",
+        "docs/architecture.md",
+        "docs/swarmd-integration.md",
+        "docs/migration-from-claude-code-toolbox.md",
+        "schemas/skill.schema.json",
+        "schemas/role.schema.json",
+        "schemas/hook.schema.json",
+        "schemas/task-packet.schema.json",
+        "schemas/tool-adapter.schema.json",
         "skills/agent-workflow/SKILL.md",
         "skills/github-project-execution/SKILL.md",
         "skills/code-review/SKILL.md",
@@ -588,15 +621,97 @@ def validate_kit() -> list[str]:
     ]
     for rel in required:
         if not (KIT_ROOT / rel).exists():
-            missing.append(rel)
+            errors.append(f"{rel}: missing")
+
+
+def validate_json_files(errors: list[str]) -> None:
     for rel in (".codex-plugin/plugin.json", "hooks.json"):
-        path = KIT_ROOT / rel
-        if path.exists():
-            try:
-                json.loads(path.read_text())
-            except json.JSONDecodeError as exc:
-                missing.append(f"{rel}: invalid JSON: {exc}")
-    return missing
+        require_json(KIT_ROOT / rel, errors)
+    for path in sorted((KIT_ROOT / "schemas").glob("*.schema.json")):
+        data = require_json(path, errors)
+        if not data:
+            continue
+        for key in ("$schema", "title", "type"):
+            if key not in data:
+                errors.append(f"{path.relative_to(KIT_ROOT)}: missing {key}")
+    for path in sorted((KIT_ROOT / "core" / "examples").glob("*.json")):
+        data = require_json(path, errors)
+        if not data:
+            continue
+        if not data.get("kind") and path.name != "task-packet.example.json":
+            errors.append(f"{path.relative_to(KIT_ROOT)}: missing kind")
+
+
+def validate_adapters(errors: list[str]) -> None:
+    seen: set[str] = set()
+    for target in SUPPORTED_TARGETS:
+        base = KIT_ROOT / "adapters" / target
+        readme = base / "README.md"
+        manifest = base / "adapter.json"
+        if not readme.exists():
+            errors.append(f"{readme.relative_to(KIT_ROOT)}: missing")
+        data = require_json(manifest, errors)
+        if not data:
+            continue
+        seen.add(str(data.get("name", "")))
+        required = ["name", "kind", "displayName", "status", "supportedTargets", "renders"]
+        for key in required:
+            if key not in data:
+                errors.append(f"{manifest.relative_to(KIT_ROOT)}: missing {key}")
+        if data.get("name") != target:
+            errors.append(f"{manifest.relative_to(KIT_ROOT)}: name must be {target}")
+        if data.get("kind") != "tool-adapter":
+            errors.append(f"{manifest.relative_to(KIT_ROOT)}: kind must be tool-adapter")
+    missing_targets = set(SUPPORTED_TARGETS) - seen
+    if missing_targets:
+        errors.append(f"adapters: missing manifests for {', '.join(sorted(missing_targets))}")
+
+
+def validate_packs(errors: list[str]) -> None:
+    expected = {
+        "engineering-guardrails",
+        "ship-pipeline",
+        "phased-rollout-template",
+        "batch-resolve-conflicts",
+    }
+    pack_root = KIT_ROOT / "packs"
+    found = {path.name for path in pack_root.glob("*") if path.is_dir()} if pack_root.exists() else set()
+    for name in sorted(expected - found):
+        errors.append(f"packs/{name}: missing")
+    for name in sorted(expected & found):
+        base = pack_root / name
+        if not (base / "README.md").exists():
+            errors.append(f"packs/{name}/README.md: missing")
+        data = require_json(base / "pack.json", errors)
+        if not data:
+            continue
+        for key in ("name", "kind", "description", "sourceRepo", "supportedTargets", "concepts", "adapters"):
+            if key not in data:
+                errors.append(f"packs/{name}/pack.json: missing {key}")
+        if data.get("name") != name:
+            errors.append(f"packs/{name}/pack.json: name must be {name}")
+        if data.get("kind") != "pack":
+            errors.append(f"packs/{name}/pack.json: kind must be pack")
+        for adapter_name, adapter in (data.get("adapters") or {}).items():
+            plugin_path = adapter.get("pluginPath")
+            readme_path = adapter.get("readmePath")
+            for rel in (plugin_path, readme_path):
+                if rel and not (base / rel).exists():
+                    errors.append(f"packs/{name}/pack.json: missing adapter asset {rel}")
+            for rel in adapter.get("assets", []):
+                if not (base / rel).exists():
+                    errors.append(f"packs/{name}/pack.json: missing adapter asset {rel}")
+            if adapter_name not in SUPPORTED_TARGETS:
+                errors.append(f"packs/{name}/pack.json: unknown adapter {adapter_name}")
+
+
+def validate_kit() -> list[str]:
+    errors: list[str] = []
+    validate_required_files(errors)
+    validate_json_files(errors)
+    validate_adapters(errors)
+    validate_packs(errors)
+    return errors
 
 
 def cmd_validate(_: argparse.Namespace) -> int:

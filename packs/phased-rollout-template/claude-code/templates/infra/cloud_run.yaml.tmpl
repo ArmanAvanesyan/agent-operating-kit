@@ -1,0 +1,95 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: {{PROJECT_NAME}}
+  annotations:
+    run.googleapis.com/launch-stage: GA
+    run.googleapis.com/ingress: all
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "0"
+        autoscaling.knative.dev/maxScale: "5"
+        run.googleapis.com/cpu-throttling: "true"
+        run.googleapis.com/execution-environment: gen2
+        run.googleapis.com/cloudsql-instances: __PROJECT__:europe-west1:{{PROJECT_NAME}}-pg
+        run.googleapis.com/startup-cpu-boost: "true"
+    spec:
+      serviceAccountName: {{PROJECT_NAME}}-app@__PROJECT__.iam.gserviceaccount.com
+      containerConcurrency: 80
+      timeoutSeconds: 300
+      containers:
+        - image: __IMAGE__
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          env:
+            - name: APP_ENV
+              value: production
+            - name: GCP_PROJECT
+              value: __PROJECT__
+            - name: GCP_LOCATION
+              value: europe-west1
+            - name: CLOUD_TASKS_QUEUE
+              value: {{PROJECT_NAME}}-jobs
+            - name: GCS_BUCKET
+              value: {{PROJECT_NAME}}-prod-eu
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{PROJECT_NAME}}-database-url
+                  key: latest
+            - name: AUTH_PROVIDER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{PROJECT_NAME}}-auth-provider-token
+                  key: latest
+            - name: AUTH_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{PROJECT_NAME}}-auth-webhook-secret
+                  key: latest
+            - name: LLM_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{PROJECT_NAME}}-llm-api-key
+                  key: latest
+            - name: STRIPE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{PROJECT_NAME}}-stripe-secret-key
+                  key: latest
+            - name: STRIPE_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{PROJECT_NAME}}-stripe-webhook-secret
+                  key: latest
+            - name: CRON_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{PROJECT_NAME}}-cron-secret
+                  key: latest
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: {{PROJECT_NAME}}-sentry-dsn
+                  key: latest
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 12
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            periodSeconds: 30
+  traffic:
+    - latestRevision: true
+      percent: 100

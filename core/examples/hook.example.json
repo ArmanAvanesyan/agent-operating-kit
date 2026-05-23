@@ -1,0 +1,13 @@
+{
+  "name": "pre-worktree",
+  "kind": "hook",
+  "event": "pre",
+  "description": "Verify branch and dirty worktree state before edits.",
+  "severity": "block",
+  "targets": {
+    "codex": {
+      "renderAs": "checklist",
+      "path": "hooks/pre/worktree.md"
+    }
+  }
+}

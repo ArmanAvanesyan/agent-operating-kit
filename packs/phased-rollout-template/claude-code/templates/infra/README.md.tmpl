@@ -1,0 +1,95 @@
+# infra/
+
+GCP deployment configuration for `{{PROJECT_NAME}}`.
+
+## Phase 1–2: manual deploys
+
+```bash
+# Authenticate
+gcloud auth login
+gcloud config set project <your-project>
+
+# Deploy from source (one command — Cloud Run builds the container)
+cd /path/to/{{PROJECT_NAME}}
+gcloud run deploy {{PROJECT_NAME}} --source . \
+  --region europe-west1 \
+  --allow-unauthenticated \
+  --min-instances 0 \
+  --max-instances 1 \
+  --timeout 1800 \
+  --memory 1Gi \
+  --cpu 1
+```
+
+`--max-instances 1` until a Cloud SQL connection pooling proxy is in place. Scaling beyond 1 without pooling will exhaust the database connection pool.
+
+## Phase 3: GitHub Actions + Terraform
+
+- `.github/workflows/deploy.yml` triggers on `workflow_dispatch` (manual) — flip to push-on-main once you trust the manual flow
+- Terraform state in a GCS bucket; per-environment workspaces (`dev`, `prod`)
+- Cloud Run, Cloud SQL, Cloud Tasks, Cloud Storage, Secret Manager, Cloud Scheduler all defined declaratively
+
+## Files
+
+```
+infra/
+├── README.md              (this file — quick reference)
+├── ACCOUNTS.md            (pre-deploy: every external service to register with)
+├── DEPLOY.md              (step-by-step production runbook)
+├── cloud_run.yaml         (declarative Cloud Run service spec)
+└── terraform/             (Phase 3 — IaC for Cloud SQL, GCS, IAM, etc.)
+```
+
+## Cloud SQL setup (one-time)
+
+```bash
+# Create instance
+gcloud sql instances create {{PROJECT_NAME}}-pg \
+  --region europe-west1 \
+  --database-version POSTGRES_16 \
+  --tier db-f1-micro \
+  --enable-private-ip \
+  --network <your-vpc>
+
+# Enable connection pooling (REQUIRED before --max-instances > 1)
+gcloud sql instances patch {{PROJECT_NAME}}-pg \
+  --enable-pooling
+
+# Create database + user
+gcloud sql databases create {{PROJECT_NAME}} --instance {{PROJECT_NAME}}-pg
+gcloud sql users create {{PROJECT_NAME}} --instance {{PROJECT_NAME}}-pg --password <strong-password>
+```
+
+Stash the password in Secret Manager as `DATABASE_PASSWORD`. Cloud Run reads via the Secret Manager mount.
+
+## Cloud Tasks queue (drop this section if your project doesn't use Cloud Tasks)
+
+```bash
+gcloud tasks queues create {{PROJECT_NAME}}-jobs \
+  --location europe-west1 \
+  --max-attempts 5 \
+  --max-backoff 600s \
+  --max-doublings 4
+```
+
+## Cost expectations (Phase 2 baseline)
+
+Roughly ~$10/month fixed before customer #1 — see the cost summary in your Tech Stack design doc. Most of this is the Cloud SQL micro instance.
+
+## Deploy via GitHub Actions
+
+### Prerequisites (one-time)
+
+- Create GCS bucket `{{PROJECT_NAME}}-prod-eu` (europe-west1)
+- Create Cloud SQL Postgres instance `{{PROJECT_NAME}}-pg` in europe-west1
+- Create Cloud Tasks queue `{{PROJECT_NAME}}-jobs` in europe-west1 (if applicable)
+- Create the Secret Manager secrets your `cloud_run.yaml` references
+- Create service accounts: `{{PROJECT_NAME}}-app@`, `{{PROJECT_NAME}}-deploy@`, `{{PROJECT_NAME}}-scheduler@`
+- Set up Workload Identity Federation for GitHub Actions
+- GitHub repo secrets: `GCP_PROJECT`, `GCP_WORKLOAD_IDENTITY_PROVIDER`, `GCP_DEPLOY_SERVICE_ACCOUNT`
+
+### Deploy
+
+Trigger the `Deploy to Cloud Run` workflow from the GitHub Actions UI. It builds the image, pushes to Artifact Registry, replaces the Cloud Run service, and smoke-tests `/healthz`.
+
+For the full step-by-step (with verifications and recovery steps for every failure mode), see `DEPLOY.md`. Read `ACCOUNTS.md` first to register the external services you'll need.

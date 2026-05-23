@@ -1,0 +1,15 @@
+{
+  "name": "batch-resolve-conflicts",
+  "kind": "pack",
+  "description": "Parallel PR conflict resolution workflow with canonical shared-file rules.",
+  "sourceRepo": "ArmanAvanesyan/claude-code-toolbox",
+  "supportedTargets": ["claude-code"],
+  "concepts": ["skill"],
+  "adapters": {
+    "claude-code": {
+      "pluginPath": "claude-code/plugin.json",
+      "readmePath": "claude-code/README.md",
+      "assets": ["claude-code/skills/batch-resolve-conflicts.md"]
+    }
+  }
+}

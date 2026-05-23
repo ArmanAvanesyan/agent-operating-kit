@@ -1,0 +1,20 @@
+{
+  "name": "implementer",
+  "kind": "role",
+  "description": "Make one scoped change and produce verification evidence.",
+  "callsign": "implementer",
+  "responsibilities": [
+    "Read the task packet",
+    "Implement the scoped change",
+    "Run relevant verification"
+  ],
+  "capabilities": ["edit", "test", "summarize"],
+  "escalationRules": ["Escalate when scope is contradictory or production secrets are required."],
+  "targets": {
+    "codex": {
+      "renderAs": "role",
+      "path": "templates/agents/roles/implementer.md",
+      "assignee": "implementer"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "batch-resolve-conflicts",
+  "version": "0.1.0",
+  "description": "Slash command /batch-resolve-conflicts that spawns parallel rebase agents for N conflicting PRs.",
+  "author": "Arman Avanesyan"
+}

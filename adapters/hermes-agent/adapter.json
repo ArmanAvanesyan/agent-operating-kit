@@ -1,0 +1,10 @@
+{
+  "name": "hermes-agent",
+  "kind": "tool-adapter",
+  "displayName": "Hermes Agent",
+  "status": "scaffolded",
+  "supportedTargets": ["hermes-agent"],
+  "renders": ["task-packet", "role", "hook", "skill", "mcp-config"],
+  "entrypoints": ["adapters/hermes-agent/README.md"],
+  "limitations": ["Runtime-specific event wiring is not automated."]
+}

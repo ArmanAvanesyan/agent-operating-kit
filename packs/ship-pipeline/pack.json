@@ -1,0 +1,19 @@
+{
+  "name": "ship-pipeline",
+  "kind": "pack",
+  "description": "PR ship workflow, CI recovery skill, and CI fixer agent.",
+  "sourceRepo": "ArmanAvanesyan/claude-code-toolbox",
+  "supportedTargets": ["claude-code"],
+  "concepts": ["skill", "role"],
+  "adapters": {
+    "claude-code": {
+      "pluginPath": "claude-code/plugin.json",
+      "readmePath": "claude-code/README.md",
+      "assets": [
+        "claude-code/skills/ship-pr.md",
+        "claude-code/skills/fix-ci.md",
+        "claude-code/agents/pr-ci-fixer.md"
+      ]
+    }
+  }
+}

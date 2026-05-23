@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ArmanAvanesyan/agent-operating-kit/schemas/hook.schema.json",
+  "title": "AOK Hook",
+  "type": "object",
+  "required": ["name", "kind", "event", "description", "severity", "targets"],
+  "properties": {
+    "name": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "kind": { "const": "hook" },
+    "event": {
+      "type": "string",
+      "enum": ["pre", "after", "session-start", "pre-tool-use", "post-tool-use"]
+    },
+    "description": { "type": "string", "minLength": 1 },
+    "matcher": { "type": "string" },
+    "command": { "type": "string" },
+    "severity": { "type": "string", "enum": ["inform", "warn", "block"] },
+    "targets": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "renderAs": { "type": "string" },
+          "path": { "type": "string" },
+          "nativeEvent": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

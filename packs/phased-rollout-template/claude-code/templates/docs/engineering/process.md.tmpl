@@ -1,0 +1,125 @@
+# Engineering process
+
+How work flows from idea → spec → code → review → merge → deploy. Tuned for 1-3 devs.
+
+## 1. Branching strategy — trunk-based, short feature branches
+
+- Branch off `main`. Name: `<type>/<short-slug>` matching the commit type — `feat/new-endpoint`, `fix/retry-deadlock`, `eval/baseline-v3`.
+- **Max lifespan: 3 days** before you must merge, draft-PR it, or explicitly extend.
+- **Long-lived experiments** → `experiment/<name>` with a tracking issue and a weekly check-in comment. Stale 14 days without a comment → delete.
+- Rebase onto `main` daily for any branch open longer than 2 days.
+
+## 2. Issue / spec lifecycle
+
+Cutoff between "write a long-form spec" vs "GitHub issue + PR":
+
+| Trigger | Where it lives |
+|---|---|
+| Touches a prompt, migration, ADR, or crosses two components | **Long-form spec page** (problem, proposed approach, known unknowns) → linked from issue |
+| Anything else | **GitHub issue with rationale in body** → directly to a PR |
+
+Hard rule: **no issue, no PR.** The issue is the spec for small work; the long-form spec is for anything that takes more than a day or requires a new ADR.
+
+## 3. Definition of Ready
+
+A ticket is Ready to start when:
+
+1. Acceptance criterion written as **"given X, when Y, then Z"** — not prose.
+2. Any required migration sketched: column names, index strategy, `CONCURRENTLY` flag noted.
+3. If it touches prompts or model behavior, the eval baseline score for that version is recorded on the issue.
+4. Any external dependency (new GCS bucket, new Cloud Tasks queue) is either already provisioned or explicitly out of scope.
+5. Issue is labeled correctly (see § Issue templates and labels).
+6. Fits in one PR. If not, split before coding starts.
+
+## 4. Definition of Done
+
+A PR is Done when all of these are true. Items marked **[CI]** are automated; **[H]** require human or subagent judgment.
+
+- All CI jobs green: ruff, mypy, pytest, alembic round-trip, migration convention scan, NDA scan. **[CI]**
+- For prompt changes: eval re-run; score delta posted in PR body; score ≥ previous version. **[CI gate + H interpretation]**
+- New/changed behavior has ≥1 pytest covering the happy path. **[H — author verifies]**
+- Migration follows CONTRIBUTING.md: `CONCURRENTLY` in own revision, `downgrade()` implemented, CHECK constraint if enum-like. **[H — subagent reviewer verifies]**
+- PR description states what changed and why in 2-5 sentences. **[H]**
+- No commented-out code, no `TODO` without a linked issue. **[H]**
+- If a new ADR is warranted, it is drafted in `docs/adr/` (or your design-docs system + linked) and referenced. **[H]**
+- Cloud Run service starts locally post-change smoke check. **[H]**
+
+## 5. PR review process
+
+1. Dev **self-reviews the diff** first — read every changed line.
+2. Dev delegates to `engineering-code-reviewer` subagent for structural and convention review.
+3. Dev addresses blocking comments (see code-review.md § Blocking vs Suggesting).
+4. **Human-only review (conscious merge, not rubber-stamp) required for:**
+   - Changes touching auth, IAM, API key handling, or stored customer data → also invoke `engineering-security-engineer` and treat its output as **blocking**.
+   - Prompt changes where the eval delta is **negative** or within 1% of the threshold.
+5. Merge.
+
+## 6. Branch protection rules for `main`
+
+In GitHub repo settings → Branches → `main`:
+
+- Require status checks before merging:
+  - `lint-and-typecheck`
+  - `test`
+  - `alembic-roundtrip`
+  - `migration-conventions`
+  - `nda-data-check`
+- Require linear history (enforces rebase, no merge commits).
+- Dismiss stale PR approvals when new commits are pushed.
+- No force-pushes.
+- No deletions.
+- Phase 1-2: do **not** require a human approving review — subagent review is sufficient for non-security changes.
+- Phase 3: require 1 human approval for anything in `prompts/`, `eval/`, billing-related code, and admin routes.
+
+## 7. Deploy gates
+
+### Phase 1-2 (manual deploys)
+
+1. All CI checks green on the commit being deployed.
+2. `alembic upgrade head` run against Cloud SQL **before** the new revision receives traffic.
+3. Deploy via `gcloud run deploy {{PROJECT_NAME}} --source .` (see `infra/README.md`).
+4. Manually verify `/healthz` returns 200 after deploy.
+5. **Note the previous revision name before deploying** — rollback is `gcloud run services update-traffic` to the previous revision.
+
+### Phase 3 (GitHub Actions deploy)
+
+- Triggers only on merge to `main`.
+- Requires all CI jobs as prerequisites.
+- Runs `alembic upgrade head` as a deploy step before switching traffic.
+- Posts the new revision URL as a workflow summary.
+- Rollback is a **revert commit**, not a manual gcloud command.
+
+## 8. Issue templates and labels
+
+### Templates
+
+- **Bug report** — required fields: steps to reproduce, actual behavior, expected behavior, logs snippet.
+- **Feature / Task** — required fields: problem statement, acceptance criteria as bullet list. Labels applied manually.
+
+### Labels (recommended starting set)
+
+- `migration` — any schema-touching issue.
+- `security` — auth, IAM, secrets, data retention.
+- `experiment` — long-lived branches.
+- `blocked` — waiting on external dependency.
+- Component labels per major package (`pipeline`, `infra`, `prompts`, `eval`, `bot`, `docs`).
+
+## 9. Project-specific conventions (the load-bearing ones)
+
+These prevent specific failure modes that have bitten similar projects:
+
+1. **Every Cloud Tasks (or async-queue) handler must have an idempotency pytest** that enqueues the same payload twice and asserts the second is a no-op. Cloud Tasks delivers at-least-once; without this test, the first surprise duplicate triggers a duplicate billing event or a duplicate output.
+
+2. **Any new env var must be added to `.env.example` in the same commit it's used — no exceptions.** Missing vars surface as runtime crashes in Cloud Run, not as startup errors.
+
+3. **Eval version files must follow a consistent naming pattern** and live in a dedicated directory. Eval history becomes useless without naming consistency — you can't bisect a regression if files are named ad-hoc.
+
+## 10. What does NOT belong in this doc
+
+Things some teams over-document that we're explicitly leaving out at this scale:
+
+- **Code style rationale** — ruff decides, not us.
+- **Meeting cadence** — there are no meetings.
+- **Onboarding steps beyond "clone and run CI."**
+- **Release notes format** — the commit log is the release note.
+- **Test coverage percentage targets** — we care about critical-path coverage, not a number. (CI's 70% global floor is the only number we track.)

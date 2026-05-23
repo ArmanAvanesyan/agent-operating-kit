@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ArmanAvanesyan/agent-operating-kit/schemas/task-packet.schema.json",
+  "title": "AOK Task Packet",
+  "type": "object",
+  "required": ["title", "spec", "status", "phase", "acceptanceCriteria", "verification"],
+  "properties": {
+    "title": { "type": "string", "minLength": 1 },
+    "spec": { "type": "string", "minLength": 1 },
+    "status": {
+      "type": "string",
+      "enum": ["inbox", "ready", "in-progress", "qa", "review", "blocked", "done"]
+    },
+    "phase": {
+      "type": "string",
+      "enum": ["intake", "planning", "build", "qa", "review", "release", "operate"]
+    },
+    "targetRepo": { "type": "string" },
+    "branch": { "type": "string" },
+    "assignee": { "type": "string" },
+    "qaAssignee": { "type": "string" },
+    "acceptanceCriteria": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "verification": {
+      "type": "object",
+      "required": ["commands"],
+      "properties": {
+        "commands": { "type": "array", "items": { "type": "string" } },
+        "evidence": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "links": {
+      "type": "object",
+      "properties": {
+        "issue": { "type": "string" },
+        "pullRequest": { "type": "string" },
+        "projectItem": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "swarmd": {
+      "type": "object",
+      "properties": {
+        "taskId": { "type": "string" },
+        "gateCmd": { "type": "string" },
+        "memoryNamespace": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

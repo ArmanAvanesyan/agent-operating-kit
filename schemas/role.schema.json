@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ArmanAvanesyan/agent-operating-kit/schemas/role.schema.json",
+  "title": "AOK Role",
+  "type": "object",
+  "required": ["name", "kind", "description", "responsibilities", "targets"],
+  "properties": {
+    "name": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "kind": { "const": "role" },
+    "description": { "type": "string", "minLength": 1 },
+    "callsign": { "type": "string" },
+    "responsibilities": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "capabilities": { "type": "array", "items": { "type": "string" } },
+    "escalationRules": { "type": "array", "items": { "type": "string" } },
+    "targets": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "path": { "type": "string" },
+          "renderAs": { "type": "string" },
+          "assignee": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

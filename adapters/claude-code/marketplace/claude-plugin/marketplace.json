@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "aok-claude-code",
+  "description": "AOK Claude Code compatibility marketplace for reusable agent workflow packs",
+  "owner": {
+    "name": "Arman Avanesyan"
+  },
+  "plugins": [
+    {
+      "name": "engineering-guardrails",
+      "source": "../../../../packs/engineering-guardrails/claude-code",
+      "description": "Hooks that enforce load-bearing engineering conventions: from __future__ import, no assert in production, alembic CONCURRENTLY discipline. Plus SessionStart reminder and pre-commit staleness nudge.",
+      "version": "0.2.0"
+    },
+    {
+      "name": "ship-pipeline",
+      "source": "../../../../packs/ship-pipeline/claude-code",
+      "description": "Slash commands /ship-pr and /fix-ci for the full PR ship pipeline (simplify → gates → push → PR → watch CI → squash-merge) with auto-recovery via the pr-ci-fixer agent.",
+      "version": "0.1.0"
+    },
+    {
+      "name": "batch-resolve-conflicts",
+      "source": "../../../../packs/batch-resolve-conflicts/claude-code",
+      "description": "Slash command /batch-resolve-conflicts that spawns parallel rebase agents for N conflicting PRs with built-in canonical-file resolution rules.",
+      "version": "0.1.0"
+    },
+    {
+      "name": "phased-rollout-template",
+      "source": "../../../../packs/phased-rollout-template/claude-code",
+      "description": "Slash command /init-phased-project that scaffolds the standard project skeleton (CLAUDE.md, infra/ACCOUNTS+DEPLOY, docs/engineering, 9-job CI, Cloud Run deploy).",
+      "version": "0.1.0"
+    }
+  ]
+}

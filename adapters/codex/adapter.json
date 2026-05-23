@@ -1,0 +1,10 @@
+{
+  "name": "codex",
+  "kind": "tool-adapter",
+  "displayName": "Codex",
+  "status": "active",
+  "supportedTargets": ["codex"],
+  "renders": ["task-packet", "role", "hook", "skill", "pack", "mcp-config"],
+  "entrypoints": ["scripts/aok", ".codex-plugin/plugin.json", "skills/"],
+  "limitations": ["Neutral manifest to Codex skill generation is currently curated manually."]
+}

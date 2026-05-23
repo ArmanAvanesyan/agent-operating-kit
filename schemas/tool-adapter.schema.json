@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ArmanAvanesyan/agent-operating-kit/schemas/tool-adapter.schema.json",
+  "title": "AOK Tool Adapter",
+  "type": "object",
+  "required": ["name", "kind", "displayName", "status", "supportedTargets", "renders"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "enum": ["codex", "claude-code", "cursor", "opencode", "gemini", "openclaw", "hermes-agent"]
+    },
+    "kind": { "const": "tool-adapter" },
+    "displayName": { "type": "string", "minLength": 1 },
+    "status": { "type": "string", "enum": ["active", "scaffolded", "experimental"] },
+    "supportedTargets": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "renders": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["task-packet", "role", "hook", "skill", "pack", "mcp-config"]
+      },
+      "minItems": 1
+    },
+    "entrypoints": { "type": "array", "items": { "type": "string" } },
+    "limitations": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}

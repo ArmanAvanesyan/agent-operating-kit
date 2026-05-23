@@ -1,0 +1,57 @@
+{
+  "name": "engineering-guardrails",
+  "version": "0.2.0",
+  "description": "Block writes/edits that violate load-bearing engineering conventions, plus session-start convention reminders and a pre-commit staleness check.",
+  "author": "Arman Avanesyan",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PLUGIN_ROOT}/scripts/session-start-reminder.py\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PLUGIN_ROOT}/scripts/check-future-annotations.py\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PLUGIN_ROOT}/scripts/check-no-assert.py\"",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PLUGIN_ROOT}/scripts/check-migration-conventions.py\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PLUGIN_ROOT}/scripts/check-pre-commit.py\"",
+            "if": "Bash(git commit*)",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

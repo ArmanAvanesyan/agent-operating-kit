@@ -10,6 +10,7 @@ import shutil
 import stat
 import subprocess
 import sys
+import tarfile
 import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
@@ -126,7 +127,7 @@ def copy_tree(paths: tuple[str, ...], dest: Path) -> None:
         shutil.copy2(path, target)
 
 
-def installer_script(version: str) -> str:
+def macos_installer_script(version: str, target_arch: str) -> str:
     return f"""#!/usr/bin/env bash
 set -euo pipefail
 
@@ -135,6 +136,19 @@ SOURCE_DIR="${{SCRIPT_DIR}}/payload/{PRODUCT}"
 INSTALL_DIR="${{HOME}}/Library/Application Support/Agent Operating Kit/{PRODUCT}"
 REPORT_DIR="${{HOME}}/Library/Application Support/Agent Operating Kit"
 REPORT_PATH="${{REPORT_DIR}}/setup-report.md"
+ARCH="$(uname -m)"
+
+case "{target_arch}" in
+  apple-silicon) EXPECTED_ARCH="arm64" ;;
+  intel) EXPECTED_ARCH="x86_64" ;;
+  *) EXPECTED_ARCH="" ;;
+esac
+
+if [ -n "$EXPECTED_ARCH" ] && [ "$ARCH" != "$EXPECTED_ARCH" ] && [ "${{AOK_IGNORE_ARCH:-0}}" != "1" ]; then
+  echo "This installer targets {target_arch} macOS ($EXPECTED_ARCH), detected $ARCH." >&2
+  echo "Set AOK_IGNORE_ARCH=1 to force installation." >&2
+  exit 2
+fi
 
 if [ ! -d "${{SOURCE_DIR}}" ]; then
   echo "Missing installer payload: ${{SOURCE_DIR}}" >&2
@@ -146,29 +160,152 @@ rm -rf "${{INSTALL_DIR}}"
 mkdir -p "$(dirname "${{INSTALL_DIR}}")"
 cp -R "${{SOURCE_DIR}}" "${{INSTALL_DIR}}"
 
-python3 "${{INSTALL_DIR}}/scripts/aok" install --home "${{HOME}}" --replace
-python3 "${{INSTALL_DIR}}/scripts/aok" doctor --home "${{HOME}}" --report "${{REPORT_PATH}}"
+python3 "${{INSTALL_DIR}}/scripts/aok" install --home "${{HOME}}" --replace || true
+python3 "${{INSTALL_DIR}}/scripts/aok" doctor --home "${{HOME}}" --report "${{REPORT_PATH}}" || true
 
-echo "Installed {PRODUCT} {version}"
+echo "Installed {PRODUCT} {version} ({target_arch})"
 echo "Install path: ${{INSTALL_DIR}}"
 echo "Setup report: ${{REPORT_PATH}}"
 """
 
 
-def build_installer_zip(dist: Path, version: str) -> Path:
-    name = f"{PRODUCT}-{version}-macos-installer"
+def windows_installer_ps1(version: str) -> str:
+    return f"""$ErrorActionPreference = "Stop"
+
+$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$SourceDir = Join-Path $ScriptDir "payload\\{PRODUCT}"
+$InstallRoot = Join-Path $env:LOCALAPPDATA "Agent Operating Kit"
+$InstallDir = Join-Path $InstallRoot "{PRODUCT}"
+$ReportPath = Join-Path $InstallRoot "setup-report.txt"
+
+if (-not (Test-Path $SourceDir)) {{
+  Write-Error "Missing installer payload: $SourceDir"
+}}
+
+New-Item -ItemType Directory -Force -Path $InstallRoot | Out-Null
+if (Test-Path $InstallDir) {{
+  Remove-Item -Recurse -Force $InstallDir
+}}
+Copy-Item -Recurse -Force $SourceDir $InstallDir
+
+$python = Get-Command python -ErrorAction SilentlyContinue
+if (-not $python) {{
+  $python = Get-Command py -ErrorAction SilentlyContinue
+}}
+
+if ($python) {{
+  & $python.Path (Join-Path $InstallDir "scripts\\aok") install --home $env:USERPROFILE --replace
+  & $python.Path (Join-Path $InstallDir "scripts\\aok") doctor --home $env:USERPROFILE --report $ReportPath
+}} else {{
+  @"
+Agent Operating Kit {version}
+Install path: $InstallDir
+Python not found; skipped aok install/doctor steps.
+"@ | Set-Content -Path $ReportPath
+}}
+
+Write-Host "Installed {PRODUCT} {version}"
+Write-Host "Install path: $InstallDir"
+Write-Host "Setup report: $ReportPath"
+"""
+
+
+def linux_user_installer_sh(version: str) -> str:
+    return f"""#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${{BASH_SOURCE[0]}}")" && pwd)"
+SOURCE_DIR="${{SCRIPT_DIR}}/payload/{PRODUCT}"
+INSTALL_ROOT="${{XDG_DATA_HOME:-$HOME/.local/share}}/agent-operating-kit"
+INSTALL_DIR="${{INSTALL_ROOT}}/{PRODUCT}"
+REPORT_PATH="${{INSTALL_ROOT}}/setup-report.md"
+
+mkdir -p "${{INSTALL_ROOT}}"
+rm -rf "${{INSTALL_DIR}}"
+cp -R "${{SOURCE_DIR}}" "${{INSTALL_DIR}}"
+
+python3 "${{INSTALL_DIR}}/scripts/aok" install --home "${{HOME}}" --replace || true
+python3 "${{INSTALL_DIR}}/scripts/aok" doctor --home "${{HOME}}" --report "${{REPORT_PATH}}" || true
+
+echo "Installed {PRODUCT} {version} (linux-user)"
+echo "Install path: ${{INSTALL_DIR}}"
+echo "Setup report: ${{REPORT_PATH}}"
+"""
+
+
+def linux_system_installer_sh(version: str) -> str:
+    return f"""#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${{BASH_SOURCE[0]}}")" && pwd)"
+SOURCE_DIR="${{SCRIPT_DIR}}/payload/{PRODUCT}"
+INSTALL_ROOT="/opt/agent-operating-kit"
+INSTALL_DIR="${{INSTALL_ROOT}}/{PRODUCT}"
+REPORT_PATH="${{INSTALL_ROOT}}/setup-report.md"
+
+if [ "$(id -u)" -ne 0 ]; then
+  echo "System installer requires root. Re-run with sudo." >&2
+  exit 1
+fi
+
+mkdir -p "${{INSTALL_ROOT}}"
+rm -rf "${{INSTALL_DIR}}"
+cp -R "${{SOURCE_DIR}}" "${{INSTALL_DIR}}"
+
+TARGET_USER="${{SUDO_USER:-}}"
+TARGET_HOME="${{HOME}}"
+if [ -n "${{TARGET_USER}}" ]; then
+  TARGET_HOME="$(getent passwd "${{TARGET_USER}}" | cut -d: -f6 || true)"
+  if [ -z "${{TARGET_HOME}}" ]; then
+    TARGET_HOME="/home/${{TARGET_USER}}"
+  fi
+fi
+
+if [ -n "${{TARGET_USER}}" ] && [ -d "${{TARGET_HOME}}" ]; then
+  su - "${{TARGET_USER}}" -c "python3 '${{INSTALL_DIR}}/scripts/aok' install --home '${{TARGET_HOME}}' --replace" || true
+  su - "${{TARGET_USER}}" -c "python3 '${{INSTALL_DIR}}/scripts/aok' doctor --home '${{TARGET_HOME}}' --report '${{REPORT_PATH}}'" || true
+fi
+
+echo "Installed {PRODUCT} {version} (linux-system)"
+echo "Install path: ${{INSTALL_DIR}}"
+echo "Setup report: ${{REPORT_PATH}}"
+"""
+
+
+def write_stage_zip(stage_root: Path, out: Path) -> Path:
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with zipfile.ZipFile(out, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
+        for path in sorted(stage_root.rglob("*")):
+            if path.is_file():
+                rel = path.relative_to(stage_root.parent)
+                info = zipfile.ZipInfo(rel.as_posix())
+                mode = stat.S_IMODE(path.stat().st_mode)
+                info.external_attr = (mode or 0o644) << 16
+                archive.writestr(info, path.read_bytes())
+    return out
+
+
+def write_stage_tar_gz(stage_root: Path, out: Path) -> Path:
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with tarfile.open(out, "w:gz") as archive:
+        archive.add(stage_root, arcname=stage_root.name, recursive=True)
+    return out
+
+
+def build_macos_installer_zip(dist: Path, version: str, target_arch: str) -> Path:
+    name = f"{PRODUCT}-{version}-macos-{target_arch}-installer"
     stage = dist / "_staging" / name
     if stage.exists():
         shutil.rmtree(stage)
     payload = stage / "payload" / PRODUCT
     copy_tree(KIT_PATHS, payload)
     command = stage / "install.command"
-    command.write_text(installer_script(version))
+    command.write_text(macos_installer_script(version, target_arch))
     command.chmod(0o755)
     (stage / "README.txt").write_text(
         "\n".join(
             [
-                f"{PRODUCT} {version} macOS installer-equivalent",
+                f"{PRODUCT} {version} macOS {target_arch} installer-equivalent",
                 "",
                 "Double-click install.command in Finder.",
                 "The installer copies the kit into ~/Library/Application Support/Agent Operating Kit,",
@@ -179,14 +316,90 @@ def build_installer_zip(dist: Path, version: str) -> Path:
         )
     )
     out = dist / f"{name}.zip"
-    with zipfile.ZipFile(out, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
-        for path in sorted(stage.rglob("*")):
-            if path.is_file():
-                rel = path.relative_to(stage.parent)
-                info = zipfile.ZipInfo(rel.as_posix())
-                mode = stat.S_IMODE(path.stat().st_mode)
-                info.external_attr = (mode or 0o644) << 16
-                archive.writestr(info, path.read_bytes())
+    write_stage_zip(stage, out)
+    shutil.rmtree(stage.parent)
+    return out
+
+
+def build_windows_installer_zip(dist: Path, version: str) -> Path:
+    name = f"{PRODUCT}-{version}-windows-installer"
+    stage = dist / "_staging" / name
+    if stage.exists():
+        shutil.rmtree(stage)
+    payload = stage / "payload" / PRODUCT
+    copy_tree(KIT_PATHS, payload)
+    ps1 = stage / "install.ps1"
+    ps1.write_text(windows_installer_ps1(version))
+    cmd = stage / "install.cmd"
+    cmd.write_text("@echo off\r\npowershell -ExecutionPolicy Bypass -File \"%~dp0install.ps1\"\r\n")
+    (stage / "README.txt").write_text(
+        "\n".join(
+            [
+                f"{PRODUCT} {version} Windows installer",
+                "",
+                "Run install.cmd (or install.ps1).",
+                "The installer copies the kit into %LOCALAPPDATA%\\Agent Operating Kit\\agent-operating-kit,",
+                "then runs aok install/doctor if Python is available.",
+                "",
+            ]
+        )
+    )
+    out = dist / f"{name}.zip"
+    write_stage_zip(stage, out)
+    shutil.rmtree(stage.parent)
+    return out
+
+
+def build_linux_user_installer_tar(dist: Path, version: str) -> Path:
+    name = f"{PRODUCT}-{version}-linux-user-installer"
+    stage = dist / "_staging" / name
+    if stage.exists():
+        shutil.rmtree(stage)
+    payload = stage / "payload" / PRODUCT
+    copy_tree(KIT_PATHS, payload)
+    script = stage / "install.sh"
+    script.write_text(linux_user_installer_sh(version))
+    script.chmod(0o755)
+    (stage / "README.txt").write_text(
+        "\n".join(
+            [
+                f"{PRODUCT} {version} Linux user installer",
+                "",
+                "Run: ./install.sh",
+                "Installs to ${XDG_DATA_HOME:-$HOME/.local/share}/agent-operating-kit.",
+                "",
+            ]
+        )
+    )
+    out = dist / f"{name}.tar.gz"
+    write_stage_tar_gz(stage, out)
+    shutil.rmtree(stage.parent)
+    return out
+
+
+def build_linux_system_installer_tar(dist: Path, version: str) -> Path:
+    name = f"{PRODUCT}-{version}-linux-system-installer"
+    stage = dist / "_staging" / name
+    if stage.exists():
+        shutil.rmtree(stage)
+    payload = stage / "payload" / PRODUCT
+    copy_tree(KIT_PATHS, payload)
+    script = stage / "install.sh"
+    script.write_text(linux_system_installer_sh(version))
+    script.chmod(0o755)
+    (stage / "README.txt").write_text(
+        "\n".join(
+            [
+                f"{PRODUCT} {version} Linux system installer",
+                "",
+                "Run as root: sudo ./install.sh",
+                "Installs to /opt/agent-operating-kit.",
+                "",
+            ]
+        )
+    )
+    out = dist / f"{name}.tar.gz"
+    write_stage_tar_gz(stage, out)
     shutil.rmtree(stage.parent)
     return out
 
@@ -234,7 +447,11 @@ def build(dist: Path, version: str) -> list[dict[str, object]]:
     for kind, out, inputs in outputs:
         write_zip(out, base, iter_files(inputs))
         paths.append((kind, out))
-    paths.append(("macos-installer", build_installer_zip(dist, version)))
+    paths.append(("macos-apple-silicon-installer", build_macos_installer_zip(dist, version, "apple-silicon")))
+    paths.append(("macos-intel-installer", build_macos_installer_zip(dist, version, "intel")))
+    paths.append(("windows-installer", build_windows_installer_zip(dist, version)))
+    paths.append(("linux-user-installer", build_linux_user_installer_tar(dist, version)))
+    paths.append(("linux-system-installer", build_linux_system_installer_tar(dist, version)))
     paths.append(("bundles", build_bundles_zip(dist, version)))
 
     artifacts: list[dict[str, object]] = []

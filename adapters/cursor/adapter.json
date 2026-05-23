@@ -3,8 +3,32 @@
   "kind": "tool-adapter",
   "displayName": "Cursor",
   "status": "active",
-  "supportedTargets": ["cursor"],
-  "renders": ["task-packet", "role", "hook", "skill", "pack", "mcp-config"],
-  "entrypoints": ["adapters/cursor/README.md", "scripts/aok"],
-  "limitations": ["Runtime output is currently JSON contract-first; native Cursor packaging is documented separately."]
+  "supportedTargets": [
+    "cursor"
+  ],
+  "renders": [
+    "task-packet",
+    "role",
+    "hook",
+    "skill",
+    "pack",
+    "mcp-config"
+  ],
+  "entrypoints": [
+    "adapters/cursor/README.md",
+    "scripts/aok",
+    "packs/*/pack.json"
+  ],
+  "limitations": [
+    "Runtime output is currently JSON contract-first; native Cursor packaging is documented separately.",
+    "Bundle metadata is emitted as generated import bundle metadata in targetRender.cursor.payload; native Cursor packaging is not claimed.",
+    "Current non-CLI support is a generated import bundle, not a native marketplace installer."
+  ],
+  "supportLevel": "generated-bundle",
+  "nativePackageFormats": [],
+  "bundle": {
+    "artifactName": "aok-cursor-bundles.zip",
+    "format": "aok-import-bundle",
+    "importInstructions": "Use the release bundle at bundles/cursor/<pack>/ and import the included rules, roles, hooks, skills, tasks, and aok-bundle.json into the project workspace."
+  }
 }

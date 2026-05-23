@@ -3,8 +3,32 @@
   "kind": "tool-adapter",
   "displayName": "Claude Code",
   "status": "active",
-  "supportedTargets": ["claude-code"],
-  "renders": ["role", "hook", "skill", "pack", "mcp-config"],
-  "entrypoints": ["adapters/claude-code/marketplace/.claude-plugin/marketplace.json", "packs/*/claude-code/"],
-  "limitations": ["Claude Code plugin hooks can depend on CLAUDE_PLUGIN_ROOT and remain adapter-specific."]
+  "supportedTargets": [
+    "claude-code"
+  ],
+  "renders": [
+    "role",
+    "hook",
+    "skill",
+    "pack",
+    "mcp-config"
+  ],
+  "entrypoints": [
+    "adapters/claude-code/marketplace/.claude-plugin/marketplace.json",
+    "packs/*/claude-code/",
+    "packs/*/pack.json"
+  ],
+  "limitations": [
+    "Claude Code plugin hooks can depend on CLAUDE_PLUGIN_ROOT and remain adapter-specific.",
+    "Bundle metadata is expected from the Claude Code compatibility marketplace plus each preserved packs/*/claude-code/plugin.json asset."
+  ],
+  "supportLevel": "compatibility-asset",
+  "nativePackageFormats": [
+    "claude-code-marketplace"
+  ],
+  "bundle": {
+    "artifactName": "aok-claude-code",
+    "format": "claude-code-marketplace",
+    "importInstructions": "Register the aok-claude-code marketplace bundle and enable preserved plugin names."
+  }
 }

@@ -11,10 +11,13 @@ role contracts.
 - Skills render as reusable workflow guidance.
 - Hooks render as lifecycle checklists.
 - Task packets render as assignment contracts with verification fields.
+- Bundle metadata is emitted as a generated import bundle in
+  `targetRender.openclaw.payload`; native installer behavior remains follow-up
+  host integration.
 
 ## Supported Commands
 
-- `aok render pack <pack> --target openclaw`
+- `aok render bundle <pack> --target openclaw`
 
 ## Known Gaps
 

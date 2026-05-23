@@ -21,7 +21,9 @@
     "mcp-config"
   ],
   "sourceRefs": {
-    "neutral": ["pack.content.json"],
+    "neutral": [
+      "pack.content.json"
+    ],
     "claude-code": [
       "claude-code/plugin.json",
       "claude-code/skills/ship-pr.md",
@@ -30,66 +32,161 @@
     ]
   },
   "conceptGraph": {
-    "roles": ["ship-lead", "pr-ci-fixer"],
+    "roles": [
+      "ship-lead",
+      "pr-ci-fixer"
+    ],
     "hooks": [],
-    "skills": ["ship-pr", "fix-ci"],
+    "skills": [
+      "ship-pr",
+      "fix-ci"
+    ],
     "templates": [],
-    "taskPackets": ["ship-pipeline-packet"]
+    "taskPackets": [
+      "ship-pipeline-packet"
+    ]
   },
   "targetRender": {
     "codex": {
       "status": "active",
-      "mode": "generated",
-      "payload": {
-        "contract": "pack-render-json"
-      }
+      "mode": "source",
+      "supportLevel": "native-install",
+      "artifactName": "agent-operating-kit",
+      "packageFormat": "codex-plugin-bundle",
+      "bundleRefs": [
+        "../../.codex-plugin/plugin.json",
+        "../../hooks.json",
+        "pack.json",
+        "pack.content.json"
+      ],
+      "sourceRefs": [
+        "../../.codex-plugin/plugin.json",
+        "../../hooks.json",
+        "pack.json",
+        "pack.content.json"
+      ],
+      "nativePackage": {
+        "manifest": "../../.codex-plugin/plugin.json",
+        "metadataFields": [
+          "name",
+          "version",
+          "description",
+          "skills",
+          "hooks",
+          "interface"
+        ]
+      },
+      "notes": "Codex support is delivered through the native AOK Codex plugin bundle; generated pack output should retain plugin metadata from .codex-plugin/plugin.json.",
+      "importInstructions": "Install the AOK macOS release installer or import this Codex plugin-oriented bundle."
     },
     "claude-code": {
       "status": "active",
       "mode": "source",
-      "sourceRefs": [
+      "supportLevel": "compatibility-asset",
+      "artifactName": "ship-pipeline",
+      "packageFormat": "claude-code-marketplace",
+      "bundleRefs": [
+        "../../adapters/claude-code/marketplace/.claude-plugin/marketplace.json",
         "claude-code/plugin.json",
         "claude-code/README.md",
         "claude-code/skills/ship-pr.md",
         "claude-code/skills/fix-ci.md",
         "claude-code/agents/pr-ci-fixer.md"
       ],
-      "notes": "Native assets preserved in AOK package."
+      "sourceRefs": [
+        "../../adapters/claude-code/marketplace/.claude-plugin/marketplace.json",
+        "claude-code/plugin.json",
+        "claude-code/README.md",
+        "claude-code/skills/ship-pr.md",
+        "claude-code/skills/fix-ci.md",
+        "claude-code/agents/pr-ci-fixer.md"
+      ],
+      "nativePackage": {
+        "marketplace": "../../adapters/claude-code/marketplace/.claude-plugin/marketplace.json",
+        "pluginManifest": "claude-code/plugin.json",
+        "metadataFields": [
+          "name",
+          "version",
+          "description"
+        ]
+      },
+      "notes": "Claude Code support is a compatibility marketplace bundle backed by preserved pack assets, not a separate operating model.",
+      "importInstructions": "Register the aok-claude-code marketplace bundle and enable preserved plugin names."
     },
     "cursor": {
       "status": "active",
       "mode": "generated",
+      "supportLevel": "generated-bundle",
+      "artifactName": "ship-pipeline.cursor.json",
+      "packageFormat": "aok-import-bundle",
+      "bundleRefs": [
+        "pack.json",
+        "pack.content.json"
+      ],
       "payload": {
         "contract": "aok-task-rules"
-      }
+      },
+      "importInstructions": "Use the release bundle at bundles/cursor/ship-pipeline/ and import the included rules, roles, hooks, skills, tasks, and aok-bundle.json into the project workspace."
     },
     "opencode": {
       "status": "active",
       "mode": "generated",
+      "supportLevel": "generated-bundle",
+      "artifactName": "ship-pipeline.opencode.json",
+      "packageFormat": "aok-import-bundle",
+      "bundleRefs": [
+        "pack.json",
+        "pack.content.json"
+      ],
       "payload": {
         "contract": "aok-task-rules"
-      }
+      },
+      "importInstructions": "Use the release bundle at bundles/opencode/ship-pipeline/ and import the included guidance, roles, hooks, skills, tasks, and aok-bundle.json into the project workspace."
     },
     "gemini": {
       "status": "active",
       "mode": "generated",
+      "supportLevel": "generated-bundle",
+      "artifactName": "ship-pipeline.gemini.json",
+      "packageFormat": "aok-import-bundle",
+      "bundleRefs": [
+        "pack.json",
+        "pack.content.json"
+      ],
       "payload": {
         "contract": "aok-skill-contract"
-      }
+      },
+      "importInstructions": "Use the release bundle at bundles/gemini/ship-pipeline/ as reusable role, skill, hook, and task guidance."
     },
     "openclaw": {
       "status": "active",
       "mode": "generated",
+      "supportLevel": "generated-bundle",
+      "artifactName": "ship-pipeline.openclaw.json",
+      "packageFormat": "aok-import-bundle",
+      "bundleRefs": [
+        "pack.json",
+        "pack.content.json"
+      ],
       "payload": {
         "contract": "aok-role-skill-bridge"
-      }
+      },
+      "importInstructions": "Use the release bundle at bundles/openclaw/ship-pipeline/ and import the included role, skill, lifecycle, and task files into the host workflow."
     },
     "hermes-agent": {
       "status": "active",
       "mode": "generated",
+      "supportLevel": "generated-bundle",
+      "artifactName": "ship-pipeline.hermes-agent.json",
+      "packageFormat": "aok-import-bundle",
+      "bundleRefs": [
+        "pack.json",
+        "pack.content.json"
+      ],
       "payload": {
         "contract": "aok-task-rules"
-      }
+      },
+      "importInstructions": "Use the release bundle at bundles/hermes-agent/ship-pipeline/ and import the included assignment, role, skill, and lifecycle files into the host workflow."
     }
   },
   "adapters": {

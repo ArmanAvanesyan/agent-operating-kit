@@ -3,8 +3,32 @@
   "kind": "tool-adapter",
   "displayName": "OpenCode",
   "status": "active",
-  "supportedTargets": ["opencode"],
-  "renders": ["task-packet", "role", "hook", "skill", "pack", "mcp-config"],
-  "entrypoints": ["adapters/opencode/README.md", "scripts/aok"],
-  "limitations": ["CLI output is currently rendered contract JSON; direct agent-native installer is documented separately."]
+  "supportedTargets": [
+    "opencode"
+  ],
+  "renders": [
+    "task-packet",
+    "role",
+    "hook",
+    "skill",
+    "pack",
+    "mcp-config"
+  ],
+  "entrypoints": [
+    "adapters/opencode/README.md",
+    "scripts/aok",
+    "packs/*/pack.json"
+  ],
+  "limitations": [
+    "CLI output is currently rendered contract JSON; direct agent-native installer is documented separately.",
+    "Bundle metadata is emitted as generated import bundle metadata in targetRender.opencode.payload; native OpenCode installer packaging is not claimed.",
+    "Current non-CLI support is a generated import bundle, not a native marketplace installer."
+  ],
+  "supportLevel": "generated-bundle",
+  "nativePackageFormats": [],
+  "bundle": {
+    "artifactName": "aok-opencode-bundles.zip",
+    "format": "aok-import-bundle",
+    "importInstructions": "Use the release bundle at bundles/opencode/<pack>/ and import the included guidance, roles, hooks, skills, tasks, and aok-bundle.json into the project workspace."
+  }
 }

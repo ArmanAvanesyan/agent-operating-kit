@@ -11,10 +11,13 @@ project rule artifacts.
 - Task packets render as structured Markdown contracts and JSON companion payloads.
 - Hooks render as actionable checklists when native Cursor hook execution is not
   directly available.
+- Bundle metadata is emitted as a generated import bundle in
+  `targetRender.cursor.payload`; AOK does not claim native Cursor package
+  installation.
 
 ## Supported Commands
 
-- `aok render pack <pack> --target cursor`
+- `aok render bundle <pack> --target cursor`
 
 ## Known Gaps
 

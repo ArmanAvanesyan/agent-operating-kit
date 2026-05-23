@@ -3,8 +3,35 @@
   "kind": "tool-adapter",
   "displayName": "Codex",
   "status": "active",
-  "supportedTargets": ["codex"],
-  "renders": ["task-packet", "role", "hook", "skill", "pack", "mcp-config"],
-  "entrypoints": ["scripts/aok", ".codex-plugin/plugin.json", "skills/"],
-  "limitations": ["Neutral manifest to Codex skill generation is currently curated manually."]
+  "supportedTargets": [
+    "codex"
+  ],
+  "renders": [
+    "task-packet",
+    "role",
+    "hook",
+    "skill",
+    "pack",
+    "mcp-config"
+  ],
+  "entrypoints": [
+    "scripts/aok",
+    ".codex-plugin/plugin.json",
+    "hooks.json",
+    "skills/",
+    "packs/*/pack.json"
+  ],
+  "limitations": [
+    "Neutral manifest to Codex skill generation is currently curated manually.",
+    "Bundle metadata is expected from the native Codex plugin manifest at .codex-plugin/plugin.json; pack renders should preserve targetRender.codex as a Codex native plugin bundle."
+  ],
+  "supportLevel": "native-install",
+  "nativePackageFormats": [
+    "codex-plugin"
+  ],
+  "bundle": {
+    "artifactName": "agent-operating-kit-macos-installer.zip",
+    "format": "codex-plugin-bundle",
+    "importInstructions": "Install the AOK macOS release installer or import this Codex plugin-oriented bundle."
+  }
 }

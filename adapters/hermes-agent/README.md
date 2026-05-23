@@ -10,10 +10,12 @@ Hermes-oriented contracts.
 - Task packets render as structured assignment specs.
 - Roles and hooks render with escalation and execution guidance.
 - MCP config references support external runtime hooks.
+- Bundle metadata is emitted as a generated import bundle in
+  `targetRender.hermes-agent.payload`; runtime event wiring remains external.
 
 ## Supported Commands
 
-- `aok render pack <pack> --target hermes-agent`
+- `aok render bundle <pack> --target hermes-agent`
 
 ## Known Gaps
 

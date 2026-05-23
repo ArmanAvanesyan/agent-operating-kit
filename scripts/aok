@@ -20,6 +20,7 @@ KIT_ROOT = Path(__file__).resolve().parents[1]
 PLUGIN_NAME = "agent-operating-kit"
 MARKETPLACE_NAME = "private-local"
 MARKETPLACE_DISPLAY = "Private Local"
+CLAUDE_MARKETPLACE_NAME = "aok-claude-code"
 SUPPORTED_TARGETS = (
     "codex",
     "claude-code",
@@ -114,22 +115,35 @@ def load_pack_content(pack_name: str, pack_dir: Path, manifest: dict) -> tuple[d
     return content, content_path
 
 
-def marketplace_paths() -> tuple[Path, Path]:
-    root = Path.home() / ".agents" / "plugins"
+def user_home(raw: str | None = None) -> Path:
+    return Path(raw).expanduser().resolve() if raw else Path.home()
+
+
+def marketplace_paths(home: Path | None = None) -> tuple[Path, Path]:
+    home = home or Path.home()
+    root = home / ".agents" / "plugins"
     return root / "marketplace.json", root / "plugins" / PLUGIN_NAME
 
 
-def cmd_install(_: argparse.Namespace) -> int:
-    missing = [name for name in ("git", "gh", "codex") if not command_exists(name)]
+def cmd_install(args: argparse.Namespace) -> int:
+    home = user_home(getattr(args, "home", None))
+    replace = bool(getattr(args, "replace", False))
+    missing = [name for name in ("codex",) if not command_exists(name)]
     if missing:
-        print(f"Warning: missing commands: {', '.join(missing)}", file=sys.stderr)
-        print("Install continues, but `aok doctor` will fail until they are available.", file=sys.stderr)
+        print(f"Warning: missing optional commands: {', '.join(missing)}", file=sys.stderr)
+        print("Install continues; `aok doctor` reports optional capabilities separately.", file=sys.stderr)
 
-    marketplace, link_path = marketplace_paths()
+    marketplace, link_path = marketplace_paths(home)
     link_path.parent.mkdir(parents=True, exist_ok=True)
     if link_path.exists() or link_path.is_symlink():
         if link_path.is_symlink() and link_path.resolve() == KIT_ROOT:
             pass
+        elif replace:
+            if link_path.is_dir() and not link_path.is_symlink():
+                shutil.rmtree(link_path)
+            else:
+                link_path.unlink()
+            link_path.symlink_to(KIT_ROOT, target_is_directory=True)
         else:
             raise AokError(f"Refusing to replace existing plugin path: {link_path}")
     else:
@@ -156,12 +170,19 @@ def cmd_install(_: argparse.Namespace) -> int:
         plugins.append(entry)
     write_json(marketplace, data)
 
-    bin_dir = Path.home() / ".local" / "bin"
+    bin_dir = home / ".local" / "bin"
     bin_dir.mkdir(parents=True, exist_ok=True)
     bin_link = bin_dir / "aok"
     if bin_link.exists() or bin_link.is_symlink():
         if not (bin_link.is_symlink() and bin_link.resolve() == KIT_ROOT / "scripts" / "aok"):
-            raise AokError(f"Refusing to replace existing executable: {bin_link}")
+            if replace:
+                if bin_link.is_dir() and not bin_link.is_symlink():
+                    shutil.rmtree(bin_link)
+                else:
+                    bin_link.unlink()
+                bin_link.symlink_to(KIT_ROOT / "scripts" / "aok")
+            else:
+                raise AokError(f"Refusing to replace existing executable: {bin_link}")
     else:
         bin_link.symlink_to(KIT_ROOT / "scripts" / "aok")
 
@@ -171,29 +192,107 @@ def cmd_install(_: argparse.Namespace) -> int:
     return 0
 
 
-def cmd_doctor(_: argparse.Namespace) -> int:
-    failed = False
-    for name in ("git", "gh", "codex"):
-        ok = command_exists(name)
-        print_result(f"command {name}", ok, shutil.which(name) or "not found")
-        failed = failed or not ok
-
-    required = [
+def collect_doctor(home: Path | None = None) -> dict:
+    home = home or Path.home()
+    required_files = [
         KIT_ROOT / ".codex-plugin" / "plugin.json",
         KIT_ROOT / "hooks.json",
         KIT_ROOT / "templates" / "AGENTS.md",
         KIT_ROOT / "templates" / "agents" / "workflow.md",
         KIT_ROOT / "scripts" / "aok",
     ]
-    for path in required:
-        ok = path.exists()
-        print_result(str(path.relative_to(KIT_ROOT)), ok)
-        failed = failed or not ok
+    marketplace, link_path = marketplace_paths(home)
+    commands = {
+        name: {
+            "ok": command_exists(name),
+            "path": shutil.which(name),
+            "required": False,
+        }
+        for name in ("git", "gh", "codex")
+    }
+    files = [
+        {
+            "path": str(path),
+            "relativePath": str(path.relative_to(KIT_ROOT)),
+            "ok": path.exists(),
+        }
+        for path in required_files
+    ]
+    install = {
+        "marketplace": {
+            "path": str(marketplace),
+            "ok": marketplace.exists(),
+        },
+        "pluginSymlink": {
+            "path": str(link_path),
+            "ok": link_path.exists() and link_path.resolve() == KIT_ROOT,
+            "target": str(KIT_ROOT),
+        },
+        "cliShim": {
+            "path": str(home / ".local" / "bin" / "aok"),
+            "ok": (home / ".local" / "bin" / "aok").exists(),
+        },
+    }
+    required_ok = all(item["ok"] for item in files) and install["marketplace"]["ok"] and install["pluginSymlink"]["ok"]
+    return {
+        "kind": "aok-doctor-report",
+        "version": plugin_version(),
+        "kitRoot": str(KIT_ROOT),
+        "home": str(home),
+        "status": "ok" if required_ok else "needs-attention",
+        "requiredOk": required_ok,
+        "commands": commands,
+        "files": files,
+        "install": install,
+        "nextActions": [] if required_ok else ["Run the AOK installer again or check the marketplace/plugin paths."],
+    }
 
-    marketplace, link_path = marketplace_paths()
-    print_result("marketplace", marketplace.exists(), str(marketplace))
-    print_result("plugin symlink", link_path.exists() and link_path.resolve() == KIT_ROOT, str(link_path))
-    return 1 if failed else 0
+
+def doctor_report_text(report: dict) -> str:
+    lines = [
+        "# Agent Operating Kit Setup Report",
+        "",
+        f"Status: {report['status']}",
+        f"Kit root: {report['kitRoot']}",
+        f"Home: {report['home']}",
+        "",
+        "## Required Files",
+    ]
+    for item in report["files"]:
+        lines.append(f"- {'OK' if item['ok'] else 'FAIL'} {item['relativePath']}")
+    lines.extend(["", "## Installation"])
+    for label, item in report["install"].items():
+        lines.append(f"- {'OK' if item['ok'] else 'FAIL'} {label}: {item['path']}")
+    lines.extend(["", "## Optional Commands"])
+    for name, item in report["commands"].items():
+        detail = item["path"] or "not found"
+        lines.append(f"- {'OK' if item['ok'] else 'MISSING'} {name}: {detail}")
+    if report["nextActions"]:
+        lines.extend(["", "## Next Actions"])
+        for action in report["nextActions"]:
+            lines.append(f"- {action}")
+    return "\n".join(lines) + "\n"
+
+
+def cmd_doctor(args: argparse.Namespace) -> int:
+    report = collect_doctor(user_home(getattr(args, "home", None)))
+    if getattr(args, "report", None):
+        out = Path(args.report).expanduser()
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(doctor_report_text(report))
+        print(f"Wrote setup report: {out}")
+    if getattr(args, "json", False):
+        print(json.dumps(report, indent=2))
+    else:
+        for name, item in report["commands"].items():
+            print_result(f"optional command {name}", bool(item["ok"]), item["path"] or "not found")
+        for item in report["files"]:
+            print_result(item["relativePath"], bool(item["ok"]))
+        install = report["install"]
+        print_result("marketplace", install["marketplace"]["ok"], install["marketplace"]["path"])
+        print_result("plugin symlink", install["pluginSymlink"]["ok"], install["pluginSymlink"]["path"])
+        print_result("CLI shim", install["cliShim"]["ok"], install["cliShim"]["path"])
+    return 0 if report["requiredOk"] else 1
 
 
 def detect_workspace_kind(target: Path) -> str:
@@ -471,6 +570,223 @@ def cmd_render_all(args: argparse.Namespace) -> int:
             rendered = render_pack_payload(pack_name, manifest, content, target)
             write_json(out, rendered)
             print(f"Wrote render: {out}")
+    return 0
+
+
+def item_id(item: dict, fallback: str) -> str:
+    value = str(item.get("id") or item.get("name") or fallback)
+    return re.sub(r"[^a-zA-Z0-9_.-]+", "-", value).strip("-") or fallback
+
+
+def write_bundle_item_files(bundle_dir: Path, section: str, items: list[dict]) -> list[str]:
+    written: list[str] = []
+    if not items:
+        return written
+    section_dir = bundle_dir / section
+    section_dir.mkdir(parents=True, exist_ok=True)
+    for idx, item in enumerate(items, start=1):
+        if not isinstance(item, dict):
+            continue
+        rel = Path(section) / f"{item_id(item, f'{section}-{idx}')}.json"
+        write_json(bundle_dir / rel, item)
+        written.append(str(rel))
+    return written
+
+
+def markdown_list(title: str, items: list[dict], fields: tuple[str, ...]) -> str:
+    lines = [f"# {title}", ""]
+    if not items:
+        lines.append("No items.")
+        return "\n".join(lines) + "\n"
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        lines.append(f"## {item.get('name') or item.get('title') or item.get('id')}")
+        lines.append("")
+        for field in fields:
+            value = item.get(field)
+            if value is None:
+                continue
+            if isinstance(value, list):
+                lines.append(f"- {field}: {', '.join(str(part) for part in value)}")
+            elif isinstance(value, dict):
+                lines.append(f"- {field}: `{json.dumps(value, sort_keys=True)}`")
+            else:
+                lines.append(f"- {field}: {value}")
+        lines.append("")
+    return "\n".join(lines)
+
+
+def copy_bundle_source(base: Path, rel: str, bundle_dir: Path, copied: list[str]) -> None:
+    src = (base / rel).resolve()
+    if not src.exists():
+        return
+    try:
+        source_rel = src.relative_to(KIT_ROOT.resolve())
+    except ValueError as exc:
+        raise AokError(f"Refusing to copy source outside kit root: {rel}") from exc
+    dest = bundle_dir / "sources" / source_rel
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    if src.is_dir():
+        if dest.exists():
+            shutil.rmtree(dest)
+        shutil.copytree(src, dest)
+    else:
+        shutil.copy2(src, dest)
+    copied.append(str(Path("sources") / rel))
+
+
+def bundle_readme(pack_name: str, target: str, support_level: str) -> str:
+    return f"""# {pack_name} for {target}
+
+This bundle was generated by Agent Operating Kit.
+
+- Pack: `{pack_name}`
+- Target: `{target}`
+- Support level: `{support_level}`
+- Contract: `aok-bundle.json`
+
+Use this directory as the importable, self-contained representation of the AOK
+pack for the target. Native target installers may consume the same contract and
+included source files.
+"""
+
+
+def render_target_bundle(pack_name: str, target: str, out_dir: Path) -> Path:
+    manifest, pack_dir = load_pack_manifest(pack_name)
+    pack_name = manifest.get("name") or pack_name
+    content, _ = load_pack_content(pack_name, pack_dir, manifest)
+    bundle_dir = out_dir / target / pack_name
+    if bundle_dir.exists():
+        shutil.rmtree(bundle_dir)
+    bundle_dir.mkdir(parents=True, exist_ok=True)
+
+    rendered = render_pack_payload(pack_name, manifest, content, target)
+    target_render = manifest.get("targetRender", {}).get(target, {})
+    support_level = target_render.get("supportLevel") or target_render.get("status", "generated")
+    source_files: list[str] = []
+    source_refs = set()
+    for refs in (manifest.get("sourceRefs") or {}).values():
+        if isinstance(refs, list):
+            source_refs.update(ref for ref in refs if isinstance(ref, str))
+    for ref in target_render.get("sourceRefs", []) if isinstance(target_render, dict) else []:
+        if isinstance(ref, str):
+            source_refs.add(ref)
+    for ref in sorted(source_refs):
+        copy_bundle_source(pack_dir, ref, bundle_dir, source_files)
+
+    sections = {
+        "roles": content.get("roles", []),
+        "hooks": content.get("hooks", []),
+        "skills": content.get("skills", []),
+        "templates": content.get("templates", []),
+        "task-packets": content.get("taskPackets", []),
+    }
+    item_files: list[str] = []
+    for section, items in sections.items():
+        if isinstance(items, list):
+            item_files.extend(write_bundle_item_files(bundle_dir, section, items))
+
+    (bundle_dir / "roles.md").write_text(markdown_list("Roles", content.get("roles", []), ("callsign", "responsibilities", "escalation")))
+    (bundle_dir / "hooks.md").write_text(markdown_list("Hooks", content.get("hooks", []), ("event", "matcher", "command", "severity", "description")))
+    (bundle_dir / "skills.md").write_text(markdown_list("Skills", content.get("skills", []), ("description", "sourcePath", "inputs")))
+    (bundle_dir / "tasks.md").write_text(markdown_list("Task Packets", content.get("taskPackets", []), ("title", "phase", "assigneeRole", "verification")))
+
+    if target == "codex":
+        write_json(
+            bundle_dir / ".codex-plugin" / "plugin.json",
+            {
+                "name": f"aok-{pack_name}",
+                "version": manifest.get("version", "0.1.0"),
+                "description": manifest.get("description", ""),
+                "aokPack": pack_name,
+            },
+        )
+    elif target == "claude-code":
+        claude_src = pack_dir / "claude-code"
+        if claude_src.exists():
+            shutil.copytree(claude_src, bundle_dir / "claude-code")
+    else:
+        write_json(
+            bundle_dir / "import.json",
+            {
+                "kind": "aok-target-import",
+                "target": target,
+                "pack": pack_name,
+                "contract": "aok-bundle.json",
+                "readme": "README.md",
+            },
+        )
+
+    bundle = {
+        "kind": "aok-bundle",
+        "version": manifest.get("version", "0.1.0"),
+        "pack": pack_name,
+        "target": target,
+        "supportLevel": support_level,
+        "generatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "contract": rendered,
+        "files": sorted(["README.md", "roles.md", "hooks.md", "skills.md", "tasks.md", *item_files, *source_files]),
+        "sourceContentIncluded": True,
+    }
+    write_json(bundle_dir / "aok-bundle.json", bundle)
+    (bundle_dir / "README.md").write_text(bundle_readme(pack_name, target, support_level))
+    return bundle_dir
+
+
+def write_bundle_index(root: Path, bundles: list[Path]) -> Path:
+    entries = []
+    for bundle in sorted(bundles):
+        contract = bundle / "aok-bundle.json"
+        if not contract.exists():
+            continue
+        data = load_json(contract, {})
+        entries.append(
+            {
+                "pack": data.get("pack"),
+                "target": data.get("target"),
+                "supportLevel": data.get("supportLevel"),
+                "path": str(bundle.relative_to(root)),
+                "contract": str((bundle / "aok-bundle.json").relative_to(root)),
+            }
+        )
+    index = {
+        "kind": "aok-bundle-index",
+        "version": plugin_version(),
+        "generatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "bundles": entries,
+    }
+    out = root / "index.json"
+    write_json(out, index)
+    return out
+
+
+def cmd_render_bundle(args: argparse.Namespace) -> int:
+    targets = resolve_targets(args.target)
+    output_root = Path(args.out) if args.out else (KIT_ROOT / "build" / "bundles")
+    bundles = []
+    for target in targets:
+        bundle = render_target_bundle(args.pack, target, output_root)
+        bundles.append(bundle)
+        print(f"Wrote bundle: {bundle}")
+    index = write_bundle_index(output_root, bundles)
+    print(f"Wrote bundle index: {index}")
+    return 0
+
+
+def cmd_render_bundles(args: argparse.Namespace) -> int:
+    targets = resolve_targets(args.target)
+    output_root = Path(args.out) if args.out else (KIT_ROOT / "build" / "bundles")
+    bundles = []
+    for pack_name in find_pack_dirs():
+        if not (KIT_ROOT / "packs" / pack_name / "pack.json").exists():
+            continue
+        for target in targets:
+            bundle = render_target_bundle(pack_name, target, output_root)
+            bundles.append(bundle)
+            print(f"Wrote bundle: {bundle}")
+    index = write_bundle_index(output_root, bundles)
+    print(f"Wrote bundle index: {index}")
     return 0
 
 
@@ -781,6 +1097,62 @@ def cmd_import_history(args: argparse.Namespace) -> int:
     return 0
 
 
+def enabled_pack_names(raw: list[str]) -> list[str]:
+    if not raw or raw == ["all"]:
+        return find_pack_dirs()
+    unknown = sorted(set(raw) - set(find_pack_dirs()))
+    if unknown:
+        raise AokError(f"Unknown pack(s): {', '.join(unknown)}")
+    return raw
+
+
+def cmd_claude_setup(args: argparse.Namespace) -> int:
+    home = user_home(getattr(args, "home", None))
+    settings_path = Path(args.settings).expanduser() if args.settings else home / ".claude" / "settings.json"
+    marketplace_path = (
+        Path(args.marketplace_path).expanduser().resolve()
+        if args.marketplace_path
+        else (KIT_ROOT / "adapters" / "claude-code" / "marketplace").resolve()
+    )
+    if not marketplace_path.exists():
+        raise AokError(f"Claude Code marketplace path does not exist: {marketplace_path}")
+
+    settings_path.parent.mkdir(parents=True, exist_ok=True)
+    if settings_path.exists():
+        backup = settings_path.with_name(
+            f"{settings_path.name}.aok-backup-{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}"
+        )
+        shutil.copy2(settings_path, backup)
+    else:
+        backup = None
+
+    data = load_json(settings_path, {})
+    if not isinstance(data, dict):
+        raise AokError(f"Claude Code settings must be a JSON object: {settings_path}")
+    marketplaces = data.setdefault("extraKnownMarketplaces", {})
+    if not isinstance(marketplaces, dict):
+        raise AokError("extraKnownMarketplaces must be an object")
+    marketplaces[CLAUDE_MARKETPLACE_NAME] = {
+        "source": {
+            "source": "directory",
+            "path": str(marketplace_path),
+        }
+    }
+
+    enabled = data.setdefault("enabledPlugins", {})
+    if not isinstance(enabled, dict):
+        raise AokError("enabledPlugins must be an object")
+    for pack in enabled_pack_names(args.enable):
+        enabled[f"{pack}@{CLAUDE_MARKETPLACE_NAME}"] = True
+
+    write_json(settings_path, data)
+    print(f"Updated Claude Code settings: {settings_path}")
+    if backup:
+        print(f"Backup: {backup}")
+    print(f"Marketplace: {CLAUDE_MARKETPLACE_NAME} -> {marketplace_path}")
+    return 0
+
+
 def require_json(path: Path, errors: list[str]) -> dict | None:
     try:
         return json.loads(path.read_text())
@@ -794,6 +1166,7 @@ def require_json(path: Path, errors: list[str]) -> dict | None:
 def validate_required_files(errors: list[str]) -> None:
     required = [
         "README.md",
+        "CHANGELOG.md",
         "LICENSE",
         ".codex-plugin/plugin.json",
         "hooks.json",
@@ -805,6 +1178,11 @@ def validate_required_files(errors: list[str]) -> None:
         "docs/architecture.md",
         "docs/swarmd-integration.md",
         "docs/migration-from-claude-code-toolbox.md",
+        "docs/install-and-onboarding.md",
+        "docs/project-init-guide.md",
+        "docs/targets-support-matrix.md",
+        "docs/release-checklist.md",
+        "docs/uninstall-and-rollback.md",
         "schemas/skill.schema.json",
         "schemas/role.schema.json",
         "schemas/hook.schema.json",
@@ -823,6 +1201,9 @@ def validate_required_files(errors: list[str]) -> None:
         "scripts/project-init.sh",
         "scripts/github-sync.sh",
         "scripts/validate.sh",
+        "scripts/release/build.py",
+        "scripts/release/build.sh",
+        ".github/workflows/release.yml",
         "references/migration-from-existing-project.md",
     ]
     for rel in required:
@@ -870,6 +1251,15 @@ def validate_adapters(errors: list[str]) -> None:
         for key in required:
             if key not in data:
                 errors.append(f"{manifest.relative_to(KIT_ROOT)}: missing {key}")
+        if data.get("status") == "active":
+            for key in ("supportLevel", "bundle"):
+                if key not in data:
+                    errors.append(f"{manifest.relative_to(KIT_ROOT)}: active adapter missing {key}")
+            bundle = data.get("bundle")
+            if isinstance(bundle, dict):
+                for key in ("artifactName", "format", "importInstructions"):
+                    if key not in bundle:
+                        errors.append(f"{manifest.relative_to(KIT_ROOT)}: bundle missing {key}")
         if data.get("name") != target:
             errors.append(f"{manifest.relative_to(KIT_ROOT)}: name must be {target}")
         if data.get("kind") != "tool-adapter":
@@ -950,6 +1340,10 @@ def validate_packs(errors: list[str]) -> None:
                 for key in ("status", "mode"):
                     if key not in render:
                         errors.append(f"packs/{name}/pack.json: targetRender[{target}] missing {key}")
+                if render.get("status") == "active":
+                    for key in ("supportLevel", "artifactName", "packageFormat", "importInstructions", "bundleRefs"):
+                        if key not in render:
+                            errors.append(f"packs/{name}/pack.json: targetRender[{target}] active render missing {key}")
                 mode = render.get("mode")
                 sources = render.get("sourceRefs", [])
                 payload = render.get("payload")
@@ -1070,13 +1464,26 @@ def cmd_validate(_: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_version(_: argparse.Namespace) -> int:
+    print(plugin_version())
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="aok", description="Agent Operating Kit CLI")
     sub = parser.add_subparsers(dest="command", required=True)
 
-    sub.add_parser("install").set_defaults(func=cmd_install)
-    sub.add_parser("doctor").set_defaults(func=cmd_doctor)
+    install = sub.add_parser("install")
+    install.add_argument("--home", help="Home directory to register user-level AOK files")
+    install.add_argument("--replace", action="store_true", help="Replace existing AOK plugin and CLI links")
+    install.set_defaults(func=cmd_install)
+    doctor = sub.add_parser("doctor")
+    doctor.add_argument("--home", help="Home directory to inspect")
+    doctor.add_argument("--json", action="store_true", help="Print machine-readable setup status")
+    doctor.add_argument("--report", help="Write a plain-language setup report")
+    doctor.set_defaults(func=cmd_doctor)
     sub.add_parser("validate").set_defaults(func=cmd_validate)
+    sub.add_parser("version").set_defaults(func=cmd_version)
 
     project = sub.add_parser("project")
     project_sub = project.add_subparsers(dest="project_command", required=True)
@@ -1114,6 +1521,20 @@ def build_parser() -> argparse.ArgumentParser:
     history.add_argument("-o", "--output")
     history.set_defaults(func=cmd_import_history)
 
+    claude = sub.add_parser("claude")
+    claude_sub = claude.add_subparsers(dest="claude_command", required=True)
+    claude_setup = claude_sub.add_parser("setup")
+    claude_setup.add_argument("--home", help="Home directory to use for default settings path")
+    claude_setup.add_argument("--settings", help="Claude Code settings file to update")
+    claude_setup.add_argument("--marketplace-path", help="AOK Claude Code marketplace directory")
+    claude_setup.add_argument(
+        "--enable",
+        nargs="+",
+        default=["all"],
+        help="Pack names to enable, or all (default)",
+    )
+    claude_setup.set_defaults(func=cmd_claude_setup)
+
     render = sub.add_parser("render")
     render_sub = render.add_subparsers(dest="render_command", required=True)
     render_pack_cmd = render_sub.add_parser("pack")
@@ -1128,6 +1549,15 @@ def build_parser() -> argparse.ArgumentParser:
         help="Output directory (default: build/renders). If omitted, defaults to build/renders/<target>.",
     )
     render_all_cmd.set_defaults(func=cmd_render_all)
+    render_bundle_cmd = render_sub.add_parser("bundle")
+    render_bundle_cmd.add_argument("pack")
+    render_bundle_cmd.add_argument("--target", required=True, choices=RENDER_TARGETS)
+    render_bundle_cmd.add_argument("--out", help="Output directory (default: build/bundles)")
+    render_bundle_cmd.set_defaults(func=cmd_render_bundle)
+    render_bundles_cmd = render_sub.add_parser("bundles")
+    render_bundles_cmd.add_argument("--target", required=True, choices=RENDER_TARGETS)
+    render_bundles_cmd.add_argument("--out", help="Output directory (default: build/bundles)")
+    render_bundles_cmd.set_defaults(func=cmd_render_bundles)
 
     return parser
 

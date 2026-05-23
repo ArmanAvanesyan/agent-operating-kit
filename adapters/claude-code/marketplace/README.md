@@ -8,7 +8,7 @@ Register this directory as a Claude Code marketplace:
 ```json
 {
   "extraKnownMarketplaces": {
-    "aok": {
+    "aok-claude-code": {
       "source": {
         "source": "directory",
         "path": "/path/to/agent-operating-kit/adapters/claude-code/marketplace"

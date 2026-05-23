@@ -3,8 +3,32 @@
   "kind": "tool-adapter",
   "displayName": "OpenClaw",
   "status": "active",
-  "supportedTargets": ["openclaw"],
-  "renders": ["task-packet", "role", "hook", "skill", "pack", "mcp-config"],
-  "entrypoints": ["adapters/openclaw/README.md", "scripts/aok"],
-  "limitations": ["CLI render is supported; native installer and hooks are under follow-up work."]
+  "supportedTargets": [
+    "openclaw"
+  ],
+  "renders": [
+    "task-packet",
+    "role",
+    "hook",
+    "skill",
+    "pack",
+    "mcp-config"
+  ],
+  "entrypoints": [
+    "adapters/openclaw/README.md",
+    "scripts/aok",
+    "packs/*/pack.json"
+  ],
+  "limitations": [
+    "CLI render is supported; native installer and hooks are under follow-up work.",
+    "Bundle metadata is emitted as generated import bundle metadata in targetRender.openclaw.payload; native OpenClaw installer behavior is not claimed.",
+    "Current non-CLI support is a generated import bundle, not a native marketplace installer."
+  ],
+  "supportLevel": "generated-bundle",
+  "nativePackageFormats": [],
+  "bundle": {
+    "artifactName": "aok-openclaw-bundles.zip",
+    "format": "aok-import-bundle",
+    "importInstructions": "Use the release bundle at bundles/openclaw/<pack>/ and import the included role, skill, lifecycle, and task files into the host workflow."
+  }
 }

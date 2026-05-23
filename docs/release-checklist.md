@@ -85,6 +85,14 @@ python3 -m json.tool dist/release/index.json >/dev/null
 cd dist/release && shasum -a 256 -c SHA256SUMS
 ```
 
+Confirm installer artifacts are present:
+
+- `agent-operating-kit-<version>-macos-apple-silicon-installer.zip`
+- `agent-operating-kit-<version>-macos-intel-installer.zip`
+- `agent-operating-kit-<version>-windows-installer.zip`
+- `agent-operating-kit-<version>-linux-user-installer.tar.gz`
+- `agent-operating-kit-<version>-linux-system-installer.tar.gz`
+
 Include:
 
 - version or tag

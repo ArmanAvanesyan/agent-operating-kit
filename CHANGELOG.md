@@ -6,6 +6,8 @@
 - Add `aok codex local-env` init, validate, and action discovery commands.
 - Add a conservative `.codex/environments/environment.toml` based on a locally
   observed Codex plugin example, plus AOK validation metadata.
+- Add release installers for macOS Apple Silicon, macOS Intel, Windows, Linux
+  user, and Linux system installation flows.
 
 ## 0.3.0
 

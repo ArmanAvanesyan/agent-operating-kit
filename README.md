@@ -14,17 +14,28 @@ Use this path when you want the shortest route to a working install without
 cloning the repository.
 
 1. Open the latest GitHub release.
-2. Download `agent-operating-kit-<version>-macos-installer.zip`.
-3. Double-click the ZIP in Finder.
-4. Double-click `install.command`.
-5. Open Codex Desktop and confirm Agent Operating Kit is available in the local
+2. Download the installer for your platform:
+   - `agent-operating-kit-<version>-macos-apple-silicon-installer.zip`
+   - `agent-operating-kit-<version>-macos-intel-installer.zip`
+   - `agent-operating-kit-<version>-windows-installer.zip`
+   - `agent-operating-kit-<version>-linux-user-installer.tar.gz`
+   - `agent-operating-kit-<version>-linux-system-installer.tar.gz`
+3. Run the installer command inside the extracted package:
+   - macOS: `install.command`
+   - Windows: `install.cmd` (or `install.ps1`)
+   - Linux user: `./install.sh`
+   - Linux system: `sudo ./install.sh`
+4. Open Codex Desktop and confirm Agent Operating Kit is available in the local
    plugin marketplace.
 
-The installer copies AOK into
-`~/Library/Application Support/Agent Operating Kit/agent-operating-kit`, updates
-the local Codex marketplace registration, links `~/.local/bin/aok`, and writes a
-plain setup report at
-`~/Library/Application Support/Agent Operating Kit/setup-report.md`.
+Installer outputs:
+
+- macOS: `~/Library/Application Support/Agent Operating Kit/agent-operating-kit`
+- Windows: `%LOCALAPPDATA%\Agent Operating Kit\agent-operating-kit`
+- Linux user: `${XDG_DATA_HOME:-$HOME/.local/share}/agent-operating-kit/agent-operating-kit`
+- Linux system: `/opt/agent-operating-kit/agent-operating-kit`
+
+Each installer writes a setup report near its install root.
 
 ## Developer First Success Path
 

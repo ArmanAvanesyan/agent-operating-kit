@@ -12,28 +12,37 @@ Codex and Claude Code can consume the same neutral pack.
 The installer treats `codex` as optional. `aok doctor` reports optional command
 availability separately from required AOK files and local registration.
 
-## Release Installer On macOS
+## Release Installers
 
-Use this route when you do not want to use Git or terminal commands.
+Use this route when you do not want to use Git clone flows.
 
 1. Open the latest GitHub release for AOK.
-2. Download `agent-operating-kit-<version>-macos-installer.zip`.
-3. Double-click the ZIP in Finder.
-4. Double-click `install.command`.
-5. Open Codex Desktop and check the local plugin marketplace for Agent
+2. Download your platform installer:
+   - macOS Apple Silicon:
+     `agent-operating-kit-<version>-macos-apple-silicon-installer.zip`
+   - macOS Intel: `agent-operating-kit-<version>-macos-intel-installer.zip`
+   - Windows: `agent-operating-kit-<version>-windows-installer.zip`
+   - Linux user install:
+     `agent-operating-kit-<version>-linux-user-installer.tar.gz`
+   - Linux system install:
+     `agent-operating-kit-<version>-linux-system-installer.tar.gz`
+3. Extract and run:
+   - macOS: `install.command`
+   - Windows: `install.cmd` (or `install.ps1`)
+   - Linux user: `./install.sh`
+   - Linux system: `sudo ./install.sh`
+4. Open Codex Desktop and check the local plugin marketplace for Agent
    Operating Kit.
 
-The installer writes AOK into:
+Install paths:
 
-```text
-~/Library/Application Support/Agent Operating Kit/agent-operating-kit
-```
+- macOS: `~/Library/Application Support/Agent Operating Kit/agent-operating-kit`
+- Windows: `%LOCALAPPDATA%\Agent Operating Kit\agent-operating-kit`
+- Linux user:
+  `${XDG_DATA_HOME:-$HOME/.local/share}/agent-operating-kit/agent-operating-kit`
+- Linux system: `/opt/agent-operating-kit/agent-operating-kit`
 
-It also writes a plain setup report:
-
-```text
-~/Library/Application Support/Agent Operating Kit/setup-report.md
-```
+Each installer writes a setup report near its install root.
 
 No Git checkout is required. The installer still uses the bundled Python CLI
 internally so it can preserve existing marketplace entries and generate the

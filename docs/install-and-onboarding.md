@@ -44,6 +44,10 @@ Install paths:
 
 Each installer writes a setup report near its install root.
 
+On Windows, the installer writes `~/.local/bin/aok.cmd` as the CLI wrapper. The
+plugin directory uses a junction when Windows allows it and falls back to a copy
+when junction creation is unavailable.
+
 No Git checkout is required. The installer still uses the bundled Python CLI
 internally so it can preserve existing marketplace entries and generate the
 setup report.
@@ -56,6 +60,9 @@ Technical users can verify the installed copy:
 "$HOME/Library/Application Support/Agent Operating Kit/agent-operating-kit/scripts/aok" doctor
 "$HOME/Library/Application Support/Agent Operating Kit/agent-operating-kit/scripts/aok" validate
 ```
+
+On Windows, run the same commands against
+`%LOCALAPPDATA%\Agent Operating Kit\agent-operating-kit\scripts\aok`.
 
 ## Git Install
 
@@ -76,8 +83,9 @@ environment assets. Do not point `--project` at the AOK repo checkout itself.
 The installer writes:
 
 - `~/.agents/plugins/marketplace.json`
-- `~/.agents/plugins/plugins/agent-operating-kit` as a symlink to this checkout
-- `~/.local/bin/aok` as a symlink to `scripts/aok`
+- `~/.agents/plugins/plugins/agent-operating-kit` as a symlink on Unix, or a
+  junction/copy on Windows
+- `~/.local/bin/aok` as a symlink on Unix, or `~/.local/bin/aok.cmd` on Windows
 
 ## Codex First Success
 
@@ -179,7 +187,7 @@ Render all packs for all targets when you want a complete generated snapshot:
 
 - If `doctor` reports a missing CLI shim, ensure `~/.local/bin` exists and rerun
   `./scripts/install.sh`.
-- If `doctor` reports the plugin symlink as failed, check whether
+- If `doctor` reports the plugin path as failed, check whether
   `~/.agents/plugins/plugins/agent-operating-kit` already exists and points
   somewhere else.
 - If Claude Code cannot see a plugin, verify that `~/.claude/settings.json` uses

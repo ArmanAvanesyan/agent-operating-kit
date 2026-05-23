@@ -37,6 +37,10 @@ Installer outputs:
 
 Each installer writes a setup report near its install root.
 
+On Windows, AOK installs the plugin directory with a junction when possible and
+falls back to a copy if junction creation is unavailable. The CLI entrypoint is
+`~/.local/bin/aok.cmd`.
+
 ## Developer First Success Path
 
 Use this path when you are comfortable with the terminal and want a validated
@@ -52,7 +56,7 @@ cd agent-operating-kit
 
 Success means:
 
-- `doctor` reports required files, marketplace registration, plugin symlink, and
+- `doctor` reports required files, marketplace registration, plugin path, and
   CLI shim as `OK`.
 - `validate` prints `Kit validation passed.`
 - the render command writes

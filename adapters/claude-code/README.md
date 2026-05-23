@@ -9,8 +9,10 @@ making AOK the source of truth.
 
 - Marketplace metadata lives under `adapters/claude-code/marketplace/.claude-plugin/`.
 - Pack-specific Claude Code assets live under `packs/*/claude-code/`.
-- `aok render pack <pack> --target claude-code` emits a compatibility JSON contract
-  that points at preserved plugin markdown and command files.
+- Bundle metadata is expected from the compatibility marketplace and each
+  preserved `packs/*/claude-code/plugin.json` asset.
+- `aok render bundle <pack> --target claude-code` emits a compatibility bundle
+  that includes preserved plugin markdown and command files.
 
 ## Compatibility
 

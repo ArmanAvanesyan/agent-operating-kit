@@ -3,8 +3,32 @@
   "kind": "tool-adapter",
   "displayName": "Hermes Agent",
   "status": "active",
-  "supportedTargets": ["hermes-agent"],
-  "renders": ["task-packet", "role", "hook", "skill", "pack", "mcp-config"],
-  "entrypoints": ["adapters/hermes-agent/README.md", "scripts/aok"],
-  "limitations": ["Runtime-specific agent wiring and packaging remains external while JSON contracts are available."]
+  "supportedTargets": [
+    "hermes-agent"
+  ],
+  "renders": [
+    "task-packet",
+    "role",
+    "hook",
+    "skill",
+    "pack",
+    "mcp-config"
+  ],
+  "entrypoints": [
+    "adapters/hermes-agent/README.md",
+    "scripts/aok",
+    "packs/*/pack.json"
+  ],
+  "limitations": [
+    "Runtime-specific agent wiring and packaging remains external while JSON contracts are available.",
+    "Bundle metadata is emitted as generated import bundle metadata in targetRender.hermes-agent.payload; runtime-specific agent wiring remains external.",
+    "Current non-CLI support is a generated import bundle, not a native marketplace installer."
+  ],
+  "supportLevel": "generated-bundle",
+  "nativePackageFormats": [],
+  "bundle": {
+    "artifactName": "aok-hermes-agent-bundles.zip",
+    "format": "aok-import-bundle",
+    "importInstructions": "Use the release bundle at bundles/hermes-agent/<pack>/ and import the included assignment, role, skill, and lifecycle files into the host workflow."
+  }
 }

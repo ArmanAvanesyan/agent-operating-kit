@@ -10,10 +10,12 @@ multi-agent workflows.
 - Task packets render as structured work specs.
 - Roles render as instruction-level policy contracts.
 - Skills and hooks render as reusable execution guidance.
+- Bundle metadata is emitted as a generated import bundle in
+  `targetRender.gemini.payload`; host runtime invocation remains external.
 
 ## Supported Commands
 
-- `aok render pack <pack> --target gemini`
+- `aok render bundle <pack> --target gemini`
 
 ## Known Gaps
 

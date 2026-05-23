@@ -3,8 +3,31 @@
   "kind": "tool-adapter",
   "displayName": "Gemini",
   "status": "active",
-  "supportedTargets": ["gemini"],
-  "renders": ["task-packet", "role", "skill", "pack", "mcp-config"],
-  "entrypoints": ["adapters/gemini/README.md", "scripts/aok"],
-  "limitations": ["Command flow is contract-based until host-specific hook/runtime wrappers are wired."]
+  "supportedTargets": [
+    "gemini"
+  ],
+  "renders": [
+    "task-packet",
+    "role",
+    "skill",
+    "pack",
+    "mcp-config"
+  ],
+  "entrypoints": [
+    "adapters/gemini/README.md",
+    "scripts/aok",
+    "packs/*/pack.json"
+  ],
+  "limitations": [
+    "Command flow is contract-based until host-specific hook/runtime wrappers are wired.",
+    "Bundle metadata is emitted as generated import bundle metadata in targetRender.gemini.payload; host runtime invocation remains external.",
+    "Current non-CLI support is a generated import bundle, not a native marketplace installer."
+  ],
+  "supportLevel": "generated-bundle",
+  "nativePackageFormats": [],
+  "bundle": {
+    "artifactName": "aok-gemini-bundles.zip",
+    "format": "aok-import-bundle",
+    "importInstructions": "Use the release bundle at bundles/gemini/<pack>/ as reusable role, skill, hook, and task guidance."
+  }
 }

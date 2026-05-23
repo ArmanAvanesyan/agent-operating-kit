@@ -7,6 +7,12 @@
   },
   "plugins": [
     {
+      "name": "agent-operating-kit",
+      "source": "../aok-plugin",
+      "description": "Claude Code control plugin for Agent Operating Kit setup, diagnostics, rendering, migration, and pack discovery.",
+      "version": "0.3.0"
+    },
+    {
       "name": "engineering-guardrails",
       "source": "../../../packs/engineering-guardrails/claude-code",
       "description": "Hooks that enforce load-bearing engineering conventions: from __future__ import, no assert in production, alembic CONCURRENTLY discipline. Plus SessionStart reminder and pre-commit staleness nudge.",

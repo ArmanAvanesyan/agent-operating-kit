@@ -87,7 +87,7 @@ Register AOK's Claude Code compatibility marketplace. This updates
 `~/.claude/settings.json` after writing a timestamped backup:
 
 ```bash
-aok claude setup --enable engineering-guardrails
+aok claude setup --enable agent-operating-kit engineering-guardrails
 ```
 
 The helper uses the canonical marketplace key `aok-claude-code` and writes this
@@ -104,6 +104,7 @@ shape:
     }
   },
   "enabledPlugins": {
+    "agent-operating-kit@aok-claude-code": true,
     "engineering-guardrails@aok-claude-code": true
   }
 }

@@ -8,6 +8,7 @@ making AOK the source of truth.
 ## Render Shape
 
 - Marketplace metadata lives under `adapters/claude-code/marketplace/.claude-plugin/`.
+- The root AOK control plugin lives under `adapters/claude-code/aok-plugin/`.
 - Pack-specific Claude Code assets live under `packs/*/claude-code/`.
 - Bundle metadata is expected from the compatibility marketplace and each
   preserved `packs/*/claude-code/plugin.json` asset.
@@ -18,6 +19,8 @@ making AOK the source of truth.
 
 Existing toolbox plugin names are preserved in the pack assets:
 
+- `agent-operating-kit` for AOK setup, doctor, render, migration, and pack
+  discovery workflows
 - `engineering-guardrails`
 - `ship-pipeline`
 - `phased-rollout-template`

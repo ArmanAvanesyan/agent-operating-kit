@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0
+
+- Add a root Claude Code `agent-operating-kit` control plugin for setup,
+  diagnostics, rendering, migration, and pack discovery.
+- Register the root plugin in the `aok-claude-code` marketplace alongside the
+  existing workflow packs.
+- Update `aok claude setup --enable all` to enable the root plugin plus all
+  migrated packs.
+
 ## 0.2.0
 
 - Make AOK the canonical cross-tool agent operating kit.

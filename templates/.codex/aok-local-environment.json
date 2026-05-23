@@ -1,0 +1,46 @@
+{
+  "kind": "aok-codex-local-environment",
+  "version": "0.4.0",
+  "description": "AOK-owned Codex App local environment manifest for setup scripts and common actions.",
+  "codexDocs": "https://developers.openai.com/codex/app/local-environments",
+  "codexGeneratedConfig": {
+    "status": "locally-observed",
+    "path": ".codex/environments/environment.toml",
+    "reason": "The official docs confirm .codex setup scripts and actions; this TOML shape is based on a local Codex plugin example because the public docs page does not publish the full schema."
+  },
+  "setupScripts": {
+    "default": ".codex/setup.sh"
+  },
+  "actions": [
+    {
+      "name": "AOK Doctor",
+      "icon": "stethoscope",
+      "command": ".codex/aok-action.sh doctor"
+    },
+    {
+      "name": "AOK Validate",
+      "icon": "check-circle",
+      "command": ".codex/aok-action.sh validate"
+    },
+    {
+      "name": "AOK Render Bundles",
+      "icon": "package",
+      "command": ".codex/aok-action.sh render-bundles"
+    },
+    {
+      "name": "AOK Project Init",
+      "icon": "folder-plus",
+      "command": ".codex/aok-action.sh project-init"
+    },
+    {
+      "name": "AOK Claude Setup",
+      "icon": "plug",
+      "command": ".codex/aok-action.sh claude-setup"
+    },
+    {
+      "name": "AOK Release Build",
+      "icon": "archive",
+      "command": ".codex/aok-action.sh release-build"
+    }
+  ]
+}

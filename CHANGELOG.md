@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.0
+
+- Add Codex App local-environment setup and action helper templates.
+- Add `aok codex local-env` init, validate, and action discovery commands.
+- Add a conservative `.codex/environments/environment.toml` based on a locally
+  observed Codex plugin example, plus AOK validation metadata.
+
 ## 0.3.0
 
 - Add a root Claude Code `agent-operating-kit` control plugin for setup,

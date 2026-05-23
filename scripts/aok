@@ -15,6 +15,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable
 
+try:
+    import tomllib
+except ModuleNotFoundError:  # pragma: no cover - Python < 3.11 fallback
+    tomllib = None
+
 
 KIT_ROOT = Path(__file__).resolve().parents[1]
 PLUGIN_NAME = "agent-operating-kit"
@@ -32,6 +37,22 @@ SUPPORTED_TARGETS = (
     "hermes-agent",
 )
 RENDER_TARGETS = SUPPORTED_TARGETS + ("all",)
+CODEX_LOCAL_ENV_DOCS_URL = "https://developers.openai.com/codex/app/local-environments"
+CODEX_LOCAL_ENV_REQUIRED = (
+    ".codex/config.toml",
+    ".codex/setup.sh",
+    ".codex/aok-action.sh",
+    ".codex/aok-local-environment.json",
+    ".codex/environments/environment.toml",
+)
+CODEX_LOCAL_ENV_ACTIONS = (
+    "AOK Doctor",
+    "AOK Validate",
+    "AOK Render Bundles",
+    "AOK Project Init",
+    "AOK Claude Setup",
+    "AOK Release Build",
+)
 
 
 
@@ -65,6 +86,39 @@ def load_json(path: Path, default: dict) -> dict:
 def write_json(path: Path, data: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2, sort_keys=False) + "\n")
+
+
+def load_simple_environment_toml(path: Path) -> dict:
+    if tomllib is not None:
+        return tomllib.loads(path.read_text())
+    data: dict[str, object] = {"actions": []}
+    current_action: dict[str, str] | None = None
+    in_setup = False
+    for raw_line in path.read_text().splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line == "[setup]":
+            data.setdefault("setup", {})
+            in_setup = True
+            current_action = None
+            continue
+        if line == "[[actions]]":
+            current_action = {}
+            data.setdefault("actions", []).append(current_action)
+            in_setup = False
+            continue
+        if "=" not in line:
+            continue
+        key, value = [part.strip() for part in line.split("=", 1)]
+        parsed = value.strip('"') if value.startswith('"') and value.endswith('"') else int(value) if value.isdigit() else value
+        if current_action is not None:
+            current_action[key] = parsed
+        elif in_setup:
+            data.setdefault("setup", {})[key] = parsed
+        else:
+            data[key] = parsed
+    return data
 
 
 def resolve_targets(raw: str) -> tuple[str, ...]:
@@ -200,6 +254,11 @@ def collect_doctor(home: Path | None = None) -> dict:
         KIT_ROOT / "hooks.json",
         KIT_ROOT / "templates" / "AGENTS.md",
         KIT_ROOT / "templates" / "agents" / "workflow.md",
+        KIT_ROOT / "templates" / ".codex" / "setup.sh",
+        KIT_ROOT / "templates" / ".codex" / "aok-action.sh",
+        KIT_ROOT / "templates" / ".codex" / "aok-local-environment.json",
+        KIT_ROOT / "templates" / ".codex" / "environments" / "environment.toml",
+        KIT_ROOT / "docs" / "codex-local-environments.md",
         KIT_ROOT / "scripts" / "aok",
     ]
     marketplace, link_path = marketplace_paths(home)
@@ -234,7 +293,13 @@ def collect_doctor(home: Path | None = None) -> dict:
             "ok": (home / ".local" / "bin" / "aok").exists(),
         },
     }
-    required_ok = all(item["ok"] for item in files) and install["marketplace"]["ok"] and install["pluginSymlink"]["ok"]
+    codex_local_environment = collect_codex_local_env(KIT_ROOT / "templates")
+    required_ok = (
+        all(item["ok"] for item in files)
+        and install["marketplace"]["ok"]
+        and install["pluginSymlink"]["ok"]
+        and codex_local_environment["templatesOk"]
+    )
     return {
         "kind": "aok-doctor-report",
         "version": plugin_version(),
@@ -245,6 +310,7 @@ def collect_doctor(home: Path | None = None) -> dict:
         "commands": commands,
         "files": files,
         "install": install,
+        "codexLocalEnvironment": codex_local_environment,
         "nextActions": [] if required_ok else ["Run the AOK installer again or check the marketplace/plugin paths."],
     }
 
@@ -264,6 +330,12 @@ def doctor_report_text(report: dict) -> str:
     lines.extend(["", "## Installation"])
     for label, item in report["install"].items():
         lines.append(f"- {'OK' if item['ok'] else 'FAIL'} {label}: {item['path']}")
+    lines.extend(["", "## Codex Local Environment"])
+    local_env = report["codexLocalEnvironment"]
+    lines.append(f"- {'OK' if local_env['templatesOk'] else 'FAIL'} templates: {local_env['projectPath']}")
+    lines.append(f"- config schema status: {local_env['codexGeneratedConfig']['status']}")
+    for item in local_env["files"]:
+        lines.append(f"- {'OK' if item['ok'] else 'FAIL'} {item['relativePath']}")
     lines.extend(["", "## Optional Commands"])
     for name, item in report["commands"].items():
         detail = item["path"] or "not found"
@@ -293,6 +365,8 @@ def cmd_doctor(args: argparse.Namespace) -> int:
         print_result("marketplace", install["marketplace"]["ok"], install["marketplace"]["path"])
         print_result("plugin symlink", install["pluginSymlink"]["ok"], install["pluginSymlink"]["path"])
         print_result("CLI shim", install["cliShim"]["ok"], install["cliShim"]["path"])
+        local_env = report["codexLocalEnvironment"]
+        print_result("Codex local environment templates", local_env["templatesOk"], local_env["projectPath"])
     return 0 if report["requiredOk"] else 1
 
 
@@ -337,6 +411,8 @@ def copy_template_tree(target: Path, force: bool = False) -> list[str]:
         new_text = src.read_text()
         if not dest.exists():
             dest.write_text(new_text)
+            if os.access(src, os.X_OK):
+                dest.chmod(0o755)
             changes.append(f"created {rel}")
             continue
         old_text = dest.read_text()
@@ -352,6 +428,8 @@ def copy_template_tree(target: Path, force: bool = False) -> list[str]:
             continue
         backup = backup_file(dest, backup_root, target)
         dest.write_text(new_text)
+        if os.access(src, os.X_OK):
+            dest.chmod(0o755)
         changes.append(f"updated {rel}; backup {backup.relative_to(target)}")
 
     meta = target / ".aok"
@@ -401,10 +479,24 @@ def validate_project(path: Path) -> list[str]:
         "agents/roles/qa-reality-checker.md",
         "agents/roles/code-reviewer.md",
         ".codex/config.toml",
+        ".codex/setup.sh",
+        ".codex/aok-action.sh",
+        ".codex/aok-local-environment.json",
+        ".codex/environments/environment.toml",
     ]
     for rel in required:
         if not (path / rel).exists():
             missing.append(rel)
+    local_env = collect_codex_local_env(path)
+    for item in local_env["files"]:
+        if item["ok"] and item["executable"] is False:
+            missing.append(f"{item['relativePath']} must be executable")
+    if (path / ".codex" / "aok-local-environment.json").exists() and not local_env["manifest"]["ok"]:
+        missing.append(".codex/aok-local-environment.json must be a valid AOK Codex local-environment manifest")
+    for action in local_env["missingActions"]:
+        missing.append(f".codex/aok-local-environment.json missing action {action}")
+    for action in local_env.get("invalidActions", []):
+        missing.append(f".codex/aok-local-environment.json invalid action {action}")
     return missing
 
 
@@ -417,6 +509,194 @@ def cmd_project_validate(args: argparse.Namespace) -> int:
             print(f"- {rel}")
         return 1
     print(f"Project validation passed: {target}")
+    return 0
+
+
+def copy_codex_local_env_templates(target: Path, force: bool = False) -> list[str]:
+    template_root = KIT_ROOT / "templates"
+    timestamp = datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
+    backup_root = target / ".aok-backups" / timestamp
+    changes: list[str] = []
+    for rel_raw in CODEX_LOCAL_ENV_REQUIRED:
+        rel = Path(rel_raw)
+        src = template_root / rel
+        dest = target / rel
+        if not src.exists():
+            raise AokError(f"Missing Codex local-environment template: {src}")
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        new_text = src.read_text()
+        if not dest.exists():
+            dest.write_text(new_text)
+            if os.access(src, os.X_OK):
+                dest.chmod(0o755)
+            changes.append(f"created {rel}")
+            continue
+        old_text = dest.read_text()
+        if old_text == new_text:
+            changes.append(f"unchanged {rel}")
+            continue
+        if not force:
+            proposed = dest.with_name(f"{dest.name}.aok-proposed")
+            proposed.write_text(new_text)
+            diff_path = dest.with_name(f"{dest.name}.aok.diff")
+            diff_path.write_text(unified_diff(old_text, new_text, str(rel), str(proposed.relative_to(target))))
+            changes.append(f"preserved {rel}; wrote {proposed.relative_to(target)} and {diff_path.relative_to(target)}")
+            continue
+        backup = backup_file(dest, backup_root, target)
+        dest.write_text(new_text)
+        if os.access(src, os.X_OK):
+            dest.chmod(0o755)
+        changes.append(f"updated {rel}; backup {backup.relative_to(target)}")
+    return changes
+
+
+def load_codex_local_env_manifest(path: Path) -> dict:
+    manifest_path = path / ".codex" / "aok-local-environment.json"
+    data = load_json(manifest_path, {})
+    if not isinstance(data, dict):
+        raise AokError(f"Invalid Codex local-environment manifest: {manifest_path}")
+    return data
+
+
+def collect_codex_local_env(path: Path) -> dict:
+    project = path.resolve()
+    files = []
+    for rel in CODEX_LOCAL_ENV_REQUIRED:
+        item = project / rel
+        files.append(
+            {
+                "path": str(item),
+                "relativePath": rel,
+                "ok": item.exists(),
+                "executable": item.exists() and os.access(item, os.X_OK) if rel.endswith(".sh") else None,
+            }
+        )
+    manifest_path = project / ".codex" / "aok-local-environment.json"
+    manifest: dict = {}
+    manifest_ok = False
+    manifest_error = None
+    if manifest_path.exists():
+        try:
+            manifest = json.loads(manifest_path.read_text())
+            manifest_ok = manifest.get("kind") == "aok-codex-local-environment"
+        except json.JSONDecodeError as exc:
+            manifest_error = str(exc)
+    actions = manifest.get("actions", []) if isinstance(manifest, dict) else []
+    action_names = [item.get("name") for item in actions if isinstance(item, dict)]
+    missing_actions = [name for name in CODEX_LOCAL_ENV_ACTIONS if name not in action_names]
+    invalid_actions = []
+    for action in actions:
+        if not isinstance(action, dict):
+            invalid_actions.append("<non-object>")
+            continue
+        name = action.get("name", "<unnamed>")
+        if not action.get("command"):
+            invalid_actions.append(str(name))
+    environment_path = project / ".codex" / "environments" / "environment.toml"
+    environment_ok = False
+    environment_error = None
+    environment_actions: list[str] = []
+    environment_setup = None
+    if environment_path.exists():
+        try:
+            environment_data = load_simple_environment_toml(environment_path)
+            environment_setup = (environment_data.get("setup") or {}).get("script")
+            environment_actions = [
+                str(item.get("name"))
+                for item in environment_data.get("actions", [])
+                if isinstance(item, dict) and item.get("name") and item.get("command")
+            ]
+            environment_ok = (
+                environment_data.get("version") == 1
+                and environment_setup == ".codex/setup.sh"
+                and not [name for name in CODEX_LOCAL_ENV_ACTIONS if name not in environment_actions]
+            )
+        except Exception as exc:  # noqa: BLE001 - validation should report parse errors, not crash
+            environment_error = str(exc)
+    setup_default = (manifest.get("setupScripts") or {}).get("default") if isinstance(manifest, dict) else None
+    codex_generated_config = manifest.get("codexGeneratedConfig", {}) if isinstance(manifest, dict) else {}
+    templates_ok = (
+        all(item["ok"] for item in files)
+        and all(item["executable"] is not False for item in files)
+        and manifest_ok
+        and environment_ok
+        and not missing_actions
+        and not invalid_actions
+        and setup_default == ".codex/setup.sh"
+    )
+    return {
+        "kind": "aok-codex-local-environment-report",
+        "projectPath": str(project),
+        "docs": CODEX_LOCAL_ENV_DOCS_URL,
+        "templatesOk": templates_ok,
+        "files": files,
+        "manifest": {
+            "path": str(manifest_path),
+            "ok": manifest_ok,
+            "error": manifest_error,
+            "version": manifest.get("version") if isinstance(manifest, dict) else None,
+        },
+        "setupScript": setup_default,
+        "environmentToml": {
+            "path": str(environment_path),
+            "ok": environment_ok,
+            "error": environment_error,
+            "setupScript": environment_setup,
+            "actions": environment_actions,
+        },
+        "actions": actions,
+        "missingActions": missing_actions,
+        "invalidActions": invalid_actions,
+        "codexGeneratedConfig": codex_generated_config
+        or {
+            "status": "unknown",
+            "reason": "No AOK Codex local-environment manifest was found.",
+        },
+    }
+
+
+def cmd_codex_local_env_init(args: argparse.Namespace) -> int:
+    target = Path(args.path).resolve()
+    if not target.exists() or not target.is_dir():
+        raise AokError(f"Target is not a directory: {target}")
+    changes = copy_codex_local_env_templates(target, force=args.force)
+    print(f"Initialized Codex local environment: {target}")
+    for change in changes:
+        print(f"- {change}")
+    print("Register .codex/setup.sh and .codex/aok-action.sh actions in Codex App settings.")
+    return 0
+
+
+def cmd_codex_local_env_validate(args: argparse.Namespace) -> int:
+    target = Path(args.path).resolve()
+    report = collect_codex_local_env(target)
+    if getattr(args, "json", False):
+        print(json.dumps(report, indent=2))
+    else:
+        for item in report["files"]:
+            detail = item["path"]
+            if item["executable"] is False:
+                detail = f"{detail} (not executable)"
+            print_result(item["relativePath"], bool(item["ok"]) and item["executable"] is not False, detail)
+        print_result("manifest", report["manifest"]["ok"], report["manifest"]["path"])
+        print_result("environment.toml", report["environmentToml"]["ok"], report["environmentToml"]["path"])
+        for missing in report["missingActions"]:
+            print_result(f"action {missing}", False)
+        for invalid in report["invalidActions"]:
+            print_result(f"action {invalid}", False, "missing command")
+        print_result("Codex generated config schema", True, report["codexGeneratedConfig"].get("status", "unknown"))
+    return 0 if report["templatesOk"] else 1
+
+
+def cmd_codex_local_env_actions(args: argparse.Namespace) -> int:
+    target = Path(args.path).resolve()
+    report = collect_codex_local_env(target)
+    if report["missingActions"]:
+        raise AokError(f"Codex local-environment actions are incomplete: {', '.join(report['missingActions'])}")
+    if report["invalidActions"]:
+        raise AokError(f"Codex local-environment actions are malformed: {', '.join(report['invalidActions'])}")
+    for action in report["actions"]:
+        print(f"{action['name']}: {action['command']}")
     return 0
 
 
@@ -1181,6 +1461,7 @@ def validate_required_files(errors: list[str]) -> None:
         "docs/swarmd-integration.md",
         "docs/migration-from-claude-code-toolbox.md",
         "docs/install-and-onboarding.md",
+        "docs/codex-local-environments.md",
         "docs/project-init-guide.md",
         "docs/targets-support-matrix.md",
         "docs/release-checklist.md",
@@ -1204,6 +1485,11 @@ def validate_required_files(errors: list[str]) -> None:
         "skills/qa-verification/SKILL.md",
         "skills/project-bootstrap/SKILL.md",
         "templates/AGENTS.md",
+        "templates/.codex/config.toml",
+        "templates/.codex/setup.sh",
+        "templates/.codex/aok-action.sh",
+        "templates/.codex/aok-local-environment.json",
+        "templates/.codex/environments/environment.toml",
         "templates/agents/workflow.md",
         "scripts/aok",
         "scripts/install.sh",
@@ -1221,7 +1507,7 @@ def validate_required_files(errors: list[str]) -> None:
 
 
 def validate_json_files(errors: list[str]) -> None:
-    for rel in (".codex-plugin/plugin.json", "hooks.json"):
+    for rel in (".codex-plugin/plugin.json", "hooks.json", "templates/.codex/aok-local-environment.json"):
         require_json(KIT_ROOT / rel, errors)
     for path in sorted((KIT_ROOT / "schemas").glob("*.schema.json")):
         data = require_json(path, errors)
@@ -1455,6 +1741,30 @@ def validate_claude_code_marketplace(errors: list[str]) -> None:
             errors.append(f"{marketplace.relative_to(KIT_ROOT)}: plugin {name} source escapes kit root: {source}")
 
 
+def validate_codex_local_environment_templates(errors: list[str]) -> None:
+    report = collect_codex_local_env(KIT_ROOT / "templates")
+    if not report["templatesOk"]:
+        for item in report["files"]:
+            if not item["ok"]:
+                errors.append(f"templates/{item['relativePath']}: missing")
+            if item["executable"] is False:
+                errors.append(f"templates/{item['relativePath']}: must be executable")
+        if not report["manifest"]["ok"]:
+            detail = f": {report['manifest']['error']}" if report["manifest"]["error"] else ""
+            errors.append(f"templates/.codex/aok-local-environment.json: invalid manifest{detail}")
+        if not report["environmentToml"]["ok"]:
+            detail = f": {report['environmentToml']['error']}" if report["environmentToml"]["error"] else ""
+            errors.append(f"templates/.codex/environments/environment.toml: invalid local environment config{detail}")
+        for action in report["missingActions"]:
+            errors.append(f"templates/.codex/aok-local-environment.json: missing action {action}")
+        for action in report["invalidActions"]:
+            errors.append(f"templates/.codex/aok-local-environment.json: invalid action {action}")
+    if report["codexGeneratedConfig"].get("status") != "locally-observed":
+        errors.append("templates/.codex/aok-local-environment.json: codexGeneratedConfig.status must be locally-observed")
+    if report["codexGeneratedConfig"].get("path") != ".codex/environments/environment.toml":
+        errors.append("templates/.codex/aok-local-environment.json: codexGeneratedConfig.path must be .codex/environments/environment.toml")
+
+
 def validate_kit() -> list[str]:
     errors: list[str] = []
     validate_required_files(errors)
@@ -1462,6 +1772,7 @@ def validate_kit() -> list[str]:
     validate_adapters(errors)
     validate_packs(errors)
     validate_claude_code_marketplace(errors)
+    validate_codex_local_environment_templates(errors)
     return errors
 
 
@@ -1546,6 +1857,22 @@ def build_parser() -> argparse.ArgumentParser:
         help="Pack names to enable, or all (default)",
     )
     claude_setup.set_defaults(func=cmd_claude_setup)
+
+    codex = sub.add_parser("codex")
+    codex_sub = codex.add_subparsers(dest="codex_command", required=True)
+    local_env = codex_sub.add_parser("local-env")
+    local_env_sub = local_env.add_subparsers(dest="local_env_command", required=True)
+    local_env_init = local_env_sub.add_parser("init")
+    local_env_init.add_argument("path", nargs="?", default=".")
+    local_env_init.add_argument("--force", action="store_true", help="Replace existing Codex local-environment files after backup")
+    local_env_init.set_defaults(func=cmd_codex_local_env_init)
+    local_env_validate = local_env_sub.add_parser("validate")
+    local_env_validate.add_argument("path", nargs="?", default=".")
+    local_env_validate.add_argument("--json", action="store_true", help="Print machine-readable Codex local-environment status")
+    local_env_validate.set_defaults(func=cmd_codex_local_env_validate)
+    local_env_actions = local_env_sub.add_parser("actions")
+    local_env_actions.add_argument("path", nargs="?", default=".")
+    local_env_actions.set_defaults(func=cmd_codex_local_env_actions)
 
     render = sub.add_parser("render")
     render_sub = render.add_subparsers(dest="render_command", required=True)

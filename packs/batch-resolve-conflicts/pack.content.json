@@ -1,0 +1,47 @@
+{
+  "kind": "pack-content",
+  "name": "batch-resolve-conflicts",
+  "version": "0.1.0",
+  "description": "Neutral content for conflict resolution across many PRs.",
+  "roles": [
+    {
+      "id": "conflict-coordinator",
+      "name": "Conflict Coordinator",
+      "callsign": "conflict-coordinator",
+      "responsibilities": [
+        "Coordinate parallel PR rebase recovery when conflicts are structural.",
+        "Route canonical-resolution decisions and document merge outcomes."
+      ],
+      "escalation": {
+        "ifBlockedBy": "manual-merge-judgment-required",
+        "notify": ["orchestrator", "qa-reality-checker"]
+      }
+    }
+  ],
+  "skills": [
+    {
+      "id": "batch-resolve-conflicts",
+      "name": "batch-resolve-conflicts",
+      "description": "Resolve a conflicting PR batch into a serializable conflict map.",
+      "sourcePath": "claude-code/skills/batch-resolve-conflicts.md",
+      "inputs": {
+        "prNumbers": "Comma-separated PR numbers"
+      }
+    }
+  ],
+  "taskPackets": [
+    {
+      "id": "batch-conflict-resolution-packet",
+      "title": "Resolve multiple conflicting PRs",
+      "description": "Validate conflict patterns and execute controlled parallel resolution.",
+      "status": "planned",
+      "phase": "recovery",
+      "assigneeRole": "conflict-coordinator",
+      "verification": [
+        "conflict list refreshed after each resolution attempt",
+        "CI returns green for each touched PR"
+      ],
+      "defaultDecision": "Keep canonical shared files on main and prioritize minimal conflict edits."
+    }
+  ]
+}

@@ -2,17 +2,18 @@
 
 Status: active.
 
-The Codex adapter maps AOK content to Codex skills, hooks, templates, and local
-CLI workflows.
+The Codex adapter renders neutral pack content into structured JSON contracts and
+supports bootstrap helpers through existing `scripts/aok` workflows.
 
 ## Render Shape
 
-- Skills render to `skills/*/SKILL.md`.
-- Hook contracts render to `hooks/` and `hooks.json`.
-- Project bootstrap files render to `templates/`.
-- The local CLI is `scripts/aok`.
+- Skills and hooks render through normalized contract payloads.
+- Task packets include `task.create`, `memory.put`, and `event.append` projection
+  references for `swarmd` integration.
+- MCP config contracts can be rendered for local agent runtimes.
 
-## Known Gaps
+## Notes
 
-- Native rendering from neutral manifests is not yet automated.
-- Project-specific facts still belong in the target project's `AGENTS.md`.
+- Native files are emitted via `aok render pack <pack> --target codex`.
+- Runtime automation is generated for portability and then adapted to Codex usage by
+  project-level workflow owners.

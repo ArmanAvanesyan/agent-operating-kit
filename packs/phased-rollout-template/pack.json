@@ -1,10 +1,134 @@
 {
   "name": "phased-rollout-template",
   "kind": "pack",
-  "description": "Project scaffold templates for phased rollouts with CI, deploy docs, infra notes, and engineering process docs.",
+  "description": "Project scaffold templates for phased rollouts with CI, deploy docs, and engineering process docs.",
   "sourceRepo": "ArmanAvanesyan/claude-code-toolbox",
-  "supportedTargets": ["claude-code"],
-  "concepts": ["skill", "template"],
+  "neutralContent": "pack.content.json",
+  "supportedTargets": [
+    "codex",
+    "claude-code",
+    "cursor",
+    "opencode",
+    "gemini",
+    "openclaw",
+    "hermes-agent"
+  ],
+  "concepts": [
+    "task-packet",
+    "role",
+    "skill",
+    "template",
+    "pack",
+    "mcp-config"
+  ],
+  "sourceRefs": {
+    "neutral": ["pack.content.json"],
+    "claude-code": [
+      "claude-code/plugin.json",
+      "claude-code/skills/init-phased-project.md",
+      "claude-code/templates/CLAUDE.md.tmpl",
+      "claude-code/templates/Dockerfile.tmpl",
+      "claude-code/templates/.dockerignore.tmpl",
+      "claude-code/templates/pyproject.toml.tmpl",
+      "claude-code/templates/.github/workflows/ci.yml.tmpl",
+      "claude-code/templates/.github/workflows/deploy.yml.tmpl",
+      "claude-code/templates/docs/engineering/process.md.tmpl",
+      "claude-code/templates/docs/engineering/code-review.md.tmpl",
+      "claude-code/templates/docs/engineering/security.md.tmpl",
+      "claude-code/templates/infra/README.md.tmpl",
+      "claude-code/templates/infra/ACCOUNTS.md.tmpl",
+      "claude-code/templates/infra/DEPLOY.md.tmpl",
+      "claude-code/templates/infra/cloud_run.yaml.tmpl"
+    ]
+  },
+  "conceptGraph": {
+    "roles": ["rollout-architect"],
+    "hooks": [],
+    "skills": ["init-phased-project"],
+    "templates": [
+      "claude-template-claude-md",
+      "claude-template-dockerfile",
+      "claude-template-dot-dockerignore",
+      "claude-template-pyproject",
+      "claude-template-ci-yml",
+      "claude-template-deploy-yml",
+      "claude-template-process-doc",
+      "claude-template-code-review-doc",
+      "claude-template-security-doc",
+      "claude-template-infra-readme",
+      "claude-template-infra-accounts",
+      "claude-template-infra-deploy",
+      "claude-template-cloud-run"
+    ],
+    "taskPackets": ["phased-rollout-template-packet"]
+  },
+  "targetRender": {
+    "codex": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "pack-render-json"
+      }
+    },
+    "claude-code": {
+      "status": "active",
+      "mode": "source",
+      "sourceRefs": [
+        "claude-code/plugin.json",
+        "claude-code/README.md",
+        "claude-code/skills/init-phased-project.md",
+        "claude-code/templates/CLAUDE.md.tmpl",
+        "claude-code/templates/Dockerfile.tmpl",
+        "claude-code/templates/.dockerignore.tmpl",
+        "claude-code/templates/pyproject.toml.tmpl",
+        "claude-code/templates/.github/workflows/ci.yml.tmpl",
+        "claude-code/templates/.github/workflows/deploy.yml.tmpl",
+        "claude-code/templates/docs/engineering/process.md.tmpl",
+        "claude-code/templates/docs/engineering/code-review.md.tmpl",
+        "claude-code/templates/docs/engineering/security.md.tmpl",
+        "claude-code/templates/infra/README.md.tmpl",
+        "claude-code/templates/infra/ACCOUNTS.md.tmpl",
+        "claude-code/templates/infra/DEPLOY.md.tmpl",
+        "claude-code/templates/infra/cloud_run.yaml.tmpl"
+      ],
+      "notes": "Native assets preserved in AOK package."
+    },
+    "cursor": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "aok-template-bundle"
+      }
+    },
+    "opencode": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "aok-template-bundle"
+      }
+    },
+    "gemini": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "aok-template-contract"
+      }
+    },
+    "openclaw": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "aok-template-bundle"
+      }
+    },
+    "hermes-agent": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "aok-template-bundle"
+      }
+    }
+  },
   "adapters": {
     "claude-code": {
       "pluginPath": "claude-code/plugin.json",

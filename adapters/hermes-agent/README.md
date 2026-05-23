@@ -1,18 +1,20 @@
 # Hermes Agent Adapter
 
-Status: scaffolded.
+Status: active.
 
-The Hermes Agent adapter defines how AOK roles, task packets, hooks, and skills
-should render into Hermes Agent workflows.
+The Hermes Agent adapter renders AOK roles, task packets, hooks, and skills into
+Hermes-oriented contracts.
 
 ## Render Shape
 
 - Task packets render as structured assignment specs.
-- Roles render as agent responsibilities and escalation rules.
-- Hooks render as lifecycle checks.
-- MCP config can point Hermes workflows at `swarmd`.
+- Roles and hooks render with escalation and execution guidance.
+- MCP config references support external runtime hooks.
+
+## Supported Commands
+
+- `aok render pack <pack> --target hermes-agent`
 
 ## Known Gaps
 
-- Native Hermes Agent package generation is not implemented yet.
-- Runtime-specific event wiring is documented but not automated.
+- Runtime-specific event wiring is documented and manually connected by host flows.

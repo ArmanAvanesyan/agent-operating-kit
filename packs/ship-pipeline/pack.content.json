@@ -1,0 +1,67 @@
+{
+  "kind": "pack-content",
+  "name": "ship-pipeline",
+  "version": "0.1.0",
+  "description": "Neutral skill and role content for PR shipping and CI recovery.",
+  "roles": [
+    {
+      "id": "ship-lead",
+      "name": "Ship Lead",
+      "callsign": "ship-lead",
+      "responsibilities": [
+        "Run and monitor end-to-end PR ship operations.",
+        "Resolve gating questions and keep release flow moving."
+      ],
+      "escalation": {
+        "ifBlockedBy": "repeated-quality-failure",
+        "notify": ["qa-reality-checker"]
+      }
+    },
+    {
+      "id": "pr-ci-fixer",
+      "name": "PR CI Fixer",
+      "callsign": "pr-ci-fixer",
+      "responsibilities": [
+        "Investigate CI failures from a PR and propose recovery steps.",
+        "Handle deterministic merge/rebase recovery actions under governance."
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "id": "ship-pr",
+      "name": "ship-pr",
+      "description": "Run a ship-to-merge workflow for current branch.",
+      "sourcePath": "claude-code/skills/ship-pr.md",
+      "inputs": {
+        "prTitle": "Optional PR title override",
+        "prBody": "Optional PR body override"
+      }
+    },
+    {
+      "id": "fix-ci",
+      "name": "fix-ci",
+      "description": "Recover a failing PR run by fixing CI blockers.",
+      "sourcePath": "claude-code/skills/fix-ci.md",
+      "inputs": {
+        "prNumber": "GitHub PR number"
+      }
+    }
+  ],
+  "taskPackets": [
+    {
+      "id": "ship-pipeline-packet",
+      "title": "Ship branch via PR pipeline",
+      "description": "Create PR, run checks, and merge once all gates are green.",
+      "status": "planned",
+      "phase": "execution",
+      "assigneeRole": "ship-lead",
+      "verification": [
+        "all required checks pass",
+        "PR state is mergeable",
+        "merge command returns success"
+      ],
+      "defaultDecision": "Prefer squash merge over merge commit when CI is green."
+    }
+  ]
+}

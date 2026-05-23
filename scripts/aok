@@ -29,6 +29,8 @@ SUPPORTED_TARGETS = (
     "openclaw",
     "hermes-agent",
 )
+RENDER_TARGETS = SUPPORTED_TARGETS + ("all",)
+
 
 
 class AokError(RuntimeError):
@@ -61,6 +63,55 @@ def load_json(path: Path, default: dict) -> dict:
 def write_json(path: Path, data: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2, sort_keys=False) + "\n")
+
+
+def resolve_targets(raw: str) -> tuple[str, ...]:
+    if raw == "all":
+        return SUPPORTED_TARGETS
+    if raw not in SUPPORTED_TARGETS:
+        raise AokError(f"Unsupported target: {raw}")
+    return (raw,)
+
+
+def normalize_pack_output(pack_name: str, target: str, explicit_out: Path | None, target_count: int) -> Path:
+    if explicit_out is None:
+        return KIT_ROOT / "build" / "renders" / pack_name / f"{target}.json"
+    if explicit_out.suffix and target_count == 1:
+        return explicit_out
+    if explicit_out.suffix and explicit_out.name == explicit_out.stem:
+        return explicit_out / f"{pack_name}.{target}.json"
+    return explicit_out / f"{pack_name}.{target}.json"
+
+
+def find_pack_dirs() -> list[str]:
+    pack_root = KIT_ROOT / "packs"
+    return sorted([path.name for path in pack_root.glob("*") if path.is_dir()])
+
+
+def load_pack_manifest(pack_name: str) -> tuple[dict, Path]:
+    pack_dir = KIT_ROOT / "packs" / pack_name
+    manifest_path = pack_dir / "pack.json"
+    if not pack_dir.exists() or not pack_dir.is_dir():
+        raise AokError(f"Unknown pack: {pack_name}")
+    if not manifest_path.exists():
+        raise AokError(f"Missing pack manifest: {manifest_path}")
+    manifest = load_json(manifest_path, {})
+    if not isinstance(manifest, dict):
+        raise AokError(f"Invalid pack manifest: {manifest_path}")
+    if not manifest:
+        raise AokError(f"Invalid pack manifest: {manifest_path}")
+    return manifest, pack_dir
+
+
+def load_pack_content(pack_name: str, pack_dir: Path, manifest: dict) -> tuple[dict, Path]:
+    content_rel = manifest.get("neutralContent", "pack.content.json")
+    content_path = pack_dir / content_rel
+    if not content_path.exists():
+        raise AokError(f"Missing neutral pack content file: {content_path}")
+    content = load_json(content_path, {})
+    if not isinstance(content, dict):
+        raise AokError(f"Missing or invalid neutral pack content: {content_path}")
+    return content, content_path
 
 
 def marketplace_paths() -> tuple[Path, Path]:
@@ -266,6 +317,160 @@ def cmd_project_validate(args: argparse.Namespace) -> int:
             print(f"- {rel}")
         return 1
     print(f"Project validation passed: {target}")
+    return 0
+
+
+def render_swarmd_projection(task: dict, roles: list[dict]) -> dict:
+    callsign = task.get("assigneeRole")
+    assignee = "implementer"
+    if callsign:
+        for role in roles:
+            if role.get("id") == callsign:
+                assignee = role.get("callsign", role.get("name", role.get("id")))
+                break
+    assignee = str(assignee or "implementer")
+    title = task.get("title", task.get("id", "unnamed task"))
+    spec = task.get("spec", task.get("description", ""))
+    return {
+        "task.create": {
+            "title": title,
+            "spec": spec,
+            "assignee": assignee,
+            "phase": task.get("phase", "planned"),
+        },
+        "memory.put": {
+            "namespace": "decision",
+            "key": f"{title.lower().replace(' ', '-')}-decision",
+            "content": task.get("defaultDecision", f"Follow neutral AOK process for {title}."),
+        },
+        "event.append": {
+            "type": "aok.task.packet.generated",
+            "actor": assignee,
+            "payload": {
+                "taskPacket": task.get("id", title),
+                "status": task.get("status", "pending"),
+            },
+        },
+    }
+
+
+def render_pack_payload(pack_name: str, pack_manifest: dict, content: dict, target: str) -> dict:
+    roles = content.get("roles", [])
+    skills = content.get("skills", [])
+    hooks = content.get("hooks", [])
+    templates = content.get("templates", [])
+    task_packets = content.get("taskPackets", [])
+    task_projection = [
+        {
+            **task,
+            "swarmd": render_swarmd_projection(task, roles),
+        }
+        for task in task_packets
+    ]
+
+    base = {
+        "kind": "aok-pack-render",
+        "version": pack_manifest.get("version", "0.1.0"),
+        "pack": {
+            "name": pack_name,
+            "sourceRepo": pack_manifest.get("sourceRepo"),
+            "kind": pack_manifest.get("kind", "pack"),
+            "description": pack_manifest.get("description"),
+            "supportedTargets": pack_manifest.get("supportedTargets", []),
+            "concepts": pack_manifest.get("concepts", []),
+        },
+        "source": {
+            "manifest": f"packs/{pack_name}/pack.json",
+            "content": f"packs/{pack_name}/{pack_manifest.get('neutralContent', 'pack.content.json')}",
+        },
+        "target": target,
+        "renderedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "roles": roles,
+        "hooks": hooks,
+        "skills": skills,
+        "templates": templates,
+        "taskPackets": task_projection,
+        "targetRender": pack_manifest.get("targetRender", {}).get(target, {}),
+        "concepts": {
+            "roles": [item.get("id") for item in roles if isinstance(item, dict) and item.get("id")],
+            "hooks": [item.get("id") for item in hooks if isinstance(item, dict) and item.get("id")],
+            "skills": [item.get("id") for item in skills if isinstance(item, dict) and item.get("id")],
+            "templates": [item.get("id") for item in templates if isinstance(item, dict) and item.get("id")],
+            "taskPackets": [item.get("id") for item in task_packets if isinstance(item, dict) and item.get("id")],
+        },
+    }
+
+    if target == "claude-code":
+        plugin_path = KIT_ROOT / "packs" / pack_name / "claude-code" / "plugin.json"
+        plugin = {}
+        if plugin_path.exists():
+            plugin = load_json(plugin_path, {})
+        return {
+            **base,
+            "targetContract": "claude-code-toolbox-compatible",
+            "pluginJson": plugin,
+            "compatibility": {
+                "hookContracts": "hook commands and plugin.json",
+                "skillContracts": [item.get("sourcePath") for item in skills if isinstance(item, dict)],
+            },
+        }
+
+    if target == "codex":
+        return {
+            **base,
+            "targetContract": "codex-agent",
+            "notes": ["Rendered into Codex JSON contract for local adoption."],
+            "mcpConfig": {
+                "mcpServers": {
+                    "swarmd": {
+                        "command": "swarmd",
+                        "args": ["mcp"],
+                    }
+                }
+            },
+        }
+
+    return {
+        **base,
+        "targetContract": f"{target}-agent",
+        "notes": [f"Rendered as structured JSON contract for {target}."],
+    }
+
+
+def cmd_render_pack(args: argparse.Namespace) -> int:
+    targets = resolve_targets(args.target)
+    manifest, pack_dir = load_pack_manifest(args.pack)
+    pack_name = manifest.get("name") or args.pack
+    content, _ = load_pack_content(pack_name, pack_dir, manifest)
+    for target in targets:
+        out = normalize_pack_output(pack_name, target, Path(args.out) if args.out else None, len(targets))
+        rendered = render_pack_payload(pack_name, manifest, content, target)
+        write_json(out, rendered)
+        print(f"Wrote render: {out}")
+    return 0
+
+
+def cmd_render_all(args: argparse.Namespace) -> int:
+    targets = resolve_targets(args.target)
+    pack_dirs = find_pack_dirs()
+    if not pack_dirs:
+        raise AokError("No packs found.")
+
+    output_root = Path(args.out) if args.out else (KIT_ROOT / "build" / "renders")
+    for pack_name in pack_dirs:
+        manifest_path = KIT_ROOT / "packs" / pack_name / "pack.json"
+        if not manifest_path.exists():
+            continue
+        manifest = load_json(manifest_path, {})
+        if not isinstance(manifest, dict):
+            continue
+        content, _ = load_pack_content(pack_name, manifest_path.parent, manifest)
+        for target in targets:
+            out_dir = output_root / target
+            out = out_dir / f"{pack_name}.json"
+            rendered = render_pack_payload(pack_name, manifest, content, target)
+            write_json(out, rendered)
+            print(f"Wrote render: {out}")
     return 0
 
 
@@ -641,6 +846,12 @@ def validate_json_files(errors: list[str]) -> None:
             continue
         if not data.get("kind") and path.name != "task-packet.example.json":
             errors.append(f"{path.relative_to(KIT_ROOT)}: missing kind")
+    for path in sorted((KIT_ROOT / "packs").glob("*/*/pack.content.json")):
+        data = require_json(path, errors)
+        if not data:
+            continue
+        if data.get("kind") != "pack-content":
+            errors.append(f"{path.relative_to(KIT_ROOT)}: expected kind pack-content")
 
 
 def validate_adapters(errors: list[str]) -> None:
@@ -686,13 +897,120 @@ def validate_packs(errors: list[str]) -> None:
         data = require_json(base / "pack.json", errors)
         if not data:
             continue
-        for key in ("name", "kind", "description", "sourceRepo", "supportedTargets", "concepts", "adapters"):
+        for key in (
+            "name",
+            "kind",
+            "description",
+            "sourceRepo",
+            "neutralContent",
+            "supportedTargets",
+            "concepts",
+            "adapters",
+            "sourceRefs",
+            "targetRender",
+            "conceptGraph",
+        ):
             if key not in data:
                 errors.append(f"packs/{name}/pack.json: missing {key}")
         if data.get("name") != name:
             errors.append(f"packs/{name}/pack.json: name must be {name}")
         if data.get("kind") != "pack":
             errors.append(f"packs/{name}/pack.json: kind must be pack")
+
+        targets = data.get("supportedTargets")
+        if isinstance(targets, list):
+            expected_targets = set(SUPPORTED_TARGETS)
+            present = set(targets)
+            if present != expected_targets:
+                errors.append(
+                    f"packs/{name}/pack.json: supportedTargets must include exactly {', '.join(sorted(expected_targets))}"
+                )
+
+        neutral_content = data.get("neutralContent", "pack.content.json")
+        content_path = base / neutral_content
+        content = require_json(content_path, errors)
+        if not content:
+            errors.append(f"packs/{name}/pack.json: missing neutral content {neutral_content}")
+            continue
+        if content.get("name") != name:
+            errors.append(f"packs/{name}/pack.content.json: name must be {name}")
+
+        target_render = data.get("targetRender")
+        if not isinstance(target_render, dict):
+            errors.append(f"packs/{name}/pack.json: targetRender must be an object")
+        else:
+            for target in SUPPORTED_TARGETS:
+                if target not in target_render:
+                    errors.append(f"packs/{name}/pack.json: missing targetRender[{target}]")
+                    continue
+                render = target_render[target]
+                if not isinstance(render, dict):
+                    errors.append(f"packs/{name}/pack.json: targetRender[{target}] must be object")
+                    continue
+                for key in ("status", "mode"):
+                    if key not in render:
+                        errors.append(f"packs/{name}/pack.json: targetRender[{target}] missing {key}")
+                mode = render.get("mode")
+                sources = render.get("sourceRefs", [])
+                payload = render.get("payload")
+                if mode == "source":
+                    if not isinstance(sources, list) or not sources:
+                        errors.append(f"packs/{name}/pack.json: targetRender[{target}] mode=source needs sourceRefs")
+                    else:
+                        for rel in sources:
+                            if not isinstance(rel, str) or not (base / rel).exists():
+                                errors.append(
+                                    f"packs/{name}/pack.json: targetRender[{target}] sourceRefs missing {rel}"
+                                )
+                elif mode in ("inline", "generated"):
+                    if payload is None and mode == "inline":
+                        errors.append(f"packs/{name}/pack.json: targetRender[{target}] mode=inline needs payload")
+                elif mode == "manual":
+                    pass
+                elif mode == "unsupported":
+                    pass
+                else:
+                    errors.append(
+                        f"packs/{name}/pack.json: targetRender[{target}] has unsupported mode {mode}"
+                    )
+
+        source_refs = data.get("sourceRefs")
+        if not isinstance(source_refs, dict):
+            errors.append(f"packs/{name}/pack.json: sourceRefs must be an object")
+        else:
+            for rel in source_refs.values():
+                if not isinstance(rel, list):
+                    continue
+                for source in rel:
+                    if not isinstance(source, str):
+                        continue
+                    if not (base / source).exists():
+                        errors.append(f"packs/{name}/pack.json: sourceRef {source} missing")
+
+        concept_graph = data.get("conceptGraph", {})
+        if not isinstance(concept_graph, dict):
+            errors.append(f"packs/{name}/pack.json: conceptGraph must be object")
+        else:
+            for section in ("roles", "hooks", "skills", "templates", "taskPackets"):
+                if section not in concept_graph:
+                    continue
+                if not isinstance(concept_graph[section], list):
+                    errors.append(f"packs/{name}/pack.json: conceptGraph.{section} must be array")
+
+            for target in ("roles", "hooks", "skills", "templates", "taskPackets"):
+                declared = concept_graph.get(target, [])
+                if not isinstance(declared, list):
+                    continue
+                content_items = content.get(target, [])
+                if not isinstance(content_items, list):
+                    continue
+                content_ids = {item.get("id") for item in content_items if isinstance(item, dict) and item.get("id")}
+                missing = [item for item in declared if item not in content_ids]
+                if missing:
+                    errors.append(
+                        f"packs/{name}/pack.json: conceptGraph.{target} references missing ids: {', '.join(missing)}"
+                    )
+
         for adapter_name, adapter in (data.get("adapters") or {}).items():
             plugin_path = adapter.get("pluginPath")
             readme_path = adapter.get("readmePath")
@@ -795,6 +1113,21 @@ def build_parser() -> argparse.ArgumentParser:
     history.add_argument("path", nargs="?", default=".")
     history.add_argument("-o", "--output")
     history.set_defaults(func=cmd_import_history)
+
+    render = sub.add_parser("render")
+    render_sub = render.add_subparsers(dest="render_command", required=True)
+    render_pack_cmd = render_sub.add_parser("pack")
+    render_pack_cmd.add_argument("pack")
+    render_pack_cmd.add_argument("--target", required=True, choices=RENDER_TARGETS)
+    render_pack_cmd.add_argument("--out", help="Path for render output JSON file or directory")
+    render_pack_cmd.set_defaults(func=cmd_render_pack)
+    render_all_cmd = render_sub.add_parser("all")
+    render_all_cmd.add_argument("--target", required=True, choices=RENDER_TARGETS)
+    render_all_cmd.add_argument(
+        "--out",
+        help="Output directory (default: build/renders). If omitted, defaults to build/renders/<target>.",
+    )
+    render_all_cmd.set_defaults(func=cmd_render_all)
 
     return parser
 

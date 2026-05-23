@@ -2,9 +2,9 @@
   "name": "openclaw",
   "kind": "tool-adapter",
   "displayName": "OpenClaw",
-  "status": "scaffolded",
+  "status": "active",
   "supportedTargets": ["openclaw"],
-  "renders": ["task-packet", "role", "hook", "skill"],
-  "entrypoints": ["adapters/openclaw/README.md"],
-  "limitations": ["Package layout is a documented scaffold only."]
+  "renders": ["task-packet", "role", "hook", "skill", "pack", "mcp-config"],
+  "entrypoints": ["adapters/openclaw/README.md", "scripts/aok"],
+  "limitations": ["CLI render is supported; native installer and hooks are under follow-up work."]
 }

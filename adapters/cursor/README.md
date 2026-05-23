@@ -1,18 +1,22 @@
 # Cursor Adapter
 
-Status: scaffolded.
+Status: active.
 
-The Cursor adapter defines how AOK content should render into Cursor-friendly
-rules, task Markdown, and project instructions.
+The Cursor adapter renders AOK content into Cursor-friendly task guidance and
+project rule artifacts.
 
 ## Render Shape
 
-- Roles and workflow policy render as project rules or instruction Markdown.
-- Task packets render as issue-sized Markdown work contracts.
-- Hooks render as manual or scriptable checklists until native hook support is
-  available.
+- Roles render as task policy markdown recommendations.
+- Task packets render as structured Markdown contracts and JSON companion payloads.
+- Hooks render as actionable checklists when native Cursor hook execution is not
+  directly available.
+
+## Supported Commands
+
+- `aok render pack <pack> --target cursor`
 
 ## Known Gaps
 
-- Native Cursor packaging is not implemented yet.
-- Hook execution is documented, not automatic.
+- Native Cursor package generator is in follow-up work; JSON contract and generated
+  markdown are the cross-tool source of truth.

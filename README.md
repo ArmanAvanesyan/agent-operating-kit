@@ -1,6 +1,6 @@
 # Agent Operating Kit
 
-Agent Operating Kit (AOK) is a cross-tool operating system for agent workflows.
+Agent Operating Kit (AOK) is the cross-tool operating system for agent workflows.
 It defines one neutral model for tasks, roles, hooks, skills, packs, and tool
 adapters, then renders that model into the agent tools a project actually uses.
 
@@ -23,8 +23,8 @@ adapters or content packs, not separate operating models.
 - `ArmanAvanesyan/claude-code-toolbox` is represented here as Claude Code
   adapter assets and curated packs.
 - `ArmanAvanesyan/swarmd` remains separate. AOK integrates with it through MCP
-  by generating config and mapping task packets, roles, decisions, and events
-  onto the `swarmd` MCP surface.
+  by generating config and mapping task packets, roles, decisions, and events onto
+  the `swarmd` MCP surface.
 
 ## Install
 
@@ -54,7 +54,31 @@ Initialize a project with AOK operating files:
 ./scripts/aok project validate /path/to/project
 ```
 
-### Claude Code Compatibility
+## Render Contracts
+
+AOK can render each pack into parseable target contracts:
+
+```bash
+./scripts/aok render pack <pack-id> --target <target> [--out PATH]
+./scripts/aok render all --target all [--out DIR]
+```
+
+`target` is one of `codex`, `claude-code`, `cursor`, `opencode`, `gemini`,
+`openclaw`, `hermes-agent`.
+
+## Usage Model
+
+1. Create or sync a task packet.
+2. Select a role for implementation and one role for QA or review.
+3. Run pre-hooks to check project context, scope, worktree safety, and risk.
+4. Execute one issue-sized change.
+5. Run verification and after-hooks.
+6. Record GitHub, swarmd, or local lifecycle updates.
+
+The neutral schema lives in `schemas/`. Tool-specific target behavior lives in
+`adapters/`. Reusable workflow content lives in `packs/`.
+
+## Claude Code Compatibility
 
 The Claude Code adapter exposes the former toolbox plugins through AOK. Register
 the compatibility marketplace path in `~/.claude/settings.json`:
@@ -82,18 +106,6 @@ Then enable a pack by its preserved plugin name:
 }
 ```
 
-## Usage Model
-
-1. Create or sync a task packet.
-2. Select a role for implementation and one role for QA or review.
-3. Run pre-hooks to check project context, scope, worktree safety, and risk.
-4. Execute one issue-sized change.
-5. Run verification and after-hooks.
-6. Record GitHub, swarmd, or local lifecycle updates.
-
-The neutral schema lives in `schemas/`. Tool-specific target behavior lives in
-`adapters/`. Reusable workflow content lives in `packs/`.
-
 ## Claude Code Toolbox Migration
 
 The former Claude Code Toolbox content is now represented as AOK packs:
@@ -117,7 +129,7 @@ for `swarmd`:
 - decisions map to `memory.put`
 - lifecycle updates map to `event.append`
 
-See `docs/swarmd-integration.md`.
+See `docs/swarmd-integration.md` for example payloads.
 
 ## Validation
 
@@ -128,5 +140,5 @@ Run:
 python3 -m py_compile scripts/aok
 ```
 
-Validation is dependency-free and checks required docs, schemas, adapter
-manifests, pack manifests, JSON syntax, and supported target coverage.
+Validation is dependency-free and checks required docs, schemas, adapter manifests,
+pack manifests, pack content, JSON syntax, and supported target coverage.

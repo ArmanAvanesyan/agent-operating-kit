@@ -1,0 +1,128 @@
+{
+  "kind": "pack-content",
+  "name": "phased-rollout-template",
+  "version": "0.1.0",
+  "description": "Neutral rollout and template content for phased delivery scaffolding.",
+  "roles": [
+    {
+      "id": "rollout-architect",
+      "name": "Rollout Architect",
+      "callsign": "rollout-architect",
+      "responsibilities": [
+        "Initialize a rollout project from templates.",
+        "Keep project scaffold and process docs aligned with target conventions."
+      ],
+      "escalation": {
+        "ifBlockedBy": "template-mismatch",
+        "notify": ["orchestrator"]
+      }
+    }
+  ],
+  "skills": [
+    {
+      "id": "init-phased-project",
+      "name": "init-phased-project",
+      "description": "Scaffold a new phased rollout project.",
+      "sourcePath": "claude-code/skills/init-phased-project.md",
+      "inputs": {
+        "name": "Project name",
+        "description": "Project description"
+      }
+    }
+  ],
+  "templates": [
+    {
+      "id": "claude-template-claude-md",
+      "sourcePath": "claude-code/templates/CLAUDE.md.tmpl",
+      "kind": "workflow",
+      "render": "Template for generated CLAUDE.md."
+    },
+    {
+      "id": "claude-template-dockerfile",
+      "sourcePath": "claude-code/templates/Dockerfile.tmpl",
+      "kind": "infrastructure",
+      "render": "Base Dockerfile template."
+    },
+    {
+      "id": "claude-template-dot-dockerignore",
+      "sourcePath": "claude-code/templates/.dockerignore.tmpl",
+      "kind": "infrastructure",
+      "render": "Docker ignore template."
+    },
+    {
+      "id": "claude-template-pyproject",
+      "sourcePath": "claude-code/templates/pyproject.toml.tmpl",
+      "kind": "packaging",
+      "render": "Project packaging template."
+    },
+    {
+      "id": "claude-template-ci-yml",
+      "sourcePath": "claude-code/templates/.github/workflows/ci.yml.tmpl",
+      "kind": "ci",
+      "render": "CI workflow scaffold."
+    },
+    {
+      "id": "claude-template-deploy-yml",
+      "sourcePath": "claude-code/templates/.github/workflows/deploy.yml.tmpl",
+      "kind": "ci",
+      "render": "Deployment workflow scaffold."
+    },
+    {
+      "id": "claude-template-process-doc",
+      "sourcePath": "claude-code/templates/docs/engineering/process.md.tmpl",
+      "kind": "documentation",
+      "render": "Engineering process doc."
+    },
+    {
+      "id": "claude-template-code-review-doc",
+      "sourcePath": "claude-code/templates/docs/engineering/code-review.md.tmpl",
+      "kind": "documentation",
+      "render": "Code review doc."
+    },
+    {
+      "id": "claude-template-security-doc",
+      "sourcePath": "claude-code/templates/docs/engineering/security.md.tmpl",
+      "kind": "documentation",
+      "render": "Security baseline doc."
+    },
+    {
+      "id": "claude-template-infra-readme",
+      "sourcePath": "claude-code/templates/infra/README.md.tmpl",
+      "kind": "infrastructure",
+      "render": "Infrastructure checklist."
+    },
+    {
+      "id": "claude-template-infra-accounts",
+      "sourcePath": "claude-code/templates/infra/ACCOUNTS.md.tmpl",
+      "kind": "infrastructure",
+      "render": "Service account bootstrap doc."
+    },
+    {
+      "id": "claude-template-infra-deploy",
+      "sourcePath": "claude-code/templates/infra/DEPLOY.md.tmpl",
+      "kind": "infrastructure",
+      "render": "Deployment prerequisites doc."
+    },
+    {
+      "id": "claude-template-cloud-run",
+      "sourcePath": "claude-code/templates/infra/cloud_run.yaml.tmpl",
+      "kind": "infrastructure",
+      "render": "Cloud Run config template."
+    }
+  ],
+  "taskPackets": [
+    {
+      "id": "phased-rollout-template-packet",
+      "title": "Initialize a phased rollout project",
+      "description": "Generate a complete starter tree for phased rollout operations.",
+      "status": "planned",
+      "phase": "scaffold",
+      "assigneeRole": "rollout-architect",
+      "verification": [
+        "generated file structure matches template manifest",
+        "required files for process, CI and infra docs exist"
+      ],
+      "defaultDecision": "Use the rendered files as the project bootstrap baseline."
+    }
+  ]
+}

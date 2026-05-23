@@ -30,8 +30,8 @@ self-corrects and re-tries — you do nothing.
 
 ## Install
 
-This plugin ships as part of the `toolbox` marketplace. See the toolbox
-repo README for full install instructions.
+This plugin ships as a Claude Code compatibility asset inside AOK. Register
+`adapters/claude-code/marketplace` as the `aok-claude-code` marketplace.
 
 Per-project enablement (in your project's `.claude/settings.json` or
 `~/.claude/settings.json`):
@@ -39,7 +39,7 @@ Per-project enablement (in your project's `.claude/settings.json` or
 ```json
 {
   "enabledPlugins": {
-    "engineering-guardrails@toolbox": true
+    "engineering-guardrails@aok-claude-code": true
   }
 }
 ```
@@ -63,13 +63,13 @@ Scripts live in `scripts/`. Add new rules by:
 
 There is no escape hatch by design — if you need to commit a violation
 (e.g., a legitimate `assert` for type narrowing in a hot path), disable the
-plugin temporarily by setting `"engineering-guardrails@toolbox": false` in
-local settings for that session.
+plugin temporarily by setting `"engineering-guardrails@aok-claude-code": false`
+in local settings for that session.
 
 ## Testing
 
 ```bash
-SCRIPTS=plugins/engineering-guardrails/scripts
+SCRIPTS=packs/engineering-guardrails/claude-code/scripts
 
 # Should DENY
 echo '{"tool_name":"Write","tool_input":{"file_path":"/x/app/y.py","content":"def f(): return 1"}}' \

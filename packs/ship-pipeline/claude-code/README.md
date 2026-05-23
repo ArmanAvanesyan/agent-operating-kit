@@ -11,13 +11,14 @@ into two slash commands plus a specialist fixer agent.
 
 ## Install
 
-Ships as part of the `toolbox` marketplace. To enable, add to your project's
-`.claude/settings.json` (or `~/.claude/settings.json`):
+Ships as a Claude Code compatibility asset inside AOK. Register
+`adapters/claude-code/marketplace` as the `aok-claude-code` marketplace, then
+enable it in your project's `.claude/settings.json` (or `~/.claude/settings.json`):
 
 ```json
 {
   "enabledPlugins": {
-    "ship-pipeline@toolbox": true
+    "ship-pipeline@aok-claude-code": true
   }
 }
 ```
@@ -91,7 +92,7 @@ PR: https://github.com/org/repo/pull/42 — feat(billing): add stars payment (me
 ## Files
 
 ```
-plugins/ship-pipeline/
+packs/ship-pipeline/claude-code/
 ├── plugin.json                 manifest
 ├── README.md                   this file
 ├── skills/

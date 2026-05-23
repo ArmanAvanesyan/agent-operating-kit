@@ -605,6 +605,7 @@ def validate_required_files(errors: list[str]) -> None:
         "schemas/hook.schema.json",
         "schemas/task-packet.schema.json",
         "schemas/tool-adapter.schema.json",
+        "schemas/pack.schema.json",
         "skills/agent-workflow/SKILL.md",
         "skills/github-project-execution/SKILL.md",
         "skills/code-review/SKILL.md",

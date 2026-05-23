@@ -54,6 +54,34 @@ Initialize a project with AOK operating files:
 ./scripts/aok project validate /path/to/project
 ```
 
+### Claude Code Compatibility
+
+The Claude Code adapter exposes the former toolbox plugins through AOK. Register
+the compatibility marketplace path in `~/.claude/settings.json`:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "aok-claude-code": {
+      "source": {
+        "source": "directory",
+        "path": "/path/to/agent-operating-kit/adapters/claude-code/marketplace"
+      }
+    }
+  }
+}
+```
+
+Then enable a pack by its preserved plugin name:
+
+```json
+{
+  "enabledPlugins": {
+    "engineering-guardrails@aok-claude-code": true
+  }
+}
+```
+
 ## Usage Model
 
 1. Create or sync a task packet.

@@ -29,6 +29,10 @@ workflow packs.
    toolbox as the source of truth.
 3. For existing Claude Code projects, keep current enabled plugin names while
    switching the marketplace path to AOK's Claude Code compatibility assets.
+   The canonical marketplace name is `aok-claude-code`, so
+   `engineering-guardrails@toolbox` becomes
+   `engineering-guardrails@aok-claude-code` unless you deliberately keep
+   `toolbox` as a local compatibility alias.
 4. For new projects, prefer AOK pack names and neutral manifests.
 
 ## Compatibility Note

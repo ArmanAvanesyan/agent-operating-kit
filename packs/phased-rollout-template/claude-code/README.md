@@ -71,11 +71,11 @@ matching path, and prints next-step instructions.
 The templates live at:
 
 ```
-~/claude-code-toolbox/plugins/phased-rollout-template/templates/
+agent-operating-kit/packs/phased-rollout-template/claude-code/templates/
 ```
 
 Edit any `.tmpl` file there to change what future scaffolds produce. Commit
-the change and `git pull` on every device that uses the toolbox marketplace.
+the change and update every device that uses the AOK Claude Code marketplace.
 
 To add a new placeholder, edit the skill (`skills/init-phased-project.md`)
 to define and substitute it, then reference `{{YOUR_TOKEN}}` wherever you
@@ -89,7 +89,7 @@ Per-project, in `.claude/settings.local.json` (or user-global, in
 ```json
 {
   "enabledPlugins": {
-    "phased-rollout-template@toolbox": true
+    "phased-rollout-template@aok-claude-code": true
   }
 }
 ```

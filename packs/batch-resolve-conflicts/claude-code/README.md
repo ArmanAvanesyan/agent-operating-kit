@@ -52,13 +52,14 @@ guessed.
 
 ## Install
 
-This plugin ships as part of the `toolbox` marketplace. Enable in your
-settings:
+This plugin ships as a Claude Code compatibility asset inside AOK. Register
+`adapters/claude-code/marketplace` as the `aok-claude-code` marketplace, then
+enable it in your settings:
 
 ```json
 {
   "enabledPlugins": {
-    "batch-resolve-conflicts@toolbox": true
+    "batch-resolve-conflicts@aok-claude-code": true
   }
 }
 ```

@@ -69,10 +69,16 @@ On Windows, run the same commands against
 ```bash
 git clone https://github.com/ArmanAvanesyan/agent-operating-kit.git
 cd agent-operating-kit
-./scripts/install.sh
-./scripts/aok doctor
+./scripts/aok codex setup
 ./scripts/aok validate
 ```
+
+Use `./scripts/aok codex setup --claude` when you want Codex and Claude Code
+configured in one pass.
+
+Use `./scripts/aok codex setup --project /path/to/project` only when you want
+to initialize a separate downstream project with AOK files and Codex local
+environment assets. Do not point `--project` at the AOK repo checkout itself.
 
 The installer writes:
 

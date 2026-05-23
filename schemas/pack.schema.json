@@ -3,12 +3,31 @@
   "$id": "https://github.com/ArmanAvanesyan/agent-operating-kit/schemas/pack.schema.json",
   "title": "AOK Pack",
   "type": "object",
-  "required": ["name", "kind", "description", "sourceRepo", "supportedTargets", "concepts", "adapters"],
+  "required": ["name", "kind", "description", "sourceRepo", "neutralContent", "supportedTargets", "concepts", "adapters", "sourceRefs", "targetRender"],
   "properties": {
     "name": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
     "kind": { "const": "pack" },
     "description": { "type": "string", "minLength": 1 },
     "sourceRepo": { "type": "string", "minLength": 1 },
+    "neutralContent": { "type": "string", "minLength": 1 },
+    "sourceRefs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string", "minLength": 1 }
+      }
+    },
+    "conceptGraph": {
+      "type": "object",
+      "properties": {
+        "roles": { "type": "array", "items": { "type": "string" } },
+        "hooks": { "type": "array", "items": { "type": "string" } },
+        "skills": { "type": "array", "items": { "type": "string" } },
+        "templates": { "type": "array", "items": { "type": "string" } },
+        "taskPackets": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
     "supportedTargets": {
       "type": "array",
       "items": {
@@ -24,6 +43,41 @@
         "enum": ["task-packet", "role", "hook", "skill", "template", "pack", "mcp-config"]
       },
       "minItems": 1
+    },
+    "targetRender": {
+      "type": "object",
+      "propertyNames": {
+        "enum": ["codex", "claude-code", "cursor", "opencode", "gemini", "openclaw", "hermes-agent"]
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["active", "scaffolded", "fallback", "unsupported"]
+          },
+          "mode": {
+            "type": "string",
+            "enum": ["source", "inline", "generated", "manual", "unsupported"]
+          },
+          "sourceRefs": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "payload": { "type": "object" },
+          "notes": { "type": "string" }
+        },
+        "required": ["status", "mode"],
+        "additionalProperties": false,
+        "oneOf": [
+          { "required": ["sourceRefs"] },
+          { "required": ["payload"] },
+          {
+            "required": ["notes"],
+            "not": { "anyOf": [{ "required": ["payload"] }, { "required": ["sourceRefs"] }] }
+          }
+        ]
+      }
     },
     "adapters": {
       "type": "object",

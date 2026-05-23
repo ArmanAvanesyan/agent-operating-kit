@@ -2,9 +2,9 @@
   "name": "cursor",
   "kind": "tool-adapter",
   "displayName": "Cursor",
-  "status": "scaffolded",
+  "status": "active",
   "supportedTargets": ["cursor"],
-  "renders": ["task-packet", "role", "hook", "skill"],
-  "entrypoints": ["adapters/cursor/README.md"],
-  "limitations": ["No native package renderer yet.", "Hooks are checklist-based until target support is defined."]
+  "renders": ["task-packet", "role", "hook", "skill", "pack", "mcp-config"],
+  "entrypoints": ["adapters/cursor/README.md", "scripts/aok"],
+  "limitations": ["Runtime output is currently JSON contract-first; native Cursor packaging is documented separately."]
 }

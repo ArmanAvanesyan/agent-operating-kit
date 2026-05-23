@@ -1,18 +1,20 @@
 # Gemini Adapter
 
-Status: scaffolded.
+Status: active.
 
-The Gemini adapter defines how AOK content should be presented to Gemini-based
-agent workflows.
+The Gemini adapter renders AOK content into Gemini-friendly contracts for use in
+multi-agent workflows.
 
 ## Render Shape
 
-- Task packets render as Markdown specs.
-- Roles render as system or project instructions.
-- Skills render as reusable command guidance.
-- MCP config can be generated for runtimes such as `swarmd` where supported.
+- Task packets render as structured work specs.
+- Roles render as instruction-level policy contracts.
+- Skills and hooks render as reusable execution guidance.
+
+## Supported Commands
+
+- `aok render pack <pack> --target gemini`
 
 ## Known Gaps
 
-- Native Gemini packaging is not implemented.
-- Tool invocation details must be supplied by the host environment.
+- Runtime invocation remains host-defined; AOK emits portable JSON contracts.

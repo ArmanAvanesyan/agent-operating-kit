@@ -1,18 +1,21 @@
 # OpenClaw Adapter
 
-Status: scaffolded.
+Status: active.
 
-The OpenClaw adapter defines the intended mapping from AOK neutral content into
-OpenClaw agent workflows.
+The OpenClaw adapter renders AOK neutral content into OpenClaw-ready task and
+role contracts.
 
 ## Render Shape
 
 - Roles render as agent definitions.
 - Skills render as reusable workflow guidance.
-- Hooks render as lifecycle checklists or command gates.
-- Task packets render as assignment contracts.
+- Hooks render as lifecycle checklists.
+- Task packets render as assignment contracts with verification fields.
+
+## Supported Commands
+
+- `aok render pack <pack> --target openclaw`
 
 ## Known Gaps
 
-- Native OpenClaw renderer is not implemented.
-- Exact package layout may change as OpenClaw integration matures.
+- Native OpenClaw installer behavior and tool calls are pending host integration.

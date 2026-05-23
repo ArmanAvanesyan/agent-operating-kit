@@ -1,0 +1,84 @@
+{
+  "kind": "pack-content",
+  "name": "engineering-guardrails",
+  "version": "0.1.0",
+  "description": "Neutral content for production-safe engineering guardrails.",
+  "roles": [
+    {
+      "id": "quality-guard",
+      "name": "Quality Guard",
+      "callsign": "quality-guard",
+      "responsibilities": [
+        "Prevent unsafe production code patterns in pre-write flow.",
+        "Preserve migration and pre-commit hygiene in active repositories."
+      ],
+      "escalation": {
+        "ifBlockedBy": "policy",
+        "notify": ["qa-reality-checker", "orchestrator"]
+      }
+    }
+  ],
+  "hooks": [
+    {
+      "id": "engineering-guardrails-session-start",
+      "name": "Session start reminder",
+      "event": "SessionStart",
+      "command": "python \"${CLAUDE_PLUGIN_ROOT}/scripts/session-start-reminder.py\"",
+      "severity": "warn",
+      "description": "Remind operator of workflow conventions at session start."
+    },
+    {
+      "id": "engineering-guardrails-future-annotations",
+      "name": "Future annotations check",
+      "event": "PreToolUse",
+      "matcher": "Write",
+      "command": "python \"${CLAUDE_PLUGIN_ROOT}/scripts/check-future-annotations.py\"",
+      "severity": "error",
+      "description": "Block Python writes that miss from __future__ import annotations in production paths."
+    },
+    {
+      "id": "engineering-guardrails-no-assert",
+      "name": "Production assert check",
+      "event": "PreToolUse",
+      "matcher": "Write|Edit",
+      "command": "python \"${CLAUDE_PLUGIN_ROOT}/scripts/check-no-assert.py\"",
+      "severity": "error",
+      "description": "Block new production-assert usage in write operations."
+    },
+    {
+      "id": "engineering-guardrails-migration-conventions",
+      "name": "Migration convention check",
+      "event": "PreToolUse",
+      "matcher": "Write|Edit",
+      "command": "python \"${CLAUDE_PLUGIN_ROOT}/scripts/check-migration-conventions.py\"",
+      "severity": "warn",
+      "description": "Ensure migration helpers remain consistent with current repository policies."
+    },
+    {
+      "id": "engineering-guardrails-pre-commit-freshness",
+      "name": "Pre-commit staleness check",
+      "event": "PreToolUse",
+      "matcher": "Bash",
+      "command": "python \"${CLAUDE_PLUGIN_ROOT}/scripts/check-pre-commit.py\"",
+      "condition": "Bash(git commit*)",
+      "severity": "warn",
+      "description": "Prompt for fresh pre-commit baseline before commit flows."
+    }
+  ],
+  "taskPackets": [
+    {
+      "id": "engineering-guardrail-packet",
+      "title": "Run engineering guardrails before risky writes",
+      "description": "Validate guardrail checks and confirm repository conventions.",
+      "status": "planned",
+      "phase": "prework",
+      "assigneeRole": "quality-guard",
+      "scope": ["src", "tests"],
+      "verification": [
+        "run relevant guardrail scripts in local workflow",
+        "confirm no blocked edits before continuing"
+      ],
+      "defaultDecision": "Apply guardrails as blocking or warning checks based on severity."
+    }
+  ]
+}

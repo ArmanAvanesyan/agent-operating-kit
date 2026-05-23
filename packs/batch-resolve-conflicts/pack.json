@@ -1,10 +1,93 @@
 {
   "name": "batch-resolve-conflicts",
   "kind": "pack",
-  "description": "Parallel PR conflict resolution workflow with canonical shared-file rules.",
+  "description": "Parallel PR conflict resolution workflow with canonical shared-file recovery rules.",
   "sourceRepo": "ArmanAvanesyan/claude-code-toolbox",
-  "supportedTargets": ["claude-code"],
-  "concepts": ["skill"],
+  "neutralContent": "pack.content.json",
+  "supportedTargets": [
+    "codex",
+    "claude-code",
+    "cursor",
+    "opencode",
+    "gemini",
+    "openclaw",
+    "hermes-agent"
+  ],
+  "concepts": [
+    "task-packet",
+    "role",
+    "skill",
+    "pack",
+    "mcp-config"
+  ],
+  "sourceRefs": {
+    "neutral": ["pack.content.json"],
+    "claude-code": [
+      "claude-code/plugin.json",
+      "claude-code/skills/batch-resolve-conflicts.md"
+    ]
+  },
+  "conceptGraph": {
+    "roles": ["conflict-coordinator"],
+    "hooks": [],
+    "skills": ["batch-resolve-conflicts"],
+    "templates": [],
+    "taskPackets": ["batch-conflict-resolution-packet"]
+  },
+  "targetRender": {
+    "codex": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "pack-render-json"
+      }
+    },
+    "claude-code": {
+      "status": "active",
+      "mode": "source",
+      "sourceRefs": [
+        "claude-code/plugin.json",
+        "claude-code/README.md",
+        "claude-code/skills/batch-resolve-conflicts.md"
+      ],
+      "notes": "Native assets preserved in AOK package."
+    },
+    "cursor": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "aok-conflict-rules"
+      }
+    },
+    "opencode": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "aok-conflict-rules"
+      }
+    },
+    "gemini": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "aok-conflict-contract"
+      }
+    },
+    "openclaw": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "aok-conflict-rules"
+      }
+    },
+    "hermes-agent": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "aok-conflict-rules"
+      }
+    }
+  },
   "adapters": {
     "claude-code": {
       "pluginPath": "claude-code/plugin.json",

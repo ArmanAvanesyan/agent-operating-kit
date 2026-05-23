@@ -2,9 +2,9 @@
   "name": "gemini",
   "kind": "tool-adapter",
   "displayName": "Gemini",
-  "status": "scaffolded",
+  "status": "active",
   "supportedTargets": ["gemini"],
-  "renders": ["task-packet", "role", "skill", "mcp-config"],
-  "entrypoints": ["adapters/gemini/README.md"],
-  "limitations": ["Native packaging and hook execution are not implemented."]
+  "renders": ["task-packet", "role", "skill", "pack", "mcp-config"],
+  "entrypoints": ["adapters/gemini/README.md", "scripts/aok"],
+  "limitations": ["Command flow is contract-based until host-specific hook/runtime wrappers are wired."]
 }

@@ -3,8 +3,105 @@
   "kind": "pack",
   "description": "Guardrail hooks for future annotations, production asserts, migration conventions, pre-commit freshness, and session reminders.",
   "sourceRepo": "ArmanAvanesyan/claude-code-toolbox",
-  "supportedTargets": ["claude-code"],
-  "concepts": ["hook"],
+  "neutralContent": "pack.content.json",
+  "supportedTargets": [
+    "codex",
+    "claude-code",
+    "cursor",
+    "opencode",
+    "gemini",
+    "openclaw",
+    "hermes-agent"
+  ],
+  "concepts": [
+    "task-packet",
+    "role",
+    "hook",
+    "pack",
+    "mcp-config"
+  ],
+  "sourceRefs": {
+    "neutral": ["pack.content.json"],
+    "claude-code": [
+      "claude-code/plugin.json",
+      "claude-code/scripts/check-future-annotations.py",
+      "claude-code/scripts/check-migration-conventions.py",
+      "claude-code/scripts/check-no-assert.py",
+      "claude-code/scripts/check-pre-commit.py",
+      "claude-code/scripts/session-start-reminder.py"
+    ]
+  },
+  "conceptGraph": {
+    "roles": ["quality-guard"],
+    "hooks": [
+      "engineering-guardrails-session-start",
+      "engineering-guardrails-future-annotations",
+      "engineering-guardrails-no-assert",
+      "engineering-guardrails-migration-conventions",
+      "engineering-guardrails-pre-commit-freshness"
+    ],
+    "skills": [],
+    "templates": [],
+    "taskPackets": ["engineering-guardrail-packet"]
+  },
+  "targetRender": {
+    "codex": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "pack-render-json"
+      }
+    },
+    "claude-code": {
+      "status": "active",
+      "mode": "source",
+      "sourceRefs": [
+        "claude-code/plugin.json",
+        "claude-code/README.md",
+        "claude-code/scripts/check-future-annotations.py",
+        "claude-code/scripts/check-migration-conventions.py",
+        "claude-code/scripts/check-no-assert.py",
+        "claude-code/scripts/check-pre-commit.py",
+        "claude-code/scripts/session-start-reminder.py"
+      ],
+      "notes": "Native assets preserved in AOK package."
+    },
+    "cursor": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "aok-hook-checklist"
+      }
+    },
+    "opencode": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "aok-hook-checklist"
+      }
+    },
+    "gemini": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "aok-guardrail-contract"
+      }
+    },
+    "openclaw": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "aok-hook-checklist"
+      }
+    },
+    "hermes-agent": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "aok-hook-checklist"
+      }
+    }
+  },
   "adapters": {
     "claude-code": {
       "pluginPath": "claude-code/plugin.json",

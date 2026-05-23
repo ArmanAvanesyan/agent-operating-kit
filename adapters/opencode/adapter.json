@@ -2,9 +2,9 @@
   "name": "opencode",
   "kind": "tool-adapter",
   "displayName": "OpenCode",
-  "status": "scaffolded",
+  "status": "active",
   "supportedTargets": ["opencode"],
-  "renders": ["task-packet", "role", "hook", "skill", "mcp-config"],
-  "entrypoints": ["adapters/opencode/README.md"],
-  "limitations": ["Renderer is documented but not automated."]
+  "renders": ["task-packet", "role", "hook", "skill", "pack", "mcp-config"],
+  "entrypoints": ["adapters/opencode/README.md", "scripts/aok"],
+  "limitations": ["CLI output is currently rendered contract JSON; direct agent-native installer is documented separately."]
 }

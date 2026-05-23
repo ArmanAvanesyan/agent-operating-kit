@@ -36,14 +36,24 @@ index of intent and compatibility.
 - `phased-rollout-template`
 - `batch-resolve-conflicts`
 
-Their Claude Code plugin files are preserved under `packs/*/claude-code/`.
-Those files are compatibility assets, not the new root model.
+Their Claude Code plugin files are preserved under each `packs/*/claude-code/`.
+A neutral `packs/*/pack.content.json` entry is the canonical definition.
 
 ## Runtime Boundary
 
 AOK is not a daemon and does not own persistent queue state. `swarmd` remains
 the runtime/state layer. AOK can generate MCP configuration and payloads that
 call `swarmd`, but `swarmd` stays a separate repository and lifecycle.
+
+## Render Model
+
+- `packs/*/pack.json` defines supported targets and per-target render mapping.
+- `packs/*/pack.content.json` stores neutral content (roles, hooks, skills,
+  templates, task packets).
+- `scripts/aok render pack <pack-id> --target <target>` outputs parseable JSON
+  contracts for all targets.
+- `scripts/aok render all --target all` bulk-renders all packs for every
+  target.
 
 ## Compatibility Policy
 

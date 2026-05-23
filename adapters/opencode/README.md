@@ -1,18 +1,20 @@
 # OpenCode Adapter
 
-Status: scaffolded.
+Status: active.
 
-The OpenCode adapter defines a target for rendering AOK roles, skills, hooks,
-and task packets into OpenCode-compatible project guidance.
+The OpenCode adapter renders AOK roles, skills, hooks, and task packets into
+OpenCode-compatible project guidance.
 
 ## Render Shape
 
-- Skills render as Markdown workflow commands.
-- Roles render as reusable agent instructions.
-- Task packets render as local work contracts.
-- MCP config can reference external runtimes such as `swarmd`.
+- Skills and roles render as structured JSON contracts.
+- Task packets include reusable execution scope and verification fields.
+- MCP config is emitted as a project-level integration payload.
+
+## Supported Commands
+
+- `aok render pack <pack> --target opencode`
 
 ## Known Gaps
 
-- Native OpenCode packaging details are intentionally deferred.
-- Hook execution is manual until the adapter is implemented.
+- OpenCode native package installer wiring is tracked as follow-up work.

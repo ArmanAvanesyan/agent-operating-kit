@@ -43,6 +43,15 @@ An adapter describes how neutral AOK content renders into one tool target. It
 lists supported concepts, output paths, capabilities, limitations, and any
 runtime assumptions.
 
+## Neutral Render Contract
+
+- `pack.content.json` files hold canonical role/hook/skill/template/task packet
+  content used by renderers.
+- `pack.json` maps each pack to supported targets and target render mode.
+- `aok render pack <pack-id> --target <target>` renders a parseable JSON contract
+  for any supported target.
+- `aok render all --target all` renders contract bundles for all packs/targets.
+
 ## Rendering Rules
 
 1. Neutral schemas are the source of truth.
@@ -51,6 +60,13 @@ runtime assumptions.
 4. Tool-specific environment variables stay isolated under that adapter.
 5. Runtime state belongs outside AOK unless it is an example or generated
    config; `swarmd` owns task, memory, and event persistence.
+
+## Neutral to Target Mapping
+
+- `task.packet` → `task.create` payload for `swarmd`.
+- `roles.callsign` → task `assignee` in generated lifecycle contracts.
+- role/task decisions → `memory.put(namespace="decision")` payload.
+- lifecycle events → `event.append` payloads.
 
 ## Minimal Example
 

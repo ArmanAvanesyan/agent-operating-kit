@@ -1,10 +1,97 @@
 {
   "name": "ship-pipeline",
   "kind": "pack",
-  "description": "PR ship workflow, CI recovery skill, and CI fixer agent.",
+  "description": "PR ship workflow, CI recovery skill, and CI fixer agent instructions.",
   "sourceRepo": "ArmanAvanesyan/claude-code-toolbox",
-  "supportedTargets": ["claude-code"],
-  "concepts": ["skill", "role"],
+  "neutralContent": "pack.content.json",
+  "supportedTargets": [
+    "codex",
+    "claude-code",
+    "cursor",
+    "opencode",
+    "gemini",
+    "openclaw",
+    "hermes-agent"
+  ],
+  "concepts": [
+    "task-packet",
+    "role",
+    "skill",
+    "pack",
+    "mcp-config"
+  ],
+  "sourceRefs": {
+    "neutral": ["pack.content.json"],
+    "claude-code": [
+      "claude-code/plugin.json",
+      "claude-code/skills/ship-pr.md",
+      "claude-code/skills/fix-ci.md",
+      "claude-code/agents/pr-ci-fixer.md"
+    ]
+  },
+  "conceptGraph": {
+    "roles": ["ship-lead", "pr-ci-fixer"],
+    "hooks": [],
+    "skills": ["ship-pr", "fix-ci"],
+    "templates": [],
+    "taskPackets": ["ship-pipeline-packet"]
+  },
+  "targetRender": {
+    "codex": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "pack-render-json"
+      }
+    },
+    "claude-code": {
+      "status": "active",
+      "mode": "source",
+      "sourceRefs": [
+        "claude-code/plugin.json",
+        "claude-code/README.md",
+        "claude-code/skills/ship-pr.md",
+        "claude-code/skills/fix-ci.md",
+        "claude-code/agents/pr-ci-fixer.md"
+      ],
+      "notes": "Native assets preserved in AOK package."
+    },
+    "cursor": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "aok-task-rules"
+      }
+    },
+    "opencode": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "aok-task-rules"
+      }
+    },
+    "gemini": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "aok-skill-contract"
+      }
+    },
+    "openclaw": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "aok-role-skill-bridge"
+      }
+    },
+    "hermes-agent": {
+      "status": "active",
+      "mode": "generated",
+      "payload": {
+        "contract": "aok-task-rules"
+      }
+    }
+  },
   "adapters": {
     "claude-code": {
       "pluginPath": "claude-code/plugin.json",

@@ -1,6 +1,6 @@
 {
   "name": "agent-operating-kit",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Cross-tool agent operating kit for task packets, roles, hooks, skills, packs, and adapters.",
   "author": {
     "name": "Arman Avanesyan",

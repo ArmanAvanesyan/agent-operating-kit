@@ -63,6 +63,23 @@ Technical users can regenerate the same bundles:
 ./scripts/aok render bundles --target all
 ```
 
+## Codex App Local Environments
+
+AOK includes Codex App local-environment helpers for worktree setup and top-bar
+actions. Project init installs `.codex/setup.sh`, `.codex/aok-action.sh`,
+`.codex/aok-local-environment.json`, `.codex/environments/environment.toml`, and
+`.codex/config.toml`.
+
+```bash
+./scripts/aok codex local-env init /path/to/project
+./scripts/aok codex local-env validate /path/to/project
+./scripts/aok codex local-env actions /path/to/project
+```
+
+Codex can read `.codex/environments/environment.toml` for setup and actions.
+The JSON manifest is AOK-owned metadata for validation and onboarding. See
+`docs/codex-local-environments.md`.
+
 ## Claude Code First Success Path
 
 Register AOK's Claude Code compatibility marketplace with the canonical key
@@ -142,6 +159,11 @@ Initialize AOK operating files in another project:
 ./scripts/aok project validate /path/to/project
 ```
 
+Initialized projects include Codex local-environment helpers:
+`.codex/setup.sh`, `.codex/aok-action.sh`,
+`.codex/aok-local-environment.json`, `.codex/environments/environment.toml`,
+and `.codex/config.toml`.
+
 If the project already has `AGENTS.md`, AOK preserves it by default and writes
 `AGENTS.aok-proposed.md` plus `AGENTS.aok.diff`. Use `--force` only when you
 intentionally want AOK to replace `AGENTS.md` after writing a backup.
@@ -201,6 +223,7 @@ migration guidance.
 ## Operations
 
 - Install and first-run onboarding: `docs/install-and-onboarding.md`
+- Codex local environments: `docs/codex-local-environments.md`
 - Project initialization: `docs/project-init-guide.md`
 - Target support: `docs/targets-support-matrix.md`
 - Release checklist: `docs/release-checklist.md`

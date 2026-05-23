@@ -39,10 +39,19 @@ Spot check at least one Codex render and one Claude Code render:
 ./scripts/aok render pack engineering-guardrails --target claude-code
 ```
 
+Spot check Codex local-environment templates:
+
+```bash
+./scripts/aok codex local-env validate templates --json
+./scripts/aok codex local-env actions templates
+```
+
 ## Documentation Checks
 
 - README first success path still matches the installer and CLI commands.
 - `docs/install-and-onboarding.md` still describes current install output.
+- `docs/codex-local-environments.md` still matches the setup script and action
+  wrapper under `templates/.codex`.
 - `docs/targets-support-matrix.md` matches pack manifests.
 - `docs/migration-from-claude-code-toolbox.md` uses the canonical marketplace
   key `aok-claude-code`.

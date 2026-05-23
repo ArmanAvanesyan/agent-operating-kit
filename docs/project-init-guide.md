@@ -1,7 +1,8 @@
 # Project Init Guide
 
 `aok project init` installs operating files into a project so agents have a
-shared workflow, role definitions, task template, hooks guide, and Codex config.
+shared workflow, role definitions, task template, hooks guide, Codex config, and
+Codex App local-environment helpers.
 
 ## Initialize A Project
 
@@ -29,6 +30,24 @@ Validation passes when these files exist:
 - `agents/roles/qa-reality-checker.md`
 - `agents/roles/code-reviewer.md`
 - `.codex/config.toml`
+- `.codex/setup.sh`
+- `.codex/aok-action.sh`
+- `.codex/aok-local-environment.json`
+- `.codex/environments/environment.toml`
+
+## Codex Local Environment Only
+
+To add or repair only the Codex local-environment files:
+
+```bash
+./scripts/aok codex local-env init /path/to/project
+./scripts/aok codex local-env validate /path/to/project
+./scripts/aok codex local-env actions /path/to/project
+```
+
+Codex can read `.codex/environments/environment.toml` for the setup script and
+actions. The AOK manifest is intentionally AOK-owned metadata for validation and
+documentation of the same action surface.
 
 ## Existing `AGENTS.md`
 

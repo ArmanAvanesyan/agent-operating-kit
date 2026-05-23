@@ -10,7 +10,7 @@
       "name": "agent-operating-kit",
       "source": "../aok-plugin",
       "description": "Claude Code control plugin for Agent Operating Kit setup, diagnostics, rendering, migration, and pack discovery.",
-      "version": "0.3.0"
+      "version": "0.4.0"
     },
     {
       "name": "engineering-guardrails",

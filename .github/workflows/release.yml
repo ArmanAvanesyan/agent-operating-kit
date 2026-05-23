@@ -19,6 +19,8 @@ jobs:
         run: |
           ./scripts/validate.sh
           ./scripts/aok validate
+          ./scripts/aok codex local-env validate templates --json > dist/release/codex-local-environment.json
+          ./scripts/aok codex local-env actions templates
           python3 -m py_compile scripts/aok
           python3 -m py_compile scripts/release/build.py
           ./scripts/aok doctor --json > dist/release/doctor.json || true

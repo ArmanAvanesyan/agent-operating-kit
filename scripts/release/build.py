@@ -45,8 +45,11 @@ KIT_PATHS = (
 
 CODEX_PLUGIN_PATHS = (
     ".codex-plugin",
+    "docs/codex-local-environments.md",
     "hooks",
+    "scripts/aok",
     "skills",
+    "templates/.codex",
     "hooks.json",
     "LICENSE",
     "README.md",

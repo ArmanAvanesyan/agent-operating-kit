@@ -1,0 +1,35 @@
+version = 1
+name = "Agent Operating Kit"
+
+[setup]
+script = ".codex/setup.sh"
+
+[[actions]]
+name = "AOK Doctor"
+icon = "stethoscope"
+command = ".codex/aok-action.sh doctor"
+
+[[actions]]
+name = "AOK Validate"
+icon = "check-circle"
+command = ".codex/aok-action.sh validate"
+
+[[actions]]
+name = "AOK Render Bundles"
+icon = "package"
+command = ".codex/aok-action.sh render-bundles"
+
+[[actions]]
+name = "AOK Project Init"
+icon = "folder-plus"
+command = ".codex/aok-action.sh project-init"
+
+[[actions]]
+name = "AOK Claude Setup"
+icon = "plug"
+command = ".codex/aok-action.sh claude-setup"
+
+[[actions]]
+name = "AOK Release Build"
+icon = "archive"
+command = ".codex/aok-action.sh release-build"

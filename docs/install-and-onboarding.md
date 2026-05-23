@@ -81,6 +81,27 @@ Wrote render: /path/to/agent-operating-kit/build/renders/engineering-guardrails/
 That file is the first proof that the neutral AOK pack can produce a Codex
 contract.
 
+## Codex App Local Environment
+
+For a project that should use AOK inside Codex App worktrees, initialize the
+project files:
+
+```bash
+aok project init /path/to/project
+aok codex local-env validate /path/to/project
+aok codex local-env actions /path/to/project
+```
+
+Codex can read `.codex/environments/environment.toml` for the setup script and
+action definitions. The setup script writes `.codex/aok-setup-report.md`; the
+actions expose doctor, validation, bundle rendering, project init, Claude setup,
+and release build commands.
+
+The AOK manifest at `.codex/aok-local-environment.json` is validation metadata
+that records the same setup script and action commands. The TOML shape is based
+on a locally observed Codex plugin example because the public docs page does not
+publish the full generated schema.
+
 ## Claude Code First Success
 
 Register AOK's Claude Code compatibility marketplace. This updates

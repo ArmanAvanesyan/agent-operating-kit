@@ -21,6 +21,7 @@ PLUGIN_NAME = "agent-operating-kit"
 MARKETPLACE_NAME = "private-local"
 MARKETPLACE_DISPLAY = "Private Local"
 CLAUDE_MARKETPLACE_NAME = "aok-claude-code"
+CLAUDE_ROOT_PLUGIN = "agent-operating-kit"
 SUPPORTED_TARGETS = (
     "codex",
     "claude-code",
@@ -1099,10 +1100,11 @@ def cmd_import_history(args: argparse.Namespace) -> int:
 
 def enabled_pack_names(raw: list[str]) -> list[str]:
     if not raw or raw == ["all"]:
-        return find_pack_dirs()
-    unknown = sorted(set(raw) - set(find_pack_dirs()))
+        return [CLAUDE_ROOT_PLUGIN, *find_pack_dirs()]
+    allowed = {CLAUDE_ROOT_PLUGIN, *find_pack_dirs()}
+    unknown = sorted(set(raw) - allowed)
     if unknown:
-        raise AokError(f"Unknown pack(s): {', '.join(unknown)}")
+        raise AokError(f"Unknown Claude plugin or pack(s): {', '.join(unknown)}")
     return raw
 
 
@@ -1183,6 +1185,13 @@ def validate_required_files(errors: list[str]) -> None:
         "docs/targets-support-matrix.md",
         "docs/release-checklist.md",
         "docs/uninstall-and-rollback.md",
+        "adapters/claude-code/aok-plugin/plugin.json",
+        "adapters/claude-code/aok-plugin/README.md",
+        "adapters/claude-code/aok-plugin/skills/aok-setup.md",
+        "adapters/claude-code/aok-plugin/skills/aok-doctor.md",
+        "adapters/claude-code/aok-plugin/skills/aok-render.md",
+        "adapters/claude-code/aok-plugin/skills/aok-migrate-toolbox.md",
+        "adapters/claude-code/aok-plugin/skills/aok-pack-discovery.md",
         "schemas/skill.schema.json",
         "schemas/role.schema.json",
         "schemas/hook.schema.json",
@@ -1428,6 +1437,9 @@ def validate_claude_code_marketplace(errors: list[str]) -> None:
     if not isinstance(plugins, list) or not plugins:
         errors.append(f"{marketplace.relative_to(KIT_ROOT)}: plugins must be a non-empty list")
         return
+    plugin_names = {plugin.get("name") for plugin in plugins if isinstance(plugin, dict)}
+    if CLAUDE_ROOT_PLUGIN not in plugin_names:
+        errors.append(f"{marketplace.relative_to(KIT_ROOT)}: missing {CLAUDE_ROOT_PLUGIN} plugin")
     for plugin in plugins:
         name = plugin.get("name", "<unknown>")
         source = plugin.get("source")

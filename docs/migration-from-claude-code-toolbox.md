@@ -9,6 +9,8 @@ workflow packs.
 - Claude Code plugin content moved conceptually into AOK packs.
 - The Claude Code marketplace shape is preserved under
   `adapters/claude-code/marketplace/` and `packs/*/claude-code/`.
+- A root `agent-operating-kit` Claude Code plugin now exposes AOK setup,
+  diagnostics, rendering, migration, and pack discovery workflows.
 - AOK pack manifests now carry canonical intent and cross-target render policy.
 - Each pack now has `pack.content.json` as the neutral source.
 
@@ -78,6 +80,7 @@ The resulting settings shape is:
     }
   },
   "enabledPlugins": {
+    "agent-operating-kit@aok-claude-code": true,
     "engineering-guardrails@aok-claude-code": true,
     "ship-pipeline@aok-claude-code": true
   }
@@ -91,6 +94,7 @@ The plugin names stay the same. The marketplace suffix changes to
 
 | Keep enabled if you used | Enable from AOK |
 |---|---|
+| AOK control workflows | `agent-operating-kit@aok-claude-code` |
 | `engineering-guardrails@<old-marketplace>` | `engineering-guardrails@aok-claude-code` |
 | `ship-pipeline@<old-marketplace>` | `ship-pipeline@aok-claude-code` |
 | `phased-rollout-template@<old-marketplace>` | `phased-rollout-template@aok-claude-code` |

@@ -19,5 +19,7 @@ Register this directory as a Claude Code marketplace:
 ```
 
 The `.claude-plugin/marketplace.json` file points at AOK pack assets under
-`packs/*/claude-code/`. Those assets remain Claude Code-specific compatibility
-projections; the pack manifest beside each pack is the AOK source index.
+`packs/*/claude-code/` and the root control plugin under
+`adapters/claude-code/aok-plugin/`. Pack assets remain Claude Code-specific
+compatibility projections; the pack manifest beside each pack is the AOK source
+index.

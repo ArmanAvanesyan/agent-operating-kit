@@ -86,6 +86,7 @@ updates `~/.claude/settings.json`. The resulting settings entry is:
     }
   },
   "enabledPlugins": {
+    "agent-operating-kit@aok-claude-code": true,
     "engineering-guardrails@aok-claude-code": true
   }
 }
@@ -97,8 +98,8 @@ Then render the same pack for Claude Code:
 ./scripts/aok render pack engineering-guardrails --target claude-code
 ```
 
-Success means Claude Code can see the `engineering-guardrails` plugin through
-`aok-claude-code`, and AOK writes
+Success means Claude Code can see the root `agent-operating-kit` plugin and the
+`engineering-guardrails` pack through `aok-claude-code`, and AOK writes
 `build/renders/engineering-guardrails/claude-code.json`.
 
 ## Pack Chooser
@@ -186,6 +187,7 @@ The neutral schema lives in `schemas/`. Tool-specific target behavior lives in
 
 The former Claude Code Toolbox content is now represented as AOK packs:
 
+- `adapters/claude-code/aok-plugin` as the root AOK Claude Code control plugin
 - `packs/engineering-guardrails`
 - `packs/ship-pipeline`
 - `packs/phased-rollout-template`

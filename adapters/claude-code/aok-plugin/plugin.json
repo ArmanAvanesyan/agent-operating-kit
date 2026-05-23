@@ -1,0 +1,6 @@
+{
+  "name": "agent-operating-kit",
+  "version": "0.3.0",
+  "description": "Claude Code control plugin for Agent Operating Kit setup, diagnostics, rendering, migration, and pack discovery.",
+  "author": "Arman Avanesyan"
+}

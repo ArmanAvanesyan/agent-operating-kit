@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Add scaffolded, read-only GitHub Projects and Azure DevOps work-system
+  discovery, desired-state planning, validation, and verified local bindings.
+- Preserve verified work-system bindings across `aok project init`.
+
 ## 0.4.0
 
 - Add Codex App local-environment setup and action helper templates.

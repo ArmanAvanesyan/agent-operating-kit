@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ArmanAvanesyan/agent-operating-kit/schemas/work-system-binding.schema.json",
+  "title": "AOK Work-System Binding",
+  "type": "object",
+  "required": ["provider", "supportLevel", "verifiedAt", "fields"],
+  "properties": {
+    "provider": {
+      "type": "string",
+      "enum": ["github", "azure-devops"]
+    },
+    "supportLevel": {
+      "const": "scaffolded"
+    },
+    "verifiedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "fields": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object"
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "provider": { "const": "github" }
+        }
+      },
+      "then": {
+        "required": ["owner", "projectNumber", "projectId", "url"],
+        "properties": {
+          "owner": { "type": "string", "minLength": 1 },
+          "projectNumber": { "type": "integer", "minimum": 1 },
+          "projectId": { "type": "string", "minLength": 1 },
+          "url": { "type": "string" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "provider": { "const": "azure-devops" }
+        }
+      },
+      "then": {
+        "required": ["organization", "project", "team", "board", "process", "workItemType", "states"],
+        "properties": {
+          "organization": { "type": "string", "minLength": 1 },
+          "project": { "type": "object" },
+          "team": { "type": "object" },
+          "board": { "type": "object" },
+          "process": { "type": "object" },
+          "workItemType": { "type": "object" },
+          "states": { "type": "object" }
+        }
+      }
+    }
+  ],
+  "additionalProperties": true
+}

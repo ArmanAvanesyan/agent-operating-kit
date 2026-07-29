@@ -125,6 +125,23 @@ that records the same setup script and action commands. The TOML shape is based
 on a locally observed Codex plugin example because the public docs page does not
 publish the full generated schema.
 
+## Optional Work-System Binding
+
+After project initialization, inspect an existing provider board and record it
+only when it already satisfies the AOK workflow contract:
+
+```bash
+aok work-system setup github \
+  --owner OWNER --project-number 12 \
+  --path /path/to/project --write-binding
+
+aok work-system validate /path/to/project
+```
+
+Azure DevOps uses the equivalent `aok work-system setup azure-devops` command.
+Both integrations are scaffolded and read-only; see
+`docs/work-system-bootstrap.md` for authentication and field requirements.
+
 ## Claude Code First Success
 
 Register AOK's Claude Code compatibility marketplace. This updates

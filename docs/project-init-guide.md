@@ -93,6 +93,11 @@ Workspace kind is detected as:
 5. Commit the project-side operating files in that project, not in the AOK
    checkout.
 
+Remote boards are a separate follow-up. Run `aok work-system setup github` or
+`aok work-system setup azure-devops` after local initialization. A verified
+binding written to `.aok/project.json` is preserved by later project init runs.
+See `work-system-bootstrap.md`.
+
 ## Rollback
 
 For generated files that did not previously exist, remove the files listed in

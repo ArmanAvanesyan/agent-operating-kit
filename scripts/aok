@@ -8,6 +8,7 @@ import difflib
 import json
 import os
 import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -53,6 +54,31 @@ CODEX_LOCAL_ENV_ACTIONS = (
     "AOK Claude Setup",
     "AOK Release Build",
 )
+WORK_SYSTEM_SUPPORT_LEVEL = "scaffolded"
+WORK_SYSTEM_SELECT_FIELDS = {
+    "Status": ("Inbox", "Ready", "In Progress", "QA", "Review", "Blocked", "Done"),
+    "Phase": ("Intake", "Planning", "Build", "QA", "Review", "Release", "Operate"),
+    "Priority": ("Critical", "High", "Medium", "Low"),
+}
+WORK_SYSTEM_TEXT_FIELDS = (
+    "Primary Agent",
+    "QA Agent",
+    "Target Repo",
+    "PR URL",
+    "Evidence URL",
+    "Blocker Reason",
+    "Next Handoff",
+)
+WORK_SYSTEM_NUMBER_FIELDS = ("Attempt",)
+AZURE_STATE_CATEGORIES = {
+    "Inbox": "Proposed",
+    "Ready": "Proposed",
+    "In Progress": "InProgress",
+    "QA": "InProgress",
+    "Review": "InProgress",
+    "Blocked": "InProgress",
+    "Done": "Completed",
+}
 
 
 
@@ -90,6 +116,720 @@ def load_json(path: Path, default: dict) -> dict:
 def write_json(path: Path, data: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2, sort_keys=False) + "\n")
+
+
+def parse_command_json(result: subprocess.CompletedProcess[str], label: str) -> object:
+    try:
+        return json.loads(result.stdout)
+    except json.JSONDecodeError as exc:
+        raise AokError(f"{label} returned malformed JSON: {exc}") from exc
+
+
+def object_list(data: object, *keys: str) -> list[dict]:
+    if isinstance(data, list):
+        return [item for item in data if isinstance(item, dict)]
+    if isinstance(data, dict):
+        for key in keys:
+            value = data.get(key)
+            if isinstance(value, list):
+                return [item for item in value if isinstance(item, dict)]
+    return []
+
+
+def work_system_check(report: dict, name: str, status: str, detail: str) -> None:
+    report["checks"].append({"name": name, "status": status, "detail": detail})
+    if status != "satisfied":
+        report["conformant"] = False
+
+
+def work_system_report(provider: str) -> dict:
+    return {
+        "provider": provider,
+        "supportLevel": WORK_SYSTEM_SUPPORT_LEVEL,
+        "conformant": True,
+        "project": None,
+        "checks": [],
+        "futureOperations": [],
+        "binding": None,
+    }
+
+
+def render_work_system_report(report: dict) -> str:
+    lines = [
+        f"Work-system plan: {report['provider']} ({report['supportLevel']})",
+        f"Conformant: {'yes' if report['conformant'] else 'no'}",
+    ]
+    project = report.get("project")
+    if isinstance(project, dict):
+        label = project.get("title") or project.get("name") or project.get("id") or "unknown"
+        lines.append(f"Project: {label}")
+    if report.get("bindingWritten"):
+        lines.append(f"Binding written: {report['bindingWritten']}")
+    lines.append("Checks:")
+    for check in report["checks"]:
+        lines.append(f"- {check['status'].upper()} {check['name']}: {check['detail']}")
+    lines.append("Future operations (not executed):")
+    operations = report.get("futureOperations") or []
+    if operations:
+        lines.extend(f"- {operation}" for operation in operations)
+    else:
+        lines.append("- none")
+    return "\n".join(lines)
+
+
+def write_work_system_binding(path: Path, binding: dict) -> None:
+    project_path = path.resolve()
+    if not project_path.exists() or not project_path.is_dir():
+        raise AokError(f"Target is not a directory: {project_path}")
+    manifest_path = project_path / ".aok" / "project.json"
+    manifest = load_json(manifest_path, {})
+    if not isinstance(manifest, dict):
+        raise AokError(f"Project manifest must be a JSON object: {manifest_path}")
+    manifest["workSystem"] = binding
+    write_json(manifest_path, manifest)
+
+
+def checked_tool(name: str) -> None:
+    if not command_exists(name):
+        raise AokError(f"Required command is not installed: {name}")
+
+
+def shell_command(parts: list[object]) -> str:
+    return shlex.join(str(part) for part in parts)
+
+
+def github_project(args: argparse.Namespace) -> tuple[dict | None, list[dict]]:
+    checked_tool("gh")
+    run(["gh", "auth", "status"])
+    if args.project_number is not None:
+        result = run(
+            ["gh", "project", "view", str(args.project_number), "--owner", args.owner, "--format", "json"],
+            check=False,
+        )
+        if result.returncode != 0:
+            error = (result.stderr or "").strip()
+            lowered = error.lower()
+            if "could not resolve" in lowered or "not found" in lowered:
+                return None, []
+            raise AokError(f"gh project view failed: {error or f'exit code {result.returncode}'}")
+        data = parse_command_json(result, "gh project view")
+        if not isinstance(data, dict):
+            raise AokError("gh project view returned an unexpected JSON shape")
+        return data, []
+    result = run(["gh", "project", "list", "--owner", args.owner, "--format", "json", "--limit", "100"])
+    projects = object_list(parse_command_json(result, "gh project list"), "projects", "items")
+    matches = [project for project in projects if project.get("title") == args.project_title]
+    return (matches[0] if len(matches) == 1 else None), matches
+
+
+def github_field_type(field: dict) -> str:
+    raw = str(field.get("dataType") or field.get("type") or "").upper()
+    aliases = {
+        "PROJECTV2SINGLESELECTFIELD": "SINGLE_SELECT",
+        "PROJECTV2ITERATIONFIELD": "ITERATION",
+    }
+    return aliases.get(raw, raw)
+
+
+def github_field_options(field: dict) -> list[dict]:
+    return object_list(field.get("options", []), "options", "items")
+
+
+def discover_github_work_system(args: argparse.Namespace) -> dict:
+    report = work_system_report("github")
+    project, title_matches = github_project(args)
+    if project is None:
+        if len(title_matches) > 1:
+            work_system_check(
+                report,
+                "project",
+                "mismatched",
+                f"multiple projects match title {args.project_title!r}; use --project-number",
+            )
+        else:
+            label = args.project_title or str(args.project_number)
+            work_system_check(report, "project", "missing", f"project {label!r} was not found")
+            if args.project_title:
+                report["futureOperations"].append(
+                    shell_command(
+                        ["gh", "project", "create", "--owner", args.owner, "--title", args.project_title]
+                    )
+                )
+        return report
+
+    number = project.get("number", args.project_number)
+    if number is None:
+        raise AokError("GitHub project JSON did not include a project number")
+    project_id = project.get("id")
+    title = project.get("title") or args.project_title or f"Project {number}"
+    url = project.get("url") or ""
+    report["project"] = {
+        "id": project_id,
+        "number": int(number),
+        "title": title,
+        "url": url,
+        "owner": args.owner,
+    }
+    if not project_id or not url:
+        work_system_check(report, "project", "mismatched", "project ID or URL is missing")
+    else:
+        work_system_check(report, "project", "satisfied", f"found project {number} ({title})")
+
+    fields_result = run(
+        ["gh", "project", "field-list", str(number), "--owner", args.owner, "--format", "json", "--limit", "100"]
+    )
+    fields = object_list(parse_command_json(fields_result, "gh project field-list"), "fields", "items")
+    if any(github_field_type(field) == "PROJECTV2FIELD" for field in fields):
+        if not project_id:
+            raise AokError("GitHub project JSON did not include an ID needed to resolve field data types")
+        type_result = run(
+            [
+                "gh",
+                "api",
+                "graphql",
+                "-f",
+                (
+                    "query($id:ID!){node(id:$id){... on ProjectV2{fields(first:100){nodes{"
+                    "__typename ... on ProjectV2FieldCommon{id name dataType}}}}}}"
+                ),
+                "-F",
+                f"id={project_id}",
+            ]
+        )
+        type_data = parse_command_json(type_result, "gh api graphql field type query")
+        nodes: object = type_data
+        for key in ("data", "node", "fields", "nodes"):
+            nodes = nodes.get(key, {}) if isinstance(nodes, dict) else {}
+        type_fields = object_list(nodes)
+        data_types = {
+            str(field.get("id")): str(field.get("dataType", ""))
+            for field in type_fields
+            if field.get("id")
+        }
+        for field in fields:
+            if github_field_type(field) == "PROJECTV2FIELD":
+                field["dataType"] = data_types.get(str(field.get("id")), "")
+    by_name: dict[str, list[dict]] = {}
+    for field in fields:
+        by_name.setdefault(str(field.get("name", "")), []).append(field)
+    binding_fields: dict[str, dict] = {}
+
+    expected: list[tuple[str, str, tuple[str, ...]]] = []
+    expected.extend((name, "SINGLE_SELECT", options) for name, options in WORK_SYSTEM_SELECT_FIELDS.items())
+    expected.extend((name, "TEXT", ()) for name in WORK_SYSTEM_TEXT_FIELDS)
+    expected.extend((name, "NUMBER", ()) for name in WORK_SYSTEM_NUMBER_FIELDS)
+    for name, expected_type, required_options in expected:
+        matches = by_name.get(name, [])
+        if not matches:
+            work_system_check(report, f"field:{name}", "missing", f"expected {expected_type}")
+            suffix = (
+                f" with options {', '.join(required_options)}" if required_options else ""
+            )
+            create_command: list[object] = [
+                "gh",
+                "project",
+                "field-create",
+                number,
+                "--owner",
+                args.owner,
+                "--name",
+                name,
+                "--data-type",
+                expected_type,
+            ]
+            if required_options:
+                create_command.extend(["--single-select-options", ",".join(required_options)])
+            report["futureOperations"].append(
+                f"{shell_command(create_command)}  # create {name!r} as {expected_type}{suffix}"
+            )
+            continue
+        if len(matches) > 1:
+            work_system_check(report, f"field:{name}", "mismatched", "duplicate field names")
+            continue
+        field = matches[0]
+        if not field.get("id"):
+            work_system_check(report, f"field:{name}", "mismatched", "field ID is missing")
+            continue
+        actual_type = github_field_type(field)
+        if actual_type != expected_type:
+            work_system_check(
+                report,
+                f"field:{name}",
+                "mismatched",
+                f"expected {expected_type}, found {actual_type or 'unknown'}",
+            )
+            continue
+        field_binding = {"id": field.get("id"), "type": actual_type}
+        if required_options:
+            options = github_field_options(field)
+            option_by_name: dict[str, list[dict]] = {}
+            for option in options:
+                option_by_name.setdefault(str(option.get("name", "")), []).append(option)
+            missing_options = [option for option in required_options if len(option_by_name.get(option, [])) != 1]
+            if missing_options:
+                work_system_check(
+                    report,
+                    f"field:{name}",
+                    "mismatched",
+                    f"missing or duplicate options: {', '.join(missing_options)}",
+                )
+                report["futureOperations"].append(
+                    f"ensure GitHub field {name!r} options: {', '.join(required_options)}"
+                )
+                continue
+            if any(not option_by_name[option][0].get("id") for option in required_options):
+                work_system_check(report, f"field:{name}", "mismatched", "one or more option IDs are missing")
+                continue
+            field_binding["options"] = {
+                option: option_by_name[option][0].get("id") for option in required_options
+            }
+        work_system_check(report, f"field:{name}", "satisfied", expected_type)
+        binding_fields[name] = field_binding
+
+    if report["conformant"]:
+        report["binding"] = {
+            "provider": "github",
+            "supportLevel": WORK_SYSTEM_SUPPORT_LEVEL,
+            "owner": args.owner,
+            "projectNumber": int(number),
+            "projectId": project_id,
+            "url": url,
+            "fields": binding_fields,
+        }
+    return report
+
+
+def az_json(cmd: list[str], label: str) -> object:
+    result = run(cmd + ["--output", "json", "--only-show-errors"])
+    return parse_command_json(result, label)
+
+
+def az_invoke(
+    organization: str,
+    area: str,
+    resource: str,
+    route_parameters: dict[str, object],
+    *,
+    api_version: str = "7.1",
+) -> object:
+    cmd = [
+        "az",
+        "devops",
+        "invoke",
+        "--organization",
+        organization,
+        "--area",
+        area,
+        "--resource",
+        resource,
+        "--api-version",
+        api_version,
+        "--http-method",
+        "GET",
+    ]
+    if route_parameters:
+        cmd.append("--route-parameters")
+        cmd.extend(f"{key}={value}" for key, value in route_parameters.items() if value is not None)
+    return az_json(cmd, f"az devops invoke {area}/{resource}")
+
+
+def azure_pick_named(
+    items: list[dict],
+    requested: str | None,
+    *,
+    name_key: str = "name",
+    fallback: str | None = None,
+) -> tuple[dict | None, list[dict]]:
+    target = requested or fallback
+    if target:
+        matches = [item for item in items if item.get(name_key) == target]
+        return (matches[0] if len(matches) == 1 else None), matches
+    return (items[0] if len(items) == 1 else None), items
+
+
+def azure_field_type(field: dict) -> str:
+    return str(field.get("type") or field.get("fieldType") or "").lower().replace(" ", "")
+
+
+def azure_allowed_values(field: dict) -> list[str]:
+    raw = field.get("allowedValues")
+    if isinstance(raw, list):
+        values = []
+        for item in raw:
+            if isinstance(item, dict):
+                item = item.get("value") or item.get("name") or item.get("displayName")
+            values.append(str(item))
+        return values
+    return []
+
+
+def discover_azure_work_system(args: argparse.Namespace) -> dict:
+    report = work_system_report("azure-devops")
+    checked_tool("az")
+    project_data = az_json(
+        [
+            "az",
+            "devops",
+            "project",
+            "show",
+            "--organization",
+            args.organization,
+            "--project",
+            args.project,
+        ],
+        "az devops project show",
+    )
+    if not isinstance(project_data, dict):
+        raise AokError("az devops project show returned an unexpected JSON shape")
+    project_id = project_data.get("id")
+    project_name = project_data.get("name") or args.project
+    project_url = project_data.get("url") or ""
+    report["project"] = {"id": project_id, "name": project_name, "url": project_url}
+    if not project_id or not project_url:
+        work_system_check(report, "project", "mismatched", "project ID or URL is missing")
+    else:
+        work_system_check(report, "project", "satisfied", f"found project {project_name}")
+
+    teams_data = az_json(
+        [
+            "az",
+            "devops",
+            "team",
+            "list",
+            "--organization",
+            args.organization,
+            "--project",
+            str(project_id or project_name),
+            "--top",
+            "100",
+        ],
+        "az devops team list",
+    )
+    teams = object_list(teams_data, "value", "teams", "items")
+    default_team = project_data.get("defaultTeam")
+    fallback_team = default_team.get("name") if isinstance(default_team, dict) else None
+    team, team_matches = azure_pick_named(teams, args.team, fallback=fallback_team)
+    if team is None:
+        detail = (
+            f"multiple teams match {args.team!r}" if len(team_matches) > 1
+            else f"team {(args.team or fallback_team or '<default>')!r} was not found"
+        )
+        work_system_check(report, "team", "mismatched" if len(team_matches) > 1 else "missing", detail)
+        return report
+    team_id = team.get("id")
+    team_name = team.get("name")
+    if not team_id:
+        work_system_check(report, "team", "mismatched", "team ID is missing")
+    else:
+        work_system_check(report, "team", "satisfied", f"found team {team_name}")
+
+    capabilities = project_data.get("capabilities")
+    process_template = capabilities.get("processTemplate", {}) if isinstance(capabilities, dict) else {}
+    process_id = process_template.get("templateTypeId")
+    if not process_id:
+        work_system_check(report, "process", "missing", "project did not expose a process ID")
+        return report
+    process_data = az_invoke(
+        args.organization,
+        "processes",
+        "processes",
+        {"processTypeId": process_id},
+    )
+    if not isinstance(process_data, dict):
+        raise AokError("Azure process lookup returned an unexpected JSON shape")
+    customization = str(process_data.get("customizationType") or "").lower()
+    process_name = process_data.get("name") or process_template.get("templateName") or process_id
+    if customization not in ("inherited", "custom"):
+        work_system_check(
+            report,
+            "process",
+            "mismatched",
+            f"{process_name} is {customization or 'unknown'}; an inherited/custom process is required",
+        )
+        report["futureOperations"].append(
+            f"bind project {project_name!r} to an inherited process before AOK provisioning"
+        )
+    else:
+        work_system_check(report, "process", "satisfied", f"{process_name} is {customization}")
+
+    wit_data = az_invoke(
+        args.organization,
+        "processes",
+        "workItemTypes",
+        {"processId": process_id},
+    )
+    work_item_types = object_list(wit_data, "value", "workItemTypes", "items")
+    if args.work_item_type:
+        wit_matches = [
+            item
+            for item in work_item_types
+            if item.get("name") == args.work_item_type or item.get("referenceName") == args.work_item_type
+        ]
+        work_item_type = wit_matches[0] if len(wit_matches) == 1 else None
+    else:
+        preferred = ("User Story", "Product Backlog Item", "Issue", "Requirement")
+        candidates = [item for name in preferred for item in work_item_types if item.get("name") == name]
+        work_item_type = candidates[0] if candidates else (work_item_types[0] if len(work_item_types) == 1 else None)
+        wit_matches = [work_item_type] if work_item_type else work_item_types
+    if work_item_type is None:
+        requested = args.work_item_type or "default requirement backlog type"
+        detail = f"work-item type {requested!r} was not uniquely resolved"
+        work_system_check(report, "workItemType", "missing" if not wit_matches else "mismatched", detail)
+        return report
+    wit_name = work_item_type.get("name")
+    wit_ref = work_item_type.get("referenceName")
+    if not wit_ref:
+        raise AokError("Azure work-item type JSON did not include referenceName")
+    work_system_check(report, "workItemType", "satisfied", f"{wit_name} ({wit_ref})")
+
+    fields_data = az_invoke(
+        args.organization,
+        "processes",
+        "fields",
+        {"processId": process_id, "witRefName": wit_ref},
+    )
+    fields = object_list(fields_data, "value", "fields", "items")
+    by_name: dict[str, list[dict]] = {}
+    for field in fields:
+        by_name.setdefault(str(field.get("name", "")), []).append(field)
+    binding_fields: dict[str, dict] = {}
+    expected_fields: list[tuple[str, tuple[str, ...], tuple[str, ...]]] = []
+    expected_fields.extend(
+        (name, ("pickliststring",), options)
+        for name, options in WORK_SYSTEM_SELECT_FIELDS.items()
+        if name != "Status"
+    )
+    expected_fields.extend((name, ("string", "plaintext", "html"), ()) for name in WORK_SYSTEM_TEXT_FIELDS)
+    expected_fields.extend((name, ("integer",), ()) for name in WORK_SYSTEM_NUMBER_FIELDS)
+    for name, allowed_types, required_options in expected_fields:
+        matches = by_name.get(name, [])
+        if not matches:
+            work_system_check(report, f"field:{name}", "missing", f"expected {'/'.join(allowed_types)}")
+            report["futureOperations"].append(f"add Azure process field {name!r} to {wit_name}")
+            continue
+        if len(matches) > 1:
+            work_system_check(report, f"field:{name}", "mismatched", "duplicate field names")
+            continue
+        field = matches[0]
+        if not field.get("referenceName"):
+            work_system_check(report, f"field:{name}", "mismatched", "field referenceName is missing")
+            continue
+        actual_type = azure_field_type(field)
+        if actual_type not in allowed_types:
+            work_system_check(
+                report,
+                f"field:{name}",
+                "mismatched",
+                f"expected {'/'.join(allowed_types)}, found {actual_type or 'unknown'}",
+            )
+            continue
+        if required_options:
+            values = azure_allowed_values(field)
+            missing = [value for value in required_options if values.count(value) != 1]
+            if missing:
+                work_system_check(
+                    report,
+                    f"field:{name}",
+                    "mismatched",
+                    f"missing or duplicate values: {', '.join(missing)}",
+                )
+                report["futureOperations"].append(
+                    f"ensure Azure field {name!r} values: {', '.join(required_options)}"
+                )
+                continue
+        work_system_check(report, f"field:{name}", "satisfied", actual_type)
+        binding_fields[name] = {
+            "referenceName": field.get("referenceName"),
+            "type": actual_type,
+        }
+
+    states_data = az_invoke(
+        args.organization,
+        "processes",
+        "states",
+        {"processId": process_id, "witRefName": wit_ref},
+    )
+    states = object_list(states_data, "value", "states", "items")
+    state_by_name: dict[str, list[dict]] = {}
+    for state in states:
+        state_by_name.setdefault(str(state.get("name", "")), []).append(state)
+    state_binding: dict[str, dict] = {}
+    for name, category in AZURE_STATE_CATEGORIES.items():
+        matches = state_by_name.get(name, [])
+        if len(matches) != 1:
+            status = "missing" if not matches else "mismatched"
+            work_system_check(report, f"state:{name}", status, "missing" if not matches else "duplicate states")
+            report["futureOperations"].append(f"ensure Azure state {name!r} in category {category}")
+            continue
+        state = matches[0]
+        if not state.get("id"):
+            work_system_check(report, f"state:{name}", "mismatched", "state ID is missing")
+            continue
+        actual_category = str(state.get("stateCategory") or state.get("category") or "").replace(" ", "")
+        if actual_category.lower() != category.lower():
+            work_system_check(
+                report,
+                f"state:{name}",
+                "mismatched",
+                f"expected category {category}, found {actual_category or 'unknown'}",
+            )
+            continue
+        work_system_check(report, f"state:{name}", "satisfied", category)
+        state_binding[name] = {"id": state.get("id"), "category": category}
+
+    boards_data = az_invoke(
+        args.organization,
+        "work",
+        "boards",
+        {"project": project_id or project_name, "team": team_id or team_name},
+    )
+    boards = object_list(boards_data, "value", "boards", "items")
+    board, board_matches = azure_pick_named(boards, args.board)
+    if board is None:
+        requested = args.board or "the only board"
+        detail = f"board {requested!r} was not uniquely resolved"
+        work_system_check(report, "board", "missing" if not board_matches else "mismatched", detail)
+        return report
+    board_id = board.get("id")
+    board_name = board.get("name")
+    if not board_id:
+        work_system_check(report, "board", "mismatched", "board ID is missing")
+    else:
+        work_system_check(report, "board", "satisfied", f"found board {board_name}")
+    columns_data = az_invoke(
+        args.organization,
+        "work",
+        "columns",
+        {
+            "project": project_id or project_name,
+            "team": team_id or team_name,
+            "board": board_id or board_name,
+        },
+    )
+    columns = object_list(columns_data, "value", "columns", "items")
+    column_by_name: dict[str, list[dict]] = {}
+    for column in columns:
+        column_by_name.setdefault(str(column.get("name", "")), []).append(column)
+    column_binding: dict[str, str | None] = {}
+    for name in WORK_SYSTEM_SELECT_FIELDS["Status"]:
+        matches = column_by_name.get(name, [])
+        if len(matches) != 1:
+            work_system_check(
+                report,
+                f"column:{name}",
+                "missing" if not matches else "mismatched",
+                "missing" if not matches else "duplicate columns",
+            )
+            report["futureOperations"].append(f"ensure Azure board column {name!r}")
+            continue
+        if not matches[0].get("id"):
+            work_system_check(report, f"column:{name}", "mismatched", "column ID is missing")
+            continue
+        work_system_check(report, f"column:{name}", "satisfied", "present")
+        column_binding[name] = matches[0].get("id")
+
+    if report["conformant"]:
+        binding_fields["Status"] = {"referenceName": "System.State", "type": "state"}
+        report["binding"] = {
+            "provider": "azure-devops",
+            "supportLevel": WORK_SYSTEM_SUPPORT_LEVEL,
+            "organization": args.organization.rstrip("/"),
+            "project": {"id": project_id, "name": project_name, "url": project_url},
+            "team": {"id": team_id, "name": team_name},
+            "board": {"id": board_id, "name": board_name, "columns": column_binding},
+            "process": {"id": process_id, "name": process_name, "customizationType": customization},
+            "workItemType": {"name": wit_name, "referenceName": wit_ref},
+            "fields": binding_fields,
+            "states": state_binding,
+        }
+    return report
+
+
+def cmd_work_system_setup_github(args: argparse.Namespace) -> int:
+    report = discover_github_work_system(args)
+    if args.write_binding:
+        if not report["conformant"] or not report.get("binding"):
+            if args.json:
+                print(json.dumps(report, indent=2))
+            else:
+                print(render_work_system_report(report))
+            print("Error: refusing to write a nonconformant work-system binding", file=sys.stderr)
+            return 1
+        stored_binding = dict(report["binding"])
+        stored_binding["verifiedAt"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        write_work_system_binding(Path(args.path), stored_binding)
+        report["binding"] = stored_binding
+        report["bindingWritten"] = str(Path(args.path).resolve() / ".aok" / "project.json")
+    print(json.dumps(report, indent=2) if args.json else render_work_system_report(report))
+    return 0
+
+
+def cmd_work_system_setup_azure(args: argparse.Namespace) -> int:
+    report = discover_azure_work_system(args)
+    if args.write_binding:
+        if not report["conformant"] or not report.get("binding"):
+            if args.json:
+                print(json.dumps(report, indent=2))
+            else:
+                print(render_work_system_report(report))
+            print("Error: refusing to write a nonconformant work-system binding", file=sys.stderr)
+            return 1
+        stored_binding = dict(report["binding"])
+        stored_binding["verifiedAt"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        write_work_system_binding(Path(args.path), stored_binding)
+        report["binding"] = stored_binding
+        report["bindingWritten"] = str(Path(args.path).resolve() / ".aok" / "project.json")
+    print(json.dumps(report, indent=2) if args.json else render_work_system_report(report))
+    return 0
+
+
+def cmd_work_system_validate(args: argparse.Namespace) -> int:
+    target = Path(args.path).resolve()
+    manifest_path = target / ".aok" / "project.json"
+    manifest = load_json(manifest_path, {})
+    if not isinstance(manifest, dict) or not isinstance(manifest.get("workSystem"), dict):
+        raise AokError(f"No work-system binding in {manifest_path}")
+    binding = manifest["workSystem"]
+    provider = binding.get("provider")
+    if provider == "github":
+        discovery_args = argparse.Namespace(
+            owner=binding.get("owner"),
+            project_number=binding.get("projectNumber"),
+            project_title=None,
+        )
+        if not discovery_args.owner or discovery_args.project_number is None:
+            raise AokError("GitHub work-system binding is missing owner or projectNumber")
+        report = discover_github_work_system(discovery_args)
+    elif provider == "azure-devops":
+        project = binding.get("project", {})
+        team = binding.get("team", {})
+        board = binding.get("board", {})
+        work_item_type = binding.get("workItemType", {})
+        discovery_args = argparse.Namespace(
+            organization=binding.get("organization"),
+            project=project.get("id") or project.get("name"),
+            team=team.get("name"),
+            board=board.get("name"),
+            work_item_type=work_item_type.get("referenceName") or work_item_type.get("name"),
+        )
+        if not discovery_args.organization or not discovery_args.project:
+            raise AokError("Azure DevOps work-system binding is missing organization or project")
+        report = discover_azure_work_system(discovery_args)
+    else:
+        raise AokError(f"Unsupported work-system provider in {manifest_path}: {provider!r}")
+
+    discovered = report.get("binding")
+    if report["conformant"] and discovered:
+        old = dict(binding)
+        new = dict(discovered)
+        old.pop("verifiedAt", None)
+        new.pop("verifiedAt", None)
+        if old != new:
+            work_system_check(report, "binding", "mismatched", "stored IDs or mappings differ from provider")
+        else:
+            work_system_check(report, "binding", "satisfied", "stored IDs and mappings match provider")
+    print(json.dumps(report, indent=2) if args.json else render_work_system_report(report))
+    return 0 if report["conformant"] else 1
 
 
 def load_simple_environment_toml(path: Path) -> dict:
@@ -572,17 +1312,19 @@ def copy_template_tree(target: Path, force: bool = False) -> list[str]:
 
     meta = target / ".aok"
     meta.mkdir(exist_ok=True)
-    (meta / "project.json").write_text(
-        json.dumps(
-            {
-                "initializedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-                "workspaceKind": detect_workspace_kind(target),
-                "kitVersion": plugin_version(),
-            },
-            indent=2,
-        )
-        + "\n"
+    manifest_path = meta / "project.json"
+    existing_manifest = load_json(manifest_path, {})
+    preserved_work_system = (
+        existing_manifest.get("workSystem") if isinstance(existing_manifest, dict) else None
     )
+    manifest = {
+        "initializedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "workspaceKind": detect_workspace_kind(target),
+        "kitVersion": plugin_version(),
+    }
+    if isinstance(preserved_work_system, dict):
+        manifest["workSystem"] = preserved_work_system
+    write_json(manifest_path, manifest)
     changes.append("wrote .aok/project.json")
     return changes
 
@@ -1604,6 +2346,7 @@ def validate_required_files(errors: list[str]) -> None:
         "docs/targets-support-matrix.md",
         "docs/release-checklist.md",
         "docs/uninstall-and-rollback.md",
+        "docs/work-system-bootstrap.md",
         "adapters/claude-code/aok-plugin/plugin.json",
         "adapters/claude-code/aok-plugin/README.md",
         "adapters/claude-code/aok-plugin/skills/aok-setup.md",
@@ -1617,6 +2360,7 @@ def validate_required_files(errors: list[str]) -> None:
         "schemas/task-packet.schema.json",
         "schemas/tool-adapter.schema.json",
         "schemas/pack.schema.json",
+        "schemas/work-system-binding.schema.json",
         "skills/agent-workflow/SKILL.md",
         "skills/github-project-execution/SKILL.md",
         "skills/code-review/SKILL.md",
@@ -1955,6 +2699,34 @@ def build_parser() -> argparse.ArgumentParser:
     project_validate = project_sub.add_parser("validate")
     project_validate.add_argument("path", nargs="?", default=".")
     project_validate.set_defaults(func=cmd_project_validate)
+
+    work_system = sub.add_parser("work-system")
+    work_system_sub = work_system.add_subparsers(dest="work_system_command", required=True)
+    work_system_setup = work_system_sub.add_parser("setup")
+    work_system_setup_sub = work_system_setup.add_subparsers(dest="work_system_provider", required=True)
+    work_system_github = work_system_setup_sub.add_parser("github")
+    work_system_github.add_argument("--owner", required=True)
+    github_project_selector = work_system_github.add_mutually_exclusive_group(required=True)
+    github_project_selector.add_argument("--project-number", type=int)
+    github_project_selector.add_argument("--project-title")
+    work_system_github.add_argument("--path", default=".")
+    work_system_github.add_argument("--write-binding", action="store_true")
+    work_system_github.add_argument("--json", action="store_true")
+    work_system_github.set_defaults(func=cmd_work_system_setup_github)
+    work_system_azure = work_system_setup_sub.add_parser("azure-devops")
+    work_system_azure.add_argument("--organization", required=True)
+    work_system_azure.add_argument("--project", required=True)
+    work_system_azure.add_argument("--team")
+    work_system_azure.add_argument("--board")
+    work_system_azure.add_argument("--work-item-type")
+    work_system_azure.add_argument("--path", default=".")
+    work_system_azure.add_argument("--write-binding", action="store_true")
+    work_system_azure.add_argument("--json", action="store_true")
+    work_system_azure.set_defaults(func=cmd_work_system_setup_azure)
+    work_system_validate = work_system_sub.add_parser("validate")
+    work_system_validate.add_argument("path", nargs="?", default=".")
+    work_system_validate.add_argument("--json", action="store_true")
+    work_system_validate.set_defaults(func=cmd_work_system_validate)
 
     task = sub.add_parser("task")
     task_sub = task.add_subparsers(dest="task_command", required=True)

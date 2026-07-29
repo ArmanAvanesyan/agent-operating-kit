@@ -197,6 +197,22 @@ intentionally want AOK to replace `AGENTS.md` after writing a backup.
 
 See `docs/project-init-guide.md` for the full guide.
 
+## Work-System Bootstrap
+
+After local project initialization, inspect an existing GitHub Project or Azure
+DevOps board against AOK's neutral workflow contract:
+
+```bash
+./scripts/aok work-system setup github --owner OWNER --project-number 12
+./scripts/aok work-system setup azure-devops \
+  --organization https://dev.azure.com/ORG --project PROJECT
+./scripts/aok work-system validate /path/to/project
+```
+
+Both providers are currently scaffolded and read-only. A conformant existing
+work system can be recorded with `--write-binding`; remote provisioning is not
+yet enabled. See `docs/work-system-bootstrap.md`.
+
 ## Repository Relationships
 
 - `ArmanAvanesyan/agent-operating-kit` is the canonical public project.

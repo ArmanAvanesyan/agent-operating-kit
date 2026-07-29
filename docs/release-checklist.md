@@ -23,6 +23,7 @@ Run:
 ./scripts/aok validate
 python3 -m py_compile scripts/aok
 python3 -m py_compile scripts/release/build.py
+python3 -m unittest discover -s tests -v
 ```
 
 Render all packs for all targets:
@@ -56,6 +57,8 @@ Spot check Codex local-environment templates:
 - `docs/migration-from-claude-code-toolbox.md` uses the canonical marketplace
   key `aok-claude-code`.
 - `docs/uninstall-and-rollback.md` covers the files the installer writes.
+- `docs/work-system-bootstrap.md` matches the scaffolded provider behavior and
+  binding schema.
 
 ## Compatibility Checks
 

@@ -1,0 +1,19 @@
+{
+  "id": "aup",
+  "kind": "flow",
+  "displayName": "Agile Unified Process",
+  "description": "Discipline-oriented iterative delivery across architecture, modeling, implementation, testing, and deployment.",
+  "supportLevel": "scaffolded",
+  "order": 40,
+  "fragment": null,
+  "requiredInputs": [
+    "Discipline checklist"
+  ],
+  "hookExpectations": [
+    "Record evidence for every required delivery discipline."
+  ],
+  "roleEmphasis": [
+    "Architecture, modeling, implementation, test, and deployment disciplines."
+  ],
+  "compatibleFlows": []
+}

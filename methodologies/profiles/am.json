@@ -1,0 +1,24 @@
+{
+  "id": "am",
+  "kind": "overlay",
+  "displayName": "Agile Modeling",
+  "description": "Just-enough collaborative modeling practices.",
+  "supportLevel": "planned",
+  "order": 30,
+  "fragment": null,
+  "requiredInputs": [
+    "Modeling need"
+  ],
+  "hookExpectations": [
+    "Model only when it materially reduces delivery uncertainty."
+  ],
+  "roleEmphasis": [
+    "Collaborative, lightweight, purpose-driven modeling."
+  ],
+  "compatibleFlows": [
+    "kanban",
+    "fdd",
+    "dsdm",
+    "aup"
+  ]
+}

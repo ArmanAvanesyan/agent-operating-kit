@@ -5,6 +5,8 @@
 - Add scaffolded, read-only GitHub Projects and Azure DevOps work-system
   discovery, desired-state planning, validation, and verified local bindings.
 - Preserve verified work-system bindings across `aok project init`.
+- Add project methodology selection with active Kanban, XP, and Lean policy
+  composition plus scaffolded FDD, DSDM, AUP, and planned AM catalog entries.
 
 ## 0.4.0
 

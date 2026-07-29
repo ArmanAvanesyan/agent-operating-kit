@@ -213,6 +213,21 @@ Both providers are currently scaffolded and read-only. A conformant existing
 work system can be recorded with `--write-binding`; remote provisioning is not
 yet enabled. See `docs/work-system-bootstrap.md`.
 
+## Methodology Profiles
+
+Projects use one flow and optional practice overlays independently of their
+GitHub or Azure DevOps binding:
+
+```bash
+./scripts/aok project init /path/to/project \
+  --flow kanban --overlay xp --overlay lean
+./scripts/aok methodology validate /path/to/project
+```
+
+Kanban is the active default flow. XP and Lean are active overlays. FDD, DSDM,
+and AUP are scaffolded catalog entries, and AM is planned. See
+`docs/methodology-profiles.md`.
+
 ## Repository Relationships
 
 - `ArmanAvanesyan/agent-operating-kit` is the canonical public project.
@@ -238,15 +253,17 @@ AOK can render each pack into parseable target contracts:
 
 ## Usage Model
 
-1. Create or sync a task packet.
-2. Select a role for implementation and one role for QA or review.
-3. Run pre-hooks to check project context, scope, worktree safety, and risk.
-4. Execute one issue-sized change.
-5. Run verification and after-hooks.
-6. Record GitHub, swarmd, or local lifecycle updates.
+1. Initialize the project and select its flow and optional overlays.
+2. Create or sync a task packet.
+3. Select a role for implementation and one role for QA or review.
+4. Run pre-hooks to check project context, scope, worktree safety, and risk.
+5. Execute one issue-sized change.
+6. Run verification and after-hooks.
+7. Record GitHub, swarmd, or local lifecycle updates.
 
 The neutral schema lives in `schemas/`. Tool-specific target behavior lives in
-`adapters/`. Reusable workflow content lives in `packs/`.
+`adapters/`. Methodology profiles live in `methodologies/`, and reusable
+workflow content lives in `packs/`.
 
 ## Claude Code Toolbox Migration
 

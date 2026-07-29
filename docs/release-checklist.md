@@ -59,6 +59,10 @@ Spot check Codex local-environment templates:
 - `docs/uninstall-and-rollback.md` covers the files the installer writes.
 - `docs/work-system-bootstrap.md` matches the scaffolded provider behavior and
   binding schema.
+- `docs/methodology-profiles.md` matches the active profile catalog, generated
+  default policy, and project CLI.
+- Release kit, Codex plugin, and pack archives include the neutral
+  `methodologies/` catalog and active fragments.
 
 ## Compatibility Checks
 

@@ -7,10 +7,11 @@ workflow content.
 
 1. `schemas/`: JSON Schema contracts for neutral AOK objects.
 2. `core/`: conceptual model and rendering rules.
-3. `packs/`: reusable workflow content and curated adapter assets.
-4. `adapters/`: target-specific mappings for Codex, Claude Code, Cursor,
+3. `methodologies/`: selectable flow and practice-overlay profiles.
+4. `packs/`: reusable workflow content and curated adapter assets.
+5. `adapters/`: target-specific mappings for Codex, Claude Code, Cursor,
    OpenCode, Gemini, OpenClaw, and Hermes Agent.
-5. `scripts/`: local CLI, install, sync, and validation commands.
+6. `scripts/`: local CLI, install, sync, and validation commands.
 
 ## Source Of Truth
 
@@ -21,6 +22,7 @@ AOK owns the neutral model:
 - hook
 - skill
 - pack
+- methodology profile
 - tool adapter
 
 Tool-specific files are projections. They can be hand-curated when a target has
@@ -38,6 +40,13 @@ index of intent and compatibility.
 
 Their Claude Code plugin files are preserved under each `packs/*/claude-code/`.
 A neutral `packs/*/pack.content.json` entry is the canonical definition.
+
+## Methodology Boundary
+
+Methodology profiles compose one flow and optional overlays into project policy.
+They do not fork task-packet fields, lifecycle statuses, or work-system provider
+mappings. General-purpose packs remain independently installable workflow
+content.
 
 ## Runtime Boundary
 

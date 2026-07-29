@@ -1,0 +1,20 @@
+{
+  "id": "fdd",
+  "kind": "flow",
+  "displayName": "Feature-Driven Development",
+  "description": "Feature-list and domain-model-driven planning.",
+  "supportLevel": "scaffolded",
+  "order": 20,
+  "fragment": null,
+  "requiredInputs": [
+    "Feature ID",
+    "Model link"
+  ],
+  "hookExpectations": [
+    "Confirm the feature belongs to an approved feature list."
+  ],
+  "roleEmphasis": [
+    "Domain modeling and chief-programmer-style feature ownership."
+  ],
+  "compatibleFlows": []
+}

@@ -142,6 +142,16 @@ Azure DevOps uses the equivalent `aok work-system setup azure-devops` command.
 Both integrations are scaffolded and read-only; see
 `docs/work-system-bootstrap.md` for authentication and field requirements.
 
+Projects can also select a flow and optional practice overlays:
+
+```bash
+aok project init /path/to/project --flow kanban --overlay xp --overlay lean
+aok methodology validate /path/to/project
+```
+
+See `docs/methodology-profiles.md` for the profile catalog and safe
+reconfiguration flow.
+
 ## Claude Code First Success
 
 Register AOK's Claude Code compatibility marketplace. This updates

@@ -21,6 +21,7 @@ Prefer structured GitHub connector/plugin data. Use local `git` and `gh` when co
 
 Use the dedicated operating model under `agents/`:
 - `agents/workflow.md`: phase flow and quality gates.
+- `agents/methodology.md`: selected flow and optional practice overlays.
 - `agents/github-project.md`: project fields, task contract, and CLI patterns.
 - `agents/hooks.md`: pre-hook and after-hook contracts.
 - `agents/tasks/task-template.md`: task packet template.

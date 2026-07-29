@@ -12,6 +12,14 @@ From the AOK checkout:
 ./scripts/aok project init /path/to/project
 ```
 
+Kanban is selected by default. Optional active practice overlays can be
+composed during initialization:
+
+```bash
+./scripts/aok project init /path/to/project \
+  --flow kanban --overlay xp --overlay lean
+```
+
 Then validate:
 
 ```bash
@@ -97,6 +105,10 @@ Remote boards are a separate follow-up. Run `aok work-system setup github` or
 `aok work-system setup azure-devops` after local initialization. A verified
 binding written to `.aok/project.json` is preserved by later project init runs.
 See `work-system-bootstrap.md`.
+
+Methodology can be changed later with `aok methodology set`. Existing explicit
+methodology and work-system bindings are preserved when init is run without
+methodology flags. See `methodology-profiles.md`.
 
 ## Rollback
 

@@ -27,6 +27,7 @@ KIT_PATHS = (
     "core",
     "docs",
     "hooks",
+    "methodologies",
     "packs",
     "references",
     "schemas",
@@ -48,6 +49,7 @@ CODEX_PLUGIN_PATHS = (
     ".codex-plugin",
     "docs/codex-local-environments.md",
     "hooks",
+    "methodologies",
     "scripts/aok",
     "skills",
     "templates/.codex",
@@ -59,6 +61,7 @@ CODEX_PLUGIN_PATHS = (
 
 PACK_PATHS = (
     "adapters",
+    "methodologies",
     "packs",
     "schemas",
     "core/model.md",

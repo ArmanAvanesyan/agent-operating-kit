@@ -37,6 +37,13 @@ A pack groups related skills, hooks, roles, scripts, and templates. Packs are
 portable content units. Tool-specific files belong under an adapter directory
 inside the pack.
 
+### Methodology
+
+A methodology selection composes exactly one flow profile with zero or more
+compatible practice overlays. It changes planning, WIP, role emphasis, and hook
+expectations while preserving the neutral task packet, phases, and statuses.
+Methodology is project configuration, not work-system provider configuration.
+
 ### Adapter
 
 An adapter describes how neutral AOK content renders into one tool target. It

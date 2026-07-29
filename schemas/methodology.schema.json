@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ArmanAvanesyan/agent-operating-kit/schemas/methodology.schema.json",
+  "title": "AOK Methodology Profile",
+  "type": "object",
+  "required": [
+    "id",
+    "kind",
+    "displayName",
+    "description",
+    "supportLevel",
+    "order",
+    "fragment",
+    "requiredInputs",
+    "hookExpectations",
+    "roleEmphasis",
+    "compatibleFlows"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["flow", "overlay"]
+    },
+    "displayName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "supportLevel": {
+      "type": "string",
+      "enum": ["active", "scaffolded", "planned"]
+    },
+    "order": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "default": {
+      "type": "boolean"
+    },
+    "fragment": {
+      "type": ["string", "null"]
+    },
+    "requiredInputs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "hookExpectations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "roleEmphasis": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "compatibleFlows": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9-]*$"
+      },
+      "uniqueItems": true
+    }
+  },
+  "additionalProperties": false
+}

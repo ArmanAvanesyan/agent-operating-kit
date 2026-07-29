@@ -1,0 +1,20 @@
+{
+  "id": "kanban",
+  "kind": "flow",
+  "displayName": "Kanban",
+  "description": "Continuous pull flow for issue-sized agent work.",
+  "supportLevel": "active",
+  "order": 10,
+  "default": true,
+  "fragment": "fragments/kanban.md",
+  "requiredInputs": [],
+  "hookExpectations": [
+    "Check Ready status and available capacity before implementation.",
+    "Surface blockers instead of silently pulling replacement work."
+  ],
+  "roleEmphasis": [
+    "The orchestrator maintains flow and explicit handoffs.",
+    "Each primary agent owns at most one active task."
+  ],
+  "compatibleFlows": []
+}

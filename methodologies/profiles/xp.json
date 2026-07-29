@@ -1,0 +1,21 @@
+{
+  "id": "xp",
+  "kind": "overlay",
+  "displayName": "Extreme Programming",
+  "description": "Engineering feedback practices for small, continuously integrated changes.",
+  "supportLevel": "active",
+  "order": 10,
+  "fragment": "fragments/xp.md",
+  "requiredInputs": [],
+  "hookExpectations": [
+    "Check test-first evidence when automated testing is practical.",
+    "Require fresh integration verification before handoff."
+  ],
+  "roleEmphasis": [
+    "Separate implementation from QA or review.",
+    "Pair or collaborate explicitly when risk justifies it."
+  ],
+  "compatibleFlows": [
+    "kanban"
+  ]
+}

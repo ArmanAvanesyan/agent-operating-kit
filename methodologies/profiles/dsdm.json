@@ -1,0 +1,21 @@
+{
+  "id": "dsdm",
+  "kind": "flow",
+  "displayName": "DSDM",
+  "description": "MoSCoW-prioritized delivery in fixed timeboxes with governance checkpoints.",
+  "supportLevel": "scaffolded",
+  "order": 30,
+  "fragment": null,
+  "requiredInputs": [
+    "MoSCoW priority",
+    "Timebox",
+    "Human checkpoint policy"
+  ],
+  "hookExpectations": [
+    "Validate timebox scope and optional human checkpoints."
+  ],
+  "roleEmphasis": [
+    "Business ambassador and delivery governance."
+  ],
+  "compatibleFlows": []
+}

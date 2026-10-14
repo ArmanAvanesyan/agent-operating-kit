@@ -16,7 +16,7 @@ git status --short
 
 ## Required Validation
 
-Run:
+Run Python kit validation (content, manifests, packaging sources):
 
 ```bash
 ./scripts/validate.sh
@@ -24,6 +24,19 @@ Run:
 python3 -m py_compile scripts/aok
 python3 -m py_compile scripts/release/build.py
 ```
+
+Build and test the thin Go CLI across the release matrix (when `cmd/aok` is
+present; Go runs in CI for publish, not on end-user devices):
+
+| OS | Arch | Artifact |
+|---|---|---|
+| darwin | arm64 | `aok-<version>-darwin-arm64` |
+| darwin | amd64 | `aok-<version>-darwin-amd64` |
+| linux | amd64 | `aok-<version>-linux-amd64` |
+| linux | arm64 | `aok-<version>-linux-arm64` |
+| windows | amd64 | `aok-<version>-windows-amd64.exe` |
+
+See [cli-distribution.md](cli-distribution.md) for naming and install outcomes.
 
 Render all packs for all targets:
 
@@ -49,13 +62,15 @@ Spot check Codex local-environment templates:
 ## Documentation Checks
 
 - README first success path still matches the installer and CLI commands.
-- `docs/install-and-onboarding.md` still describes current install output.
+- `docs/install-and-onboarding.md` still describes current install output
+  (binary-first end-user path; Python for developers).
+- `docs/cli-distribution.md` artifact names match published binaries.
 - `docs/codex-local-environments.md` still matches the setup script and action
   wrapper under `templates/.codex`.
 - `docs/targets-support-matrix.md` matches pack manifests.
 - `docs/migration-from-claude-code-toolbox.md` uses the canonical marketplace
   key `aok-claude-code`.
-- `docs/uninstall-and-rollback.md` covers the files the installer writes.
+- `docs/uninstall-and-rollback.md` covers binary + shim removal and kit tree.
 
 ## Compatibility Checks
 
@@ -92,6 +107,18 @@ Confirm installer artifacts are present:
 - `agent-operating-kit-<version>-windows-installer.zip`
 - `agent-operating-kit-<version>-linux-user-installer.tar.gz`
 - `agent-operating-kit-<version>-linux-system-installer.tar.gz`
+
+Confirm Go CLI binary artifacts are present (when publish plumbing is enabled):
+
+- `aok-<version>-darwin-arm64`
+- `aok-<version>-darwin-amd64`
+- `aok-<version>-linux-amd64`
+- `aok-<version>-linux-arm64`
+- `aok-<version>-windows-amd64.exe`
+
+Confirm `index.json` lists those binaries (and installers), and `SHA256SUMS`
+covers every published file. Installers should bundle `aok` / `aok.exe` for
+`PATH` installs.
 
 Include:
 

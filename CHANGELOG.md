@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Document upcoming thin Go CLI binary distribution: release `aok` binaries on
+  GitHub Releases for installer/`PATH` installs without Python on the device;
+  Python `scripts/aok` remains the developer entrypoint until command parity is
+  complete. See `docs/cli-distribution.md` and `ROADMAP.md`.
+
 ## 0.4.0
 
 - Add Codex App local-environment setup and action helper templates.

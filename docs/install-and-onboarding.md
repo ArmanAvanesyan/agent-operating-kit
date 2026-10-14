@@ -5,8 +5,9 @@ Codex and Claude Code can consume the same neutral pack.
 
 ## Requirements
 
-- macOS or another Unix-like shell environment.
-- Python 3 for `scripts/aok`.
+- macOS, Windows, or Linux (user or system install).
+- Python 3 for `scripts/aok` (bundled with release installers; required for
+  Git checkout flows).
 - Optional but useful: `git`, `gh`, `codex`, and Claude Code.
 
 The installer treats `codex` as optional. `aok doctor` reports optional command
@@ -54,15 +55,26 @@ setup report.
 
 ## Optional Manual Verification
 
-Technical users can verify the installed copy:
+Technical users can verify the installed copy with `doctor` and `validate`
+against the platform install root:
 
 ```bash
+# macOS
 "$HOME/Library/Application Support/Agent Operating Kit/agent-operating-kit/scripts/aok" doctor
 "$HOME/Library/Application Support/Agent Operating Kit/agent-operating-kit/scripts/aok" validate
+
+# Linux user
+"${XDG_DATA_HOME:-$HOME/.local/share}/agent-operating-kit/agent-operating-kit/scripts/aok" doctor
+"${XDG_DATA_HOME:-$HOME/.local/share}/agent-operating-kit/agent-operating-kit/scripts/aok" validate
+
+# Linux system
+/opt/agent-operating-kit/agent-operating-kit/scripts/aok doctor
+/opt/agent-operating-kit/agent-operating-kit/scripts/aok validate
 ```
 
 On Windows, run the same commands against
-`%LOCALAPPDATA%\Agent Operating Kit\agent-operating-kit\scripts\aok`.
+`%LOCALAPPDATA%\Agent Operating Kit\agent-operating-kit\scripts\aok`, or use
+`aok.cmd` from `~/.local/bin` when that wrapper is on `PATH`.
 
 ## Git Install
 

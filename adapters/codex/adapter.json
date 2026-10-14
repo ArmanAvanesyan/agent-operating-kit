@@ -30,8 +30,8 @@
     "codex-plugin"
   ],
   "bundle": {
-    "artifactName": "agent-operating-kit-macos-installer.zip",
+    "artifactName": "agent-operating-kit-<version>-{macos-apple-silicon,macos-intel,windows}-installer.zip / linux-{user,system}-installer.tar.gz",
     "format": "codex-plugin-bundle",
-    "importInstructions": "Install the AOK macOS release installer or import this Codex plugin-oriented bundle."
+    "importInstructions": "Install the AOK release installer for your platform (macOS Apple Silicon, macOS Intel, Windows, Linux user, or Linux system) or import this Codex plugin-oriented bundle."
   }
 }

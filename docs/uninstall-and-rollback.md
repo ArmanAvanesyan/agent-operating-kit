@@ -5,41 +5,74 @@ It does not remove projects that were initialized with `aok project init`.
 
 ## What Install Adds
 
-The release installer copies the kit to:
+The release installer copies the kit to one of these roots, depending on
+platform:
 
-```text
-~/Library/Application Support/Agent Operating Kit/agent-operating-kit
-```
+| Platform | Install root |
+|---|---|
+| macOS | `~/Library/Application Support/Agent Operating Kit/agent-operating-kit` |
+| Windows | `%LOCALAPPDATA%\Agent Operating Kit\agent-operating-kit` |
+| Linux user | `${XDG_DATA_HOME:-$HOME/.local/share}/agent-operating-kit/agent-operating-kit` |
+| Linux system | `/opt/agent-operating-kit/agent-operating-kit` |
+
+Each installer also writes a setup report near its install root:
+
+| Platform | Setup report |
+|---|---|
+| macOS | `~/Library/Application Support/Agent Operating Kit/setup-report.md` |
+| Windows | `%LOCALAPPDATA%\Agent Operating Kit\setup-report.md` |
+| Linux user | `${XDG_DATA_HOME:-$HOME/.local/share}/agent-operating-kit/setup-report.md` |
+| Linux system | `/opt/agent-operating-kit/setup-report.md` |
 
 It then registers:
 
 - `~/.agents/plugins/marketplace.json`
-- `~/.agents/plugins/plugins/agent-operating-kit` as a symlink to the installed
-  kit
-- `~/.local/bin/aok` as a symlink to `scripts/aok`
-- `~/Library/Application Support/Agent Operating Kit/setup-report.md`
+- `~/.agents/plugins/plugins/agent-operating-kit` as a symlink on Unix, or a
+  junction/copy on Windows, pointing at the installed kit
+- `~/.local/bin/aok` as a symlink on Unix, or `~/.local/bin/aok.cmd` on Windows
 
 Claude Code setup may also add an `aok-claude-code` entry to
 `~/.claude/settings.json`.
 
 ## Uninstall Local AOK
 
-Remove the plugin symlink:
+Remove the plugin link:
 
 ```bash
+# Unix (macOS / Linux)
 rm ~/.agents/plugins/plugins/agent-operating-kit
+
+# Windows (Command Prompt)
+rmdir "%USERPROFILE%\.agents\plugins\plugins\agent-operating-kit"
 ```
+
+On Windows, if the plugin path is a copied directory rather than a junction,
+delete that directory instead of using `rmdir` on a junction.
 
 Remove the CLI shim:
 
 ```bash
+# Unix (macOS / Linux)
 rm ~/.local/bin/aok
+
+# Windows
+del "%USERPROFILE%\.local\bin\aok.cmd"
 ```
 
-Remove the installed kit and setup report:
+Remove the installed kit and setup report for your platform:
 
 ```bash
+# macOS
 rm -rf "$HOME/Library/Application Support/Agent Operating Kit"
+
+# Windows (Command Prompt)
+rmdir /s /q "%LOCALAPPDATA%\Agent Operating Kit"
+
+# Linux user
+rm -rf "${XDG_DATA_HOME:-$HOME/.local/share}/agent-operating-kit"
+
+# Linux system
+sudo rm -rf /opt/agent-operating-kit
 ```
 
 Edit `~/.agents/plugins/marketplace.json` and remove the plugin entry whose
@@ -53,7 +86,10 @@ remove:
 
 ## Roll Back To Another Checkout
 
-If you keep two AOK checkouts, point the symlinks back to the checkout you want:
+If you keep two AOK checkouts, point the plugin and CLI entrypoints back to the
+checkout you want.
+
+Unix (macOS / Linux):
 
 ```bash
 rm ~/.agents/plugins/plugins/agent-operating-kit
@@ -61,6 +97,12 @@ ln -s /path/to/previous/agent-operating-kit ~/.agents/plugins/plugins/agent-oper
 rm ~/.local/bin/aok
 ln -s /path/to/previous/agent-operating-kit/scripts/aok ~/.local/bin/aok
 ```
+
+Windows: recreate the plugin junction or copy under
+`%USERPROFILE%\.agents\plugins\plugins\agent-operating-kit`, and point
+`%USERPROFILE%\.local\bin\aok.cmd` at
+`\path\to\previous\agent-operating-kit\scripts\aok` (or re-run that checkout's
+install helper).
 
 Then verify:
 
@@ -88,9 +130,17 @@ After uninstalling, these paths should be absent unless another local install
 owns them:
 
 ```bash
+# Unix
 test ! -e ~/.agents/plugins/plugins/agent-operating-kit
 test ! -e ~/.local/bin/aok
+
+# Windows (PowerShell)
+Test-Path "$env:USERPROFILE\.agents\plugins\plugins\agent-operating-kit"
+Test-Path "$env:USERPROFILE\.local\bin\aok.cmd"
 ```
+
+On Windows, both `Test-Path` checks should return `False` after a clean
+uninstall.
 
 If Claude Code still shows AOK plugins, recheck `~/.claude/settings.json` for
 `aok-claude-code`.

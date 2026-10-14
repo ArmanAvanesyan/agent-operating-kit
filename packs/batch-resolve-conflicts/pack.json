@@ -73,7 +73,7 @@
         ]
       },
       "notes": "Codex support is delivered through the native AOK Codex plugin bundle; generated pack output should retain plugin metadata from .codex-plugin/plugin.json.",
-      "importInstructions": "Install the AOK macOS release installer or import this Codex plugin-oriented bundle."
+      "importInstructions": "Install the AOK release installer for your platform (macOS Apple Silicon, macOS Intel, Windows, Linux user, or Linux system) or import this Codex plugin-oriented bundle."
     },
     "claude-code": {
       "status": "active",

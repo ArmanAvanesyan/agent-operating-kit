@@ -3,6 +3,28 @@
 `swarmd` remains a separate MCP runtime and state backend. AOK integrates with
 it by generating config and mapping neutral workflow objects to MCP calls.
 
+## Compatibility
+
+| Field | Value |
+|---|---|
+| swarmd version | **Untracked** |
+| Integration surface | MCP server command `swarmd mcp` (examples below) |
+| Ownership | AOK generates config and call shapes; swarmd owns runtime state |
+
+AOK does not pin or vendor a swarmd release. Example configs below match the
+documented MCP mapping; they are not a compatibility guarantee for any specific
+swarmd build.
+
+### Recording a tested swarmd version
+
+After verifying against a real `swarmd` binary or release:
+
+1. Note **version or commit**, **date (UTC)**, and which MCP methods were
+   exercised (`task.create`, `memory.put`, `event.append`, …).
+2. Replace the “Untracked” cell above (or add a “Last tested” bullet) with that
+   version.
+3. Optionally mirror the note in [host-compatibility.md](host-compatibility.md).
+
 ## Boundary
 
 - AOK owns workflow definitions, schemas, packs, adapters, and generated config.

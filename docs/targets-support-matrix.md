@@ -4,17 +4,26 @@ AOK renders neutral pack content into target-specific contracts and
 self-contained bundles. Native usability differs by target, so the support
 level below is explicit.
 
+Host AI tool versions are **untracked** unless a row records a tested version.
+See [Host compatibility](host-compatibility.md) for how to record one later.
+
 ## Target Matrix
 
-| Target | Status | Support level | Notes |
-|---|---|---|---|
-| `codex` | Active | Native install | Release installer registers AOK as a Codex local plugin and bundles pack contracts. |
-| `claude-code` | Active | Compatibility asset | Preserves native Claude Code plugin assets and exposes them through `aok-claude-code`. |
-| `cursor` | Active | Generated bundle | Produces structured rules, hook checklists, templates, or skill contracts depending on the pack. |
-| `opencode` | Active | Generated bundle | Produces structured rules, hook checklists, templates, or conflict contracts depending on the pack. |
-| `gemini` | Active | Generated bundle | Produces structured guardrail, skill, template, or conflict contracts depending on the pack. |
-| `openclaw` | Active | Generated bundle | Produces structured rules, hook checklists, template bundles, or role-skill bridge contracts. |
-| `hermes-agent` | Active | Generated bundle | Produces structured rules, hook checklists, templates, or conflict contracts depending on the pack. |
+| Target | Status | Support level | Host version | Import / bundle path | Known gaps |
+|---|---|---|---|---|---|
+| `codex` | Active | Native install | Untracked | Multi-platform release installers (`agent-operating-kit-<version>-<platform>-installer.*`) register the Codex local plugin; pack bundles under `build/bundles/codex/<pack>/` (also in release `*-bundles.zip`) | Neutral→skill generation is curated; keep installer wording multi-platform (not macOS-only) |
+| `claude-code` | Active | Compatibility asset | Untracked | `aok-claude-code` marketplace under `adapters/claude-code/marketplace/`; pack assets in `packs/*/claude-code/`; bundles under `build/bundles/claude-code/<pack>/` | Plugin hooks may depend on `CLAUDE_PLUGIN_ROOT`; marketplace plugin versions can lag the kit version |
+| `cursor` | Active | Generated bundle | Untracked | `aok render bundle <pack> --target cursor` → `build/bundles/cursor/<pack>/` (`aok-bundle.json`, `roles.md` / `hooks.md` / `skills.md` / `tasks.md`, per-item JSON, `import.json`) | **Native Cursor package** (rules/skills/hooks as first-class Cursor package) is an explicit follow-up; today import is manual from the generated bundle |
+| `opencode` | Active | Generated bundle | Untracked | `build/bundles/opencode/<pack>/` via `aok render bundle` / release bundles zip | No native OpenCode installer; contract JSON + markdown guidance only |
+| `gemini` | Active | Generated bundle | Untracked | `build/bundles/gemini/<pack>/` | Host runtime invocation external; no native Gemini package |
+| `openclaw` | Active | Generated bundle | Untracked | `build/bundles/openclaw/<pack>/` | Native installer / tool-call wiring is follow-up |
+| `hermes-agent` | Active | Generated bundle | Untracked | `build/bundles/hermes-agent/<pack>/` | Runtime event wiring remains host-defined |
+
+Support level meanings (schema enum):
+
+- `native-install` — kit ships or registers a host-native package/plugin
+- `compatibility-asset` — preserved host plugin/marketplace assets, not a separate operating model
+- `generated-bundle` — self-contained import directory/zip; no claim of native packaging
 
 ## Pack Coverage
 

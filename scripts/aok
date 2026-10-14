@@ -1599,6 +1599,7 @@ def validate_required_files(errors: list[str]) -> None:
         "docs/swarmd-integration.md",
         "docs/migration-from-claude-code-toolbox.md",
         "docs/install-and-onboarding.md",
+        "docs/cli-distribution.md",
         "docs/codex-local-environments.md",
         "docs/project-init-guide.md",
         "docs/targets-support-matrix.md",

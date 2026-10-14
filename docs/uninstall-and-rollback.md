@@ -29,7 +29,9 @@ It then registers:
 - `~/.agents/plugins/marketplace.json`
 - `~/.agents/plugins/plugins/agent-operating-kit` as a symlink on Unix, or a
   junction/copy on Windows, pointing at the installed kit
-- `~/.local/bin/aok` as a symlink on Unix, or `~/.local/bin/aok.cmd` on Windows
+- `~/.local/bin/aok` on Unix, or `~/.local/bin/aok.cmd` (and the installed
+  `aok.exe`) on Windows — the release path installs a Go binary or shim to it,
+  not a symlink to `scripts/aok`. See [cli-distribution.md](cli-distribution.md).
 
 Claude Code setup may also add an `aok-claude-code` entry to
 `~/.claude/settings.json`.
@@ -49,15 +51,21 @@ rmdir "%USERPROFILE%\.agents\plugins\plugins\agent-operating-kit"
 On Windows, if the plugin path is a copied directory rather than a junction,
 delete that directory instead of using `rmdir` on a junction.
 
-Remove the CLI shim:
+Remove the CLI binary and PATH shim (binary + shim, not a symlink-to-Python
+assumption):
 
 ```bash
-# Unix (macOS / Linux)
+# Unix (macOS / Linux) — removes the Go binary or shim on PATH
 rm ~/.local/bin/aok
 
-# Windows
+# Windows — remove the cmd wrapper and any installed aok.exe under the kit
+# or PATH bin directory used by the installer
 del "%USERPROFILE%\.local\bin\aok.cmd"
+del "%USERPROFILE%\.local\bin\aok.exe"
 ```
+
+If `aok.exe` lives only under the install root, deleting that root (below)
+removes it; still delete `aok.cmd` from `~/.local/bin` so `PATH` is clean.
 
 Remove the installed kit and setup report for your platform:
 
@@ -87,9 +95,10 @@ remove:
 ## Roll Back To Another Checkout
 
 If you keep two AOK checkouts, point the plugin and CLI entrypoints back to the
-checkout you want.
+checkout you want. Developer rollbacks may use `scripts/aok`; release-path
+rollbacks should restore the previous release binary on `PATH`.
 
-Unix (macOS / Linux):
+Unix (macOS / Linux) — developer checkout:
 
 ```bash
 rm ~/.agents/plugins/plugins/agent-operating-kit
@@ -98,15 +107,23 @@ rm ~/.local/bin/aok
 ln -s /path/to/previous/agent-operating-kit/scripts/aok ~/.local/bin/aok
 ```
 
+Unix — release rollback: re-run the previous release installer (or copy the
+previous `aok-<version>-…` binary to `~/.local/bin/aok`) instead of symlinking
+`scripts/aok`.
+
 Windows: recreate the plugin junction or copy under
-`%USERPROFILE%\.agents\plugins\plugins\agent-operating-kit`, and point
-`%USERPROFILE%\.local\bin\aok.cmd` at
+`%USERPROFILE%\.agents\plugins\plugins\agent-operating-kit`. For a developer
+checkout, point `%USERPROFILE%\.local\bin\aok.cmd` at
 `\path\to\previous\agent-operating-kit\scripts\aok` (or re-run that checkout's
-install helper).
+install helper). For a release rollback, restore the previous `aok.exe` and
+`aok.cmd` from that release's installer.
 
 Then verify:
 
 ```bash
+aok doctor
+aok validate
+# or, developer checkout:
 /path/to/previous/agent-operating-kit/scripts/aok doctor
 /path/to/previous/agent-operating-kit/scripts/aok validate
 ```

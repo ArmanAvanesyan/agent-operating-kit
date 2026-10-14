@@ -11,7 +11,9 @@ adapters or content packs, not separate operating models.
 ## No-Terminal Install
 
 Use this path when you want the shortest route to a working install without
-cloning the repository.
+cloning the repository. Release installers put a thin Go `aok` binary on
+`PATH` so you do not need Python or a Go toolchain on the device. See
+[docs/cli-distribution.md](docs/cli-distribution.md).
 
 1. Open the latest GitHub release.
 2. Download the installer for your platform:
@@ -39,12 +41,13 @@ Each installer writes a setup report near its install root.
 
 On Windows, AOK installs the plugin directory with a junction when possible and
 falls back to a copy if junction creation is unavailable. The CLI entrypoint is
-`~/.local/bin/aok.cmd`.
+`~/.local/bin/aok.cmd` (release path: Go binary / shim, not a link to
+`scripts/aok`).
 
 ## Developer First Success Path
 
 Use this path when you are comfortable with the terminal and want a validated
-checkout.
+checkout. The developer CLI remains the Python entrypoint at `./scripts/aok`.
 
 ```bash
 git clone https://github.com/ArmanAvanesyan/agent-operating-kit.git
@@ -250,6 +253,7 @@ migration guidance.
 ## Operations
 
 - Install and first-run onboarding: `docs/install-and-onboarding.md`
+- CLI distribution (Go binary vs Python): `docs/cli-distribution.md`
 - Codex local environments: `docs/codex-local-environments.md`
 - Project initialization: `docs/project-init-guide.md`
 - Target support: `docs/targets-support-matrix.md`

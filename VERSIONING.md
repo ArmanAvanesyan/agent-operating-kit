@@ -9,9 +9,12 @@ required.
 **Source of truth for kit / release version:**
 `.codex-plugin/plugin.json` → `version`.
 
-GitHub Releases and installer artifact names should track that value (for
-example `0.4.0`). Release packaging lives under `scripts/release/` and is
-documented in `docs/release-checklist.md`.
+GitHub Releases, installer artifact names, and published Go CLI binaries
+(`aok-<version>-…`) should track that value (for example `0.4.0`). The thin
+release binary version matches the kit version from
+`.codex-plugin/plugin.json`. Release packaging lives under `scripts/release/`
+and is documented in `docs/release-checklist.md` and
+`docs/cli-distribution.md`.
 
 When cutting a kit release, bump `.codex-plugin/plugin.json` (and mirror kit
 plugin metadata that intentionally tracks the kit, such as
@@ -47,5 +50,6 @@ cadence than the kit CLI and installers.
 | Surface | Version location | Tracks kit? |
 |---------|------------------|-------------|
 | Kit / GitHub release | `.codex-plugin/plugin.json` | — |
+| Go CLI binary (`aok-<version>-…`) | Same kit version | Yes |
 | Hooks catalog | `hooks.json` | No (independent) |
 | Packs | `packs/*/pack.content.json` (and related) | No (independent) |

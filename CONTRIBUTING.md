@@ -7,6 +7,30 @@ JSON manifests — keep changes small, validated, and documented.
 
 - Python 3 (stdlib only; no pip install required for kit validation)
 - A Unix-like shell, or Git Bash / WSL on Windows for `./scripts/aok`
+- Optional: Go toolchain when building the thin release CLI locally (see below)
+
+## Which CLI to use
+
+| Situation | Use |
+|---|---|
+| Pack, adapter, schema, or docs work; full kit surface | `./scripts/aok` (Python) |
+| Exercising the end-user release entrypoint | Build/run the Go CLI from `cmd/aok` when present |
+| End-user install without a checkout | Release binary on `PATH` (see [docs/cli-distribution.md](docs/cli-distribution.md)) |
+
+Prefer `./scripts/aok` for day-to-day contribution until Go command parity is
+complete. Release CI builds the Go binary; end users do not need Go or Python.
+
+### Building the Go CLI locally (when present)
+
+Planned layout: module / main package under `cmd/aok`. When that tree exists:
+
+```bash
+go build -o dist/aok ./cmd/aok
+./dist/aok version
+```
+
+Pin the Go version to whatever release CI uses. Cross-compile notes and artifact
+names live in [docs/cli-distribution.md](docs/cli-distribution.md).
 
 ## Validate locally
 
@@ -36,7 +60,8 @@ and supported target coverage.
 | `core/` | Conceptual model |
 | `packs/` | Reusable workflow content |
 | `adapters/` | Per-target mappings and import docs |
-| `scripts/aok` | CLI (`validate`, `render`, install helpers) |
+| `scripts/aok` | Python kit CLI (`validate`, `render`, install helpers) |
+| `cmd/aok` | Planned Go release CLI (when present) |
 | `docs/` | Operator and integration guides |
 
 ## Adding a pack
@@ -78,6 +103,7 @@ See [VERSIONING.md](VERSIONING.md).
 
 - Operator guides: [`docs/`](docs/)
 - Architecture and source-of-truth rules: [`docs/architecture.md`](docs/architecture.md)
+- CLI distribution (Go binary vs Python): [`docs/cli-distribution.md`](docs/cli-distribution.md)
 - Target support matrix: [`docs/targets-support-matrix.md`](docs/targets-support-matrix.md)
 - Release steps: [`docs/release-checklist.md`](docs/release-checklist.md)
 - Version policy: [`VERSIONING.md`](VERSIONING.md)

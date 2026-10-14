@@ -1,0 +1,57 @@
+name: Bug report
+description: Report incorrect kit behavior, validation failures, or broken renders
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. For security issues, use [SECURITY.md](https://github.com/ArmanAvanesyan/agent-operating-kit/blob/main/SECURITY.md) instead of a public issue.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What went wrong?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Commands, pack/target, and OS where possible
+      placeholder: |
+        1. ./scripts/aok validate
+        2. ./scripts/aok render pack ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include relevant CLI output or error text
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Kit version / commit
+      description: From `.codex-plugin/plugin.json` or `git rev-parse --short HEAD`
+    validations:
+      required: false
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options:
+        - macOS
+        - Linux
+        - Windows
+        - Multiple / unknown
+    validations:
+      required: false

@@ -269,3 +269,8 @@ python3 -m py_compile scripts/aok
 Validation is dependency-free and checks required docs, schemas, adapter
 manifests, pack manifests, pack content, JSON syntax, Claude Code marketplace
 metadata, and supported target coverage.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for local validation, render checks, and
+conventions for packs, adapters, and schema changes.

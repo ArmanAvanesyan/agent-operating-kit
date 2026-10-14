@@ -253,6 +253,7 @@ migration guidance.
 - Codex local environments: `docs/codex-local-environments.md`
 - Project initialization: `docs/project-init-guide.md`
 - Target support: `docs/targets-support-matrix.md`
+- Host compatibility: `docs/host-compatibility.md`
 - Release checklist: `docs/release-checklist.md`
 - Uninstall and rollback: `docs/uninstall-and-rollback.md`
 - `swarmd` integration: `docs/swarmd-integration.md`

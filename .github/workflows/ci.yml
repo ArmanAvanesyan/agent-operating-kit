@@ -1,0 +1,17 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate kit
+        run: ./scripts/aok validate
+      - name: Compile Python entrypoints
+        run: python3 -m py_compile scripts/aok scripts/release/build.py

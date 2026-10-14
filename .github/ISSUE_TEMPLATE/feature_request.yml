@@ -1,0 +1,41 @@
+name: Feature request
+description: Propose a pack, adapter, schema, or docs improvement
+title: "[feature] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the kit improvement. Keep scope aligned with AOK as a cross-tool library (schemas, packs, adapters, CLI), not a hosted product.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / motivation
+      description: What gap does this address?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: Packs, adapters, schema fields, CLI, or docs you have in mind
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: false
+  - type: checkboxes
+    id: areas
+    attributes:
+      label: Areas
+      options:
+        - label: Pack content
+        - label: Tool adapter / target render
+        - label: Schema
+        - label: CLI (`scripts/aok`)
+        - label: Docs / onboarding
+        - label: Release / installers
+        - label: Other

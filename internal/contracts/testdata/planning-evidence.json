@@ -1,0 +1,39 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "PlanningEvidence",
+  "metadata": {
+    "id": "exploration-evidence",
+    "name": "Exploration Evidence",
+    "version": "0.1.0",
+    "description": "Pinned planning evidence fixture."
+  },
+  "planRef": {
+    "kind": "PlanDefinition",
+    "id": "exploration-plan",
+    "version": "0.1.0"
+  },
+  "planSHA256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "evaluatedAt": "2026-10-16T10:00:00Z",
+  "expiresAt": "2026-10-16T11:00:00Z",
+  "outcomes": [
+    {
+      "predicateId": "report-valid",
+      "status": "pass",
+      "artifactRefs": [
+        {
+          "path": "reports/exploration.md",
+          "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      ]
+    }
+  ],
+  "completedSteps": [
+    "inspect"
+  ],
+  "inventoryCoverage": [],
+  "revisionsUsed": 0,
+  "attemptsUsed": 1,
+  "elapsedSeconds": 45,
+  "cancelled": false,
+  "contextSHA256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+}

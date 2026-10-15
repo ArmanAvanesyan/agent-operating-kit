@@ -1,0 +1,24 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "DecisionResult",
+  "decisionRef": {
+    "kind": "DecisionContract",
+    "id": "choose-exploration-depth",
+    "version": "0.1.0"
+  },
+  "fixture": true,
+  "status": "abstained",
+  "value": ["overview", "deep", 1.0000000000000000001],
+  "evidence": [],
+  "confidence": 0.123456789012345678901,
+  "confidenceMeaning": "unavailable",
+  "reason": "Synthetic example: scope evidence has not been supplied.",
+  "observedProvider": null,
+  "authorizationGranted": false,
+  "metadata": {
+    "id": "depth-result",
+    "name": "Depth result",
+    "version": "0.1.0",
+    "description": "Typed example result."
+  }
+}

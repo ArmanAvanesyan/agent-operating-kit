@@ -1,0 +1,37 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "PlanningEvidence",
+  "metadata": {
+    "id": "synthetic-evidence",
+    "name": "Synthetic evidence",
+    "version": "0.1.0",
+    "description": "Synthetic incomplete evidence; no native or runtime attestation."
+  },
+  "planRef": {
+    "kind": "PlanDefinition",
+    "id": "explore-plan",
+    "version": "0.1.0"
+  },
+  "planSHA256": "c911e501310afefe55d18e91f771a30d85b14da4a3dbccb4ac10f8e58ecba481",
+  "contextSHA256": "d7077b31e3df911e365f9a6ca08a9fe345ec6e102d03e83d06491d778384b1e5",
+  "evaluatedAt": "2026-10-16T00:00:00Z",
+  "expiresAt": "2026-10-17T00:00:00Z",
+  "outcomes": [
+    {
+      "predicateId": "unchanged",
+      "status": "pass",
+      "artifactRefs": [
+        {
+          "path": "assets/synthetic-evidence.txt",
+          "sha256": "f1f6e2f68b03ee52fd915bccbf7287871b8ecfba364a55bf17788f089e93080d"
+        }
+      ]
+    }
+  ],
+  "completedSteps": [],
+  "inventoryCoverage": [],
+  "revisionsUsed": 0,
+  "attemptsUsed": 0,
+  "elapsedSeconds": 0,
+  "cancelled": false
+}

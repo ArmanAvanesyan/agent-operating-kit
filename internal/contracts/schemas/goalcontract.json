@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.invalid/operational/GoalContract.json",
+  "title": "GoalContract",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "GoalContract"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    },
+    "outcome": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "type": "object",
+      "properties": {
+        "repositories": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "writeRoots": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "repositories",
+        "writeRoots"
+      ],
+      "additionalProperties": false
+    },
+    "successPredicates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "common.schema.json#/$defs/planningPredicate"
+      }
+    },
+    "invariants": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/planningPredicate"
+      },
+      "uniqueItems": true
+    },
+    "limits": {
+      "$ref": "common.schema.json#/$defs/limits"
+    },
+    "stopConditions": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "verified-success",
+          "cancelled",
+          "budget-exhausted",
+          "blocked",
+          "no-defensible-next-step"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "verificationPolicy": {
+      "const": "all-required-pass-no-required-unknown"
+    },
+    "planRef": {
+      "$ref": "common.schema.json#/$defs/pin"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "outcome",
+    "scope",
+    "successPredicates",
+    "invariants",
+    "limits",
+    "stopConditions",
+    "verificationPolicy"
+  ],
+  "additionalProperties": false
+}

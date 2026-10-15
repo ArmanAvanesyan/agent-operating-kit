@@ -1,0 +1,35 @@
+{
+  "agent": {
+    "id": "repository-explorer",
+    "kind": "Agent",
+    "version": "0.1.0"
+  },
+  "apiVersion": "aok/v1alpha1",
+  "executionProfile": {
+    "id": "opencode-exploration",
+    "kind": "ExecutionProfile",
+    "version": "0.1.0"
+  },
+  "inputs": {
+    "depth": "deep",
+    "repository": "."
+  },
+  "kind": "AgentAssignment",
+  "metadata": {
+    "description": "assignment test fixture",
+    "id": "explore-aok-001",
+    "name": "explore-aok-001",
+    "version": "0.1.0"
+  },
+  "outputs": {
+    "contract": {
+      "id": "repository-exploration-report",
+      "kind": "OutputContract",
+      "version": "0.1.0"
+    },
+    "parameters": {
+      "includeEvidence": true
+    }
+  },
+  "taskPacket": "assets/task.json"
+}

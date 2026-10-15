@@ -1,0 +1,72 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "OptimizationExperiment",
+  "metadata": {
+    "id": "explorer-instruction-evaluation",
+    "version": "0.1.0",
+    "description": "Illustrative proposal fixture; no execution or integration implied.",
+    "name": "Explorer Instruction Evaluation"
+  },
+  "agentRef": {
+    "kind": "Agent",
+    "id": "repository-explorer",
+    "version": "0.1.0"
+  },
+  "baselineVersion": "0.1.0",
+  "profileRefs": [
+    {
+      "kind": "ExecutionProfile",
+      "id": "opencode-exploration",
+      "version": "0.1.0"
+    }
+  ],
+  "optimizer": {
+    "adapterRef": "gepa-proposed",
+    "version": "unselected"
+  },
+  "mutableFields": [
+    "instructions.sources.exploration-body"
+  ],
+  "protectedFields": [
+    "permissions",
+    "verification",
+    "outputs",
+    "identity.boundaries",
+    "evaluator",
+    "datasets.test"
+  ],
+  "datasets": {
+    "train": [
+      "train-alpha@b06b9380fb202211588e4fcdc9751e500903859b832a43f411b27d6e3cc8825e",
+      "train-beta@b8ff37db22fe4916bc6bc23adb52cfd5241ace67c4d0c8e8eb561a8cd7682ec6"
+    ],
+    "validation": [
+      "validation-alpha@62d797271955695a22cb0cd65e08bf93d8c031de564a0270e5d7ab7c84131b61"
+    ],
+    "test": [
+      "heldout-alpha@0239dc044a3e3690074c951efd36c2994dbfe926bc04ca2b770fc24d648cbf18"
+    ]
+  },
+  "evaluator": {
+    "ref": {
+      "kind": "EvaluationContract",
+      "id": "exploration-evaluation",
+      "version": "0.1.0"
+    },
+    "immutable": true
+  },
+  "budget": {
+    "maxCandidateEvaluations": 10,
+    "maxProposerCostUsd": 5,
+    "maxEvaluationCostUsd": 10
+  },
+  "promotion": {
+    "automatic": false,
+    "requirements": [
+      "Held-out results pass required quality and policy gates.",
+      "Review candidate changes and regression evidence."
+    ]
+  },
+  "status": "not-run",
+  "results": []
+}

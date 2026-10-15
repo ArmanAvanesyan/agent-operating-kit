@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.invalid/operational/DecisionContract.json",
+  "title": "DecisionContract",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "DecisionContract"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    },
+    "decisionType": {
+      "enum": [
+        "boolean",
+        "choice",
+        "score",
+        "ranking"
+      ]
+    },
+    "inputSchema": {
+      "type": "string",
+      "minLength": 1
+    },
+    "choices": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "scoreRange": {
+      "type": "object",
+      "properties": {
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "min",
+        "max"
+      ],
+      "additionalProperties": false
+    },
+    "mechanism": {
+      "enum": [
+        "deterministic",
+        "model",
+        "human"
+      ]
+    },
+    "adapterRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidenceRequired": {
+      "type": "boolean"
+    },
+    "uncertainty": {
+      "type": "object",
+      "properties": {
+        "allowAbstention": {
+          "type": "boolean"
+        },
+        "onMissingEvidence": {
+          "const": "abstain"
+        },
+        "calibrationRef": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "allowAbstention",
+        "onMissingEvidence",
+        "calibrationRef"
+      ],
+      "additionalProperties": false
+    },
+    "consequences": {
+      "type": "object",
+      "properties": {
+        "authority": {
+          "const": "recommendation-only"
+        },
+        "allowedOutcomes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "authority",
+        "allowedOutcomes"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "decisionType",
+    "inputSchema",
+    "choices",
+    "mechanism",
+    "adapterRef",
+    "evidenceRequired",
+    "uncertainty",
+    "consequences"
+  ],
+  "additionalProperties": false
+}

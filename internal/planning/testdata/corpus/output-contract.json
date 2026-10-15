@@ -1,0 +1,40 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "deliverables": [
+    {
+      "destination": "docs/reports/{assignmentId}/exploration.md",
+      "format": "markdown",
+      "id": "report",
+      "required": true,
+      "requiredSections": [
+        "Scope",
+        "Repository structure",
+        "Architecture",
+        "Development commands",
+        "Findings",
+        "Evidence",
+        "Limitations"
+      ],
+      "template": "assets/exploration.md"
+    },
+    {
+      "destination": "docs/reports/{assignmentId}/inventory.json",
+      "format": "json",
+      "id": "inventory",
+      "required": true,
+      "schema": "assets/schemas/inventory.schema.json"
+    }
+  ],
+  "kind": "OutputContract",
+  "metadata": {
+    "description": "A report with verifiable evidence.",
+    "id": "repository-exploration-report",
+    "name": "Exploration report",
+    "version": "0.1.0"
+  },
+  "resultSchema": "assets/schemas/result.schema.json",
+  "validation": {
+    "evidenceReferences": "must-resolve",
+    "missingRequiredDeliverable": "fail"
+  }
+}

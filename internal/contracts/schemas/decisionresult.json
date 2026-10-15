@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.invalid/operational/DecisionResult.json",
+  "title": "DecisionResult",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "DecisionResult"
+    },
+    "decisionRef": {
+      "$ref": "common.schema.json#/$defs/pin"
+    },
+    "fixture": {
+      "type": "boolean"
+    },
+    "status": {
+      "enum": [
+        "decided",
+        "abstained",
+        "failed"
+      ]
+    },
+    "value": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "confidence": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "confidenceMeaning": {
+      "enum": [
+        "unavailable",
+        "provider-reported-uncalibrated",
+        "calibrated"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "observedProvider": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "authorizationGranted": {
+      "const": false
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "decisionRef",
+    "fixture",
+    "status",
+    "value",
+    "evidence",
+    "confidence",
+    "confidenceMeaning",
+    "reason",
+    "observedProvider",
+    "authorizationGranted",
+    "metadata"
+  ],
+  "additionalProperties": false
+}

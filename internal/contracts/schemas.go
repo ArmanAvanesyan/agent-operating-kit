@@ -38,7 +38,7 @@ func validateSchema(kind string, data []byte) error {
 			return e
 		}
 	}
-	filenames := map[string]string{"Agent": "agent.json", "ExecutionProfile": "execution-profile.json", "AgentAssignment": "assignment.json", "CapabilityRegistry": "capability-registry.json", "InvocationContract": "invocation-contract.json", "ContextPolicy": "context-policy.json", "OutputContract": "output-contract.json", "EnvironmentProfile": "environment-profile.json"}
+	filenames := map[string]string{"Agent": "agent.json", "ExecutionProfile": "execution-profile.json", "AgentAssignment": "assignment.json", "CapabilityRegistry": "capability-registry.json", "InvocationContract": "invocation-contract.json", "ContextPolicy": "context-policy.json", "OutputContract": "output-contract.json", "EnvironmentProfile": "environment-profile.json", "LifecyclePolicy": "lifecycle-policy.json", "EvaluationContract": "evaluation-contract.json", "MigrationContract": "migration-contract.json", "TaskPacket": "task-packet.json"}
 	schemaName, ok := filenames[kind]
 	if !ok {
 		return fmt.Errorf("no operational schema for %s", kind)

@@ -1,0 +1,416 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.invalid/operational/task-packet.json",
+  "title": "AOK Task Packet",
+  "type": "object",
+  "$defs": {
+    "disciplineEvidenceEntry": {
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "evidence"
+          ],
+          "properties": {
+            "evidence": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "required": [
+            "notApplicableRationale"
+          ],
+          "properties": {
+            "notApplicableRationale": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "required": [
+    "title",
+    "spec",
+    "status",
+    "phase",
+    "acceptanceCriteria",
+    "verification"
+  ],
+  "properties": {
+    "workItemType": {
+      "type": "string",
+      "enum": [
+        "epic",
+        "feature",
+        "task",
+        "bug",
+        "spike",
+        "incident",
+        "risk",
+        "change",
+        "xp-user-story",
+        "lean-improvement",
+        "lean-experiment",
+        "fdd-feature",
+        "dsdm-requirement",
+        "aup-use-case",
+        "aup-user-story",
+        "aup-non-functional",
+        "aup-business-rule",
+        "aup-defect",
+        "aup-technical"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "spec": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "inbox",
+        "ready",
+        "in-progress",
+        "qa",
+        "review",
+        "blocked",
+        "done"
+      ]
+    },
+    "phase": {
+      "type": "string",
+      "enum": [
+        "intake",
+        "planning",
+        "build",
+        "qa",
+        "review",
+        "release",
+        "operate"
+      ]
+    },
+    "lifecycleStage": {
+      "type": "string",
+      "minLength": 1
+    },
+    "featureId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subjectArea": {
+      "type": "string",
+      "minLength": 1
+    },
+    "businessActivity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "featureName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "featureNameParts": {
+      "type": "object",
+      "required": [
+        "action",
+        "result",
+        "preposition",
+        "object",
+        "style"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "pattern": "^\\S+$"
+        },
+        "result": {
+          "type": "string",
+          "minLength": 1
+        },
+        "preposition": {
+          "type": "string",
+          "enum": [
+            "by",
+            "for",
+            "of",
+            "to"
+          ]
+        },
+        "object": {
+          "type": "string",
+          "minLength": 1
+        },
+        "style": {
+          "type": "string",
+          "enum": [
+            "short",
+            "classic"
+          ]
+        },
+        "article": {
+          "type": "string",
+          "enum": [
+            "a",
+            "an"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "style": {
+                "const": "classic"
+              }
+            },
+            "required": [
+              "style"
+            ]
+          },
+          "then": {
+            "required": [
+              "article"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "style": {
+                "const": "short"
+              }
+            },
+            "required": [
+              "style"
+            ]
+          },
+          "then": {
+            "not": {
+              "required": [
+                "article"
+              ]
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "estimatedEffortDays": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "featureMilestones": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "domain-walkthrough",
+          "design",
+          "design-inspection",
+          "code",
+          "code-inspection",
+          "promote-to-build"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "requirementId": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9]*-[0-9]+$"
+    },
+    "requirementTheme": {
+      "type": "string",
+      "minLength": 1
+    },
+    "requirementOutcome": {
+      "type": "string",
+      "minLength": 1
+    },
+    "projectIncrement": {
+      "type": "string",
+      "minLength": 1
+    },
+    "projectMoscow": {
+      "type": "string",
+      "enum": [
+        "must",
+        "should",
+        "could",
+        "wont"
+      ]
+    },
+    "incrementMoscow": {
+      "type": "string",
+      "enum": [
+        "must",
+        "should",
+        "could",
+        "wont"
+      ]
+    },
+    "timeboxMoscow": {
+      "type": "string",
+      "enum": [
+        "must",
+        "should",
+        "could",
+        "wont"
+      ]
+    },
+    "requirementType": {
+      "type": "string",
+      "enum": [
+        "use-case",
+        "user-story",
+        "non-functional",
+        "business-rule",
+        "defect",
+        "technical"
+      ]
+    },
+    "iterationId": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9]*-[0-9]+$"
+    },
+    "iterationObjective": {
+      "type": "string",
+      "minLength": 1
+    },
+    "disciplineEvidence": {
+      "type": "object",
+      "required": [
+        "model",
+        "implementation",
+        "test",
+        "deployment",
+        "configurationManagement",
+        "projectManagement",
+        "environment"
+      ],
+      "properties": {
+        "model": {
+          "$ref": "#/$defs/disciplineEvidenceEntry"
+        },
+        "implementation": {
+          "$ref": "#/$defs/disciplineEvidenceEntry"
+        },
+        "test": {
+          "$ref": "#/$defs/disciplineEvidenceEntry"
+        },
+        "deployment": {
+          "$ref": "#/$defs/disciplineEvidenceEntry"
+        },
+        "configurationManagement": {
+          "$ref": "#/$defs/disciplineEvidenceEntry"
+        },
+        "projectManagement": {
+          "$ref": "#/$defs/disciplineEvidenceEntry"
+        },
+        "environment": {
+          "$ref": "#/$defs/disciplineEvidenceEntry"
+        }
+      },
+      "additionalProperties": false
+    },
+    "moscow": {
+      "type": "string",
+      "enum": [
+        "must",
+        "should",
+        "could",
+        "wont"
+      ]
+    },
+    "timebox": {
+      "type": "string",
+      "minLength": 1
+    },
+    "targetRepo": {
+      "type": "string"
+    },
+    "branch": {
+      "type": "string"
+    },
+    "assignee": {
+      "type": "string"
+    },
+    "qaAssignee": {
+      "type": "string"
+    },
+    "acceptanceCriteria": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "verification": {
+      "type": "object",
+      "required": [
+        "commands"
+      ],
+      "properties": {
+        "commands": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "links": {
+      "type": "object",
+      "properties": {
+        "issue": {
+          "type": "string"
+        },
+        "pullRequest": {
+          "type": "string"
+        },
+        "projectItem": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "swarmd": {
+      "type": "object",
+      "properties": {
+        "taskId": {
+          "type": "string"
+        },
+        "gateCmd": {
+          "type": "string"
+        },
+        "memoryNamespace": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -8,6 +8,8 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"strconv"
+	"strings"
 	"unicode/utf8"
 )
 
@@ -74,7 +76,7 @@ func Parse(data []byte) (any, []Diagnostic, error) {
 		return fail("document.api-version", "apiVersion", fmt.Sprintf("unsupported apiVersion %q", head.APIVersion))
 	}
 	switch head.Kind {
-	case "Agent", "ExecutionProfile", "AgentAssignment", "CapabilityRegistry", "InvocationContract", "ContextPolicy", "OutputContract", "EnvironmentProfile":
+	case "Agent", "ExecutionProfile", "AgentAssignment", "CapabilityRegistry", "InvocationContract", "ContextPolicy", "OutputContract", "EnvironmentProfile", "LifecyclePolicy", "EvaluationContract", "MigrationContract":
 	default:
 		return fail("document.kind", "kind", fmt.Sprintf("unsupported kind %q", head.Kind))
 	}
@@ -105,6 +107,17 @@ func scanJSON(b []byte) error {
 			return e
 		}
 		switch x := t.(type) {
+		case json.Number:
+			// Bound exact-arithmetic work before the schema engine sees numbers.
+			if len(x) > 1024 {
+				return errors.New("JSON numeric lexeme exceeds 1024 bytes")
+			}
+			if i := strings.IndexAny(string(x), "eE"); i >= 0 {
+				exponent, err := strconv.ParseInt(string(x)[i+1:], 10, 32)
+				if err != nil || exponent < -10000 || exponent > 10000 {
+					return errors.New("JSON numeric exponent exceeds supported range")
+				}
+			}
 		case json.Delim:
 			switch x {
 			case '{':

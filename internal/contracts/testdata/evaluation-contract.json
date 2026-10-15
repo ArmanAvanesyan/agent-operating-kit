@@ -1,0 +1,79 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "EvaluationContract",
+  "metadata": {
+    "id": "exploration-evaluation",
+    "name": "Exploration Evaluation",
+    "version": "0.1.0",
+    "description": "Proposed documentation fixture; not operational configuration."
+  },
+  "agent": {
+    "kind": "Agent",
+    "id": "repository-explorer",
+    "version": "0.1.0"
+  },
+  "profiles": [
+    {
+      "kind": "ExecutionProfile",
+      "id": "opencode-exploration",
+      "version": "0.1.0"
+    },
+    {
+      "kind": "ExecutionProfile",
+      "id": "agy-exploration",
+      "version": "0.1.0"
+    }
+  ],
+  "fixtures": [
+    {
+      "id": "aok-exploration",
+      "taskPacket": "examples/task-packet.json",
+      "datasetRevision": "bbe8c264a6a2658b37bc40c479eec6bc555e01cd"
+    }
+  ],
+  "metrics": [
+    {
+      "id": "required-deliverables-valid",
+      "unit": "fraction",
+      "direction": "higher",
+      "threshold": 1
+    },
+    {
+      "id": "elapsed-time",
+      "unit": "seconds",
+      "direction": "lower",
+      "threshold": null
+    },
+    {
+      "id": "cost-per-accepted-task",
+      "unit": "USD",
+      "direction": "lower",
+      "threshold": null
+    }
+  ],
+  "repetitions": 3,
+  "acceptance": [
+    "All required output and policy checks pass.",
+    "Human assessment confirms source-grounded findings."
+  ],
+  "results": [
+    {
+      "profile": {
+        "kind": "ExecutionProfile",
+        "id": "opencode-exploration",
+        "version": "0.1.0"
+      },
+      "status": "not-run",
+      "evidence": []
+    },
+    {
+      "profile": {
+        "kind": "ExecutionProfile",
+        "id": "agy-exploration",
+        "version": "0.1.0"
+      },
+      "status": "not-run",
+      "evidence": []
+    }
+  ]
+}

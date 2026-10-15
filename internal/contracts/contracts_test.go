@@ -89,7 +89,7 @@ func bytesRepeat(b byte, n int) []byte {
 }
 
 func TestOperationalFixturesCoverEverySupportedKind(t *testing.T) {
-	names := []string{"agent.json", "execution-profile.json", "assignment.json", "capability-registry.json", "invocation-contract.json", "context-policy.json", "output-contract.json", "environment-profile.json"}
+	names := []string{"agent.json", "execution-profile.json", "assignment.json", "capability-registry.json", "invocation-contract.json", "context-policy.json", "output-contract.json", "environment-profile.json", "lifecycle-policy.json", "evaluation-contract.json", "migration-contract.json"}
 	for _, name := range names {
 		t.Run(name, func(t *testing.T) {
 			data, err := os.ReadFile(filepath.Join("testdata", name))
@@ -132,5 +132,16 @@ func TestSchemaLoaderRejectsNetworkAndFileURLs(t *testing.T) {
 		if _, err := loader.Load(url); err == nil {
 			t.Fatalf("loader accepted %s", url)
 		}
+	}
+}
+
+func TestNumericWorkIsBoundedBeforeSchemaEvaluation(t *testing.T) {
+	for _, input := range []string{`{"n":1e1000000000}`, `{"n":1e-1000000000}`, `{"n":` + strings.Repeat("1", 1025) + `}`} {
+		if err := scanJSON([]byte(input)); err == nil {
+			t.Fatal("accepted excessive numeric work")
+		}
+	}
+	if err := scanJSON([]byte(`{"n":900719925474099312345,"f":1e10000}`)); err != nil {
+		t.Fatal(err)
 	}
 }

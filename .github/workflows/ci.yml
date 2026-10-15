@@ -14,7 +14,7 @@ jobs:
       - name: Validate kit
         run: ./scripts/aok validate
       - name: Compile Python entrypoints
-        run: python3 -m py_compile scripts/aok scripts/release/build.py
+        run: python3 -m py_compile scripts/aok
 
   go:
     runs-on: ubuntu-latest

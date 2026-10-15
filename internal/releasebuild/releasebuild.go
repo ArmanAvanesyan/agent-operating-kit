@@ -38,8 +38,9 @@ var (
 		"scripts/aok",
 		"scripts/install.sh",
 		"scripts/project-init.sh",
-		"scripts/release/build.py",
 		"scripts/release/build.sh",
+		"cmd/aok-release",
+		"go.mod",
 		"scripts/validate.sh",
 		"CHANGELOG.md",
 	}

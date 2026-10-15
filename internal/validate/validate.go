@@ -75,8 +75,9 @@ func validateRequiredFiles(root string, errors *[]string) {
 		"scripts/project-init.sh",
 		"scripts/github-sync.sh",
 		"scripts/validate.sh",
-		"scripts/release/build.py",
 		"scripts/release/build.sh",
+		"cmd/aok-release/main.go",
+		"go.mod",
 		".github/workflows/release.yml",
 		"references/migration-from-existing-project.md",
 	}

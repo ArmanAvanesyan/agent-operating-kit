@@ -117,7 +117,7 @@ Full steps: [release-checklist.md](release-checklist.md).
 | `codex setup` / `codex local-env` | Yes (implemented) | Yes |
 | `claude setup` | Yes (implemented) | Yes |
 | `project init` / `project validate` | Yes (implemented) | Yes |
-| Release packaging (`scripts/release` / `cmd/aok-release`) | No (maintainer Go tool) | Legacy `build.py` still present |
+| Release packaging (`scripts/release` / `cmd/aok-release`) | No (maintainer Go tool) | N/A (Python `build.py` removed) |
 | `task sync` / `task packet` | Yes (implemented; requires `gh` on `PATH`) | Yes |
 | `hooks pre` / `hooks after` | Yes (implemented) | Yes |
 | `import history` | Yes (implemented) | Yes |

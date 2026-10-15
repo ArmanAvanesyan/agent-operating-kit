@@ -1,7 +1,9 @@
 # Native adapter interface
 
 The shared interface and conformance harness support explicit native projections.
-OpenCode project Markdown is registered; see its [mapping and host evidence](../internal/nativeadapters/opencode/README.md).
+OpenCode and Claude Code project Markdown are registered; see its [mapping and host evidence](../internal/nativeadapters/opencode/README.md).
+Claude also supports plugin parsing/rendering, but its plugin loading gate remains
+unverified. See [Claude mappings and evidence](../internal/nativeadapters/claude/README.md).
 Other known targets without a registered adapter report a blocked result.
 Shared parser tests alone do not establish native completion.
 

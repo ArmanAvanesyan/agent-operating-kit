@@ -458,7 +458,7 @@ func validateDocument(doc Document, d Descriptor) error {
 			return errors.New("document contains invalid JSON field data")
 		}
 		for _, cap := range d.Fields {
-			if pathsOverlap(field, cap.NativePath) {
+			if cap.Support != "unsupported" && pathsOverlap(field, cap.NativePath) {
 				return errors.New("mapped field collides with inert unknown field")
 			}
 		}

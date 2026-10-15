@@ -8,7 +8,7 @@ newer than installed hosts; each adapter must pin its tested format and host.
 | Target | Native format and candidate scope | Local host | Remaining native gate |
 |---|---|---|---|
 | Codex | Project `.codex/agents/<name>.toml`; project `.codex/config.toml` controls concurrency | `codex-cli 0.162.1` | Isolated native loading; validate per-agent allowed fields and model/reasoning support |
-| Claude Code | Project `.claude/agents/*.md`, YAML frontmatter and prompt body; user/plugin scopes differ | `2.1.281` | Isolated discovery and project/plugin negative scope tests |
+| Claude Code | Project `.claude/agents/*.md`, YAML frontmatter and prompt body; user/plugin scopes differ | `2.1.281` | Project discovery verified; [evidence](../../evidence/native-adapters/claude-2.1.281.json); plugin loading/runtime enforcement unverified |
 | OpenCode | Project `.opencode/agents/*.md` or `opencode.json` agent entries | `1.18.35` | Project loading and round trip verified; [evidence](../../evidence/native-adapters/opencode-1.18.35.json); runtime enforcement unverified |
 | Cursor | Project `.cursor/agents/*.md`, YAML frontmatter and prompt body | `cursor-agent 2026.04.17-787b533` | Verify installed CLI discovery/loading; docs alone insufficient |
 | Gemini | Project `.gemini/agents/*.md`; personal `~/.gemini/agents/*.md` | Not installed | Native host loading unavailable; documentation feasibility only |

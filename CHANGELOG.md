@@ -17,6 +17,8 @@
   lifecycle milestone contracts, and read-only iteration validation.
 - Add a 19-entry methodology-aware work-item catalog with deterministic neutral
   Markdown, GitHub Issue Form, and Azure DevOps desired-state scaffolding.
+- Include GitHub sync and release workflow files in release kits so extracted
+  kits satisfy their own required-file validation.
 
 ## 0.4.0
 

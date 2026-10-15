@@ -40,9 +40,11 @@ KIT_PATHS = (
     "scripts/aok",
     "scripts/install.sh",
     "scripts/project-init.sh",
+    "scripts/github-sync.sh",
     "scripts/release/build.py",
     "scripts/release/build.sh",
     "scripts/validate.sh",
+    ".github/workflows/release.yml",
     "CHANGELOG.md",
 )
 

@@ -65,6 +65,9 @@ Spot check Codex local-environment templates:
   renderers, and offline scaffold validation.
 - Release kit, Codex plugin, and pack archives include the neutral
   `methodologies/` and `work-items/` catalogs and templates.
+- Extracted release kits pass `scripts/aok validate`, including required sync
+  and release workflow files and executable Codex setup helpers. The release
+  tests verify the archive contents and extracted-kit validation.
 
 ## Compatibility Checks
 

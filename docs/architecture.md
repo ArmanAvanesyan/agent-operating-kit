@@ -12,10 +12,10 @@ workflow content.
    OpenCode, Gemini, OpenClaw, and Hermes Agent.
 5. `scripts/`: Python kit CLI (`scripts/aok`), install helpers, sync, and
    validation — the maintained source for contributors and kit logic.
-6. Distribution layer: thin Go `aok` binary built in release CI and published on
-   GitHub Releases so end-user `PATH` installs need neither Python nor Go on
-   the device. Planned module path: `cmd/aok` (when present). See
-   [cli-distribution.md](cli-distribution.md).
+6. Distribution layer: thin Go `aok` binary (`cmd/aok`, module
+   `github.com/ArmanAvanesyan/agent-operating-kit`) built in release CI and
+   published on GitHub Releases so end-user `PATH` installs need neither
+   Python nor Go on the device. See [cli-distribution.md](cli-distribution.md).
 
 ## Source Of Truth
 

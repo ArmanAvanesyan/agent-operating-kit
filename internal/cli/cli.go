@@ -46,6 +46,8 @@ func Run(argv []string, stdout, stderr io.Writer) int {
 		code, err = runCodex(args, stdout, stderr)
 	case "project":
 		code, err = runProject(args, stdout, stderr)
+	case "render":
+		code, err = runRender(args, stdout, stderr)
 	default:
 		fmt.Fprintf(stderr, "unknown command: %s\n", cmd)
 		printUsage(stderr)
@@ -79,6 +81,7 @@ Commands:
   codex setup          Install + doctor (+ optional project / claude)
   codex local-env      init|validate|actions
   project init|validate
+  render pack|all|bundle|bundles
 
 Environment:
   AOK_ROOT             Override kit root discovery`)

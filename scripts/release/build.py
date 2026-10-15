@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Build dependency-free AOK release artifacts."""
+"""Build dependency-free AOK release artifacts.
+
+Deprecated: prefer ``go run ./cmd/aok-release`` (or ``./scripts/release/build.sh``).
+This module remains for reference until the follow-up removal PR.
+"""
 
 from __future__ import annotations
 

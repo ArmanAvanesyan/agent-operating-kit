@@ -13,11 +13,12 @@ commitment calendar.
 - **Go CLI full command parity (`task` / `hooks` / `import`)** — release binary
   matches Python for `task sync|packet`, `hooks pre|after`, and
   `import history` (`task` still shells out to `gh`).
+- **Go release builder** — `cmd/aok-release` (via `scripts/release/build.sh`)
+  builds kit zips, cross-compiled binaries, installers, bundles (via Go
+  `aok render bundles`), `SHA256SUMS`, and `index.json`.
 
 ## Planned themes
 
-- **Go release builder** — rewrite `scripts/release/build.py` as a Go maintainer
-  tool so release hosts need Go + git checkout only.
 - **Optional code signing** — secrets-gated macOS / Windows (and optional Linux)
   signing in release CI; unsigned path remains default when secrets are absent.
 - **Homebrew / Scoop / winget** — package-manager install channels that consume

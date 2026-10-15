@@ -32,12 +32,13 @@ For the **release binary** install path:
   locally) to produce the binary.
 
 Python remains required only for git-checkout / contributor workflows that call
-`./scripts/aok` directly, and for maintainer release packaging that still invokes
-Python `scripts/aok render bundles` when building release zip artifacts.
+`./scripts/aok` directly. Maintainer release packaging uses the Go tool
+`cmd/aok-release` (via `scripts/release/build.sh`), which invokes Go
+`aok render bundles` for the bundles artifact.
 
 ## Artifact Naming Convention
 
-Published release names (match `scripts/release/build.py`):
+Published release names (match `cmd/aok-release` / `scripts/release/build.sh`):
 
 | Artifact | Role |
 |---|---|
@@ -100,7 +101,7 @@ Maintainer checklist (alongside existing kit validation):
    binary.
 4. Update `SHA256SUMS` and ensure `index.json` lists every binary artifact.
 5. Keep Python `./scripts/aok validate` and `python3 -m py_compile` for kit
-   sources (content and packaging still use Python in-repo).
+   content sources. Release packaging is Go (`go run ./cmd/aok-release`).
 
 Full steps: [release-checklist.md](release-checklist.md).
 
@@ -116,7 +117,7 @@ Full steps: [release-checklist.md](release-checklist.md).
 | `codex setup` / `codex local-env` | Yes (implemented) | Yes |
 | `claude setup` | Yes (implemented) | Yes |
 | `project init` / `project validate` | Yes (implemented) | Yes |
-| Release packaging (`scripts/release`) | No (maintainer) | Yes (Python) |
+| Release packaging (`scripts/release` / `cmd/aok-release`) | No (maintainer Go tool) | Legacy `build.py` still present |
 | `task sync` / `task packet` | Yes (implemented; requires `gh` on `PATH`) | Yes |
 | `hooks pre` / `hooks after` | Yes (implemented) | Yes |
 | `import history` | Yes (implemented) | Yes |

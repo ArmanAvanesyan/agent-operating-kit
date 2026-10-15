@@ -45,6 +45,9 @@ From the repository root:
 ```bash
 ./scripts/aok validate
 python3 -m py_compile scripts/aok scripts/release/build.py
+go test ./...
+# Release packaging (optional local dry-run):
+# ./scripts/release/build.sh dist/release
 ```
 
 Optional smoke checks after pack or adapter edits:

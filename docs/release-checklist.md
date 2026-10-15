@@ -130,14 +130,48 @@ the end-user path).
 ## Optional code signing (secrets-gated)
 
 Release CI runs `scripts/release/sign.sh` after the build and before publishing.
-**Missing secrets must not fail the release** — unsigned artifacts remain valid.
+**Missing secrets must not fail the release** — unsigned artifacts remain the
+default and are fully valid. Do not require these secrets to exist before
+tagging.
 
 | Platform | Mechanism | Secrets / vars |
 |---|---|---|
 | macOS | `codesign` on darwin binaries | `MACOS_CERTIFICATE` (base64 PKCS#12), `MACOS_CERTIFICATE_PWD`, optional `MACOS_SIGNING_IDENTITY` |
 | macOS notarize (optional) | `xcrun notarytool` stub | `APPLE_ID`, `APPLE_TEAM_ID`, `APPLE_APP_SPECIFIC_PASSWORD`; set secret/env `AOK_ENABLE_NOTARIZE=1` to attempt |
-| Windows | Azure Trusted Signing or Authenticode PFX | Trusted Signing: `AZURE_TRUSTED_SIGNING_*` (client id/tenant/secret/account/profile/endpoint); or `WINDOWS_CERT` + `WINDOWS_CERT_PWD` (base64 PFX) with `osslsigncode`/`signtool` on the runner |
-| Linux | Optional cosign over `SHA256SUMS` (off by default) | Repo var `AOK_ENABLE_LINUX_SIGN=1` + `COSIGN_KEY` (+ optional `COSIGN_PASSWORD`) |
+| Windows | Azure Trusted Signing or Authenticode PFX | Trusted Signing: `AZURE_TRUSTED_SIGNING_*` (see exact names below); or `WINDOWS_CERT` + `WINDOWS_CERT_PWD` (base64 PFX) with `osslsigncode`/`signtool` on the runner |
+| Linux | Optional cosign over `SHA256SUMS` (off by default) | Repo **variable** `AOK_ENABLE_LINUX_SIGN=1` + secret `COSIGN_KEY` (+ optional `COSIGN_PASSWORD`) |
+
+### Exact secret and variable names (`sign.sh`)
+
+Repository **secrets** (GitHub Actions `secrets.*`), all optional:
+
+| Name | Used for |
+|---|---|
+| `MACOS_CERTIFICATE` | base64-encoded macOS PKCS#12 |
+| `MACOS_CERTIFICATE_PWD` | PKCS#12 password |
+| `MACOS_SIGNING_IDENTITY` | optional codesign identity string |
+| `APPLE_ID` | notarization |
+| `APPLE_TEAM_ID` | notarization |
+| `APPLE_APP_SPECIFIC_PASSWORD` | notarization |
+| `AOK_ENABLE_NOTARIZE` | set to `1` to attempt `notarytool` |
+| `WINDOWS_CERT` | base64-encoded Windows PFX |
+| `WINDOWS_CERT_PWD` | PFX password |
+| `AZURE_TRUSTED_SIGNING_CLIENT_ID` | Azure Trusted Signing |
+| `AZURE_TRUSTED_SIGNING_TENANT_ID` | Azure Trusted Signing |
+| `AZURE_TRUSTED_SIGNING_CLIENT_SECRET` | Azure Trusted Signing |
+| `AZURE_TRUSTED_SIGNING_ACCOUNT` | Azure Trusted Signing |
+| `AZURE_TRUSTED_SIGNING_PROFILE` | Azure Trusted Signing |
+| `AZURE_TRUSTED_SIGNING_ENDPOINT` | Azure Trusted Signing |
+| `COSIGN_KEY` | optional Linux checksum signing |
+| `COSIGN_PASSWORD` | optional cosign key password |
+
+Repository **variables** (GitHub Actions `vars.*`), all optional:
+
+| Name | Used for |
+|---|---|
+| `AOK_ENABLE_LINUX_SIGN` | set to `1` to enable the cosign path |
+
+When none of the above are set, `sign.sh` prints skip messages and exits 0.
 
 Local dry-run (always safe without secrets):
 

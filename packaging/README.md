@@ -12,7 +12,7 @@ managers that consume **GitHub Release** assets.
 Regenerate from a published release (or local `dist/release`):
 
 ```bash
-./scripts/packaging/generate-from-release.sh --version 0.5.0
+./scripts/packaging/generate-from-release.sh --version 0.6.0
 # or from local artifacts:
 ./scripts/packaging/generate-from-release.sh --dist dist/release
 ```

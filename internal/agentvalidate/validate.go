@@ -268,11 +268,20 @@ func validateInvocation(r *Report, c *Corpus, doc LoadedResource) {
 }
 func validateOutput(r *Report, c *Corpus, doc LoadedResource) {
 	uniqueIDs(r, doc, "deliverables")
+	destinations := []string{}
 	for i, v := range array(doc.Object["deliverables"]) {
 		d := obj(v)
 		if destination := str(d["destination"]); !safeDestination(destination) {
 			r.add("output.destination", doc.Path, fmt.Sprintf("deliverables[%d].destination", i), "error", "destination must be a confined relative path")
 		}
+		destination := strings.ToLower(str(d["destination"]))
+		for _, prior := range destinations {
+			if destination == prior || strings.HasPrefix(destination, prior+"/") || strings.HasPrefix(prior, destination+"/") {
+				r.add("output.destination.collision", doc.Path, fmt.Sprintf("deliverables[%d].destination", i), "error", "output destinations collide (case-insensitive file/directory comparison)")
+				break
+			}
+		}
+		destinations = append(destinations, destination)
 		for _, field := range []string{"template", "schema"} {
 			if p := str(d[field]); p != "" {
 				if path, err := requireFile(r, c, doc.Path, fmt.Sprintf("deliverables[%d].%s", i, field), p); err == nil && field == "schema" {

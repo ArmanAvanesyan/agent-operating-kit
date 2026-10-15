@@ -398,3 +398,22 @@ func TestBoundedReadRejectsNonRegularFiles(t *testing.T) {
 		t.Fatal("symlink accepted")
 	}
 }
+
+func TestOutputDestinationCollisions(t *testing.T) {
+	for _, destination := range []string{"reports/result.txt", "REPORTS/Result.txt", "reports/result.txt/nested", "reports"} {
+		t.Run(destination, func(t *testing.T) {
+			root := validCorpus(t, func(n string, docs map[string]map[string]any) {
+				if n != "output-contract" {
+					return
+				}
+				ds := array(docs[n]["deliverables"])
+				obj(ds[0])["destination"] = "reports/result.txt"
+				obj(ds[1])["destination"] = destination
+			})
+			report := Validate(root)
+			if !hasCode(report, "output.destination.collision") {
+				t.Fatalf("collision accepted: %+v", report)
+			}
+		})
+	}
+}

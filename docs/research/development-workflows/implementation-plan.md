@@ -67,6 +67,27 @@ or requiring new task-packet fields.
 | P1-07 | Reconcile review-and-ship recipe with existing shipping content | Ship pipeline | One owning procedure for CI/review/delivery |
 | P1-08 | Add source provenance, examples and unsupported-feature notes | Documentation and pack manifests | Discoverable content with honest support boundaries |
 
+### Exploration and readiness foundation
+
+Before developing the six delivery recipes, add content for the proposed
+[exploration and readiness procedures](project-exploration-and-readiness.md):
+
+- **P1-09:** implement `project-exploration` instructions and references for E01–E10,
+  preserving source-backed discovery and a separate environment outcome.
+- **P1-10:** implement `environment-readiness` instructions and references for R01–R07,
+  with five conditional profiles and actual check evidence.
+- Reuse `project-bootstrap` for AOK initialization and `qa-verification` for acceptance;
+  do not duplicate their procedures or claim they install application dependencies.
+- Forward-test an unfamiliar repository, a multi-repo/subsystem investigation, an
+  inspection-only task, a missing dependency, a failing application check and a setup
+  helper that exits zero despite a diagnostic failure.
+- Acceptance requires honest observed/untested/unknown distinctions, preserved user
+  changes, valid handoff references, and no ready verdict for unmet required capabilities.
+
+These are new work packages, not implemented skills. Phase 2 must decide whether profile
+and readiness records need additional schemas; until then, keep them in linked documents
+or supported packet fields. Target projections and runtime execution remain later phases.
+
 ### Initial six recipes
 
 | Recipe | Required result | Minimum evidence |

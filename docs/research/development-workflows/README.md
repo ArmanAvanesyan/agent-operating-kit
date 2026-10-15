@@ -24,6 +24,19 @@ commands, skills, packs, adapters, workflows, schedules or runtime integrations.
 5. [Structured catalog](catalog.json) and [source register](sources.json): machine-readable
    research companions. They are not operational AOK configuration formats.
 
+## Exploration and readiness refinement
+
+[Project exploration and environment readiness](project-exploration-and-readiness.md)
+adds a proposed entry topology, ten exploration tasks, seven preparation tasks, skill
+ownership, conditional tools, five environment profiles, outputs and acceptance criteria.
+It refines the existing `discovery`/`readiness` catalog groups without changing catalog
+counts. Its implementation inspection uses commit
+`c2cbc3e4f29bb08b1c2064a411f6e8cc24a015c5` on 2026-10-15; the original source-research
+baseline above remains unchanged.
+
+Existing bootstrap skills and Codex setup helpers are separated from proposed exploration
+and readiness skills. Application readiness requires observed checks, not merely AOK setup.
+
 ## Existing capabilities and proposed additions
 
 The following statements describe the inspected baseline, rather than general vendor capability.
@@ -67,7 +80,7 @@ All additions live in this directory. Existing runtime code, schemas, adapters, 
 methodology selections and work-item contracts remain unchanged. Commit, push and PR
 publication are outside this save request.
 
-## Validation of this documentation
+## Validation of the original research documentation
 
 Checked on 2026-10-15:
 
@@ -82,3 +95,11 @@ Checked on 2026-10-15:
 
 These checks establish documentation consistency. They do not validate the proposed
 schemas, runtime integrations or workflows, which have not been implemented here.
+
+## Validation of the exploration refinement
+
+Checked on 2026-10-15: local links/anchors, JSON parsing, unchanged catalog counts,
+ten exploration/seven preparation task entries, absence of the two proposed skill
+directories, whitespace and `./scripts/aok validate` all passed. These checks validate
+documentation structure; no application setup, skill installation or readiness runtime
+was exercised.

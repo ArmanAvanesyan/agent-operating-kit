@@ -12,6 +12,16 @@ This directory saves the OpenAI/Anthropic research and the full workflow proposa
 It adds documentation and structured research data. It does not install new schemas,
 commands, skills, packs, adapters, workflows, schedules or runtime integrations.
 
+## Initial skill implementation
+
+The first content/helper implementation is now in
+[project exploration and readiness skills](../../project-exploration-and-readiness.md).
+`project-exploration` and `environment-readiness` have instructions, references, report
+assets and Python helpers using optional Rust CLIs. The historical capability tables
+below describe their stated baselines. This implementation does not add first-class
+workflow/campaign schemas, native Goal adapters or durable runtime execution. Cross-target
+projections and realistic agent forward-testing remain future work.
+
 ## Reading order
 
 1. [Research and source findings](research.md): the six requested OpenAI articles,

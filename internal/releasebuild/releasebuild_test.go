@@ -99,3 +99,34 @@ func TestBuildSmokeWithFakeBundles(t *testing.T) {
 		t.Fatalf("index: %+v", idx)
 	}
 }
+
+func TestExplorationSkillsIncludedInCodexPlugin(t *testing.T) {
+	root, err := filepath.Abs("../..")
+	if err != nil {
+		t.Fatal(err)
+	}
+	files, err := iterFiles(root, CodexPluginPaths)
+	if err != nil {
+		t.Fatal(err)
+	}
+	found := map[string]bool{}
+	for _, file := range files {
+		rel, err := filepath.Rel(root, file)
+		if err != nil {
+			t.Fatal(err)
+		}
+		found[filepath.ToSlash(rel)] = true
+	}
+	for _, path := range []string{
+		"skills/project-exploration/SKILL.md",
+		"skills/project-exploration/scripts/inventory.py",
+		"skills/project-exploration/scripts/structure.py",
+		"skills/project-exploration/references/structural-analysis.md",
+		"skills/environment-readiness/SKILL.md",
+		"skills/environment-readiness/scripts/assess.py",
+	} {
+		if !found[path] {
+			t.Errorf("Codex plugin missing skill resource: %s", path)
+		}
+	}
+}

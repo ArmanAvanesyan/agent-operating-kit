@@ -46,18 +46,22 @@ falls back to a copy if junction creation is unavailable. The CLI entrypoint is
 
 ## Install via package managers
 
-GitHub Releases remain the source of truth for binaries. Homebrew, Scoop, and
-winget consume those assets (see [docs/cli-distribution.md](docs/cli-distribution.md)
-and [`packaging/`](packaging/)).
+GitHub Releases remain the source of truth for binaries. **Releases are
+unsigned**; verify with the Release `SHA256SUMS` file (OS may warn once on
+first run). Homebrew, Scoop, and winget install from this repository’s
+published manifests — no separate tap/bucket repo required (see
+[docs/cli-distribution.md](docs/cli-distribution.md) and
+[`packaging/`](packaging/)).
 
-| Channel | Status |
+| Channel | Install |
 |---|---|
-| Homebrew | Formula templates under `packaging/homebrew/` (tap such as `ArmanAvanesyan/homebrew-aok`) |
-| Scoop | Bucket manifest templates under `packaging/scoop/` |
-| winget | Manifest templates under `packaging/winget/` |
+| Scoop | `scoop bucket add aok https://github.com/ArmanAvanesyan/agent-operating-kit` then `scoop install aok` (`bucket/aok.json`) |
+| Homebrew | `brew install --formula https://raw.githubusercontent.com/ArmanAvanesyan/agent-operating-kit/main/packaging/homebrew/aok.rb` (classic tap deferred) |
+| winget | Manifests under `packaging/winget/`; submit to `microsoft/winget-pkgs` when ready |
 | PyPI | **Not planned** for the Go `aok` binary (wrong distribution model) |
 
-Regenerate manifests from a release tag or local `dist/release`:
+Regenerate manifests from a release tag or local `dist/release` (updates
+`bucket/`, `packaging/homebrew/aok.rb`, and `packaging/winget/*.yaml`):
 
 ```bash
 ./scripts/packaging/generate-from-release.sh --version 0.6.0

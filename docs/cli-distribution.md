@@ -128,16 +128,27 @@ build. End-user docs assume the binary path for install, doctor, validate,
 version, render, Codex/Claude setup, and these contributor helpers when the
 release binary is installed.
 
+## Trust model (unsigned releases)
+
+Published GitHub Release binaries are **unsigned by default**. Code signing is
+optional and secrets-gated (`scripts/release/sign.sh`); when secrets or tools
+are absent the script skips and exits 0 so the release still publishes.
+
+- Verify downloads against the Release `SHA256SUMS` file.
+- macOS Gatekeeper, Windows SmartScreen, or similar may warn once on first run;
+  that is expected without Apple/Windows signing certificates.
+
 ## Install via package managers
 
 Package managers consume GitHub Release binaries (same artifact names as above).
-Templates and a regenerator live under [`packaging/`](../packaging/):
+Templates live under [`packaging/`](../packaging/); the regenerator also writes
+**same-repo published paths** so users install without a separate tap/bucket:
 
-| Channel | How |
-|---|---|
-| Homebrew | `packaging/homebrew/aok.rb.tmpl` → formula for a dedicated tap |
-| Scoop | `packaging/scoop/aok.json.tmpl` → bucket manifest |
-| winget | `packaging/winget/*.yaml.tmpl` → winget-pkgs (or private source) |
+| Channel | Same-repo path | How to install |
+|---|---|---|
+| Scoop | `bucket/aok.json` | `scoop bucket add aok https://github.com/ArmanAvanesyan/agent-operating-kit` then `scoop install aok` |
+| Homebrew | `packaging/homebrew/aok.rb` | `brew install --formula https://raw.githubusercontent.com/ArmanAvanesyan/agent-operating-kit/main/packaging/homebrew/aok.rb` (classic `user/tap` deferred) |
+| winget | `packaging/winget/*.yaml` | Keep manifests in-repo; open a PR to `microsoft/winget-pkgs` when ready |
 
 ```bash
 ./scripts/packaging/generate-from-release.sh --version <version>
@@ -146,8 +157,10 @@ Templates and a regenerator live under [`packaging/`](../packaging/):
 ```
 
 CI: `.github/workflows/packaging.yml` regenerates on `v*` tags and uploads
-artifacts. Pushing to an external tap/bucket is token-gated
-(`PACKAGING_PUSH_TOKEN`, optional `HOMEBREW_TAP_REPO` / `SCOOP_BUCKET_REPO`).
+`packaging/out/` artifacts. Optional pushes to an external tap/bucket/
+winget-pkgs are token-gated (`PACKAGING_PUSH_TOKEN`, optional
+`HOMEBREW_TAP_REPO` / `SCOOP_BUCKET_REPO`) and not required for the install
+paths above.
 
 ### PyPI
 

@@ -19,8 +19,10 @@ commitment calendar.
 - **Optional code signing** — secrets-gated macOS / Windows (and optional Linux
   cosign) in release CI via `scripts/release/sign.sh`; unsigned path remains
   default when secrets are absent.
-- **Homebrew / Scoop / winget** — package-manager templates under `packaging/`,
-  regenerated from Release `SHA256SUMS` / `index.json`. **PyPI is not planned**
+- **Homebrew / Scoop / winget** — same-repo manifests (`bucket/`,
+  `packaging/homebrew/aok.rb`, `packaging/winget/`), regenerated from Release
+  `SHA256SUMS` / `index.json`. Unsigned Releases + checksums are the default
+  trust model. **PyPI is not planned**
   for the Go `aok` binary.
 - **Host compatibility tracking** — `docs/targets-support-matrix.md` tracks
   Min / Tested host versions (or explicitly `Untracked`); recording process and

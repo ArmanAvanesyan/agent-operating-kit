@@ -34,18 +34,23 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          # Writes packaging/out/ plus same-repo paths: bucket/, packaging/homebrew/aok.rb,
+          # packaging/winget/*.yaml (unsigned Release trust via SHA256SUMS).
           ./scripts/packaging/generate-from-release.sh --version "${{ steps.ver.outputs.version }}"
       - name: Upload packaging artifacts
         uses: actions/upload-artifact@v7
         with:
           name: aok-packaging-${{ steps.ver.outputs.version }}
-          path: packaging/out/**
+          path: |
+            packaging/out/**
+            bucket/aok.json
+            packaging/homebrew/aok.rb
+            packaging/winget/*.yaml
 
-      # Token-gated pushes: set PACKAGING_PUSH_TOKEN (and optional tap/bucket remotes)
-      # as repository secrets to enable automatic PRs/pushes. Without the token,
-      # this job still succeeds with uploaded artifacts only.
+      # Same-repo Scoop/Homebrew/winget paths are the supported default.
+      # Token-gated pushes to external tap/bucket/winget-pkgs remain optional.
       # Note: do not use `secrets` in `if:` — gate inside the step script instead.
-      - name: Push Homebrew tap (token-gated)
+      - name: Push Homebrew tap (token-gated, optional)
         env:
           GH_TOKEN: ${{ secrets.PACKAGING_PUSH_TOKEN }}
           TAP_REPO: ${{ secrets.HOMEBREW_TAP_REPO }}
@@ -53,13 +58,13 @@ jobs:
         run: |
           set -euo pipefail
           if [ -z "${GH_TOKEN:-}" ] || [ -z "${TAP_REPO:-}" ]; then
-            echo "PACKAGING_PUSH_TOKEN or HOMEBREW_TAP_REPO not set; skipping tap push."
+            echo "PACKAGING_PUSH_TOKEN or HOMEBREW_TAP_REPO not set; skipping external tap push (same-repo formula is enough)."
             exit 0
           fi
           work="$(mktemp -d)"
           git clone "https://x-access-token:${GH_TOKEN}@github.com/${TAP_REPO}.git" "${work}"
           mkdir -p "${work}/Formula"
-          cp packaging/out/homebrew/aok.rb "${work}/Formula/aok.rb"
+          cp packaging/homebrew/aok.rb "${work}/Formula/aok.rb"
           cd "${work}"
           git config user.name "aok-packaging-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -69,7 +74,7 @@ jobs:
           git push -u origin "aok-${VERSION}"
           gh pr create --repo "${TAP_REPO}" --title "aok ${VERSION}" --body "Automated formula update from agent-operating-kit ${VERSION}." || true
 
-      - name: Push Scoop bucket (token-gated)
+      - name: Push Scoop bucket (token-gated, optional)
         env:
           GH_TOKEN: ${{ secrets.PACKAGING_PUSH_TOKEN }}
           BUCKET_REPO: ${{ secrets.SCOOP_BUCKET_REPO }}
@@ -77,12 +82,12 @@ jobs:
         run: |
           set -euo pipefail
           if [ -z "${GH_TOKEN:-}" ] || [ -z "${BUCKET_REPO:-}" ]; then
-            echo "PACKAGING_PUSH_TOKEN or SCOOP_BUCKET_REPO not set; skipping Scoop push."
+            echo "PACKAGING_PUSH_TOKEN or SCOOP_BUCKET_REPO not set; skipping external Scoop push (repo-root bucket/ is enough)."
             exit 0
           fi
           work="$(mktemp -d)"
           git clone "https://x-access-token:${GH_TOKEN}@github.com/${BUCKET_REPO}.git" "${work}"
-          cp packaging/out/scoop/aok.json "${work}/aok.json"
+          cp bucket/aok.json "${work}/aok.json"
           cd "${work}"
           git config user.name "aok-packaging-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -97,7 +102,7 @@ jobs:
           PUSH_TOKEN: ${{ secrets.PACKAGING_PUSH_TOKEN }}
           WINGET_REPO: ${{ secrets.WINGET_PKGS_REPO }}
         run: |
-          echo "winget manifests are in the workflow artifact."
+          echo "winget manifests are under packaging/winget/ (and in the workflow artifact)."
           echo "Open a PR against microsoft/winget-pkgs when publishing."
           if [ -n "${PUSH_TOKEN:-}" ] && [ -n "${WINGET_REPO:-}" ]; then
             echo "WINGET_PKGS_REPO is configured; extend this job to open a manifests PR when ready."

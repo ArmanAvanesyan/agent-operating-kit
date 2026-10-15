@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 # Regenerate Homebrew / Scoop / winget manifests from SHA256SUMS + index.json.
+# Writes CI staging under packaging/out/ and same-repo published paths:
+#   bucket/aok.json
+#   packaging/homebrew/aok.rb
+#   packaging/winget/*.yaml (non-.tmpl)
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
@@ -12,13 +16,18 @@ OUT_DIR="${ROOT_DIR}/packaging/out"
 TAG=""
 PACKAGE_ID="ArmanAvanesyan.AgentOperatingKit"
 PUBLISHER="ArmanAvanesyan"
+PUBLISH_SAME_REPO=1
 
 usage() {
   cat <<'EOF'
-Usage: generate-from-release.sh [--version X.Y.Z] [--dist DIR] [--repo owner/name] [--out DIR]
+Usage: generate-from-release.sh [--version X.Y.Z] [--dist DIR] [--repo owner/name] [--out DIR] [--no-publish]
 
 Reads SHA256SUMS (and optional index.json) to fill packaging templates.
 With --version only, downloads SHA256SUMS from the GitHub Release tag vX.Y.Z.
+
+By default also syncs Scoop/Homebrew/winget into same-repo published paths
+(bucket/, packaging/homebrew/aok.rb, packaging/winget/*.yaml). Pass
+--no-publish to write only under --out (default packaging/out).
 EOF
 }
 
@@ -28,6 +37,7 @@ while [ $# -gt 0 ]; do
     --dist) DIST_DIR="$2"; shift 2 ;;
     --repo) REPO="$2"; shift 2 ;;
     --out) OUT_DIR="$2"; shift 2 ;;
+    --no-publish) PUBLISH_SAME_REPO=0; shift ;;
     -h|--help) usage; exit 0 ;;
     *) echo "Unknown arg: $1" >&2; usage; exit 2 ;;
   esac
@@ -125,32 +135,64 @@ replace_placeholders() {
     "${src}" > "${dest}"
 }
 
-rm -rf "${OUT_DIR}"
-mkdir -p "${OUT_DIR}/homebrew" "${OUT_DIR}/scoop" "${OUT_DIR}/winget"
+write_scoop_json() {
+  local dest="$1"
+  mkdir -p "$(dirname "${dest}")"
+  # Scoop hash is typically lowercase sha256 without prefix.
+  sed \
+    -e "s|{{VERSION}}|${VERSION}|g" \
+    -e "s|{{WINDOWS_AMD64_URL}}|${BASE_URL}/${WINDOWS_AMD64}|g" \
+    -e "s|{{WINDOWS_AMD64_SHA256}}|${WINDOWS_AMD64_SHA256}|g" \
+    packaging/scoop/aok.json.tmpl > "${dest}"
+}
 
-replace_placeholders packaging/homebrew/aok.rb.tmpl "${OUT_DIR}/homebrew/aok.rb"
-# Scoop hash is typically lowercase sha256 without prefix.
-sed \
-  -e "s|{{VERSION}}|${VERSION}|g" \
-  -e "s|{{WINDOWS_AMD64_URL}}|${BASE_URL}/${WINDOWS_AMD64}|g" \
-  -e "s|{{WINDOWS_AMD64_SHA256}}|${WINDOWS_AMD64_SHA256}|g" \
-  packaging/scoop/aok.json.tmpl > "${OUT_DIR}/scoop/aok.json"
-
-replace_placeholders packaging/winget/ArmanAvanesyan.AgentOperatingKit.yaml.tmpl \
-  "${OUT_DIR}/winget/ArmanAvanesyan.AgentOperatingKit.yaml"
-replace_placeholders packaging/winget/ArmanAvanesyan.AgentOperatingKit.installer.yaml.tmpl \
-  "${OUT_DIR}/winget/ArmanAvanesyan.AgentOperatingKit.installer.yaml"
-replace_placeholders packaging/winget/ArmanAvanesyan.AgentOperatingKit.locale.en-US.yaml.tmpl \
-  "${OUT_DIR}/winget/ArmanAvanesyan.AgentOperatingKit.locale.en-US.yaml"
-
-# Version-only stub for multi-file winget layout.
-cat > "${OUT_DIR}/winget/ArmanAvanesyan.AgentOperatingKit.version.yaml" <<EOF
+write_winget_version_stub() {
+  local dest="$1"
+  mkdir -p "$(dirname "${dest}")"
+  cat > "${dest}" <<EOF
 PackageIdentifier: ${PACKAGE_ID}
 PackageVersion: ${VERSION}
 DefaultLocale: en-US
 ManifestType: version
 ManifestVersion: 1.6.0
 EOF
+}
+
+rm -rf "${OUT_DIR}"
+mkdir -p "${OUT_DIR}/homebrew" "${OUT_DIR}/scoop" "${OUT_DIR}/winget"
+
+replace_placeholders packaging/homebrew/aok.rb.tmpl "${OUT_DIR}/homebrew/aok.rb"
+write_scoop_json "${OUT_DIR}/scoop/aok.json"
+replace_placeholders packaging/winget/ArmanAvanesyan.AgentOperatingKit.yaml.tmpl \
+  "${OUT_DIR}/winget/ArmanAvanesyan.AgentOperatingKit.yaml"
+replace_placeholders packaging/winget/ArmanAvanesyan.AgentOperatingKit.installer.yaml.tmpl \
+  "${OUT_DIR}/winget/ArmanAvanesyan.AgentOperatingKit.installer.yaml"
+replace_placeholders packaging/winget/ArmanAvanesyan.AgentOperatingKit.locale.en-US.yaml.tmpl \
+  "${OUT_DIR}/winget/ArmanAvanesyan.AgentOperatingKit.locale.en-US.yaml"
+write_winget_version_stub "${OUT_DIR}/winget/ArmanAvanesyan.AgentOperatingKit.version.yaml"
+
+if [ "${PUBLISH_SAME_REPO}" = "1" ]; then
+  # Scoop: repo-root bucket/ so `scoop bucket add aok <this-repo-url>` works.
+  mkdir -p "${ROOT_DIR}/bucket"
+  cp "${OUT_DIR}/scoop/aok.json" "${ROOT_DIR}/bucket/aok.json"
+  # Homebrew: formula at packaging/homebrew/aok.rb for raw-URL install.
+  cp "${OUT_DIR}/homebrew/aok.rb" "${ROOT_DIR}/packaging/homebrew/aok.rb"
+  # winget: generated manifests beside templates (submit to winget-pkgs when ready).
+  cp "${OUT_DIR}/winget/ArmanAvanesyan.AgentOperatingKit.yaml" \
+    "${ROOT_DIR}/packaging/winget/ArmanAvanesyan.AgentOperatingKit.yaml"
+  cp "${OUT_DIR}/winget/ArmanAvanesyan.AgentOperatingKit.installer.yaml" \
+    "${ROOT_DIR}/packaging/winget/ArmanAvanesyan.AgentOperatingKit.installer.yaml"
+  cp "${OUT_DIR}/winget/ArmanAvanesyan.AgentOperatingKit.locale.en-US.yaml" \
+    "${ROOT_DIR}/packaging/winget/ArmanAvanesyan.AgentOperatingKit.locale.en-US.yaml"
+  cp "${OUT_DIR}/winget/ArmanAvanesyan.AgentOperatingKit.version.yaml" \
+    "${ROOT_DIR}/packaging/winget/ArmanAvanesyan.AgentOperatingKit.version.yaml"
+fi
 
 echo "Wrote manifests to ${OUT_DIR}"
+if [ "${PUBLISH_SAME_REPO}" = "1" ]; then
+  echo "Published same-repo paths:"
+  echo "  bucket/aok.json"
+  echo "  packaging/homebrew/aok.rb"
+  echo "  packaging/winget/ArmanAvanesyan.AgentOperatingKit*.yaml"
+fi
 find "${OUT_DIR}" -type f | sort

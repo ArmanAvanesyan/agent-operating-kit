@@ -15,11 +15,11 @@ log template.
 |---|---|---|---|---|---|---|
 | `codex` | Active | Native install | Untracked | Untracked | Multi-platform release installers (`agent-operating-kit-<version>-<platform>-installer.*`) register the Codex local plugin; pack bundles under `build/bundles/codex/<pack>/` (also in release `*-bundles.zip`) | Neutral→skill generation is curated; keep installer wording multi-platform (not macOS-only) |
 | `claude-code` | Active | Compatibility asset | Untracked | Untracked | `aok-claude-code` marketplace under `adapters/claude-code/marketplace/`; pack assets in `packs/*/claude-code/`; bundles under `build/bundles/claude-code/<pack>/` | Plugin hooks may depend on `CLAUDE_PLUGIN_ROOT`; marketplace plugin versions can lag the kit version |
-| `cursor` | Active | Generated bundle | Untracked | Untracked | `aok render bundle <pack> --target cursor` → `build/bundles/cursor/<pack>/` (`aok-bundle.json`, `roles.md` / `hooks.md` / `skills.md` / `tasks.md`, per-item JSON, `import.json`); see `adapters/cursor/README.md` | **Native Cursor package** (rules/skills/hooks as first-class Cursor package) is an explicit follow-up; today import is manual from the generated bundle |
-| `opencode` | Active | Generated bundle | Untracked | Untracked | `build/bundles/opencode/<pack>/` via `aok render bundle` / release bundles zip | No native OpenCode installer; contract JSON + markdown guidance only |
-| `gemini` | Active | Generated bundle | Untracked | Untracked | `build/bundles/gemini/<pack>/` | Host runtime invocation external; no native Gemini package |
-| `openclaw` | Active | Generated bundle | Untracked | Untracked | `build/bundles/openclaw/<pack>/` | Native installer / tool-call wiring is follow-up |
-| `hermes-agent` | Active | Generated bundle | Untracked | Untracked | `build/bundles/hermes-agent/<pack>/` | Runtime event wiring remains host-defined |
+| `cursor` | Active | Generated bundle | Untracked | Untracked | `build/bundles/cursor/<pack>/` — [import guide](adapters/cursor.md) | **Native Cursor package** (rules/skills/hooks as first-class Cursor package) is an explicit follow-up; today import is manual from the generated bundle |
+| `opencode` | Active | Generated bundle | Untracked | Untracked | `build/bundles/opencode/<pack>/` — [import guide](adapters/opencode.md) | No native OpenCode installer; contract JSON + markdown guidance only |
+| `gemini` | Active | Generated bundle | Untracked | Untracked | `build/bundles/gemini/<pack>/` — [import guide](adapters/gemini.md) | Host runtime invocation external; no native Gemini package |
+| `openclaw` | Active | Generated bundle | Untracked | Untracked | `build/bundles/openclaw/<pack>/` — [import guide](adapters/openclaw.md) | Native installer / tool-call wiring is follow-up |
+| `hermes-agent` | Active | Generated bundle | Untracked | Untracked | `build/bundles/hermes-agent/<pack>/` — [import guide](adapters/hermes-agent.md) | Runtime event wiring remains host-defined |
 
 Support level meanings (schema enum):
 

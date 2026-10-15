@@ -4,26 +4,35 @@ Status: active.
 Support level: `generated-bundle`.  
 Host version: untracked (see `docs/host-compatibility.md`).
 
+**Ops guide (SoT for import steps):** [`docs/adapters/opencode.md`](../../docs/adapters/opencode.md).
+
 The OpenCode adapter renders AOK roles, skills, hooks, and task packets into a
 **generated import bundle**. AOK does not ship a native OpenCode installer.
 
-## Generated-bundle import expectations
+## Prerequisites
+
+- OpenCode CLI/app with an editable project workspace
+- Kit checkout or release `*-bundles.zip`
+
+## Generate or download
 
 ```bash
 ./scripts/aok render bundle <pack> --target opencode
 # → build/bundles/opencode/<pack>/
 ```
 
-Import the directory (or the matching tree from release `*-bundles.zip`) into
-the project workspace:
+Release zip: `bundles/opencode/<pack>/`.
 
-- Use `aok-bundle.json` as the parseable contract.
-- Use `roles.md` / `hooks.md` / `skills.md` / `tasks.md` (and per-item JSON) as
-  project guidance.
-- Follow `import.json` + pack `targetRender.opencode.importInstructions` for
-  the intended file set.
+## Import steps (summary)
 
-There is no automatic OpenCode package registration from AOK.
+1. Obtain `bundles/opencode/<pack>/`.
+2. Copy or reference markdown/JSON from a stable import directory (recommended:
+   `.aok/imports/opencode/<pack>/`) into OpenCode’s instruction/config paths.
+3. Wire any MCP hints from `aok-bundle.json` in the host yourself.
+4. No automatic OpenCode package registration.
+
+Full steps, verification, and failure modes:
+[`docs/adapters/opencode.md`](../../docs/adapters/opencode.md).
 
 ## Render Shape
 
@@ -40,5 +49,5 @@ There is no automatic OpenCode package registration from AOK.
 ## Known Gaps
 
 - OpenCode native package installer wiring is follow-up work.
-- Host OpenCode version is untracked until someone records a tested build in
+- Host OpenCode version is untracked until recorded in
   `docs/targets-support-matrix.md`.

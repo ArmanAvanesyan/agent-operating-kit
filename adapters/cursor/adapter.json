@@ -16,6 +16,7 @@
   ],
   "entrypoints": [
     "adapters/cursor/README.md",
+    "docs/adapters/cursor.md",
     "scripts/aok",
     "packs/*/pack.json"
   ],
@@ -29,6 +30,6 @@
   "bundle": {
     "artifactName": "aok-cursor-bundles.zip",
     "format": "aok-import-bundle",
-    "importInstructions": "Use the release bundle at bundles/cursor/<pack>/ and import the included rules, roles, hooks, skills, tasks, and aok-bundle.json into the project workspace."
+    "importInstructions": "See docs/adapters/cursor.md for host-specific import steps. Bundle: bundles/cursor/<pack>/."
   }
 }

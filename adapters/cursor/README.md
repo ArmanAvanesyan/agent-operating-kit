@@ -4,47 +4,47 @@ Status: active.
 Support level: `generated-bundle`.  
 Host version: untracked (see `docs/host-compatibility.md`).
 
-The Cursor adapter renders AOK pack content into a **self-contained import
-bundle**. AOK does not install a native Cursor package today.
+**Ops guide (SoT for import steps):** [`docs/adapters/cursor.md`](../../docs/adapters/cursor.md).
 
-## What `aok render bundle` produces
+The Cursor adapter renders AOK pack content into a **self-contained import
+bundle**. AOK does not install a native Cursor package on this path (native
+project-tree emission is separate roadmap work).
+
+## Prerequisites
+
+- Cursor IDE/Agent with project rules (and optional skills) support
+- Kit checkout or release `*-bundles.zip`
+
+## Generate or download
 
 ```bash
 ./scripts/aok render bundle <pack> --target cursor
 # → build/bundles/cursor/<pack>/
 ```
 
-Typical bundle layout (same shape for every generated-bundle target):
+Release zip: `bundles/cursor/<pack>/`.
+
+## Bundle layout
 
 | Path | Role |
 |---|---|
-| `aok-bundle.json` | Canonical contract (`kind: aok-bundle`) plus embedded pack render |
-| `import.json` | Lightweight import pointer (`kind: aok-target-import`) |
-| `README.md` | Pack/target/support-level summary |
+| `aok-bundle.json` | Canonical contract (`kind: aok-bundle`) |
+| `import.json` | Lightweight import pointer |
+| `README.md` | Pack/target summary |
 | `roles.md`, `hooks.md`, `skills.md`, `tasks.md` | Human-readable projections |
 | `roles/`, `hooks/`, `skills/`, `templates/`, `task-packets/` | Per-item JSON |
 | `sources/` | Copied pack/source refs when declared |
 
-Pack manifests may also describe Cursor-oriented `targetRender.cursor.payload`
-(for example hook-checklist contracts). That metadata is carried in the render
-contract inside `aok-bundle.json`; it is not a separate Cursor marketplace
-package.
+## Import steps (summary)
 
-## Import story (rules / skills / hooks)
+1. Obtain `bundles/cursor/<pack>/`.
+2. Map `roles.md` / `roles/*.json` → Cursor project rules (e.g. `.cursor/rules/`).
+3. Map `skills.md` / `skills/*.json` → Cursor skills or prompts manually.
+4. Use `hooks.md` as **checklists** only (not executable Cursor hooks).
+5. Keep `aok-bundle.json` for audits.
 
-Until a native Cursor package exists, treat the bundle as the import source:
-
-1. Generate or download the Cursor pack directory (`bundles/cursor/<pack>/` in
-   a release `*-bundles.zip`, or regenerate with `aok render bundle`).
-2. Copy or map **rules / policy** from `roles.md` and `roles/*.json` into the
-   project’s Cursor rules location (project rules / AGENTS-style guidance as
-   your Cursor version expects).
-3. Use `skills.md` / `skills/*.json` as skill or workflow prompts; wire them
-   manually into Cursor skills or docs the host understands.
-4. Use `hooks.md` / `hooks/*.json` as **checklists** (pre/after guidance). Native
-   Cursor hook execution is not emitted by this adapter.
-5. Keep `aok-bundle.json` in-repo if you want a parseable audit trail of what
-   was imported.
+Full steps, verification, and failure modes:
+[`docs/adapters/cursor.md`](../../docs/adapters/cursor.md).
 
 ## Supported Commands
 
@@ -54,8 +54,7 @@ Until a native Cursor package exists, treat the bundle as the import source:
 
 ## Known Gaps
 
-- **Native Cursor package** (first-class Cursor rules/skills/hooks packaging) is
-  explicit follow-up work. JSON contract + generated markdown remain the
-  cross-tool source of truth.
+- **Native Cursor package** (first-class rules/skills/hooks packaging) is
+  explicit follow-up work.
 - Host Cursor version is untracked; record a tested version in
   `docs/targets-support-matrix.md` when verified.

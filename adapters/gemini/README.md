@@ -4,24 +4,35 @@ Status: active.
 Support level: `generated-bundle`.  
 Host version: untracked (see `docs/host-compatibility.md`).
 
+**Ops guide (SoT for import steps):** [`docs/adapters/gemini.md`](../../docs/adapters/gemini.md).
+
 The Gemini adapter renders AOK content into Gemini-friendly contracts for use in
 multi-agent workflows. Delivery is a **generated import bundle** only.
 
-## Generated-bundle import expectations
+## Prerequisites
+
+- Gemini CLI or app that can take project/context files
+- Kit checkout or release `*-bundles.zip`
+
+## Generate or download
 
 ```bash
 ./scripts/aok render bundle <pack> --target gemini
 # → build/bundles/gemini/<pack>/
 ```
 
-Treat `build/bundles/gemini/<pack>/` (or the release bundles zip path) as
-reusable role, skill, hook, and task guidance:
+Release zip: `bundles/gemini/<pack>/`.
 
-- `aok-bundle.json` — canonical contract
-- markdown + per-item JSON — copy or adapt into Gemini CLI/app prompts or
-  project docs as your host expects
+## Import steps (summary)
 
-AOK does not invoke Gemini runtimes or install a Gemini-native package.
+1. Obtain `bundles/gemini/<pack>/`.
+2. Load `roles.md` / `skills.md` / `tasks.md` into Gemini context.
+3. Use `hooks.md` as operator checklists (`renders` includes `hook` to match
+   emitted bundle files).
+4. AOK does not invoke Gemini runtimes or install a Gemini-native package.
+
+Full steps, verification, and failure modes:
+[`docs/adapters/gemini.md`](../../docs/adapters/gemini.md).
 
 ## Render Shape
 

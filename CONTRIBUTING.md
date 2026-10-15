@@ -20,17 +20,19 @@ JSON manifests — keep changes small, validated, and documented.
 Prefer `./scripts/aok` for day-to-day contribution until Go command parity is
 complete. Release CI builds the Go binary; end users do not need Go or Python.
 
-### Building the Go CLI locally (when present)
+### Building the Go CLI locally
 
-Planned layout: module / main package under `cmd/aok`. When that tree exists:
+Module: `github.com/ArmanAvanesyan/agent-operating-kit`. Main package: `cmd/aok`.
 
 ```bash
 go build -o dist/aok ./cmd/aok
 ./dist/aok version
+go test ./...
 ```
 
-Pin the Go version to whatever release CI uses. Cross-compile notes and artifact
-names live in [docs/cli-distribution.md](docs/cli-distribution.md).
+CI pins Go **1.22.x** (see `.github/workflows/ci.yml`). Cross-compile notes and
+artifact names live in [docs/cli-distribution.md](docs/cli-distribution.md).
+Set `AOK_ROOT` to override kit-root discovery when needed.
 
 ## Validate locally
 

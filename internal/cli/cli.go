@@ -40,6 +40,12 @@ func Run(argv []string, stdout, stderr io.Writer) int {
 		code, err = runValidate(args, stdout, stderr)
 	case "install":
 		code, err = runInstall(args, stdout, stderr)
+	case "claude":
+		code, err = runClaude(args, stdout, stderr)
+	case "codex":
+		code, err = runCodex(args, stdout, stderr)
+	case "project":
+		code, err = runProject(args, stdout, stderr)
 	default:
 		fmt.Fprintf(stderr, "unknown command: %s\n", cmd)
 		printUsage(stderr)
@@ -69,6 +75,10 @@ Commands:
   doctor               Check install and required kit files
   validate             Validate kit content
   install              Register marketplace plugin and install PATH binary
+  claude setup         Configure Claude Code marketplace (aok-claude-code)
+  codex setup          Install + doctor (+ optional project / claude)
+  codex local-env      init|validate|actions
+  project init|validate
 
 Environment:
   AOK_ROOT             Override kit root discovery`)

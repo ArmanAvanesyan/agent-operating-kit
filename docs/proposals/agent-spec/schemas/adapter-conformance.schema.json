@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.example/proposals/agent-spec/adapter-conformance.schema.json",
+  "title": "PROPOSED AOK adapter-conformance",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "AdapterConformance"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    },
+    "adapter": {
+      "type": "string",
+      "minLength": 1
+    },
+    "adapterVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "hostVersionRange": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "enum": [
+        "project",
+        "user",
+        "plugin",
+        "session"
+      ]
+    },
+    "nativeFormats": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "operations": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "detect",
+          "parse",
+          "normalize",
+          "inspect",
+          "adopt",
+          "render",
+          "compare",
+          "verify"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "fields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "neutralPath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "support": {
+            "enum": [
+              "native",
+              "executor-backed",
+              "guidance-only",
+              "unsupported"
+            ]
+          },
+          "enforcementOwner": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "neutralPath",
+          "support",
+          "enforcementOwner",
+          "required",
+          "evidence"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "tests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "enum": [
+              "syntax",
+              "round-trip",
+              "scope",
+              "enforcement",
+              "drift",
+              "credentials"
+            ]
+          },
+          "status": {
+            "enum": [
+              "passed",
+              "failed",
+              "not-run"
+            ]
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "category",
+          "status",
+          "evidence"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "certification": {
+      "enum": [
+        "draft",
+        "verified",
+        "expired"
+      ]
+    },
+    "checkedOn": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "adapter",
+    "adapterVersion",
+    "hostVersionRange",
+    "scope",
+    "nativeFormats",
+    "operations",
+    "fields",
+    "tests",
+    "certification",
+    "checkedOn"
+  ],
+  "additionalProperties": false
+}

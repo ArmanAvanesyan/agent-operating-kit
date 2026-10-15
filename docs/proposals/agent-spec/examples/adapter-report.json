@@ -1,0 +1,32 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "AdapterReport",
+  "operation": "export",
+  "adapter": "opencode",
+  "adapterVersion": "draft-fixture",
+  "hostVersion": "unverified",
+  "nativeFormat": "opencode-agent-markdown",
+  "scope": "project",
+  "status": "blocked",
+  "fields": [
+    {
+      "neutralPath": "model.selector",
+      "nativePath": "frontmatter.model",
+      "mapping": "exact",
+      "enforcement": "native",
+      "reason": "Supported field shape; no live host replay."
+    },
+    {
+      "neutralPath": "permissions.filesystem.write",
+      "nativePath": "sidecar.permissions.filesystem.write",
+      "mapping": "unsupported",
+      "enforcement": "none",
+      "reason": "Draft fixture denies edits entirely; report-directory-only writes need verified enforcement."
+    }
+  ],
+  "diagnostics": [
+    "Illustrative report only. Do not install or launch from this fixture."
+  ],
+  "sourceHashes": [],
+  "sidecarPath": "examples/native/repository-explorer.aok.json"
+}

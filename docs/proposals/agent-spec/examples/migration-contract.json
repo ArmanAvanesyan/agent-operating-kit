@@ -1,0 +1,30 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "MigrationContract",
+  "metadata": {
+    "id": "agent-contract-versioning",
+    "name": "Agent Contract Versioning",
+    "version": "0.1.0",
+    "description": "Proposed documentation fixture; not operational configuration."
+  },
+  "schemaCompatibility": {
+    "current": "aok/v1alpha1",
+    "readableVersions": [
+      "aok/v1alpha1"
+    ],
+    "unknownVersion": "block"
+  },
+  "referencePinning": "version-and-content-hash",
+  "deprecations": [],
+  "migrations": [],
+  "upgrade": {
+    "dryRunRequired": true,
+    "backupRequired": true,
+    "reResolveRequired": true
+  },
+  "rollback": {
+    "restoreDefinitions": true,
+    "restoreGeneratedFiles": true,
+    "reverseExternalEffects": false
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "status": "illustrative-sidecar-not-an-installed-contract",
+  "agent": "../agent.json",
+  "outputContract": "../output-contract.json",
+  "adapterReport": "../adapter-report.json",
+  "notes": "Production sidecars must additionally bind native file hashes, adapter/host versions and complete unmapped fields. These fixtures do not establish runnable equivalence."
+}

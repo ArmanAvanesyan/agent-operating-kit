@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.example/proposals/agent-spec/adapter-report.schema.json",
+  "title": "PROPOSED AOK adapter-report",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "AdapterReport"
+    },
+    "operation": {
+      "enum": [
+        "import",
+        "export"
+      ]
+    },
+    "adapter": {
+      "type": "string",
+      "minLength": 1
+    },
+    "adapterVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "hostVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nativeFormat": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "enum": [
+        "project",
+        "user",
+        "plugin",
+        "session"
+      ]
+    },
+    "status": {
+      "enum": [
+        "compatible",
+        "lossy",
+        "blocked"
+      ]
+    },
+    "fields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "neutralPath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "nativePath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "mapping": {
+            "enum": [
+              "exact",
+              "transformed",
+              "guidance-only",
+              "unsupported",
+              "preserved-extension"
+            ]
+          },
+          "enforcement": {
+            "enum": [
+              "native",
+              "executor",
+              "advisory",
+              "none"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "neutralPath",
+          "nativePath",
+          "mapping",
+          "enforcement",
+          "reason"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "sourceHashes": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/provenance"
+      },
+      "uniqueItems": true
+    },
+    "sidecarPath": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "operation",
+    "adapter",
+    "adapterVersion",
+    "hostVersion",
+    "nativeFormat",
+    "scope",
+    "status",
+    "fields",
+    "diagnostics",
+    "sourceHashes"
+  ],
+  "additionalProperties": false
+}

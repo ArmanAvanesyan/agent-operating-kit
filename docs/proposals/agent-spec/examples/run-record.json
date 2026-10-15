@@ -1,0 +1,58 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "AgentRunRecord",
+  "id": "fixture-explore-aok-001-attempt-1",
+  "fixture": true,
+  "assignment": "explore-aok-001",
+  "manifest": "examples/resolved-manifest.json",
+  "state": "blocked",
+  "attempt": 1,
+  "parentRun": null,
+  "timestamps": {
+    "createdAt": "2026-10-15T00:00:00Z",
+    "startedAt": null,
+    "endedAt": "2026-10-15T00:00:00Z"
+  },
+  "configuration": {
+    "requested": {
+      "profile": "opencode-exploration"
+    },
+    "resolvedManifestSha256": "1dd6cb55b964968f3fed3ff624b7184324711a1bb324c4f3358c6ff1f940a80f",
+    "observed": null
+  },
+  "usage": {
+    "inputTokens": null,
+    "outputTokens": null,
+    "costUsd": null
+  },
+  "events": [
+    {
+      "sequence": 1,
+      "type": "readiness.blocked",
+      "detail": "Synthetic fixture only; no agent executed."
+    }
+  ],
+  "errors": [
+    {
+      "code": "enforcement-unverified",
+      "message": "Required policy enforcement not demonstrated.",
+      "retryable": false
+    }
+  ],
+  "checkpointRef": null,
+  "result": {
+    "apiVersion": "aok/v1alpha1",
+    "kind": "AgentResult",
+    "status": "blocked",
+    "summary": "Synthetic example: required enforcement and native discovery have not been verified.",
+    "deliverables": [],
+    "evidence": [],
+    "unresolvedItems": [
+      "Report-subtree enforcement needs host/executor validation."
+    ],
+    "nextActions": [
+      "Complete conformance checks before execution."
+    ],
+    "verification": "not-run"
+  }
+}

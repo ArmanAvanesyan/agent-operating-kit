@@ -18,7 +18,7 @@ never fails the release.
 Regenerate from a published release (or local `dist/release`):
 
 ```bash
-./scripts/packaging/generate-from-release.sh --version 0.6.0
+./scripts/packaging/generate-from-release.sh --version 0.6.1
 # or from local artifacts:
 ./scripts/packaging/generate-from-release.sh --dist dist/release
 ```

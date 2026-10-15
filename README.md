@@ -64,7 +64,7 @@ Regenerate manifests from a release tag or local `dist/release` (updates
 `bucket/`, `packaging/homebrew/aok.rb`, and `packaging/winget/*.yaml`):
 
 ```bash
-./scripts/packaging/generate-from-release.sh --version 0.6.0
+./scripts/packaging/generate-from-release.sh --version 0.6.1
 ```
 
 ## Developer First Success Path

@@ -15,7 +15,7 @@ jobs:
     name: Lint + typecheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v10
         with:
           version: ${{ env.UV_VERSION }}
@@ -46,7 +46,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v10
         with:
           version: ${{ env.UV_VERSION }}
@@ -79,7 +79,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v10
         with:
           version: ${{ env.UV_VERSION }}
@@ -97,7 +97,7 @@ jobs:
     name: Migration convention check (ADR-011)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Verify CONCURRENTLY indexes have autocommit + are in their own revision
         run: |
           # Grep for CONCURRENTLY without autocommit
@@ -121,7 +121,7 @@ jobs:
     name: NDA / customer-data hygiene
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: No customer-data files committed
         run: |
           # Edit the directory list and the extension list to match what your project considers "customer data"
@@ -136,7 +136,7 @@ jobs:
     name: pip-audit (supply chain)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v10
         with:
           version: ${{ env.UV_VERSION }}
@@ -148,8 +148,8 @@ jobs:
     name: hadolint (Dockerfile linting)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: hadolint/hadolint-action@v3.1.0
+      - uses: actions/checkout@v7
+      - uses: hadolint/hadolint-action@v3.5.0
         with:
           dockerfile: Dockerfile
           failure-threshold: warning
@@ -159,7 +159,7 @@ jobs:
     name: bandit (SAST)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v10
         with:
           version: ${{ env.UV_VERSION }}
@@ -172,7 +172,7 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v10
         with:
           version: ${{ env.UV_VERSION }}

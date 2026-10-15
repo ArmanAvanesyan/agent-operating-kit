@@ -1,7 +1,9 @@
 package claude
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"reflect"
 	"testing"
 
@@ -175,5 +177,24 @@ func TestEnginePreservesUnsupportedNativeControls(t *testing.T) {
 	out, _, report := e.Export("claude-code", "project", files, b, nil)
 	if len(out) != 1 || report.Status != "blocked" {
 		t.Fatalf("export: %+v", report)
+	}
+}
+
+func TestMCPCredentialsNeverEnterBundleOrReport(t *testing.T) {
+	registry := nativeadapter.NewRegistry()
+	if err := registry.Register(New()); err != nil {
+		t.Fatal(err)
+	}
+	engine := nativeadapter.NewEngine(registry)
+	for _, key := range []string{"ANTHROPIC_API_KEY", "GITHUB_TOKEN", "AWS_SECRET_ACCESS_KEY", "providerClientSecret"} {
+		input := []nativeadapter.File{{Path: ".claude/agents/probe.md", Format: "markdown", Data: []byte(fmt.Sprintf("---\nname: probe\ndescription: Probe\nmcpServers:\n  local:\n    command: run\n    env:\n      %s: fixture-private-value\n---\nPrompt\n", key))}}
+		bundle, report := engine.Import("claude-code", "project", input, nil, nil)
+		if bundle.Version != "" || report.Status != "blocked" {
+			t.Fatalf("credential accepted for %s: %+v", key, report)
+		}
+		encoded, _ := json.Marshal(report)
+		if bytes.Contains(encoded, []byte("fixture-private-value")) {
+			t.Fatal("secret echoed")
+		}
 	}
 }

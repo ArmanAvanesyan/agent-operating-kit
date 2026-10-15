@@ -530,6 +530,16 @@ func sensitiveKey(k string) bool {
 	case "apikey", "password", "accesstoken", "privatekey", "token", "clientsecret", "refreshtoken", "authtoken", "bearertoken", "apisecret", "secret", "authorization", "secretkey", "credential", "credentials", "clientcredential", "clientcredentials":
 		return true
 	}
+	// Provider prefixes do not make common credential environment keys safe.
+	// Reference/limit suffixes are not matched (for example apiKeyRef/maxTokens).
+	for _, suffix := range []string{"apikey", "password", "privatekey", "accesstoken", "clientsecret", "refreshtoken", "authtoken", "bearertoken", "apisecret", "secretkey", "secretaccesskey"} {
+		if strings.HasSuffix(n, suffix) {
+			return true
+		}
+	}
+	if strings.HasSuffix(strings.ToUpper(k), "_TOKEN") {
+		return true
+	}
 	return false
 }
 

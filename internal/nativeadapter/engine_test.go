@@ -367,7 +367,7 @@ func TestPortableFileCollisionsAndScopeSpecificEvidence(t *testing.T) {
 
 func TestCommonCredentialKeysNeverProduceBundles(t *testing.T) {
 	engine := testEngine(t)
-	for _, key := range []string{"token", "clientSecret", "refresh_token", "Authorization", "api-secret"} {
+	for _, key := range []string{"token", "clientSecret", "refresh_token", "Authorization", "api-secret", "secret_key", "credentials", "clientCredential"} {
 		data, _ := json.Marshal(map[string]any{"name": "x", "model": "m", key: "fixture-sensitive-value"})
 		b, r := engine.Import("opencode", "project", testNative(string(data), "json"), nil, nil)
 		if b.Version != "" || r.Status != "blocked" {

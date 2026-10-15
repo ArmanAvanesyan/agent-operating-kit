@@ -521,7 +521,7 @@ func findSensitive(pathName string, raw json.RawMessage) []string {
 func sensitiveKey(k string) bool {
 	n := strings.ToLower(strings.NewReplacer("_", "", "-", "").Replace(k))
 	switch n {
-	case "apikey", "password", "accesstoken", "privatekey", "token", "clientsecret", "refreshtoken", "authtoken", "bearertoken", "apisecret", "secret", "authorization":
+	case "apikey", "password", "accesstoken", "privatekey", "token", "clientsecret", "refreshtoken", "authtoken", "bearertoken", "apisecret", "secret", "authorization", "secretkey", "credential", "credentials", "clientcredential", "clientcredentials":
 		return true
 	}
 	return false

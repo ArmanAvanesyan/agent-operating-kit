@@ -62,7 +62,7 @@ SHA-256 hashes and decoded projection. Raw bytes preserve source comments and
 formatting as provenance; rendering may normalize formatting. Integrity and
 source drift failures prevent export. Unknown fields survive supported-field
 round trips, and collisions with mapped fields are errors. Common credential-bearing
-decoded key names (including token, clientSecret and refreshToken) are rejected; diagnostics do not echo their values. This is not a
+decoded key names (including token, clientSecret, refreshToken, secretKey and credentials) are rejected; diagnostics do not echo their values. This is not a
 general secret scanner for arbitrary prose.
 
 Comparison uses decoded semantics rather than serialized formatting. Differences

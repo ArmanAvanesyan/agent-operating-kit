@@ -1,9 +1,9 @@
 # Native adapter interface
 
-Stage 6 implements the shared interface and conformance harness, not a client
-adapter. The production registry is empty until client-specific reviewed PRs
-register implementations. A known target with no registered adapter reports a
-blocked result. No native completion claim follows from passing these tests.
+The shared interface and conformance harness support explicit native projections.
+OpenCode project Markdown is registered; see its [mapping and host evidence](../internal/nativeadapters/opencode/README.md).
+Other known targets without a registered adapter report a blocked result.
+Shared parser tests alone do not establish native completion.
 
 The Go CLI accepts explicit operations, target, scope and input:
 
@@ -46,7 +46,9 @@ encoding. Reports contain field paths and hashes, not source contents or values.
 Output creates private files and directories, rejects case-insensitive and
 file/directory collisions, portable reserved names, symlink ancestors, input
 overlap and existing destinations. The output parent must already exist.
-`report.json` and `aok-native.json` are reserved output names.
+`report.json`, `aok-native.json`, and `aok-native-input.json` are reserved output
+names. Exports include the input inventory so their directory can be explicitly
+re-imported or compared.
 
 ## Projection, provenance and comparison
 
@@ -54,8 +56,20 @@ Adapters decode native files into a mapping projection using canonical AOK field
 paths plus inert unknown native content. This projection is an **incomplete
 draft**, not a new operating model or a schema-valid canonical Agent. It does not
 invent missing assignment, output, environment, verifier or lifecycle references.
-A future canonical-assignment bridge must supply and validate those references
-before a draft can claim canonical completeness.
+Canonical export validates those references using the existing resolver:
+
+```text
+aok agent native export --target opencode --scope project --input assignment.json --root /corpus --out /new/candidate
+```
+
+`--root` selects canonical export and is mutually exclusive with `--source`.
+The target must match the selected execution profile. The candidate binds the
+immutable snapshot digest, pinned assignment/agent/profile and all source hashes.
+Literal instruction files are materialized from the same captured bytes, in
+declared order, separated by two newline bytes. Parameterized templates block
+export. Assets are inert bundle content. Native projections remain incomplete
+and required unsupported controls remain blocked; hashes do not establish
+readiness, authorization or runtime enforcement.
 
 The versioned bundle binds the adapter version, target, scope, exact source bytes,
 SHA-256 hashes and decoded projection. Raw bytes preserve source comments and

@@ -20,6 +20,7 @@ type File struct {
 // Document is an incomplete mapping projection, never a complete canonical
 // Agent. Fields use canonical AOK dotted paths; Unknown uses native paths.
 type Document struct {
+	Assets  map[string][]byte          `json:"assets,omitempty"` // Materialized instruction files, not executable content.
 	Fields  map[string]json.RawMessage `json:"fields"`
 	Unknown map[string]json.RawMessage `json:"unknown"`
 }
@@ -78,15 +79,16 @@ type BoundFile struct {
 // explicitly incomplete until a canonical-assignment bridge supplies and
 // validates all required AOK references.
 type Bundle struct {
-	Version        string      `json:"version"`
-	Target         string      `json:"target"`
-	Scope          string      `json:"scope"`
-	AdapterVersion string      `json:"adapterVersion"`
-	Completeness   string      `json:"completeness"` // draft-incomplete
-	OriginalFiles  []BoundFile `json:"originalFiles"`
-	RenderedFiles  []BoundFile `json:"renderedFiles,omitempty"`
-	Document       Document    `json:"document"`
-	Digest         string      `json:"digest"`
+	Canonical      *CanonicalProvenance `json:"canonical,omitempty"`
+	Version        string               `json:"version"`
+	Target         string               `json:"target"`
+	Scope          string               `json:"scope"`
+	AdapterVersion string               `json:"adapterVersion"`
+	Completeness   string               `json:"completeness"` // draft-incomplete
+	OriginalFiles  []BoundFile          `json:"originalFiles"`
+	RenderedFiles  []BoundFile          `json:"renderedFiles,omitempty"`
+	Document       Document             `json:"document"`
+	Digest         string               `json:"digest"`
 }
 
 type Difference struct {
@@ -107,4 +109,18 @@ type Report struct {
 	Unknown            []string               `json:"unknown,omitempty"`
 	Differences        []Difference           `json:"differences,omitempty"`
 	SourceHashes       []FileHash             `json:"sourceHashes,omitempty"`
+}
+
+// CanonicalProvenance records the validated source selection. It is hash evidence,
+// not authorization and does not make a native draft a complete canonical Agent.
+type CanonicalProvenance struct {
+	SnapshotDigest string              `json:"snapshotDigest"`
+	Agent          contracts.Reference `json:"agent"`
+	Profile        contracts.Reference `json:"profile"`
+	Assignment     contracts.Reference `json:"assignment"`
+	Sources        []CanonicalSource   `json:"sources"`
+}
+type CanonicalSource struct {
+	Path   string `json:"path"`
+	SHA256 string `json:"sha256"`
 }

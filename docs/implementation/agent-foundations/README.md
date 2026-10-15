@@ -89,8 +89,8 @@ workers and one reviewer, with isolated worktrees for concurrent edits.
 | 3 | Typed models, registries, invocation/context/assignment and reference semantics | Merged: [PR #50](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/50) |
 | 4 | Deterministic resolution, immutable evidence, permission/path protections | Merged: [PR #51](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/51) |
 | 5 | Planning DAG, revisions, traceability, decision results | Merged: [PR #52](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/52) |
-| 6 | Shared native interface, provenance/sidecars, semantic comparison | In progress |
-| 7 | OpenCode native adapter | Pending |
+| 6 | Shared native interface, provenance/sidecars, semantic comparison | Merged: [PR #53](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/53) |
+| 7 | OpenCode native adapter | In progress; project loading verified on 1.18.35 |
 | 8 | Claude Code native adapter | Pending |
 | 9 | Codex native adapter | Pending |
 | 10 | Cursor native adapter | Pending |

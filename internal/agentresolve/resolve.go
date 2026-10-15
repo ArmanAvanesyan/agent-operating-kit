@@ -23,16 +23,33 @@ const (
 	maxFile  = contracts.MaxDocumentBytes
 )
 
+// InstructionFile contains bytes from the same immutable capture as the snapshot.
+type InstructionFile struct {
+	Path string
+	Data []byte
+}
+
 // Resolve captures a bounded corpus, validates only that captured copy, and
 // resolves the exact assignment pins. An empty corpusRoot means the assignment
 // file's parent directory. No commands, probes, adapters, or network calls run.
 func Resolve(assignmentPath, corpusRoot string) Report {
+	report, _ := resolveInstructions(assignmentPath, corpusRoot)
+	return report
+}
+
+// ResolveWithInstructions additionally returns captured instruction files in declared order.
+// It never re-reads live files after resolution or performs template expansion.
+func ResolveWithInstructions(assignmentPath, corpusRoot string) (Report, []InstructionFile) {
+	return resolveInstructions(assignmentPath, corpusRoot)
+}
+
+func resolveInstructions(assignmentPath, corpusRoot string) (Report, []InstructionFile) {
 	report := Report{Diagnostics: []contracts.Diagnostic{}}
 	capture, err := captureCorpus(assignmentPath, corpusRoot)
 	if err != nil {
 		report.add("resolve.capture", assignmentPath, "", "error", err.Error())
 		report.finish("invalid")
-		return report
+		return report, nil
 	}
 	defer os.RemoveAll(capture.tempRoot)
 
@@ -40,13 +57,13 @@ func Resolve(assignmentPath, corpusRoot string) Report {
 	report.Diagnostics = append(report.Diagnostics, sanitizeDiagnostics(validated.Diagnostics, capture.tempRoot)...)
 	if validated.Status == "invalid" {
 		report.finish("invalid")
-		return report
+		return report, nil
 	}
 	corpus, loaded := agentvalidate.Load(capture.tempRoot)
 	report.Diagnostics = append(report.Diagnostics, sanitizeDiagnostics(loaded.Diagnostics, capture.tempRoot)...)
 	if loaded.Status == "invalid" || corpus == nil {
 		report.finish("invalid")
-		return report
+		return report, nil
 	}
 	resolved, err := resolveCaptured(corpus, capture, &report)
 	if err != nil {
@@ -54,7 +71,7 @@ func Resolve(assignmentPath, corpusRoot string) Report {
 			report.add("resolve.selection", capture.assignmentRel, "", "error", err.Error())
 		}
 		report.finish("invalid")
-		return report
+		return report, nil
 	}
 	report.Snapshot = resolved
 	for _, e := range resolved.ReadinessEvidence {
@@ -63,8 +80,32 @@ func Resolve(assignmentPath, corpusRoot string) Report {
 	for _, e := range resolved.CompatibilityEvidence {
 		report.add("resolve.compatibility.unverified", e.Source, e.Field, "warning", e.Message)
 	}
+	instructions := []InstructionFile{}
+	owner := ""
+	for _, doc := range corpus.Resources {
+		if doc.Resource.Kind == "Agent" && doc.Resource.Envelope.Metadata.ID == resolved.Agent.Metadata.ID && doc.Resource.Envelope.Metadata.Version == resolved.Agent.Metadata.Version {
+			owner = doc.Path
+			break
+		}
+	}
+	for _, source := range resolved.Agent.Instructions.Sources {
+		file, err := corpus.ResolveFile(owner, source.Path)
+		if err != nil {
+			report.add("resolve.instructions", owner, "instructions.sources", "error", "instruction source cannot be materialized")
+			report.finish("invalid")
+			return report, nil
+		}
+		key := filepath.ToSlash(rel(corpus.Root, file))
+		data, ok := capture.bytesByPath[key]
+		if !ok {
+			report.add("resolve.instructions", owner, "instructions.sources", "error", "instruction source is absent from captured evidence")
+			report.finish("invalid")
+			return report, nil
+		}
+		instructions = append(instructions, InstructionFile{Path: key, Data: append([]byte(nil), data...)})
+	}
 	report.finish("blocked")
-	return report
+	return report, instructions
 }
 
 type capturedCorpus struct {

@@ -9,7 +9,7 @@ newer than installed hosts; each adapter must pin its tested format and host.
 |---|---|---|---|
 | Codex | Project `.codex/agents/<name>.toml`; project `.codex/config.toml` controls concurrency | `codex-cli 0.162.1` | Isolated native loading; validate per-agent allowed fields and model/reasoning support |
 | Claude Code | Project `.claude/agents/*.md`, YAML frontmatter and prompt body; user/plugin scopes differ | `2.1.281` | Isolated discovery and project/plugin negative scope tests |
-| OpenCode | Project `.opencode/agents/*.md` or `opencode.json` agent entries | `1.18.35` | Isolated discovery and supported-field round trips |
+| OpenCode | Project `.opencode/agents/*.md` or `opencode.json` agent entries | `1.18.35` | Project loading and round trip verified; [evidence](../../evidence/native-adapters/opencode-1.18.35.json); runtime enforcement unverified |
 | Cursor | Project `.cursor/agents/*.md`, YAML frontmatter and prompt body | `cursor-agent 2026.04.17-787b533` | Verify installed CLI discovery/loading; docs alone insufficient |
 | Gemini | Project `.gemini/agents/*.md`; personal `~/.gemini/agents/*.md` | Not installed | Native host loading unavailable; documentation feasibility only |
 | OpenClaw | Config roster plus workspace bootstrap files; isolated configuration-home scope | Not installed | Native host unavailable; pin roster version and validate bundle dependencies |
@@ -59,8 +59,8 @@ newer than installed hosts; each adapter must pin its tested format and host.
 
 `command -v` located Codex, Claude, OpenCode, Cursor, Hermes and agy. It did not
 locate Gemini or OpenClaw. Versions above came from each host's `--version`.
-Hermes profile/help and agy agent listing were read-only probes. No native fixture
-has been loaded yet by this implementation effort. Future evidence must record
+Hermes profile/help and agy agent listing were read-only probes. The OpenCode adapter now has isolated generated-file loading evidence linked
+above. Other native gates remain open. Future evidence must record
 exact commands, sanitized output, isolated configuration paths, native fixture
 hashes, host version, scope, and whether the observation proves syntax, discovery,
 loading or runtime enforcement. Never conflate those categories.

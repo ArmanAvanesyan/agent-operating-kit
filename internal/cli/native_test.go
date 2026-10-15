@@ -62,7 +62,7 @@ func TestNativeCLIMisuseAndMissingAdapter(t *testing.T) {
 	input := filepath.Join(root, "agent.json")
 	_ = os.WriteFile(input, []byte("{}"), 0600)
 	var out, errout bytes.Buffer
-	code, err := runNative([]string{"inspect", "--target", "opencode", "--scope", "project", "--input", input}, &out, &errout)
+	code, err := runNative([]string{"inspect", "--target", "gemini", "--scope", "project", "--input", input}, &out, &errout)
 	if err != nil || code != 1 || !bytes.Contains(out.Bytes(), []byte("blocked")) {
 		t.Fatalf("%d %v %s", code, err, out.String())
 	}

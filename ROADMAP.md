@@ -29,14 +29,13 @@ commitment calendar.
 - **Deeper non-Codex / non-Claude import guides** — `docs/adapters/` pages plus
   expanded READMEs for Cursor, OpenCode, Gemini, OpenClaw, and Hermes Agent
   (prerequisites, bundle paths, verification, failure modes).
+- **Scaffold pin maintenance** — `packs/phased-rollout-template` tooling /
+  Python runtime floors / Actions refreshed (see CHANGELOG Unreleased).
 
 ## Planned themes
 
 - **Native Cursor packaging** — move beyond generated import bundles toward a
   clearer native Cursor rules/skills/hooks story when a stable format exists.
-- **Scaffold pin maintenance** — refresh pins in
-  `packs/phased-rollout-template` (tooling, Python/runtime floors, Actions) when
-  regenerating that template.
 
 ## Related docs
 

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Refresh `packs/phased-rollout-template` scaffold pins: FastAPI / uvicorn /
+  pydantic / pydantic-settings floors; Actions `checkout@v7`, GCP auth/setup
+  `@v3`, hadolint-action `@v3.5.0`. UV `0.13.1` + `setup-uv@v10` and Python
+  `3.12` remain current (no bump).
+
 ## 0.6.0
 
 - Go CLI full command parity for `task`, `hooks`, and `import` in the release

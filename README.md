@@ -304,6 +304,13 @@ Every export includes Epic, Feature, Task, Bug, Spike, Incident, Risk, and
 Change. Selected flows and overlays add their native types. See
 `docs/work-item-types.md`.
 
+## Project Exploration and Readiness
+
+The root Codex plugin includes `project-exploration` and `environment-readiness` skills.
+They provide bounded discovery, optional Rust CLI structural queries and evidence-based
+readiness guidance. Their Python helpers install nothing; full workflow/runtime automation
+remains separate. See [project exploration and readiness](docs/project-exploration-and-readiness.md).
+
 ## Repository Relationships
 
 - `ArmanAvanesyan/agent-operating-kit` is the canonical public project.

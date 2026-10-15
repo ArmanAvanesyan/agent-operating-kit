@@ -63,6 +63,8 @@ func validateRequiredFiles(root string, errors *[]string) {
 		"skills/code-review/SKILL.md",
 		"skills/qa-verification/SKILL.md",
 		"skills/project-bootstrap/SKILL.md",
+		"skills/project-exploration/SKILL.md",
+		"skills/environment-readiness/SKILL.md",
 		"templates/AGENTS.md",
 		"templates/.codex/config.toml",
 		"templates/.codex/setup.sh",

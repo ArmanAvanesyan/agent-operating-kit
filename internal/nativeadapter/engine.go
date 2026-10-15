@@ -458,7 +458,7 @@ func validateDocument(doc Document, d Descriptor) error {
 			return errors.New("document contains invalid JSON field data")
 		}
 		for _, cap := range d.Fields {
-			if pathsOverlap(field, cap.NativePath) {
+			if cap.Support != "unsupported" && pathsOverlap(field, cap.NativePath) {
 				return errors.New("mapped field collides with inert unknown field")
 			}
 		}
@@ -528,6 +528,16 @@ func sensitiveKey(k string) bool {
 	n := strings.ToLower(strings.NewReplacer("_", "", "-", "").Replace(k))
 	switch n {
 	case "apikey", "password", "accesstoken", "privatekey", "token", "clientsecret", "refreshtoken", "authtoken", "bearertoken", "apisecret", "secret", "authorization", "secretkey", "credential", "credentials", "clientcredential", "clientcredentials":
+		return true
+	}
+	// Provider prefixes do not make common credential environment keys safe.
+	// Reference/limit suffixes are not matched (for example apiKeyRef/maxTokens).
+	for _, suffix := range []string{"apikey", "password", "privatekey", "accesstoken", "clientsecret", "refreshtoken", "authtoken", "bearertoken", "apisecret", "secretkey", "secretaccesskey"} {
+		if strings.HasSuffix(n, suffix) {
+			return true
+		}
+	}
+	if strings.HasSuffix(strings.ToUpper(k), "_TOKEN") {
 		return true
 	}
 	return false

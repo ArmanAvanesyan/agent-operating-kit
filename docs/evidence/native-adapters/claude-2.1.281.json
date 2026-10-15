@@ -1,0 +1,54 @@
+{
+  "target": "claude-code",
+  "scope": "project",
+  "hostVersion": "2.1.281",
+  "observedAt": "2026-10-15T21:55:56.879528+00:00",
+  "command": [
+    "--print",
+    "--input-format",
+    "stream-json",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--setting-sources",
+    "project",
+    "--strict-mcp-config",
+    "--mcp-config",
+    "{\"mcpServers\":{}}"
+  ],
+  "request": {
+    "type": "control_request",
+    "request_id": "aok-probe",
+    "request": {
+      "subtype": "initialize"
+    }
+  },
+  "isolation": {
+    "cwd": "$PROBE_ROOT/export",
+    "HOME": "$PROBE_ROOT/home",
+    "CLAUDE_CONFIG_DIR": "$PROBE_ROOT/home/.claude",
+    "XDG_CONFIG_HOME": "$PROBE_ROOT/home/.config",
+    "environment": "Explicit allowlist; no credential variables inherited"
+  },
+  "nativeLoading": "verified",
+  "runtimeEnforcement": "not-tested",
+  "modelExecution": "not-run",
+  "sourceFixture": "internal/nativeadapters/claude/testdata/project/.claude/agents/aok-probe.md",
+  "sourceSHA256": "45e8d4ec5e8b6cb25948ef2cc7f5330a630153e0978b335893207f1c737ba2ec",
+  "renderedSHA256": "62002a30c6ef211ba76ab881733948b6d163e694c72e275d195b384e54ecd3db",
+  "cliResults": {
+    "import": "blocked",
+    "export": "blocked",
+    "compare": "valid"
+  },
+  "observedAgent": {
+    "name": "aok-probe",
+    "description": "Synthetic AOK native loading fixture",
+    "model": "haiku"
+  },
+  "limitations": [
+    "Initialization response proves discovery and returned identity/model only. Prompt and tool enforcement were not exercised.",
+    "No user message or inference request was sent. Process terminated after initialize response.",
+    "Plugin loading remains unverified."
+  ]
+}

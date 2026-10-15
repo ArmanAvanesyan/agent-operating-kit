@@ -1,0 +1,69 @@
+{
+  "target": "codex",
+  "scope": "project",
+  "hostVersion": "0.162.1",
+  "observedAt": "2026-10-15T22:03:52.064665+00:00",
+  "command": [
+    "codex",
+    "app-server",
+    "--stdio"
+  ],
+  "requests": [
+    "initialize",
+    "thread/start (ephemeral, read-only, approvalPolicy never)"
+  ],
+  "isolation": {
+    "cwd": "$PROBE_ROOT/export",
+    "HOME": "$PROBE_ROOT/<case>-home",
+    "CODEX_HOME": "$PROBE_ROOT/<case>-home/.codex",
+    "credentials": "No credential variables inherited"
+  },
+  "nativeParsing": "verified",
+  "nativeLoading": "parser-acceptance-only",
+  "agentSelection": "not-tested",
+  "runtimeEnforcement": "not-tested",
+  "modelExecution": "not-run",
+  "sourceFixture": "internal/nativeadapters/codex/testdata/probe.toml",
+  "sourceSHA256": "ccf2bd30d60b70b6276f1a4749f663a586ebecd8033699f6f2b6c739784514f1",
+  "renderedSHA256": "f61f9ce71cac446817f42e4955befdf10f7c4c403e29308c77cadec16c9e3de8",
+  "cliResults": {
+    "import": "blocked",
+    "export": "blocked",
+    "compare": "valid"
+  },
+  "positive": {
+    "threadStartSucceeded": true,
+    "configWarnings": []
+  },
+  "negativeMalformed": {
+    "threadStartSucceeded": true,
+    "configWarnings": [
+      "Ignoring malformed agent role definition: failed to parse agent role file at $PROBE_ROOT/export/.codex/agents/aok-probe.toml: TOML parse error at line 1, column 9\n  |\n1 | name = [\n  |         ^\nunclosed array, expected `]`\n"
+    ]
+  },
+  "negativeEffort": {
+    "threadStartSucceeded": true,
+    "configWarnings": []
+  },
+  "limitations": [
+    "Native parser reads generated file at startup; controlled malformed variant emits a native warning; invalid effort spelling does not emit a startup warning.",
+    "No turn/start, user prompt, agent selection or model invocation occurred.",
+    "Successful startup does not demonstrate child-agent selection, instruction use or runtime enforcement."
+  ],
+  "reasoningSchemaEvidence": {
+    "command": [
+      "codex",
+      "app-server",
+      "generate-json-schema",
+      "--out",
+      "$SCHEMA_DIR"
+    ],
+    "file": "v2/ThreadStartResponse.json",
+    "definition": "ReasoningEffort",
+    "schema": {
+      "description": "A non-empty reasoning effort value advertised by the model.",
+      "minLength": 1,
+      "type": "string"
+    }
+  }
+}

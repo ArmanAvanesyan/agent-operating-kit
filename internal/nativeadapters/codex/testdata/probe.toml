@@ -1,0 +1,9 @@
+name = "aok-probe"
+description = "Synthetic read-only discovery fixture"
+model = "gpt-6-luna"
+model_reasoning_effort = "medium"
+developer_instructions = "Read-only synthetic discovery fixture."
+
+[features]
+shell_tool = false
+future_capability = true

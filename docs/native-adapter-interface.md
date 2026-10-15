@@ -4,6 +4,7 @@ The shared interface and conformance harness support explicit native projections
 OpenCode and Claude Code project Markdown are registered; see its [mapping and host evidence](../internal/nativeadapters/opencode/README.md).
 Claude also supports plugin parsing/rendering, but its plugin loading gate remains
 unverified. See [Claude mappings and evidence](../internal/nativeadapters/claude/README.md).
+Codex project TOML is also registered; [its source mapping and parser evidence](../internal/nativeadapters/codex/README.md) do not yet establish child-agent loading.
 Other known targets without a registered adapter report a blocked result.
 Shared parser tests alone do not establish native completion.
 

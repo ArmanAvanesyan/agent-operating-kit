@@ -36,6 +36,10 @@ func Export(engine *nativeadapter.Engine, target, scope, assignment, root string
 		fail("native.target.unregistered", "target", "target has no registered native adapter")
 		return nil, nativeadapter.Bundle{}, r
 	}
+	supported := map[string]bool{}
+	for _, cap := range descriptor.Fields {
+		supported[cap.NeutralPath] = cap.Support == "native"
+	}
 	fields := map[string]json.RawMessage{}
 	set := func(path string, value any) { fields[path], _ = json.Marshal(value) }
 	set("agent.metadata.id", s.Agent.Metadata.ID)
@@ -47,7 +51,19 @@ func Export(engine *nativeadapter.Engine, target, scope, assignment, root string
 	for _, path := range []string{"agent.metadata.id", "agent.identity.purpose", "agent.instructions.sources", "executionProfile.model.selector"} {
 		required(path)
 	}
-	if s.Profile.Model.Reasoning.Mode != "provider-default" {
+	if supported["executionProfile.model.reasoning.mode"] {
+		mode := s.Profile.Model.Reasoning.Mode
+		if mode != "provider-default" && mode != "effort" {
+			fail("native.canonical.reasoning", "executionProfile.model.reasoning", "adapter supports only provider-default or explicit effort reasoning")
+			return nil, nativeadapter.Bundle{}, r
+		}
+		set("executionProfile.model.reasoning.mode", mode)
+		required("executionProfile.model.reasoning.mode")
+		if s.Profile.Model.Reasoning.Effort != nil {
+			set("executionProfile.model.reasoning.effort", s.Profile.Model.Reasoning.Effort)
+			required("executionProfile.model.reasoning.effort")
+		}
+	} else if s.Profile.Model.Reasoning.Mode != "provider-default" {
 		set("executionProfile.model.reasoning", s.Profile.Model.Reasoning)
 		required("executionProfile.model.reasoning")
 	}
@@ -95,10 +111,6 @@ func Export(engine *nativeadapter.Engine, target, scope, assignment, root string
 	}
 	// Keep only explicitly declared native projections. Missing required fields
 	// remain controls and become blocked compatibility diagnostics, never guesses.
-	supported := map[string]bool{}
-	for _, cap := range descriptor.Fields {
-		supported[cap.NeutralPath] = cap.Support == "native"
-	}
 	for path := range fields {
 		if !supported[path] {
 			delete(fields, path)

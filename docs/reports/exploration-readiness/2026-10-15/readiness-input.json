@@ -1,0 +1,177 @@
+{
+  "task": "Develop and verify AOK contributor/Go CLI and exploration/readiness helpers",
+  "profile": "local-development",
+  "revision": "9dec920f6cb202e4733f5d8d9504441d51cfe729",
+  "environment": "darwin/amd64; Python 3.14.6; Go 1.27.2; base plus uncommitted fixes fingerprinted in source-state.json",
+  "checks": [
+    {
+      "id": "project-context",
+      "dimension": "context",
+      "required": true,
+      "outcome": "pass",
+      "evidence": [
+        "exploration.md",
+        "source-state.json",
+        "evidence/inventory-initial.stdout.txt"
+      ]
+    },
+    {
+      "id": "runtime-versions",
+      "dimension": "context",
+      "required": true,
+      "outcome": "pass",
+      "evidence": [
+        "evidence/python-version.stdout.txt",
+        "evidence/go-version.stdout.txt"
+      ]
+    },
+    {
+      "id": "kit-validate",
+      "dimension": "verification",
+      "required": true,
+      "outcome": "pass",
+      "evidence": [
+        "evidence/kit-validate.stdout.txt",
+        "evidence/kit-validate.stderr.txt",
+        "commands.json"
+      ]
+    },
+    {
+      "id": "python-tests-final",
+      "dimension": "verification",
+      "required": true,
+      "outcome": "pass",
+      "evidence": [
+        "evidence/python-tests-final.stdout.txt",
+        "evidence/python-tests-final.stderr.txt",
+        "commands.json"
+      ]
+    },
+    {
+      "id": "go-tests",
+      "dimension": "verification",
+      "required": true,
+      "outcome": "pass",
+      "evidence": [
+        "evidence/go-tests.stdout.txt",
+        "evidence/go-tests.stderr.txt",
+        "commands.json"
+      ]
+    },
+    {
+      "id": "go-build",
+      "dimension": "verification",
+      "required": true,
+      "outcome": "pass",
+      "evidence": [
+        "evidence/go-build.stdout.txt",
+        "evidence/go-build.stderr.txt",
+        "commands.json"
+      ]
+    },
+    {
+      "id": "go-cli-validate",
+      "dimension": "verification",
+      "required": true,
+      "outcome": "pass",
+      "evidence": [
+        "evidence/go-cli-validate.stdout.txt",
+        "evidence/go-cli-validate.stderr.txt",
+        "commands.json"
+      ]
+    },
+    {
+      "id": "python-compile",
+      "dimension": "verification",
+      "required": true,
+      "outcome": "pass",
+      "evidence": [
+        "evidence/python-compile.stdout.txt",
+        "evidence/python-compile.stderr.txt",
+        "commands.json"
+      ]
+    },
+    {
+      "id": "project-init",
+      "dimension": "verification",
+      "required": true,
+      "outcome": "pass",
+      "evidence": [
+        "evidence/project-init.stdout.txt",
+        "evidence/project-init.stderr.txt",
+        "commands.json"
+      ]
+    },
+    {
+      "id": "project-validate",
+      "dimension": "verification",
+      "required": true,
+      "outcome": "pass",
+      "evidence": [
+        "evidence/project-validate.stdout.txt",
+        "evidence/project-validate.stderr.txt",
+        "commands.json"
+      ]
+    },
+    {
+      "id": "local-env-validate",
+      "dimension": "verification",
+      "required": true,
+      "outcome": "pass",
+      "evidence": [
+        "evidence/local-env-validate.stdout.txt",
+        "evidence/local-env-validate.stderr.txt",
+        "commands.json"
+      ]
+    },
+    {
+      "id": "render-smoke",
+      "dimension": "verification",
+      "required": true,
+      "outcome": "pass",
+      "evidence": [
+        "evidence/render-smoke.stdout.txt",
+        "evidence/render-smoke.stderr.txt",
+        "commands.json"
+      ]
+    },
+    {
+      "id": "failure-diagnostics",
+      "dimension": "feedback",
+      "required": true,
+      "outcome": "pass",
+      "evidence": [
+        "evidence/extensionless-before.stderr.txt",
+        "evidence/python-tests.stderr.txt",
+        "evidence/python-tests-final.stderr.txt"
+      ]
+    },
+    {
+      "id": "optional-rust-backends",
+      "dimension": "verification",
+      "required": false,
+      "outcome": "pass",
+      "evidence": [
+        "evidence/extensionless-after.stdout.txt",
+        "evidence/go-pattern.stdout.txt",
+        "evidence/tokei-stats.stdout.txt"
+      ]
+    },
+    {
+      "id": "cross-platform-and-minimum-go",
+      "dimension": "verification",
+      "required": false,
+      "outcome": "not-checked",
+      "evidence": [],
+      "rationale": "Local readiness uses Go 1.27.2/darwin; minimum Go 1.22 and other platforms are separate compatibility checks."
+    },
+    {
+      "id": "remote-delivery",
+      "dimension": "verification",
+      "required": false,
+      "outcome": "not-applicable",
+      "evidence": [],
+      "rationale": "No publishing, deployment or remote work-system access is required for local development."
+    }
+  ]
+}

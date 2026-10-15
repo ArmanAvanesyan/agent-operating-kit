@@ -1,0 +1,546 @@
+[
+  {
+    "id": "workspace-initial",
+    "argv": [
+      "git",
+      "status",
+      "--short"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:00:38.586074+00:00",
+    "durationSeconds": 0.021,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/workspace-initial.stdout.txt",
+    "stderr": "evidence/workspace-initial.stderr.txt"
+  },
+  {
+    "id": "inventory-initial",
+    "argv": [
+      "python3",
+      "skills/project-exploration/scripts/inventory.py",
+      ".",
+      "--max-depth",
+      "4",
+      "--max-files",
+      "2000",
+      "--max-entries",
+      "10000"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:00:38.608115+00:00",
+    "durationSeconds": 0.19,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/inventory-initial.stdout.txt",
+    "stderr": "evidence/inventory-initial.stderr.txt"
+  },
+  {
+    "id": "extensionless-before",
+    "argv": [
+      "python3",
+      "skills/project-exploration/scripts/structure.py",
+      ".",
+      "--file",
+      "scripts/aok",
+      "--mode",
+      "outline",
+      "--lang",
+      "python"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:00:38.799078+00:00",
+    "durationSeconds": 0.113,
+    "exitCode": 2,
+    "expectedExitCode": 2,
+    "passed": true,
+    "stdout": "evidence/extensionless-before.stdout.txt",
+    "stderr": "evidence/extensionless-before.stderr.txt"
+  },
+  {
+    "id": "python-version",
+    "argv": [
+      "python3",
+      "--version"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:00:38.912456+00:00",
+    "durationSeconds": 0.016,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/python-version.stdout.txt",
+    "stderr": "evidence/python-version.stderr.txt"
+  },
+  {
+    "id": "go-version",
+    "argv": [
+      "go",
+      "version"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:00:38.929616+00:00",
+    "durationSeconds": 0.016,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/go-version.stdout.txt",
+    "stderr": "evidence/go-version.stderr.txt"
+  },
+  {
+    "id": "rg-version",
+    "argv": [
+      "rg",
+      "--version"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:00:38.946538+00:00",
+    "durationSeconds": 0.008,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/rg-version.stdout.txt",
+    "stderr": "evidence/rg-version.stderr.txt"
+  },
+  {
+    "id": "ast-version",
+    "argv": [
+      "ast-grep",
+      "--version"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:00:38.954756+00:00",
+    "durationSeconds": 0.203,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/ast-version.stdout.txt",
+    "stderr": "evidence/ast-version.stderr.txt"
+  },
+  {
+    "id": "tokei-version",
+    "argv": [
+      "tokei",
+      "--version"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:00:39.158477+00:00",
+    "durationSeconds": 0.015,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/tokei-version.stdout.txt",
+    "stderr": "evidence/tokei-version.stderr.txt"
+  },
+  {
+    "id": "extensionless-after",
+    "argv": [
+      "python3",
+      "skills/project-exploration/scripts/structure.py",
+      ".",
+      "--file",
+      "scripts/aok",
+      "--mode",
+      "outline",
+      "--lang",
+      "python"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:01:19.140281+00:00",
+    "durationSeconds": 1.589,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/extensionless-after.stdout.txt",
+    "stderr": "evidence/extensionless-after.stderr.txt"
+  },
+  {
+    "id": "go-pattern",
+    "argv": [
+      "python3",
+      "skills/project-exploration/scripts/structure.py",
+      ".",
+      "--file",
+      "cmd/aok/main.go",
+      "--mode",
+      "pattern",
+      "--lang",
+      "go",
+      "--pattern",
+      "func $NAME($$$ARGS) { $$$BODY }"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:01:20.730722+00:00",
+    "durationSeconds": 0.907,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/go-pattern.stdout.txt",
+    "stderr": "evidence/go-pattern.stderr.txt"
+  },
+  {
+    "id": "tokei-stats",
+    "argv": [
+      "python3",
+      "skills/project-exploration/scripts/structure.py",
+      ".",
+      "--file",
+      "scripts/aok",
+      "--mode",
+      "stats"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:01:21.639382+00:00",
+    "durationSeconds": 0.286,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/tokei-stats.stdout.txt",
+    "stderr": "evidence/tokei-stats.stderr.txt"
+  },
+  {
+    "id": "text-entrypoint",
+    "argv": [
+      "python3",
+      "skills/project-exploration/scripts/structure.py",
+      ".",
+      "--file",
+      "scripts/aok",
+      "--mode",
+      "text",
+      "--pattern",
+      "def main"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:01:21.926059+00:00",
+    "durationSeconds": 0.296,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/text-entrypoint.stdout.txt",
+    "stderr": "evidence/text-entrypoint.stderr.txt"
+  },
+  {
+    "id": "kit-validate",
+    "argv": [
+      "./scripts/aok",
+      "validate"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:01:22.223532+00:00",
+    "durationSeconds": 1.308,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/kit-validate.stdout.txt",
+    "stderr": "evidence/kit-validate.stderr.txt"
+  },
+  {
+    "id": "go-tests",
+    "argv": [
+      "go",
+      "test",
+      "./..."
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:01:19.139575+00:00",
+    "durationSeconds": 19.977,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/go-tests.stdout.txt",
+    "stderr": "evidence/go-tests.stderr.txt"
+  },
+  {
+    "id": "go-build",
+    "argv": [
+      "go",
+      "build",
+      "-o",
+      "/tmp/aok-readiness-build/aok",
+      "./cmd/aok"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:01:39.118589+00:00",
+    "durationSeconds": 0.74,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/go-build.stdout.txt",
+    "stderr": "evidence/go-build.stderr.txt"
+  },
+  {
+    "id": "go-cli-validate",
+    "argv": [
+      "/tmp/aok-readiness-build/aok",
+      "validate"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:01:39.859774+00:00",
+    "durationSeconds": 0.673,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/go-cli-validate.stdout.txt",
+    "stderr": "evidence/go-cli-validate.stderr.txt"
+  },
+  {
+    "id": "python-compile",
+    "argv": [
+      "python3",
+      "-m",
+      "py_compile",
+      "scripts/aok",
+      "skills/project-exploration/scripts/inventory.py",
+      "skills/project-exploration/scripts/structure.py",
+      "skills/environment-readiness/scripts/assess.py"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:01:48.861361+00:00",
+    "durationSeconds": 0.408,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/python-compile.stdout.txt",
+    "stderr": "evidence/python-compile.stderr.txt"
+  },
+  {
+    "id": "skill-project-exploration",
+    "argv": [
+      "python3",
+      "/Users/armanavanesyan/.codex/skills/.system/skill-creator/scripts/quick_validate.py",
+      "skills/project-exploration"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:01:49.270907+00:00",
+    "durationSeconds": 0.16,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/skill-project-exploration.stdout.txt",
+    "stderr": "evidence/skill-project-exploration.stderr.txt"
+  },
+  {
+    "id": "skill-environment-readiness",
+    "argv": [
+      "python3",
+      "/Users/armanavanesyan/.codex/skills/.system/skill-creator/scripts/quick_validate.py",
+      "skills/environment-readiness"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:01:49.432002+00:00",
+    "durationSeconds": 0.142,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/skill-environment-readiness.stdout.txt",
+    "stderr": "evidence/skill-environment-readiness.stderr.txt"
+  },
+  {
+    "id": "project-init",
+    "argv": [
+      "./scripts/aok",
+      "project",
+      "init",
+      "/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/aok-readiness-project-7oi9gkrw"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:01:49.578092+00:00",
+    "durationSeconds": 0.416,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/project-init.stdout.txt",
+    "stderr": "evidence/project-init.stderr.txt"
+  },
+  {
+    "id": "project-validate",
+    "argv": [
+      "./scripts/aok",
+      "project",
+      "validate",
+      "/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/aok-readiness-project-7oi9gkrw"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:01:49.995279+00:00",
+    "durationSeconds": 0.399,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/project-validate.stdout.txt",
+    "stderr": "evidence/project-validate.stderr.txt"
+  },
+  {
+    "id": "local-env-validate",
+    "argv": [
+      "./scripts/aok",
+      "codex",
+      "local-env",
+      "validate",
+      "/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/aok-readiness-project-7oi9gkrw"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:01:50.395911+00:00",
+    "durationSeconds": 0.413,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/local-env-validate.stdout.txt",
+    "stderr": "evidence/local-env-validate.stderr.txt"
+  },
+  {
+    "id": "render-smoke",
+    "argv": [
+      "./scripts/aok",
+      "render",
+      "pack",
+      "engineering-guardrails",
+      "--target",
+      "codex",
+      "--out",
+      "/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/aok-readiness-project-7oi9gkrw/render.json"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:01:50.810113+00:00",
+    "durationSeconds": 0.503,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/render-smoke.stdout.txt",
+    "stderr": "evidence/render-smoke.stderr.txt"
+  },
+  {
+    "id": "python-tests",
+    "argv": [
+      "python3",
+      "-W",
+      "error::ResourceWarning",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-v"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:01:19.139550+00:00",
+    "durationSeconds": 71.833,
+    "exitCode": 1,
+    "expectedExitCode": 0,
+    "passed": false,
+    "stdout": "evidence/python-tests.stdout.txt",
+    "stderr": "evidence/python-tests.stderr.txt"
+  },
+  {
+    "id": "focused-tests-final",
+    "argv": [
+      "python3",
+      "-W",
+      "error::ResourceWarning",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_exploration_readiness.py",
+      "-v"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:03:36.194960+00:00",
+    "durationSeconds": 1.787,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/focused-tests-final.stdout.txt",
+    "stderr": "evidence/focused-tests-final.stderr.txt"
+  },
+  {
+    "id": "python-tests-final",
+    "argv": [
+      "python3",
+      "-W",
+      "error::ResourceWarning",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-v"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:03:37.983493+00:00",
+    "durationSeconds": 59.715,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/python-tests-final.stdout.txt",
+    "stderr": "evidence/python-tests-final.stderr.txt"
+  },
+  {
+    "id": "readiness-assessment",
+    "argv": [
+      "python3",
+      "skills/environment-readiness/scripts/assess.py",
+      "docs/reports/exploration-readiness/2026-10-15/readiness-input.json",
+      "--expected-revision",
+      "9dec920f6cb202e4733f5d8d9504441d51cfe729"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:05:47.665304+00:00",
+    "durationSeconds": 0.084,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/readiness-assessment.stdout.txt",
+    "stderr": "evidence/readiness-assessment.stderr.txt"
+  },
+  {
+    "id": "report-validation",
+    "argv": [
+      "python3",
+      "docs/reports/exploration-readiness/2026-10-15/evidence/validate_report.py"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:06:39.345503+00:00",
+    "durationSeconds": 0.784,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/report-validation.stdout.txt",
+    "stderr": "evidence/report-validation.stderr.txt"
+  },
+  {
+    "id": "kit-validate-final",
+    "argv": [
+      "./scripts/aok",
+      "validate"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:06:40.131613+00:00",
+    "durationSeconds": 0.282,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/kit-validate-final.stdout.txt",
+    "stderr": "evidence/kit-validate-final.stderr.txt"
+  },
+  {
+    "id": "whitespace-final",
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "cwd": ".",
+    "startedAt": "2026-10-15T18:06:40.413798+00:00",
+    "durationSeconds": 0.019,
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "passed": true,
+    "stdout": "evidence/whitespace-final.stdout.txt",
+    "stderr": "evidence/whitespace-final.stderr.txt"
+  }
+]

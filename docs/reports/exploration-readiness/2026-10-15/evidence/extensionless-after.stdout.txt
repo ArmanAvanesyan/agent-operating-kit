@@ -1,0 +1,4442 @@
+{
+  "kind": "aok-structural-evidence",
+  "version": 1,
+  "file": "scripts/aok",
+  "backend": "ast-grep",
+  "mode": "outline",
+  "query": null,
+  "language": "python",
+  "status": "observed",
+  "limitations": [
+    "Syntax/text/statistics are not resolved references or runtime behavior.",
+    "One explicit file only; empty results are not repository-wide absence proof."
+  ],
+  "sourceSha256": "26d1114f49b17d9b75526134e04fbf428ac331a87b461dce8e6ba92056d57ac4",
+  "revision": "9dec920f6cb202e4733f5d8d9504441d51cfe729",
+  "toolVersion": "ast-grep 0.51.0",
+  "exitCode": 0,
+  "evidence": [
+    {
+      "path": "scripts/aok",
+      "language": "Python",
+      "items": [
+        {
+          "role": "item",
+          "symbolType": "variable",
+          "name": "tomllib",
+          "range": {
+            "byteOffset": {
+              "start": 439,
+              "end": 453
+            },
+            "start": {
+              "line": 22,
+              "column": 4
+            },
+            "end": {
+              "line": 22,
+              "column": 18
+            }
+          },
+          "signature": "tomllib = None",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "KIT_ROOT",
+          "range": {
+            "byteOffset": {
+              "start": 456,
+              "end": 502
+            },
+            "start": {
+              "line": 25,
+              "column": 0
+            },
+            "end": {
+              "line": 25,
+              "column": 46
+            }
+          },
+          "signature": "KIT_ROOT = Path(__file__).resolve().parents[1]",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "PLUGIN_NAME",
+          "range": {
+            "byteOffset": {
+              "start": 503,
+              "end": 538
+            },
+            "start": {
+              "line": 26,
+              "column": 0
+            },
+            "end": {
+              "line": 26,
+              "column": 35
+            }
+          },
+          "signature": "PLUGIN_NAME = \"agent-operating-kit\"",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "MARKETPLACE_NAME",
+          "range": {
+            "byteOffset": {
+              "start": 539,
+              "end": 573
+            },
+            "start": {
+              "line": 27,
+              "column": 0
+            },
+            "end": {
+              "line": 27,
+              "column": 34
+            }
+          },
+          "signature": "MARKETPLACE_NAME = \"private-local\"",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "MARKETPLACE_DISPLAY",
+          "range": {
+            "byteOffset": {
+              "start": 574,
+              "end": 611
+            },
+            "start": {
+              "line": 28,
+              "column": 0
+            },
+            "end": {
+              "line": 28,
+              "column": 37
+            }
+          },
+          "signature": "MARKETPLACE_DISPLAY = \"Private Local\"",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "CLAUDE_MARKETPLACE_NAME",
+          "range": {
+            "byteOffset": {
+              "start": 612,
+              "end": 655
+            },
+            "start": {
+              "line": 29,
+              "column": 0
+            },
+            "end": {
+              "line": 29,
+              "column": 43
+            }
+          },
+          "signature": "CLAUDE_MARKETPLACE_NAME = \"aok-claude-code\"",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "CLAUDE_ROOT_PLUGIN",
+          "range": {
+            "byteOffset": {
+              "start": 656,
+              "end": 698
+            },
+            "start": {
+              "line": 30,
+              "column": 0
+            },
+            "end": {
+              "line": 30,
+              "column": 42
+            }
+          },
+          "signature": "CLAUDE_ROOT_PLUGIN = \"agent-operating-kit\"",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "SUPPORTED_TARGETS",
+          "range": {
+            "byteOffset": {
+              "start": 699,
+              "end": 834
+            },
+            "start": {
+              "line": 31,
+              "column": 0
+            },
+            "end": {
+              "line": 39,
+              "column": 1
+            }
+          },
+          "signature": "SUPPORTED_TARGETS = (",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "RENDER_TARGETS",
+          "range": {
+            "byteOffset": {
+              "start": 835,
+              "end": 880
+            },
+            "start": {
+              "line": 40,
+              "column": 0
+            },
+            "end": {
+              "line": 40,
+              "column": 45
+            }
+          },
+          "signature": "RENDER_TARGETS = SUPPORTED_TARGETS + (\"all\",)",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "CODEX_LOCAL_ENV_DOCS_URL",
+          "range": {
+            "byteOffset": {
+              "start": 881,
+              "end": 968
+            },
+            "start": {
+              "line": 41,
+              "column": 0
+            },
+            "end": {
+              "line": 41,
+              "column": 87
+            }
+          },
+          "signature": "CODEX_LOCAL_ENV_DOCS_URL = \"https://developers.openai.com/codex/app/local-environments\"",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "CODEX_LOCAL_ENV_REQUIRED",
+          "range": {
+            "byteOffset": {
+              "start": 969,
+              "end": 1161
+            },
+            "start": {
+              "line": 42,
+              "column": 0
+            },
+            "end": {
+              "line": 48,
+              "column": 1
+            }
+          },
+          "signature": "CODEX_LOCAL_ENV_REQUIRED = (",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "CODEX_LOCAL_ENV_ACTIONS",
+          "range": {
+            "byteOffset": {
+              "start": 1162,
+              "end": 1328
+            },
+            "start": {
+              "line": 49,
+              "column": 0
+            },
+            "end": {
+              "line": 56,
+              "column": 1
+            }
+          },
+          "signature": "CODEX_LOCAL_ENV_ACTIONS = (",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "WORK_SYSTEM_SUPPORT_LEVEL",
+          "range": {
+            "byteOffset": {
+              "start": 1329,
+              "end": 1369
+            },
+            "start": {
+              "line": 57,
+              "column": 0
+            },
+            "end": {
+              "line": 57,
+              "column": 40
+            }
+          },
+          "signature": "WORK_SYSTEM_SUPPORT_LEVEL = \"scaffolded\"",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "WORK_SYSTEM_SELECT_FIELDS",
+          "range": {
+            "byteOffset": {
+              "start": 1370,
+              "end": 1624
+            },
+            "start": {
+              "line": 58,
+              "column": 0
+            },
+            "end": {
+              "line": 62,
+              "column": 1
+            }
+          },
+          "signature": "WORK_SYSTEM_SELECT_FIELDS = {",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "WORK_SYSTEM_TEXT_FIELDS",
+          "range": {
+            "byteOffset": {
+              "start": 1625,
+              "end": 1786
+            },
+            "start": {
+              "line": 63,
+              "column": 0
+            },
+            "end": {
+              "line": 71,
+              "column": 1
+            }
+          },
+          "signature": "WORK_SYSTEM_TEXT_FIELDS = (",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "WORK_SYSTEM_NUMBER_FIELDS",
+          "range": {
+            "byteOffset": {
+              "start": 1787,
+              "end": 1827
+            },
+            "start": {
+              "line": 72,
+              "column": 0
+            },
+            "end": {
+              "line": 72,
+              "column": 40
+            }
+          },
+          "signature": "WORK_SYSTEM_NUMBER_FIELDS = (\"Attempt\",)",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "AZURE_STATE_CATEGORIES",
+          "range": {
+            "byteOffset": {
+              "start": 1828,
+              "end": 2045
+            },
+            "start": {
+              "line": 73,
+              "column": 0
+            },
+            "end": {
+              "line": 81,
+              "column": 1
+            }
+          },
+          "signature": "AZURE_STATE_CATEGORIES = {",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "METHODOLOGY_ROOT",
+          "range": {
+            "byteOffset": {
+              "start": 2046,
+              "end": 2091
+            },
+            "start": {
+              "line": 82,
+              "column": 0
+            },
+            "end": {
+              "line": 82,
+              "column": 45
+            }
+          },
+          "signature": "METHODOLOGY_ROOT = KIT_ROOT / \"methodologies\"",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "METHODOLOGY_GENERATED_MARKER",
+          "range": {
+            "byteOffset": {
+              "start": 2092,
+              "end": 2173
+            },
+            "start": {
+              "line": 83,
+              "column": 0
+            },
+            "end": {
+              "line": 83,
+              "column": 81
+            }
+          },
+          "signature": "METHODOLOGY_GENERATED_MARKER = \"<!-- Generated by AOK. Do not edit directly. -->\"",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "METHODOLOGY_SCAFFOLD_MARKER",
+          "range": {
+            "byteOffset": {
+              "start": 2174,
+              "end": 2283
+            },
+            "start": {
+              "line": 84,
+              "column": 0
+            },
+            "end": {
+              "line": 84,
+              "column": 109
+            }
+          },
+          "signature": "METHODOLOGY_SCAFFOLD_MARKER = \"<!-- AOK methodology scaffold. Edit freely; re-scaffold requires --force. -->\"",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "DEFAULT_METHODOLOGY",
+          "range": {
+            "byteOffset": {
+              "start": 2284,
+              "end": 2340
+            },
+            "start": {
+              "line": 85,
+              "column": 0
+            },
+            "end": {
+              "line": 85,
+              "column": 56
+            }
+          },
+          "signature": "DEFAULT_METHODOLOGY = {\"flow\": \"kanban\", \"overlays\": []}",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "WORK_ITEM_ROOT",
+          "range": {
+            "byteOffset": {
+              "start": 2341,
+              "end": 2381
+            },
+            "start": {
+              "line": 86,
+              "column": 0
+            },
+            "end": {
+              "line": 86,
+              "column": 40
+            }
+          },
+          "signature": "WORK_ITEM_ROOT = KIT_ROOT / \"work-items\"",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "WORK_ITEM_CATALOG_PATH",
+          "range": {
+            "byteOffset": {
+              "start": 2382,
+              "end": 2438
+            },
+            "start": {
+              "line": 87,
+              "column": 0
+            },
+            "end": {
+              "line": 87,
+              "column": 56
+            }
+          },
+          "signature": "WORK_ITEM_CATALOG_PATH = WORK_ITEM_ROOT / \"catalog.json\"",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "WORK_ITEM_GENERATED_MARKER",
+          "range": {
+            "byteOffset": {
+              "start": 2439,
+              "end": 2537
+            },
+            "start": {
+              "line": 88,
+              "column": 0
+            },
+            "end": {
+              "line": 88,
+              "column": 98
+            }
+          },
+          "signature": "WORK_ITEM_GENERATED_MARKER = \"<!-- Generated by AOK work-item scaffold. Do not edit directly. -->\"",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "WORK_ITEM_JSON_GENERATOR",
+          "range": {
+            "byteOffset": {
+              "start": 2538,
+              "end": 2589
+            },
+            "start": {
+              "line": 89,
+              "column": 0
+            },
+            "end": {
+              "line": 89,
+              "column": 51
+            }
+          },
+          "signature": "WORK_ITEM_JSON_GENERATOR = \"aok-work-item-scaffold\"",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "WORK_ITEM_PROVIDERS",
+          "range": {
+            "byteOffset": {
+              "start": 2590,
+              "end": 2649
+            },
+            "start": {
+              "line": 90,
+              "column": 0
+            },
+            "end": {
+              "line": 90,
+              "column": 59
+            }
+          },
+          "signature": "WORK_ITEM_PROVIDERS = (\"neutral\", \"github\", \"azure-devops\")",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "class",
+          "name": "AokError",
+          "range": {
+            "byteOffset": {
+              "start": 2653,
+              "end": 2691
+            },
+            "start": {
+              "line": 94,
+              "column": 0
+            },
+            "end": {
+              "line": 95,
+              "column": 8
+            }
+          },
+          "signature": "class AokError(RuntimeError):",
+          "astKind": "class_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "run",
+          "range": {
+            "byteOffset": {
+              "start": 2694,
+              "end": 2884
+            },
+            "start": {
+              "line": 98,
+              "column": 0
+            },
+            "end": {
+              "line": 99,
+              "column": 84
+            }
+          },
+          "signature": "def run(cmd: list[str], cwd: Path | None = None, check: bool = True) -> subprocess.CompletedProcess[str]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "is_windows_host",
+          "range": {
+            "byteOffset": {
+              "start": 2887,
+              "end": 2944
+            },
+            "start": {
+              "line": 102,
+              "column": 0
+            },
+            "end": {
+              "line": 103,
+              "column": 26
+            }
+          },
+          "signature": "def is_windows_host() -> bool:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "command_exists",
+          "range": {
+            "byteOffset": {
+              "start": 2947,
+              "end": 3027
+            },
+            "start": {
+              "line": 106,
+              "column": 0
+            },
+            "end": {
+              "line": 107,
+              "column": 41
+            }
+          },
+          "signature": "def command_exists(name: str) -> bool:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "print_result",
+          "range": {
+            "byteOffset": {
+              "start": 3030,
+              "end": 3212
+            },
+            "start": {
+              "line": 110,
+              "column": 0
+            },
+            "end": {
+              "line": 113,
+              "column": 36
+            }
+          },
+          "signature": "def print_result(label: str, ok: bool, detail: str = \"\") -> None:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "load_json",
+          "range": {
+            "byteOffset": {
+              "start": 3215,
+              "end": 3472
+            },
+            "start": {
+              "line": 116,
+              "column": 0
+            },
+            "end": {
+              "line": 122,
+              "column": 65
+            }
+          },
+          "signature": "def load_json(path: Path, default: dict) -> dict:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "write_json",
+          "range": {
+            "byteOffset": {
+              "start": 3475,
+              "end": 3645
+            },
+            "start": {
+              "line": 125,
+              "column": 0
+            },
+            "end": {
+              "line": 127,
+              "column": 71
+            }
+          },
+          "signature": "def write_json(path: Path, data: dict) -> None:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "parse_command_json",
+          "range": {
+            "byteOffset": {
+              "start": 3648,
+              "end": 3900
+            },
+            "start": {
+              "line": 130,
+              "column": 0
+            },
+            "end": {
+              "line": 134,
+              "column": 74
+            }
+          },
+          "signature": "def parse_command_json(result: subprocess.CompletedProcess[str], label: str) -> object:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "object_list",
+          "range": {
+            "byteOffset": {
+              "start": 3903,
+              "end": 4273
+            },
+            "start": {
+              "line": 137,
+              "column": 0
+            },
+            "end": {
+              "line": 145,
+              "column": 13
+            }
+          },
+          "signature": "def object_list(data: object, *keys: str) -> list[dict]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "work_system_check",
+          "range": {
+            "byteOffset": {
+              "start": 4276,
+              "end": 4504
+            },
+            "start": {
+              "line": 148,
+              "column": 0
+            },
+            "end": {
+              "line": 151,
+              "column": 36
+            }
+          },
+          "signature": "def work_system_check(report: dict, name: str, status: str, detail: str) -> None:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "work_system_report",
+          "range": {
+            "byteOffset": {
+              "start": 4507,
+              "end": 4785
+            },
+            "start": {
+              "line": 154,
+              "column": 0
+            },
+            "end": {
+              "line": 163,
+              "column": 5
+            }
+          },
+          "signature": "def work_system_report(provider: str) -> dict:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "render_work_system_report",
+          "range": {
+            "byteOffset": {
+              "start": 4788,
+              "end": 5729
+            },
+            "start": {
+              "line": 166,
+              "column": 0
+            },
+            "end": {
+              "line": 186,
+              "column": 27
+            }
+          },
+          "signature": "def render_work_system_report(report: dict) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "write_work_system_binding",
+          "range": {
+            "byteOffset": {
+              "start": 5732,
+              "end": 6265
+            },
+            "start": {
+              "line": 189,
+              "column": 0
+            },
+            "end": {
+              "line": 198,
+              "column": 39
+            }
+          },
+          "signature": "def write_work_system_binding(path: Path, binding: dict) -> None:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "checked_tool",
+          "range": {
+            "byteOffset": {
+              "start": 6268,
+              "end": 6406
+            },
+            "start": {
+              "line": 201,
+              "column": 0
+            },
+            "end": {
+              "line": 203,
+              "column": 68
+            }
+          },
+          "signature": "def checked_tool(name: str) -> None:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "shell_command",
+          "range": {
+            "byteOffset": {
+              "start": 6409,
+              "end": 6506
+            },
+            "start": {
+              "line": 206,
+              "column": 0
+            },
+            "end": {
+              "line": 207,
+              "column": 50
+            }
+          },
+          "signature": "def shell_command(parts: list[object]) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "github_project",
+          "range": {
+            "byteOffset": {
+              "start": 6509,
+              "end": 7737
+            },
+            "start": {
+              "line": 210,
+              "column": 0
+            },
+            "end": {
+              "line": 231,
+              "column": 63
+            }
+          },
+          "signature": "def github_project(args: argparse.Namespace) -> tuple[dict | None, list[dict]]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "github_field_type",
+          "range": {
+            "byteOffset": {
+              "start": 7740,
+              "end": 8012
+            },
+            "start": {
+              "line": 234,
+              "column": 0
+            },
+            "end": {
+              "line": 240,
+              "column": 32
+            }
+          },
+          "signature": "def github_field_type(field: dict) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "github_field_options",
+          "range": {
+            "byteOffset": {
+              "start": 8015,
+              "end": 8136
+            },
+            "start": {
+              "line": 243,
+              "column": 0
+            },
+            "end": {
+              "line": 244,
+              "column": 68
+            }
+          },
+          "signature": "def github_field_options(field: dict) -> list[dict]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "discover_github_work_system",
+          "range": {
+            "byteOffset": {
+              "start": 8139,
+              "end": 15123
+            },
+            "start": {
+              "line": 247,
+              "column": 0
+            },
+            "end": {
+              "line": 408,
+              "column": 17
+            }
+          },
+          "signature": "def discover_github_work_system(args: argparse.Namespace) -> dict:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "az_json",
+          "range": {
+            "byteOffset": {
+              "start": 15126,
+              "end": 15288
+            },
+            "start": {
+              "line": 411,
+              "column": 0
+            },
+            "end": {
+              "line": 413,
+              "column": 44
+            }
+          },
+          "signature": "def az_json(cmd: list[str], label: str) -> object:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "az_invoke",
+          "range": {
+            "byteOffset": {
+              "start": 15291,
+              "end": 15957
+            },
+            "start": {
+              "line": 416,
+              "column": 0
+            },
+            "end": {
+              "line": 442,
+              "column": 62
+            }
+          },
+          "signature": "def az_invoke(",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "azure_pick_named",
+          "range": {
+            "byteOffset": {
+              "start": 15960,
+              "end": 16387
+            },
+            "start": {
+              "line": 445,
+              "column": 0
+            },
+            "end": {
+              "line": 456,
+              "column": 57
+            }
+          },
+          "signature": "def azure_pick_named(",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "azure_field_type",
+          "range": {
+            "byteOffset": {
+              "start": 16390,
+              "end": 16522
+            },
+            "start": {
+              "line": 459,
+              "column": 0
+            },
+            "end": {
+              "line": 460,
+              "column": 90
+            }
+          },
+          "signature": "def azure_field_type(field: dict) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "azure_allowed_values",
+          "range": {
+            "byteOffset": {
+              "start": 16525,
+              "end": 16888
+            },
+            "start": {
+              "line": 463,
+              "column": 0
+            },
+            "end": {
+              "line": 472,
+              "column": 13
+            }
+          },
+          "signature": "def azure_allowed_values(field: dict) -> list[str]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "discover_azure_work_system",
+          "range": {
+            "byteOffset": {
+              "start": 16891,
+              "end": 29104
+            },
+            "start": {
+              "line": 475,
+              "column": 0
+            },
+            "end": {
+              "line": 754,
+              "column": 17
+            }
+          },
+          "signature": "def discover_azure_work_system(args: argparse.Namespace) -> dict:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_work_system_setup_github",
+          "range": {
+            "byteOffset": {
+              "start": 29107,
+              "end": 30038
+            },
+            "start": {
+              "line": 757,
+              "column": 0
+            },
+            "end": {
+              "line": 773,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_work_system_setup_github(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_work_system_setup_azure",
+          "range": {
+            "byteOffset": {
+              "start": 30041,
+              "end": 30970
+            },
+            "start": {
+              "line": 776,
+              "column": 0
+            },
+            "end": {
+              "line": 792,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_work_system_setup_azure(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_work_system_validate",
+          "range": {
+            "byteOffset": {
+              "start": 30973,
+              "end": 33343
+            },
+            "start": {
+              "line": 795,
+              "column": 0
+            },
+            "end": {
+              "line": 841,
+              "column": 43
+            }
+          },
+          "signature": "def cmd_work_system_validate(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "load_methodology_profiles",
+          "range": {
+            "byteOffset": {
+              "start": 33346,
+              "end": 34150
+            },
+            "start": {
+              "line": 844,
+              "column": 0
+            },
+            "end": {
+              "line": 859,
+              "column": 19
+            }
+          },
+          "signature": "def load_methodology_profiles() -> dict[str, dict]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "methodology_catalog",
+          "range": {
+            "byteOffset": {
+              "start": 34153,
+              "end": 34997
+            },
+            "start": {
+              "line": 862,
+              "column": 0
+            },
+            "end": {
+              "line": 877,
+              "column": 17
+            }
+          },
+          "signature": "def methodology_catalog(profile: dict, key: str, collection: str) -> list[dict]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "methodology_asset_path",
+          "range": {
+            "byteOffset": {
+              "start": 35000,
+              "end": 35408
+            },
+            "start": {
+              "line": 880,
+              "column": 0
+            },
+            "end": {
+              "line": 888,
+              "column": 15
+            }
+          },
+          "signature": "def methodology_asset_path(relative: str, label: str) -> Path:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "load_feature_contract",
+          "range": {
+            "byteOffset": {
+              "start": 35411,
+              "end": 35956
+            },
+            "start": {
+              "line": 891,
+              "column": 0
+            },
+            "end": {
+              "line": 901,
+              "column": 15
+            }
+          },
+          "signature": "def load_feature_contract(profile: dict) -> dict | None:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "load_requirement_contract",
+          "range": {
+            "byteOffset": {
+              "start": 35959,
+              "end": 36546
+            },
+            "start": {
+              "line": 904,
+              "column": 0
+            },
+            "end": {
+              "line": 916,
+              "column": 15
+            }
+          },
+          "signature": "def load_requirement_contract(profile: dict) -> dict | None:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "load_iteration_contract",
+          "range": {
+            "byteOffset": {
+              "start": 36549,
+              "end": 37126
+            },
+            "start": {
+              "line": 919,
+              "column": 0
+            },
+            "end": {
+              "line": 931,
+              "column": 15
+            }
+          },
+          "signature": "def load_iteration_contract(profile: dict) -> dict | None:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "methodology_profile_contract",
+          "range": {
+            "byteOffset": {
+              "start": 37129,
+              "end": 37928
+            },
+            "start": {
+              "line": 934,
+              "column": 0
+            },
+            "end": {
+              "line": 950,
+              "column": 17
+            }
+          },
+          "signature": "def methodology_profile_contract(profile: dict) -> dict:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "render_scaffold_role",
+          "range": {
+            "byteOffset": {
+              "start": 37931,
+              "end": 39205
+            },
+            "start": {
+              "line": 953,
+              "column": 0
+            },
+            "end": {
+              "line": 987,
+              "column": 43
+            }
+          },
+          "signature": "def render_scaffold_role(role: dict, flow_name: str) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "render_scaffold_artifact",
+          "range": {
+            "byteOffset": {
+              "start": 39208,
+              "end": 40432
+            },
+            "start": {
+              "line": 990,
+              "column": 0
+            },
+            "end": {
+              "line": 1013,
+              "column": 43
+            }
+          },
+          "signature": "def render_scaffold_artifact(artifact: dict, flow_name: str) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "validate_fdd_feature_name",
+          "range": {
+            "byteOffset": {
+              "start": 40435,
+              "end": 43335
+            },
+            "start": {
+              "line": 1016,
+              "column": 0
+            },
+            "end": {
+              "line": 1092,
+              "column": 5
+            }
+          },
+          "signature": "def validate_fdd_feature_name(name: str, contract: dict) -> dict:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "render_feature_name_validation",
+          "range": {
+            "byteOffset": {
+              "start": 43338,
+              "end": 44138
+            },
+            "start": {
+              "line": 1095,
+              "column": 0
+            },
+            "end": {
+              "line": 1114,
+              "column": 27
+            }
+          },
+          "signature": "def render_feature_name_validation(report: dict) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "validate_dsdm_requirement",
+          "range": {
+            "byteOffset": {
+              "start": 44141,
+              "end": 47481
+            },
+            "start": {
+              "line": 1117,
+              "column": 0
+            },
+            "end": {
+              "line": 1194,
+              "column": 5
+            }
+          },
+          "signature": "def validate_dsdm_requirement(args: argparse.Namespace, contract: dict) -> dict:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "render_requirement_validation",
+          "range": {
+            "byteOffset": {
+              "start": 47484,
+              "end": 48619
+            },
+            "start": {
+              "line": 1197,
+              "column": 0
+            },
+            "end": {
+              "line": 1223,
+              "column": 27
+            }
+          },
+          "signature": "def render_requirement_validation(report: dict) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "validate_aup_iteration",
+          "range": {
+            "byteOffset": {
+              "start": 48622,
+              "end": 54429
+            },
+            "start": {
+              "line": 1226,
+              "column": 0
+            },
+            "end": {
+              "line": 1366,
+              "column": 5
+            }
+          },
+          "signature": "def validate_aup_iteration(args: argparse.Namespace, contract: dict) -> dict:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "render_iteration_validation",
+          "range": {
+            "byteOffset": {
+              "start": 54432,
+              "end": 55786
+            },
+            "start": {
+              "line": 1369,
+              "column": 0
+            },
+            "end": {
+              "line": 1403,
+              "column": 27
+            }
+          },
+          "signature": "def render_iteration_validation(report: dict) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "render_scaffold_readme",
+          "range": {
+            "byteOffset": {
+              "start": 55789,
+              "end": 57550
+            },
+            "start": {
+              "line": 1406,
+              "column": 0
+            },
+            "end": {
+              "line": 1446,
+              "column": 43
+            }
+          },
+          "signature": "def render_scaffold_readme(profile: dict, roles: list[dict], artifacts: list[dict]) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "methodology_scaffold_assets",
+          "range": {
+            "byteOffset": {
+              "start": 57553,
+              "end": 58590
+            },
+            "start": {
+              "line": 1449,
+              "column": 0
+            },
+            "end": {
+              "line": 1467,
+              "column": 17
+            }
+          },
+          "signature": "def methodology_scaffold_assets(profile: dict) -> dict[Path, str]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "normalize_methodology_selection",
+          "range": {
+            "byteOffset": {
+              "start": 58593,
+              "end": 60453
+            },
+            "start": {
+              "line": 1470,
+              "column": 0
+            },
+            "end": {
+              "line": 1508,
+              "column": 83
+            }
+          },
+          "signature": "def normalize_methodology_selection(",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "methodology_fragment",
+          "range": {
+            "byteOffset": {
+              "start": 60456,
+              "end": 61075
+            },
+            "start": {
+              "line": 1511,
+              "column": 0
+            },
+            "end": {
+              "line": 1522,
+              "column": 35
+            }
+          },
+          "signature": "def methodology_fragment(profile: dict) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "render_methodology_policy",
+          "range": {
+            "byteOffset": {
+              "start": 61078,
+              "end": 62152
+            },
+            "start": {
+              "line": 1525,
+              "column": 0
+            },
+            "end": {
+              "line": 1555,
+              "column": 43
+            }
+          },
+          "signature": "def render_methodology_policy(selection: dict, profiles: dict[str, dict] | None = None) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "methodology_manifest",
+          "range": {
+            "byteOffset": {
+              "start": 62155,
+              "end": 62475
+            },
+            "start": {
+              "line": 1558,
+              "column": 0
+            },
+            "end": {
+              "line": 1563,
+              "column": 34
+            }
+          },
+          "signature": "def methodology_manifest(path: Path) -> tuple[dict, Path]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "methodology_selection_from_manifest",
+          "range": {
+            "byteOffset": {
+              "start": 62478,
+              "end": 63157
+            },
+            "start": {
+              "line": 1566,
+              "column": 0
+            },
+            "end": {
+              "line": 1578,
+              "column": 54
+            }
+          },
+          "signature": "def methodology_selection_from_manifest(manifest: dict) -> tuple[dict, bool]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "methodology_policy_is_safe",
+          "range": {
+            "byteOffset": {
+              "start": 63160,
+              "end": 64124
+            },
+            "start": {
+              "line": 1581,
+              "column": 0
+            },
+            "end": {
+              "line": 1607,
+              "column": 9
+            }
+          },
+          "signature": "def methodology_policy_is_safe(",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "write_methodology_policy",
+          "range": {
+            "byteOffset": {
+              "start": 64127,
+              "end": 65828
+            },
+            "start": {
+              "line": 1610,
+              "column": 0
+            },
+            "end": {
+              "line": 1646,
+              "column": 70
+            }
+          },
+          "signature": "def write_methodology_policy(",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "methodology_validation_report",
+          "range": {
+            "byteOffset": {
+              "start": 65831,
+              "end": 67711
+            },
+            "start": {
+              "line": 1649,
+              "column": 0
+            },
+            "end": {
+              "line": 1690,
+              "column": 17
+            }
+          },
+          "signature": "def methodology_validation_report(path: Path) -> dict:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "render_methodology_validation",
+          "range": {
+            "byteOffset": {
+              "start": 67714,
+              "end": 68341
+            },
+            "start": {
+              "line": 1693,
+              "column": 0
+            },
+            "end": {
+              "line": 1705,
+              "column": 27
+            }
+          },
+          "signature": "def render_methodology_validation(report: dict) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_methodology_set",
+          "range": {
+            "byteOffset": {
+              "start": 68344,
+              "end": 69308
+            },
+            "start": {
+              "line": 1708,
+              "column": 0
+            },
+            "end": {
+              "line": 1725,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_methodology_set(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_methodology_show",
+          "range": {
+            "byteOffset": {
+              "start": 69311,
+              "end": 70135
+            },
+            "start": {
+              "line": 1728,
+              "column": 0
+            },
+            "end": {
+              "line": 1743,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_methodology_show(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_methodology_validate",
+          "range": {
+            "byteOffset": {
+              "start": 70138,
+              "end": 70395
+            },
+            "start": {
+              "line": 1746,
+              "column": 0
+            },
+            "end": {
+              "line": 1749,
+              "column": 38
+            }
+          },
+          "signature": "def cmd_methodology_validate(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_methodology_validate_feature",
+          "range": {
+            "byteOffset": {
+              "start": 70398,
+              "end": 70927
+            },
+            "start": {
+              "line": 1752,
+              "column": 0
+            },
+            "end": {
+              "line": 1761,
+              "column": 38
+            }
+          },
+          "signature": "def cmd_methodology_validate_feature(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_methodology_validate_requirement",
+          "range": {
+            "byteOffset": {
+              "start": 70930,
+              "end": 71468
+            },
+            "start": {
+              "line": 1764,
+              "column": 0
+            },
+            "end": {
+              "line": 1773,
+              "column": 38
+            }
+          },
+          "signature": "def cmd_methodology_validate_requirement(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_methodology_validate_iteration",
+          "range": {
+            "byteOffset": {
+              "start": 71471,
+              "end": 71995
+            },
+            "start": {
+              "line": 1776,
+              "column": 0
+            },
+            "end": {
+              "line": 1785,
+              "column": 38
+            }
+          },
+          "signature": "def cmd_methodology_validate_iteration(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_methodology_list",
+          "range": {
+            "byteOffset": {
+              "start": 71998,
+              "end": 72963
+            },
+            "start": {
+              "line": 1788,
+              "column": 0
+            },
+            "end": {
+              "line": 1810,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_methodology_list(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_methodology_scaffold",
+          "range": {
+            "byteOffset": {
+              "start": 72966,
+              "end": 76183
+            },
+            "start": {
+              "line": 1813,
+              "column": 0
+            },
+            "end": {
+              "line": 1884,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_methodology_scaffold(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "load_work_item_catalog",
+          "range": {
+            "byteOffset": {
+              "start": 76186,
+              "end": 76838
+            },
+            "start": {
+              "line": 1887,
+              "column": 0
+            },
+            "end": {
+              "line": 1897,
+              "column": 18
+            }
+          },
+          "signature": "def load_work_item_catalog() -> dict:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "work_item_source_path",
+          "range": {
+            "byteOffset": {
+              "start": 76841,
+              "end": 77371
+            },
+            "start": {
+              "line": 1900,
+              "column": 0
+            },
+            "end": {
+              "line": 1910,
+              "column": 15
+            }
+          },
+          "signature": "def work_item_source_path(relative: str) -> Path:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "normalize_work_item_selection",
+          "range": {
+            "byteOffset": {
+              "start": 77374,
+              "end": 78384
+            },
+            "start": {
+              "line": 1913,
+              "column": 0
+            },
+            "end": {
+              "line": 1937,
+              "column": 5
+            }
+          },
+          "signature": "def normalize_work_item_selection(",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "work_item_selection_for_project",
+          "range": {
+            "byteOffset": {
+              "start": 78387,
+              "end": 78922
+            },
+            "start": {
+              "line": 1940,
+              "column": 0
+            },
+            "end": {
+              "line": 1952,
+              "column": 86
+            }
+          },
+          "signature": "def work_item_selection_for_project(",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "effective_work_item_types",
+          "range": {
+            "byteOffset": {
+              "start": 78925,
+              "end": 79370
+            },
+            "start": {
+              "line": 1955,
+              "column": 0
+            },
+            "end": {
+              "line": 1966,
+              "column": 5
+            }
+          },
+          "signature": "def effective_work_item_types(catalog: dict, selection: dict) -> list[dict]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "work_item_sections",
+          "range": {
+            "byteOffset": {
+              "start": 79373,
+              "end": 79496
+            },
+            "start": {
+              "line": 1969,
+              "column": 0
+            },
+            "end": {
+              "line": 1970,
+              "column": 58
+            }
+          },
+          "signature": "def work_item_sections(catalog: dict, item: dict) -> list[dict]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "render_neutral_work_item",
+          "range": {
+            "byteOffset": {
+              "start": 79499,
+              "end": 80361
+            },
+            "start": {
+              "line": 1973,
+              "column": 0
+            },
+            "end": {
+              "line": 1997,
+              "column": 43
+            }
+          },
+          "signature": "def render_neutral_work_item(catalog: dict, item: dict) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "yaml_string",
+          "range": {
+            "byteOffset": {
+              "start": 80364,
+              "end": 80456
+            },
+            "start": {
+              "line": 2000,
+              "column": 0
+            },
+            "end": {
+              "line": 2001,
+              "column": 53
+            }
+          },
+          "signature": "def yaml_string(value: object) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "render_github_work_item",
+          "range": {
+            "byteOffset": {
+              "start": 80459,
+              "end": 82062
+            },
+            "start": {
+              "line": 2004,
+              "column": 0
+            },
+            "end": {
+              "line": 2042,
+              "column": 43
+            }
+          },
+          "signature": "def render_github_work_item(catalog: dict, item: dict) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "resolve_azure_requirement_type",
+          "range": {
+            "byteOffset": {
+              "start": 82065,
+              "end": 82927
+            },
+            "start": {
+              "line": 2045,
+              "column": 0
+            },
+            "end": {
+              "line": 2062,
+              "column": 69
+            }
+          },
+          "signature": "def resolve_azure_requirement_type(target: Path) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "render_azure_work_item",
+          "range": {
+            "byteOffset": {
+              "start": 82930,
+              "end": 84141
+            },
+            "start": {
+              "line": 2065,
+              "column": 0
+            },
+            "end": {
+              "line": 2096,
+              "column": 43
+            }
+          },
+          "signature": "def render_azure_work_item(",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "work_item_desired_state",
+          "range": {
+            "byteOffset": {
+              "start": 84144,
+              "end": 85215
+            },
+            "start": {
+              "line": 2099,
+              "column": 0
+            },
+            "end": {
+              "line": 2128,
+              "column": 61
+            }
+          },
+          "signature": "def work_item_desired_state(",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "resolve_work_item_providers",
+          "range": {
+            "byteOffset": {
+              "start": 85218,
+              "end": 85457
+            },
+            "start": {
+              "line": 2131,
+              "column": 0
+            },
+            "end": {
+              "line": 2136,
+              "column": 17
+            }
+          },
+          "signature": "def resolve_work_item_providers(raw: str) -> tuple[str, ...]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "work_item_assets",
+          "range": {
+            "byteOffset": {
+              "start": 85460,
+              "end": 86782
+            },
+            "start": {
+              "line": 2139,
+              "column": 0
+            },
+            "end": {
+              "line": 2169,
+              "column": 17
+            }
+          },
+          "signature": "def work_item_assets(",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "content_sha256",
+          "range": {
+            "byteOffset": {
+              "start": 86785,
+              "end": 86881
+            },
+            "start": {
+              "line": 2172,
+              "column": 0
+            },
+            "end": {
+              "line": 2173,
+              "column": 55
+            }
+          },
+          "signature": "def content_sha256(content: str) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "load_work_item_scaffold_manifest",
+          "range": {
+            "byteOffset": {
+              "start": 86884,
+              "end": 87529
+            },
+            "start": {
+              "line": 2176,
+              "column": 0
+            },
+            "end": {
+              "line": 2189,
+              "column": 21
+            }
+          },
+          "signature": "def load_work_item_scaffold_manifest(target: Path) -> tuple[dict | None, Path]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "work_item_scaffold_manifest",
+          "range": {
+            "byteOffset": {
+              "start": 87532,
+              "end": 88095
+            },
+            "start": {
+              "line": 2192,
+              "column": 0
+            },
+            "end": {
+              "line": 2208,
+              "column": 5
+            }
+          },
+          "signature": "def work_item_scaffold_manifest(",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "work_item_file_is_generated",
+          "range": {
+            "byteOffset": {
+              "start": 88098,
+              "end": 88785
+            },
+            "start": {
+              "line": 2211,
+              "column": 0
+            },
+            "end": {
+              "line": 2227,
+              "column": 16
+            }
+          },
+          "signature": "def work_item_file_is_generated(path: Path, expected_hash: str | None = None) -> bool:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_work_item_list",
+          "range": {
+            "byteOffset": {
+              "start": 88788,
+              "end": 89957
+            },
+            "start": {
+              "line": 2230,
+              "column": 0
+            },
+            "end": {
+              "line": 2260,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_work_item_list(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_work_item_scaffold",
+          "range": {
+            "byteOffset": {
+              "start": 89960,
+              "end": 95539
+            },
+            "start": {
+              "line": 2263,
+              "column": 0
+            },
+            "end": {
+              "line": 2381,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_work_item_scaffold(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "work_item_validation_report",
+          "range": {
+            "byteOffset": {
+              "start": 95542,
+              "end": 99443
+            },
+            "start": {
+              "line": 2384,
+              "column": 0
+            },
+            "end": {
+              "line": 2467,
+              "column": 17
+            }
+          },
+          "signature": "def work_item_validation_report(target: Path) -> dict:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "render_work_item_validation",
+          "range": {
+            "byteOffset": {
+              "start": 99446,
+              "end": 100052
+            },
+            "start": {
+              "line": 2470,
+              "column": 0
+            },
+            "end": {
+              "line": 2481,
+              "column": 27
+            }
+          },
+          "signature": "def render_work_item_validation(report: dict) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_work_item_validate",
+          "range": {
+            "byteOffset": {
+              "start": 100055,
+              "end": 100306
+            },
+            "start": {
+              "line": 2484,
+              "column": 0
+            },
+            "end": {
+              "line": 2487,
+              "column": 38
+            }
+          },
+          "signature": "def cmd_work_item_validate(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "load_simple_environment_toml",
+          "range": {
+            "byteOffset": {
+              "start": 100309,
+              "end": 101502
+            },
+            "start": {
+              "line": 2490,
+              "column": 0
+            },
+            "end": {
+              "line": 2520,
+              "column": 15
+            }
+          },
+          "signature": "def load_simple_environment_toml(path: Path) -> dict:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "resolve_targets",
+          "range": {
+            "byteOffset": {
+              "start": 101505,
+              "end": 101716
+            },
+            "start": {
+              "line": 2523,
+              "column": 0
+            },
+            "end": {
+              "line": 2528,
+              "column": 17
+            }
+          },
+          "signature": "def resolve_targets(raw: str) -> tuple[str, ...]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "normalize_pack_output",
+          "range": {
+            "byteOffset": {
+              "start": 101719,
+              "end": 102197
+            },
+            "start": {
+              "line": 2531,
+              "column": 0
+            },
+            "end": {
+              "line": 2538,
+              "column": 54
+            }
+          },
+          "signature": "def normalize_pack_output(pack_name: str, target: str, explicit_out: Path | None, target_count: int) -> Path:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "find_pack_dirs",
+          "range": {
+            "byteOffset": {
+              "start": 102200,
+              "end": 102349
+            },
+            "start": {
+              "line": 2541,
+              "column": 0
+            },
+            "end": {
+              "line": 2543,
+              "column": 79
+            }
+          },
+          "signature": "def find_pack_dirs() -> list[str]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "load_pack_manifest",
+          "range": {
+            "byteOffset": {
+              "start": 102352,
+              "end": 102976
+            },
+            "start": {
+              "line": 2546,
+              "column": 0
+            },
+            "end": {
+              "line": 2558,
+              "column": 29
+            }
+          },
+          "signature": "def load_pack_manifest(pack_name: str) -> tuple[dict, Path]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "load_pack_content",
+          "range": {
+            "byteOffset": {
+              "start": 102979,
+              "end": 103489
+            },
+            "start": {
+              "line": 2561,
+              "column": 0
+            },
+            "end": {
+              "line": 2569,
+              "column": 32
+            }
+          },
+          "signature": "def load_pack_content(pack_name: str, pack_dir: Path, manifest: dict) -> tuple[dict, Path]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "user_home",
+          "range": {
+            "byteOffset": {
+              "start": 103492,
+              "end": 103606
+            },
+            "start": {
+              "line": 2572,
+              "column": 0
+            },
+            "end": {
+              "line": 2573,
+              "column": 67
+            }
+          },
+          "signature": "def user_home(raw: str | None = None) -> Path:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "marketplace_paths",
+          "range": {
+            "byteOffset": {
+              "start": 103609,
+              "end": 103818
+            },
+            "start": {
+              "line": 2576,
+              "column": 0
+            },
+            "end": {
+              "line": 2579,
+              "column": 68
+            }
+          },
+          "signature": "def marketplace_paths(home: Path | None = None) -> tuple[Path, Path]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cli_shim_path",
+          "range": {
+            "byteOffset": {
+              "start": 103821,
+              "end": 104007
+            },
+            "start": {
+              "line": 2582,
+              "column": 0
+            },
+            "end": {
+              "line": 2585,
+              "column": 64
+            }
+          },
+          "signature": "def cli_shim_path(home: Path | None = None) -> Path:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "remove_existing_path",
+          "range": {
+            "byteOffset": {
+              "start": 104010,
+              "end": 104163
+            },
+            "start": {
+              "line": 2588,
+              "column": 0
+            },
+            "end": {
+              "line": 2592,
+              "column": 21
+            }
+          },
+          "signature": "def remove_existing_path(path: Path) -> None:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "plugin_dir_looks_valid",
+          "range": {
+            "byteOffset": {
+              "start": 104166,
+              "end": 104487
+            },
+            "start": {
+              "line": 2595,
+              "column": 0
+            },
+            "end": {
+              "line": 2603,
+              "column": 42
+            }
+          },
+          "signature": "def plugin_dir_looks_valid(path: Path) -> bool:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "create_windows_junction",
+          "range": {
+            "byteOffset": {
+              "start": 104490,
+              "end": 104763
+            },
+            "start": {
+              "line": 2606,
+              "column": 0
+            },
+            "end": {
+              "line": 2613,
+              "column": 33
+            }
+          },
+          "signature": "def create_windows_junction(link_path: Path, target: Path) -> bool:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "ensure_plugin_path",
+          "range": {
+            "byteOffset": {
+              "start": 104766,
+              "end": 105774
+            },
+            "start": {
+              "line": 2616,
+              "column": 0
+            },
+            "end": {
+              "line": 2642,
+              "column": 17
+            }
+          },
+          "signature": "def ensure_plugin_path(link_path: Path, replace: bool) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "windows_cli_shim_text",
+          "range": {
+            "byteOffset": {
+              "start": 105777,
+              "end": 106096
+            },
+            "start": {
+              "line": 2645,
+              "column": 0
+            },
+            "end": {
+              "line": 2656,
+              "column": 5
+            }
+          },
+          "signature": "def windows_cli_shim_text(target_script: Path) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "ensure_cli_shim",
+          "range": {
+            "byteOffset": {
+              "start": 106099,
+              "end": 107516
+            },
+            "start": {
+              "line": 2659,
+              "column": 0
+            },
+            "end": {
+              "line": 2691,
+              "column": 26
+            }
+          },
+          "signature": "def ensure_cli_shim(home: Path, replace: bool) -> tuple[Path, str]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_install",
+          "range": {
+            "byteOffset": {
+              "start": 107519,
+              "end": 109146
+            },
+            "start": {
+              "line": 2694,
+              "column": 0
+            },
+            "end": {
+              "line": 2732,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_install(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "collect_doctor",
+          "range": {
+            "byteOffset": {
+              "start": 109149,
+              "end": 111741
+            },
+            "start": {
+              "line": 2735,
+              "column": 0
+            },
+            "end": {
+              "line": 2806,
+              "column": 5
+            }
+          },
+          "signature": "def collect_doctor(home: Path | None = None) -> dict:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "doctor_report_text",
+          "range": {
+            "byteOffset": {
+              "start": 111744,
+              "end": 113152
+            },
+            "start": {
+              "line": 2809,
+              "column": 0
+            },
+            "end": {
+              "line": 2838,
+              "column": 34
+            }
+          },
+          "signature": "def doctor_report_text(report: dict) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_doctor",
+          "range": {
+            "byteOffset": {
+              "start": 113155,
+              "end": 114373
+            },
+            "start": {
+              "line": 2841,
+              "column": 0
+            },
+            "end": {
+              "line": 2861,
+              "column": 43
+            }
+          },
+          "signature": "def cmd_doctor(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_codex_setup",
+          "range": {
+            "byteOffset": {
+              "start": 114376,
+              "end": 116137
+            },
+            "start": {
+              "line": 2864,
+              "column": 0
+            },
+            "end": {
+              "line": 2905,
+              "column": 39
+            }
+          },
+          "signature": "def cmd_codex_setup(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "detect_workspace_kind",
+          "range": {
+            "byteOffset": {
+              "start": 116140,
+              "end": 116401
+            },
+            "start": {
+              "line": 2908,
+              "column": 0
+            },
+            "end": {
+              "line": 2912,
+              "column": 61
+            }
+          },
+          "signature": "def detect_workspace_kind(target: Path) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "backup_file",
+          "range": {
+            "byteOffset": {
+              "start": 116404,
+              "end": 116633
+            },
+            "start": {
+              "line": 2915,
+              "column": 0
+            },
+            "end": {
+              "line": 2920,
+              "column": 15
+            }
+          },
+          "signature": "def backup_file(path: Path, backup_root: Path, target: Path) -> Path:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "unified_diff",
+          "range": {
+            "byteOffset": {
+              "start": 116636,
+              "end": 116926
+            },
+            "start": {
+              "line": 2923,
+              "column": 0
+            },
+            "end": {
+              "line": 2931,
+              "column": 5
+            }
+          },
+          "signature": "def unified_diff(old: str, new: str, old_label: str, new_label: str) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "copy_template_tree",
+          "range": {
+            "byteOffset": {
+              "start": 116929,
+              "end": 119215
+            },
+            "start": {
+              "line": 2934,
+              "column": 0
+            },
+            "end": {
+              "line": 2987,
+              "column": 18
+            }
+          },
+          "signature": "def copy_template_tree(target: Path, methodology: dict, force: bool = False) -> list[str]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "plugin_version",
+          "range": {
+            "byteOffset": {
+              "start": 119218,
+              "end": 119381
+            },
+            "start": {
+              "line": 2990,
+              "column": 0
+            },
+            "end": {
+              "line": 2992,
+              "column": 50
+            }
+          },
+          "signature": "def plugin_version() -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_project_init",
+          "range": {
+            "byteOffset": {
+              "start": 119384,
+              "end": 120821
+            },
+            "start": {
+              "line": 2995,
+              "column": 0
+            },
+            "end": {
+              "line": 3027,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_project_init(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "validate_project",
+          "range": {
+            "byteOffset": {
+              "start": 120824,
+              "end": 122617
+            },
+            "start": {
+              "line": 3030,
+              "column": 0
+            },
+            "end": {
+              "line": 3067,
+              "column": 18
+            }
+          },
+          "signature": "def validate_project(path: Path) -> list[str]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_project_validate",
+          "range": {
+            "byteOffset": {
+              "start": 122620,
+              "end": 122963
+            },
+            "start": {
+              "line": 3070,
+              "column": 0
+            },
+            "end": {
+              "line": 3079,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_project_validate(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "copy_codex_local_env_templates",
+          "range": {
+            "byteOffset": {
+              "start": 122966,
+              "end": 124622
+            },
+            "start": {
+              "line": 3082,
+              "column": 0
+            },
+            "end": {
+              "line": 3117,
+              "column": 18
+            }
+          },
+          "signature": "def copy_codex_local_env_templates(target: Path, force: bool = False) -> list[str]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "load_codex_local_env_manifest",
+          "range": {
+            "byteOffset": {
+              "start": 124625,
+              "end": 124922
+            },
+            "start": {
+              "line": 3120,
+              "column": 0
+            },
+            "end": {
+              "line": 3125,
+              "column": 15
+            }
+          },
+          "signature": "def load_codex_local_env_manifest(path: Path) -> dict:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "collect_codex_local_env",
+          "range": {
+            "byteOffset": {
+              "start": 124925,
+              "end": 128927
+            },
+            "start": {
+              "line": 3128,
+              "column": 0
+            },
+            "end": {
+              "line": 3222,
+              "column": 5
+            }
+          },
+          "signature": "def collect_codex_local_env(path: Path) -> dict:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_codex_local_env_init",
+          "range": {
+            "byteOffset": {
+              "start": 128930,
+              "end": 129439
+            },
+            "start": {
+              "line": 3225,
+              "column": 0
+            },
+            "end": {
+              "line": 3234,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_codex_local_env_init(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_codex_local_env_validate",
+          "range": {
+            "byteOffset": {
+              "start": 129442,
+              "end": 130542
+            },
+            "start": {
+              "line": 3237,
+              "column": 0
+            },
+            "end": {
+              "line": 3255,
+              "column": 44
+            }
+          },
+          "signature": "def cmd_codex_local_env_validate(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_codex_local_env_actions",
+          "range": {
+            "byteOffset": {
+              "start": 130545,
+              "end": 131091
+            },
+            "start": {
+              "line": 3258,
+              "column": 0
+            },
+            "end": {
+              "line": 3267,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_codex_local_env_actions(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "render_swarmd_projection",
+          "range": {
+            "byteOffset": {
+              "start": 131094,
+              "end": 132282
+            },
+            "start": {
+              "line": 3270,
+              "column": 0
+            },
+            "end": {
+              "line": 3301,
+              "column": 5
+            }
+          },
+          "signature": "def render_swarmd_projection(task: dict, roles: list[dict]) -> dict:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "render_pack_payload",
+          "range": {
+            "byteOffset": {
+              "start": 132285,
+              "end": 135491
+            },
+            "start": {
+              "line": 3304,
+              "column": 0
+            },
+            "end": {
+              "line": 3384,
+              "column": 5
+            }
+          },
+          "signature": "def render_pack_payload(pack_name: str, pack_manifest: dict, content: dict, target: str) -> dict:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_render_pack",
+          "range": {
+            "byteOffset": {
+              "start": 135494,
+              "end": 136057
+            },
+            "start": {
+              "line": 3387,
+              "column": 0
+            },
+            "end": {
+              "line": 3397,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_render_pack(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_render_all",
+          "range": {
+            "byteOffset": {
+              "start": 136060,
+              "end": 136987
+            },
+            "start": {
+              "line": 3400,
+              "column": 0
+            },
+            "end": {
+              "line": 3421,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_render_all(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "item_id",
+          "range": {
+            "byteOffset": {
+              "start": 136990,
+              "end": 137174
+            },
+            "start": {
+              "line": 3424,
+              "column": 0
+            },
+            "end": {
+              "line": 3426,
+              "column": 73
+            }
+          },
+          "signature": "def item_id(item: dict, fallback: str) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "write_bundle_item_files",
+          "range": {
+            "byteOffset": {
+              "start": 137177,
+              "end": 137705
+            },
+            "start": {
+              "line": 3429,
+              "column": 0
+            },
+            "end": {
+              "line": 3441,
+              "column": 18
+            }
+          },
+          "signature": "def write_bundle_item_files(bundle_dir: Path, section: str, items: list[dict]) -> list[str]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "markdown_list",
+          "range": {
+            "byteOffset": {
+              "start": 137708,
+              "end": 138597
+            },
+            "start": {
+              "line": 3444,
+              "column": 0
+            },
+            "end": {
+              "line": 3465,
+              "column": 27
+            }
+          },
+          "signature": "def markdown_list(title: str, items: list[dict], fields: tuple[str, ...]) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "copy_bundle_source",
+          "range": {
+            "byteOffset": {
+              "start": 138600,
+              "end": 139243
+            },
+            "start": {
+              "line": 3468,
+              "column": 0
+            },
+            "end": {
+              "line": 3484,
+              "column": 45
+            }
+          },
+          "signature": "def copy_bundle_source(base: Path, rel: str, bundle_dir: Path, copied: list[str]) -> None:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "bundle_readme",
+          "range": {
+            "byteOffset": {
+              "start": 139246,
+              "end": 139709
+            },
+            "start": {
+              "line": 3487,
+              "column": 0
+            },
+            "end": {
+              "line": 3500,
+              "column": 3
+            }
+          },
+          "signature": "def bundle_readme(pack_name: str, target: str, support_level: str) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "_cursor_slug",
+          "range": {
+            "byteOffset": {
+              "start": 139713,
+              "end": 139845
+            },
+            "start": {
+              "line": 3504,
+              "column": 0
+            },
+            "end": {
+              "line": 3506,
+              "column": 22
+            }
+          },
+          "signature": "def _cursor_slug(raw: str) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "write_cursor_native_tree",
+          "range": {
+            "byteOffset": {
+              "start": 139848,
+              "end": 146334
+            },
+            "start": {
+              "line": 3509,
+              "column": 0
+            },
+            "end": {
+              "line": 3644,
+              "column": 16
+            }
+          },
+          "signature": "def write_cursor_native_tree(bundle_dir: Path, pack_dir: Path, content: dict) -> list[str]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "render_target_bundle",
+          "range": {
+            "byteOffset": {
+              "start": 146337,
+              "end": 150443
+            },
+            "start": {
+              "line": 3647,
+              "column": 0
+            },
+            "end": {
+              "line": 3739,
+              "column": 21
+            }
+          },
+          "signature": "def render_target_bundle(pack_name: str, target: str, out_dir: Path) -> Path:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "write_bundle_index",
+          "range": {
+            "byteOffset": {
+              "start": 150446,
+              "end": 151320
+            },
+            "start": {
+              "line": 3742,
+              "column": 0
+            },
+            "end": {
+              "line": 3766,
+              "column": 14
+            }
+          },
+          "signature": "def write_bundle_index(root: Path, bundles: list[Path]) -> Path:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_render_bundle",
+          "range": {
+            "byteOffset": {
+              "start": 151323,
+              "end": 151798
+            },
+            "start": {
+              "line": 3769,
+              "column": 0
+            },
+            "end": {
+              "line": 3779,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_render_bundle(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_render_bundles",
+          "range": {
+            "byteOffset": {
+              "start": 151801,
+              "end": 152425
+            },
+            "start": {
+              "line": 3782,
+              "column": 0
+            },
+            "end": {
+              "line": 3795,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_render_bundles(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "ISSUE_RE",
+          "range": {
+            "byteOffset": {
+              "start": 152428,
+              "end": 152518
+            },
+            "start": {
+              "line": 3798,
+              "column": 0
+            },
+            "end": {
+              "line": 3798,
+              "column": 90
+            }
+          },
+          "signature": "ISSUE_RE = re.compile(r\"github\\.com/(?P<owner>[^/]+)/(?P<repo>[^/]+)/issues/(?P<num>\\d+)\")",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "constant",
+          "name": "PR_RE",
+          "range": {
+            "byteOffset": {
+              "start": 152519,
+              "end": 152604
+            },
+            "start": {
+              "line": 3799,
+              "column": 0
+            },
+            "end": {
+              "line": 3799,
+              "column": 85
+            }
+          },
+          "signature": "PR_RE = re.compile(r\"github\\.com/(?P<owner>[^/]+)/(?P<repo>[^/]+)/pull/(?P<num>\\d+)\")",
+          "astKind": "assignment",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "parse_github_ref",
+          "range": {
+            "byteOffset": {
+              "start": 152607,
+              "end": 152890
+            },
+            "start": {
+              "line": 3802,
+              "column": 0
+            },
+            "end": {
+              "line": 3807,
+              "column": 15
+            }
+          },
+          "signature": "def parse_github_ref(ref: str) -> tuple[str, str, str, str] | None:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "gh_view",
+          "range": {
+            "byteOffset": {
+              "start": 152893,
+              "end": 153911
+            },
+            "start": {
+              "line": 3810,
+              "column": 0
+            },
+            "end": {
+              "line": 3845,
+              "column": 15
+            }
+          },
+          "signature": "def gh_view(ref: str) -> dict:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_task_sync",
+          "range": {
+            "byteOffset": {
+              "start": 153914,
+              "end": 154045
+            },
+            "start": {
+              "line": 3848,
+              "column": 0
+            },
+            "end": {
+              "line": 3851,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_task_sync(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "extract_section",
+          "range": {
+            "byteOffset": {
+              "start": 154048,
+              "end": 154463
+            },
+            "start": {
+              "line": 3854,
+              "column": 0
+            },
+            "end": {
+              "line": 3862,
+              "column": 34
+            }
+          },
+          "signature": "def extract_section(body: str, heading: str) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "task_packet_markdown",
+          "range": {
+            "byteOffset": {
+              "start": 154466,
+              "end": 155896
+            },
+            "start": {
+              "line": 3865,
+              "column": 0
+            },
+            "end": {
+              "line": 3951,
+              "column": 3
+            }
+          },
+          "signature": "def task_packet_markdown(data: dict) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_task_packet",
+          "range": {
+            "byteOffset": {
+              "start": 155899,
+              "end": 156233
+            },
+            "start": {
+              "line": 3954,
+              "column": 0
+            },
+            "end": {
+              "line": 3964,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_task_packet(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "read_packet",
+          "range": {
+            "byteOffset": {
+              "start": 156236,
+              "end": 156431
+            },
+            "start": {
+              "line": 3967,
+              "column": 0
+            },
+            "end": {
+              "line": 3971,
+              "column": 34
+            }
+          },
+          "signature": "def read_packet(path: str) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "section_present",
+          "range": {
+            "byteOffset": {
+              "start": 156434,
+              "end": 156576
+            },
+            "start": {
+              "line": 3974,
+              "column": 0
+            },
+            "end": {
+              "line": 3975,
+              "column": 88
+            }
+          },
+          "signature": "def section_present(text: str, heading: str) -> bool:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "section_has_content",
+          "range": {
+            "byteOffset": {
+              "start": 156579,
+              "end": 156760
+            },
+            "start": {
+              "line": 3978,
+              "column": 0
+            },
+            "end": {
+              "line": 3981,
+              "column": 25
+            }
+          },
+          "signature": "def section_has_content(text: str, heading: str) -> bool:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_hooks_pre",
+          "range": {
+            "byteOffset": {
+              "start": 156763,
+              "end": 157823
+            },
+            "start": {
+              "line": 3984,
+              "column": 0
+            },
+            "end": {
+              "line": 4006,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_hooks_pre(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_hooks_after",
+          "range": {
+            "byteOffset": {
+              "start": 157826,
+              "end": 158531
+            },
+            "start": {
+              "line": 4009,
+              "column": 0
+            },
+            "end": {
+              "line": 4027,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_hooks_after(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "candidate_history_files",
+          "range": {
+            "byteOffset": {
+              "start": 158534,
+              "end": 159033
+            },
+            "start": {
+              "line": 4030,
+              "column": 0
+            },
+            "end": {
+              "line": 4041,
+              "column": 17
+            }
+          },
+          "signature": "def candidate_history_files(path: Path) -> list[Path]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "summarize_history",
+          "range": {
+            "byteOffset": {
+              "start": 159036,
+              "end": 160677
+            },
+            "start": {
+              "line": 4044,
+              "column": 0
+            },
+            "end": {
+              "line": 4087,
+              "column": 34
+            }
+          },
+          "signature": "def summarize_history(path: Path) -> str:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_import_history",
+          "range": {
+            "byteOffset": {
+              "start": 160680,
+              "end": 161140
+            },
+            "start": {
+              "line": 4090,
+              "column": 0
+            },
+            "end": {
+              "line": 4102,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_import_history(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "enabled_pack_names",
+          "range": {
+            "byteOffset": {
+              "start": 161143,
+              "end": 161492
+            },
+            "start": {
+              "line": 4105,
+              "column": 0
+            },
+            "end": {
+              "line": 4112,
+              "column": 14
+            }
+          },
+          "signature": "def enabled_pack_names(raw: list[str]) -> list[str]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_claude_setup",
+          "range": {
+            "byteOffset": {
+              "start": 161495,
+              "end": 163353
+            },
+            "start": {
+              "line": 4115,
+              "column": 0
+            },
+            "end": {
+              "line": 4159,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_claude_setup(args: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "require_json",
+          "range": {
+            "byteOffset": {
+              "start": 163356,
+              "end": 163698
+            },
+            "start": {
+              "line": 4162,
+              "column": 0
+            },
+            "end": {
+              "line": 4169,
+              "column": 15
+            }
+          },
+          "signature": "def require_json(path: Path, errors: list[str]) -> dict | None:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "validate_required_files",
+          "range": {
+            "byteOffset": {
+              "start": 163701,
+              "end": 166669
+            },
+            "start": {
+              "line": 4172,
+              "column": 0
+            },
+            "end": {
+              "line": 4244,
+              "column": 44
+            }
+          },
+          "signature": "def validate_required_files(errors: list[str]) -> None:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "validate_json_files",
+          "range": {
+            "byteOffset": {
+              "start": 166672,
+              "end": 167789
+            },
+            "start": {
+              "line": 4247,
+              "column": 0
+            },
+            "end": {
+              "line": 4268,
+              "column": 86
+            }
+          },
+          "signature": "def validate_json_files(errors: list[str]) -> None:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "validate_adapters",
+          "range": {
+            "byteOffset": {
+              "start": 167792,
+              "end": 169458
+            },
+            "start": {
+              "line": 4271,
+              "column": 0
+            },
+            "end": {
+              "line": 4302,
+              "column": 94
+            }
+          },
+          "signature": "def validate_adapters(errors: list[str]) -> None:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "validate_packs",
+          "range": {
+            "byteOffset": {
+              "start": 169461,
+              "end": 176638
+            },
+            "start": {
+              "line": 4305,
+              "column": 0
+            },
+            "end": {
+              "line": 4451,
+              "column": 88
+            }
+          },
+          "signature": "def validate_packs(errors: list[str]) -> None:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "validate_methodologies",
+          "range": {
+            "byteOffset": {
+              "start": 176641,
+              "end": 228135
+            },
+            "start": {
+              "line": 4454,
+              "column": 0
+            },
+            "end": {
+              "line": 5454,
+              "column": 87
+            }
+          },
+          "signature": "def validate_methodologies(errors: list[str]) -> None:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "validate_work_item_catalog",
+          "range": {
+            "byteOffset": {
+              "start": 228138,
+              "end": 237449
+            },
+            "start": {
+              "line": 5457,
+              "column": 0
+            },
+            "end": {
+              "line": 5658,
+              "column": 81
+            }
+          },
+          "signature": "def validate_work_item_catalog(errors: list[str]) -> None:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "validate_claude_code_marketplace",
+          "range": {
+            "byteOffset": {
+              "start": 237452,
+              "end": 238874
+            },
+            "start": {
+              "line": 5661,
+              "column": 0
+            },
+            "end": {
+              "line": 5686,
+              "column": 114
+            }
+          },
+          "signature": "def validate_claude_code_marketplace(errors: list[str]) -> None:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "validate_codex_local_environment_templates",
+          "range": {
+            "byteOffset": {
+              "start": 238877,
+              "end": 240559
+            },
+            "start": {
+              "line": 5689,
+              "column": 0
+            },
+            "end": {
+              "line": 5710,
+              "column": 140
+            }
+          },
+          "signature": "def validate_codex_local_environment_templates(errors: list[str]) -> None:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "validate_kit",
+          "range": {
+            "byteOffset": {
+              "start": 240562,
+              "end": 240938
+            },
+            "start": {
+              "line": 5713,
+              "column": 0
+            },
+            "end": {
+              "line": 5723,
+              "column": 17
+            }
+          },
+          "signature": "def validate_kit() -> list[str]:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_validate",
+          "range": {
+            "byteOffset": {
+              "start": 240941,
+              "end": 241211
+            },
+            "start": {
+              "line": 5726,
+              "column": 0
+            },
+            "end": {
+              "line": 5734,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_validate(_: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "cmd_version",
+          "range": {
+            "byteOffset": {
+              "start": 241214,
+              "end": 241301
+            },
+            "start": {
+              "line": 5737,
+              "column": 0
+            },
+            "end": {
+              "line": 5739,
+              "column": 12
+            }
+          },
+          "signature": "def cmd_version(_: argparse.Namespace) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "build_parser",
+          "range": {
+            "byteOffset": {
+              "start": 241304,
+              "end": 255495
+            },
+            "start": {
+              "line": 5742,
+              "column": 0
+            },
+            "end": {
+              "line": 5988,
+              "column": 17
+            }
+          },
+          "signature": "def build_parser() -> argparse.ArgumentParser:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        },
+        {
+          "role": "item",
+          "symbolType": "function",
+          "name": "main",
+          "range": {
+            "byteOffset": {
+              "start": 255498,
+              "end": 256056
+            },
+            "start": {
+              "line": 5991,
+              "column": 0
+            },
+            "end": {
+              "line": 6005,
+              "column": 16
+            }
+          },
+          "signature": "def main(argv: Iterable[str] | None = None) -> int:",
+          "astKind": "function_definition",
+          "isImport": false,
+          "isExported": true
+        }
+      ]
+    }
+  ]
+}

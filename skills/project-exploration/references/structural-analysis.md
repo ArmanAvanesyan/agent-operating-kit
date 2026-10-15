@@ -11,7 +11,8 @@ Use the smallest suitable query:
 
 The wrapper stages one explicitly selected source file in a temporary workspace, isolates
 ast-grep project configuration and requests JSON. It never passes rewrite/update flags.
-It rejects symlink paths, outside-root paths, oversized files and non-source extensions.
+It rejects symlink paths, outside-root paths, oversized files and non-source extensions. Extensionless Python/shell scripts require a recognized
+shebang and are staged with a matching language suffix; they are never executed.
 Results retain the original relative filename and tool version; backend JSON shapes remain
 backend-specific. Time/output failures are incomplete, not empty success.
 

@@ -1,0 +1,13 @@
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/cmd/aok	2.027s
+?   	github.com/ArmanAvanesyan/agent-operating-kit/cmd/aok-release	[no test files]
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/cli	(cached)
+?   	github.com/ArmanAvanesyan/agent-operating-kit/internal/doctor	[no test files]
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/hooks	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/importhistory	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/install	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/kit	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/releasebuild	15.007s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/render	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/setup	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/task	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/validate	0.596s

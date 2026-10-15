@@ -1,0 +1,1 @@
+Kit validation passed: /Users/armanavanesyan/oss/own/agent-operating-kit

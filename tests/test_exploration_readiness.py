@@ -88,6 +88,35 @@ class ExplorationTests(unittest.TestCase):
             self.assertEqual(len(report['sourceSha256']), 64)
             self.assertNotIn('aok-explore-', json.dumps(report['evidence']))
 
+    def test_extensionless_entrypoints_require_known_shebang(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            cases = [('cli', '#!/usr/bin/env python3\nprint(1)\n', '.py'),
+                     ('setup', '#!/bin/sh\necho ready\n', '.sh')]
+            for name, source, suffix in cases:
+                path = root / name
+                path.write_text(source)
+                self.assertEqual(structure.selected_file(root, name, 100), path.resolve())
+                self.assertEqual(structure.source_suffix(path), suffix)
+            for name, source in [('unknown', 'print(1)'), ('.env', '#!/bin/sh\nSECRET=value'),
+                                 ('config.txt', '#!/bin/sh\necho x')]:
+                (root / name).write_text(source)
+                with self.assertRaises(ValueError):
+                    structure.selected_file(root, name, 100)
+
+    def test_extensionless_query_uses_staged_language_suffix(self):
+        if not structure.shutil.which('rg'):
+            self.skipTest('ripgrep unavailable')
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = root / 'cli'
+            original = '#!/usr/bin/env python3\nprint(1)\n'
+            path.write_text(original)
+            report = structure.query(root, 'cli', 'text', 'print')
+            self.assertEqual(report['status'], 'observed', report)
+            self.assertEqual(report['evidence'][0]['path']['text'], 'cli')
+            self.assertEqual(path.read_text(), original)
+
     def test_source_scope_rejects_symlinks_traversal_and_size(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

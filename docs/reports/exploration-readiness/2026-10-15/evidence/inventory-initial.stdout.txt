@@ -1,0 +1,1995 @@
+{
+  "kind": "aok-project-inventory",
+  "version": 1,
+  "root": "/Users/armanavanesyan/oss/own/agent-operating-kit",
+  "revision": {
+    "status": "observed",
+    "value": "9dec920f6cb202e4733f5d8d9504441d51cfe729"
+  },
+  "branch": {
+    "status": "observed",
+    "value": "codex/verify-exploration-readiness"
+  },
+  "limits": {
+    "maxDepth": 4,
+    "maxFiles": 2000,
+    "maxEntries": 10000
+  },
+  "coverage": "partial",
+  "omissions": {
+    "hidden-directory": 2,
+    "excluded-name": 9,
+    "depth-limit": 8
+  },
+  "errors": [],
+  "files": [
+    {
+      "path": ".DS_Store",
+      "kind": "other",
+      "language": null,
+      "bytes": 8196
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.yml",
+      "kind": "configuration",
+      "language": null,
+      "bytes": 1504
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/config.yml",
+      "kind": "configuration",
+      "language": null,
+      "bytes": 224
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/feature_request.yml",
+      "kind": "configuration",
+      "language": null,
+      "bytes": 1153
+    },
+    {
+      "path": ".github/PULL_REQUEST_TEMPLATE.md",
+      "kind": "configuration",
+      "language": null,
+      "bytes": 535
+    },
+    {
+      "path": ".github/dependabot.yml",
+      "kind": "configuration",
+      "language": null,
+      "bytes": 144
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "kind": "configuration",
+      "language": null,
+      "bytes": 714
+    },
+    {
+      "path": ".github/workflows/packaging.yml",
+      "kind": "configuration",
+      "language": null,
+      "bytes": 4738
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "kind": "configuration",
+      "language": null,
+      "bytes": 3246
+    },
+    {
+      "path": ".gitignore",
+      "kind": "other",
+      "language": null,
+      "bytes": 81
+    },
+    {
+      "path": "CHANGELOG.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 4935
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 5577
+    },
+    {
+      "path": "LICENSE",
+      "kind": "other",
+      "language": null,
+      "bytes": 1072
+    },
+    {
+      "path": "README.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 15003
+    },
+    {
+      "path": "ROADMAP.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 2484
+    },
+    {
+      "path": "SECURITY.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 1326
+    },
+    {
+      "path": "VERSIONING.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 2149
+    },
+    {
+      "path": "adapters/claude-code/README.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 2019
+    },
+    {
+      "path": "adapters/claude-code/adapter.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 961
+    },
+    {
+      "path": "adapters/claude-code/aok-plugin/README.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 487
+    },
+    {
+      "path": "adapters/claude-code/aok-plugin/plugin.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 222
+    },
+    {
+      "path": "adapters/claude-code/aok-plugin/skills/aok-doctor.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 1127
+    },
+    {
+      "path": "adapters/claude-code/aok-plugin/skills/aok-migrate-toolbox.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 1049
+    },
+    {
+      "path": "adapters/claude-code/aok-plugin/skills/aok-pack-discovery.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 1042
+    },
+    {
+      "path": "adapters/claude-code/aok-plugin/skills/aok-render.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 842
+    },
+    {
+      "path": "adapters/claude-code/aok-plugin/skills/aok-setup.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 918
+    },
+    {
+      "path": "adapters/claude-code/marketplace/README.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 727
+    },
+    {
+      "path": "adapters/codex/README.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 2584
+    },
+    {
+      "path": "adapters/codex/adapter.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 1153
+    },
+    {
+      "path": "adapters/cursor/README.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 1917
+    },
+    {
+      "path": "adapters/cursor/adapter.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 1159
+    },
+    {
+      "path": "adapters/gemini/README.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 1594
+    },
+    {
+      "path": "adapters/gemini/adapter.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 1019
+    },
+    {
+      "path": "adapters/hermes-agent/README.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 1721
+    },
+    {
+      "path": "adapters/hermes-agent/adapter.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 1092
+    },
+    {
+      "path": "adapters/openclaw/README.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 1632
+    },
+    {
+      "path": "adapters/openclaw/adapter.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 1040
+    },
+    {
+      "path": "adapters/opencode/README.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 1719
+    },
+    {
+      "path": "adapters/opencode/adapter.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 1067
+    },
+    {
+      "path": "bucket/aok.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 819
+    },
+    {
+      "path": "cmd/aok/main.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 164
+    },
+    {
+      "path": "cmd/aok/main_test.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 799
+    },
+    {
+      "path": "cmd/aok-release/main.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 1597
+    },
+    {
+      "path": "core/examples/hook.example.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 271
+    },
+    {
+      "path": "core/examples/role.example.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 579
+    },
+    {
+      "path": "core/examples/skill.example.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 359
+    },
+    {
+      "path": "core/examples/task-packet.example.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 592
+    },
+    {
+      "path": "core/model.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 5218
+    },
+    {
+      "path": "docs/adapters/cursor.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 3684
+    },
+    {
+      "path": "docs/adapters/gemini.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 2289
+    },
+    {
+      "path": "docs/adapters/hermes-agent.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 2228
+    },
+    {
+      "path": "docs/adapters/openclaw.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 2259
+    },
+    {
+      "path": "docs/adapters/opencode.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 2496
+    },
+    {
+      "path": "docs/architecture.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 3231
+    },
+    {
+      "path": "docs/cli-distribution.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 8910
+    },
+    {
+      "path": "docs/codex-local-environments.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 2624
+    },
+    {
+      "path": "docs/host-compatibility.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 4221
+    },
+    {
+      "path": "docs/install-and-onboarding.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 8587
+    },
+    {
+      "path": "docs/methodology-profiles.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 11857
+    },
+    {
+      "path": "docs/migration-from-claude-code-toolbox.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 4991
+    },
+    {
+      "path": "docs/project-exploration-and-readiness.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 5444
+    },
+    {
+      "path": "docs/project-init-guide.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 4224
+    },
+    {
+      "path": "docs/release-checklist.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 9286
+    },
+    {
+      "path": "docs/reports/exploration-readiness/2026-10-15/commands.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 383
+    },
+    {
+      "path": "docs/research/agent-tool-config-comparison.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 41760
+    },
+    {
+      "path": "docs/research/agent-tool-config-matrix.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 287832
+    },
+    {
+      "path": "docs/research/claude-model-selection.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 13613
+    },
+    {
+      "path": "docs/research/claude-model-selection.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 15602
+    },
+    {
+      "path": "docs/research/codex-model-selector-raw.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 37182
+    },
+    {
+      "path": "docs/research/codex-model-selector.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 37364
+    },
+    {
+      "path": "docs/research/codex-model-selector.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 18626
+    },
+    {
+      "path": "docs/research/development-workflows/README.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 9393
+    },
+    {
+      "path": "docs/research/development-workflows/catalog.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 37732
+    },
+    {
+      "path": "docs/research/development-workflows/catalog.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 25122
+    },
+    {
+      "path": "docs/research/development-workflows/external-comparison-sources.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 6559
+    },
+    {
+      "path": "docs/research/development-workflows/external-workflow-comparison.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 12031
+    },
+    {
+      "path": "docs/research/development-workflows/implementation-plan.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 22245
+    },
+    {
+      "path": "docs/research/development-workflows/project-exploration-and-readiness.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 17060
+    },
+    {
+      "path": "docs/research/development-workflows/proposal.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 27867
+    },
+    {
+      "path": "docs/research/development-workflows/research.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 12983
+    },
+    {
+      "path": "docs/research/development-workflows/sources.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 9745
+    },
+    {
+      "path": "docs/research/goal-ruv-io/README.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 2885
+    },
+    {
+      "path": "docs/research/goal-ruv-io/defaults.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 3280
+    },
+    {
+      "path": "docs/research/goal-ruv-io/evidence/claude-session.txt",
+      "kind": "other",
+      "language": null,
+      "bytes": 21926
+    },
+    {
+      "path": "docs/research/goal-ruv-io/manifest.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 49782
+    },
+    {
+      "path": "docs/research/goal-ruv-io/report.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 32202
+    },
+    {
+      "path": "docs/research/goal-ruv-io/screenshots.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 7244
+    },
+    {
+      "path": "docs/research/goal-ruv-io/verification.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 1648
+    },
+    {
+      "path": "docs/swarmd-integration.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 2528
+    },
+    {
+      "path": "docs/targets-support-matrix.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 4687
+    },
+    {
+      "path": "docs/uninstall-and-rollback.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 5502
+    },
+    {
+      "path": "docs/work-item-types.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 3824
+    },
+    {
+      "path": "docs/work-system-bootstrap.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 3684
+    },
+    {
+      "path": "go.mod",
+      "kind": "manifest",
+      "language": null,
+      "bytes": 62
+    },
+    {
+      "path": "hooks/after/agent-summary.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 194
+    },
+    {
+      "path": "hooks/after/done.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 347
+    },
+    {
+      "path": "hooks/after/escalation.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 323
+    },
+    {
+      "path": "hooks/after/github-update.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 315
+    },
+    {
+      "path": "hooks/after/pr-ready.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 363
+    },
+    {
+      "path": "hooks/after/qa-verdict.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 258
+    },
+    {
+      "path": "hooks/pre/agent-select.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 632
+    },
+    {
+      "path": "hooks/pre/project-sync.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 569
+    },
+    {
+      "path": "hooks/pre/risk-check.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 456
+    },
+    {
+      "path": "hooks/pre/scope-check.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 584
+    },
+    {
+      "path": "hooks/pre/worktree.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 535
+    },
+    {
+      "path": "hooks.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 542
+    },
+    {
+      "path": "internal/cli/cli.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 2542
+    },
+    {
+      "path": "internal/cli/contributor.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 3311
+    },
+    {
+      "path": "internal/cli/contributor_test.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 2405
+    },
+    {
+      "path": "internal/cli/doctor.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 1598
+    },
+    {
+      "path": "internal/cli/install.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 1083
+    },
+    {
+      "path": "internal/cli/render.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 3654
+    },
+    {
+      "path": "internal/cli/setup_cmds.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 10986
+    },
+    {
+      "path": "internal/cli/validate.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 661
+    },
+    {
+      "path": "internal/cli/version.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 488
+    },
+    {
+      "path": "internal/doctor/doctor.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 6692
+    },
+    {
+      "path": "internal/hooks/hooks.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 3849
+    },
+    {
+      "path": "internal/hooks/hooks_test.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 2090
+    },
+    {
+      "path": "internal/hooks/testdata/complete.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 771
+    },
+    {
+      "path": "internal/hooks/testdata/incomplete.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 229
+    },
+    {
+      "path": "internal/importhistory/importhistory.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 3979
+    },
+    {
+      "path": "internal/importhistory/importhistory_test.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 2350
+    },
+    {
+      "path": "internal/install/install.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 9020
+    },
+    {
+      "path": "internal/install/install_test.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 1909
+    },
+    {
+      "path": "internal/kit/codex_local.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 7214
+    },
+    {
+      "path": "internal/kit/kit.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 6807
+    },
+    {
+      "path": "internal/kit/kit_test.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 1838
+    },
+    {
+      "path": "internal/releasebuild/catalogs_test.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 3155
+    },
+    {
+      "path": "internal/releasebuild/releasebuild.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 25100
+    },
+    {
+      "path": "internal/releasebuild/releasebuild_test.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 3190
+    },
+    {
+      "path": "internal/render/cursor.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 7195
+    },
+    {
+      "path": "internal/render/render.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 20786
+    },
+    {
+      "path": "internal/render/render_test.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 2563
+    },
+    {
+      "path": "internal/setup/setup.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 13839
+    },
+    {
+      "path": "internal/setup/setup_test.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 1298
+    },
+    {
+      "path": "internal/task/task.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 5874
+    },
+    {
+      "path": "internal/task/task_test.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 3377
+    },
+    {
+      "path": "internal/validate/validate.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 17860
+    },
+    {
+      "path": "internal/validate/validate_test.go",
+      "kind": "source",
+      "language": "Go",
+      "bytes": 480
+    },
+    {
+      "path": "methodologies/aup/artifacts.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 6412
+    },
+    {
+      "path": "methodologies/aup/iteration-contract.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 2348
+    },
+    {
+      "path": "methodologies/aup/roles.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 4503
+    },
+    {
+      "path": "methodologies/aup/templates/architecture-model.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 861
+    },
+    {
+      "path": "methodologies/aup/templates/configuration-record.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 667
+    },
+    {
+      "path": "methodologies/aup/templates/deployment-package.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 663
+    },
+    {
+      "path": "methodologies/aup/templates/deployment-plan.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 771
+    },
+    {
+      "path": "methodologies/aup/templates/implementation.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 531
+    },
+    {
+      "path": "methodologies/aup/templates/iteration-assessment.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 840
+    },
+    {
+      "path": "methodologies/aup/templates/iteration-plan.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 953
+    },
+    {
+      "path": "methodologies/aup/templates/requirements-model.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 890
+    },
+    {
+      "path": "methodologies/aup/templates/risk-list.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 517
+    },
+    {
+      "path": "methodologies/aup/templates/test-results.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 659
+    },
+    {
+      "path": "methodologies/aup/templates/vision.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 579
+    },
+    {
+      "path": "methodologies/dsdm/artifacts.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 9615
+    },
+    {
+      "path": "methodologies/dsdm/requirement-contract.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 2356
+    },
+    {
+      "path": "methodologies/dsdm/roles.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 7519
+    },
+    {
+      "path": "methodologies/dsdm/templates/benefits-assessment.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 630
+    },
+    {
+      "path": "methodologies/dsdm/templates/business-case.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 744
+    },
+    {
+      "path": "methodologies/dsdm/templates/delivery-plan.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 895
+    },
+    {
+      "path": "methodologies/dsdm/templates/deployed-solution.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 691
+    },
+    {
+      "path": "methodologies/dsdm/templates/development-approach-definition.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 652
+    },
+    {
+      "path": "methodologies/dsdm/templates/evolving-solution.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 584
+    },
+    {
+      "path": "methodologies/dsdm/templates/feasibility-assessment.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 614
+    },
+    {
+      "path": "methodologies/dsdm/templates/foundations-summary.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 899
+    },
+    {
+      "path": "methodologies/dsdm/templates/management-approach-definition.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 668
+    },
+    {
+      "path": "methodologies/dsdm/templates/prioritised-requirements-list.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 944
+    },
+    {
+      "path": "methodologies/dsdm/templates/project-review-report.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 662
+    },
+    {
+      "path": "methodologies/dsdm/templates/solution-architecture-definition.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 922
+    },
+    {
+      "path": "methodologies/dsdm/templates/terms-of-reference.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 495
+    },
+    {
+      "path": "methodologies/dsdm/templates/timebox-plan.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 1163
+    },
+    {
+      "path": "methodologies/dsdm/templates/timebox-review-record.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 793
+    },
+    {
+      "path": "methodologies/fdd/artifacts.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 4384
+    },
+    {
+      "path": "methodologies/fdd/feature-contract.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 2214
+    },
+    {
+      "path": "methodologies/fdd/roles.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 7657
+    },
+    {
+      "path": "methodologies/fdd/templates/design-package.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 917
+    },
+    {
+      "path": "methodologies/fdd/templates/feature-list.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 1047
+    },
+    {
+      "path": "methodologies/fdd/templates/feature-plan.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 639
+    },
+    {
+      "path": "methodologies/fdd/templates/feature-status-report.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 896
+    },
+    {
+      "path": "methodologies/fdd/templates/inspection-record.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 658
+    },
+    {
+      "path": "methodologies/fdd/templates/overall-model.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 746
+    },
+    {
+      "path": "methodologies/fragments/kanban.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 531
+    },
+    {
+      "path": "methodologies/fragments/lean.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 387
+    },
+    {
+      "path": "methodologies/fragments/xp.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 466
+    },
+    {
+      "path": "methodologies/profiles/am.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 720
+    },
+    {
+      "path": "methodologies/profiles/aup.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 6768
+    },
+    {
+      "path": "methodologies/profiles/dsdm.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 6455
+    },
+    {
+      "path": "methodologies/profiles/fdd.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 5295
+    },
+    {
+      "path": "methodologies/profiles/kanban.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 811
+    },
+    {
+      "path": "methodologies/profiles/lean.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 746
+    },
+    {
+      "path": "methodologies/profiles/xp.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 826
+    },
+    {
+      "path": "packaging/README.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 1999
+    },
+    {
+      "path": "packaging/homebrew/aok.rb",
+      "kind": "source",
+      "language": "Ruby",
+      "bytes": 989
+    },
+    {
+      "path": "packaging/homebrew/aok.rb.tmpl",
+      "kind": "other",
+      "language": null,
+      "bytes": 751
+    },
+    {
+      "path": "packaging/scoop/aok.json.tmpl",
+      "kind": "other",
+      "language": null,
+      "bytes": 706
+    },
+    {
+      "path": "packaging/winget/ArmanAvanesyan.AgentOperatingKit.installer.yaml",
+      "kind": "other",
+      "language": null,
+      "bytes": 539
+    },
+    {
+      "path": "packaging/winget/ArmanAvanesyan.AgentOperatingKit.installer.yaml.tmpl",
+      "kind": "other",
+      "language": null,
+      "bytes": 402
+    },
+    {
+      "path": "packaging/winget/ArmanAvanesyan.AgentOperatingKit.locale.en-US.yaml",
+      "kind": "other",
+      "language": null,
+      "bytes": 449
+    },
+    {
+      "path": "packaging/winget/ArmanAvanesyan.AgentOperatingKit.locale.en-US.yaml.tmpl",
+      "kind": "other",
+      "language": null,
+      "bytes": 436
+    },
+    {
+      "path": "packaging/winget/ArmanAvanesyan.AgentOperatingKit.version.yaml",
+      "kind": "other",
+      "language": null,
+      "bytes": 140
+    },
+    {
+      "path": "packaging/winget/ArmanAvanesyan.AgentOperatingKit.yaml",
+      "kind": "other",
+      "language": null,
+      "bytes": 1131
+    },
+    {
+      "path": "packaging/winget/ArmanAvanesyan.AgentOperatingKit.yaml.tmpl",
+      "kind": "other",
+      "language": null,
+      "bytes": 855
+    },
+    {
+      "path": "packs/batch-resolve-conflicts/README.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 694
+    },
+    {
+      "path": "packs/batch-resolve-conflicts/claude-code/README.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 2300
+    },
+    {
+      "path": "packs/batch-resolve-conflicts/claude-code/plugin.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 210
+    },
+    {
+      "path": "packs/batch-resolve-conflicts/claude-code/skills/batch-resolve-conflicts.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 4669
+    },
+    {
+      "path": "packs/batch-resolve-conflicts/pack.content.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 1571
+    },
+    {
+      "path": "packs/batch-resolve-conflicts/pack.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 6191
+    },
+    {
+      "path": "packs/engineering-guardrails/README.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 660
+    },
+    {
+      "path": "packs/engineering-guardrails/claude-code/README.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 3475
+    },
+    {
+      "path": "packs/engineering-guardrails/claude-code/plugin.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 1502
+    },
+    {
+      "path": "packs/engineering-guardrails/claude-code/scripts/check-future-annotations.py",
+      "kind": "source",
+      "language": "Python",
+      "bytes": 2973
+    },
+    {
+      "path": "packs/engineering-guardrails/claude-code/scripts/check-migration-conventions.py",
+      "kind": "source",
+      "language": "Python",
+      "bytes": 2830
+    },
+    {
+      "path": "packs/engineering-guardrails/claude-code/scripts/check-no-assert.py",
+      "kind": "source",
+      "language": "Python",
+      "bytes": 2746
+    },
+    {
+      "path": "packs/engineering-guardrails/claude-code/scripts/check-pre-commit.py",
+      "kind": "source",
+      "language": "Python",
+      "bytes": 4016
+    },
+    {
+      "path": "packs/engineering-guardrails/claude-code/scripts/session-start-reminder.py",
+      "kind": "source",
+      "language": "Python",
+      "bytes": 1612
+    },
+    {
+      "path": "packs/engineering-guardrails/pack.content.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 3069
+    },
+    {
+      "path": "packs/engineering-guardrails/pack.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 7310
+    },
+    {
+      "path": "packs/phased-rollout-template/README.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 635
+    },
+    {
+      "path": "packs/phased-rollout-template/claude-code/README.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 3866
+    },
+    {
+      "path": "packs/phased-rollout-template/claude-code/plugin.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 222
+    },
+    {
+      "path": "packs/phased-rollout-template/claude-code/skills/init-phased-project.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 4340
+    },
+    {
+      "path": "packs/phased-rollout-template/claude-code/templates/.dockerignore.tmpl",
+      "kind": "other",
+      "language": null,
+      "bytes": 493
+    },
+    {
+      "path": "packs/phased-rollout-template/claude-code/templates/CLAUDE.md.tmpl",
+      "kind": "other",
+      "language": null,
+      "bytes": 6478
+    },
+    {
+      "path": "packs/phased-rollout-template/claude-code/templates/Dockerfile.tmpl",
+      "kind": "other",
+      "language": null,
+      "bytes": 1813
+    },
+    {
+      "path": "packs/phased-rollout-template/claude-code/templates/pyproject.toml.tmpl",
+      "kind": "other",
+      "language": null,
+      "bytes": 2775
+    },
+    {
+      "path": "packs/phased-rollout-template/pack.content.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 4116
+    },
+    {
+      "path": "packs/phased-rollout-template/pack.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 9694
+    },
+    {
+      "path": "packs/ship-pipeline/README.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 601
+    },
+    {
+      "path": "packs/ship-pipeline/claude-code/README.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 3563
+    },
+    {
+      "path": "packs/ship-pipeline/claude-code/agents/pr-ci-fixer.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 1942
+    },
+    {
+      "path": "packs/ship-pipeline/claude-code/plugin.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 191
+    },
+    {
+      "path": "packs/ship-pipeline/claude-code/skills/fix-ci.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 848
+    },
+    {
+      "path": "packs/ship-pipeline/claude-code/skills/ship-pr.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 2482
+    },
+    {
+      "path": "packs/ship-pipeline/pack.content.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 1937
+    },
+    {
+      "path": "packs/ship-pipeline/pack.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 6365
+    },
+    {
+      "path": "references/github-project-fields.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 726
+    },
+    {
+      "path": "references/migration-from-existing-project.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 703
+    },
+    {
+      "path": "references/workflow-model.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 876
+    },
+    {
+      "path": "schemas/artifact.schema.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 2039
+    },
+    {
+      "path": "schemas/hook.schema.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 1110
+    },
+    {
+      "path": "schemas/methodology.schema.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 6250
+    },
+    {
+      "path": "schemas/pack.schema.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 4117
+    },
+    {
+      "path": "schemas/role.schema.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 1355
+    },
+    {
+      "path": "schemas/skill.schema.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 1454
+    },
+    {
+      "path": "schemas/task-packet.schema.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 6625
+    },
+    {
+      "path": "schemas/tool-adapter.schema.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 1587
+    },
+    {
+      "path": "schemas/work-item-type.schema.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 3994
+    },
+    {
+      "path": "schemas/work-system-binding.schema.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 1792
+    },
+    {
+      "path": "scripts/aok",
+      "kind": "other",
+      "language": null,
+      "bytes": 256115
+    },
+    {
+      "path": "scripts/github-sync.sh",
+      "kind": "source",
+      "language": "Shell",
+      "bytes": 235
+    },
+    {
+      "path": "scripts/install.sh",
+      "kind": "source",
+      "language": "Shell",
+      "bytes": 136
+    },
+    {
+      "path": "scripts/packaging/generate-from-release.sh",
+      "kind": "source",
+      "language": "Shell",
+      "bytes": 6924
+    },
+    {
+      "path": "scripts/project-init.sh",
+      "kind": "source",
+      "language": "Shell",
+      "bytes": 141
+    },
+    {
+      "path": "scripts/release/build.sh",
+      "kind": "source",
+      "language": "Shell",
+      "bytes": 255
+    },
+    {
+      "path": "scripts/release/sign.sh",
+      "kind": "source",
+      "language": "Shell",
+      "bytes": 9535
+    },
+    {
+      "path": "scripts/validate.sh",
+      "kind": "source",
+      "language": "Shell",
+      "bytes": 137
+    },
+    {
+      "path": "skills/agent-workflow/SKILL.md",
+      "kind": "instructions",
+      "language": null,
+      "bytes": 1788
+    },
+    {
+      "path": "skills/code-review/SKILL.md",
+      "kind": "instructions",
+      "language": null,
+      "bytes": 812
+    },
+    {
+      "path": "skills/environment-readiness/SKILL.md",
+      "kind": "instructions",
+      "language": null,
+      "bytes": 2040
+    },
+    {
+      "path": "skills/environment-readiness/assets/readiness-report.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 658
+    },
+    {
+      "path": "skills/environment-readiness/references/profiles-and-evidence.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 2487
+    },
+    {
+      "path": "skills/environment-readiness/references/setup-and-recovery.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 1406
+    },
+    {
+      "path": "skills/environment-readiness/scripts/assess.py",
+      "kind": "source",
+      "language": "Python",
+      "bytes": 4170
+    },
+    {
+      "path": "skills/github-project-execution/SKILL.md",
+      "kind": "instructions",
+      "language": null,
+      "bytes": 1454
+    },
+    {
+      "path": "skills/project-bootstrap/SKILL.md",
+      "kind": "instructions",
+      "language": null,
+      "bytes": 1110
+    },
+    {
+      "path": "skills/project-exploration/SKILL.md",
+      "kind": "instructions",
+      "language": null,
+      "bytes": 2307
+    },
+    {
+      "path": "skills/project-exploration/assets/exploration-report.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 610
+    },
+    {
+      "path": "skills/project-exploration/references/exploration-procedure.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 1505
+    },
+    {
+      "path": "skills/project-exploration/references/structural-analysis.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 2662
+    },
+    {
+      "path": "skills/project-exploration/scripts/inventory.py",
+      "kind": "source",
+      "language": "Python",
+      "bytes": 6514
+    },
+    {
+      "path": "skills/project-exploration/scripts/structure.py",
+      "kind": "source",
+      "language": "Python",
+      "bytes": 8352
+    },
+    {
+      "path": "skills/qa-verification/SKILL.md",
+      "kind": "instructions",
+      "language": null,
+      "bytes": 916
+    },
+    {
+      "path": "templates/.codex/aok-action.sh",
+      "kind": "configuration",
+      "language": "Shell",
+      "bytes": 1280
+    },
+    {
+      "path": "templates/.codex/aok-local-environment.json",
+      "kind": "configuration",
+      "language": null,
+      "bytes": 1386
+    },
+    {
+      "path": "templates/.codex/config.toml",
+      "kind": "configuration",
+      "language": null,
+      "bytes": 771
+    },
+    {
+      "path": "templates/.codex/environments/environment.toml",
+      "kind": "configuration",
+      "language": null,
+      "bytes": 685
+    },
+    {
+      "path": "templates/.codex/setup.sh",
+      "kind": "configuration",
+      "language": "Shell",
+      "bytes": 820
+    },
+    {
+      "path": "templates/AGENTS.md",
+      "kind": "instructions",
+      "language": null,
+      "bytes": 2439
+    },
+    {
+      "path": "templates/agents/github-project.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 2106
+    },
+    {
+      "path": "templates/agents/hooks/after/agent-summary.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 194
+    },
+    {
+      "path": "templates/agents/hooks/after/done.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 347
+    },
+    {
+      "path": "templates/agents/hooks/after/escalation.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 323
+    },
+    {
+      "path": "templates/agents/hooks/after/github-update.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 315
+    },
+    {
+      "path": "templates/agents/hooks/after/pr-ready.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 363
+    },
+    {
+      "path": "templates/agents/hooks/after/qa-verdict.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 258
+    },
+    {
+      "path": "templates/agents/hooks/pre/agent-select.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 632
+    },
+    {
+      "path": "templates/agents/hooks/pre/project-sync.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 569
+    },
+    {
+      "path": "templates/agents/hooks/pre/risk-check.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 456
+    },
+    {
+      "path": "templates/agents/hooks/pre/scope-check.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 584
+    },
+    {
+      "path": "templates/agents/hooks/pre/worktree.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 535
+    },
+    {
+      "path": "templates/agents/hooks.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 2574
+    },
+    {
+      "path": "templates/agents/methodology.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 651
+    },
+    {
+      "path": "templates/agents/roles/code-reviewer.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 577
+    },
+    {
+      "path": "templates/agents/roles/devops-sre.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 586
+    },
+    {
+      "path": "templates/agents/roles/implementer.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 732
+    },
+    {
+      "path": "templates/agents/roles/orchestrator.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 688
+    },
+    {
+      "path": "templates/agents/roles/product-manager.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 535
+    },
+    {
+      "path": "templates/agents/roles/project-manager.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 476
+    },
+    {
+      "path": "templates/agents/roles/qa-reality-checker.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 646
+    },
+    {
+      "path": "templates/agents/roles/software-architect.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 609
+    },
+    {
+      "path": "templates/agents/tasks/task-template.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 803
+    },
+    {
+      "path": "templates/agents/workflow.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 2720
+    },
+    {
+      "path": "tests/test_exploration_readiness.py",
+      "kind": "source",
+      "language": "Python",
+      "bytes": 10535
+    },
+    {
+      "path": "tests/test_methodology.py",
+      "kind": "source",
+      "language": "Python",
+      "bytes": 48865
+    },
+    {
+      "path": "tests/test_work_item.py",
+      "kind": "source",
+      "language": "Python",
+      "bytes": 22280
+    },
+    {
+      "path": "tests/test_work_system.py",
+      "kind": "source",
+      "language": "Python",
+      "bytes": 16788
+    },
+    {
+      "path": "work-items/catalog.json",
+      "kind": "other",
+      "language": null,
+      "bytes": 29159
+    },
+    {
+      "path": "work-items/templates/aup-business-rule.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 138
+    },
+    {
+      "path": "work-items/templates/aup-defect.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 148
+    },
+    {
+      "path": "work-items/templates/aup-non-functional.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 154
+    },
+    {
+      "path": "work-items/templates/aup-technical.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 147
+    },
+    {
+      "path": "work-items/templates/aup-use-case.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 156
+    },
+    {
+      "path": "work-items/templates/aup-user-story.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 160
+    },
+    {
+      "path": "work-items/templates/bug.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 149
+    },
+    {
+      "path": "work-items/templates/change.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 144
+    },
+    {
+      "path": "work-items/templates/dsdm-requirement.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 154
+    },
+    {
+      "path": "work-items/templates/epic.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 141
+    },
+    {
+      "path": "work-items/templates/fdd-feature.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 147
+    },
+    {
+      "path": "work-items/templates/feature.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 133
+    },
+    {
+      "path": "work-items/templates/incident.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 145
+    },
+    {
+      "path": "work-items/templates/lean-experiment.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 127
+    },
+    {
+      "path": "work-items/templates/lean-improvement.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 142
+    },
+    {
+      "path": "work-items/templates/risk.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 102
+    },
+    {
+      "path": "work-items/templates/spike.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 139
+    },
+    {
+      "path": "work-items/templates/task.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 121
+    },
+    {
+      "path": "work-items/templates/xp-user-story.md",
+      "kind": "other",
+      "language": null,
+      "bytes": 148
+    }
+  ],
+  "languages": {
+    "Go": 34,
+    "Ruby": 1,
+    "Python": 12,
+    "Shell": 9
+  },
+  "limitations": [
+    "Metadata only; no file contents or architectural conclusions.",
+    "Fixed exclusions, not full gitignore semantics; ignored paths may appear.",
+    "Symlinks are not followed. Depth counts directories below root.",
+    "Language counts describe enumerated files, not code size or importance."
+  ]
+}

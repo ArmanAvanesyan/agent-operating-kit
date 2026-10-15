@@ -1,0 +1,4 @@
+usage: structure.py [-h] --file FILE --mode {text,pattern,outline,stats}
+                    [--pattern PATTERN] [--lang LANG]
+                    root
+structure.py: error: select a supported source file, not configuration or secrets

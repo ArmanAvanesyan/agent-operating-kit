@@ -1,0 +1,39 @@
+{
+  "kind": "aok-structural-evidence",
+  "version": 1,
+  "file": "scripts/aok",
+  "backend": "rg",
+  "mode": "text",
+  "query": "def main",
+  "language": null,
+  "status": "observed",
+  "limitations": [
+    "Syntax/text/statistics are not resolved references or runtime behavior.",
+    "One explicit file only; empty results are not repository-wide absence proof."
+  ],
+  "sourceSha256": "26d1114f49b17d9b75526134e04fbf428ac331a87b461dce8e6ba92056d57ac4",
+  "revision": "9dec920f6cb202e4733f5d8d9504441d51cfe729",
+  "toolVersion": "ripgrep 15.2.0 (rev e89fff89ac)\n\nfeatures:+pcre2\nsimd(compile):+SSE2,+SSSE3,-AVX2\nsimd(runtime):+SSE2,+SSSE3,+AVX2\n\nPCRE2 10.45 is available (JIT is available)",
+  "exitCode": 0,
+  "evidence": [
+    {
+      "path": {
+        "text": "scripts/aok"
+      },
+      "lines": {
+        "text": "def main(argv: Iterable[str] | None = None) -> int:\n"
+      },
+      "line_number": 5992,
+      "absolute_offset": 255498,
+      "submatches": [
+        {
+          "match": {
+            "text": "def main"
+          },
+          "start": 0,
+          "end": 8
+        }
+      ]
+    }
+  ]
+}

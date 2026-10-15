@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapter"
+	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/codex"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/opencode"
 )
 
@@ -80,5 +81,32 @@ func TestCanonicalTargetMismatchHasNoOutput(t *testing.T) {
 	files, _, r := Export(nativeadapter.NewEngine(nil), "claude-code", "project", filepath.Join(root, "assignment.json"), root, nil)
 	if len(files) != 0 || r.Status != "blocked" {
 		t.Fatalf("target mismatch accepted: %+v", r)
+	}
+}
+
+func TestCanonicalCodexEffortProjection(t *testing.T) {
+	root := fixture(t)
+	path := filepath.Join(root, "execution-profile.json")
+	data, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var profile map[string]any
+	if err := json.Unmarshal(data, &profile); err != nil {
+		t.Fatal(err)
+	}
+	profile["client"].(map[string]any)["adapter"] = "codex"
+	profile["model"].(map[string]any)["reasoning"] = map[string]any{"mode": "effort", "effort": "medium"}
+	data, _ = json.Marshal(profile)
+	if err := os.WriteFile(path, data, 0600); err != nil {
+		t.Fatal(err)
+	}
+	registry := nativeadapter.NewRegistry()
+	if err := registry.Register(codex.New()); err != nil {
+		t.Fatal(err)
+	}
+	files, b, r := Export(nativeadapter.NewEngine(registry), "codex", "project", filepath.Join(root, "assignment.json"), root, nil)
+	if len(files) != 1 || r.Status != "blocked" || string(b.Document.Fields["executionProfile.model.reasoning.effort"]) != `"medium"` {
+		t.Fatalf("effort mapping lost: %+v", r)
 	}
 }

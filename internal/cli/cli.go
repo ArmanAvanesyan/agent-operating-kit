@@ -48,6 +48,8 @@ func Run(argv []string, stdout, stderr io.Writer) int {
 		code, err = runProject(args, stdout, stderr)
 	case "render":
 		code, err = runRender(args, stdout, stderr)
+	case "agent":
+		code, err = runAgent(args, stdout, stderr)
 	case "task":
 		code, err = runTask(args, stdout, stderr)
 	case "hooks":
@@ -82,6 +84,7 @@ Commands:
   version              Print kit version from .codex-plugin/plugin.json
   doctor               Check install and required kit files
   validate             Validate kit content
+  agent validate       Validate local agent contracts (Go CLI)
   install              Register marketplace plugin and install PATH binary
   claude setup         Configure Claude Code marketplace (aok-claude-code)
   codex setup          Install + doctor (+ optional project / claude)

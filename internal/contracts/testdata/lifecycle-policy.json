@@ -1,0 +1,105 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "LifecyclePolicy",
+  "metadata": {
+    "id": "bounded-analysis",
+    "name": "Bounded Analysis",
+    "version": "0.1.0",
+    "description": "Proposed documentation fixture; not operational configuration."
+  },
+  "states": [
+    "queued",
+    "running",
+    "suspended",
+    "completed",
+    "partial",
+    "blocked",
+    "failed",
+    "cancelled",
+    "timed-out"
+  ],
+  "transitions": [
+    {
+      "from": "queued",
+      "to": "running",
+      "condition": "Readiness passes."
+    },
+    {
+      "from": "queued",
+      "to": "blocked",
+      "condition": "Required readiness check fails."
+    },
+    {
+      "from": "queued",
+      "to": "cancelled",
+      "condition": "Cancelled before launch."
+    },
+    {
+      "from": "running",
+      "to": "suspended",
+      "condition": "Executor records suspended outcome."
+    },
+    {
+      "from": "running",
+      "to": "completed",
+      "condition": "Executor records completed outcome."
+    },
+    {
+      "from": "running",
+      "to": "partial",
+      "condition": "Executor records partial outcome."
+    },
+    {
+      "from": "running",
+      "to": "blocked",
+      "condition": "Executor records blocked outcome."
+    },
+    {
+      "from": "running",
+      "to": "failed",
+      "condition": "Executor records failed outcome."
+    },
+    {
+      "from": "running",
+      "to": "cancelled",
+      "condition": "Executor records cancelled outcome."
+    },
+    {
+      "from": "running",
+      "to": "timed-out",
+      "condition": "Executor records timed-out outcome."
+    },
+    {
+      "from": "suspended",
+      "to": "running",
+      "condition": "Checkpoint compatible and trusted resume authorized."
+    },
+    {
+      "from": "suspended",
+      "to": "cancelled",
+      "condition": "Cancellation requested."
+    }
+  ],
+  "retry": {
+    "maxAttempts": 2,
+    "retryableErrors": [
+      "transient-provider-unavailable"
+    ],
+    "backoffSeconds": 5,
+    "sideEffects": "reconcile-before-retry"
+  },
+  "checkpoint": {
+    "enabled": false,
+    "formatVersion": "none",
+    "resumeRequires": [
+      "compatible-manifest",
+      "verified-checkpoint",
+      "trusted-authorization"
+    ]
+  },
+  "cancellation": {
+    "stopNewActions": true,
+    "recordInflightActions": true,
+    "rollback": "explicit-compensations-only"
+  }
+}

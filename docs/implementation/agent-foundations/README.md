@@ -1,6 +1,7 @@
 # Agent foundations delivery contract
 
-Status: implementation contract; the Go commands below are not implemented yet.
+Status: foundations in progress. `aok agent validate` is implemented in the Go
+CLI; the remaining commands below are planned.
 The historical [agent specification](../../proposals/agent-spec/README.md) and
 [planning proposal](../../proposals/planning-decisions-optimization/README.md)
 remain design assets. Their illustrative unresolved references do not form a
@@ -83,8 +84,8 @@ workers and one reviewer, with isolated worktrees for concurrent edits.
 | Stage | Deliverable | Status |
 |---|---|---|
 | 1 | This reconciliation and [native inventory](native-inventory.md) | Merged: [PR #48](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/48) |
-| 2 | Offline schemas, typed envelope/references, strict parsers, positive/negative fixtures | In review; per-kind decoding follows in stage 3 |
-| 3 | Registries, invocation/context/assignment and reference semantics | Pending |
+| 2 | Offline schemas, typed envelope/references, strict parsers, positive/negative fixtures | Merged: [PR #49](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/49) |
+| 3 | Typed models, registries, invocation/context/assignment and reference semantics | In progress |
 | 4 | Deterministic resolution, immutable evidence, permission/path protections | Pending |
 | 5 | Planning DAG, revisions, traceability, decision results | Pending |
 | 6 | Shared native interface, provenance/sidecars, semantic comparison | Pending |
@@ -119,6 +120,9 @@ incomplete until all eight native gates pass.
 Stage 2 adds [operational contract parsing](../../../internal/contracts/README.md)
 and [inert native parsing](../../../internal/nativeparse/README.md). It does not
 expose the planned commands or resolve references. Schema-valid fixtures can
-still be unresolved and blocked. Standalone planning schemas and per-kind typed
-decoding remain subsequent stages; proposal checkers continue to check only
+still be unresolved and blocked. Standalone planning schemas remain subsequent stages; proposal checkers continue to check only
 historical proposal assets.
+
+Stage 3 adds [local agent validation](../../agent-validation.md) and typed
+decoding for the initial eleven resource kinds. Static validation does not imply
+readiness or authorization. Resolution, planning and native adapters remain open.

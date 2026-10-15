@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.invalid/operational/lifecycle-policy.json",
+  "title": "AOK operational lifecycle-policy",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "LifecyclePolicy"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    },
+    "states": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "queued",
+          "running",
+          "suspended",
+          "completed",
+          "partial",
+          "blocked",
+          "failed",
+          "cancelled",
+          "timed-out"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "transitions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string",
+            "minLength": 1
+          },
+          "to": {
+            "type": "string",
+            "minLength": 1
+          },
+          "condition": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "from",
+          "to",
+          "condition"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "retry": {
+      "type": "object",
+      "properties": {
+        "maxAttempts": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "retryableErrors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "backoffSeconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sideEffects": {
+          "const": "reconcile-before-retry"
+        }
+      },
+      "required": [
+        "maxAttempts",
+        "retryableErrors",
+        "backoffSeconds",
+        "sideEffects"
+      ],
+      "additionalProperties": false
+    },
+    "checkpoint": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "formatVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "resumeRequires": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "enabled",
+        "formatVersion",
+        "resumeRequires"
+      ],
+      "additionalProperties": false
+    },
+    "cancellation": {
+      "type": "object",
+      "properties": {
+        "stopNewActions": {
+          "const": true
+        },
+        "recordInflightActions": {
+          "const": true
+        },
+        "rollback": {
+          "enum": [
+            "explicit-compensations-only",
+            "none"
+          ]
+        }
+      },
+      "required": [
+        "stopNewActions",
+        "recordInflightActions",
+        "rollback"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "states",
+    "transitions",
+    "retry",
+    "checkpoint",
+    "cancellation"
+  ],
+  "additionalProperties": false
+}

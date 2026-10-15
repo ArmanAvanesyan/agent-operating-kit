@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.example/proposals/agent-spec/assignment.schema.json",
+  "title": "PROPOSED AOK assignment",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "AgentAssignment"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "agent": {
+      "type": "string",
+      "minLength": 1
+    },
+    "taskPacket": {
+      "type": "string",
+      "minLength": 1
+    },
+    "executionProfile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputs": {
+      "$ref": "common.schema.json#/$defs/parameters"
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {
+        "contract": {
+          "type": "string",
+          "minLength": 1
+        },
+        "parameters": {
+          "$ref": "common.schema.json#/$defs/parameters"
+        }
+      },
+      "required": [
+        "contract"
+      ],
+      "additionalProperties": false
+    },
+    "permissionRestrictions": {
+      "$ref": "common.schema.json#/$defs/permissions"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "id",
+    "agent",
+    "taskPacket",
+    "executionProfile",
+    "inputs",
+    "outputs"
+  ],
+  "additionalProperties": false
+}

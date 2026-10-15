@@ -1,0 +1,15 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "AgentResult",
+  "status": "blocked",
+  "summary": "Synthetic example: required enforcement and native discovery have not been verified.",
+  "deliverables": [],
+  "evidence": [],
+  "unresolvedItems": [
+    "Report-subtree enforcement needs host/executor validation."
+  ],
+  "nextActions": [
+    "Complete conformance checks before execution."
+  ],
+  "verification": "not-run"
+}

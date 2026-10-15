@@ -1,0 +1,83 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "AdapterConformance",
+  "metadata": {
+    "id": "opencode-project-draft",
+    "name": "Opencode Project Draft",
+    "version": "0.1.0",
+    "description": "Proposed documentation fixture; not operational configuration."
+  },
+  "adapter": "opencode",
+  "adapterVersion": "draft-fixture",
+  "hostVersionRange": "unverified",
+  "scope": "project",
+  "nativeFormats": [
+    "opencode-agent-markdown"
+  ],
+  "operations": [
+    "detect",
+    "parse",
+    "normalize",
+    "inspect",
+    "adopt",
+    "render",
+    "compare",
+    "verify"
+  ],
+  "fields": [
+    {
+      "neutralPath": "permissions.filesystem.write",
+      "support": "unsupported",
+      "enforcementOwner": "none",
+      "required": true,
+      "evidence": []
+    },
+    {
+      "neutralPath": "identity.purpose",
+      "support": "guidance-only",
+      "enforcementOwner": "advisory",
+      "required": false,
+      "evidence": []
+    }
+  ],
+  "tests": [
+    {
+      "id": "syntax-fixture",
+      "category": "syntax",
+      "status": "not-run",
+      "evidence": []
+    },
+    {
+      "id": "round-trip-fixture",
+      "category": "round-trip",
+      "status": "not-run",
+      "evidence": []
+    },
+    {
+      "id": "scope-fixture",
+      "category": "scope",
+      "status": "not-run",
+      "evidence": []
+    },
+    {
+      "id": "enforcement-fixture",
+      "category": "enforcement",
+      "status": "not-run",
+      "evidence": []
+    },
+    {
+      "id": "drift-fixture",
+      "category": "drift",
+      "status": "not-run",
+      "evidence": []
+    },
+    {
+      "id": "credentials-fixture",
+      "category": "credentials",
+      "status": "not-run",
+      "evidence": []
+    }
+  ],
+  "certification": "draft",
+  "checkedOn": "2026-10-15"
+}

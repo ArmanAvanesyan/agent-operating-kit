@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.example/proposals/agent-spec/migration-contract.schema.json",
+  "title": "PROPOSED AOK migration-contract",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "MigrationContract"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    },
+    "schemaCompatibility": {
+      "type": "object",
+      "properties": {
+        "current": {
+          "type": "string",
+          "minLength": 1
+        },
+        "readableVersions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "unknownVersion": {
+          "const": "block"
+        }
+      },
+      "required": [
+        "current",
+        "readableVersions",
+        "unknownVersion"
+      ],
+      "additionalProperties": false
+    },
+    "referencePinning": {
+      "enum": [
+        "version-and-content-hash",
+        "content-hash"
+      ]
+    },
+    "deprecations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string",
+            "minLength": 1
+          },
+          "replacement": {
+            "type": "string",
+            "minLength": 1
+          },
+          "removeAfterVersion": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "field",
+          "replacement",
+          "removeAfterVersion"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "migrations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string",
+            "minLength": 1
+          },
+          "to": {
+            "type": "string",
+            "minLength": 1
+          },
+          "transformRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "automatic": {
+            "type": "boolean"
+          },
+          "lossPolicy": {
+            "const": "block"
+          }
+        },
+        "required": [
+          "from",
+          "to",
+          "transformRef",
+          "automatic",
+          "lossPolicy"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "upgrade": {
+      "type": "object",
+      "properties": {
+        "dryRunRequired": {
+          "const": true
+        },
+        "backupRequired": {
+          "const": true
+        },
+        "reResolveRequired": {
+          "const": true
+        }
+      },
+      "required": [
+        "dryRunRequired",
+        "backupRequired",
+        "reResolveRequired"
+      ],
+      "additionalProperties": false
+    },
+    "rollback": {
+      "type": "object",
+      "properties": {
+        "restoreDefinitions": {
+          "type": "boolean"
+        },
+        "restoreGeneratedFiles": {
+          "type": "boolean"
+        },
+        "reverseExternalEffects": {
+          "const": false
+        }
+      },
+      "required": [
+        "restoreDefinitions",
+        "restoreGeneratedFiles",
+        "reverseExternalEffects"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "schemaCompatibility",
+    "referencePinning",
+    "deprecations",
+    "migrations",
+    "upgrade",
+    "rollback"
+  ],
+  "additionalProperties": false
+}

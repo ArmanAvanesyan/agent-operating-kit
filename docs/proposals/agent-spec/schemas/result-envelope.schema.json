@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.example/proposals/agent-spec/result-envelope.schema.json",
+  "title": "PROPOSED AOK result-envelope",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "AgentResult"
+    },
+    "status": {
+      "enum": [
+        "completed",
+        "partial",
+        "blocked",
+        "failed",
+        "cancelled"
+      ]
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "deliverables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "validation": {
+            "enum": [
+              "passed",
+              "failed",
+              "not-run"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "path",
+          "sha256",
+          "validation"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "unresolvedItems": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "nextActions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "verification": {
+      "enum": [
+        "passed",
+        "failed",
+        "not-run"
+      ]
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "status",
+    "summary",
+    "deliverables",
+    "evidence",
+    "unresolvedItems",
+    "nextActions",
+    "verification"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "completed"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "verification": {
+            "const": "passed"
+          },
+          "unresolvedItems": {
+            "maxItems": 0
+          },
+          "deliverables": {
+            "items": {
+              "properties": {
+                "validation": {
+                  "const": "passed"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

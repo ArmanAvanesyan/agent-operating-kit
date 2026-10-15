@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.example/proposals/agent-spec/environment-profile.schema.json",
+  "title": "PROPOSED AOK environment-profile",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "EnvironmentProfile"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    },
+    "roots": {
+      "type": "object",
+      "properties": {
+        "workspace": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reports": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "workspace",
+        "reports"
+      ],
+      "additionalProperties": false
+    },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "discovery": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "ref",
+          "required",
+          "discovery"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "isolation": {
+      "enum": [
+        "workspace",
+        "worktree",
+        "sandbox"
+      ]
+    },
+    "network": {
+      "enum": [
+        "denied",
+        "allowlist"
+      ]
+    },
+    "credentialRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "readinessChecks": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "mutationOnDiscovery": {
+      "const": false
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "roots",
+    "requirements",
+    "isolation",
+    "network",
+    "credentialRefs",
+    "readinessChecks",
+    "mutationOnDiscovery"
+  ],
+  "additionalProperties": false
+}

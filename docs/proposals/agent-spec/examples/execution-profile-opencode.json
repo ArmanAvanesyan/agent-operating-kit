@@ -1,0 +1,29 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "ExecutionProfile",
+  "metadata": {
+    "id": "opencode-exploration",
+    "name": "opencode exploration",
+    "version": "0.1.0",
+    "description": "Illustrative profile; availability is not task suitability."
+  },
+  "client": {
+    "adapter": "opencode",
+    "interface": "cli"
+  },
+  "model": {
+    "selector": "opencode/deepseek-v4.1-flash-free",
+    "reasoning": {
+      "mode": "provider-default"
+    }
+  },
+  "compatibility": {
+    "unsupportedSettings": "error"
+  },
+  "limits": {
+    "timeoutSeconds": 900
+  },
+  "environment": {
+    "profile": "repository-analysis"
+  }
+}

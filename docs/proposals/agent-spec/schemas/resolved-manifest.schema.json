@@ -1,0 +1,211 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.example/proposals/agent-spec/resolved-manifest.schema.json",
+  "title": "PROPOSED AOK resolved-manifest",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "ResolvedAgentManifest"
+    },
+    "assignment": {
+      "type": "string",
+      "minLength": 1
+    },
+    "agent": {
+      "type": "string",
+      "minLength": 1
+    },
+    "executionProfile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "resolvedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "repository": {
+      "type": "object",
+      "properties": {
+        "revision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dirty": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "revision",
+        "dirty"
+      ],
+      "additionalProperties": false
+    },
+    "effectiveConfiguration": {
+      "type": "object",
+      "properties": {
+        "client": {
+          "type": "string",
+          "minLength": 1
+        },
+        "modelSelector": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reasoningMode": {
+          "type": "string",
+          "minLength": 1
+        },
+        "outputContract": {
+          "type": "string",
+          "minLength": 1
+        },
+        "permissions": {
+          "$ref": "common.schema.json#/$defs/permissions"
+        }
+      },
+      "required": [
+        "client",
+        "modelSelector",
+        "reasoningMode",
+        "outputContract",
+        "permissions"
+      ],
+      "additionalProperties": false
+    },
+    "readiness": {
+      "enum": [
+        "ready",
+        "blocked",
+        "partial"
+      ]
+    },
+    "missingOptionalCapabilities": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "provenance": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/provenance"
+      },
+      "uniqueItems": true
+    },
+    "adapterReport": {
+      "type": "string",
+      "minLength": 1
+    },
+    "snapshot": {
+      "type": "object",
+      "properties": {
+        "documents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "content": {
+                "type": "object"
+              }
+            },
+            "required": [
+              "path",
+              "sha256",
+              "content"
+            ],
+            "additionalProperties": false
+          },
+          "uniqueItems": true
+        },
+        "instructionSources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "content": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "path",
+              "sha256",
+              "content"
+            ],
+            "additionalProperties": false
+          },
+          "uniqueItems": true
+        },
+        "effectiveCapabilities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "registries": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "enforcementGaps": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "documents",
+        "instructionSources",
+        "effectiveCapabilities",
+        "registries",
+        "enforcementGaps"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "assignment",
+    "agent",
+    "executionProfile",
+    "resolvedAt",
+    "repository",
+    "effectiveConfiguration",
+    "readiness",
+    "missingOptionalCapabilities",
+    "provenance",
+    "adapterReport",
+    "snapshot"
+  ],
+  "additionalProperties": false
+}

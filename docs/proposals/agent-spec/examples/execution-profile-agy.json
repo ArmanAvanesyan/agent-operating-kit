@@ -1,0 +1,29 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "ExecutionProfile",
+  "metadata": {
+    "id": "agy-exploration",
+    "name": "agy exploration",
+    "version": "0.1.0",
+    "description": "Illustrative profile; availability is not task suitability."
+  },
+  "client": {
+    "adapter": "agy",
+    "interface": "cli"
+  },
+  "model": {
+    "selector": "gemini-3.8-flash-medium",
+    "reasoning": {
+      "mode": "model-variant"
+    }
+  },
+  "compatibility": {
+    "unsupportedSettings": "error"
+  },
+  "limits": {
+    "timeoutSeconds": 900
+  },
+  "environment": {
+    "profile": "repository-analysis"
+  }
+}

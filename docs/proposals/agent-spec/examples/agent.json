@@ -1,0 +1,157 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "Agent",
+  "metadata": {
+    "id": "repository-explorer",
+    "name": "Repository Explorer",
+    "version": "0.1.0",
+    "description": "Source-grounded project exploration."
+  },
+  "identity": {
+    "purpose": "Explain repository structure and readiness.",
+    "communication": {
+      "style": "concise",
+      "evidence": "file-references"
+    },
+    "boundaries": [
+      "Separate implementation from proposals.",
+      "Record unknowns and incomplete coverage."
+    ]
+  },
+  "roles": {
+    "primary": "explorer",
+    "supporting": [
+      "architecture-analyst"
+    ]
+  },
+  "instructions": {
+    "sources": [
+      {
+        "path": "examples/instructions.md"
+      }
+    ],
+    "parameters": {
+      "depth": {
+        "type": "string",
+        "enum": [
+          "overview",
+          "standard",
+          "deep"
+        ],
+        "default": "standard"
+      }
+    }
+  },
+  "execution": {
+    "defaultProfile": "opencode-exploration",
+    "allowedProfiles": [
+      "opencode-exploration",
+      "agy-exploration"
+    ],
+    "fallbackPolicy": "explicit-only",
+    "fallbackProfiles": []
+  },
+  "capabilities": {
+    "tools": [
+      {
+        "ref": "filesystem.read",
+        "required": true
+      },
+      {
+        "ref": "repository.search",
+        "required": true
+      },
+      {
+        "ref": "source.structure",
+        "required": false
+      }
+    ],
+    "skills": [
+      {
+        "ref": "project-exploration",
+        "required": true
+      },
+      {
+        "ref": "environment-readiness",
+        "required": false
+      }
+    ],
+    "mcps": [
+      {
+        "ref": "project-knowledge",
+        "required": false,
+        "tools": [
+          "search",
+          "read"
+        ]
+      }
+    ],
+    "plugins": []
+  },
+  "permissions": {
+    "filesystem": {
+      "read": [
+        "workspace"
+      ],
+      "write": [
+        "reports"
+      ]
+    },
+    "network": {
+      "mode": "denied"
+    },
+    "secrets": {
+      "mode": "references-only"
+    },
+    "externalMutations": {
+      "mode": "denied"
+    },
+    "actions": {
+      "default": "deny",
+      "rules": [
+        {
+          "action": "repository.read",
+          "resource": "workspace",
+          "decision": "allow",
+          "enforcementOwner": "executor"
+        },
+        {
+          "action": "artifact.write",
+          "resource": "reports",
+          "decision": "allow",
+          "enforcementOwner": "executor"
+        }
+      ]
+    }
+  },
+  "environment": {
+    "profile": "repository-analysis",
+    "readinessRequired": true
+  },
+  "outputs": {
+    "contract": "repository-exploration-report",
+    "allowedContracts": [
+      "repository-exploration-report"
+    ],
+    "parameters": {
+      "includeEvidence": true
+    }
+  },
+  "verification": {
+    "required": [
+      "output-schema-valid",
+      "evidence-references-resolve",
+      "coverage-and-limitations-present"
+    ]
+  },
+  "delegation": {
+    "enabled": false,
+    "allowedAgents": [],
+    "maxDepth": 0
+  },
+  "invocationContract": "repository-exploration-invocation",
+  "contextPolicy": "repository-context",
+  "lifecyclePolicy": "bounded-analysis",
+  "evaluationContract": "exploration-evaluation",
+  "migrationContract": "agent-contract-versioning"
+}

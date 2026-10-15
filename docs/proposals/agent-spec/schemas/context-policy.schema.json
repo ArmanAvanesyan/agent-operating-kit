@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.example/proposals/agent-spec/context-policy.schema.json",
+  "title": "PROPOSED AOK context-policy",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "ContextPolicy"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    },
+    "repositoryScope": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "requiredDocuments": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "conversation": {
+      "enum": [
+        "none",
+        "assignment-only",
+        "selected-history"
+      ]
+    },
+    "retrievalSources": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "untrustedContent": {
+      "const": "data-only"
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "maxInputTokens": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "overflow": {
+          "enum": [
+            "block",
+            "retrieve-selectively"
+          ]
+        }
+      },
+      "required": [
+        "maxInputTokens",
+        "overflow"
+      ],
+      "additionalProperties": false
+    },
+    "retention": {
+      "enum": [
+        "run-only",
+        "explicit-persistence"
+      ]
+    },
+    "redactionRequired": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "repositoryScope",
+    "requiredDocuments",
+    "conversation",
+    "retrievalSources",
+    "untrustedContent",
+    "limits",
+    "retention",
+    "redactionRequired"
+  ],
+  "additionalProperties": false
+}

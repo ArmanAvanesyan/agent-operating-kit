@@ -1,0 +1,346 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.example/proposals/agent-spec/agent.schema.json",
+  "title": "PROPOSED AOK agent",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "Agent"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    },
+    "identity": {
+      "type": "object",
+      "properties": {
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "callsign": {
+          "type": "string",
+          "minLength": 1
+        },
+        "communication": {
+          "type": "object",
+          "properties": {
+            "style": {
+              "type": "string",
+              "minLength": 1
+            },
+            "evidence": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "style",
+            "evidence"
+          ],
+          "additionalProperties": false
+        },
+        "boundaries": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "purpose",
+        "boundaries"
+      ],
+      "additionalProperties": false
+    },
+    "roles": {
+      "type": "object",
+      "properties": {
+        "primary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "supporting": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "primary"
+      ],
+      "additionalProperties": false
+    },
+    "instructions": {
+      "type": "object",
+      "properties": {
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "path"
+            ],
+            "additionalProperties": false
+          },
+          "uniqueItems": true
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "enum": [
+                  "string",
+                  "number",
+                  "boolean"
+                ]
+              },
+              "enum": {
+                "type": "array",
+                "items": {
+                  "type": [
+                    "string",
+                    "number",
+                    "boolean"
+                  ]
+                },
+                "uniqueItems": true
+              },
+              "default": {
+                "type": [
+                  "string",
+                  "number",
+                  "boolean"
+                ]
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "sources"
+      ],
+      "additionalProperties": false
+    },
+    "execution": {
+      "type": "object",
+      "properties": {
+        "defaultProfile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "allowedProfiles": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "fallbackPolicy": {
+          "const": "explicit-only"
+        },
+        "fallbackProfiles": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "defaultProfile",
+        "allowedProfiles",
+        "fallbackPolicy"
+      ],
+      "additionalProperties": false
+    },
+    "capabilities": {
+      "type": "object",
+      "properties": {
+        "tools": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/reference"
+          },
+          "uniqueItems": true
+        },
+        "skills": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/reference"
+          },
+          "uniqueItems": true
+        },
+        "mcps": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/reference"
+          },
+          "uniqueItems": true
+        },
+        "plugins": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/reference"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "tools",
+        "skills",
+        "mcps",
+        "plugins"
+      ],
+      "additionalProperties": false
+    },
+    "permissions": {
+      "$ref": "common.schema.json#/$defs/permissions"
+    },
+    "environment": {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "readinessRequired": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "profile",
+        "readinessRequired"
+      ],
+      "additionalProperties": false
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {
+        "contract": {
+          "type": "string",
+          "minLength": 1
+        },
+        "allowedContracts": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "parameters": {
+          "$ref": "common.schema.json#/$defs/parameters"
+        }
+      },
+      "required": [
+        "contract",
+        "allowedContracts"
+      ],
+      "additionalProperties": false
+    },
+    "verification": {
+      "type": "object",
+      "properties": {
+        "required": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "required"
+      ],
+      "additionalProperties": false
+    },
+    "delegation": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "allowedAgents": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "maxDepth": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "enabled"
+      ],
+      "additionalProperties": false
+    },
+    "invocationContract": {
+      "type": "string",
+      "minLength": 1
+    },
+    "contextPolicy": {
+      "type": "string",
+      "minLength": 1
+    },
+    "lifecyclePolicy": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evaluationContract": {
+      "type": "string",
+      "minLength": 1
+    },
+    "migrationContract": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "identity",
+    "roles",
+    "instructions",
+    "execution",
+    "capabilities",
+    "permissions",
+    "environment",
+    "outputs",
+    "verification",
+    "delegation",
+    "invocationContract",
+    "contextPolicy",
+    "lifecyclePolicy",
+    "evaluationContract",
+    "migrationContract"
+  ],
+  "additionalProperties": false
+}

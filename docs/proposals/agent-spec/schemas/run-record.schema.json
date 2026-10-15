@@ -1,0 +1,254 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.example/proposals/agent-spec/run-record.schema.json",
+  "title": "PROPOSED AOK run-record",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "AgentRunRecord"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "fixture": {
+      "type": "boolean"
+    },
+    "assignment": {
+      "type": "string",
+      "minLength": 1
+    },
+    "manifest": {
+      "type": "string",
+      "minLength": 1
+    },
+    "state": {
+      "enum": [
+        "queued",
+        "running",
+        "suspended",
+        "completed",
+        "partial",
+        "blocked",
+        "failed",
+        "cancelled",
+        "timed-out"
+      ]
+    },
+    "attempt": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "parentRun": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "timestamps": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "startedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "endedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "createdAt",
+        "startedAt",
+        "endedAt"
+      ],
+      "additionalProperties": false
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "requested": {
+          "type": "object"
+        },
+        "resolvedManifestSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "observed": {
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "requested",
+        "resolvedManifestSha256",
+        "observed"
+      ],
+      "additionalProperties": false
+    },
+    "usage": {
+      "type": "object",
+      "properties": {
+        "inputTokens": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "outputTokens": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "costUsd": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        }
+      },
+      "required": [
+        "inputTokens",
+        "outputTokens",
+        "costUsd"
+      ],
+      "additionalProperties": false
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "sequence": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "detail": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "sequence",
+          "type",
+          "detail"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1
+          },
+          "retryable": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "retryable"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "checkpointRef": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "result": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "result-envelope.schema.json"
+        }
+      ]
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "id",
+    "fixture",
+    "assignment",
+    "manifest",
+    "state",
+    "attempt",
+    "parentRun",
+    "timestamps",
+    "configuration",
+    "usage",
+    "events",
+    "errors",
+    "checkpointRef",
+    "result"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "enum": [
+              "queued",
+              "running",
+              "suspended"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "result": {
+            "type": "null"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "result": {
+            "$ref": "result-envelope.schema.json"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -126,3 +126,11 @@ ten exploration/seven preparation task entries, absence of the two proposed skil
 directories, whitespace and `./scripts/aok validate` all passed. These checks validate
 documentation structure; no application setup, skill installation or readiness runtime
 was exercised.
+
+## Agent identity and execution contract proposal
+
+The [agent specification proposal](../../proposals/agent-spec/README.md) adds draft
+agent/profile/assignment/output contracts, composition rules, adapter-native parsing
+and rendering, invocation/context/registry contracts, run and lifecycle evidence,
+adapter conformance, evaluation/versioning, examples and a phased implementation plan. These are design assets,
+not operational schema support or implemented native agent import/export.

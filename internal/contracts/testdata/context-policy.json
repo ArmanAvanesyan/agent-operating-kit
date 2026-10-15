@@ -1,0 +1,27 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "ContextPolicy",
+  "metadata": {
+    "id": "repository-context",
+    "name": "Repository Context",
+    "version": "0.1.0",
+    "description": "Proposed documentation fixture; not operational configuration."
+  },
+  "repositoryScope": [
+    "workspace"
+  ],
+  "requiredDocuments": [
+    "AGENTS.md"
+  ],
+  "conversation": "assignment-only",
+  "retrievalSources": [
+    "workspace"
+  ],
+  "untrustedContent": "data-only",
+  "limits": {
+    "maxInputTokens": 32000,
+    "overflow": "retrieve-selectively"
+  },
+  "retention": "run-only",
+  "redactionRequired": true
+}

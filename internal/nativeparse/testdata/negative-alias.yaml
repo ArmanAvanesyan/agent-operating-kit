@@ -1,0 +1,2 @@
+base: &base {enabled: true}
+copy: *base

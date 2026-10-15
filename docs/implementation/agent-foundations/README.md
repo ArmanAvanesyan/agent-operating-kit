@@ -82,8 +82,8 @@ workers and one reviewer, with isolated worktrees for concurrent edits.
 
 | Stage | Deliverable | Status |
 |---|---|---|
-| 1 | This reconciliation and [native inventory](native-inventory.md) | In review |
-| 2 | Offline schemas, typed contracts, strict parsers, positive/negative fixtures | Pending |
+| 1 | This reconciliation and [native inventory](native-inventory.md) | Merged: [PR #48](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/48) |
+| 2 | Offline schemas, typed envelope/references, strict parsers, positive/negative fixtures | In review; per-kind decoding follows in stage 3 |
 | 3 | Registries, invocation/context/assignment and reference semantics | Pending |
 | 4 | Deterministic resolution, immutable evidence, permission/path protections | Pending |
 | 5 | Planning DAG, revisions, traceability, decision results | Pending |
@@ -113,3 +113,12 @@ and blocked unsupported required controls. Portable Markdown or neutral render
 bundles do not satisfy native completion. Missing hosts or suitable formats remain
 explicit blockers while independent PRs continue. The overall release remains
 incomplete until all eight native gates pass.
+
+## Implemented library boundary
+
+Stage 2 adds [operational contract parsing](../../../internal/contracts/README.md)
+and [inert native parsing](../../../internal/nativeparse/README.md). It does not
+expose the planned commands or resolve references. Schema-valid fixtures can
+still be unresolved and blocked. Standalone planning schemas and per-kind typed
+decoding remain subsequent stages; proposal checkers continue to check only
+historical proposal assets.

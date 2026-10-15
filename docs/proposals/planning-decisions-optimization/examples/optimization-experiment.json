@@ -1,0 +1,59 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "OptimizationExperiment",
+  "metadata": {
+    "id": "explorer-instruction-evaluation",
+    "version": "0.1.0",
+    "description": "Illustrative proposal fixture; no execution or integration implied."
+  },
+  "agentRef": "repository-explorer",
+  "baselineVersion": "0.1.0",
+  "profileRefs": [
+    "opencode-exploration"
+  ],
+  "optimizer": {
+    "adapterRef": "gepa-proposed",
+    "version": "unselected"
+  },
+  "mutableFields": [
+    "instructions.sources.exploration-body"
+  ],
+  "protectedFields": [
+    "permissions",
+    "verification",
+    "outputs",
+    "identity.boundaries",
+    "evaluator",
+    "datasets.test"
+  ],
+  "datasets": {
+    "train": [
+      "fixture-train-a"
+    ],
+    "validation": [
+      "fixture-validation-b"
+    ],
+    "test": [
+      "fixture-test-c"
+    ]
+  },
+  "evaluator": {
+    "ref": "exploration-evaluation",
+    "version": "0.1.0",
+    "immutable": true
+  },
+  "budget": {
+    "maxCandidateEvaluations": 10,
+    "maxProposerCostUsd": 5,
+    "maxEvaluationCostUsd": 10
+  },
+  "promotion": {
+    "automatic": false,
+    "requirements": [
+      "Held-out results pass required quality and policy gates.",
+      "Review candidate changes and regression evidence."
+    ]
+  },
+  "status": "not-run",
+  "results": []
+}

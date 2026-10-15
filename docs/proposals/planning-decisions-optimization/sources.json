@@ -1,0 +1,54 @@
+{
+  "reviewedOn": "2026-10-15",
+  "baseline": "0aa56707fe77ed60abe6133117c2c33133612b01",
+  "conversation": {
+    "id": "6ad12451-9fbc-83eb-947a-0f409587b746",
+    "title": "Explain AI Concepts",
+    "accessibleContent": "Three user questions only; assistant answers returned as reference placeholders."
+  },
+  "sources": [
+    {
+      "id": "D1",
+      "title": "DSPy overview",
+      "url": "https://dspy.ai/3.4.0/",
+      "use": "Signatures, modules and metric-based optimization; possible optional component backend.",
+      "evidence": "Primary documentation/paper inspected in the preceding comparison; no runtime validation."
+    },
+    {
+      "id": "G1",
+      "title": "GEPA optimize_anything API",
+      "url": "https://gepa-ai.github.io/gepa/api/optimize_anything/optimize_anything/",
+      "use": "Text candidates, evaluator interfaces and dataset splits; optional optimization mapping.",
+      "evidence": "Primary documentation/paper inspected in the preceding comparison; no runtime validation."
+    },
+    {
+      "id": "G2",
+      "title": "GEPA Engine contract",
+      "url": "https://gepa-ai.github.io/gepa/api/optimize_anything/Engine/",
+      "use": "Distinguishes proposer-cost enforcement from evaluator budget accounting.",
+      "evidence": "Primary documentation/paper inspected in the preceding comparison; no runtime validation."
+    },
+    {
+      "id": "G3",
+      "title": "GEPA original paper",
+      "url": "https://arxiv.org/abs/2507.19457",
+      "use": "Reflective optimization with feedback; no universal superiority claim adopted.",
+      "evidence": "Primary documentation/paper inspected in the preceding comparison; no runtime validation."
+    },
+    {
+      "id": "S1",
+      "title": "System One decision primitives",
+      "url": "https://docs.system-one.dev/en/docs/primitives",
+      "use": "Normalized/native boolean, choice and score distinctions; model-specific restrictions.",
+      "evidence": "Primary documentation/paper inspected in the preceding comparison; no runtime validation."
+    },
+    {
+      "id": "R1",
+      "title": "Spinning Up reinforcement learning reference",
+      "url": "https://spinningup.openai.com/_/downloads/en/latest/pdf/",
+      "use": "Policy optimization against expected return; foundation only, no AOK implementation claim.",
+      "evidence": "Primary documentation/paper inspected in the preceding comparison; no runtime validation."
+    }
+  ],
+  "designStatus": "AOK-specific proposed synthesis; not vendor-endorsed mappings."
+}

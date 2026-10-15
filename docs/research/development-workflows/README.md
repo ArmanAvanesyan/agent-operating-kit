@@ -134,3 +134,10 @@ agent/profile/assignment/output contracts, composition rules, adapter-native par
 and rendering, invocation/context/registry contracts, run and lifecycle evidence,
 adapter conformance, evaluation/versioning, examples and a phased implementation plan. These are design assets,
 not operational schema support or implemented native agent import/export.
+
+## Planning, decisions and optimization refinement
+
+The [companion proposal](../../proposals/planning-decisions-optimization/README.md)
+adds draft goal/plan/revision, decision/result, optimization and SDLC traceability
+contracts. It reuses this workflow catalog and links to the agent-spec proposal;
+all new execution and adapter behavior remains proposed.

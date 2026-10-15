@@ -1,0 +1,107 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "PlanDefinition",
+  "metadata": {
+    "id": "exploration-plan",
+    "version": "0.1.0",
+    "description": "Illustrative proposal fixture; no execution or integration implied."
+  },
+  "goalRef": "explore-repository",
+  "strategy": "fixed-dag",
+  "steps": [
+    {
+      "id": "inspect",
+      "description": "Inspect the repository exploration artifacts.",
+      "dependsOn": [],
+      "preconditions": [],
+      "outputs": [
+        "inventory"
+      ],
+      "completionChecks": [
+        {
+          "id": "inspect-check",
+          "description": "Required stage evidence has passed validation.",
+          "verifierRef": "inspect-check-verifier",
+          "required": true
+        }
+      ],
+      "assignmentRef": "exploration-inspect-assignment",
+      "workflowRef": "repository-onboarding",
+      "ownership": [
+        "docs/reports/explore-aok-001"
+      ],
+      "recovery": "stop"
+    },
+    {
+      "id": "report",
+      "description": "Report the repository exploration artifacts.",
+      "dependsOn": [
+        "inspect"
+      ],
+      "preconditions": [],
+      "outputs": [
+        "exploration-report"
+      ],
+      "completionChecks": [
+        {
+          "id": "report-check",
+          "description": "Required stage evidence has passed validation.",
+          "verifierRef": "report-check-verifier",
+          "required": true
+        }
+      ],
+      "assignmentRef": "exploration-report-assignment",
+      "workflowRef": "repository-onboarding",
+      "ownership": [
+        "docs/reports/explore-aok-001"
+      ],
+      "recovery": "stop"
+    },
+    {
+      "id": "verify",
+      "description": "Verify the repository exploration artifacts.",
+      "dependsOn": [
+        "report"
+      ],
+      "preconditions": [],
+      "outputs": [
+        "verification-result"
+      ],
+      "completionChecks": [
+        {
+          "id": "verify-check",
+          "description": "Required stage evidence has passed validation.",
+          "verifierRef": "verify-check-verifier",
+          "required": true
+        }
+      ],
+      "assignmentRef": "exploration-verify-assignment",
+      "workflowRef": "repository-onboarding",
+      "ownership": [
+        "docs/reports/explore-aok-001"
+      ],
+      "recovery": "stop"
+    }
+  ],
+  "methodRefs": [],
+  "inventory": [],
+  "aggregateVerification": [
+    {
+      "id": "report-valid",
+      "description": "Validate the report independently of step completion.",
+      "verifierRef": "report-valid-verifier",
+      "required": true
+    },
+    {
+      "id": "coverage-reconciled",
+      "description": "Reconcile discovered units and omissions.",
+      "verifierRef": "coverage-reconciled-verifier",
+      "required": true
+    }
+  ],
+  "concurrencyLimit": 1,
+  "replanning": {
+    "maxRevisions": 1,
+    "preserveCompletedEvidence": true
+  }
+}

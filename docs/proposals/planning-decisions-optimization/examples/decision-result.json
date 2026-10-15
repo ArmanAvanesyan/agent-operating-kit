@@ -1,0 +1,14 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "DecisionResult",
+  "decisionRef": "choose-exploration-depth",
+  "fixture": true,
+  "status": "abstained",
+  "value": null,
+  "evidence": [],
+  "confidence": null,
+  "confidenceMeaning": "unavailable",
+  "reason": "Synthetic example: scope evidence has not been supplied.",
+  "observedProvider": null,
+  "authorizationGranted": false
+}

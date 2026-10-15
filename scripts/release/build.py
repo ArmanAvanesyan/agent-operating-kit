@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import shutil
 import stat
 import subprocess
@@ -137,6 +138,7 @@ INSTALL_DIR="${{HOME}}/Library/Application Support/Agent Operating Kit/{PRODUCT}
 REPORT_DIR="${{HOME}}/Library/Application Support/Agent Operating Kit"
 REPORT_PATH="${{REPORT_DIR}}/setup-report.md"
 ARCH="$(uname -m)"
+AOK_BIN="${{SOURCE_DIR}}/bin/aok"
 
 case "{target_arch}" in
   apple-silicon) EXPECTED_ARCH="arm64" ;;
@@ -154,14 +156,19 @@ if [ ! -d "${{SOURCE_DIR}}" ]; then
   echo "Missing installer payload: ${{SOURCE_DIR}}" >&2
   exit 1
 fi
+if [ ! -x "${{AOK_BIN}}" ]; then
+  echo "Missing bundled aok binary: ${{AOK_BIN}}" >&2
+  exit 1
+fi
 
 mkdir -p "${{REPORT_DIR}}"
 rm -rf "${{INSTALL_DIR}}"
 mkdir -p "$(dirname "${{INSTALL_DIR}}")"
 cp -R "${{SOURCE_DIR}}" "${{INSTALL_DIR}}"
 
-python3 "${{INSTALL_DIR}}/scripts/aok" install --home "${{HOME}}" --replace || true
-python3 "${{INSTALL_DIR}}/scripts/aok" doctor --home "${{HOME}}" --report "${{REPORT_PATH}}" || true
+export AOK_ROOT="${{INSTALL_DIR}}"
+"${{INSTALL_DIR}}/bin/aok" install --home "${{HOME}}" --replace || true
+"${{INSTALL_DIR}}/bin/aok" doctor --home "${{HOME}}" --report "${{REPORT_PATH}}" || true
 
 echo "Installed {PRODUCT} {version} ({target_arch})"
 echo "Install path: ${{INSTALL_DIR}}"
@@ -177,9 +184,13 @@ $SourceDir = Join-Path $ScriptDir "payload\\{PRODUCT}"
 $InstallRoot = Join-Path $env:LOCALAPPDATA "Agent Operating Kit"
 $InstallDir = Join-Path $InstallRoot "{PRODUCT}"
 $ReportPath = Join-Path $InstallRoot "setup-report.txt"
+$AokBin = Join-Path $SourceDir "bin\\aok.exe"
 
 if (-not (Test-Path $SourceDir)) {{
   Write-Error "Missing installer payload: $SourceDir"
+}}
+if (-not (Test-Path $AokBin)) {{
+  Write-Error "Missing bundled aok binary: $AokBin"
 }}
 
 New-Item -ItemType Directory -Force -Path $InstallRoot | Out-Null
@@ -188,21 +199,10 @@ if (Test-Path $InstallDir) {{
 }}
 Copy-Item -Recurse -Force $SourceDir $InstallDir
 
-$python = Get-Command python -ErrorAction SilentlyContinue
-if (-not $python) {{
-  $python = Get-Command py -ErrorAction SilentlyContinue
-}}
-
-if ($python) {{
-  & $python.Path (Join-Path $InstallDir "scripts\\aok") install --home $env:USERPROFILE --replace
-  & $python.Path (Join-Path $InstallDir "scripts\\aok") doctor --home $env:USERPROFILE --report $ReportPath
-}} else {{
-  @"
-Agent Operating Kit {version}
-Install path: $InstallDir
-Python not found; skipped aok install/doctor steps.
-"@ | Set-Content -Path $ReportPath
-}}
+$InstalledBin = Join-Path $InstallDir "bin\\aok.exe"
+$env:AOK_ROOT = $InstallDir
+& $InstalledBin install --home $env:USERPROFILE --replace
+& $InstalledBin doctor --home $env:USERPROFILE --report $ReportPath
 
 Write-Host "Installed {PRODUCT} {version}"
 Write-Host "Install path: $InstallDir"
@@ -219,13 +219,24 @@ SOURCE_DIR="${{SCRIPT_DIR}}/payload/{PRODUCT}"
 INSTALL_ROOT="${{XDG_DATA_HOME:-$HOME/.local/share}}/agent-operating-kit"
 INSTALL_DIR="${{INSTALL_ROOT}}/{PRODUCT}"
 REPORT_PATH="${{INSTALL_ROOT}}/setup-report.md"
+AOK_BIN="${{SOURCE_DIR}}/bin/aok"
+
+if [ ! -d "${{SOURCE_DIR}}" ]; then
+  echo "Missing installer payload: ${{SOURCE_DIR}}" >&2
+  exit 1
+fi
+if [ ! -x "${{AOK_BIN}}" ]; then
+  echo "Missing bundled aok binary: ${{AOK_BIN}}" >&2
+  exit 1
+fi
 
 mkdir -p "${{INSTALL_ROOT}}"
 rm -rf "${{INSTALL_DIR}}"
 cp -R "${{SOURCE_DIR}}" "${{INSTALL_DIR}}"
 
-python3 "${{INSTALL_DIR}}/scripts/aok" install --home "${{HOME}}" --replace || true
-python3 "${{INSTALL_DIR}}/scripts/aok" doctor --home "${{HOME}}" --report "${{REPORT_PATH}}" || true
+export AOK_ROOT="${{INSTALL_DIR}}"
+"${{INSTALL_DIR}}/bin/aok" install --home "${{HOME}}" --replace || true
+"${{INSTALL_DIR}}/bin/aok" doctor --home "${{HOME}}" --report "${{REPORT_PATH}}" || true
 
 echo "Installed {PRODUCT} {version} (linux-user)"
 echo "Install path: ${{INSTALL_DIR}}"
@@ -242,9 +253,14 @@ SOURCE_DIR="${{SCRIPT_DIR}}/payload/{PRODUCT}"
 INSTALL_ROOT="/opt/agent-operating-kit"
 INSTALL_DIR="${{INSTALL_ROOT}}/{PRODUCT}"
 REPORT_PATH="${{INSTALL_ROOT}}/setup-report.md"
+AOK_BIN="${{SOURCE_DIR}}/bin/aok"
 
 if [ "$(id -u)" -ne 0 ]; then
   echo "System installer requires root. Re-run with sudo." >&2
+  exit 1
+fi
+if [ ! -x "${{AOK_BIN}}" ]; then
+  echo "Missing bundled aok binary: ${{AOK_BIN}}" >&2
   exit 1
 fi
 
@@ -262,8 +278,8 @@ if [ -n "${{TARGET_USER}}" ]; then
 fi
 
 if [ -n "${{TARGET_USER}}" ] && [ -d "${{TARGET_HOME}}" ]; then
-  su - "${{TARGET_USER}}" -c "python3 '${{INSTALL_DIR}}/scripts/aok' install --home '${{TARGET_HOME}}' --replace" || true
-  su - "${{TARGET_USER}}" -c "python3 '${{INSTALL_DIR}}/scripts/aok' doctor --home '${{TARGET_HOME}}' --report '${{REPORT_PATH}}'" || true
+  su - "${{TARGET_USER}}" -c "AOK_ROOT='${{INSTALL_DIR}}' '${{INSTALL_DIR}}/bin/aok' install --home '${{TARGET_HOME}}' --replace" || true
+  su - "${{TARGET_USER}}" -c "AOK_ROOT='${{INSTALL_DIR}}' '${{INSTALL_DIR}}/bin/aok' doctor --home '${{TARGET_HOME}}' --report '${{REPORT_PATH}}'" || true
 fi
 
 echo "Installed {PRODUCT} {version} (linux-system)"
@@ -292,6 +308,56 @@ def write_stage_tar_gz(stage_root: Path, out: Path) -> Path:
     return out
 
 
+GO_BINARY_TARGETS = (
+    ("darwin", "arm64", "aok-{version}-darwin-arm64"),
+    ("darwin", "amd64", "aok-{version}-darwin-amd64"),
+    ("linux", "amd64", "aok-{version}-linux-amd64"),
+    ("linux", "arm64", "aok-{version}-linux-arm64"),
+    ("windows", "amd64", "aok-{version}-windows-amd64.exe"),
+)
+
+
+def build_go_binaries(dist: Path, version: str) -> list[tuple[str, Path]]:
+    """Cross-compile release CLI binaries named per docs/cli-distribution.md."""
+    out_dir = dist / "_binaries"
+    if out_dir.exists():
+        shutil.rmtree(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    results: list[tuple[str, Path]] = []
+    for goos, goarch, name_tmpl in GO_BINARY_TARGETS:
+        name = name_tmpl.format(version=version)
+        out = out_dir / name
+        env = os.environ.copy()
+        env["GOOS"] = goos
+        env["GOARCH"] = goarch
+        env["CGO_ENABLED"] = "0"
+        subprocess.run(
+            ["go", "build", "-o", str(out), "./cmd/aok"],
+            cwd=ROOT,
+            env=env,
+            check=True,
+        )
+        out.chmod(0o755)
+        published = dist / name
+        shutil.copy2(out, published)
+        results.append((f"cli-{goos}-{goarch}", published))
+    return results
+
+
+def binary_path_for(dist: Path, version: str, goos: str, goarch: str) -> Path:
+    suffix = ".exe" if goos == "windows" else ""
+    return dist / f"aok-{version}-{goos}-{goarch}{suffix}"
+
+
+def stage_bundled_binary(payload: Path, binary: Path, windows: bool = False) -> None:
+    bin_dir = payload / "bin"
+    bin_dir.mkdir(parents=True, exist_ok=True)
+    dest = bin_dir / ("aok.exe" if windows else "aok")
+    shutil.copy2(binary, dest)
+    if not windows:
+        dest.chmod(0o755)
+
+
 def build_macos_installer_zip(dist: Path, version: str, target_arch: str) -> Path:
     name = f"{PRODUCT}-{version}-macos-{target_arch}-installer"
     stage = dist / "_staging" / name
@@ -299,6 +365,8 @@ def build_macos_installer_zip(dist: Path, version: str, target_arch: str) -> Pat
         shutil.rmtree(stage)
     payload = stage / "payload" / PRODUCT
     copy_tree(KIT_PATHS, payload)
+    goarch = "arm64" if target_arch == "apple-silicon" else "amd64"
+    stage_bundled_binary(payload, binary_path_for(dist, version, "darwin", goarch))
     command = stage / "install.command"
     command.write_text(macos_installer_script(version, target_arch))
     command.chmod(0o755)
@@ -309,8 +377,10 @@ def build_macos_installer_zip(dist: Path, version: str, target_arch: str) -> Pat
                 "",
                 "Double-click install.command in Finder.",
                 "The installer copies the kit into ~/Library/Application Support/Agent Operating Kit,",
-                "updates ~/.agents/plugins/marketplace.json, links ~/.local/bin/aok,",
+                "installs the Go aok binary onto ~/.local/bin,",
+                "updates ~/.agents/plugins/marketplace.json,",
                 "and writes a setup report next to the installed kit.",
+                "No Python runtime is required.",
                 "",
             ]
         )
@@ -328,6 +398,7 @@ def build_windows_installer_zip(dist: Path, version: str) -> Path:
         shutil.rmtree(stage)
     payload = stage / "payload" / PRODUCT
     copy_tree(KIT_PATHS, payload)
+    stage_bundled_binary(payload, binary_path_for(dist, version, "windows", "amd64"), windows=True)
     ps1 = stage / "install.ps1"
     ps1.write_text(windows_installer_ps1(version))
     cmd = stage / "install.cmd"
@@ -339,7 +410,7 @@ def build_windows_installer_zip(dist: Path, version: str) -> Path:
                 "",
                 "Run install.cmd (or install.ps1).",
                 "The installer copies the kit into %LOCALAPPDATA%\\Agent Operating Kit\\agent-operating-kit,",
-                "then runs aok install/doctor if Python is available.",
+                "then runs the bundled aok.exe for install/doctor (no Python required).",
                 "",
             ]
         )
@@ -350,13 +421,14 @@ def build_windows_installer_zip(dist: Path, version: str) -> Path:
     return out
 
 
-def build_linux_user_installer_tar(dist: Path, version: str) -> Path:
+def build_linux_user_installer_tar(dist: Path, version: str, goarch: str = "amd64") -> Path:
     name = f"{PRODUCT}-{version}-linux-user-installer"
     stage = dist / "_staging" / name
     if stage.exists():
         shutil.rmtree(stage)
     payload = stage / "payload" / PRODUCT
     copy_tree(KIT_PATHS, payload)
+    stage_bundled_binary(payload, binary_path_for(dist, version, "linux", goarch))
     script = stage / "install.sh"
     script.write_text(linux_user_installer_sh(version))
     script.chmod(0o755)
@@ -367,6 +439,7 @@ def build_linux_user_installer_tar(dist: Path, version: str) -> Path:
                 "",
                 "Run: ./install.sh",
                 "Installs to ${XDG_DATA_HOME:-$HOME/.local/share}/agent-operating-kit.",
+                "Bundles the Go aok binary (no Python required on the device).",
                 "",
             ]
         )
@@ -377,13 +450,14 @@ def build_linux_user_installer_tar(dist: Path, version: str) -> Path:
     return out
 
 
-def build_linux_system_installer_tar(dist: Path, version: str) -> Path:
+def build_linux_system_installer_tar(dist: Path, version: str, goarch: str = "amd64") -> Path:
     name = f"{PRODUCT}-{version}-linux-system-installer"
     stage = dist / "_staging" / name
     if stage.exists():
         shutil.rmtree(stage)
     payload = stage / "payload" / PRODUCT
     copy_tree(KIT_PATHS, payload)
+    stage_bundled_binary(payload, binary_path_for(dist, version, "linux", goarch))
     script = stage / "install.sh"
     script.write_text(linux_system_installer_sh(version))
     script.chmod(0o755)
@@ -394,6 +468,7 @@ def build_linux_system_installer_tar(dist: Path, version: str) -> Path:
                 "",
                 "Run as root: sudo ./install.sh",
                 "Installs to /opt/agent-operating-kit.",
+                "Bundles the Go aok binary (no Python required on the device).",
                 "",
             ]
         )
@@ -447,12 +522,20 @@ def build(dist: Path, version: str) -> list[dict[str, object]]:
     for kind, out, inputs in outputs:
         write_zip(out, base, iter_files(inputs))
         paths.append((kind, out))
+
+    # Build platform binaries first so installers can bundle them.
+    paths.extend(build_go_binaries(dist, version))
+
     paths.append(("macos-apple-silicon-installer", build_macos_installer_zip(dist, version, "apple-silicon")))
     paths.append(("macos-intel-installer", build_macos_installer_zip(dist, version, "intel")))
     paths.append(("windows-installer", build_windows_installer_zip(dist, version)))
     paths.append(("linux-user-installer", build_linux_user_installer_tar(dist, version)))
     paths.append(("linux-system-installer", build_linux_system_installer_tar(dist, version)))
     paths.append(("bundles", build_bundles_zip(dist, version)))
+
+    binaries_staging = dist / "_binaries"
+    if binaries_staging.exists():
+        shutil.rmtree(binaries_staging)
 
     artifacts: list[dict[str, object]] = []
     for kind, path in paths:

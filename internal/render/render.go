@@ -576,6 +576,7 @@ func RenderTargetBundle(root, packName, target, outDir string) (string, error) {
 	_ = os.WriteFile(filepath.Join(bundleDir, "skills.md"), []byte(markdownList("Skills", asMapSlice(content["skills"]), []string{"description", "sourcePath", "inputs"})), 0o644)
 	_ = os.WriteFile(filepath.Join(bundleDir, "tasks.md"), []byte(markdownList("Task Packets", asMapSlice(content["taskPackets"]), []string{"title", "phase", "assigneeRole", "verification"})), 0o644)
 
+	var nativeFiles []string
 	switch target {
 	case "codex":
 		_ = kit.WriteJSON(filepath.Join(bundleDir, ".codex-plugin", "plugin.json"), map[string]any{
@@ -591,6 +592,19 @@ func RenderTargetBundle(root, packName, target, outDir string) (string, error) {
 				return "", err
 			}
 		}
+	case "cursor":
+		_ = kit.WriteJSON(filepath.Join(bundleDir, "import.json"), map[string]any{
+			"kind":     "aok-target-import",
+			"target":   target,
+			"pack":     packName,
+			"contract": "aok-bundle.json",
+			"readme":   "README.md",
+		})
+		var err error
+		nativeFiles, err = writeCursorNativeTree(bundleDir, packDir, content)
+		if err != nil {
+			return "", err
+		}
 	default:
 		_ = kit.WriteJSON(filepath.Join(bundleDir, "import.json"), map[string]any{
 			"kind":     "aok-target-import",
@@ -603,6 +617,7 @@ func RenderTargetBundle(root, packName, target, outDir string) (string, error) {
 
 	files := append([]string{"README.md", "roles.md", "hooks.md", "skills.md", "tasks.md"}, itemFiles...)
 	files = append(files, sourceFiles...)
+	files = append(files, nativeFiles...)
 	sort.Strings(files)
 	bundle := map[string]any{
 		"kind":                 "aok-bundle",

@@ -26,7 +26,7 @@ from the kit; that skew is intentional unless a release notes otherwise.
 |---|---|---|---|
 | Codex | `native-install` | Multi-platform installers + Codex plugin bundle | Keep docs/manifests multi-platform |
 | Claude Code | `compatibility-asset` | Marketplace + preserved pack plugins | Host-specific hook roots |
-| Cursor | `generated-bundle` | Rules/skills/hooks/tasks as bundle files | Native Cursor package follow-up |
+| Cursor | `generated-bundle` | Bundle + additive `.cursor/rules` / `.cursor/skills` | Executable hooks.json / marketplace plugin deferred |
 | OpenCode / Gemini / OpenClaw / Hermes | `generated-bundle` | Importable `aok-bundle.json` + markdown/JSON items | Native install / host wiring |
 
 Full columns (Min / Tested, import paths, notes):

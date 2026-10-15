@@ -31,11 +31,13 @@ commitment calendar.
   (prerequisites, bundle paths, verification, failure modes).
 - **Scaffold pin maintenance** — `packs/phased-rollout-template` tooling /
   Python runtime floors / Actions refreshed (see CHANGELOG Unreleased).
+- **Native Cursor packaging** — `aok render bundle --target cursor` emits an
+  additive `.cursor/rules` + `.cursor/skills` tree (hooks as checklist) beside
+  `aok-bundle.json`; see `docs/adapters/cursor.md`.
 
 ## Planned themes
 
-- **Native Cursor packaging** — move beyond generated import bundles toward a
-  clearer native Cursor rules/skills/hooks story when a stable format exists.
+_(none — planned ROADMAP themes from the 0.6.0 cut are shipped)_
 
 ## Related docs
 

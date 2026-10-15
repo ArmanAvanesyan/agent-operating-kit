@@ -33,6 +33,40 @@ and 12 reusable approaches. The activities are templates for bounded assignments
 pre-created issues. Groups are organizational labels; a real task selects the smallest
 recipe that owns its outcome.
 
+## Project exploration and environment readiness
+
+Before implementation, use the proposed [exploration and readiness topology](project-exploration-and-readiness.md)
+to establish project context and task-specific execution prerequisites. This refinement
+spans the catalog's `discovery` and `readiness` groups; it does not replace the 48 type IDs
+or add new records to `catalog.json`.
+
+The proposed entry types are explore project, explore repository, investigate subsystem,
+assess environment and prepare environment. Research, specification, breakdown, execution
+and verification remain reusable activities across workflows.
+
+| Element | Proposed definition | Existing capability to reuse |
+|---|---|---|
+| Exploration tasks | Inspect workspace, identify project, inventory technology, map architecture, trace execution, map commands, assess verification, assess agent setup, assess environment, produce handoff | File/Git inspection and existing repository instructions; no dedicated exploration skill claimed |
+| Readiness tasks | Select profile, check tools, prepare workspace, install necessary dependencies, configure/start services, run relevant checks, record result | AOK bootstrap and diagnostics provide only part of this procedure |
+| Skills | New `project-exploration` and `environment-readiness` content with references | Existing `project-bootstrap`, `agent-workflow`, `qa-verification` and `code-review` |
+| Tools | Start with file access, search and Git; add runtimes, package managers, services, browser and remote integrations only when needed | Availability must be inspected per project/target; no universal installer or connector requirement |
+| Environment profiles | Inspection, local development, service integration, application verification, delivery | Existing Codex local-environment helpers; these profiles are not installed AOK selectors |
+| Outputs | Project map, development guide, readiness report, task handoff | Reuse canonical docs and current packet `spec`/verification fields rather than unsupported new fields |
+| Exploration acceptance | Source-backed boundaries, architecture, commands, prerequisites and usable next-task handoff | Existing evidence-oriented task/QA guidance |
+| Readiness acceptance | Required profile capabilities and checks actually demonstrated at the relevant revision | Explicit verification, rather than helper exit status alone |
+
+Exploration may complete while environment readiness is blocked. Reports distinguish
+observed, documented-but-untested, inferred and unknown claims. Required failed, blocked
+or unchecked capabilities cannot receive a ready verdict. Preserve user changes, avoid
+secret values and keep delivery authority separate from technical readiness.
+
+The existing setup helper attempts AOK doctor/project validation and tolerates failures;
+it does not install application dependencies. Therefore AOK initialization and a zero
+helper exit code are not proof that the target application can build or run. Detailed
+task IDs, tool/profile requirements, artifact ownership and acceptance checklists are in
+the linked topology document. Its existing-capability inspection was refreshed at
+`c2cbc3e4f29bb08b1c2064a411f6e8cc24a015c5` on 2026-10-15.
+
 ## Architecture and responsibilities
 
 | Layer | Owns | Boundary |

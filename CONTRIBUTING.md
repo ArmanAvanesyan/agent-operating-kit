@@ -121,6 +121,16 @@ See [VERSIONING.md](VERSIONING.md).
 Update the relevant `docs/` page when behavior or import paths change. Keep the
 README focused on install and first success.
 
+## Maintainer: release signing secrets
+
+Optional. Configure repository secrets (see [docs/release-checklist.md](docs/release-checklist.md))
+only when you want signed GitHub Release binaries. Without them,
+`.github/workflows/release.yml` still publishes unsigned artifacts via
+`scripts/release/sign.sh` (no-op / skip path).
+
+Do not commit certificates or private keys. Prefer GitHub Actions secrets and
+rotate credentials after any leak.
+
 ## Pull requests
 
 Use the PR template checklist. Include validation output (or CI green) and docs

@@ -1636,6 +1636,7 @@ def validate_required_files(errors: list[str]) -> None:
         "scripts/github-sync.sh",
         "scripts/validate.sh",
         "scripts/release/build.sh",
+        "scripts/release/sign.sh",
         "cmd/aok-release/main.go",
         "go.mod",
         ".github/workflows/release.yml",

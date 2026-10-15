@@ -1,0 +1,1161 @@
+{
+  "kind": "aok-development-workflow-proposal",
+  "version": 1,
+  "status": "proposed",
+  "reviewedOn": "2026-10-15",
+  "baselineCommit": "a34fecc7d9cd54ffe29ad47a428f348e394c93b1",
+  "scope": "Research catalog only. Not an installed AOK schema, executable workflow, selectable methodology, or runtime capability. Work-item lists are suggestions; overlay-specific types require compatible methodology selection.",
+  "sources": "sources.json",
+  "approaches": [
+    {
+      "id": "direct-execution",
+      "title": "Direct execution",
+      "chooseWhen": "Small clear low-impact change",
+      "sequence": "Inspect → edit → relevant check → report",
+      "constraint": "Avoid extra planning artifacts unless uncertainty emerges.",
+      "status": "proposed"
+    },
+    {
+      "id": "explore-plan-implement",
+      "title": "Explore plan implement",
+      "chooseWhen": "Uncertain solution or impact",
+      "sequence": "Explore → compare → plan → implement → verify",
+      "constraint": "Resolve consequential unknowns before expensive implementation.",
+      "status": "proposed"
+    },
+    {
+      "id": "execplan-delivery",
+      "title": "ExecPlan delivery",
+      "chooseWhen": "Complex milestones dependencies or handoffs",
+      "sequence": "Plan → deliver increment → record evidence → update plan",
+      "constraint": "Keep the plan resumable and acceptance observable.",
+      "status": "proposed"
+    },
+    {
+      "id": "goal-driven-iteration",
+      "title": "Goal-driven iteration",
+      "chooseWhen": "Measurable finish line with adaptive path",
+      "sequence": "Act → evaluate evidence → select next action → repeat",
+      "constraint": "Honor native lifecycle permissions and configured stop limits.",
+      "status": "proposed"
+    },
+    {
+      "id": "reproduce-repair-verify",
+      "title": "Reproduce repair verify",
+      "chooseWhen": "Defect correction",
+      "sequence": "Failing behavior → cause → repair → regression check",
+      "constraint": "Do not weaken the judge to obtain a green result.",
+      "status": "proposed"
+    },
+    {
+      "id": "characterize-transform-compare",
+      "title": "Characterize transform compare",
+      "chooseWhen": "Behavior-sensitive existing code",
+      "sequence": "Baseline → transform → compare → reconcile exceptions",
+      "constraint": "Baseline behavior can include defects; approve intentional semantic changes separately.",
+      "status": "proposed"
+    },
+    {
+      "id": "scripted-pipeline",
+      "title": "Scripted pipeline",
+      "chooseWhen": "Predictable stages and transitions",
+      "sequence": "Execute explicit steps with checked intermediate outputs",
+      "constraint": "Script success must depend on real check outcomes.",
+      "status": "proposed"
+    },
+    {
+      "id": "parallel-workstreams",
+      "title": "Parallel workstreams",
+      "chooseWhen": "Independent ownership and integration boundaries",
+      "sequence": "Partition → execute → aggregate → integration check",
+      "constraint": "Separate contexts do not isolate files ports databases or external systems.",
+      "status": "proposed"
+    },
+    {
+      "id": "generator-evaluator",
+      "title": "Generator evaluator",
+      "chooseWhen": "Independent assessment materially helps",
+      "sequence": "Generate → evaluate → remediate within limits",
+      "constraint": "Calibrate the evaluator and test whether it earns its overhead.",
+      "status": "proposed"
+    },
+    {
+      "id": "pilot-and-expand",
+      "title": "Pilot and expand",
+      "chooseWhen": "Repeated change across a large surface",
+      "sequence": "Representative pilot → refine → bounded batches → reconcile",
+      "constraint": "Pilot exceptional cases as well as easy ones.",
+      "status": "proposed"
+    },
+    {
+      "id": "evidence-led-audit",
+      "title": "Evidence-led audit",
+      "chooseWhen": "Many candidate findings or uncertain claims",
+      "sequence": "Inventory → evidence → confidence → prioritize",
+      "constraint": "Insufficient evidence is an outcome; do not invent certainty.",
+      "status": "proposed"
+    },
+    {
+      "id": "scheduled-maintenance",
+      "title": "Scheduled maintenance",
+      "chooseWhen": "Recurring or event-triggered bounded work",
+      "sequence": "Trigger → inspect → report or propose change",
+      "constraint": "Scheduling is distinct from continuation toward an active Goal.",
+      "status": "proposed"
+    }
+  ],
+  "groups": [
+    {
+      "id": "discovery",
+      "title": "Discovery and understanding",
+      "status": "proposed",
+      "sourceIds": [
+        "O2",
+        "A2",
+        "A6"
+      ],
+      "types": [
+        {
+          "id": "repository-onboarding",
+          "title": "Repository onboarding",
+          "exampleTask": "Map the services and startup path of an unfamiliar repository",
+          "tasks": [
+            "Inspect entrypoints and ownership",
+            "Trace major dependencies",
+            "Record navigation and open questions"
+          ],
+          "completionEvidence": "Code-linked architecture map",
+          "approaches": [
+            "evidence-led-audit"
+          ],
+          "workItemTypes": [
+            "spike",
+            "task"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "execution-path-tracing",
+          "title": "Execution path tracing",
+          "exampleTask": "Trace a request from HTTP boundary to persistence",
+          "tasks": [
+            "Locate entrypoint",
+            "Follow calls and data transformations",
+            "Check error and retry branches"
+          ],
+          "completionEvidence": "File/function references and an observed trace where available",
+          "approaches": [
+            "evidence-led-audit"
+          ],
+          "workItemTypes": [
+            "spike",
+            "task"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "consumer-mapping",
+          "title": "Dependency and consumer mapping",
+          "exampleTask": "Identify consumers of a response field before changing it",
+          "tasks": [
+            "Inventory direct references",
+            "Investigate indirect and external consumers",
+            "Record ownership and compatibility constraints"
+          ],
+          "completionEvidence": "Consumer inventory with confidence and provenance",
+          "approaches": [
+            "evidence-led-audit"
+          ],
+          "workItemTypes": [
+            "spike",
+            "change"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "technical-research",
+          "title": "Technical research",
+          "exampleTask": "Compare two approaches to a background job system",
+          "tasks": [
+            "Define questions and evidence standard",
+            "Review primary sources and local constraints",
+            "Compare options and unresolved assumptions"
+          ],
+          "completionEvidence": "Source-backed findings and decision inputs",
+          "approaches": [
+            "evidence-led-audit"
+          ],
+          "workItemTypes": [
+            "spike"
+          ],
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "design",
+      "title": "Requirements and solution design",
+      "status": "proposed",
+      "sourceIds": [
+        "O1",
+        "O6",
+        "A1"
+      ],
+      "types": [
+        {
+          "id": "requirements-clarification",
+          "title": "Requirements clarification",
+          "exampleTask": "Turn a feature request into bounded acceptance criteria",
+          "tasks": [
+            "Identify intended user outcome",
+            "Resolve consequential ambiguities",
+            "Record scope and constraints"
+          ],
+          "completionEvidence": "Testable requirements with explicit assumptions",
+          "approaches": [
+            "explore-plan-implement"
+          ],
+          "workItemTypes": [
+            "feature",
+            "spike"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "acceptance-design",
+          "title": "Acceptance scenario design",
+          "exampleTask": "Define observable success for invoice export",
+          "tasks": [
+            "Enumerate user and failure scenarios",
+            "Select verification surfaces",
+            "Define expected observations"
+          ],
+          "completionEvidence": "Acceptance scenarios including relevant edge cases",
+          "approaches": [
+            "explore-plan-implement"
+          ],
+          "workItemTypes": [
+            "feature",
+            "task"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "architecture-decision",
+          "title": "Architecture decision",
+          "exampleTask": "Choose synchronous or queued report generation",
+          "tasks": [
+            "Inspect system constraints",
+            "Compare alternatives and recovery implications",
+            "Record decision and consequences"
+          ],
+          "completionEvidence": "ADR with evidence and rejected alternatives",
+          "approaches": [
+            "explore-plan-implement"
+          ],
+          "workItemTypes": [
+            "spike",
+            "change"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "feasibility-spike",
+          "title": "Feasibility spike",
+          "exampleTask": "Test whether a library supports the required streaming behavior",
+          "tasks": [
+            "Define bounded hypothesis",
+            "Build disposable experiment",
+            "Measure and report limitations"
+          ],
+          "completionEvidence": "Reproducible experiment and go/no-go inputs",
+          "approaches": [
+            "explore-plan-implement"
+          ],
+          "workItemTypes": [
+            "spike"
+          ],
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "readiness",
+      "title": "Repository and harness readiness",
+      "status": "proposed",
+      "sourceIds": [
+        "O2",
+        "O6",
+        "A3"
+      ],
+      "types": [
+        {
+          "id": "environment-bootstrap",
+          "title": "Environment bootstrap",
+          "exampleTask": "Make a fresh checkout runnable",
+          "tasks": [
+            "Document dependencies and configuration inputs",
+            "Provide repeatable setup",
+            "Run fresh-environment smoke checks"
+          ],
+          "completionEvidence": "Successful setup and startup evidence",
+          "approaches": [
+            "scripted-pipeline"
+          ],
+          "workItemTypes": [
+            "task"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "agent-instructions",
+          "title": "Agent instruction setup",
+          "exampleTask": "Create concise repository navigation for agents",
+          "tasks": [
+            "Inspect existing instructions",
+            "Link canonical commands and boundaries",
+            "Check scope and conflicting guidance"
+          ],
+          "completionEvidence": "Navigable instructions with valid links",
+          "approaches": [
+            "direct-execution"
+          ],
+          "workItemTypes": [
+            "task"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "validation-setup",
+          "title": "Validation command setup",
+          "exampleTask": "Provide one reliable command for relevant checks",
+          "tasks": [
+            "Inventory checks",
+            "Define deterministic command outputs",
+            "Test success and deliberate failure"
+          ],
+          "completionEvidence": "Runnable checks that expose failures correctly",
+          "approaches": [
+            "scripted-pipeline"
+          ],
+          "workItemTypes": [
+            "task"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "observability-enablement",
+          "title": "Observability enablement",
+          "exampleTask": "Make a local workflow diagnosable by an agent",
+          "tasks": [
+            "Identify missing feedback",
+            "Expose useful logs or test diagnostics",
+            "Exercise a representative failure"
+          ],
+          "completionEvidence": "Failure is observable without sensitive data exposure",
+          "approaches": [
+            "explore-plan-implement"
+          ],
+          "workItemTypes": [
+            "task",
+            "change"
+          ],
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "delivery",
+      "title": "Feature delivery",
+      "status": "proposed",
+      "sourceIds": [
+        "O1",
+        "A1",
+        "A2"
+      ],
+      "types": [
+        {
+          "id": "small-enhancement",
+          "title": "Small enhancement",
+          "exampleTask": "Add a bounded CLI option",
+          "tasks": [
+            "Inspect existing behavior",
+            "Implement minimal change",
+            "Run targeted checks"
+          ],
+          "completionEvidence": "Expected option behavior and unchanged existing paths",
+          "approaches": [
+            "direct-execution"
+          ],
+          "workItemTypes": [
+            "task",
+            "feature"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "vertical-slice",
+          "title": "Vertical product slice",
+          "exampleTask": "Deliver an end-to-end invoice preview",
+          "tasks": [
+            "Define user scenario",
+            "Implement across required layers",
+            "Exercise the full path"
+          ],
+          "completionEvidence": "Working scenario rather than isolated component stubs",
+          "approaches": [
+            "explore-plan-implement"
+          ],
+          "workItemTypes": [
+            "feature"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "integration-feature",
+          "title": "API or integration feature",
+          "exampleTask": "Add a webhook endpoint",
+          "tasks": [
+            "Specify external contract",
+            "Implement boundary and failure behavior",
+            "Run contract and integration tests"
+          ],
+          "completionEvidence": "Contract, error and retry behavior verified",
+          "approaches": [
+            "explore-plan-implement"
+          ],
+          "workItemTypes": [
+            "feature"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "complex-feature",
+          "title": "Complex multi-phase feature",
+          "exampleTask": "Implement a multi-component export system",
+          "tasks": [
+            "Create milestones and dependencies",
+            "Deliver verifiable increments",
+            "Reconcile final acceptance and recovery"
+          ],
+          "completionEvidence": "Milestone evidence and complete acceptance inventory",
+          "approaches": [
+            "execplan-delivery",
+            "goal-driven-iteration"
+          ],
+          "workItemTypes": [
+            "feature",
+            "epic"
+          ],
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "debugging",
+      "title": "Debugging and defect repair",
+      "status": "proposed",
+      "sourceIds": [
+        "A1",
+        "A2",
+        "O7"
+      ],
+      "types": [
+        {
+          "id": "deterministic-bug",
+          "title": "Deterministic bug repair",
+          "exampleTask": "Fix a reproducible invalid-state crash",
+          "tasks": [
+            "Capture failing input",
+            "Find and repair cause",
+            "Verify regression and adjacent behavior"
+          ],
+          "completionEvidence": "Reproducer fails before and passes after",
+          "approaches": [
+            "reproduce-repair-verify"
+          ],
+          "workItemTypes": [
+            "bug"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "intermittent-failure",
+          "title": "Intermittent failure investigation",
+          "exampleTask": "Diagnose a nondeterministic checkout failure",
+          "tasks": [
+            "Collect occurrences and environment details",
+            "Test hypotheses with controlled repetitions",
+            "Fix cause or document evidence-backed blocker"
+          ],
+          "completionEvidence": "Failure-rate evidence with execution conditions",
+          "approaches": [
+            "goal-driven-iteration",
+            "reproduce-repair-verify"
+          ],
+          "workItemTypes": [
+            "bug",
+            "spike"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "regression-isolation",
+          "title": "Regression isolation",
+          "exampleTask": "Find the change that broke response compatibility",
+          "tasks": [
+            "Establish good and bad states",
+            "Bisect or compare relevant changes",
+            "Verify causal fix"
+          ],
+          "completionEvidence": "Causal revision evidence and behavior test",
+          "approaches": [
+            "reproduce-repair-verify"
+          ],
+          "workItemTypes": [
+            "bug"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "concurrency-investigation",
+          "title": "Concurrency investigation",
+          "exampleTask": "Repair duplicate processing under simultaneous requests",
+          "tasks": [
+            "Construct concurrent reproducer",
+            "Inspect ordering and resource ownership",
+            "Test the synchronization or idempotency fix"
+          ],
+          "completionEvidence": "Repeatable concurrent scenario and invariant checks",
+          "approaches": [
+            "reproduce-repair-verify",
+            "goal-driven-iteration"
+          ],
+          "workItemTypes": [
+            "bug",
+            "spike"
+          ],
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "modernization",
+      "title": "Refactoring and modernization",
+      "status": "proposed",
+      "sourceIds": [
+        "O1",
+        "A2",
+        "A9"
+      ],
+      "types": [
+        {
+          "id": "module-extraction",
+          "title": "Module extraction",
+          "exampleTask": "Split a large parser without changing its API",
+          "tasks": [
+            "Characterize current interface",
+            "Extract focused modules",
+            "Compare behavior and imports"
+          ],
+          "completionEvidence": "Behavioral tests and stable public interface",
+          "approaches": [
+            "characterize-transform-compare"
+          ],
+          "workItemTypes": [
+            "task",
+            "change"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "boundary-repair",
+          "title": "Architectural boundary repair",
+          "exampleTask": "Remove a forbidden dependency across layers",
+          "tasks": [
+            "Identify dependency violation",
+            "Move responsibility behind an interface",
+            "Run architecture and integration checks"
+          ],
+          "completionEvidence": "Dependency rule and behavior both hold",
+          "approaches": [
+            "execplan-delivery",
+            "characterize-transform-compare"
+          ],
+          "workItemTypes": [
+            "change"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "framework-upgrade",
+          "title": "Dependency or framework upgrade",
+          "exampleTask": "Upgrade a framework across a service",
+          "tasks": [
+            "Review changed APIs and defaults",
+            "Update code and configuration",
+            "Verify build and runtime behavior"
+          ],
+          "completionEvidence": "Compatibility inventory and passing affected checks",
+          "approaches": [
+            "pilot-and-expand",
+            "characterize-transform-compare"
+          ],
+          "workItemTypes": [
+            "change"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "obsolete-pattern",
+          "title": "Obsolete pattern replacement",
+          "exampleTask": "Replace a deprecated internal helper",
+          "tasks": [
+            "Inventory usage",
+            "Define semantic replacement",
+            "Transform and verify callers"
+          ],
+          "completionEvidence": "No unsupported callers and equivalent behavior",
+          "approaches": [
+            "characterize-transform-compare"
+          ],
+          "workItemTypes": [
+            "task",
+            "change"
+          ],
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "migration",
+      "title": "Migration campaigns",
+      "status": "proposed",
+      "sourceIds": [
+        "O5",
+        "A9"
+      ],
+      "types": [
+        {
+          "id": "api-migration",
+          "title": "API or SDK migration",
+          "exampleTask": "Move every inventoried client call to a new API",
+          "tasks": [
+            "Inventory calls and contract differences",
+            "Pilot semantic mappings",
+            "Migrate units and reconcile coverage"
+          ],
+          "completionEvidence": "Contract parity and complete call-site inventory",
+          "approaches": [
+            "pilot-and-expand",
+            "characterize-transform-compare",
+            "goal-driven-iteration"
+          ],
+          "workItemTypes": [
+            "change",
+            "epic"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "language-port",
+          "title": "Language or framework port",
+          "exampleTask": "Port a service while preserving supported behavior",
+          "tasks": [
+            "Create shared behavioral judge",
+            "Stress-test translation rules",
+            "Translate units then compile and compare"
+          ],
+          "completionEvidence": "Old/new parity, integration and nonfunctional checks",
+          "approaches": [
+            "pilot-and-expand",
+            "parallel-workstreams"
+          ],
+          "workItemTypes": [
+            "change",
+            "epic"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "data-migration",
+          "title": "Schema or data migration",
+          "exampleTask": "Backfill a new schema while versions coexist",
+          "tasks": [
+            "Define integrity and mixed-version requirements",
+            "Implement checkpointed migration",
+            "Reconcile and rehearse recovery"
+          ],
+          "completionEvidence": "Data reconciliation and tested restore or roll-forward",
+          "approaches": [
+            "execplan-delivery",
+            "scripted-pipeline"
+          ],
+          "workItemTypes": [
+            "change"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "contract-transition",
+          "title": "Cross-service contract transition",
+          "exampleTask": "Retire an old event only after consumers transition",
+          "tasks": [
+            "Map consumers and deployment ordering",
+            "Introduce compatibility bridge",
+            "Verify adoption before retirement"
+          ],
+          "completionEvidence": "Consumer coverage and compatibility evidence",
+          "approaches": [
+            "execplan-delivery",
+            "pilot-and-expand"
+          ],
+          "workItemTypes": [
+            "change",
+            "epic"
+          ],
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "maintenance",
+      "title": "Maintenance and simplification",
+      "status": "proposed",
+      "sourceIds": [
+        "O4",
+        "O2"
+      ],
+      "types": [
+        {
+          "id": "dead-code",
+          "title": "Dead-code removal",
+          "exampleTask": "Remove an unused subsystem with evidence",
+          "tasks": [
+            "Collect direct indirect and runtime usage evidence",
+            "Check operational and recovery purpose",
+            "Propose small removals and verify"
+          ],
+          "completionEvidence": "Removal justification and supported-consumer checks",
+          "approaches": [
+            "evidence-led-audit",
+            "pilot-and-expand"
+          ],
+          "workItemTypes": [
+            "task",
+            "change"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "stale-experiment",
+          "title": "Stale experiment cleanup",
+          "exampleTask": "Retire a fully shipped feature experiment",
+          "tasks": [
+            "Read live or authorized configuration evidence",
+            "Check dependencies and intentional controls",
+            "Remove eligible code with owner dispositions"
+          ],
+          "completionEvidence": "Production-value provenance and preserved operational safeguards",
+          "approaches": [
+            "evidence-led-audit"
+          ],
+          "workItemTypes": [
+            "task",
+            "change"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "dependency-cleanup",
+          "title": "Dependency and configuration cleanup",
+          "exampleTask": "Remove an obsolete package or configuration key",
+          "tasks": [
+            "Inventory consumers and generated uses",
+            "Check supported deployment environments",
+            "Remove and verify packaging and startup"
+          ],
+          "completionEvidence": "No required consumer lost; build and startup evidence",
+          "approaches": [
+            "evidence-led-audit",
+            "characterize-transform-compare"
+          ],
+          "workItemTypes": [
+            "task"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "documentation-gardening",
+          "title": "Documentation gardening",
+          "exampleTask": "Reconcile setup docs with current behavior",
+          "tasks": [
+            "Identify stale claims",
+            "Verify authoritative implementation",
+            "Correct links examples and claims"
+          ],
+          "completionEvidence": "Source-linked corrections and usable examples",
+          "approaches": [
+            "evidence-led-audit",
+            "direct-execution"
+          ],
+          "workItemTypes": [
+            "task"
+          ],
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "quality",
+      "title": "Testing and quality improvement",
+      "status": "proposed",
+      "sourceIds": [
+        "A1",
+        "A4",
+        "O4"
+      ],
+      "types": [
+        {
+          "id": "behavior-coverage",
+          "title": "Missing behavior coverage",
+          "exampleTask": "Add a regression scenario for invalid signatures",
+          "tasks": [
+            "Identify consequential uncovered behavior",
+            "Write independent expected outcomes",
+            "Verify the test detects the defect"
+          ],
+          "completionEvidence": "Meaningful behavioral failure detection",
+          "approaches": [
+            "reproduce-repair-verify"
+          ],
+          "workItemTypes": [
+            "task",
+            "bug"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "flaky-test",
+          "title": "Flaky-test repair",
+          "exampleTask": "Fix a timing-dependent CI test",
+          "tasks": [
+            "Establish failure history and rate",
+            "Replace nondeterministic dependency or fix product cause",
+            "Repeat relevant tests under comparable conditions"
+          ],
+          "completionEvidence": "Stable repeated outcomes without weaker assertions",
+          "approaches": [
+            "goal-driven-iteration",
+            "reproduce-repair-verify"
+          ],
+          "workItemTypes": [
+            "bug",
+            "task"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "browser-quality",
+          "title": "Browser and accessibility verification",
+          "exampleTask": "Verify keyboard completion of a form",
+          "tasks": [
+            "Define user interactions and expected states",
+            "Exercise live UI and accessibility semantics",
+            "Capture failures and retest corrections"
+          ],
+          "completionEvidence": "Scenario results and relevant screenshots or traces",
+          "approaches": [
+            "generator-evaluator"
+          ],
+          "workItemTypes": [
+            "task",
+            "bug"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "suite-improvement",
+          "title": "Test-suite improvement",
+          "exampleTask": "Reduce test time while preserving useful coverage",
+          "tasks": [
+            "Measure baseline and bottlenecks",
+            "Optimize expensive setup or redundant work",
+            "Compare failures detected and run time"
+          ],
+          "completionEvidence": "Comparable coverage and measured improvement",
+          "approaches": [
+            "goal-driven-iteration"
+          ],
+          "workItemTypes": [
+            "task"
+          ],
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "assurance",
+      "title": "Review and assurance",
+      "status": "proposed",
+      "sourceIds": [
+        "O3",
+        "A4"
+      ],
+      "types": [
+        {
+          "id": "change-review",
+          "title": "Change review",
+          "exampleTask": "Review a PR for consequential defects",
+          "tasks": [
+            "Inspect diff and affected context",
+            "Validate suspected defects",
+            "Record prioritized actionable findings"
+          ],
+          "completionEvidence": "Findings with location rationale and dispositions",
+          "approaches": [
+            "evidence-led-audit"
+          ],
+          "workItemTypes": [
+            "task"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "compatibility-review",
+          "title": "Compatibility review",
+          "exampleTask": "Review a public wire-name change",
+          "tasks": [
+            "Locate consumers and contracts",
+            "Evaluate safe transitions and exceptions",
+            "Verify supported consumer behavior"
+          ],
+          "completionEvidence": "Compatibility evidence and explicit exception decisions",
+          "approaches": [
+            "evidence-led-audit"
+          ],
+          "workItemTypes": [
+            "task",
+            "risk"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "security-privacy-review",
+          "title": "Security and privacy review",
+          "exampleTask": "Review a new data boundary",
+          "tasks": [
+            "Identify relevant assets and trust boundaries",
+            "Trace inputs authorization and outputs",
+            "Verify mitigations against concrete scenarios"
+          ],
+          "completionEvidence": "Validated findings and residual-risk decisions",
+          "approaches": [
+            "evidence-led-audit",
+            "generator-evaluator"
+          ],
+          "workItemTypes": [
+            "task",
+            "risk"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "review-rule-evaluation",
+          "title": "Repository-rule evaluation",
+          "exampleTask": "Check whether a rule catches breaks without noise",
+          "tasks": [
+            "Build violation safe-exception and unrelated cases",
+            "Run blinded representative reviews",
+            "Measure detection restraint and actionability"
+          ],
+          "completionEvidence": "Evaluation outcomes including false positives",
+          "approaches": [
+            "generator-evaluator",
+            "scripted-pipeline"
+          ],
+          "workItemTypes": [
+            "task"
+          ],
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "operations",
+      "title": "Release and operations",
+      "status": "proposed",
+      "sourceIds": [
+        "A2",
+        "O6"
+      ],
+      "types": [
+        {
+          "id": "pr-shipping",
+          "title": "PR shipping and CI repair",
+          "exampleTask": "Get a focused PR through checks and review",
+          "tasks": [
+            "Inspect CI and review feedback",
+            "Repair issues and rerun affected checks",
+            "Deliver only within authorized policy"
+          ],
+          "completionEvidence": "Required checks and resolved review dispositions",
+          "approaches": [
+            "scripted-pipeline",
+            "goal-driven-iteration"
+          ],
+          "workItemTypes": [
+            "task"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "release-preparation",
+          "title": "Release preparation",
+          "exampleTask": "Prepare versioned installers and release notes",
+          "tasks": [
+            "Verify release contents and version consistency",
+            "Build and smoke-test artifacts",
+            "Record publication readiness"
+          ],
+          "completionEvidence": "Artifact checks and release checklist evidence",
+          "approaches": [
+            "scripted-pipeline"
+          ],
+          "workItemTypes": [
+            "change",
+            "task"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "staged-rollout",
+          "title": "Staged rollout and recovery",
+          "exampleTask": "Roll out a compatible service change gradually",
+          "tasks": [
+            "Define indicators and recovery triggers",
+            "Deploy approved stages",
+            "Observe and advance or recover"
+          ],
+          "completionEvidence": "Stage observations and verified recovery path",
+          "approaches": [
+            "execplan-delivery",
+            "scripted-pipeline"
+          ],
+          "workItemTypes": [
+            "change"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "incident-response",
+          "title": "Incident response",
+          "exampleTask": "Restore service after a deployment regression",
+          "tasks": [
+            "Triage scope and preserve evidence",
+            "Apply authorized containment or recovery",
+            "Verify restoration and assign follow-ups"
+          ],
+          "completionEvidence": "Restoration evidence and incident timeline",
+          "approaches": [
+            "goal-driven-iteration"
+          ],
+          "workItemTypes": [
+            "incident"
+          ],
+          "status": "proposed"
+        }
+      ]
+    },
+    {
+      "id": "improvement",
+      "title": "Workflow and harness improvement",
+      "status": "proposed",
+      "sourceIds": [
+        "O6",
+        "A4",
+        "A5"
+      ],
+      "types": [
+        {
+          "id": "retrospective",
+          "title": "Execution retrospective",
+          "exampleTask": "Explain why a workflow required repeated correction",
+          "tasks": [
+            "Reconstruct intent and observed events",
+            "Classify material friction and causes",
+            "Assign bounded improvements to owners"
+          ],
+          "completionEvidence": "Evidence-backed findings and prioritized backlog",
+          "approaches": [
+            "evidence-led-audit"
+          ],
+          "workItemTypes": [
+            "lean-improvement",
+            "task"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "procedure-improvement",
+          "title": "Skill and prompt improvement",
+          "exampleTask": "Improve an existing migration procedure",
+          "tasks": [
+            "Identify recurring failure",
+            "Change the owning instruction reference or validator",
+            "Forward-test representative positive and negative cases"
+          ],
+          "completionEvidence": "Improved outcomes on held-out realistic tasks",
+          "approaches": [
+            "generator-evaluator",
+            "pilot-and-expand"
+          ],
+          "workItemTypes": [
+            "lean-improvement",
+            "task"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "model-effort-evaluation",
+          "title": "Model and effort evaluation",
+          "exampleTask": "Choose a cost-effective configuration for a workflow",
+          "tasks": [
+            "Define representative task set and outcomes",
+            "Compare supported configurations",
+            "Analyze accepted results cost and failure patterns"
+          ],
+          "completionEvidence": "Comparable evaluation records and selection rationale",
+          "approaches": [
+            "scripted-pipeline"
+          ],
+          "workItemTypes": [
+            "lean-experiment",
+            "spike"
+          ],
+          "status": "proposed"
+        },
+        {
+          "id": "orchestration-simplification",
+          "title": "Orchestration simplification",
+          "exampleTask": "Remove an unnecessary evaluator stage",
+          "tasks": [
+            "Identify the assumption behind each component",
+            "Ablate one component at a time",
+            "Compare quality recovery latency and cost"
+          ],
+          "completionEvidence": "No material regression on representative tasks",
+          "approaches": [
+            "pilot-and-expand",
+            "generator-evaluator"
+          ],
+          "workItemTypes": [
+            "lean-experiment",
+            "task"
+          ],
+          "status": "proposed"
+        }
+      ]
+    }
+  ]
+}

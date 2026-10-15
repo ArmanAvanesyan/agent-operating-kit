@@ -55,10 +55,10 @@ call `swarmd`, but `swarmd` stays a separate repository and lifecycle.
 - `packs/*/pack.json` defines supported targets and per-target render mapping.
 - `packs/*/pack.content.json` stores neutral content (roles, hooks, skills,
   templates, task packets).
-- `scripts/aok render pack <pack-id> --target <target>` outputs parseable JSON
-  contracts for all targets.
-- `scripts/aok render all --target all` bulk-renders all packs for every
-  target.
+- The release Go binary (`cmd/aok`) implements `render` for end-user installs.
+- Contributors and CI packaging may still call Python
+  `scripts/aok render pack <pack-id> --target <target>` (and
+  `scripts/aok render all --target all`) when building release bundles.
 
 ## Compatibility Policy
 

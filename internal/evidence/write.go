@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path"
 	"path/filepath"
+	"sort"
 	"strings"
 )
 
@@ -21,6 +23,37 @@ func WriteJSON(out, name string, value any, protectedRoots ...string) error {
 		return err
 	}
 	data = append(data, '\n')
+	return WriteFiles(out, map[string][]byte{name: data}, protectedRoots...)
+}
+
+// WriteFiles writes a fully validated relative file set to a new private directory.
+// It rejects portable path collisions before creating anything. On failure it
+// removes only the newly created directory, never existing content.
+func WriteFiles(out string, files map[string][]byte, protectedRoots ...string) error {
+	if out == "" || len(files) == 0 {
+		return fmt.Errorf("output directory and files are required")
+	}
+	names := make([]string, 0, len(files))
+	seen := map[string]bool{}
+	for name := range files {
+		if err := CheckPath(name); err != nil {
+			return err
+		}
+		lower := strings.ToLower(name)
+		if seen[lower] {
+			return fmt.Errorf("case-insensitive output collision")
+		}
+		seen[lower] = true
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for name := range seen {
+		for p := path.Dir(name); p != "."; p = path.Dir(p) {
+			if seen[p] {
+				return fmt.Errorf("file/directory output collision")
+			}
+		}
+	}
 	abs, err := filepath.Abs(out)
 	if err != nil {
 		return err
@@ -57,21 +90,53 @@ func WriteJSON(out, name string, value any, protectedRoots ...string) error {
 	if err := os.Mkdir(abs, 0700); err != nil {
 		return fmt.Errorf("output must be a new directory: %w", err)
 	}
-	path := filepath.Join(abs, name)
-	f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0600)
-	if err != nil {
-		_ = os.Remove(abs)
-		return err
-	}
-	_, writeErr := f.Write(data)
-	closeErr := f.Close()
-	if writeErr != nil || closeErr != nil {
-		_ = os.Remove(path)
-		_ = os.Remove(abs)
+
+	complete := false
+	defer func() {
+		if !complete {
+			_ = os.RemoveAll(abs)
+		}
+	}()
+	for _, name := range names {
+		dest := filepath.Join(abs, filepath.FromSlash(name))
+		if err := os.MkdirAll(filepath.Dir(dest), 0700); err != nil {
+			return err
+		}
+		f, err := os.OpenFile(dest, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0600)
+		if err != nil {
+			return err
+		}
+		_, writeErr := f.Write(files[name])
+		closeErr := f.Close()
 		if writeErr != nil {
 			return writeErr
 		}
-		return closeErr
+		if closeErr != nil {
+			return closeErr
+		}
+	}
+	complete = true
+	return nil
+}
+
+// CheckPath accepts portable, relative POSIX file names only.
+func CheckPath(name string) error {
+	if name == "" || path.IsAbs(name) || path.Clean(name) != name || name == "." || name == ".." || strings.HasPrefix(name, "../") || strings.ContainsAny(name, "\\:\x00<>\"|?*") {
+		return fmt.Errorf("invalid relative output path")
+	}
+	for _, part := range strings.Split(name, "/") {
+		if strings.TrimRight(part, ". ") != part {
+			return fmt.Errorf("nonportable file name")
+		}
+		for _, r := range part {
+			if r < 32 || r == 127 {
+				return fmt.Errorf("control character in file name")
+			}
+		}
+		stem := strings.ToUpper(strings.SplitN(part, ".", 2)[0])
+		if stem == "CON" || stem == "PRN" || stem == "AUX" || stem == "NUL" || (len(stem) == 4 && (strings.HasPrefix(stem, "COM") || strings.HasPrefix(stem, "LPT")) && stem[3] >= '1' && stem[3] <= '9') {
+			return fmt.Errorf("reserved file name")
+		}
 	}
 	return nil
 }

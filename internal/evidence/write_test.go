@@ -50,3 +50,34 @@ func TestRejectProtectedAndSymlinkOutputs(t *testing.T) {
 		t.Fatal("escaped output")
 	}
 }
+
+func TestWriteFilesRejectsPathsAndCollisionsBeforeWriting(t *testing.T) {
+	for _, files := range []map[string][]byte{
+		{"../escape": {}}, {"A": {}, "a": {}}, {"a": {}, "a/b": {}},
+		{"a": {}, "A/b": {}}, {"a/../b": {}}, {"NUL.txt": {}}, {"a.": {}},
+	} {
+		root := realTemp(t)
+		out := filepath.Join(root, "out")
+		if err := WriteFiles(out, files); err == nil {
+			t.Fatalf("accepted paths: %v", files)
+		}
+		if _, err := os.Lstat(out); !os.IsNotExist(err) {
+			t.Fatal("created output before validation")
+		}
+	}
+}
+func TestWriteFilesPreservesNestedBytesAndExistingOutput(t *testing.T) {
+	root := realTemp(t)
+	out := filepath.Join(root, "out")
+	files := map[string][]byte{".opencode/agents/test.md": []byte("---\nname: test\n---\nbody"), "report.json": []byte("{}")}
+	if err := WriteFiles(out, files); err != nil {
+		t.Fatal(err)
+	}
+	b, err := os.ReadFile(filepath.Join(out, ".opencode/agents/test.md"))
+	if err != nil || string(b) != string(files[".opencode/agents/test.md"]) {
+		t.Fatalf("bytes changed: %v", err)
+	}
+	if err := WriteFiles(out, map[string][]byte{"other": {}}); err == nil {
+		t.Fatal("overwrote output")
+	}
+}

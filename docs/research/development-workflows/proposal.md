@@ -385,6 +385,43 @@ cases without revealing the expected answer. When models or tools change, remove
 scaffolding component at a time to see whether its benefit remains. Structural validation
 alone does not establish a better workflow.
 
+## Recommended refinements from external comparisons
+
+The [external workflow comparison](external-workflow-comparison.md) and
+[pinned source register](external-comparison-sources.json) add design inputs from seven
+references, with GitHub primary documentation clarifying automated-output semantics.
+These are proposed refinements, not newly installed AOK capabilities. Existing bootstrap,
+review/QA guidance and artifact contracts remain the foundation.
+
+| Recommendation | Proposed contract or procedure | Existing boundary |
+|---|---|---|
+| X01 Bounded discovery | Limit traversal; explicitly include agent/CI configuration; link component findings | Exploration skill remains proposed; avoid copying a scanner whose depth argument is ineffective |
+| X02 Readiness evidence | Canonical command matrix plus context, verification and feedback dimensions | AOK setup diagnostics do not demonstrate application readiness |
+| X03 Review scope | Scope kind, base/head references, head revision, merge base when applicable, diff strategy and depth | Existing review guidance has no first-class scope schema |
+| X04 Planning checks | Structural checks first; scoped judgment for specifications, architecture and breakdown | Do not impose a full stage pipeline on trivial work |
+| X05 Traceability | Requirement/acceptance → task → change → evidence relationships | Retain authoritative task and work-system state; no duplicate writable board |
+| X06 Documentation drift | Compare code/docs; preserve or explicitly supersede decision rationale | Repository history and canonical documentation remain authoritative |
+| X07 GitHub pilot | Optional intent projection to GitHub Agentic Workflows and evidence collection | Separate from GitHub Projects binding and AOK's neutral model |
+| X08 Review exceptions | Narrow scope, owner, rationale, review date and regression cases | No blanket or permanent suppression inferred from prior reviews |
+
+Review a change, fix review comments and verify remediation should share a revision-bound
+scope contract. Distinguish uncommitted workspace changes, one commit and branch evolution.
+Each finding should retain its reviewed revision, identity, disposition and verification
+on the corrected revision. These are proposed fields; current task packets reject unknown
+properties, so phase 1 uses linked documents until compatible contracts exist.
+
+Readiness gains three independently evidenced dimensions: context (commands/constraints
+are discoverable), verification (required behavior can be exercised) and feedback (failures
+produce useful diagnostics). Preserve the existing five environment profiles; these
+dimensions refine their assessment rather than introducing new profile selectors.
+
+A proposed GitHub adapter maps neutral workflow intent to an external compiler/executor,
+then collects declared outputs and run evidence. Controlled outputs can publish automatically
+through separate permission-controlled jobs; they are not inherently human approvals.
+The first pilot is artifact-only CI diagnosis with explicit prevention of publishing side
+effects. Comments/issues/PRs require a separately configured, authorized delivery capability.
+No automation is activated by this proposal.
+
 ## Phased adoption
 
 Start with the six recipes above. Extend existing owning packs before adding new packages.

@@ -300,6 +300,39 @@ and integration results justify it. Publishing PRs, merging and deployments rema
 delivery capabilities governed by existing authorization. A failed pilot can revert to
 content-only workflows without losing portable definitions or evidence.
 
+## External comparison work packages
+
+These proposed work packages implement the [comparison backlog](external-workflow-comparison.md#recommended-backlog).
+Their ordering refines the four phases without changing current schemas, catalog counts,
+methodology support or runtime capabilities.
+
+| ID | Phase and dependency | Deliverable | Acceptance and validation |
+|---|---|---|---|
+| X01 | Phase 1, P1-09 | Bounded inventory procedure/tool design | Fixtures exercise depth limits, generated/vendor exclusions and relevant hidden agent/CI directories; source evidence remains scoped |
+| X02 | Phase 1, P1-10 | Command matrix and context/verification/feedback readiness rubric | Missing command, unavailable verifier and insufficient diagnostics cannot be reported as ready; preserve existing profile definitions |
+| X03 | Phase 1 linked template; Phase 2 contract | Review scope and remediation records | Compare dirty-workspace, single-commit and merge-base branch cases; findings remain tied to reviewed/corrected revisions |
+| X04 | Phases 1–2, planning templates and P2 validators | Specification/architecture/breakdown acceptance | Positive and negative fixtures cover untestable acceptance, missing references, cycles and premature transition |
+| X05 | Phase 2, P2-03/P2-04 | Requirement/task/change/evidence references | Detect dangling/stale references and incomplete acceptance; old packets remain valid; authoritative state ownership documented |
+| X06 | Phase 1 documentation recipe; Phase 2 validation where mechanical | Drift findings and decision preservation | Test stale docs, missing docs and intentionally superseded decisions; do not overwrite rationale silently |
+| X07 | Phase 3 projection; Phase 4 live pilot | Optional CI diagnosis adapter | Pin compiler/runtime; inspect generated jobs and configured/default outputs; prove artifact-only mode cannot publish, then evaluate diagnosis/deduplication on bounded cases |
+| X08 | Phase 2 review policy; Phase 4 outcome evaluation | Governed exceptions | Test narrow accepted exception, expired/stale exception and materially changed code; ensure genuine defects remain detectable |
+
+### Pilot constraints
+
+The GitHub automation projection is separate from work-system bootstrap/provider state.
+AOK supplies intent and validation; GitHub Agentic Workflows supplies compilation/execution.
+The runtime's safe-output mechanism can publish configured actions automatically. Do not
+infer a human approval requirement or absence of writes from read-only agent permissions.
+Artifact-only tests must inspect actual compiled jobs and outputs for the selected version.
+
+Start with a failed-CI fixture and a revision-linked report. Evaluate root-cause evidence,
+confidence calibration and duplicate consolidation. Publishing issues/comments is a later,
+explicitly authorized capability; broad autonomous repository assistance is not the pilot.
+
+No external framework dependency or fixed agent count is required for X01–X06. If importing
+source later, review pinned implementation, dependencies and license/notice obligations.
+Source inspection is not runtime validation; all live claims need observed evidence.
+
 ## Risks and decisions to revisit
 
 | Risk | Mitigation |

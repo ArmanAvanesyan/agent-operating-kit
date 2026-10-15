@@ -37,6 +37,19 @@ baseline above remains unchanged.
 Existing bootstrap skills and Codex setup helpers are separated from proposed exploration
 and readiness skills. Application readiness requires observed checks, not merely AOK setup.
 
+## External workflow comparison
+
+The [comparison](external-workflow-comparison.md) reviews seven additional references and
+records selective recommendations X01–X08. Its [source register](external-comparison-sources.json)
+contains the requested URLs, pinned revisions and inspected files for three repositories,
+plus GitHub primary documentation on safe outputs. The AOK comparison baseline is
+`ea04d30ed5b27ab302f2f42a596adec9d9b68a83` on 2026-10-15.
+
+The proposal and phased plan incorporate bounded inventory, verified readiness dimensions,
+review scope, planning checks, traceability, documentation drift, a GitHub CI-diagnosis
+pilot and governed review exceptions. These remain proposals; no external framework,
+new skill, contract or automation is installed or activated.
+
 ## Existing capabilities and proposed additions
 
 The following statements describe the inspected baseline, rather than general vendor capability.

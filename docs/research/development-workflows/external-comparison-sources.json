@@ -1,0 +1,132 @@
+{
+  "kind": "aok-external-workflow-comparison-sources",
+  "version": 1,
+  "reviewedOn": "2026-10-15",
+  "aokBaseline": "ea04d30ed5b27ab302f2f42a596adec9d9b68a83",
+  "scope": "Seven requested references plus one primary-source verification reference. Selected pages/files reviewed in the preceding research turn; no external frameworks installed or run.",
+  "sources": [
+    {
+      "id": "C1",
+      "title": "MatrixFounder Agentic-development",
+      "url": "https://github.com/MatrixFounder/Agentic-development",
+      "reviewedOn": "2026-10-15",
+      "commit": "09765e1d1379bd70eae996fe87e483ce73cf96fa",
+      "inspectedFiles": [
+        {
+          "path": ".agent/skills/skill-reverse-engineering/SKILL.md",
+          "url": "https://github.com/MatrixFounder/Agentic-development/blob/09765e1d1379bd70eae996fe87e483ce73cf96fa/.agent/skills/skill-reverse-engineering/SKILL.md"
+        },
+        {
+          "path": ".agent/skills/skill-reverse-engineering/scripts/scan_structure.py",
+          "url": "https://github.com/MatrixFounder/Agentic-development/blob/09765e1d1379bd70eae996fe87e483ce73cf96fa/.agent/skills/skill-reverse-engineering/scripts/scan_structure.py"
+        },
+        {
+          "path": "System/Docs/SOURCE_OF_TRUTH.md",
+          "url": "https://github.com/MatrixFounder/Agentic-development/blob/09765e1d1379bd70eae996fe87e483ce73cf96fa/System/Docs/SOURCE_OF_TRUTH.md"
+        }
+      ],
+      "supports": "Incremental reverse engineering, artifact ownership and documentation drift.",
+      "limitations": "Selected source inspection only; scanner depth argument is not enforced and hidden directories are skipped."
+    },
+    {
+      "id": "C2",
+      "title": "SuperiorByteWorks agent-project",
+      "url": "https://github.com/SuperiorByteWorks-LLC/agent-project/tree/main",
+      "reviewedOn": "2026-10-15",
+      "commit": "54b2b1e6616c8bcffd5cd082ecfb616db97e7185",
+      "inspectedFiles": [
+        {
+          "path": "README.md",
+          "url": "https://github.com/SuperiorByteWorks-LLC/agent-project/blob/54b2b1e6616c8bcffd5cd082ecfb616db97e7185/README.md"
+        },
+        {
+          "path": ".crewai/adr/ADR-004-review-scope-contract-and-tiering.md",
+          "url": "https://github.com/SuperiorByteWorks-LLC/agent-project/blob/54b2b1e6616c8bcffd5cd082ecfb616db97e7185/.crewai/adr/ADR-004-review-scope-contract-and-tiering.md"
+        },
+        {
+          "path": "agentic/adr/ADR-008-persistent-review-memory-governance.md",
+          "url": "https://github.com/SuperiorByteWorks-LLC/agent-project/blob/54b2b1e6616c8bcffd5cd082ecfb616db97e7185/agentic/adr/ADR-008-persistent-review-memory-governance.md"
+        },
+        {
+          "path": ".crewai/utils/specialist_output.py",
+          "url": "https://github.com/SuperiorByteWorks-LLC/agent-project/blob/54b2b1e6616c8bcffd5cd082ecfb616db97e7185/.crewai/utils/specialist_output.py"
+        }
+      ],
+      "supports": "Review scope contract, tiered review, local/CI consistency and governed review memory.",
+      "limitations": "Selected files inspected; CrewAI workflows and advertised production readiness not independently validated."
+    },
+    {
+      "id": "C3",
+      "title": "Agent-ready repo structure",
+      "url": "https://medium.com/@huseyinkaplandev/agent-ready-repo-structure-2026-90af2ac8aed2",
+      "reviewedOn": "2026-10-15",
+      "commit": null,
+      "inspectedFiles": [],
+      "supports": "Canonical commands, entrypoints, concise instructions and boundaries.",
+      "limitations": "Author guidance; cross-tool compatibility and productivity claims are not verified guarantees."
+    },
+    {
+      "id": "C4",
+      "title": "Agentic Workflows on Azure with AJ",
+      "url": "https://azurewithaj.com/agentic-workflows-reimagining-automation/",
+      "reviewedOn": "2026-10-15",
+      "commit": null,
+      "inspectedFiles": [],
+      "supports": "Orientation to event-triggered agent automation and controlled outputs.",
+      "limitations": "Secondary explainer; use GitHub primary documentation for exact permission, syntax and approval behavior."
+    },
+    {
+      "id": "C5",
+      "title": "GitHub Next Agentics",
+      "url": "https://github.com/githubnext/agentics",
+      "reviewedOn": "2026-10-15",
+      "commit": "b4e175bab6674279e0fe158f7dc877b77bc9d92f",
+      "inspectedFiles": [
+        {
+          "path": "README.md",
+          "url": "https://github.com/githubnext/agentics/blob/b4e175bab6674279e0fe158f7dc877b77bc9d92f/README.md"
+        },
+        {
+          "path": "workflows/ci-doctor.md",
+          "url": "https://github.com/githubnext/agentics/blob/b4e175bab6674279e0fe158f7dc877b77bc9d92f/workflows/ci-doctor.md"
+        },
+        {
+          "path": "workflows/contribution-guidelines-checker.md",
+          "url": "https://github.com/githubnext/agentics/blob/b4e175bab6674279e0fe158f7dc877b77bc9d92f/workflows/contribution-guidelines-checker.md"
+        }
+      ],
+      "supports": "Reusable CI diagnosis, contribution compliance, research and maintenance workflow examples.",
+      "limitations": "Examples were inspected, not compiled, installed or executed."
+    },
+    {
+      "id": "C6",
+      "title": "OpenAI harness engineering",
+      "url": "https://openai.com/index/harness-engineering/",
+      "reviewedOn": "2026-10-15",
+      "commit": null,
+      "inspectedFiles": [],
+      "supports": "Navigable knowledge, observable applications and mechanically enforced architectural invariants.",
+      "limitations": "Engineering case study; throughput and autonomy results were not reproduced."
+    },
+    {
+      "id": "C7",
+      "title": "QuantumBlack agentic workflows for software development",
+      "url": "https://medium.com/quantumblack/agentic-workflows-for-software-development-dc8e64f4a79d",
+      "reviewedOn": "2026-10-15",
+      "commit": null,
+      "inspectedFiles": [],
+      "supports": "Structured artifact contracts, traceability, deterministic orchestration and bounded evaluation.",
+      "limitations": "Practitioner account; no accompanying runtime was executed or independently validated."
+    },
+    {
+      "id": "C8",
+      "title": "GitHub Agentic Workflows safe outputs",
+      "url": "https://github.github.com/gh-aw/reference/safe-outputs/",
+      "reviewedOn": "2026-10-15",
+      "commit": null,
+      "inspectedFiles": [],
+      "supports": "Structured requests are processed by separate permission-controlled jobs; configured writes can be automated.",
+      "limitations": "Product documentation snapshot, not a tested AOK integration."
+    }
+  ]
+}

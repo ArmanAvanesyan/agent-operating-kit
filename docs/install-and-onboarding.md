@@ -22,6 +22,25 @@ Codex and Claude Code can consume the same neutral pack.
 The installer treats `codex` as optional. `aok doctor` reports optional command
 availability separately from required AOK files and local registration.
 
+## Release trust (unsigned)
+
+GitHub Release binaries and installers are **unsigned** unless maintainers
+configure optional signing secrets. Verify the download with the Release
+`SHA256SUMS` file. Your OS may show a one-time trust warning on first run;
+that is expected. See [cli-distribution.md](cli-distribution.md).
+
+## Install via package managers
+
+Same-repo manifests (no separate tap/bucket required):
+
+| Channel | Command |
+|---|---|
+| Scoop | `scoop bucket add aok https://github.com/ArmanAvanesyan/agent-operating-kit` then `scoop install aok` |
+| Homebrew | `brew install --formula https://raw.githubusercontent.com/ArmanAvanesyan/agent-operating-kit/main/packaging/homebrew/aok.rb` |
+| winget | Manifests under `packaging/winget/`; submit to `microsoft/winget-pkgs` when ready |
+
+Details: [`packaging/README.md`](../packaging/README.md).
+
 ## Release Installers
 
 Use this route when you do not want to use Git clone flows.

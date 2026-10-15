@@ -206,9 +206,16 @@ After GitHub Release assets exist:
 ./scripts/packaging/generate-from-release.sh --version <version>
 ```
 
-Confirm `packaging/out/` Homebrew / Scoop / winget files pin the correct URLs
-and SHA256 digests. Token-gated tap/bucket pushes are optional (see
-`packaging/README.md`). **PyPI is not planned** for the Go binary.
+Confirm same-repo published paths pin the correct URLs and SHA256 digests:
+
+- `bucket/aok.json` (Scoop)
+- `packaging/homebrew/aok.rb` (Homebrew raw-URL formula)
+- `packaging/winget/*.yaml` (winget; submit to winget-pkgs when ready)
+
+`packaging/out/` is CI staging (gitignored). Token-gated external tap/bucket
+pushes remain optional (see `packaging/README.md`). **Unsigned Releases +
+SHA256SUMS** are the supported trust model; **PyPI is not planned** for the Go
+binary.
 
 Include:
 

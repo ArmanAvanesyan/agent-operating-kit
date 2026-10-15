@@ -1,0 +1,14 @@
+# winget installer manifest template (for winget-pkgs multi-file layout).
+PackageIdentifier: ArmanAvanesyan.AgentOperatingKit
+PackageVersion: 0.6.0
+InstallerLocale: en-US
+InstallerType: portable
+Commands:
+  - aok
+Installers:
+  - Architecture: x64
+    InstallerUrl: https://github.com/ArmanAvanesyan/agent-operating-kit/releases/download/v0.6.0/aok-0.6.0-windows-amd64.exe
+    InstallerSha256: EF27693DACAA168C450ED776DD5BD0C6EA8DFEDAF08E3D619C27DBF8497152EC
+    NestedInstallerType: portable
+ManifestType: installer
+ManifestVersion: 1.6.0

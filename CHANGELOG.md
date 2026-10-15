@@ -6,6 +6,8 @@
   pydantic / pydantic-settings floors; Actions `checkout@v7`, GCP auth/setup
   `@v3`, hadolint-action `@v3.5.0`. UV `0.13.1` + `setup-uv@v10` and Python
   `3.12` remain current (no bump).
+- Cursor bundles emit an additive native project tree (`.cursor/rules/*.mdc`,
+  `.cursor/skills/*/SKILL.md`, hooks checklist) alongside `aok-bundle.json`.
 
 ## 0.6.0
 

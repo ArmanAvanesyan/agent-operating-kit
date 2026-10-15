@@ -172,7 +172,11 @@
       "payload": {
         "contract": "aok-template-bundle"
       },
-      "importInstructions": "See docs/adapters/cursor.md for host-specific import steps. Bundle: bundles/cursor/<pack>/."
+      "importInstructions": "See docs/adapters/cursor.md. Copy .cursor/rules and .cursor/skills from bundles/cursor/<pack>/ into the project; keep aok-bundle.json as audit fallback.",
+      "nativePackageFormats": [
+        ".cursor/rules",
+        ".cursor/skills"
+      ]
     },
     "opencode": {
       "status": "active",

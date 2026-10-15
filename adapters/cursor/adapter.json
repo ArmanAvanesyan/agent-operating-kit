@@ -21,15 +21,18 @@
     "packs/*/pack.json"
   ],
   "limitations": [
-    "Runtime output is currently JSON contract-first; native Cursor packaging is documented separately.",
-    "Bundle metadata is emitted as generated import bundle metadata in targetRender.cursor.payload; native Cursor packaging is not claimed.",
-    "Current non-CLI support is a generated import bundle, not a native marketplace installer."
+    "Emits a project-local `.cursor/` tree (rules + skills + hooks checklist) alongside the generic `aok-bundle.json` import bundle.",
+    "Does not emit executable `.cursor/hooks.json` — pack hooks remain checklist guidance (often Claude-oriented).",
+    "Does not ship a Cursor marketplace `.cursor-plugin` package; support level remains generated-bundle."
   ],
   "supportLevel": "generated-bundle",
-  "nativePackageFormats": [],
+  "nativePackageFormats": [
+    ".cursor/rules",
+    ".cursor/skills"
+  ],
   "bundle": {
     "artifactName": "aok-cursor-bundles.zip",
     "format": "aok-import-bundle",
-    "importInstructions": "See docs/adapters/cursor.md for host-specific import steps. Bundle: bundles/cursor/<pack>/."
+    "importInstructions": "See docs/adapters/cursor.md. Copy `.cursor/rules` and `.cursor/skills` from bundles/cursor/<pack>/ into the project; keep aok-bundle.json as audit fallback."
   }
 }

@@ -3,76 +3,80 @@
 Status: active · Support level: `generated-bundle` · Host Min/Tested: see
 [targets-support-matrix.md](../targets-support-matrix.md).
 
-This guide covers **today’s generated-bundle** path. Native Cursor project-tree
-emission (`.cursor/rules`, skills) is tracked separately on the roadmap.
-
 Adapter README: [`adapters/cursor/README.md`](../../adapters/cursor/README.md).
+
+## Format spike (locked for v1)
+
+Against current Cursor docs
+([Rules](https://cursor.com/docs/context/rules),
+[Skills](https://cursor.com/docs/context/skills),
+[Hooks](https://cursor.com/docs/agent/hooks)):
+
+| Surface | Cursor path | AOK mapping |
+|---|---|---|
+| Project rules | `.cursor/rules/*.mdc` (YAML frontmatter + body) | Pack **roles** → one `.mdc` per role (`alwaysApply: false`, description from role name) |
+| Skills | `.cursor/skills/<name>/SKILL.md` | Pack **skills** → skill folder; body from `sourcePath` when present (`name` forced to folder slug) |
+| Hooks | `.cursor/hooks.json` (executable) | **Not emitted** — pack hooks become `.cursor/hooks-checklist.md` (non-executable). Claude `CLAUDE_PLUGIN_ROOT` commands are not Cursor hooks. |
+| Plugin / marketplace | `.cursor-plugin/` + marketplace | **Deferred** — no stable in-repo marketplace publish path claimed |
+
+The generic import bundle (`aok-bundle.json`, markdown/JSON item dirs) remains
+forever as audit/fallback. Native tree emission is **additive**.
 
 ## Prerequisites
 
-- Cursor IDE (or Agent) that can load project rules / skills from the workspace
+- Cursor IDE (or Agent) that loads project rules from `.cursor/rules` and skills
+  from `.cursor/skills`
 - AOK kit checkout **or** a release `agent-operating-kit-<version>-bundles.zip`
 - Optional: Go/`aok` CLI or Python `./scripts/aok` to regenerate bundles
 
 ## Obtain the bundle
-
-From a kit checkout:
 
 ```bash
 ./scripts/aok render bundle engineering-guardrails --target cursor
 # → build/bundles/cursor/engineering-guardrails/
 ```
 
-From a release zip, extract:
-
-```text
-bundles/cursor/<pack>/
-```
+Release zip path: `bundles/cursor/<pack>/`.
 
 ## Exact paths in the bundle
 
 | Path | Use when importing |
 |---|---|
-| `aok-bundle.json` | Keep in-repo as audit/contract (`kind: aok-bundle`) |
-| `import.json` | Lightweight pointer (`kind: aok-target-import`) |
-| `roles.md`, `roles/*.json` | Map into Cursor **project rules** / policy guidance |
-| `skills.md`, `skills/*.json` | Map into Cursor **skills** or reusable prompts |
-| `hooks.md`, `hooks/*.json` | **Checklists only** — not executable Cursor hooks |
-| `tasks.md`, `task-packets/` | Task packet specs for agents/humans |
-| `README.md` | Pack/target summary |
+| `.cursor/rules/*.mdc` | **Copy into project** `.cursor/rules/` (native) |
+| `.cursor/skills/*/SKILL.md` | **Copy into project** `.cursor/skills/` (native; when pack has skills) |
+| `.cursor/hooks-checklist.md` | Operator checklist only — not `hooks.json` |
+| `aok-bundle.json` | Keep in-repo as audit/contract |
+| `import.json` | Lightweight pointer |
+| `roles.md`, `hooks.md`, `skills.md`, `tasks.md` | Human-readable projections / fallback |
+| `roles/`, `hooks/`, `skills/`, `task-packets/` | Per-item JSON |
 
 ## Host import steps
 
-1. Open (or create) the target project in Cursor.
-2. Copy rule content from `roles.md` / `roles/*.json` into the project’s Cursor
-   rules location for your Cursor build (commonly `.cursor/rules/` `.mdc` files,
-   or project rules UI). Prefer one rule file per AOK role when practical.
-3. Copy skill guidance from `skills.md` / `skills/*.json` into Cursor skills
-   (or linked docs the agent can read). AOK does not emit Cursor skill package
-   folders on this path.
-4. Treat `hooks.md` as a pre/after checklist in chat or PR templates. Do **not**
-   expect native Cursor hook execution from this bundle.
-5. Optionally commit `aok-bundle.json` under something like
-   `.aok/imports/cursor/<pack>/aok-bundle.json` for drift audits.
+1. Generate or extract `bundles/cursor/<pack>/`.
+2. Copy the emitted `.cursor/rules/` tree into the project root’s `.cursor/rules/`
+   (merge carefully if rules already exist).
+3. Copy `.cursor/skills/` the same way when present.
+4. Optionally keep `.cursor/hooks-checklist.md` or fold it into PR/process docs.
+   Do **not** expect AOK to write executable `.cursor/hooks.json`.
+5. Keep `aok-bundle.json` under e.g. `.aok/imports/cursor/<pack>/` for audits.
 
 ## Verification
 
-- Ask the agent to summarize a named role from the imported rules (e.g. a
-  guardrail role from `engineering-guardrails`).
-- Confirm the rule text appears in Cursor’s project rules UI or on disk under
-  `.cursor/rules/`.
-- Confirm `aok-bundle.json` `target` is `"cursor"` and `pack` matches.
+- Cursor Customize → Rules shows the imported `.mdc` files.
+- For skill packs (e.g. `ship-pipeline`), `/ship-pr` (or the skill name) appears
+  under Skills / Agent chat `/` menu.
+- `aok-bundle.json` `target` is `"cursor"` and `files` lists `.cursor/...` paths.
 
 ## Failure modes
 
 | Symptom | Likely cause |
 |---|---|
-| Agent ignores imported policy | Rules not on Cursor’s active rules path for this project |
-| “Hooks don’t run” | Expected — checklist only on generated-bundle path |
-| Missing `hooks.md` / empty roles | Wrong pack or render failed; re-run `aok render bundle` |
-| Stale guidance after pack bump | Re-render bundle and re-copy changed markdown/JSON |
+| Rules ignored | Wrong extension (must be `.mdc`) or not under project `.cursor/rules/` |
+| Skill name mismatch | Folder name must match `SKILL.md` frontmatter `name` — AOK rewrites this |
+| “Hooks don’t run” | Expected — checklist only; wire `.cursor/hooks.json` yourself if needed |
+| Missing `.cursor/` | Old renderer; upgrade kit and re-run `aok render bundle` |
 
 ## Known gaps
 
-- No native Cursor marketplace / `.cursor-plugin` install from AOK yet.
+- No Cursor marketplace / `.cursor-plugin` installer from AOK.
 - Host Cursor version remains Untracked until recorded in the matrix.

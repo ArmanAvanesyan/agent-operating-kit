@@ -1,0 +1,81 @@
+- region "Notifications alt+T"
+- dialog "Advanced Research Settings":
+  - heading "Advanced Research Settings" [level=2]:
+    - img
+    - text: Advanced Research Settings
+  - paragraph: Fine-tune GOAP planner, model routing, and per-step prompts for this research run.
+  - img
+  - text: "AI-Optimize Settings by Research Type:"
+  - button "Academic Research Deep, rigorous academic analysis":
+    - img
+    - text: Academic Research Deep, rigorous academic analysis
+  - button "Industry Quick Scan Fast business insights":
+    - img
+    - text: Industry Quick Scan Fast business insights
+  - button "Competitive Intel Market & competitor analysis":
+    - img
+    - text: Competitive Intel Market & competitor analysis
+  - button "Technical Study Engineering feasibility":
+    - img
+    - text: Technical Study Engineering feasibility
+  - button "Market Trends Trend analysis & forecasting":
+    - img
+    - text: Market Trends Trend analysis & forecasting
+  - button "Medical/Clinical Evidence-based medical research":
+    - img
+    - text: Medical/Clinical Evidence-based medical research
+  - button "Startup Validation Business idea validation":
+    - img
+    - text: Startup Validation Business idea validation
+  - button "Policy & Regulatory Compliance & legal research":
+    - img
+    - text: Policy & Regulatory Compliance & legal research
+  - paragraph: Fine-tune how the AI conducts research by configuring GOAP planning parameters, AI prompts, execution settings, and source filters.
+  - tablist:
+    - tab "Guidance":
+      - img
+      - text: Guidance
+    - tab "GOAP":
+      - img
+      - text: GOAP
+    - tab "Prompts" [selected]:
+      - img
+      - text: Prompts
+    - tab "Parameters":
+      - img
+      - text: Parameters
+    - tab "Actions":
+      - img
+      - text: Actions
+    - tab "Filters":
+      - img
+      - text: Filters
+  - tabpanel "Prompts":
+    - heading "AI Prompts Configuration" [level=3]:
+      - img
+      - text: AI Prompts Configuration
+    - paragraph: Customize the AI prompts used during research
+    - text: System Prompt
+    - textbox "System Prompt":
+      - /placeholder: Define the AI's role and behavior...
+      - text: You are an expert research assistant specializing in GOAP (Goal-Oriented Action Planning) research workflows. Your role is to provide precise, evidence-based information for each research step. Format your responses as structured data points that can be used in subsequent research steps. Always include sources, confidence levels, and timestamps when available.
+    - text: Search Query Template
+    - textbox "Search Query Template":
+      - /placeholder: "Use {topic} and {year} placeholders..."
+      - text: "Latest {topic} advancements {year} research site:arxiv.org OR site:scholar.google.com OR site:ieee.org"
+    - paragraph: "Available variables: {topic}, {year}, {keywords}"
+    - text: Document Analysis Prompt
+    - textbox "Document Analysis Prompt":
+      - /placeholder: Instructions for analyzing documents...
+      - text: "Analyze the following content and extract: 1. Key findings and methodologies 2. Actionable insights and recommendations 3. Technical details and specifications 4. Sources and citations 5. Confidence level (0-100%) based on source quality"
+    - text: Synthesis Prompt
+    - textbox "Synthesis Prompt":
+      - /placeholder: Instructions for synthesizing findings...
+      - text: "Synthesize the research findings into: 1. Coherent summary of key discoveries 2. Connections between different sources 3. Practical recommendations 4. Identified gaps or conflicts in the data 5. Overall confidence assessment"
+  - button "Cancel"
+  - button "Start Revised Research":
+    - img
+    - text: Start Revised Research
+  - button "Close":
+    - img
+    - text: Close

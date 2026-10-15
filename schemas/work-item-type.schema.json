@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-operating-kit.dev/schemas/work-item-type.schema.json",
+  "title": "AOK Work Item Type Catalog",
+  "type": "object",
+  "required": ["kind", "version", "maxTypes", "commonSections", "types"],
+  "properties": {
+    "kind": {"const": "aok-work-item-type-catalog"},
+    "version": {"type": "integer", "minimum": 1},
+    "maxTypes": {"type": "integer", "minimum": 1},
+    "commonSections": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/section"}
+    },
+    "types": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/workItemType"}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "origin": {
+      "type": "object",
+      "required": ["kind", "id"],
+      "properties": {
+        "kind": {"type": "string", "enum": ["core", "flow", "overlay"]},
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"}
+      },
+      "additionalProperties": false
+    },
+    "hierarchy": {
+      "type": "object",
+      "required": ["parentTypes", "childTypes"],
+      "properties": {
+        "parentTypes": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+          "uniqueItems": true
+        },
+        "childTypes": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "section": {
+      "type": "object",
+      "required": ["id", "label", "description", "required", "multiline"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+        "label": {"type": "string", "minLength": 1},
+        "description": {"type": "string", "minLength": 1},
+        "required": {"type": "boolean"},
+        "multiline": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "providerMappings": {
+      "type": "object",
+      "required": ["github", "azureDevOps"],
+      "properties": {
+        "github": {
+          "type": "object",
+          "required": ["issueType"],
+          "properties": {
+            "issueType": {"type": "string", "enum": ["Feature", "Task", "Bug"]}
+          },
+          "additionalProperties": false
+        },
+        "azureDevOps": {
+          "type": "object",
+          "required": ["workItemType"],
+          "properties": {
+            "workItemType": {
+              "type": "string",
+              "enum": ["Epic", "Feature", "Task", "Bug", "$defaultRequirementWorkItemType"]
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "workItemType": {
+      "type": "object",
+      "required": [
+        "id",
+        "displayName",
+        "description",
+        "origin",
+        "canonicalCategory",
+        "hierarchy",
+        "taskPacketFields",
+        "sourcePath",
+        "sections",
+        "providerMappings"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "displayName": {"type": "string", "minLength": 1},
+        "description": {"type": "string", "minLength": 1},
+        "origin": {"$ref": "#/$defs/origin"},
+        "canonicalCategory": {
+          "type": "string",
+          "enum": ["epic", "feature", "task", "bug", "spike", "incident", "risk", "change"]
+        },
+        "hierarchy": {"$ref": "#/$defs/hierarchy"},
+        "taskPacketFields": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "sourcePath": {"type": "string", "pattern": "^templates/.+\\.md$"},
+        "sections": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/section"}
+        },
+        "providerMappings": {"$ref": "#/$defs/providerMappings"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,6 @@
+- listbox:
+  - option "Uniform - All actions same cost"
+  - option "Time - Based on execution time"
+  - option "Resources - Based on resource usage"
+  - option "Tokens - Based on token consumption"
+  - option "Hybrid - Combination of factors" [selected]

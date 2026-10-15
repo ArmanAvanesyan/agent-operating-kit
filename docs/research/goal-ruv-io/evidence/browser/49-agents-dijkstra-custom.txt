@@ -1,0 +1,48 @@
+- region "Notifications (F8)":
+  - list:
+    - status:
+      - text: Settings Saved Your advanced configuration has been saved.
+      - button:
+        - img
+- region "Notifications alt+T"
+- status: Notification Settings SavedYour advanced configuration has been saved.
+- dialog "Advanced Agent Configuration":
+  - heading "Advanced Agent Configuration" [level=2]:
+    - img
+    - text: Advanced Agent Configuration
+  - paragraph: Configure swarm topology, GOAP planning, execution strategy, and model routing
+  - text: Quick Presets
+  - button "Development development Fast iteration, verbose logging"
+  - button "Production production Optimized performance, strict validation"
+  - button "Budget budget Cost-optimized, slower execution"
+  - button "Quality quality Maximum quality, higher cost"
+  - tablist:
+    - tab "Swarm"
+    - tab "GOAP" [selected]
+    - tab "Execution"
+    - tab "Model"
+  - tabpanel "GOAP":
+    - text: Planning Algorithm
+    - combobox "Planning Algorithm": Dijkstra - Guaranteed optimal
+    - text: Heuristic Function
+    - combobox "Heuristic Function": Custom Heuristic
+    - text: Cost Calculation Method
+    - combobox "Cost Calculation Method": Hybrid - Combination of factors
+    - text: Optimization Options Enable Optimization
+    - paragraph: Optimize generated plans
+    - switch [checked]
+    - text: Detect Parallel Actions
+    - paragraph: Find actions that can run concurrently
+    - switch [checked]
+    - text: Remove Redundant Actions
+    - paragraph: Eliminate unnecessary steps
+    - switch [checked]
+  - button "Reset to Defaults":
+    - img
+    - text: Reset to Defaults
+  - button "Save Configuration":
+    - img
+    - text: Save Configuration
+  - button "Close":
+    - img
+    - text: Close

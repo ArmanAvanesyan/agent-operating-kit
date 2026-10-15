@@ -1,0 +1,100 @@
+{
+  "id": "fdd-feature",
+  "methodology": "fdd",
+  "hierarchy": [
+    {
+      "id": "subjectArea",
+      "displayName": "Subject Area"
+    },
+    {
+      "id": "businessActivity",
+      "displayName": "Business Activity",
+      "alias": "Feature Set"
+    },
+    {
+      "id": "feature",
+      "displayName": "Feature"
+    }
+  ],
+  "naming": {
+    "preferredStyle": "short",
+    "prepositions": ["by", "for", "of", "to"],
+    "styles": [
+      {
+        "id": "short",
+        "template": "<action> <result> <by|for|of|to> <object>",
+        "example": "Generate PDF for Invoice"
+      },
+      {
+        "id": "classic",
+        "template": "<action> the <result> <by|for|of|to> a|an <object>",
+        "example": "Calculate the total amount of a Sale"
+      }
+    ]
+  },
+  "maxEstimatedEffortDays": 10,
+  "gateInputs": [
+    "subjectArea",
+    "businessActivity",
+    "featureId",
+    "featureName",
+    "featureNameParts",
+    "estimatedEffortDays",
+    "approvedFeatureListMembership",
+    "designInspectionPassed",
+    "featureMilestones",
+    "codeInspectionPassed",
+    "verificationEvidence",
+    "promotedToBuild"
+  ],
+  "milestones": [
+    {
+      "id": "domain-walkthrough",
+      "name": "Domain Walkthrough",
+      "order": 1,
+      "weight": 1,
+      "cumulative": 1,
+      "lifecycleStage": "design-by-feature"
+    },
+    {
+      "id": "design",
+      "name": "Design",
+      "order": 2,
+      "weight": 40,
+      "cumulative": 41,
+      "lifecycleStage": "design-by-feature"
+    },
+    {
+      "id": "design-inspection",
+      "name": "Design Inspection",
+      "order": 3,
+      "weight": 3,
+      "cumulative": 44,
+      "lifecycleStage": "design-by-feature"
+    },
+    {
+      "id": "code",
+      "name": "Code",
+      "order": 4,
+      "weight": 45,
+      "cumulative": 89,
+      "lifecycleStage": "build-by-feature"
+    },
+    {
+      "id": "code-inspection",
+      "name": "Code Inspection",
+      "order": 5,
+      "weight": 10,
+      "cumulative": 99,
+      "lifecycleStage": "build-by-feature"
+    },
+    {
+      "id": "promote-to-build",
+      "name": "Promote to Build",
+      "order": 6,
+      "weight": 1,
+      "cumulative": 100,
+      "lifecycleStage": "build-by-feature"
+    }
+  ]
+}

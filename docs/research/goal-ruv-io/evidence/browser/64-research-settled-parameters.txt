@@ -1,0 +1,74 @@
+- region "Notifications alt+T"
+- dialog "Advanced Research Settings":
+  - heading "Advanced Research Settings" [level=2]:
+    - img
+    - text: Advanced Research Settings
+  - paragraph: Fine-tune GOAP planner, model routing, and per-step prompts for this research run.
+  - img
+  - text: "AI-Optimize Settings by Research Type:"
+  - button "Academic Research Deep, rigorous academic analysis":
+    - img
+    - text: Academic Research Deep, rigorous academic analysis
+  - button "Industry Quick Scan Fast business insights":
+    - img
+    - text: Industry Quick Scan Fast business insights
+  - button "Competitive Intel Market & competitor analysis":
+    - img
+    - text: Competitive Intel Market & competitor analysis
+  - button "Technical Study Engineering feasibility":
+    - img
+    - text: Technical Study Engineering feasibility
+  - button "Market Trends Trend analysis & forecasting":
+    - img
+    - text: Market Trends Trend analysis & forecasting
+  - button "Medical/Clinical Evidence-based medical research":
+    - img
+    - text: Medical/Clinical Evidence-based medical research
+  - button "Startup Validation Business idea validation":
+    - img
+    - text: Startup Validation Business idea validation
+  - button "Policy & Regulatory Compliance & legal research":
+    - img
+    - text: Policy & Regulatory Compliance & legal research
+  - paragraph: Fine-tune how the AI conducts research by configuring GOAP planning parameters, AI prompts, execution settings, and source filters.
+  - tablist:
+    - tab "Guidance":
+      - img
+      - text: Guidance
+    - tab "GOAP":
+      - img
+      - text: GOAP
+    - tab "Prompts":
+      - img
+      - text: Prompts
+    - tab "Parameters" [selected]:
+      - img
+      - text: Parameters
+    - tab "Actions":
+      - img
+      - text: Actions
+    - tab "Filters":
+      - img
+      - text: Filters
+  - tabpanel "Parameters":
+    - heading "Research Parameters" [level=3]:
+      - img
+      - text: Research Parameters
+    - paragraph: Fine-tune the research execution settings
+    - text: Maximum Sources 15
+    - slider
+    - text: Minimum Confidence (%) 85%
+    - slider
+    - text: Maximum Research Steps 7
+    - slider
+    - text: Parallel Agents 3
+    - slider
+    - text: Timeout (seconds) 120s
+    - slider
+  - button "Cancel"
+  - button "Start Revised Research":
+    - img
+    - text: Start Revised Research
+  - button "Close":
+    - img
+    - text: Close

@@ -1,0 +1,5 @@
+- listbox:
+  - option "Mesh - Fully connected, peer-to-peer"
+  - option "Hierarchical - Tree structure with coordinators" [selected]
+  - option "Ring - Circular communication"
+  - option "Star - Centralized coordinator"

@@ -1,0 +1,11 @@
+### Planning and pull
+
+- Pull the highest-priority `Ready` task only when the primary agent has capacity.
+- Keep continuous flow; no sprint or mandatory timebox is implied.
+- Keep each change issue-sized and preserve explicit acceptance criteria.
+
+### Work in progress
+
+- Each primary agent may own at most one `In Progress` task.
+- Move work through the neutral `Inbox` to `Done` statuses without introducing methodology-specific states.
+- Surface blocked work as `Blocked`; do not hide stalled flow by starting replacement work.

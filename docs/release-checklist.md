@@ -22,6 +22,7 @@ Run Python kit validation (content, manifests, packaging sources):
 ./scripts/validate.sh
 ./scripts/aok validate
 python3 -m py_compile scripts/aok
+python3 -m unittest discover -s tests -v
 go test ./...
 ```
 
@@ -77,6 +78,17 @@ Spot check Codex local-environment templates:
 - `docs/migration-from-claude-code-toolbox.md` uses the canonical marketplace
   key `aok-claude-code`.
 - `docs/uninstall-and-rollback.md` covers binary + shim removal and kit tree.
+- `docs/work-system-bootstrap.md` matches the scaffolded provider behavior and
+  binding schema.
+- `docs/methodology-profiles.md` matches the active profile catalog, generated
+  default policy, and project CLI.
+- `docs/work-item-types.md` matches the 19-type catalog, local provider
+  renderers, and offline scaffold validation.
+- Release kit, Codex plugin, and pack archives include the neutral
+  `methodologies/` and `work-items/` catalogs and templates.
+- Extracted release kits pass `scripts/aok validate`, including required sync
+  and release workflow files and executable Codex setup helpers. The release
+  tests verify the archive contents and extracted-kit validation.
 
 ## Compatibility Checks
 

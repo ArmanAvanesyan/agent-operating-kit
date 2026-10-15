@@ -1,0 +1,412 @@
+[
+  {
+    "time": "2026-10-15T14:04:39.497Z",
+    "test": "research XPath",
+    "result": "PASS",
+    "text": "Advanced"
+  },
+  {
+    "time": "2026-10-15T14:04:43.480Z",
+    "test": "research Cancel discards draft",
+    "result": "PASS"
+  },
+  {
+    "time": "2026-10-15T14:04:44.751Z",
+    "test": "research preset Academic Research",
+    "result": "BACKEND_ERROR",
+    "httpStatus": 502,
+    "networkStart": 0
+  },
+  {
+    "time": "2026-10-15T14:04:45.197Z",
+    "test": "research preset Industry Quick Scan",
+    "result": "BACKEND_ERROR",
+    "httpStatus": 502,
+    "networkStart": 1
+  },
+  {
+    "time": "2026-10-15T14:04:48.291Z",
+    "test": "research preset Competitive Intel",
+    "result": "BACKEND_ERROR",
+    "httpStatus": 502,
+    "networkStart": 2
+  },
+  {
+    "time": "2026-10-15T14:04:50.319Z",
+    "test": "research preset Technical Study",
+    "result": "BACKEND_ERROR",
+    "httpStatus": 502,
+    "networkStart": 3
+  },
+  {
+    "time": "2026-10-15T14:04:50.949Z",
+    "test": "research preset Market Trends",
+    "result": "BACKEND_ERROR",
+    "httpStatus": 502,
+    "networkStart": 4
+  },
+  {
+    "time": "2026-10-15T14:04:51.380Z",
+    "test": "research preset Medical/Clinical",
+    "result": "BACKEND_ERROR",
+    "httpStatus": 502,
+    "networkStart": 5
+  },
+  {
+    "time": "2026-10-15T14:04:51.815Z",
+    "test": "research preset Startup Validation",
+    "result": "BACKEND_ERROR",
+    "httpStatus": 502,
+    "networkStart": 6
+  },
+  {
+    "time": "2026-10-15T14:04:52.247Z",
+    "test": "research preset Policy & Regulatory",
+    "result": "BACKEND_ERROR",
+    "httpStatus": 502,
+    "networkStart": 7
+  },
+  {
+    "time": "2026-10-15T14:04:57.429Z",
+    "test": "Advanced apply does not start plan",
+    "result": "FAIL"
+  },
+  {
+    "time": "2026-10-15T14:04:57.521Z",
+    "test": "research reopen keeps applied goal",
+    "result": "PASS"
+  },
+  {
+    "time": "2026-10-15T14:04:59.698Z",
+    "test": "research reload resets config",
+    "result": "PASS"
+  },
+  {
+    "time": "2026-10-15T14:05:01.778Z",
+    "test": "agents XPath",
+    "result": "PASS",
+    "text": "Advanced Settings"
+  },
+  {
+    "time": "2026-10-15T14:05:03.533Z",
+    "test": "autoscaling disabled hides child inputs",
+    "result": "PASS"
+  },
+  {
+    "time": "2026-10-15T14:05:03.904Z",
+    "test": "agent preset Development",
+    "result": "PASS",
+    "settings": {
+      "swarm": {
+        "topology": "hierarchical",
+        "maxAgents": 5,
+        "strategy": "balanced",
+        "autoScaling": {
+          "enabled": true,
+          "minAgents": 2,
+          "maxAgents": 20,
+          "scaleUpThreshold": 80,
+          "scaleDownThreshold": 20
+        }
+      },
+      "goap": {
+        "algorithm": "a-star",
+        "heuristic": "manhattan",
+        "costMethod": "hybrid",
+        "optimization": {
+          "enabled": true,
+          "detectParallel": true,
+          "removeRedundant": true
+        }
+      },
+      "execution": {
+        "strategy": "sequential",
+        "maxParallelTasks": 5,
+        "timeout": 300000,
+        "enableQualityGates": false
+      },
+      "modelRouter": {
+        "primaryProvider": "anthropic",
+        "strategy": "speed",
+        "maxCostPerRequest": 1,
+        "enableFallback": true
+      }
+    }
+  },
+  {
+    "time": "2026-10-15T14:05:04.553Z",
+    "test": "agent preset Production",
+    "result": "PASS",
+    "settings": {
+      "swarm": {
+        "topology": "hierarchical",
+        "maxAgents": 15,
+        "strategy": "adaptive",
+        "autoScaling": {
+          "enabled": true,
+          "minAgents": 2,
+          "maxAgents": 20,
+          "scaleUpThreshold": 80,
+          "scaleDownThreshold": 20
+        }
+      },
+      "goap": {
+        "algorithm": "a-star",
+        "heuristic": "manhattan",
+        "costMethod": "hybrid",
+        "optimization": {
+          "enabled": true,
+          "detectParallel": true,
+          "removeRedundant": true
+        }
+      },
+      "execution": {
+        "strategy": "adaptive",
+        "maxParallelTasks": 5,
+        "timeout": 300000,
+        "enableQualityGates": true
+      },
+      "modelRouter": {
+        "primaryProvider": "anthropic",
+        "strategy": "balanced",
+        "maxCostPerRequest": 1,
+        "enableFallback": true
+      }
+    }
+  },
+  {
+    "time": "2026-10-15T14:05:05.187Z",
+    "test": "agent preset Budget",
+    "result": "PASS",
+    "settings": {
+      "swarm": {
+        "topology": "hierarchical",
+        "maxAgents": 3,
+        "strategy": "specialized",
+        "autoScaling": {
+          "enabled": true,
+          "minAgents": 2,
+          "maxAgents": 20,
+          "scaleUpThreshold": 80,
+          "scaleDownThreshold": 20
+        }
+      },
+      "goap": {
+        "algorithm": "a-star",
+        "heuristic": "manhattan",
+        "costMethod": "hybrid",
+        "optimization": {
+          "enabled": true,
+          "detectParallel": true,
+          "removeRedundant": true
+        }
+      },
+      "execution": {
+        "strategy": "sequential",
+        "maxParallelTasks": 2,
+        "timeout": 300000,
+        "enableQualityGates": true
+      },
+      "modelRouter": {
+        "primaryProvider": "openrouter",
+        "strategy": "cost",
+        "maxCostPerRequest": 1,
+        "enableFallback": true
+      }
+    }
+  },
+  {
+    "time": "2026-10-15T14:05:05.850Z",
+    "test": "agent preset Quality",
+    "result": "PASS",
+    "settings": {
+      "swarm": {
+        "topology": "hierarchical",
+        "maxAgents": 20,
+        "strategy": "adaptive",
+        "autoScaling": {
+          "enabled": true,
+          "minAgents": 2,
+          "maxAgents": 20,
+          "scaleUpThreshold": 80,
+          "scaleDownThreshold": 20
+        }
+      },
+      "goap": {
+        "algorithm": "a-star",
+        "heuristic": "manhattan",
+        "costMethod": "hybrid",
+        "optimization": {
+          "enabled": true,
+          "detectParallel": true,
+          "removeRedundant": true
+        }
+      },
+      "execution": {
+        "strategy": "parallel",
+        "maxParallelTasks": 5,
+        "timeout": 300000,
+        "enableQualityGates": true
+      },
+      "modelRouter": {
+        "primaryProvider": "anthropic",
+        "strategy": "quality",
+        "maxCostPerRequest": 1,
+        "enableFallback": true
+      }
+    }
+  },
+  {
+    "time": "2026-10-15T14:05:06.436Z",
+    "test": "agent preset combination Budget → Production",
+    "result": "PASS",
+    "settings": {
+      "swarm": {
+        "topology": "hierarchical",
+        "maxAgents": 15,
+        "strategy": "adaptive",
+        "autoScaling": {
+          "enabled": true,
+          "minAgents": 2,
+          "maxAgents": 20,
+          "scaleUpThreshold": 80,
+          "scaleDownThreshold": 20
+        }
+      },
+      "goap": {
+        "algorithm": "a-star",
+        "heuristic": "manhattan",
+        "costMethod": "hybrid",
+        "optimization": {
+          "enabled": true,
+          "detectParallel": true,
+          "removeRedundant": true
+        }
+      },
+      "execution": {
+        "strategy": "adaptive",
+        "maxParallelTasks": 2,
+        "timeout": 300000,
+        "enableQualityGates": true
+      },
+      "modelRouter": {
+        "primaryProvider": "openrouter",
+        "strategy": "balanced",
+        "maxCostPerRequest": 1,
+        "enableFallback": true
+      }
+    }
+  },
+  {
+    "time": "2026-10-15T14:05:07.019Z",
+    "test": "agent preset combination Development → Budget",
+    "result": "PASS",
+    "settings": {
+      "swarm": {
+        "topology": "hierarchical",
+        "maxAgents": 3,
+        "strategy": "specialized",
+        "autoScaling": {
+          "enabled": true,
+          "minAgents": 2,
+          "maxAgents": 20,
+          "scaleUpThreshold": 80,
+          "scaleDownThreshold": 20
+        }
+      },
+      "goap": {
+        "algorithm": "a-star",
+        "heuristic": "manhattan",
+        "costMethod": "hybrid",
+        "optimization": {
+          "enabled": true,
+          "detectParallel": true,
+          "removeRedundant": true
+        }
+      },
+      "execution": {
+        "strategy": "sequential",
+        "maxParallelTasks": 2,
+        "timeout": 300000,
+        "enableQualityGates": false
+      },
+      "modelRouter": {
+        "primaryProvider": "openrouter",
+        "strategy": "cost",
+        "maxCostPerRequest": 1,
+        "enableFallback": true
+      }
+    }
+  },
+  {
+    "time": "2026-10-15T14:05:07.582Z",
+    "test": "agent preset combination Budget → Quality",
+    "result": "PASS",
+    "settings": {
+      "swarm": {
+        "topology": "hierarchical",
+        "maxAgents": 20,
+        "strategy": "adaptive",
+        "autoScaling": {
+          "enabled": true,
+          "minAgents": 2,
+          "maxAgents": 20,
+          "scaleUpThreshold": 80,
+          "scaleDownThreshold": 20
+        }
+      },
+      "goap": {
+        "algorithm": "a-star",
+        "heuristic": "manhattan",
+        "costMethod": "hybrid",
+        "optimization": {
+          "enabled": true,
+          "detectParallel": true,
+          "removeRedundant": true
+        }
+      },
+      "execution": {
+        "strategy": "parallel",
+        "maxParallelTasks": 2,
+        "timeout": 300000,
+        "enableQualityGates": true
+      },
+      "modelRouter": {
+        "primaryProvider": "anthropic",
+        "strategy": "quality",
+        "maxCostPerRequest": 1,
+        "enableFallback": true
+      }
+    }
+  },
+  {
+    "time": "2026-10-15T14:05:08.954Z",
+    "test": "agent unsaved close retains draft",
+    "result": "PASS"
+  },
+  {
+    "time": "2026-10-15T14:05:08.956Z",
+    "test": "agent unsaved draft leaves storage unchanged",
+    "result": "PASS"
+  },
+  {
+    "time": "2026-10-15T14:05:10.873Z",
+    "test": "agent reload discards unsaved draft",
+    "result": "PASS"
+  },
+  {
+    "time": "2026-10-15T14:05:13.010Z",
+    "test": "agent save survives reload",
+    "result": "PASS"
+  },
+  {
+    "time": "2026-10-15T14:05:14.783Z",
+    "test": "agent reset without save preserves stored budget",
+    "result": "PASS"
+  },
+  {
+    "time": "2026-10-15T14:05:15.178Z",
+    "test": "browser verification complete",
+    "result": "PASS"
+  }
+]

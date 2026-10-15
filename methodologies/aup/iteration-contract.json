@@ -1,0 +1,61 @@
+{
+  "id": "aup-iteration",
+  "methodology": "aup",
+  "identifier": {
+    "field": "iterationId",
+    "pattern": "^[A-Z][A-Z0-9]*-[0-9]+$",
+    "examples": ["I-12", "ELAB-2", "REL2-003"]
+  },
+  "objective": {
+    "field": "iterationObjective",
+    "rule": "A non-empty outcome for the iteration."
+  },
+  "selectedWork": {
+    "idField": "requirementId",
+    "typeField": "requirementType",
+    "types": [
+      "use-case",
+      "user-story",
+      "non-functional",
+      "business-rule",
+      "defect",
+      "technical"
+    ]
+  },
+  "disciplines": [
+    {"id": "model", "displayName": "Model", "taskField": "model"},
+    {"id": "implementation", "displayName": "Implementation", "taskField": "implementation"},
+    {"id": "test", "displayName": "Test", "taskField": "test"},
+    {"id": "deployment", "displayName": "Deployment", "taskField": "deployment"},
+    {"id": "configuration-management", "displayName": "Configuration Management", "taskField": "configurationManagement"},
+    {"id": "project-management", "displayName": "Project Management", "taskField": "projectManagement"},
+    {"id": "environment", "displayName": "Environment", "taskField": "environment"}
+  ],
+  "disciplineEvidence": {
+    "field": "disciplineEvidence",
+    "requiredForEveryDiscipline": true,
+    "evidenceField": "evidence",
+    "notApplicableField": "notApplicableRationale"
+  },
+  "milestones": [
+    {"id": "lco", "name": "Lifecycle Objectives", "order": 1, "lifecycleStage": "inception", "gate": "lifecycle-objectives"},
+    {"id": "lca", "name": "Lifecycle Architecture", "order": 2, "lifecycleStage": "elaboration", "gate": "lifecycle-architecture"},
+    {"id": "ioc", "name": "Initial Operational Capability", "order": 3, "lifecycleStage": "construction", "gate": "initial-operational-capability"},
+    {"id": "pr", "name": "Product Release", "order": 4, "lifecycleStage": "transition", "gate": "product-release"}
+  ],
+  "completionMeasure": "iteration-objective-and-selected-work-accepted-with-discipline-evidence",
+  "gateInputs": [
+    "iterationId",
+    "iterationObjective",
+    "selectedWork",
+    "disciplineEvidence",
+    "environmentReadiness",
+    "architectureRiskEvidence",
+    "integratedBuild",
+    "verificationEvidence",
+    "configurationBaseline",
+    "deploymentReadiness",
+    "stakeholderAcceptance",
+    "operationalReadiness"
+  ]
+}

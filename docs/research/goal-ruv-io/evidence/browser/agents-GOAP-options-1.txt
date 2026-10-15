@@ -1,0 +1,5 @@
+- listbox:
+  - option "Manhattan Distance" [selected]
+  - option "Euclidean Distance"
+  - option "Hamming Distance"
+  - option "Custom Heuristic"

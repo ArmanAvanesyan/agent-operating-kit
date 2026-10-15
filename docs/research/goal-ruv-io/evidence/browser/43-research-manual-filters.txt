@@ -1,0 +1,96 @@
+- region "Notifications alt+T"
+- dialog "Advanced Research Settings":
+  - heading "Advanced Research Settings" [level=2]:
+    - img
+    - text: Advanced Research Settings
+  - paragraph: Fine-tune GOAP planner, model routing, and per-step prompts for this research run.
+  - img
+  - text: "AI-Optimize Settings by Research Type:"
+  - button "Academic Research Deep, rigorous academic analysis":
+    - img
+    - text: Academic Research Deep, rigorous academic analysis
+  - button "Industry Quick Scan Fast business insights":
+    - img
+    - text: Industry Quick Scan Fast business insights
+  - button "Competitive Intel Market & competitor analysis":
+    - img
+    - text: Competitive Intel Market & competitor analysis
+  - button "Technical Study Engineering feasibility":
+    - img
+    - text: Technical Study Engineering feasibility
+  - button "Market Trends Trend analysis & forecasting":
+    - img
+    - text: Market Trends Trend analysis & forecasting
+  - button "Medical/Clinical Evidence-based medical research":
+    - img
+    - text: Medical/Clinical Evidence-based medical research
+  - button "Startup Validation Business idea validation":
+    - img
+    - text: Startup Validation Business idea validation
+  - button "Policy & Regulatory Compliance & legal research":
+    - img
+    - text: Policy & Regulatory Compliance & legal research
+  - paragraph: Fine-tune how the AI conducts research by configuring GOAP planning parameters, AI prompts, execution settings, and source filters.
+  - tablist:
+    - tab "Guidance":
+      - img
+      - text: Guidance
+    - tab "GOAP":
+      - img
+      - text: GOAP
+    - tab "Prompts":
+      - img
+      - text: Prompts
+    - tab "Parameters":
+      - img
+      - text: Parameters
+    - tab "Actions":
+      - img
+      - text: Actions
+    - tab "Filters" [selected]:
+      - img
+      - text: Filters
+  - tabpanel "Filters":
+    - heading "Source Filters" [level=3]:
+      - img
+      - text: Source Filters
+    - paragraph: Control which sources are included in research
+    - text: Date Range
+    - combobox: Past Year
+    - text: Source Types
+    - switch "academic" [checked]
+    - text: academic
+    - switch "technical" [checked]
+    - text: technical
+    - switch "industry" [checked]
+    - text: industry
+    - switch "news"
+    - text: news
+    - switch "blogs"
+    - text: blogs
+    - switch "documentation"
+    - text: documentation Exclude Domains
+    - textbox "e.g., example.com"
+    - button "Add"
+    - text: example.com
+    - button "×"
+    - text: Languages
+    - switch "English" [checked]
+    - text: English
+    - switch "Spanish"
+    - text: Spanish
+    - switch "French"
+    - text: French
+    - switch "German"
+    - text: German
+    - switch "Chinese"
+    - text: Chinese
+    - switch "Japanese"
+    - text: Japanese
+  - button "Cancel"
+  - button "Start Revised Research":
+    - img
+    - text: Start Revised Research
+  - button "Close":
+    - img
+    - text: Close

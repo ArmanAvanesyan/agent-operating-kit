@@ -223,6 +223,87 @@ intentionally want AOK to replace `AGENTS.md` after writing a backup.
 
 See `docs/project-init-guide.md` for the full guide.
 
+Scaffolded delivery frameworks can be inspected without selecting them:
+
+```bash
+./scripts/aok methodology scaffold /path/to/project --flow fdd
+./scripts/aok methodology scaffold /path/to/project --flow dsdm
+./scripts/aok methodology scaffold /path/to/project --flow aup
+./scripts/aok methodology validate-feature --name "Generate PDF for Invoice"
+./scripts/aok methodology validate-requirement \
+  --id REQ-014 \
+  --outcome "Produce customer-ready invoice PDF" \
+  --project-moscow must \
+  --acceptance "The generated PDF matches the approved invoice content"
+./scripts/aok methodology validate-iteration \
+  --id I-12 \
+  --stage construction \
+  --objective "Deliver invoice generation increment" \
+  --work-item use-case=UC-03 \
+  --discipline model=docs/architecture.md \
+  --discipline implementation=PR-142 \
+  --discipline test=reports/test-results.xml \
+  --discipline deployment=not-applicable:No-release-activity \
+  --discipline configuration-management=build-142 \
+  --discipline project-management=docs/iteration-plan.md \
+  --discipline environment=ci/run-912
+```
+
+The export contains methodology-specific roles, artifacts, lifecycle stages,
+ceremonies, and gates. It does not modify project methodology state.
+FDD exports curated domain, feature-list, planning, design, inspection, and
+milestone-tracking templates; the validator checks short and classic FDD names
+without activating the flow.
+
+## Work-System Bootstrap
+
+After local project initialization, inspect an existing GitHub Project or Azure
+DevOps board against AOK's neutral workflow contract:
+
+```bash
+./scripts/aok work-system setup github --owner OWNER --project-number 12
+./scripts/aok work-system setup azure-devops \
+  --organization https://dev.azure.com/ORG --project PROJECT
+./scripts/aok work-system validate /path/to/project
+```
+
+Both providers are currently scaffolded and read-only. A conformant existing
+work system can be recorded with `--write-binding`; remote provisioning is not
+yet enabled. See `docs/work-system-bootstrap.md`.
+
+## Methodology Profiles
+
+Methodology, work-item, and work-system commands currently use the contributor
+Python entrypoint (`./scripts/aok`), not the distributed Go binary.
+
+Projects use one flow and optional practice overlays independently of their
+GitHub or Azure DevOps binding:
+
+```bash
+./scripts/aok project init /path/to/project \
+  --flow kanban --overlay xp --overlay lean
+./scripts/aok methodology validate /path/to/project
+```
+
+Kanban is the active default flow. XP and Lean are active overlays. FDD, DSDM,
+and AUP are scaffolded catalog entries, and AM is planned. See
+`docs/methodology-profiles.md`.
+
+## Work-Item Templates
+
+Generate methodology-aware neutral templates, GitHub Issue Forms, and Azure
+DevOps desired-state guidance without changing remote resources:
+
+```bash
+./scripts/aok work-item list --flow kanban --overlay xp
+./scripts/aok work-item scaffold /path/to/project
+./scripts/aok work-item validate /path/to/project
+```
+
+Every export includes Epic, Feature, Task, Bug, Spike, Incident, Risk, and
+Change. Selected flows and overlays add their native types. See
+`docs/work-item-types.md`.
+
 ## Repository Relationships
 
 - `ArmanAvanesyan/agent-operating-kit` is the canonical public project.
@@ -248,15 +329,17 @@ AOK can render each pack into parseable target contracts:
 
 ## Usage Model
 
-1. Create or sync a task packet.
-2. Select a role for implementation and one role for QA or review.
-3. Run pre-hooks to check project context, scope, worktree safety, and risk.
-4. Execute one issue-sized change.
-5. Run verification and after-hooks.
-6. Record GitHub, swarmd, or local lifecycle updates.
+1. Initialize the project and select its flow and optional overlays.
+2. Create or sync a task packet.
+3. Select a role for implementation and one role for QA or review.
+4. Run pre-hooks to check project context, scope, worktree safety, and risk.
+5. Execute one issue-sized change.
+6. Run verification and after-hooks.
+7. Record GitHub, swarmd, or local lifecycle updates.
 
 The neutral schema lives in `schemas/`. Tool-specific target behavior lives in
-`adapters/`. Reusable workflow content lives in `packs/`.
+`adapters/`. Methodology profiles live in `methodologies/`, work-item contracts
+live in `work-items/`, and reusable workflow content lives in `packs/`.
 
 ## Claude Code Toolbox Migration
 
@@ -279,6 +362,7 @@ migration guidance.
 - CLI distribution (Go binary vs Python): `docs/cli-distribution.md`
 - Codex local environments: `docs/codex-local-environments.md`
 - Project initialization: `docs/project-init-guide.md`
+- Methodology-aware work items: `docs/work-item-types.md`
 - Target support: `docs/targets-support-matrix.md`
 - Host compatibility: `docs/host-compatibility.md`
 - Release checklist: `docs/release-checklist.md`

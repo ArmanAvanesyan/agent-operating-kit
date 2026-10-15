@@ -1,0 +1,172 @@
+ now define fully what is the following tools: https://goal.ruv.io https://goal.ruv.io/agents
+
+I'll fetch both pages and describe what they are.
+
+⏺ Fetch(https://goal.ruv.io)
+Received 4.3KB (200 OK)
+
+⏺ Fetch(https://goal.ruv.io/agents)
+Received 4.3KB (200 OK)
+
+The pages render via JavaScript, so a plain fetch only got the title. I'll pull the raw HTML for bundle/API clues, use browser tools to render the pages properly, and search for public references to the product. · summarized
+
+  Called claude-in-chrome, ran 2 shell commands
+
+⏺ Web Search(""RuFlo Research" OR "goal.ruv.io" GOAP ruvnet")
+Did 1 search in 6s
+
+⏺ Web Search("ruvnet goal-oriented action planning GOAP agent planner github claude-flow ruflo "goal"")
+Did 1 search in 7s
+
+  Ran 2 shell commands
+
+⏺ Fetch(https://github.com/ruvnet/ruflo/wiki/Goal-Module)
+Received 246KB (200 OK)
+
+⏺ Fetch(https://raw.githubusercontent.com/ruvnet/ruflo/main/plugins/ruflo-goals/README.md)
+Received 6.1KB (200 OK)
+
+  Ran 4 shell commands
+
+Nearly done. One last look at how the agents dashboard sources its data and what the live bundle calls, then I'll write up the definition.
+
+  Ran 1 shell command
+
+Research is complete. Here is the full definition.
+
+What goal.ruv.io is
+
+RuFlo Research is a hosted web app from Reuven Cohen (ruvnet), the author of claude-flow / RuFlo. Its tagline is "Autonomous AI Research with Goal-Oriented Action Planning." You type a research goal in plain English, and the app decomposes it into an ordered plan of actions using GOAP (Goal-Oriented Action Planning, a game-AI technique) with A* search, runs each step through an LLM-backed research pipeline, and produces a final report with findings, references and action items. It is one of two RuFlo web front-ends; the sister UI is flo.ruv.io.
+
+Facts about provenance and status:
+
+- Source lives in the RuFlo monorepo at v3/goal_ui/ (MIT license). It is a Vite + React 18 + TypeScript + Tailwind + shadcn/ui app with Supabase Edge Functions, hosted on Netlify.
+- It began as a Lovable-generated app and was imported and rebranded as RuFlo Research on 2026-05-01 (PR #1693). Its npm package name is @ruflo/research.
+- An open roadmap issue (#1692) tracks wiring it into the rest of RuFlo. Phase 1 (decouple from Lovable's AI gateway) and Phase 2 (connect to real CLI agents) are unchecked.
+- On 2026-09-29 the project removed goal.ruv.io and flo.ruv.io from the main READMEs (PR #3554). The site is still live, but it is no longer promoted as a headline feature.
+
+How it works
+
+Planner. src/lib/goapPlanner.ts is a small, classic GOAP implementation. World state is eight boolean flags: goalDefined, goalParsed, stateAssessed, informationGathered, documentsAnalyzed, knowledgeSynthesized, insightsGenerated, verified. Each action has a name, a cost, preconditions and effects over those flags, and a step generator. A* searches from the initial state to the goal state, ordering the open list by cost plus heuristic, where the heuristic is the number of unmet goal conditions. If a step fails, the planner re-runs A* from the current state rather than restarting ("adaptive replanning").
+
+Pipeline. The resulting plan is a sequence of research phases (define goal, assess state, gather information, analyze documents, synthesize knowledge, generate insights, verify). Each phase calls a backend function; the UI renders the plan as a collapsible action tree with progress, blocked branches and rollbacks, then shows a Final Research Report, key insights, academic references, logs, and AI-generated action items.
+
+Backend. Five Supabase Edge Functions: research-step, generate-research-goal, generate-action-items, research-api, optimize-research-config. The functions call Lovable's AI gateway with Google Gemini models (default google/gemini-2.5-flash, with flash-lite and pro options). The live bundle now routes these calls through a Google Cloud Run service named ruflo-research-fns, authenticated with a public token header shipped in the browser bundle. Settings panels let the user pick models, toggle replanning, control sources, and edit per-step prompts.
+
+Embeddable widget. npm run build:widget produces widget.js and widget.css. A host page adds a ruflo-research-widget-container div, sets window.RufloResearchWidgetConfig, and loads the script from goal.ruv.io. The global window.RufloResearchWidget exposes init(containerId) and version.
+
+Local run.
+
+cd v3/goal_ui && npm install && npm run dev    # http://localhost:8080
+
+What goal.ruv.io/agents is
+
+The /agents route is the Agent Swarm dashboard, rendered by src/pages/Agents.tsx. It presents a research-to-development flow: a research phase, then a "Development Phase" where work is handed to a "Coding Agent Swarm." It has Dashboard, Tasks, Execution, Quality and Logs tabs, with Execution subdivided into plan, current step, agent activity and event timeline.
+
+The agent roster is fixed in code. The development swarm is six agents: Architecture, Implementation, Testing, Code Review, Documentation, DevOps. The research side names a Research Agent plus specialists seen in the bundle such as Search Agent, Parser Agent, Inference Agent, Evidence Weigher, Resource Planner, Validator Agent, Audit Agent and Quality Assurance Agent. The sample execution plan is five actions with costs (Setup Architecture 3, Design API 2, Implement Backend 5, Write Tests 4, Deploy 1), which is the same GOAP cost model applied to coding work.
+
+Important caveat: the dashboard is demo state. Agent statuses cycle between idle and working from the UI's own timers, and task counters are random numbers. The roadmap issue says explicitly that surfacing the dashboard against agents actually spawned by the RuFlo CLI or MCP is future work. It is a visualization of what RuFlo's swarm model looks like, not live telemetry from running agents.
+
+Relationship to the RuFlo CLI and plugin
+
+The same GOAP idea exists in three places in the RuFlo ecosystem, and the web app is currently the least connected one:
+
+- CLI: npx claude-flow@alpha goal init writes a goal-planner agent definition to .claude/agents/goal/goal-planner.md. You already have this agent family installed locally under ~/.claude/agents/.
+- Plugin: ruflo-goals (install with /plugin marketplace add ruvnet/ruflo then /plugin install ruflo-goals@ruflo) ships skills goal-plan, deep-research, horizon-track, research-synthesize, dossier-collect, agents goal-planner, deep-researcher, horizon-tracker, dossier-investigator, and a /goals command. Its planner persists to AgentDB and supports budget caps and evidence grading.
+- Web app: goal.ruv.io, the standalone UI described above. Bridging its planner to the plugin's goal-planner so plans persist in AgentDB is roadmap Phase 2.
+
+Sources:
+- goal.ruv.io (https://goal.ruv.io/) and its page metadata (https://giption, OG tags)
+- RuFlo Research README, v3/goal_ui (https://github.com/ruvnet/ruflo/blob/main/v3/goal_ui/README.md)
+- Issue #1692, RuFlo Research integration roadmap (https://github.com/ruvnet/ruflo/issues/1692)
+- PR #1693, rebrand and cleanup (https://github.com/ruvnet/ruflo/pull/1693)
+- PR #3554, remove flo.ruv.io and goal.ruv.io from README (https://gi/3554)
+- ruflo-goals plugin (https://github.com/ruvnet/ruflo/tree/main/plugins/ruflo-goals)
+- Goal Module wiki (https://github.com/ruvnet/ruflo/wiki/Goal-Module) and agent-goal-planner skill (https://github.com/ruvnet/ruflo/blob/main/.agents/skills/agent-goal-planner/SKILL.md)
+- Source files read directly: src/lib/goapPlanner.ts, src/pages/Agents.tsx, src/App.tsx, supabase/functions/research-step/index.ts, and the production JS bundle at goal.ruv.io
+
+❯ no, just from ui we have configs and different combination we need to extract that logics
+
+Understood. You want the configuration model behind the UI: every setults, the presets, and how combinations change behavior. The source in v3/goal_ui/src is the authoritative place for that, so I'll pull the config components and the functions that consume them.
+
+  Read 3 files, ran 3 shell commands
+
+Got the Advanced Agent Configuration and Revise Research settings mapped out. Now I'll trace how Index.tsx and the research-step function consume each field, plus check the remaining config surfaces: AI Research Settings, widget config, and the public API. · summarized
+
+  Read 2 files, ran 4 shell commands
+
+I have the full picture now. Writing the extracted configuration model to a file, then summarizing the logic.
+
+  Made 1 scratchpad edit +271
+
+Extraction done. The full model is in goal-ruv-io-config-model.md in the session scratchpad; the logic below is the part that matters.
+
+Six config surfaces, two that do anything
+
+┌─────────────────────────────────────┬─────────────────────────────────────────────────────┬────────────────────────────────────┬──────────────────────────────┐
+│               Surface               │                       Object                        │               Stored               │     Actually consumed by     │
+├─────────────────────────────────────┼─────────────────────────────────────────────────────┼────────────────────────────────────┼──────────────────────────────┤
+│ Goal + category buttons             │ goal string, category → preset                      │ none                               │ planner text, research-step  │
+├─────────────────────────────────────┼─────────────────────────────────────────────────────┼────────────────────────────────────┼──────────────────────────────┤
+│ Advanced / Revise Research form (6  │ ResearchConfig                                      │ React state                        │ research-step prompt         │
+│ tabs)                               │                                                     │                                    │ (partially)                  │
+├─────────────────────────────────────┼─────────────────────────────────────────────────────┼────────────────────────────────────┼──────────────────────────────┤
+│ AI tab in widget customizer         │ enableAI, aiModel                                   │ React state                        │ research-step model          │
+├─────────────────────────────────────┼─────────────────────────────────────────────────────┼────────────────────────────────────┼──────────────────────────────┤
+│ Advanced Agent Configuration on     │ AdvancedSettings (swarm, GOAP, execution, model     │ localStorage key                   │ nothing. No module reads it  │
+│ /agents                             │ router)                                             │ agenticflow-settings               │ back                         │
+├─────────────────────────────────────┼─────────────────────────────────────────────────────┼────────────────────────────────────┼──────────────────────────────┤
+│ Widget embed                        │ window.RufloResearchWidgetConfig                    │ host page                          │ theming and default goal     │
+├─────────────────────────────────────┼─────────────────────────────────────────────────────┼────────────────────────────────────┼──────────────────────────────┤
+│ research-api function               │ subset of ResearchConfig + aiModel + stream         │ n/a                                │ research-step prompt         │
+└─────────────────────────────────────┴─────────────────────────────────────────────────────┴────────────────────────────────────┴──────────────────────────────┘
+
+The planner is fixed; config only decorates it
+
+The GOAP action library is seven linear actions with costs 1, 1, 2, 2an flags (goalDefined through verified). Each state has exactly oneapplicable action, so A* always returns the same 7-step plan for every goal and every setting. parseGoal only extracts a domain label, an action verb and five keywords for text interpolation.
+
+Settings that look like planner controls are display-only:
+
+- executionMode changes one metric shown on step 1: open = maxSteps + 3, focused = min(5, maxSteps), closed = maxSteps.
+- Sub-goals metric = min(max(2, ceil(words / 10)), maxSteps).
+- enableReplanning with trigger "Action failure" shows a toast when a function call errors. The plan never changes. The other four triggers are never evaluated.
+- costOptimization, parallelExecution, parallelAgents, timeout, all of actionConfig, and stateDefinition are rendered in the GOAP Configuration card or logged, nothing more.
+- Execution is strictly sequential with fixed sleeps (500 ms, 2000 ms, 500 ms per step).
+
+What actually changes the output
+
+Only the research-step prompt assembly reads config. Per step it sends goal, step title and type, aiModel, the previous steps' AI output as context, and these fields:
+
+┌────────────────────────────────────────┬─────────────────────────────────────────────────────────────────────────┐
+│                 Field                  │                                 Effect                                  │
+├────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────┤
+│ prompts.systemPrompt                   │ replaces the default system prompt                                      │
+├────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────┤
+│ depth                                  │ appended DEPTH instruction; 2–3, 4–5, or 7–10 sentences per finding     │
+├────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────┤
+│ perspective                            │ appended PERSPECTIVE line                                               │
+├────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────┤
+│ focusAreas, excludeTopics              │ appended FOCUS AREAS and EXCLUDE lines                                  │
+├────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────┤
+│ maxSources                             │ "generate up to N findings"                                             │
+├────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────┤
+│ minConfidence                          │ floor in prompt text and as JSON-schema minimum on the confidence field │
+├────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────┤
+│ sourceTypes, excludeDomains, dateRange │ prioritize, forbid, and focus lines                                     │
+├────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────┤
+│ aiModel                                │ gemini-2.5-flash (default), flash-lite, or pro                          │
+└────────────────────────────────────────┴─────────────────────────────────────────────────────────────────────────┘
+
+Never consumed on the backend: searchQueryTemplate, analysisPrompt, synthesisPrompt, timeframe, languages, maxSteps in the UI path, parallelAgents, timeout. The final-report call passes no config at all, so depth, perspective, focus and source filters do not apply to Final Recommendations.
+
+Presets are LLM-generated, not tables
+
+The eight research-type presets (academic-deep, industry-quick, competitive-analysis, technical-feasibility, market-trends, medical-clinical, startup-validation, policy-regulatory) contain no hard-coded values. Each sends an intent paragraph to gemini-2.5-flash with a forced tool call whose schema bounds the result: maxSources 5–25, minConfidence 70–95, maxSteps 5–10, parallelAgents 1–5, timeout 60–300, depth enum, 2–4 focus areas, 0–3 exclusions. The result is shallow-merged per section over the current config. Output varies run to run. The category buttons map finance → market-trends, business → startup-validation, marketing → competitive-analysis, medical → medical-clinical, education → academic-deep, and coding, technical, ai-ml → technical-feasibility, while generating three candidate goals in parallel.
+
+The /agents presets are the only deterministic ones. Development, production, budget and quality apply fixed deltas to maxAgents (5, 15, 3, 20), swarm strategy, execution strategy, quality gates and model-router provider and strategy. The file has the full table and the complete AdvancedSettings schema with ranges and defaults.
+
+Effective combination space
+
+Ten dimensions matter: aiModel, depth, perspective, focus and exclude lists, source types and excluded domains, date range, maxSources, minConfidence, systemPrompt, enableAI, and maxSteps for the API path only. In the API path maxStepst from the front, so a value below 8 drops the final report.Everything else is cosmetic.
+
+The file is at scratchpad/goal/goal-ruv-io-config-model.md for this session. Say where you want it kept and I will move it there.

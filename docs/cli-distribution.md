@@ -117,6 +117,7 @@ Full steps: [release-checklist.md](release-checklist.md).
 | `codex setup` / `codex local-env` | Yes (implemented) | Yes |
 | `claude setup` | Yes (implemented) | Yes |
 | `project init` / `project validate` | Yes (implemented) | Yes |
+| `methodology` / `work-item` / `work-system` | Not yet implemented | Yes (contributor commands) |
 | Release packaging (`scripts/release` / `cmd/aok-release`) | No (maintainer Go tool) | N/A (Python `build.py` removed) |
 | `task sync` / `task packet` | Yes (implemented; requires `gh` on `PATH`) | Yes |
 | `hooks pre` / `hooks after` | Yes (implemented) | Yes |
@@ -127,6 +128,11 @@ Full steps: [release-checklist.md](release-checklist.md).
 build. End-user docs assume the binary path for install, doctor, validate,
 version, render, Codex/Claude setup, and these contributor helpers when the
 release binary is installed.
+
+Methodology selection/scaffolding, work-item export, and work-system discovery
+currently use `./scripts/aok` from a checkout or extracted kit with Python
+available. Their catalogs are included in release archives; binary command
+parity for these three groups is separate follow-up work.
 
 ## Trust model (unsigned releases)
 

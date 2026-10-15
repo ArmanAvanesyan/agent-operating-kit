@@ -1,0 +1,29 @@
+{
+  "id": "lean",
+  "kind": "overlay",
+  "displayName": "Lean",
+  "description": "WIP, batch-size, and waste controls for agent delivery.",
+  "supportLevel": "active",
+  "order": 20,
+  "fragment": "fragments/lean.md",
+  "requiredInputs": [],
+  "hookExpectations": [
+    "Enforce one active task per primary agent.",
+    "Escalate waiting, rework, excess handoffs, and hidden blockers."
+  ],
+  "roleEmphasis": [
+    "The orchestrator minimizes batch size and visible workflow waste."
+  ],
+  "compatibleFlows": [
+    "kanban"
+  ],
+  "lifecycle": null,
+  "featureContract": null,
+  "requirementContract": null,
+  "iterationContract": null,
+  "roleCatalog": null,
+  "artifactCatalog": null,
+  "ceremonies": [],
+  "gates": [],
+  "phaseMappings": []
+}

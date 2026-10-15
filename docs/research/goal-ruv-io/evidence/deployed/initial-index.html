@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!--
+      Content-Security-Policy (ADR-093 §S4 / Step 22d).
+
+      script-src 'self' 'wasm-unsafe-eval': allows the ruvector
+        ONNX-WASM modules to instantiate (browsers require this token
+        for `WebAssembly.compile`/`instantiate`). No 'unsafe-eval'
+        and no 'unsafe-inline' — inline event handlers are blocked.
+        'unsafe-inline' on style-src is necessary for Vite's HMR-
+        injected style tags + the chart.tsx CSS-variable injection.
+      connect-src: only this origin + the LOCAL_FN/GCF function
+        host (resolved at deploy time via VITE_FUNCTIONS_BASE_URL)
+        + HuggingFace (the ruvector embedder fetches model bytes
+        + tokenizer at runtime). Add specific upstream LLM hosts
+        only if Path B (direct Anthropic) ever lands.
+      object-src 'none', base-uri 'self', frame-ancestors 'self':
+        defense in depth against legacy plugin abuse, base-tag
+        injection, and clickjacking.
+    -->
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' 'wasm-unsafe-eval';
+      style-src 'self' 'unsafe-inline';
+      img-src 'self' data: https:;
+      font-src 'self' data:;
+      connect-src 'self' http://localhost:8080 http://localhost:8787 https://goal.ruv.io https://*.run.app https://*.cloudfunctions.net https://huggingface.co https://*.huggingface.co https://cdn-lfs.huggingface.co https://cdn-lfs-us-1.huggingface.co;
+      worker-src 'self' blob:;
+      object-src 'none';
+      base-uri 'self';
+    " />
+    <!--
+      `frame-ancestors` is intentionally NOT in the <meta> CSP — browsers
+      ignore it there (must come via HTTP header). The deploy host
+      (netlify.toml / GCF Cloud Run config) MUST set:
+        X-Frame-Options: SAMEORIGIN
+        Content-Security-Policy: frame-ancestors 'self';
+      Step 23 / branding pass adds the netlify.toml header config.
+    -->
+
+    <!-- SEO Meta Tags -->
+    <title>RuFlo Research — Autonomous AI Research with Goal-Oriented Action Planning</title>
+    <meta name="description" content="RuFlo Research turns plain-English goals into executable agent plans. Goal-Oriented Action Planning (GOAP) with A* search, multi-agent coordination, real-time web research, and live agent telemetry — part of the RuFlo platform." />
+    <meta name="keywords" content="RuFlo, RuFlo Research, autonomous AI agents, GOAP, goal-oriented action planning, A* search, multi-agent orchestration, AI research assistant, agent dashboard, MCP tools, ruflo.ruv.io" />
+    <meta name="author" content="RuFlo" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://goal.ruv.io/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://goal.ruv.io/" />
+    <meta property="og:title" content="RuFlo Research — Autonomous AI Research with GOAP" />
+    <meta property="og:description" content="Plain-English goals → executable agent plans. GOAP A* planning, multi-agent coordination, live agent dashboard at goal.ruv.io/agents." />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:site_name" content="RuFlo Research" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://goal.ruv.io/" />
+    <meta property="twitter:title" content="RuFlo Research — Autonomous AI Research with GOAP" />
+    <meta property="twitter:description" content="Plain-English goals → executable agent plans. GOAP A* planning, multi-agent coordination, live agent dashboard." />
+    <meta property="twitter:image" content="/og-image.png" />
+
+    <!-- Additional SEO -->
+    <meta name="theme-color" content="#8b5cf6" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <script type="module" crossorigin src="/assets/index-r7I6ZcN4.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-C4xGj2sQ.css">
+  </head>
+
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

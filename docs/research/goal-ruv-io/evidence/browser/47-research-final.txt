@@ -1,0 +1,472 @@
+- region "Notifications (F8)":
+  - list
+- region "Notifications alt+T"
+- img
+- text: GOAP Multi-Agent System
+- heading "Goal-Oriented Action Planning" [level=1]
+- paragraph: AI-powered research planning using A* pathfinding and dynamic agent coordination
+- button "New Research":
+  - img
+  - text: New Research
+- link "Widget Demo":
+  - /url: /demo
+  - button "Widget Demo":
+    - img
+    - text: Widget Demo
+- link "Agent Swarm":
+  - /url: /agents
+  - button "Agent Swarm":
+    - img
+    - text: Agent Swarm
+- button "Create Widget":
+  - img
+  - text: Create Widget
+- button "Switch to light theme":
+  - img
+- heading "GOAP State Assessment" [level=3]:
+  - img
+  - text: GOAP State Assessment
+- paragraph: Real-time state progression tracking
+- text: 100% 2/2 complete
+- progressbar
+- img
+- heading "System State" [level=4]
+- text: Current
+- img
+- text: goalDefined true
+- img
+- text: informationGathered true
+- img
+- text: goalParsed true
+- img
+- text: stateAssessed true
+- img
+- text: documentsAnalyzed true
+- img
+- text: knowledgeSynthesized true
+- img
+- text: insightsGenerated true
+- img
+- text: verified true
+- img
+- heading "Goal State" [level=4]
+- text: Target
+- img
+- text: verified true
+- img
+- text: insightsGenerated true
+- img
+- heading "State Transitions" [level=4]
+- text: verified true
+- img
+- text: true insightsGenerated true
+- img
+- text: "true"
+- img
+- heading "Action Plan" [level=4]
+- text: 3 steps remaining 1
+- paragraph: Information needs to be gathered
+- img
+- text: "2"
+- paragraph: Analysis required
+- img
+- text: "3"
+- paragraph: Insights need generation
+- img
+- heading "GOAP Configuration" [level=3]:
+  - img
+  - text: GOAP Configuration
+- paragraph: Active planning and execution settings
+- text: Execution Mode open
+- paragraph: Creative problem solving across all domains
+- img
+- text: Cost Optimization
+- img
+- text: Parallel Execution
+- img
+- text: "Replanning Enabled Max Cost: 1 Active Triggers (3) Action failure Low confidence results Missing preconditions"
+- button "New Research":
+  - img
+  - text: New Research
+- text: "Objective: Explain how a stack differs from a queue"
+- img
+- heading "Goal Analysis" [level=3]
+- paragraph: Analyzing "Explain how a stack differs from a queue..." and breaking it down into actionable sub-goals.
+- img
+- text: Parse objective ✓
+- img
+- text: "Objective:"
+- paragraph: Extract and structure the high-level goal from natural language input
+- text: "Preconditions:"
+- list:
+  - listitem: • User input received
+  - listitem: • NLP module initialized
+- text: "Effects:"
+- list:
+  - listitem: • Structured goal object created
+  - listitem: • Sub-goals identified
+- text: "Agents: Parser Agent NLP Agent"
+- img
+- text: Identify dependencies ✓
+- img
+- text: "Objective:"
+- paragraph: Map relationships between actions and their requirements
+- text: "Preconditions:"
+- list:
+  - listitem: • Goal parsed
+  - listitem: • Action library loaded
+- text: "Effects:"
+- list:
+  - listitem: • Dependency graph generated
+  - listitem: • Critical path identified
+- text: "Agents: Dependency Analyzer Graph Builder Sources:"
+- list:
+  - listitem: • Action Registry
+  - listitem: • State Definitions
+- img
+- text: Map state transitions ✓
+- img
+- text: "Objective:"
+- paragraph: Define how each action transforms the world state
+- text: "Preconditions:"
+- list:
+  - listitem: • Dependencies mapped
+  - listitem: • State space defined
+- text: "Effects:"
+- list:
+  - listitem: • Transition matrix created
+  - listitem: • State reachability confirmed
+- text: "Agents: State Mapper Validator Agent Citations:"
+- list:
+  - listitem: "\"GOAP: Goal-Oriented Action Planning - Orkin, J. (2006)\""
+- text: "Sub-goals: 2 Actions: 6 Complete"
+- img
+- heading "State Assessment" [level=3]
+- paragraph: Evaluating current knowledge about general and identifying information gaps.
+- img
+- text: Assessing current state... ✓
+- img
+- text: "Objective:"
+- paragraph: Assess current knowledge and capability state for Explain how a stack differs from a queue
+- text: "Effects:"
+- list:
+  - listitem: • Baseline established
+  - listitem: • Gaps identified
+- text: "Agents: State Assessor"
+- img
+- text: Defining success criteria... ✓
+- img
+- text: "Objective:"
+- paragraph: Define success criteria and validation requirements for general
+- text: "Preconditions:"
+- list:
+  - listitem: • Goals defined
+- text: "Effects:"
+- list:
+  - listitem: • Validation criteria set
+  - listitem: • Acceptance tests defined
+- img
+- text: Analyzing gaps... ✓
+- img
+- text: "Objective:"
+- paragraph: Quantify differences between current and target state for research in general
+- text: "Effects:"
+- list:
+  - listitem: • Priority list generated
+  - listitem: • Resource needs identified
+- text: "Agents: Gap Analyzer Priority Ranker Complete"
+- img
+- heading "Web Search" [level=3]
+- paragraph: "Conducting intelligent searches for: Explain, stack, differs, queue"
+- img
+- text: Searching for research Explain... ✓
+- img
+- text: "Objective:"
+- paragraph: Execute targeted web searches for Explain how a stack differs from a queue
+- text: "Agents: Search Agent Query Optimizer Sources:"
+- list:
+  - listitem: • arXiv.org
+  - listitem: • Google Scholar
+  - listitem: • ACM Digital Library
+- img
+- text: Gathering sources... ✓
+- img
+- text: "Objective:"
+- paragraph: Aggregate and catalog information sources for general
+- text: "Effects:"
+- list:
+  - listitem: • Source database populated
+  - listitem: • Relevance scores assigned
+- img
+- text: Calculating relevance... ✓
+- img
+- text: "Objective:"
+- paragraph: Calculate information quality and applicability metrics for Explain, stack, differs, queue
+- text: "Agents: Relevance Scorer ML Classifier Citations:"
+- list:
+  - listitem: "\"Information Retrieval Metrics - Manning et al.\""
+- text: Complete
+- img
+- heading "Document Analysis" [level=3]
+- paragraph: Processing documents related to general to extract key insights.
+- img
+- text: Parsing documents... ✓
+- img
+- text: "Objective:"
+- paragraph: Extract structured data from general documents for Explain how a stack differs from a queue
+- text: "Preconditions:"
+- list:
+  - listitem: • Documents retrieved
+  - listitem: • Parser modules loaded
+- text: "Effects:"
+- list:
+  - listitem: • Content extracted
+  - listitem: • Metadata catalogued
+- text: "Agents: Document Parser Text Extractor Sources:"
+- list:
+  - listitem: • PDF Parser
+  - listitem: • HTML Scraper
+  - listitem: • API Responses
+- img
+- text: Extracting insights... ✓
+- img
+- text: "Objective:"
+- paragraph: Identify key findings about Explain, stack, differs, queue
+- text: "Preconditions:"
+- list:
+  - listitem: • Documents parsed
+  - listitem: • NLP models ready
+- text: "Effects:"
+- list:
+  - listitem: • Insights database populated
+  - listitem: • Key points highlighted
+- text: "Agents: Insight Extractor NLP Analyzer Pattern Recognizer Citations:"
+- list:
+  - listitem: "\"Named Entity Recognition - Nadeau & Sekine\""
+- img
+- text: Validating claims... ✓
+- img
+- text: "Objective:"
+- paragraph: Verify factual accuracy for research in general
+- text: "Preconditions:"
+- list:
+  - listitem: • Insights extracted
+  - listitem: • Validation rules defined
+- text: "Effects:"
+- list:
+  - listitem: • Accuracy scores assigned
+  - listitem: • Unreliable sources flagged
+- text: "Agents: Fact Checker Source Validator Cross-Referencer Sources:"
+- list:
+  - listitem: • Fact-checking APIs
+  - listitem: • Citation Databases
+- text: Complete
+- img
+- heading "Knowledge Synthesis" [level=3]
+- paragraph: Synthesizing information from multiple general sources.
+- img
+- text: Cross-referencing sources... ✓
+- img
+- text: "Objective:"
+- paragraph: Correlate general information across multiple sources for Explain how a stack differs from a queue
+- text: "Preconditions:"
+- list:
+  - listitem: • Multiple sources validated
+  - listitem: • Correlation rules set
+- text: "Effects:"
+- list:
+  - listitem: • Source connections mapped
+  - listitem: • Confidence levels adjusted
+- text: "Agents: Cross-Referencer Correlation Analyzer Sources:"
+- list:
+  - listitem: • Academic papers
+  - listitem: • Industry reports
+  - listitem: • Technical documentation
+- img
+- text: Merging concepts... ✓
+- img
+- text: "Objective:"
+- paragraph: Combine Explain, stack, differs, queue concepts into unified knowledge structures
+- text: "Preconditions:"
+- list:
+  - listitem: • Concepts identified
+  - listitem: • Relationships defined
+- text: "Effects:"
+- list:
+  - listitem: • Knowledge graph updated
+  - listitem: • Concept taxonomy refined
+- text: "Agents: Concept Merger Ontology Builder Semantic Analyzer Citations:"
+- list:
+  - listitem: "\"Knowledge Graphs - Hogan et al. (2021)\""
+- img
+- text: Resolving conflicts... ✓
+- img
+- text: "Objective:"
+- paragraph: Handle contradictory information about research in general
+- text: "Preconditions:"
+- list:
+  - listitem: • Conflicts detected
+  - listitem: • Resolution strategies loaded
+- text: "Effects:"
+- list:
+  - listitem: • Consensus reached
+  - listitem: • Conflict resolution logged
+- text: "Agents: Conflict Resolver Evidence Weigher Decision Maker Sources:"
+- list:
+  - listitem: • Source credibility scores
+  - listitem: • Temporal data
+  - listitem: • Expert systems
+- text: "Sources: 18 Concepts: 12 Complete"
+- img
+- heading "Insight Generation" [level=3]
+- paragraph: Generating actionable insights for general based on research findings.
+- img
+- text: Generating insights... ✓
+- img
+- text: "Objective:"
+- paragraph: Create novel conclusions from synthesized general knowledge for Explain how a stack differs from a queue
+- text: "Preconditions:"
+- list:
+  - listitem: • Knowledge synthesized
+  - listitem: • Analysis complete
+- text: "Effects:"
+- list:
+  - listitem: • Actionable insights created
+  - listitem: • Recommendations formulated
+- text: "Agents: Insight Generator Recommendation Engine Inference Agent Citations:"
+- list:
+  - listitem: "\"Automated Reasoning - Robinson (1965)\""
+  - listitem: "\"AI Planning - Ghallab et al.\""
+- img
+- text: Prioritizing by impact... ✓
+- img
+- text: "Objective:"
+- paragraph: Rank insights about Explain, stack, differs, queue by potential value and applicability
+- text: "Preconditions:"
+- list:
+  - listitem: • Insights generated
+  - listitem: • Impact metrics defined
+- text: "Effects:"
+- list:
+  - listitem: • Priority scores assigned
+  - listitem: • Implementation order set
+- text: "Agents: Priority Ranker Impact Analyzer ROI Calculator Sources:"
+- list:
+  - listitem: • Business metrics
+  - listitem: • Historical outcomes
+  - listitem: • Expert heuristics
+- img
+- text: Validating feasibility... ✓
+- img
+- text: "Objective:"
+- paragraph: Assess practicality of research recommendations for general
+- text: "Preconditions:"
+- list:
+  - listitem: • Insights prioritized
+  - listitem: • Constraint database available
+- text: "Effects:"
+- list:
+  - listitem: • Feasibility scores computed
+  - listitem: • Resource needs estimated
+- text: "Agents: Feasibility Validator Resource Planner Constraint Checker Sources:"
+- list:
+  - listitem: • Available resources
+  - listitem: • Technical constraints
+  - listitem: • Timeline requirements
+- text: Complete
+- img
+- heading "Verification" [level=3]
+- paragraph: Cross-checking findings and ensuring accuracy before final presentation.
+- img
+- text: Verifying insights... ✓
+- img
+- text: "Objective:"
+- paragraph: Perform final quality assurance on general insights for Explain how a stack differs from a queue
+- text: "Preconditions:"
+- list:
+  - listitem: • Insights validated
+  - listitem: • Verification criteria set
+- text: "Effects:"
+- list:
+  - listitem: • Quality confirmed
+  - listitem: • Errors corrected
+- text: "Agents: Quality Assurance Agent Verification Bot Audit Agent Sources:"
+- list:
+  - listitem: • Quality standards
+  - listitem: • Best practices
+  - listitem: • Validation protocols
+- img
+- text: Checking sources... ✓
+- img
+- text: "Objective:"
+- paragraph: Re-validate all Explain, stack, differs, queue information sources for final output
+- text: "Preconditions:"
+- list:
+  - listitem: • Sources catalogued
+  - listitem: • Verification complete
+- text: "Effects:"
+- list:
+  - listitem: • Source reliability confirmed
+  - listitem: • Citations verified
+- text: "Agents: Source Checker Citation Validator Provenance Tracker Citations:"
+- list:
+  - listitem: "\"Information Provenance - Buneman et al. (2001)\""
+- img
+- text: Calculating confidence... ✓
+- img
+- text: "Objective:"
+- paragraph: Calculate overall confidence in research research findings
+- text: "Preconditions:"
+- list:
+  - listitem: • All checks complete
+  - listitem: • Confidence model loaded
+- text: "Effects:"
+- list:
+  - listitem: • Final confidence score computed
+  - listitem: • Report ready
+- text: "Agents: Confidence Calculator Statistical Analyzer Meta-Evaluator Sources:"
+- list:
+  - listitem: • Validation results
+  - listitem: • Source quality scores
+  - listitem: • Cross-reference matches
+- text: Complete 7 Completed 0 Active 0 Pending
+- img
+- heading "Final Research Report" [level=3]:
+  - text: Final Research Report
+  - img
+- paragraph: Comprehensive analysis generated by multi-agent GOAP research system
+- text: Total Steps 7 Data Points 21 Confidence 94%
+- img
+- text: Duration 25s
+- heading "Executive Summary" [level=4]:
+  - img
+  - text: Executive Summary
+- paragraph: This research successfully analyzed "Explain how a stack differs from a queue" through a 7-step Goal-Oriented Action Planning (GOAP) workflow. The system coordinated multiple specialized agents to gather information, analyze documents, synthesize knowledge, and generate actionable insights with high confidence scores across all validation checks.
+- tablist:
+  - tab "Direct Answer" [selected]:
+    - img
+    - text: Direct Answer
+  - tab "Key Findings":
+    - img
+    - text: Key Findings
+  - tab "Methodology":
+    - img
+    - text: Methodology
+  - tab "Next Steps":
+    - img
+    - text: Next Steps
+- tabpanel "Direct Answer":
+  - paragraph: No direct answers available yet. Complete the research to see results.
+- img
+- text: All verification checks passed
+- button "New Research":
+  - img
+  - text: New Research
+- button "View Full Report":
+  - img
+  - text: View Full Report
+- contentinfo:
+  - paragraph:
+    - text: RuFlo ResearchCreated with ❤️ by
+    - link "rUv.io":
+      - /url: https://ruv.io

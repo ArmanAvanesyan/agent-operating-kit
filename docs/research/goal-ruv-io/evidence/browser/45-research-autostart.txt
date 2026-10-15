@@ -1,0 +1,97 @@
+- region "Notifications (F8)":
+  - list:
+    - status:
+      - text: Plan Generated Created 7-step research workflow using GOAP algorithm.
+      - button:
+        - img
+- region "Notifications alt+T"
+- img
+- text: GOAP Multi-Agent System
+- heading "Goal-Oriented Action Planning" [level=1]
+- paragraph: AI-powered research planning using A* pathfinding and dynamic agent coordination
+- button "New Research":
+  - img
+  - text: New Research
+- link "Widget Demo":
+  - /url: /demo
+  - button "Widget Demo":
+    - img
+    - text: Widget Demo
+- link "Agent Swarm":
+  - /url: /agents
+  - button "Agent Swarm":
+    - img
+    - text: Agent Swarm
+- button "Create Widget":
+  - img
+  - text: Create Widget
+- button "Switch to light theme":
+  - img
+- heading "GOAP State Assessment" [level=3]:
+  - img
+  - text: GOAP State Assessment
+- paragraph: Real-time state progression tracking
+- text: 0% 0/2 complete
+- progressbar
+- img
+- heading "System State" [level=4]
+- text: Current
+- img
+- text: goalDefined true
+- img
+- text: informationGathered false
+- img
+- heading "Goal State" [level=4]
+- text: Target
+- img
+- text: verified true
+- img
+- text: insightsGenerated true
+- img
+- heading "State Transitions" [level=4]
+- text: verified
+- img
+- text: pending
+- img
+- text: true insightsGenerated
+- img
+- text: pending
+- img
+- text: "true"
+- img
+- heading "Action Plan" [level=4]
+- text: 3 steps remaining 1
+- paragraph: Information needs to be gathered
+- img
+- text: "2"
+- paragraph: Analysis required
+- img
+- text: "3"
+- paragraph: Insights need generation
+- img
+- heading "GOAP Configuration" [level=3]:
+  - img
+  - text: GOAP Configuration
+- paragraph: Active planning and execution settings
+- text: Execution Mode open
+- paragraph: Creative problem solving across all domains
+- img
+- text: Cost Optimization
+- img
+- text: Parallel Execution
+- img
+- text: "Replanning Enabled Max Cost: 1 Active Triggers (3) Action failure Low confidence results Missing preconditions"
+- button "New Research" [disabled]:
+  - img
+  - text: New Research
+- text: "Objective: Explain how a stack differs from a queue"
+- img
+- heading "Goal Analysis" [level=3]
+- paragraph: Analyzing "Explain how a stack differs from a queue..." and breaking it down into actionable sub-goals.
+- text: Pending 0 Completed 0 Active 7 Pending
+- contentinfo:
+  - paragraph:
+    - text: RuFlo ResearchCreated with ❤️ by
+    - link "rUv.io":
+      - /url: https://ruv.io
+- status: Notification Plan GeneratedCreated 7-step research workflow using GOAP algorithm.

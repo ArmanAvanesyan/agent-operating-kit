@@ -7,12 +7,14 @@ workflow content.
 
 1. `schemas/`: JSON Schema contracts for neutral AOK objects.
 2. `core/`: conceptual model and rendering rules.
-3. `packs/`: reusable workflow content and curated adapter assets.
-4. `adapters/`: target-specific mappings for Codex, Claude Code, Cursor,
+3. `methodologies/`: selectable flow and practice-overlay profiles.
+4. `work-items/`: methodology-aware intake contracts and provider exports.
+5. `packs/`: reusable workflow content and curated adapter assets.
+6. `adapters/`: target-specific mappings for Codex, Claude Code, Cursor,
    OpenCode, Gemini, OpenClaw, and Hermes Agent.
-5. `scripts/`: Python kit CLI (`scripts/aok`), install helpers, sync, and
+7. `scripts/`: Python kit CLI (`scripts/aok`), install helpers, sync, and
    validation — the maintained source for contributors and kit logic.
-6. Distribution layer: thin Go `aok` binary (`cmd/aok`, module
+8. Distribution layer: Go `aok` binary (`cmd/aok`, module
    `github.com/ArmanAvanesyan/agent-operating-kit`) built in release CI and
    published on GitHub Releases so end-user `PATH` installs need neither
    Python nor Go on the device. See [cli-distribution.md](cli-distribution.md).
@@ -26,6 +28,9 @@ AOK owns the neutral model:
 - hook
 - skill
 - pack
+- methodology profile
+- methodology artifact
+- work-item type
 - tool adapter
 
 Tool-specific files are projections. They can be hand-curated when a target has
@@ -43,6 +48,18 @@ index of intent and compatibility.
 
 Their Claude Code plugin files are preserved under each `packs/*/claude-code/`.
 A neutral `packs/*/pack.content.json` entry is the canonical definition.
+
+## Methodology Boundary
+
+Methodology profiles compose one flow and optional overlays into project policy.
+They do not fork task-packet fields, lifecycle statuses, or work-system provider
+mappings. General-purpose packs remain independently installable workflow
+content.
+
+The `methodology`, `work-item`, and `work-system` command groups currently
+use the contributor Python entrypoint (`./scripts/aok`). They are not yet
+implemented by the distributed Go `aok` binary. Their catalogs and templates
+ship in release archives so local exports from the kit remain available.
 
 ## Runtime Boundary
 

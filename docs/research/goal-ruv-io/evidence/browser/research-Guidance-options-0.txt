@@ -1,0 +1,4 @@
+- listbox:
+  - option "Surface (Quick overview)"
+  - option "Moderate (Standard depth)" [selected]
+  - option "Deep (Comprehensive analysis)"

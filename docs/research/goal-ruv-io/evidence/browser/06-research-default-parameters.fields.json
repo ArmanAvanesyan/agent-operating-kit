@@ -1,0 +1,62 @@
+[
+  {
+    "tag": "SPAN",
+    "id": "",
+    "role": "slider",
+    "type": null,
+    "value": null,
+    "text": "",
+    "checked": null,
+    "min": "5",
+    "max": "50",
+    "now": "15"
+  },
+  {
+    "tag": "SPAN",
+    "id": "",
+    "role": "slider",
+    "type": null,
+    "value": null,
+    "text": "",
+    "checked": null,
+    "min": "50",
+    "max": "99",
+    "now": "85"
+  },
+  {
+    "tag": "SPAN",
+    "id": "",
+    "role": "slider",
+    "type": null,
+    "value": null,
+    "text": "",
+    "checked": null,
+    "min": "3",
+    "max": "15",
+    "now": "7"
+  },
+  {
+    "tag": "SPAN",
+    "id": "",
+    "role": "slider",
+    "type": null,
+    "value": null,
+    "text": "",
+    "checked": null,
+    "min": "1",
+    "max": "10",
+    "now": "3"
+  },
+  {
+    "tag": "SPAN",
+    "id": "",
+    "role": "slider",
+    "type": null,
+    "value": null,
+    "text": "",
+    "checked": null,
+    "min": "30",
+    "max": "300",
+    "now": "120"
+  }
+]

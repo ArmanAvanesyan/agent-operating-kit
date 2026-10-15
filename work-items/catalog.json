@@ -1,0 +1,343 @@
+{
+  "kind": "aok-work-item-type-catalog",
+  "version": 1,
+  "maxTypes": 19,
+  "commonSections": [
+    {"id": "outcome", "label": "Outcome or Problem", "description": "State the user, business, operational, or technical outcome and why it matters.", "required": true, "multiline": true},
+    {"id": "scope", "label": "Scope and Exclusions", "description": "List what is included and explicitly excluded.", "required": true, "multiline": true},
+    {"id": "acceptance", "label": "Acceptance Criteria", "description": "Provide measurable completion criteria, one per line.", "required": true, "multiline": true},
+    {"id": "target-repo", "label": "Target Repository", "description": "Name the repository or repositories where delivery work belongs.", "required": true, "multiline": false},
+    {"id": "dependencies", "label": "Dependencies", "description": "List prerequisite work, decisions, systems, and blocking relationships; write None when empty.", "required": true, "multiline": true},
+    {"id": "risks", "label": "Risks and Blockers", "description": "Record known risks, blockers, and the decision or escalation needed; write None when empty.", "required": true, "multiline": true},
+    {"id": "verification", "label": "Verification and Evidence", "description": "List commands, checks, reviewers, and evidence required before handoff.", "required": true, "multiline": true}
+  ],
+  "types": [
+    {
+      "id": "epic",
+      "displayName": "Epic",
+      "description": "A multi-feature outcome that needs decomposition and success measures.",
+      "origin": {"kind": "core", "id": "core"},
+      "canonicalCategory": "epic",
+      "hierarchy": {"parentTypes": [], "childTypes": ["feature"]},
+      "taskPacketFields": ["workItemType", "title", "spec", "acceptanceCriteria", "verification", "targetRepo"],
+      "sourcePath": "templates/epic.md",
+      "sections": [
+        {"id": "objective", "label": "Strategic Objective", "description": "Describe the durable objective and intended beneficiaries.", "required": true, "multiline": true},
+        {"id": "success-measures", "label": "Success Measures", "description": "Define measurable outcome indicators and evaluation timing.", "required": true, "multiline": true},
+        {"id": "boundaries", "label": "Boundaries", "description": "Define organizational, product, and architectural boundaries.", "required": true, "multiline": true},
+        {"id": "child-features", "label": "Child Features", "description": "List known child features or the decomposition plan.", "required": true, "multiline": true}
+      ],
+      "providerMappings": {"github": {"issueType": "Feature"}, "azureDevOps": {"workItemType": "Epic"}}
+    },
+    {
+      "id": "feature",
+      "displayName": "Feature",
+      "description": "A cohesive user or business capability with measurable acceptance.",
+      "origin": {"kind": "core", "id": "core"},
+      "canonicalCategory": "feature",
+      "hierarchy": {"parentTypes": ["epic"], "childTypes": ["task", "bug"]},
+      "taskPacketFields": ["workItemType", "title", "spec", "acceptanceCriteria", "verification", "targetRepo"],
+      "sourcePath": "templates/feature.md",
+      "sections": [
+        {"id": "beneficiaries", "label": "Users and Business Outcome", "description": "Identify beneficiaries and the capability or outcome delivered.", "required": true, "multiline": true},
+        {"id": "behavior", "label": "Expected Behavior", "description": "Describe externally observable behavior and important constraints.", "required": true, "multiline": true}
+      ],
+      "providerMappings": {"github": {"issueType": "Feature"}, "azureDevOps": {"workItemType": "Feature"}}
+    },
+    {
+      "id": "task",
+      "displayName": "Task",
+      "description": "An issue-sized implementation, documentation, test, or operational change.",
+      "origin": {"kind": "core", "id": "core"},
+      "canonicalCategory": "task",
+      "hierarchy": {"parentTypes": ["epic", "feature"], "childTypes": []},
+      "taskPacketFields": ["workItemType", "title", "spec", "acceptanceCriteria", "verification", "targetRepo"],
+      "sourcePath": "templates/task.md",
+      "sections": [
+        {"id": "change", "label": "Concrete Change", "description": "Describe the files, systems, or behavior to change.", "required": true, "multiline": true},
+        {"id": "completion", "label": "Completion Conditions", "description": "State the conditions that make the task ready for handoff.", "required": true, "multiline": true}
+      ],
+      "providerMappings": {"github": {"issueType": "Task"}, "azureDevOps": {"workItemType": "Task"}}
+    },
+    {
+      "id": "bug",
+      "displayName": "Bug",
+      "description": "An unexpected or incorrect behavior requiring reproduction and regression evidence.",
+      "origin": {"kind": "core", "id": "core"},
+      "canonicalCategory": "bug",
+      "hierarchy": {"parentTypes": ["epic", "feature"], "childTypes": ["task"]},
+      "taskPacketFields": ["workItemType", "title", "spec", "acceptanceCriteria", "verification", "targetRepo"],
+      "sourcePath": "templates/bug.md",
+      "sections": [
+        {"id": "observed", "label": "Observed Behavior", "description": "Describe what happens, including exact errors when safe.", "required": true, "multiline": true},
+        {"id": "expected", "label": "Expected Behavior", "description": "Describe the correct behavior.", "required": true, "multiline": true},
+        {"id": "reproduction", "label": "Reproduction", "description": "Provide deterministic reproduction steps and frequency.", "required": true, "multiline": true},
+        {"id": "environment", "label": "Environment", "description": "Record relevant versions, platform, configuration, and data conditions without secrets.", "required": true, "multiline": true},
+        {"id": "impact", "label": "Impact and Severity", "description": "Describe affected users or systems and justify severity.", "required": true, "multiline": true},
+        {"id": "regression", "label": "Regression Evidence", "description": "Identify the regression test or evidence that will prevent recurrence.", "required": true, "multiline": true}
+      ],
+      "providerMappings": {"github": {"issueType": "Bug"}, "azureDevOps": {"workItemType": "Bug"}}
+    },
+    {
+      "id": "spike",
+      "displayName": "Spike",
+      "description": "A bounded investigation that produces evidence and a decision rather than production scope.",
+      "origin": {"kind": "core", "id": "core"},
+      "canonicalCategory": "spike",
+      "hierarchy": {"parentTypes": ["epic", "feature", "task"], "childTypes": []},
+      "taskPacketFields": ["workItemType", "title", "spec", "acceptanceCriteria", "verification", "targetRepo"],
+      "sourcePath": "templates/spike.md",
+      "sections": [
+        {"id": "question", "label": "Decision Question", "description": "State the single decision or uncertainty this spike resolves.", "required": true, "multiline": true},
+        {"id": "effort-box", "label": "Effort Box", "description": "Set a fixed investigation limit and stopping condition.", "required": true, "multiline": false},
+        {"id": "approach", "label": "Investigation Approach", "description": "List experiments, prototypes, sources, and comparisons.", "required": true, "multiline": true},
+        {"id": "decision-artifact", "label": "Decision Artifact", "description": "Name the expected recommendation, ADR, prototype, or evidence report.", "required": true, "multiline": true}
+      ],
+      "providerMappings": {"github": {"issueType": "Task"}, "azureDevOps": {"workItemType": "Task"}}
+    },
+    {
+      "id": "incident",
+      "displayName": "Incident",
+      "description": "An active or resolved service disruption tracked through recovery and follow-up.",
+      "origin": {"kind": "core", "id": "core"},
+      "canonicalCategory": "incident",
+      "hierarchy": {"parentTypes": ["epic"], "childTypes": ["bug", "task", "change"]},
+      "taskPacketFields": ["workItemType", "title", "spec", "acceptanceCriteria", "verification", "targetRepo"],
+      "sourcePath": "templates/incident.md",
+      "sections": [
+        {"id": "severity-impact", "label": "Severity and Impact", "description": "State affected users, systems, regions, and business impact.", "required": true, "multiline": true},
+        {"id": "detection", "label": "Detection and Current State", "description": "Record detection time, signal, owner, and present state.", "required": true, "multiline": true},
+        {"id": "timeline", "label": "Timeline", "description": "Record material events and decisions in chronological order.", "required": true, "multiline": true},
+        {"id": "mitigation", "label": "Mitigation and Recovery", "description": "Describe containment, recovery, validation, and rollback readiness.", "required": true, "multiline": true},
+        {"id": "follow-up", "label": "Follow-up Work", "description": "List corrective bugs, changes, and learning actions.", "required": true, "multiline": true}
+      ],
+      "providerMappings": {"github": {"issueType": "Bug"}, "azureDevOps": {"workItemType": "Bug"}}
+    },
+    {
+      "id": "risk",
+      "displayName": "Risk",
+      "description": "A potential event or condition requiring ownership, mitigation, and contingency.",
+      "origin": {"kind": "core", "id": "core"},
+      "canonicalCategory": "risk",
+      "hierarchy": {"parentTypes": ["epic", "feature"], "childTypes": ["task", "change"]},
+      "taskPacketFields": ["workItemType", "title", "spec", "acceptanceCriteria", "verification", "targetRepo"],
+      "sourcePath": "templates/risk.md",
+      "sections": [
+        {"id": "risk-statement", "label": "Risk Statement", "description": "Describe the cause, uncertain event, and consequence.", "required": true, "multiline": true},
+        {"id": "probability-impact", "label": "Probability and Impact", "description": "Assess likelihood, impact, and rationale.", "required": true, "multiline": true},
+        {"id": "trigger-owner", "label": "Trigger and Owner", "description": "Name observable triggers and the accountable human owner.", "required": true, "multiline": true},
+        {"id": "response", "label": "Mitigation and Contingency", "description": "Describe preventive actions and the response if the risk occurs.", "required": true, "multiline": true}
+      ],
+      "providerMappings": {"github": {"issueType": "Task"}, "azureDevOps": {"workItemType": "Task"}}
+    },
+    {
+      "id": "change",
+      "displayName": "Change",
+      "description": "A controlled production, infrastructure, data, or process modification.",
+      "origin": {"kind": "core", "id": "core"},
+      "canonicalCategory": "change",
+      "hierarchy": {"parentTypes": ["epic", "feature", "incident", "risk"], "childTypes": ["task"]},
+      "taskPacketFields": ["workItemType", "title", "spec", "acceptanceCriteria", "verification", "targetRepo"],
+      "sourcePath": "templates/change.md",
+      "sections": [
+        {"id": "reason", "label": "Reason and Affected Systems", "description": "Explain why the change is needed and what it can affect.", "required": true, "multiline": true},
+        {"id": "rollout", "label": "Rollout Plan", "description": "Provide sequencing, ownership, observation, and pause criteria.", "required": true, "multiline": true},
+        {"id": "rollback", "label": "Rollback Plan", "description": "Provide tested reversal steps and the rollback decision threshold.", "required": true, "multiline": true},
+        {"id": "approval", "label": "Approval and Change Window", "description": "Record required human approval and the authorized execution window.", "required": true, "multiline": true}
+      ],
+      "providerMappings": {"github": {"issueType": "Task"}, "azureDevOps": {"workItemType": "Task"}}
+    },
+    {
+      "id": "xp-user-story",
+      "displayName": "XP User Story",
+      "description": "A small user-valued story shaped for test-first continuous integration.",
+      "origin": {"kind": "overlay", "id": "xp"},
+      "canonicalCategory": "feature",
+      "hierarchy": {"parentTypes": ["epic", "feature"], "childTypes": ["task", "bug"]},
+      "taskPacketFields": ["workItemType", "title", "spec", "acceptanceCriteria", "verification", "targetRepo"],
+      "sourcePath": "templates/xp-user-story.md",
+      "sections": [
+        {"id": "story", "label": "User Story", "description": "State the persona, capability, and benefit.", "required": true, "multiline": true},
+        {"id": "acceptance-tests", "label": "Acceptance Tests", "description": "Describe executable or observable examples before implementation.", "required": true, "multiline": true},
+        {"id": "test-first", "label": "Test-First Plan", "description": "Identify the first failing test or why automation is impractical.", "required": true, "multiline": true},
+        {"id": "ci-evidence", "label": "CI and Refactoring Evidence", "description": "Name fresh CI evidence and the green baseline required before refactoring.", "required": true, "multiline": true}
+      ],
+      "providerMappings": {"github": {"issueType": "Feature"}, "azureDevOps": {"workItemType": "$defaultRequirementWorkItemType"}}
+    },
+    {
+      "id": "lean-improvement",
+      "displayName": "Lean Improvement",
+      "description": "A smallest-batch improvement aimed at measurable flow or value.",
+      "origin": {"kind": "overlay", "id": "lean"},
+      "canonicalCategory": "task",
+      "hierarchy": {"parentTypes": ["epic", "feature", "risk"], "childTypes": ["task"]},
+      "taskPacketFields": ["workItemType", "title", "spec", "acceptanceCriteria", "verification", "targetRepo"],
+      "sourcePath": "templates/lean-improvement.md",
+      "sections": [
+        {"id": "current-condition", "label": "Current Condition and Waste", "description": "Describe the observed condition, waiting, rework, handoff, or excess batch.", "required": true, "multiline": true},
+        {"id": "desired-condition", "label": "Desired Condition and Measure", "description": "State the measurable change in value or flow.", "required": true, "multiline": true},
+        {"id": "smallest-change", "label": "Smallest Change", "description": "Define the smallest issue-sized intervention and deferred scope.", "required": true, "multiline": true},
+        {"id": "follow-up-decision", "label": "Follow-up Decision", "description": "Define when to adopt, adapt, stop, or escalate.", "required": true, "multiline": true}
+      ],
+      "providerMappings": {"github": {"issueType": "Task"}, "azureDevOps": {"workItemType": "Task"}}
+    },
+    {
+      "id": "lean-experiment",
+      "displayName": "Lean Experiment",
+      "description": "A bounded hypothesis test with measures and explicit decision criteria.",
+      "origin": {"kind": "overlay", "id": "lean"},
+      "canonicalCategory": "spike",
+      "hierarchy": {"parentTypes": ["epic", "feature", "risk"], "childTypes": ["task"]},
+      "taskPacketFields": ["workItemType", "title", "spec", "acceptanceCriteria", "verification", "targetRepo"],
+      "sourcePath": "templates/lean-experiment.md",
+      "sections": [
+        {"id": "hypothesis", "label": "Hypothesis", "description": "State the predicted outcome and causal belief.", "required": true, "multiline": true},
+        {"id": "measure", "label": "Measure and Guardrails", "description": "Define success measures, safety guardrails, and evidence sources.", "required": true, "multiline": true},
+        {"id": "experiment-bounds", "label": "Experiment Bounds", "description": "Set the smallest batch, capacity limit, duration, and stop conditions.", "required": true, "multiline": true},
+        {"id": "decision-rule", "label": "Decision Rule", "description": "Define adoption, adaptation, rejection, and escalation criteria.", "required": true, "multiline": true}
+      ],
+      "providerMappings": {"github": {"issueType": "Task"}, "azureDevOps": {"workItemType": "Task"}}
+    },
+    {
+      "id": "fdd-feature",
+      "displayName": "FDD Feature",
+      "description": "A small client-valued feature within Subject Area and Business Activity hierarchy.",
+      "origin": {"kind": "flow", "id": "fdd"},
+      "canonicalCategory": "feature",
+      "hierarchy": {"parentTypes": ["epic", "feature"], "childTypes": ["task", "bug"]},
+      "taskPacketFields": ["workItemType", "featureId", "subjectArea", "businessActivity", "featureName", "featureNameParts", "estimatedEffortDays", "featureMilestones", "acceptanceCriteria", "verification"],
+      "sourcePath": "templates/fdd-feature.md",
+      "sections": [
+        {"id": "hierarchy", "label": "Subject Area and Business Activity", "description": "Record Subject Area and Business Activity, AOK's canonical feature-set term.", "required": true, "multiline": true},
+        {"id": "feature-identity", "label": "Feature ID and Canonical Name", "description": "Provide the feature ID and a name accepted by the FDD grammar.", "required": true, "multiline": true},
+        {"id": "parsed-parts", "label": "Parsed Name Parts", "description": "Record action, result, preposition, object, style, and article when classic.", "required": true, "multiline": true},
+        {"id": "effort", "label": "Estimated Effort Days", "description": "Estimate one through ten days; split larger features.", "required": true, "multiline": false},
+        {"id": "membership", "label": "Model and Feature-List Membership", "description": "Link the overall model and approved feature-list entry.", "required": true, "multiline": true},
+        {"id": "milestones", "label": "Feature Milestones", "description": "Record evidence for Domain Walkthrough, Design, Design Inspection, Code, Code Inspection, and Promote to Build.", "required": true, "multiline": true}
+      ],
+      "providerMappings": {"github": {"issueType": "Feature"}, "azureDevOps": {"workItemType": "Feature"}}
+    },
+    {
+      "id": "dsdm-requirement",
+      "displayName": "DSDM Requirement",
+      "description": "An outcome-focused requirement prioritized across project, increment, and timebox.",
+      "origin": {"kind": "flow", "id": "dsdm"},
+      "canonicalCategory": "feature",
+      "hierarchy": {"parentTypes": ["epic", "feature"], "childTypes": ["task", "bug"]},
+      "taskPacketFields": ["workItemType", "requirementId", "requirementTheme", "requirementOutcome", "projectIncrement", "projectMoscow", "incrementMoscow", "timebox", "timeboxMoscow", "acceptanceCriteria", "verification"],
+      "sourcePath": "templates/dsdm-requirement.md",
+      "sections": [
+        {"id": "requirement", "label": "Requirement ID, Theme, and Outcome", "description": "Record the identifier, optional theme, and normalized outcome.", "required": true, "multiline": true},
+        {"id": "moscow", "label": "MoSCoW Priorities", "description": "Record project priority and paired increment/timebox priorities where applicable.", "required": true, "multiline": true},
+        {"id": "planning", "label": "Project Increment and Timebox", "description": "Name assigned increments and timeboxes without treating them as feature hierarchies.", "required": false, "multiline": true},
+        {"id": "ownership", "label": "Ownership and Business Acceptance", "description": "Name the owner and the human Business Ambassador acceptance required.", "required": true, "multiline": true}
+      ],
+      "providerMappings": {"github": {"issueType": "Feature"}, "azureDevOps": {"workItemType": "$defaultRequirementWorkItemType"}}
+    },
+    {
+      "id": "aup-use-case",
+      "displayName": "AUP Use Case",
+      "description": "An actor-goal interaction selected into an AUP iteration.",
+      "origin": {"kind": "flow", "id": "aup"},
+      "canonicalCategory": "feature",
+      "hierarchy": {"parentTypes": ["epic", "feature"], "childTypes": ["task", "bug"]},
+      "taskPacketFields": ["workItemType", "requirementType", "requirementId", "requirementOutcome", "iterationId", "iterationObjective", "acceptanceCriteria", "verification", "disciplineEvidence"],
+      "sourcePath": "templates/aup-use-case.md",
+      "sections": [
+        {"id": "work-identity", "label": "Work-Item ID, Outcome, and Priority", "description": "Record the typed requirement ID, concise outcome, priority, and current status.", "required": true, "multiline": true},
+        {"id": "iteration", "label": "Iteration Link and Objective", "description": "Record iteration ID, lifecycle stage, and objective.", "required": true, "multiline": true},
+        {"id": "use-case", "label": "Actor, Trigger, and Main Flow", "description": "Describe the actor goal, trigger, preconditions, and main success flow.", "required": true, "multiline": true},
+        {"id": "alternates", "label": "Alternate and Failure Flows", "description": "Describe material alternate paths and failure handling.", "required": true, "multiline": true},
+        {"id": "disciplines", "label": "Discipline Implications", "description": "Identify Model, Implementation, Test, Deployment, Configuration Management, Project Management, and Environment implications.", "required": true, "multiline": true}
+      ],
+      "providerMappings": {"github": {"issueType": "Feature"}, "azureDevOps": {"workItemType": "$defaultRequirementWorkItemType"}}
+    },
+    {
+      "id": "aup-user-story",
+      "displayName": "AUP User Story",
+      "description": "A user-valued story selected into an AUP iteration.",
+      "origin": {"kind": "flow", "id": "aup"},
+      "canonicalCategory": "feature",
+      "hierarchy": {"parentTypes": ["epic", "feature"], "childTypes": ["task", "bug"]},
+      "taskPacketFields": ["workItemType", "requirementType", "requirementId", "requirementOutcome", "iterationId", "iterationObjective", "acceptanceCriteria", "verification", "disciplineEvidence"],
+      "sourcePath": "templates/aup-user-story.md",
+      "sections": [
+        {"id": "work-identity", "label": "Work-Item ID, Outcome, and Priority", "description": "Record the typed requirement ID, concise outcome, priority, and current status.", "required": true, "multiline": true},
+        {"id": "iteration", "label": "Iteration Link and Objective", "description": "Record iteration ID, lifecycle stage, and objective.", "required": true, "multiline": true},
+        {"id": "story", "label": "Role, Capability, and Benefit", "description": "State who needs what capability and why.", "required": true, "multiline": true},
+        {"id": "disciplines", "label": "Discipline Implications", "description": "Identify implications across all seven AUP disciplines.", "required": true, "multiline": true}
+      ],
+      "providerMappings": {"github": {"issueType": "Feature"}, "azureDevOps": {"workItemType": "$defaultRequirementWorkItemType"}}
+    },
+    {
+      "id": "aup-non-functional",
+      "displayName": "AUP Non-Functional Requirement",
+      "description": "A measurable quality or constraint requirement selected into an AUP iteration.",
+      "origin": {"kind": "flow", "id": "aup"},
+      "canonicalCategory": "feature",
+      "hierarchy": {"parentTypes": ["epic", "feature"], "childTypes": ["task", "bug"]},
+      "taskPacketFields": ["workItemType", "requirementType", "requirementId", "requirementOutcome", "iterationId", "iterationObjective", "acceptanceCriteria", "verification", "disciplineEvidence"],
+      "sourcePath": "templates/aup-non-functional.md",
+      "sections": [
+        {"id": "work-identity", "label": "Work-Item ID, Outcome, and Priority", "description": "Record the typed requirement ID, concise outcome, priority, and current status.", "required": true, "multiline": true},
+        {"id": "iteration", "label": "Iteration Link and Objective", "description": "Record iteration ID, lifecycle stage, and objective.", "required": true, "multiline": true},
+        {"id": "quality", "label": "Quality Attribute and Context", "description": "Name the quality attribute, operating context, stimulus, and affected response.", "required": true, "multiline": true},
+        {"id": "threshold", "label": "Measure and Threshold", "description": "Define a measurable threshold and verification method.", "required": true, "multiline": true},
+        {"id": "disciplines", "label": "Discipline Implications", "description": "Identify implications across all seven AUP disciplines.", "required": true, "multiline": true}
+      ],
+      "providerMappings": {"github": {"issueType": "Feature"}, "azureDevOps": {"workItemType": "$defaultRequirementWorkItemType"}}
+    },
+    {
+      "id": "aup-business-rule",
+      "displayName": "AUP Business Rule",
+      "description": "A business constraint or decision rule selected into an AUP iteration.",
+      "origin": {"kind": "flow", "id": "aup"},
+      "canonicalCategory": "feature",
+      "hierarchy": {"parentTypes": ["epic", "feature"], "childTypes": ["task", "bug"]},
+      "taskPacketFields": ["workItemType", "requirementType", "requirementId", "requirementOutcome", "iterationId", "iterationObjective", "acceptanceCriteria", "verification", "disciplineEvidence"],
+      "sourcePath": "templates/aup-business-rule.md",
+      "sections": [
+        {"id": "work-identity", "label": "Work-Item ID, Outcome, and Priority", "description": "Record the typed requirement ID, concise outcome, priority, and current status.", "required": true, "multiline": true},
+        {"id": "iteration", "label": "Iteration Link and Objective", "description": "Record iteration ID, lifecycle stage, and objective.", "required": true, "multiline": true},
+        {"id": "rule", "label": "Rule and Rationale", "description": "State the normative rule, source, and business rationale.", "required": true, "multiline": true},
+        {"id": "examples", "label": "Examples and Exceptions", "description": "Provide confirming examples, boundary cases, and authorized exceptions.", "required": true, "multiline": true},
+        {"id": "disciplines", "label": "Discipline Implications", "description": "Identify implications across all seven AUP disciplines.", "required": true, "multiline": true}
+      ],
+      "providerMappings": {"github": {"issueType": "Feature"}, "azureDevOps": {"workItemType": "$defaultRequirementWorkItemType"}}
+    },
+    {
+      "id": "aup-defect",
+      "displayName": "AUP Defect",
+      "description": "An observed defect selected into an AUP iteration with discipline evidence.",
+      "origin": {"kind": "flow", "id": "aup"},
+      "canonicalCategory": "bug",
+      "hierarchy": {"parentTypes": ["epic", "feature"], "childTypes": ["task"]},
+      "taskPacketFields": ["workItemType", "requirementType", "requirementId", "requirementOutcome", "iterationId", "iterationObjective", "acceptanceCriteria", "verification", "disciplineEvidence"],
+      "sourcePath": "templates/aup-defect.md",
+      "sections": [
+        {"id": "work-identity", "label": "Work-Item ID, Outcome, and Priority", "description": "Record the typed defect ID, concise outcome, priority, and current status.", "required": true, "multiline": true},
+        {"id": "iteration", "label": "Iteration Link and Objective", "description": "Record iteration ID, lifecycle stage, and objective.", "required": true, "multiline": true},
+        {"id": "defect", "label": "Observed, Expected, and Reproduction", "description": "Record observed and expected behavior, reproduction, environment, and impact.", "required": true, "multiline": true},
+        {"id": "disciplines", "label": "Discipline Implications", "description": "Identify implications across all seven AUP disciplines.", "required": true, "multiline": true}
+      ],
+      "providerMappings": {"github": {"issueType": "Bug"}, "azureDevOps": {"workItemType": "Bug"}}
+    },
+    {
+      "id": "aup-technical",
+      "displayName": "AUP Technical Work",
+      "description": "Architecture, environment, configuration, or implementation work selected into an AUP iteration.",
+      "origin": {"kind": "flow", "id": "aup"},
+      "canonicalCategory": "task",
+      "hierarchy": {"parentTypes": ["epic", "feature"], "childTypes": ["task", "bug"]},
+      "taskPacketFields": ["workItemType", "requirementType", "requirementId", "requirementOutcome", "iterationId", "iterationObjective", "acceptanceCriteria", "verification", "disciplineEvidence"],
+      "sourcePath": "templates/aup-technical.md",
+      "sections": [
+        {"id": "work-identity", "label": "Work-Item ID, Outcome, and Priority", "description": "Record the typed technical-work ID, concise outcome, priority, and current status.", "required": true, "multiline": true},
+        {"id": "iteration", "label": "Iteration Link and Objective", "description": "Record iteration ID, lifecycle stage, and objective.", "required": true, "multiline": true},
+        {"id": "technical-objective", "label": "Technical Objective and Rationale", "description": "Describe the technical outcome, constraints, and delivery rationale.", "required": true, "multiline": true},
+        {"id": "disciplines", "label": "Discipline Implications", "description": "Identify implications across all seven AUP disciplines.", "required": true, "multiline": true}
+      ],
+      "providerMappings": {"github": {"issueType": "Task"}, "azureDevOps": {"workItemType": "Task"}}
+    }
+  ]
+}

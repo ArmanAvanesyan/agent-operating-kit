@@ -1,0 +1,84 @@
+{
+  "id": "dsdm-requirement",
+  "methodology": "dsdm",
+  "hierarchy": [
+    {
+      "id": "requirementTheme",
+      "displayName": "Theme",
+      "optional": true
+    },
+    {
+      "id": "requirement",
+      "displayName": "Requirement",
+      "optional": false
+    },
+    {
+      "id": "acceptanceCriterion",
+      "displayName": "Acceptance Criterion",
+      "optional": false,
+      "repeatable": true
+    }
+  ],
+  "identifier": {
+    "field": "requirementId",
+    "pattern": "^[A-Z][A-Z0-9]*-[0-9]+$",
+    "examples": ["REQ-014", "BILL-14", "REG2-003"]
+  },
+  "outcome": {
+    "field": "requirementOutcome",
+    "rule": "A non-empty outcome statement; no feature-name grammar is imposed."
+  },
+  "moscow": {
+    "values": [
+      {"id": "must", "displayName": "Must Have"},
+      {"id": "should", "displayName": "Should Have"},
+      {"id": "could", "displayName": "Could Have"},
+      {"id": "wont", "displayName": "Won't Have this time"}
+    ],
+    "levels": [
+      {"id": "project", "field": "projectMoscow", "contextField": null},
+      {"id": "project-increment", "field": "incrementMoscow", "contextField": "projectIncrement"},
+      {"id": "timebox", "field": "timeboxMoscow", "contextField": "timebox"}
+    ],
+    "legacyAlias": {
+      "field": "moscow",
+      "mapsTo": "timeboxMoscow"
+    },
+    "guidance": {
+      "mustEffortMaximumPercent": 60,
+      "couldEffortTargetPercent": 20,
+      "enforcement": "advisory"
+    }
+  },
+  "timeboxing": {
+    "policy": {
+      "time": "fixed",
+      "quality": "protected",
+      "scope": "flexed-by-moscow"
+    },
+    "checkpoints": [
+      {"id": "kick-off", "name": "Kick-off", "order": 1},
+      {"id": "mid-timebox", "name": "Mid-timebox", "order": 2},
+      {"id": "close-out", "name": "Close-out", "order": 3}
+    ],
+    "dispositions": [
+      {"id": "planned", "name": "Planned"},
+      {"id": "delivered", "name": "Delivered"},
+      {"id": "deferred", "name": "Deferred"},
+      {"id": "wont", "name": "Won't Have this time"}
+    ],
+    "progressMeasure": "requirements-delivered-and-accepted-by-moscow"
+  },
+  "gateInputs": [
+    "requirementId",
+    "requirementOutcome",
+    "projectMoscow",
+    "acceptanceCriteria",
+    "timebox",
+    "timeboxMoscow",
+    "assignedTimeboxScope",
+    "verificationEvidence",
+    "businessAmbassadorAcceptance",
+    "acceptedEvolvingSolution"
+  ]
+}

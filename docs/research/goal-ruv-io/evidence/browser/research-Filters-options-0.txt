@@ -1,0 +1,8 @@
+- listbox:
+  - option "Past Week"
+  - option "Past Month"
+  - option "Past 3 Months"
+  - option "Past 6 Months"
+  - option "Past Year" [selected]
+  - option "Past 2 Years"
+  - option "All Time"

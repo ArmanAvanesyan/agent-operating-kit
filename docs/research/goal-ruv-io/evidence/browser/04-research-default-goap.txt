@@ -1,0 +1,87 @@
+- region "Notifications alt+T"
+- dialog "Advanced Research Settings":
+  - heading "Advanced Research Settings" [level=2]:
+    - img
+    - text: Advanced Research Settings
+  - paragraph: Fine-tune GOAP planner, model routing, and per-step prompts for this research run.
+  - img
+  - text: "AI-Optimize Settings by Research Type:"
+  - button "Academic Research Deep, rigorous academic analysis":
+    - img
+    - text: Academic Research Deep, rigorous academic analysis
+  - button "Industry Quick Scan Fast business insights":
+    - img
+    - text: Industry Quick Scan Fast business insights
+  - button "Competitive Intel Market & competitor analysis":
+    - img
+    - text: Competitive Intel Market & competitor analysis
+  - button "Technical Study Engineering feasibility":
+    - img
+    - text: Technical Study Engineering feasibility
+  - button "Market Trends Trend analysis & forecasting":
+    - img
+    - text: Market Trends Trend analysis & forecasting
+  - button "Medical/Clinical Evidence-based medical research":
+    - img
+    - text: Medical/Clinical Evidence-based medical research
+  - button "Startup Validation Business idea validation":
+    - img
+    - text: Startup Validation Business idea validation
+  - button "Policy & Regulatory Compliance & legal research":
+    - img
+    - text: Policy & Regulatory Compliance & legal research
+  - paragraph: Fine-tune how the AI conducts research by configuring GOAP planning parameters, AI prompts, execution settings, and source filters.
+  - tablist:
+    - tab "Guidance":
+      - img
+      - text: Guidance
+    - tab "GOAP" [selected]:
+      - img
+      - text: GOAP
+    - tab "Prompts":
+      - img
+      - text: Prompts
+    - tab "Parameters":
+      - img
+      - text: Parameters
+    - tab "Actions":
+      - img
+      - text: Actions
+    - tab "Filters":
+      - img
+      - text: Filters
+  - tabpanel "GOAP":
+    - heading "GOAP Configuration" [level=3]:
+      - img
+      - text: GOAP Configuration
+    - paragraph: Configure Goal-Oriented Action Planning parameters
+    - text: Execution Mode
+    - combobox: Closed (Single-domain planning)
+    - paragraph: Plan within defined action set with type safety
+    - text: Enable Replanning
+    - paragraph: Adjust plan when actions fail
+    - switch [checked]
+    - text: Cost Optimization
+    - paragraph: Find most efficient action paths
+    - switch [checked]
+    - text: Parallel Execution
+    - paragraph: Run independent actions simultaneously
+    - switch [checked]
+    - text: Replanning Triggers
+    - switch "Action failure" [checked]
+    - text: Action failure
+    - switch "Low confidence results" [checked]
+    - text: Low confidence results
+    - switch "Missing preconditions" [checked]
+    - text: Missing preconditions
+    - switch "Timeout exceeded"
+    - text: Timeout exceeded
+    - switch "State mismatch"
+    - text: State mismatch
+  - button "Cancel"
+  - button "Start Revised Research":
+    - img
+    - text: Start Revised Research
+  - button "Close":
+    - img
+    - text: Close

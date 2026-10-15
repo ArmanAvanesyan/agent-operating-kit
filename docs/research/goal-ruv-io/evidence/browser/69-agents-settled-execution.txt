@@ -1,0 +1,35 @@
+- region "Notifications alt+T"
+- dialog "Advanced Agent Configuration":
+  - heading "Advanced Agent Configuration" [level=2]:
+    - img
+    - text: Advanced Agent Configuration
+  - paragraph: Configure swarm topology, GOAP planning, execution strategy, and model routing
+  - text: Quick Presets
+  - button "Development development Fast iteration, verbose logging"
+  - button "Production production Optimized performance, strict validation"
+  - button "Budget budget Cost-optimized, slower execution"
+  - button "Quality quality Maximum quality, higher cost"
+  - tablist:
+    - tab "Swarm"
+    - tab "GOAP"
+    - tab "Execution" [selected]
+    - tab "Model"
+  - tabpanel "Execution":
+    - text: Execution Strategy
+    - combobox "Execution Strategy": Adaptive - Dynamic based on load
+    - text: "Max Parallel Tasks: 5"
+    - slider
+    - text: "Timeout (seconds): 300"
+    - slider
+    - text: Enable Quality Gates
+    - paragraph: Run compile checks, test coverage, code quality, and security scans
+    - switch [checked]
+  - button "Reset to Defaults":
+    - img
+    - text: Reset to Defaults
+  - button "Save Configuration":
+    - img
+    - text: Save Configuration
+  - button "Close":
+    - img
+    - text: Close

@@ -1,0 +1,28 @@
+- region "Notifications (F8)":
+  - list
+- region "Notifications alt+T"
+- heading "Coding Agent Swarm" [level=1]
+- paragraph: Intelligent multi-agent system for collaborative software development
+- link "Back to Research":
+  - /url: /
+  - button "Back to Research":
+    - img
+    - text: Back to Research
+- button "Switch to light theme":
+  - img
+- heading "Coding Objective" [level=3]:
+  - img
+  - text: Coding Objective
+- paragraph: Define what you want the agent swarm to build
+- button "Advanced Settings":
+  - img
+  - text: Advanced Settings
+- textbox "e.g., Build REST API with JWT authentication and PostgreSQL"
+- button "Generate Plan" [disabled]:
+  - img
+  - text: Generate Plan
+- img
+- heading "Ready to Plan" [level=3]
+- paragraph: Enter a coding objective above and click "Generate Plan" to see the agent swarm in action
+- paragraph: "Example: \"Build REST API with JWT authentication and PostgreSQL\""
+- paragraph: "Example: \"Create a React dashboard with charts and real-time data\""

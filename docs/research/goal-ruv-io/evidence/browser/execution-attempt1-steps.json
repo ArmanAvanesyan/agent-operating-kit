@@ -1,0 +1,112 @@
+[
+  {
+    "time": "2026-10-15T14:07:50.006Z",
+    "test": "Advanced goal does not inherit main textarea",
+    "result": "PASS"
+  },
+  {
+    "time": "2026-10-15T14:07:50.108Z",
+    "test": "duplicate focus entries accepted",
+    "result": "FAIL"
+  },
+  {
+    "time": "2026-10-15T14:07:52.468Z",
+    "test": "Advanced apply does not start research",
+    "result": "PASS",
+    "note": "Corrected original probe: wait for dialog unmount before querying background controls."
+  },
+  {
+    "time": "2026-10-15T14:07:52.470Z",
+    "test": "Advanced goal does not overwrite main textarea",
+    "result": "PASS"
+  },
+  {
+    "time": "2026-10-15T14:07:52.603Z",
+    "test": "applied manual config survives reopen",
+    "result": "PASS"
+  },
+  {
+    "time": "2026-10-15T14:08:43.289Z",
+    "test": "seven sequential step requests despite maxSteps three",
+    "result": "FAIL",
+    "stepTypes": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "statuses": [
+      502,
+      502,
+      502,
+      502
+    ]
+  },
+  {
+    "time": "2026-10-15T14:08:43.289Z",
+    "test": "manual settings reach live research requests",
+    "result": "FAIL",
+    "config": {
+      "researchGuidance": {
+        "focusAreas": [
+          "basic operations",
+          "basic operations"
+        ],
+        "excludeTopics": [
+          "quantum physics"
+        ],
+        "depth": "surface",
+        "perspective": "practical",
+        "timeframe": "all-time"
+      },
+      "prompts": {
+        "systemPrompt": "You are an expert research assistant specializing in GOAP (Goal-Oriented Action Planning) research workflows. \nYour role is to provide precise, evidence-based information for each research step.\nFormat your responses as structured data points that can be used in subsequent research steps.\nAlways include sources, confidence levels, and timestamps when available.",
+        "searchQueryTemplate": "Latest {topic} advancements {year} research site:arxiv.org OR site:scholar.google.com OR site:ieee.org",
+        "analysisPrompt": "Analyze the following content and extract:\n1. Key findings and methodologies\n2. Actionable insights and recommendations  \n3. Technical details and specifications\n4. Sources and citations\n5. Confidence level (0-100%) based on source quality",
+        "synthesisPrompt": "Synthesize the research findings into:\n1. Coherent summary of key discoveries\n2. Connections between different sources\n3. Practical recommendations\n4. Identified gaps or conflicts in the data\n5. Overall confidence assessment"
+      },
+      "parameters": {
+        "maxSources": 5,
+        "minConfidence": 85,
+        "maxSteps": 3,
+        "parallelAgents": 3,
+        "timeout": 30
+      },
+      "filters": {
+        "dateRange": "past-year",
+        "sourceTypes": [
+          "academic",
+          "technical",
+          "industry"
+        ],
+        "languages": [
+          "en"
+        ],
+        "excludeDomains": [
+          "example.com"
+        ]
+      }
+    }
+  },
+  {
+    "time": "2026-10-15T14:08:43.289Z",
+    "test": "final report omits config",
+    "result": "FAIL"
+  },
+  {
+    "time": "2026-10-15T14:08:43.290Z",
+    "test": "failed AI steps still complete",
+    "result": "FAIL",
+    "note": "Final call follows all failed normal calls; inspect screenshots for completion state."
+  },
+  {
+    "time": "2026-10-15T14:08:45.517Z",
+    "test": "inverted autoscaling range accepted on save",
+    "result": "PASS"
+  },
+  {
+    "time": "2026-10-15T14:08:46.449Z",
+    "test": "Dijkstra plus custom heuristic saves without editor",
+    "result": "PASS"
+  }
+]

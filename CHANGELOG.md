@@ -2,6 +2,24 @@
 
 ## Unreleased
 
+- Add scaffolded, read-only GitHub Projects and Azure DevOps work-system
+  discovery, desired-state planning, validation, and verified local bindings.
+- Preserve verified work-system bindings across `aok project init`.
+- Add project methodology selection with active Kanban, XP, and Lean policy
+  composition plus scaffolded FDD, DSDM, AUP, and planned AM catalog entries.
+- Add structured FDD, DSDM, and AUP lifecycle, role, artifact, ceremony, gate,
+  and phase-mapping catalogs with safe local scaffold export.
+- Add curated FDD feature/domain artifacts, structured feature metadata,
+  classic milestone tracking, and read-only feature-name validation.
+- Add curated DSDM product templates, structured requirement and timebox
+  metadata, three-level MoSCoW priorities, and read-only requirement validation.
+- Add curated AUP model and iteration templates, seven-discipline evidence,
+  lifecycle milestone contracts, and read-only iteration validation.
+- Add a 19-entry methodology-aware work-item catalog with deterministic neutral
+  Markdown, GitHub Issue Form, and Azure DevOps desired-state scaffolding.
+- Include GitHub sync and release workflow files in release kits so extracted
+  kits satisfy their own required-file validation.
+
 ## 0.6.1
 
 - Same-repo Homebrew / Scoop / winget packaging layout and docs: unsigned

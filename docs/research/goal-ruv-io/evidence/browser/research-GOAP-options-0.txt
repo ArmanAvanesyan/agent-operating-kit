@@ -1,0 +1,4 @@
+- listbox:
+  - option "Focused (Direct execution)"
+  - option "Closed (Single-domain planning)" [selected]
+  - option "Open (Creative problem solving)"

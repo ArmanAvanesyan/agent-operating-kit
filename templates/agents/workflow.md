@@ -1,5 +1,9 @@
 # Agent Workflow
 
+The neutral statuses and phases in this file remain stable across
+methodologies. Apply the selected planning, WIP, and engineering practices from
+`agents/methodology.md`.
+
 ## Status Flow
 
 Use this status model for GitHub Project items:

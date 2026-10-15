@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ArmanAvanesyan/agent-operating-kit/schemas/artifact.schema.json",
+  "title": "AOK Methodology Artifact",
+  "type": "object",
+  "required": [
+    "id",
+    "kind",
+    "title",
+    "description",
+    "methodology",
+    "requirement",
+    "evolution",
+    "owners",
+    "approvers",
+    "lifecycleStages",
+    "sections",
+    "template"
+  ],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "kind": { "const": "artifact" },
+    "title": { "type": "string", "minLength": 1 },
+    "description": { "type": "string", "minLength": 1 },
+    "methodology": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "requirement": {
+      "type": "string",
+      "enum": ["required", "conditional", "optional"]
+    },
+    "evolution": {
+      "type": "string",
+      "enum": ["milestone", "evolutionary", "iterative", "working"]
+    },
+    "owners": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "approvers": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+      "uniqueItems": true
+    },
+    "lifecycleStages": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "sections": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "template": {
+      "type": "object",
+      "required": ["outputPath"],
+      "properties": {
+        "outputPath": {
+          "type": "string",
+          "pattern": "^docs/methodology/[a-z0-9-]+/artifacts/[a-z0-9-]+\\.md$"
+        },
+        "sourcePath": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9/.-]*\\.md$"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

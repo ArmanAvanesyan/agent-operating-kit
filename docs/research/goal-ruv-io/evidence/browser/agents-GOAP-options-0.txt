@@ -1,0 +1,6 @@
+- listbox:
+  - option "A* - Optimal pathfinding" [selected]
+  - option "Greedy - Fast, not optimal"
+  - option "Dijkstra - Guaranteed optimal"
+  - option "BFS - Breadth-first search"
+  - option "DFS - Depth-first search"

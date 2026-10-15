@@ -12,6 +12,14 @@ From the AOK checkout:
 ./scripts/aok project init /path/to/project
 ```
 
+Kanban is selected by default. Optional active practice overlays can be
+composed during initialization:
+
+```bash
+./scripts/aok project init /path/to/project \
+  --flow kanban --overlay xp --overlay lean
+```
+
 Then validate:
 
 ```bash
@@ -92,6 +100,36 @@ Workspace kind is detected as:
 4. Run `./scripts/aok project validate /path/to/project`.
 5. Commit the project-side operating files in that project, not in the AOK
    checkout.
+
+Remote boards are a separate follow-up. Run `./scripts/aok work-system setup github` or
+`./scripts/aok work-system setup azure-devops` after local initialization. A verified
+binding written to `.aok/project.json` is preserved by later project init runs.
+See `work-system-bootstrap.md`.
+
+Methodology can be changed later with `./scripts/aok methodology set`. Existing explicit
+methodology and work-system bindings are preserved when init is run without
+methodology flags. See `methodology-profiles.md`.
+
+Scaffolded methodology flows remain separate from project initialization. To
+inspect FDD, DSDM, or AUP roles and artifact templates without selecting the
+flow, run:
+
+```bash
+./scripts/aok methodology scaffold /path/to/project --flow fdd
+```
+
+This local export leaves `.aok/project.json` and remote work systems unchanged.
+
+Work-item templates are a separate explicit export:
+
+```bash
+./scripts/aok work-item scaffold /path/to/project
+./scripts/aok work-item validate /path/to/project
+```
+
+This writes neutral task templates, GitHub Issue Forms, and Azure DevOps
+desired-state guidance based on the selected methodology. It does not change
+the project methodology or any remote work system. See `work-item-types.md`.
 
 ## Rollback
 

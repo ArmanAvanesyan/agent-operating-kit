@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.invalid/operational/SDLCTraceability.json",
+  "title": "SDLCTraceability",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "SDLCTraceability"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    },
+    "goalRef": {
+      "$ref": "common.schema.json#/$defs/pin"
+    },
+    "planRef": {
+      "$ref": "common.schema.json#/$defs/pin"
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "requirement": {
+            "type": "string",
+            "minLength": 1
+          },
+          "predicateRefs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "workflowType": {
+            "type": "string",
+            "minLength": 1
+          },
+          "stepRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "assignmentRef": {
+            "$ref": "common.schema.json#/$defs/pin"
+          },
+          "outputContractRef": {
+            "$ref": "common.schema.json#/$defs/pin"
+          },
+          "verificationRef": {
+            "$ref": "common.schema.json#/$defs/pin"
+          },
+          "runRefs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "requirement",
+          "predicateRefs",
+          "workflowType",
+          "stepRef",
+          "assignmentRef",
+          "outputContractRef",
+          "verificationRef",
+          "runRefs"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "coverage": {
+      "enum": [
+        "planned",
+        "partial",
+        "verified"
+      ]
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "goalRef",
+    "planRef",
+    "links",
+    "coverage",
+    "evidence"
+  ],
+  "additionalProperties": false
+}

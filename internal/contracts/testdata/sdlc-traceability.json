@@ -1,0 +1,49 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "SDLCTraceability",
+  "metadata": {
+    "id": "exploration-traceability",
+    "version": "0.1.0",
+    "description": "Illustrative proposal fixture; no execution or integration implied.",
+    "name": "Exploration Traceability"
+  },
+  "goalRef": {
+    "kind": "GoalContract",
+    "id": "explore-repository",
+    "version": "0.1.0"
+  },
+  "planRef": {
+    "kind": "PlanDefinition",
+    "id": "exploration-plan",
+    "version": "0.1.0"
+  },
+  "links": [
+    {
+      "requirement": "Source-grounded exploration deliverables",
+      "predicateRefs": [
+        "report-valid",
+        "coverage-reconciled"
+      ],
+      "workflowType": "repository-onboarding",
+      "stepRef": "verify",
+      "assignmentRef": {
+        "kind": "AgentAssignment",
+        "id": "exploration-verify-assignment",
+        "version": "0.1.0"
+      },
+      "outputContractRef": {
+        "kind": "OutputContract",
+        "id": "repository-exploration-report",
+        "version": "0.1.0"
+      },
+      "verificationRef": {
+        "kind": "EvaluationContract",
+        "id": "exploration-evaluation",
+        "version": "0.1.0"
+      },
+      "runRefs": []
+    }
+  ],
+  "coverage": "planned",
+  "evidence": []
+}

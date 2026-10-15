@@ -344,6 +344,22 @@ func DecodeTyped(resource Resource) (any, error) {
 		return decodeResource[EvaluationContract](resource.Document)
 	case "MigrationContract":
 		return decodeResource[MigrationContract](resource.Document)
+	case "GoalContract":
+		return decodeResource[GoalContract](resource.Document)
+	case "PlanDefinition":
+		return decodeResource[PlanDefinition](resource.Document)
+	case "PlanRevision":
+		return decodeResource[PlanRevision](resource.Document)
+	case "DecisionContract":
+		return decodeResource[DecisionContract](resource.Document)
+	case "DecisionResult":
+		return decodeResource[DecisionResult](resource.Document)
+	case "OptimizationExperiment":
+		return decodeResource[OptimizationExperiment](resource.Document)
+	case "SDLCTraceability":
+		return decodeResource[SDLCTraceability](resource.Document)
+	case "PlanningEvidence":
+		return decodeResource[PlanningEvidence](resource.Document)
 	default:
 		return nil, fmt.Errorf("unsupported resource kind %q", resource.Kind)
 	}

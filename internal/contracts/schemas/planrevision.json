@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.invalid/operational/PlanRevision.json",
+  "title": "PlanRevision",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "PlanRevision"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    },
+    "trigger": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "stepId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "operation": {
+            "enum": [
+              "add",
+              "modify",
+              "remove"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "stepId",
+          "operation",
+          "reason"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "preservedEvidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "invalidatedEvidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "authorizationRef": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "enum": [
+        "proposed",
+        "accepted",
+        "rejected"
+      ]
+    },
+    "beforePlan": {
+      "$ref": "common.schema.json#/$defs/pin"
+    },
+    "afterPlan": {
+      "$ref": "common.schema.json#/$defs/pin"
+    },
+    "predecessor": {
+      "oneOf": [
+        {
+          "$ref": "common.schema.json#/$defs/pin"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "ordinal": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 2147483647
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "trigger",
+    "evidence",
+    "changes",
+    "preservedEvidence",
+    "invalidatedEvidence",
+    "authorizationRef",
+    "state",
+    "beforePlan",
+    "afterPlan",
+    "predecessor",
+    "ordinal"
+  ],
+  "additionalProperties": false
+}

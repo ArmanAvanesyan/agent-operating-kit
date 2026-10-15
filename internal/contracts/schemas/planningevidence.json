@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.invalid/operational/planningevidence.json",
+  "title": "PlanningEvidence",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "PlanningEvidence"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    },
+    "planRef": {
+      "$ref": "common.schema.json#/$defs/pin"
+    },
+    "planSHA256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "evaluatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "outcomes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "predicateId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "pass",
+              "fail",
+              "unknown",
+              "error"
+            ]
+          },
+          "artifactRefs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "predicateId",
+          "status",
+          "artifactRefs"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "completedSteps": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "inventoryCoverage": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "revisionsUsed": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2147483647
+    },
+    "attemptsUsed": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2147483647
+    },
+    "elapsedSeconds": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2147483647
+    },
+    "cancelled": {
+      "type": "boolean"
+    },
+    "contextSHA256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "planRef",
+    "planSHA256",
+    "evaluatedAt",
+    "expiresAt",
+    "outcomes",
+    "completedSteps",
+    "inventoryCoverage",
+    "revisionsUsed",
+    "attemptsUsed",
+    "elapsedSeconds",
+    "cancelled",
+    "contextSHA256"
+  ],
+  "additionalProperties": false
+}

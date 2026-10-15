@@ -25,8 +25,10 @@ are Agent, ExecutionProfile, AgentAssignment, CapabilityRegistry,
 InvocationContract, ContextPolicy, OutputContract, EnvironmentProfile,
 LifecyclePolicy, EvaluationContract, and MigrationContract. Delegated agents
 use exact Agent references; evaluation declarations pin their agent and profiles.
-Planning `GoalContract`, `PlanDefinition`, `PlanRevision`, `DecisionContract`,
-`SDLCTraceability`, and optimization kinds are deferred to planning PRs.
+Planning adds GoalContract, PlanDefinition, PlanRevision, DecisionContract,
+DecisionResult, SDLCTraceability, OptimizationExperiment and PlanningEvidence.
+Their cross-contract and evidence semantics are checked by `internal/planning`,
+`internal/decision` and `internal/experiment`.
 
 To bound schema-engine exact arithmetic, numeric lexemes are limited to 1024
 bytes and exponents to -10000 through 10000 before schema validation.

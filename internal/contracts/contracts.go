@@ -76,7 +76,7 @@ func Parse(data []byte) (any, []Diagnostic, error) {
 		return fail("document.api-version", "apiVersion", fmt.Sprintf("unsupported apiVersion %q", head.APIVersion))
 	}
 	switch head.Kind {
-	case "Agent", "ExecutionProfile", "AgentAssignment", "CapabilityRegistry", "InvocationContract", "ContextPolicy", "OutputContract", "EnvironmentProfile", "LifecyclePolicy", "EvaluationContract", "MigrationContract":
+	case "Agent", "ExecutionProfile", "AgentAssignment", "CapabilityRegistry", "InvocationContract", "ContextPolicy", "OutputContract", "EnvironmentProfile", "LifecyclePolicy", "EvaluationContract", "MigrationContract", "GoalContract", "PlanDefinition", "PlanRevision", "DecisionContract", "DecisionResult", "OptimizationExperiment", "SDLCTraceability", "PlanningEvidence":
 	default:
 		return fail("document.kind", "kind", fmt.Sprintf("unsupported kind %q", head.Kind))
 	}

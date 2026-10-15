@@ -1,0 +1,224 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.invalid/operational/OptimizationExperiment.json",
+  "title": "OptimizationExperiment",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "OptimizationExperiment"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    },
+    "agentRef": {
+      "$ref": "common.schema.json#/$defs/pin"
+    },
+    "baselineVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "profileRefs": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/pin"
+      },
+      "uniqueItems": true
+    },
+    "optimizer": {
+      "type": "object",
+      "properties": {
+        "adapterRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "adapterRef",
+        "version"
+      ],
+      "additionalProperties": false
+    },
+    "mutableFields": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "protectedFields": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "datasets": {
+      "type": "object",
+      "properties": {
+        "train": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9._-]+@[a-f0-9]{64}$"
+          },
+          "uniqueItems": true
+        },
+        "validation": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9._-]+@[a-f0-9]{64}$"
+          },
+          "uniqueItems": true
+        },
+        "test": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9._-]+@[a-f0-9]{64}$"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "train",
+        "validation",
+        "test"
+      ],
+      "additionalProperties": false
+    },
+    "evaluator": {
+      "type": "object",
+      "properties": {
+        "ref": {
+          "$ref": "common.schema.json#/$defs/pin"
+        },
+        "immutable": {
+          "const": true
+        }
+      },
+      "required": [
+        "ref",
+        "immutable"
+      ],
+      "additionalProperties": false
+    },
+    "budget": {
+      "type": "object",
+      "properties": {
+        "maxCandidateEvaluations": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "maxProposerCostUsd": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "maxEvaluationCostUsd": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "maxCandidateEvaluations",
+        "maxProposerCostUsd",
+        "maxEvaluationCostUsd"
+      ],
+      "additionalProperties": false
+    },
+    "promotion": {
+      "type": "object",
+      "properties": {
+        "automatic": {
+          "const": false
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "automatic",
+        "requirements"
+      ],
+      "additionalProperties": false
+    },
+    "status": {
+      "enum": [
+        "not-run",
+        "running",
+        "completed",
+        "failed"
+      ]
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "candidateRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "disposition": {
+            "enum": [
+              "unreviewed",
+              "rejected",
+              "approved"
+            ]
+          }
+        },
+        "required": [
+          "candidateRef",
+          "evidence",
+          "disposition"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "agentRef",
+    "baselineVersion",
+    "profileRefs",
+    "optimizer",
+    "mutableFields",
+    "protectedFields",
+    "datasets",
+    "evaluator",
+    "budget",
+    "promotion",
+    "status",
+    "results"
+  ],
+  "additionalProperties": false
+}

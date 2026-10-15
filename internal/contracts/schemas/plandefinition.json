@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.invalid/operational/PlanDefinition.json",
+  "title": "PlanDefinition",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "PlanDefinition"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    },
+    "goalRef": {
+      "$ref": "common.schema.json#/$defs/pin"
+    },
+    "strategy": {
+      "enum": [
+        "fixed-dag",
+        "hierarchical",
+        "iterative",
+        "inventory-campaign"
+      ]
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "dependsOn": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "preconditions": {
+            "type": "array",
+            "items": {
+              "$ref": "common.schema.json#/$defs/planningPredicate"
+            },
+            "uniqueItems": true
+          },
+          "outputs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "completionChecks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "common.schema.json#/$defs/planningPredicate"
+            }
+          },
+          "assignmentRef": {
+            "$ref": "common.schema.json#/$defs/pin"
+          },
+          "workflowRef": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ownership": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "recovery": {
+            "enum": [
+              "stop",
+              "retry-within-policy",
+              "replan"
+            ]
+          },
+          "verifierRef": {
+            "$ref": "common.schema.json#/$defs/pin"
+          }
+        },
+        "required": [
+          "id",
+          "description",
+          "dependsOn",
+          "preconditions",
+          "outputs",
+          "completionChecks",
+          "assignmentRef",
+          "workflowRef",
+          "ownership",
+          "recovery",
+          "verifierRef"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "methodRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "inventory": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "stepRefs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "disposition": {
+            "enum": [
+              "included",
+              "excluded",
+              "deferred"
+            ]
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "stepRefs",
+          "disposition",
+          "rationale"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "aggregateVerification": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/planningPredicate"
+      },
+      "uniqueItems": true
+    },
+    "concurrencyLimit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 2147483647
+    },
+    "replanning": {
+      "type": "object",
+      "properties": {
+        "maxRevisions": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "preserveCompletedEvidence": {
+          "const": true
+        }
+      },
+      "required": [
+        "maxRevisions",
+        "preserveCompletedEvidence"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "goalRef",
+    "strategy",
+    "steps",
+    "methodRefs",
+    "inventory",
+    "aggregateVerification",
+    "concurrencyLimit",
+    "replanning"
+  ],
+  "additionalProperties": false
+}

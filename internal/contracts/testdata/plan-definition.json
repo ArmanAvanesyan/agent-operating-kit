@@ -1,0 +1,159 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "PlanDefinition",
+  "metadata": {
+    "id": "exploration-plan",
+    "version": "0.1.0",
+    "description": "Illustrative proposal fixture; no execution or integration implied.",
+    "name": "Exploration Plan"
+  },
+  "goalRef": {
+    "kind": "GoalContract",
+    "id": "explore-repository",
+    "version": "0.1.0"
+  },
+  "strategy": "fixed-dag",
+  "steps": [
+    {
+      "id": "inspect",
+      "description": "Inspect the repository exploration artifacts.",
+      "dependsOn": [],
+      "preconditions": [],
+      "outputs": [
+        "inventory"
+      ],
+      "completionChecks": [
+        {
+          "id": "inspect-check",
+          "description": "Required stage evidence has passed validation.",
+          "verifierRef": {
+            "kind": "Capability",
+            "id": "inspect-check-verifier",
+            "version": "0.1.0"
+          },
+          "required": true
+        }
+      ],
+      "assignmentRef": {
+        "kind": "AgentAssignment",
+        "id": "exploration-inspect-assignment",
+        "version": "0.1.0"
+      },
+      "workflowRef": "repository-onboarding",
+      "ownership": [
+        "docs/reports/explore-aok-001"
+      ],
+      "recovery": "stop",
+      "verifierRef": {
+        "kind": "Capability",
+        "id": "inspect-verifier",
+        "version": "0.1.0"
+      }
+    },
+    {
+      "id": "report",
+      "description": "Report the repository exploration artifacts.",
+      "dependsOn": [
+        "inspect"
+      ],
+      "preconditions": [],
+      "outputs": [
+        "exploration-report"
+      ],
+      "completionChecks": [
+        {
+          "id": "report-check",
+          "description": "Required stage evidence has passed validation.",
+          "verifierRef": {
+            "kind": "Capability",
+            "id": "report-check-verifier",
+            "version": "0.1.0"
+          },
+          "required": true
+        }
+      ],
+      "assignmentRef": {
+        "kind": "AgentAssignment",
+        "id": "exploration-report-assignment",
+        "version": "0.1.0"
+      },
+      "workflowRef": "repository-onboarding",
+      "ownership": [
+        "docs/reports/explore-aok-001"
+      ],
+      "recovery": "stop",
+      "verifierRef": {
+        "kind": "Capability",
+        "id": "report-verifier",
+        "version": "0.1.0"
+      }
+    },
+    {
+      "id": "verify",
+      "description": "Verify the repository exploration artifacts.",
+      "dependsOn": [
+        "report"
+      ],
+      "preconditions": [],
+      "outputs": [
+        "verification-result"
+      ],
+      "completionChecks": [
+        {
+          "id": "verify-check",
+          "description": "Required stage evidence has passed validation.",
+          "verifierRef": {
+            "kind": "Capability",
+            "id": "verify-check-verifier",
+            "version": "0.1.0"
+          },
+          "required": true
+        }
+      ],
+      "assignmentRef": {
+        "kind": "AgentAssignment",
+        "id": "exploration-verify-assignment",
+        "version": "0.1.0"
+      },
+      "workflowRef": "repository-onboarding",
+      "ownership": [
+        "docs/reports/explore-aok-001"
+      ],
+      "recovery": "stop",
+      "verifierRef": {
+        "kind": "Capability",
+        "id": "verify-verifier",
+        "version": "0.1.0"
+      }
+    }
+  ],
+  "methodRefs": [],
+  "inventory": [],
+  "aggregateVerification": [
+    {
+      "id": "report-valid",
+      "description": "Validate the report independently of step completion.",
+      "verifierRef": {
+        "kind": "Capability",
+        "id": "report-valid-verifier",
+        "version": "0.1.0"
+      },
+      "required": true
+    },
+    {
+      "id": "coverage-reconciled",
+      "description": "Reconcile discovered units and omissions.",
+      "verifierRef": {
+        "kind": "Capability",
+        "id": "coverage-reconciled-verifier",
+        "version": "0.1.0"
+      },
+      "required": true
+    }
+  ],
+  "concurrencyLimit": 1,
+  "replanning": {
+    "maxRevisions": 1,
+    "preserveCompletedEvidence": true
+  }
+}

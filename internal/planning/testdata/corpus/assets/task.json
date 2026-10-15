@@ -1,0 +1,21 @@
+{
+  "title": "Explore repository structure and development readiness",
+  "spec": "Inspect the assigned repository and produce a source-grounded exploration report without modifying application code.",
+  "status": "ready",
+  "phase": "planning",
+  "targetRepo": "ArmanAvanesyan/agent-operating-kit",
+  "assignee": "repository-explorer",
+  "qaAssignee": "human-reviewer",
+  "acceptanceCriteria": [
+    "Architecture and development commands cite source paths.",
+    "Required report sections include evidence and coverage limitations.",
+    "Only the approved report subtree may be written."
+  ],
+  "verification": {
+    "commands": [],
+    "evidence": [
+      "Exploration report checked against its output contract",
+      "Resolved permission and readiness report"
+    ]
+  }
+}

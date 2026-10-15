@@ -1,0 +1,111 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "PlanDefinition",
+  "metadata": {
+    "id": "explore-plan",
+    "name": "explore-plan",
+    "version": "0.1.0",
+    "description": "Synthetic planning fixture; no execution or native readiness attestation."
+  },
+  "goalRef": {
+    "kind": "GoalContract",
+    "id": "explore-goal",
+    "version": "0.1.0"
+  },
+  "strategy": "fixed-dag",
+  "steps": [
+    {
+      "id": "inspect",
+      "description": "Synthetic inspect step.",
+      "dependsOn": [],
+      "preconditions": [],
+      "outputs": [
+        "inspect-result"
+      ],
+      "completionChecks": [
+        {
+          "id": "inspect-checked",
+          "description": "Synthetic artifact-backed check.",
+          "verifierRef": {
+            "kind": "Capability",
+            "id": "output-schema-valid",
+            "version": "0.1.0"
+          },
+          "required": true
+        }
+      ],
+      "assignmentRef": {
+        "kind": "AgentAssignment",
+        "id": "explore-aok-001",
+        "version": "0.1.0"
+      },
+      "verifierRef": {
+        "kind": "Capability",
+        "id": "output-schema-valid",
+        "version": "0.1.0"
+      },
+      "workflowRef": "repository-onboarding",
+      "ownership": [
+        "reports"
+      ],
+      "recovery": "stop"
+    },
+    {
+      "id": "report",
+      "description": "Synthetic report step.",
+      "dependsOn": [
+        "inspect"
+      ],
+      "preconditions": [],
+      "outputs": [
+        "report-result"
+      ],
+      "completionChecks": [
+        {
+          "id": "report-checked",
+          "description": "Synthetic artifact-backed check.",
+          "verifierRef": {
+            "kind": "Capability",
+            "id": "output-schema-valid",
+            "version": "0.1.0"
+          },
+          "required": true
+        }
+      ],
+      "assignmentRef": {
+        "kind": "AgentAssignment",
+        "id": "explore-aok-001",
+        "version": "0.1.0"
+      },
+      "verifierRef": {
+        "kind": "Capability",
+        "id": "output-schema-valid",
+        "version": "0.1.0"
+      },
+      "workflowRef": "repository-onboarding",
+      "ownership": [
+        "reports"
+      ],
+      "recovery": "stop"
+    }
+  ],
+  "methodRefs": [],
+  "inventory": [],
+  "aggregateVerification": [
+    {
+      "id": "goal-verified",
+      "description": "Synthetic artifact-backed check.",
+      "verifierRef": {
+        "kind": "Capability",
+        "id": "output-schema-valid",
+        "version": "0.1.0"
+      },
+      "required": true
+    }
+  ],
+  "concurrencyLimit": 1,
+  "replanning": {
+    "maxRevisions": 0,
+    "preserveCompletedEvidence": true
+  }
+}

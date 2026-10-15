@@ -1,0 +1,98 @@
+[
+  {
+    "tag": "BUTTON",
+    "id": "topology",
+    "role": "combobox",
+    "type": "button",
+    "value": "",
+    "text": "Hierarchical - Tree structure with coordinators",
+    "checked": null,
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "SPAN",
+    "id": "",
+    "role": "slider",
+    "type": null,
+    "value": null,
+    "text": "",
+    "checked": null,
+    "min": "1",
+    "max": "50",
+    "now": "20"
+  },
+  {
+    "tag": "BUTTON",
+    "id": "strategy",
+    "role": "combobox",
+    "type": "button",
+    "value": "",
+    "text": "Adaptive - Dynamic based on load",
+    "checked": null,
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "BUTTON",
+    "id": "autoScaling",
+    "role": "switch",
+    "type": "button",
+    "value": "on",
+    "text": "",
+    "checked": "true",
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "INPUT",
+    "id": "",
+    "role": null,
+    "type": "number",
+    "value": "2",
+    "text": "",
+    "checked": null,
+    "min": "1",
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "INPUT",
+    "id": "",
+    "role": null,
+    "type": "number",
+    "value": "20",
+    "text": "",
+    "checked": null,
+    "min": "1",
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "SPAN",
+    "id": "",
+    "role": "slider",
+    "type": null,
+    "value": null,
+    "text": "",
+    "checked": null,
+    "min": "0",
+    "max": "100",
+    "now": "80"
+  },
+  {
+    "tag": "SPAN",
+    "id": "",
+    "role": "slider",
+    "type": null,
+    "value": null,
+    "text": "",
+    "checked": null,
+    "min": "0",
+    "max": "100",
+    "now": "20"
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "tag": "SPAN",
+    "id": "",
+    "role": "slider",
+    "type": null,
+    "value": null,
+    "text": "",
+    "checked": null,
+    "min": "1",
+    "max": "10",
+    "now": "5"
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "role": "switch",
+    "type": "button",
+    "value": "on",
+    "text": "",
+    "checked": "true",
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "role": "switch",
+    "type": "button",
+    "value": "on",
+    "text": "",
+    "checked": "true",
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "role": "switch",
+    "type": "button",
+    "value": "on",
+    "text": "",
+    "checked": "true",
+    "min": null,
+    "max": null,
+    "now": null
+  }
+]

@@ -1,0 +1,105 @@
+{
+  "research": {
+    "goal": "",
+    "stateDefinition": {
+      "currentState": {
+        "goalDefined": true,
+        "informationGathered": false
+      },
+      "goalState": {
+        "verified": true,
+        "insightsGenerated": true
+      },
+      "stateGaps": [
+        "Information needs to be gathered",
+        "Analysis required",
+        "Insights need generation"
+      ]
+    },
+    "researchGuidance": {
+      "focusAreas": [],
+      "excludeTopics": [],
+      "depth": "moderate",
+      "perspective": "technical",
+      "timeframe": "recent"
+    },
+    "prompts": {
+      "systemPrompt": "You are an expert research assistant specializing in GOAP (Goal-Oriented Action Planning) research workflows. \nYour role is to provide precise, evidence-based information for each research step.\nFormat your responses as structured data points that can be used in subsequent research steps.\nAlways include sources, confidence levels, and timestamps when available.",
+      "searchQueryTemplate": "Latest {topic} advancements {year} research site:arxiv.org OR site:scholar.google.com OR site:ieee.org",
+      "analysisPrompt": "Analyze the following content and extract:\n1. Key findings and methodologies\n2. Actionable insights and recommendations  \n3. Technical details and specifications\n4. Sources and citations\n5. Confidence level (0-100%) based on source quality",
+      "synthesisPrompt": "Synthesize the research findings into:\n1. Coherent summary of key discoveries\n2. Connections between different sources\n3. Practical recommendations\n4. Identified gaps or conflicts in the data\n5. Overall confidence assessment"
+    },
+    "goapConfig": {
+      "executionMode": "closed",
+      "enableReplanning": true,
+      "replanningTriggers": [
+        "Action failure",
+        "Low confidence results",
+        "Missing preconditions"
+      ],
+      "costOptimization": true,
+      "parallelExecution": true
+    },
+    "actionConfig": {
+      "maxActionCost": 5,
+      "enableFallbacks": true,
+      "validatePreconditions": true,
+      "trackEffects": true
+    },
+    "parameters": {
+      "maxSources": 15,
+      "minConfidence": 85,
+      "maxSteps": 7,
+      "parallelAgents": 3,
+      "timeout": 120
+    },
+    "filters": {
+      "dateRange": "past-year",
+      "sourceTypes": [
+        "academic",
+        "technical",
+        "industry"
+      ],
+      "languages": [
+        "en"
+      ],
+      "excludeDomains": []
+    }
+  },
+  "agents": {
+    "swarm": {
+      "topology": "hierarchical",
+      "maxAgents": 10,
+      "strategy": "adaptive",
+      "autoScaling": {
+        "enabled": true,
+        "minAgents": 2,
+        "maxAgents": 20,
+        "scaleUpThreshold": 80,
+        "scaleDownThreshold": 20
+      }
+    },
+    "goap": {
+      "algorithm": "a-star",
+      "heuristic": "manhattan",
+      "costMethod": "hybrid",
+      "optimization": {
+        "enabled": true,
+        "detectParallel": true,
+        "removeRedundant": true
+      }
+    },
+    "execution": {
+      "strategy": "adaptive",
+      "maxParallelTasks": 5,
+      "timeout": 300000,
+      "enableQualityGates": true
+    },
+    "modelRouter": {
+      "primaryProvider": "anthropic",
+      "strategy": "balanced",
+      "maxCostPerRequest": 1,
+      "enableFallback": true
+    }
+  }
+}

@@ -1,0 +1,5 @@
+- listbox:
+  - option "Technical/Scientific" [selected]
+  - option "Business/Commercial"
+  - option "Academic/Research"
+  - option "Practical/Applied"

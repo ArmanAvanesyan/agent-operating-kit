@@ -1,0 +1,4 @@
+- listbox:
+  - option "Balanced - Evenly distribute tasks"
+  - option "Specialized - Assign based on capabilities"
+  - option "Adaptive - Dynamic based on load" [selected]

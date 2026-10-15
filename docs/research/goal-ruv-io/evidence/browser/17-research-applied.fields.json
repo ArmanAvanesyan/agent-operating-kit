@@ -1,0 +1,74 @@
+[
+  {
+    "tag": "TEXTAREA",
+    "id": "goal",
+    "role": null,
+    "type": null,
+    "value": "Explain the difference between a stack and a queue",
+    "text": "Explain the difference between a stack and a queue",
+    "checked": null,
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "INPUT",
+    "id": "",
+    "role": null,
+    "type": null,
+    "value": "",
+    "text": "",
+    "checked": null,
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "INPUT",
+    "id": "",
+    "role": null,
+    "type": null,
+    "value": "",
+    "text": "",
+    "checked": null,
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "role": "combobox",
+    "type": "button",
+    "value": "",
+    "text": "Moderate (Standard depth)",
+    "checked": null,
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "role": "combobox",
+    "type": "button",
+    "value": "",
+    "text": "Technical/Scientific",
+    "checked": null,
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "role": "combobox",
+    "type": "button",
+    "value": "",
+    "text": "Recent (Last 6 months)",
+    "checked": null,
+    "min": null,
+    "max": null,
+    "now": null
+  }
+]

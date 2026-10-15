@@ -1,0 +1,64 @@
+- region "Notifications (F8)":
+  - list
+- region "Notifications alt+T"
+- img
+- text: GOAP Multi-Agent System
+- heading "Goal-Oriented Action Planning" [level=1]
+- paragraph: AI-powered research planning using A* pathfinding and dynamic agent coordination
+- link "Widget Demo":
+  - /url: /demo
+  - button "Widget Demo":
+    - img
+    - text: Widget Demo
+- link "Agent Swarm":
+  - /url: /agents
+  - button "Agent Swarm":
+    - img
+    - text: Agent Swarm
+- button "Create Widget":
+  - img
+  - text: Create Widget
+- button "Switch to light theme":
+  - img
+- img
+- heading "Define Research Objective" [level=2]
+- button "Advanced":
+  - img
+  - text: Advanced
+- textbox "Enter your research goal or objective..."
+- paragraph: The GOAP system will analyze your objective and plan the optimal research workflow
+- img
+- text: "AI-Generate by Category:"
+- button "Finance":
+  - img
+  - text: Finance
+- button "Business":
+  - img
+  - text: Business
+- button "Marketing":
+  - img
+  - text: Marketing
+- button "Medical":
+  - img
+  - text: Medical
+- button "Education":
+  - img
+  - text: Education
+- button "Coding":
+  - img
+  - text: Coding
+- button "Technical":
+  - img
+  - text: Technical
+- button "AI & ML":
+  - img
+  - text: AI & ML
+- button "Generate Research Plan" [disabled]:
+  - img
+  - text: Generate Research Plan
+- paragraph: Type a goal above or pick a category to begin
+- contentinfo:
+  - paragraph:
+    - text: RuFlo ResearchCreated with ❤️ by
+    - link "rUv.io":
+      - /url: https://ruv.io

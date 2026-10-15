@@ -1,0 +1,52 @@
+{
+  "checks": [
+    {
+      "check": "agent preset Development",
+      "result": "PASS",
+      "method": "Compare full saved object with defaults plus source-defined patches."
+    },
+    {
+      "check": "agent preset Production",
+      "result": "PASS",
+      "method": "Compare full saved object with defaults plus source-defined patches."
+    },
+    {
+      "check": "agent preset Budget",
+      "result": "PASS",
+      "method": "Compare full saved object with defaults plus source-defined patches."
+    },
+    {
+      "check": "agent preset Quality",
+      "result": "PASS",
+      "method": "Compare full saved object with defaults plus source-defined patches."
+    },
+    {
+      "check": "agent preset combination Budget \u2192 Production",
+      "result": "PASS",
+      "method": "Compare full saved object with defaults plus source-defined patches."
+    },
+    {
+      "check": "agent preset combination Development \u2192 Budget",
+      "result": "PASS",
+      "method": "Compare full saved object with defaults plus source-defined patches."
+    },
+    {
+      "check": "agent preset combination Budget \u2192 Quality",
+      "result": "PASS",
+      "method": "Compare full saved object with defaults plus source-defined patches."
+    },
+    {
+      "check": "./scripts/aok validate",
+      "result": "PASS"
+    },
+    {
+      "check": "Authored Markdown links and JSON parse",
+      "result": "PASS"
+    },
+    {
+      "check": "Seven normal live requests and final request captured",
+      "result": "PASS"
+    }
+  ],
+  "scope": "Artifact consistency and actual captured browser observations; not successful AI service verification."
+}

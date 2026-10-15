@@ -1,0 +1,110 @@
+[
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "role": "combobox",
+    "type": "button",
+    "value": "",
+    "text": "Closed (Single-domain planning)",
+    "checked": null,
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "role": "switch",
+    "type": "button",
+    "value": "on",
+    "text": "",
+    "checked": "true",
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "role": "switch",
+    "type": "button",
+    "value": "on",
+    "text": "",
+    "checked": "true",
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "role": "switch",
+    "type": "button",
+    "value": "on",
+    "text": "",
+    "checked": "true",
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "BUTTON",
+    "id": "Action failure",
+    "role": "switch",
+    "type": "button",
+    "value": "on",
+    "text": "",
+    "checked": "true",
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "BUTTON",
+    "id": "Low confidence results",
+    "role": "switch",
+    "type": "button",
+    "value": "on",
+    "text": "",
+    "checked": "true",
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "BUTTON",
+    "id": "Missing preconditions",
+    "role": "switch",
+    "type": "button",
+    "value": "on",
+    "text": "",
+    "checked": "true",
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "BUTTON",
+    "id": "Timeout exceeded",
+    "role": "switch",
+    "type": "button",
+    "value": "on",
+    "text": "",
+    "checked": "false",
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "BUTTON",
+    "id": "State mismatch",
+    "role": "switch",
+    "type": "button",
+    "value": "on",
+    "text": "",
+    "checked": "false",
+    "min": null,
+    "max": null,
+    "now": null
+  }
+]

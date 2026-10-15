@@ -1,0 +1,6 @@
+- listbox:
+  - option "Recent (Last 6 months)" [selected]
+  - option "Current Year"
+  - option "Past Year"
+  - option "Past 2 Years"
+  - option "All Time"

@@ -1,0 +1,50 @@
+[
+  {
+    "tag": "BUTTON",
+    "id": "provider",
+    "role": "combobox",
+    "type": "button",
+    "value": "",
+    "text": "Anthropic - Highest quality",
+    "checked": null,
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "BUTTON",
+    "id": "routingStrategy",
+    "role": "combobox",
+    "type": "button",
+    "value": "",
+    "text": "Balanced - Optimize all factors",
+    "checked": null,
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "SPAN",
+    "id": "",
+    "role": "slider",
+    "type": null,
+    "value": null,
+    "text": "",
+    "checked": null,
+    "min": "0.01",
+    "max": "5",
+    "now": "1"
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "role": "switch",
+    "type": "button",
+    "value": "on",
+    "text": "",
+    "checked": "true",
+    "min": null,
+    "max": null,
+    "now": null
+  }
+]

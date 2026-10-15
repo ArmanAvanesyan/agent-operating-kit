@@ -1,0 +1,50 @@
+[
+  {
+    "tag": "TEXTAREA",
+    "id": "systemPrompt",
+    "role": null,
+    "type": null,
+    "value": "You are an expert research assistant specializing in GOAP (Goal-Oriented Action Planning) research workflows. \nYour role is to provide precise, evidence-based information for each research step.\nFormat your responses as structured data points that can be used in subsequent research steps.\nAlways include sources, confidence levels, and timestamps when available.",
+    "text": "You are an expert research assistant specializing in GOAP (Goal-Oriented Action Planning) research workflows. \nYour role is to provide precise, evidence-based information for each research step.\nFormat your responses as structured data points that can be used in subsequent research steps.\nAlways include sources, confidence levels, and timestamps when available.",
+    "checked": null,
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "TEXTAREA",
+    "id": "searchQuery",
+    "role": null,
+    "type": null,
+    "value": "Latest {topic} advancements {year} research site:arxiv.org OR site:scholar.google.com OR site:ieee.org",
+    "text": "Latest {topic} advancements {year} research site:arxiv.org OR site:scholar.google.com OR site:ieee.org",
+    "checked": null,
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "TEXTAREA",
+    "id": "analysisPrompt",
+    "role": null,
+    "type": null,
+    "value": "Analyze the following content and extract:\n1. Key findings and methodologies\n2. Actionable insights and recommendations  \n3. Technical details and specifications\n4. Sources and citations\n5. Confidence level (0-100%) based on source quality",
+    "text": "Analyze the following content and extract:\n1. Key findings and methodologies\n2. Actionable insights and recommendations  \n3. Technical details and specifications\n4. Sources and citations\n5. Confidence level (0-100%) based on source quality",
+    "checked": null,
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "TEXTAREA",
+    "id": "synthesisPrompt",
+    "role": null,
+    "type": null,
+    "value": "Synthesize the research findings into:\n1. Coherent summary of key discoveries\n2. Connections between different sources\n3. Practical recommendations\n4. Identified gaps or conflicts in the data\n5. Overall confidence assessment",
+    "text": "Synthesize the research findings into:\n1. Coherent summary of key discoveries\n2. Connections between different sources\n3. Practical recommendations\n4. Identified gaps or conflicts in the data\n5. Overall confidence assessment",
+    "checked": null,
+    "min": null,
+    "max": null,
+    "now": null
+  }
+]

@@ -1,0 +1,375 @@
+[
+  {
+    "time": "2026-10-15T14:08:08.423Z",
+    "url": "https://ruflo-research-fns-vi6poqcldq-uc.a.run.app/functions/v1/research-step",
+    "status": 502,
+    "request": {
+      "goal": "Explain how a stack differs from a queue",
+      "stepTitle": "Goal Analysis",
+      "stepDescription": "Analyzing \"Explain how a stack differs from a queue...\" and breaking it down into actionable sub-goals.",
+      "stepType": "1",
+      "aiModel": "google/gemini-2.5-flash",
+      "config": {
+        "researchGuidance": {
+          "focusAreas": [
+            "basic operations",
+            "basic operations"
+          ],
+          "excludeTopics": [
+            "quantum physics"
+          ],
+          "depth": "surface",
+          "perspective": "practical",
+          "timeframe": "all-time"
+        },
+        "prompts": {
+          "systemPrompt": "You are an expert research assistant specializing in GOAP (Goal-Oriented Action Planning) research workflows. \nYour role is to provide precise, evidence-based information for each research step.\nFormat your responses as structured data points that can be used in subsequent research steps.\nAlways include sources, confidence levels, and timestamps when available.",
+          "searchQueryTemplate": "Latest {topic} advancements {year} research site:arxiv.org OR site:scholar.google.com OR site:ieee.org",
+          "analysisPrompt": "Analyze the following content and extract:\n1. Key findings and methodologies\n2. Actionable insights and recommendations  \n3. Technical details and specifications\n4. Sources and citations\n5. Confidence level (0-100%) based on source quality",
+          "synthesisPrompt": "Synthesize the research findings into:\n1. Coherent summary of key discoveries\n2. Connections between different sources\n3. Practical recommendations\n4. Identified gaps or conflicts in the data\n5. Overall confidence assessment"
+        },
+        "parameters": {
+          "maxSources": 5,
+          "minConfidence": 85,
+          "maxSteps": 3,
+          "parallelAgents": 3,
+          "timeout": 30
+        },
+        "filters": {
+          "dateRange": "past-year",
+          "sourceTypes": [
+            "academic",
+            "technical",
+            "industry"
+          ],
+          "languages": [
+            "en"
+          ],
+          "excludeDomains": [
+            "example.com"
+          ]
+        }
+      },
+      "previousStepsData": []
+    },
+    "response": {
+      "error": "AI gateway error: 400"
+    }
+  },
+  {
+    "time": "2026-10-15T14:08:15.942Z",
+    "url": "https://ruflo-research-fns-vi6poqcldq-uc.a.run.app/functions/v1/research-step",
+    "status": 502,
+    "request": {
+      "goal": "Explain how a stack differs from a queue",
+      "stepTitle": "State Assessment",
+      "stepDescription": "Evaluating current knowledge about general and identifying information gaps.",
+      "stepType": "2",
+      "aiModel": "google/gemini-2.5-flash",
+      "config": {
+        "researchGuidance": {
+          "focusAreas": [
+            "basic operations",
+            "basic operations"
+          ],
+          "excludeTopics": [
+            "quantum physics"
+          ],
+          "depth": "surface",
+          "perspective": "practical",
+          "timeframe": "all-time"
+        },
+        "prompts": {
+          "systemPrompt": "You are an expert research assistant specializing in GOAP (Goal-Oriented Action Planning) research workflows. \nYour role is to provide precise, evidence-based information for each research step.\nFormat your responses as structured data points that can be used in subsequent research steps.\nAlways include sources, confidence levels, and timestamps when available.",
+          "searchQueryTemplate": "Latest {topic} advancements {year} research site:arxiv.org OR site:scholar.google.com OR site:ieee.org",
+          "analysisPrompt": "Analyze the following content and extract:\n1. Key findings and methodologies\n2. Actionable insights and recommendations  \n3. Technical details and specifications\n4. Sources and citations\n5. Confidence level (0-100%) based on source quality",
+          "synthesisPrompt": "Synthesize the research findings into:\n1. Coherent summary of key discoveries\n2. Connections between different sources\n3. Practical recommendations\n4. Identified gaps or conflicts in the data\n5. Overall confidence assessment"
+        },
+        "parameters": {
+          "maxSources": 5,
+          "minConfidence": 85,
+          "maxSteps": 3,
+          "parallelAgents": 3,
+          "timeout": 30
+        },
+        "filters": {
+          "dateRange": "past-year",
+          "sourceTypes": [
+            "academic",
+            "technical",
+            "industry"
+          ],
+          "languages": [
+            "en"
+          ],
+          "excludeDomains": [
+            "example.com"
+          ]
+        }
+      },
+      "previousStepsData": [
+        {
+          "stepTitle": "Goal Analysis",
+          "data": [
+            {
+              "id": "",
+              "title": "Parse objective",
+              "content": "Extract and structure the high-level goal from natural language input",
+              "timestamp": "2026-10-15T14:08:11.424Z"
+            },
+            {
+              "id": "",
+              "title": "Identify dependencies",
+              "content": "Map relationships between actions and their requirements",
+              "source": "Action Registry",
+              "timestamp": "2026-10-15T14:08:11.425Z"
+            },
+            {
+              "id": "",
+              "title": "Map state transitions",
+              "content": "Define how each action transforms the world state",
+              "timestamp": "2026-10-15T14:08:11.425Z"
+            }
+          ]
+        }
+      ]
+    },
+    "response": {
+      "error": "AI gateway error: 400"
+    }
+  },
+  {
+    "time": "2026-10-15T14:08:25.262Z",
+    "url": "https://ruflo-research-fns-vi6poqcldq-uc.a.run.app/functions/v1/research-step",
+    "status": 502,
+    "request": {
+      "goal": "Explain how a stack differs from a queue",
+      "stepTitle": "Web Search",
+      "stepDescription": "Conducting intelligent searches for: Explain, stack, differs, queue",
+      "stepType": "3",
+      "aiModel": "google/gemini-2.5-flash",
+      "config": {
+        "researchGuidance": {
+          "focusAreas": [
+            "basic operations",
+            "basic operations"
+          ],
+          "excludeTopics": [
+            "quantum physics"
+          ],
+          "depth": "surface",
+          "perspective": "practical",
+          "timeframe": "all-time"
+        },
+        "prompts": {
+          "systemPrompt": "You are an expert research assistant specializing in GOAP (Goal-Oriented Action Planning) research workflows. \nYour role is to provide precise, evidence-based information for each research step.\nFormat your responses as structured data points that can be used in subsequent research steps.\nAlways include sources, confidence levels, and timestamps when available.",
+          "searchQueryTemplate": "Latest {topic} advancements {year} research site:arxiv.org OR site:scholar.google.com OR site:ieee.org",
+          "analysisPrompt": "Analyze the following content and extract:\n1. Key findings and methodologies\n2. Actionable insights and recommendations  \n3. Technical details and specifications\n4. Sources and citations\n5. Confidence level (0-100%) based on source quality",
+          "synthesisPrompt": "Synthesize the research findings into:\n1. Coherent summary of key discoveries\n2. Connections between different sources\n3. Practical recommendations\n4. Identified gaps or conflicts in the data\n5. Overall confidence assessment"
+        },
+        "parameters": {
+          "maxSources": 5,
+          "minConfidence": 85,
+          "maxSteps": 3,
+          "parallelAgents": 3,
+          "timeout": 30
+        },
+        "filters": {
+          "dateRange": "past-year",
+          "sourceTypes": [
+            "academic",
+            "technical",
+            "industry"
+          ],
+          "languages": [
+            "en"
+          ],
+          "excludeDomains": [
+            "example.com"
+          ]
+        }
+      },
+      "previousStepsData": [
+        {
+          "stepTitle": "Goal Analysis",
+          "data": [
+            {
+              "id": "",
+              "title": "Parse objective",
+              "content": "Extract and structure the high-level goal from natural language input",
+              "timestamp": "2026-10-15T14:08:18.941Z"
+            },
+            {
+              "id": "",
+              "title": "Identify dependencies",
+              "content": "Map relationships between actions and their requirements",
+              "source": "Action Registry",
+              "timestamp": "2026-10-15T14:08:18.941Z"
+            },
+            {
+              "id": "",
+              "title": "Map state transitions",
+              "content": "Define how each action transforms the world state",
+              "timestamp": "2026-10-15T14:08:18.941Z"
+            }
+          ]
+        },
+        {
+          "stepTitle": "State Assessment",
+          "data": [
+            {
+              "id": "",
+              "title": "Assessing current state...",
+              "content": "Assess current knowledge and capability state for Explain how a stack differs from a queue",
+              "timestamp": "2026-10-15T14:08:18.941Z"
+            },
+            {
+              "id": "",
+              "title": "Defining success criteria...",
+              "content": "Define success criteria and validation requirements for general",
+              "timestamp": "2026-10-15T14:08:18.941Z"
+            },
+            {
+              "id": "",
+              "title": "Analyzing gaps...",
+              "content": "Quantify differences between current and target state for research in general",
+              "timestamp": "2026-10-15T14:08:18.941Z"
+            }
+          ]
+        }
+      ]
+    },
+    "response": {
+      "error": "AI gateway error: 400"
+    }
+  },
+  {
+    "time": "2026-10-15T14:08:34.264Z",
+    "url": "https://ruflo-research-fns-vi6poqcldq-uc.a.run.app/functions/v1/research-step",
+    "status": 502,
+    "request": {
+      "goal": "Explain how a stack differs from a queue",
+      "stepTitle": "Document Analysis",
+      "stepDescription": "Processing documents related to general to extract key insights.",
+      "stepType": "4",
+      "aiModel": "google/gemini-2.5-flash",
+      "config": {
+        "researchGuidance": {
+          "focusAreas": [
+            "basic operations",
+            "basic operations"
+          ],
+          "excludeTopics": [
+            "quantum physics"
+          ],
+          "depth": "surface",
+          "perspective": "practical",
+          "timeframe": "all-time"
+        },
+        "prompts": {
+          "systemPrompt": "You are an expert research assistant specializing in GOAP (Goal-Oriented Action Planning) research workflows. \nYour role is to provide precise, evidence-based information for each research step.\nFormat your responses as structured data points that can be used in subsequent research steps.\nAlways include sources, confidence levels, and timestamps when available.",
+          "searchQueryTemplate": "Latest {topic} advancements {year} research site:arxiv.org OR site:scholar.google.com OR site:ieee.org",
+          "analysisPrompt": "Analyze the following content and extract:\n1. Key findings and methodologies\n2. Actionable insights and recommendations  \n3. Technical details and specifications\n4. Sources and citations\n5. Confidence level (0-100%) based on source quality",
+          "synthesisPrompt": "Synthesize the research findings into:\n1. Coherent summary of key discoveries\n2. Connections between different sources\n3. Practical recommendations\n4. Identified gaps or conflicts in the data\n5. Overall confidence assessment"
+        },
+        "parameters": {
+          "maxSources": 5,
+          "minConfidence": 85,
+          "maxSteps": 3,
+          "parallelAgents": 3,
+          "timeout": 30
+        },
+        "filters": {
+          "dateRange": "past-year",
+          "sourceTypes": [
+            "academic",
+            "technical",
+            "industry"
+          ],
+          "languages": [
+            "en"
+          ],
+          "excludeDomains": [
+            "example.com"
+          ]
+        }
+      },
+      "previousStepsData": [
+        {
+          "stepTitle": "Goal Analysis",
+          "data": [
+            {
+              "id": "",
+              "title": "Parse objective",
+              "content": "Extract and structure the high-level goal from natural language input",
+              "timestamp": "2026-10-15T14:08:28.261Z"
+            },
+            {
+              "id": "",
+              "title": "Identify dependencies",
+              "content": "Map relationships between actions and their requirements",
+              "source": "Action Registry",
+              "timestamp": "2026-10-15T14:08:28.261Z"
+            },
+            {
+              "id": "",
+              "title": "Map state transitions",
+              "content": "Define how each action transforms the world state",
+              "timestamp": "2026-10-15T14:08:28.261Z"
+            }
+          ]
+        },
+        {
+          "stepTitle": "State Assessment",
+          "data": [
+            {
+              "id": "",
+              "title": "Assessing current state...",
+              "content": "Assess current knowledge and capability state for Explain how a stack differs from a queue",
+              "timestamp": "2026-10-15T14:08:28.261Z"
+            },
+            {
+              "id": "",
+              "title": "Defining success criteria...",
+              "content": "Define success criteria and validation requirements for general",
+              "timestamp": "2026-10-15T14:08:28.261Z"
+            },
+            {
+              "id": "",
+              "title": "Analyzing gaps...",
+              "content": "Quantify differences between current and target state for research in general",
+              "timestamp": "2026-10-15T14:08:28.261Z"
+            }
+          ]
+        },
+        {
+          "stepTitle": "Web Search",
+          "data": [
+            {
+              "id": "",
+              "title": "Searching for research Explain...",
+              "content": "Execute targeted web searches for Explain how a stack differs from a queue",
+              "source": "arXiv.org",
+              "timestamp": "2026-10-15T14:08:28.261Z"
+            },
+            {
+              "id": "",
+              "title": "Gathering sources...",
+              "content": "Aggregate and catalog information sources for general",
+              "timestamp": "2026-10-15T14:08:28.261Z"
+            },
+            {
+              "id": "",
+              "title": "Calculating relevance...",
+              "content": "Calculate information quality and applicability metrics for Explain, stack, differs, queue",
+              "timestamp": "2026-10-15T14:08:28.261Z"
+            }
+          ]
+        }
+      ]
+    },
+    "response": {
+      "error": "AI gateway error: 400"
+    }
+  }
+]

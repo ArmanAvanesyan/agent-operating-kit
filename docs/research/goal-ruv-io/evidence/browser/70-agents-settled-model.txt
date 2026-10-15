@@ -1,0 +1,35 @@
+- region "Notifications alt+T"
+- dialog "Advanced Agent Configuration":
+  - heading "Advanced Agent Configuration" [level=2]:
+    - img
+    - text: Advanced Agent Configuration
+  - paragraph: Configure swarm topology, GOAP planning, execution strategy, and model routing
+  - text: Quick Presets
+  - button "Development development Fast iteration, verbose logging"
+  - button "Production production Optimized performance, strict validation"
+  - button "Budget budget Cost-optimized, slower execution"
+  - button "Quality quality Maximum quality, higher cost"
+  - tablist:
+    - tab "Swarm"
+    - tab "GOAP"
+    - tab "Execution"
+    - tab "Model" [selected]
+  - tabpanel "Model":
+    - text: Primary Provider
+    - combobox "Primary Provider": Anthropic - Highest quality
+    - text: Routing Strategy
+    - combobox "Routing Strategy": Balanced - Optimize all factors
+    - text: "Max Cost Per Request ($): 1.00"
+    - slider
+    - text: Enable Fallback
+    - paragraph: Automatically fallback to alternative providers on failure
+    - switch [checked]
+  - button "Reset to Defaults":
+    - img
+    - text: Reset to Defaults
+  - button "Save Configuration":
+    - img
+    - text: Save Configuration
+  - button "Close":
+    - img
+    - text: Close

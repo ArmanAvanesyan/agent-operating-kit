@@ -1,0 +1,5 @@
+- listbox:
+  - option "Sequential - One task at a time"
+  - option "Parallel - Maximum concurrency"
+  - option "Hybrid - Mixed approach"
+  - option "Adaptive - Dynamic based on load" [selected]

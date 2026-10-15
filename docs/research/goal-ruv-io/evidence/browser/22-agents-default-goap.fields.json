@@ -1,0 +1,74 @@
+[
+  {
+    "tag": "BUTTON",
+    "id": "algorithm",
+    "role": "combobox",
+    "type": "button",
+    "value": "",
+    "text": "A* - Optimal pathfinding",
+    "checked": null,
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "BUTTON",
+    "id": "heuristic",
+    "role": "combobox",
+    "type": "button",
+    "value": "",
+    "text": "Manhattan Distance",
+    "checked": null,
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "BUTTON",
+    "id": "costMethod",
+    "role": "combobox",
+    "type": "button",
+    "value": "",
+    "text": "Hybrid - Combination of factors",
+    "checked": null,
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "role": "switch",
+    "type": "button",
+    "value": "on",
+    "text": "",
+    "checked": "true",
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "role": "switch",
+    "type": "button",
+    "value": "on",
+    "text": "",
+    "checked": "true",
+    "min": null,
+    "max": null,
+    "now": null
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "role": "switch",
+    "type": "button",
+    "value": "on",
+    "text": "",
+    "checked": "true",
+    "min": null,
+    "max": null,
+    "now": null
+  }
+]

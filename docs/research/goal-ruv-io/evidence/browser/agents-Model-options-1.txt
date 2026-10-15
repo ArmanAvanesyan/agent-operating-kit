@@ -1,0 +1,6 @@
+- listbox:
+  - option "Cost - Prefer cheapest models"
+  - option "Speed - Prefer fastest models"
+  - option "Quality - Prefer highest quality"
+  - option "Privacy - Use local models only"
+  - option "Balanced - Optimize all factors" [selected]

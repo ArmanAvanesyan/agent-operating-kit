@@ -1,0 +1,98 @@
+[
+  {
+    "time": "2026-10-15T14:04:44.618Z",
+    "url": "https://ruflo-research-fns-vi6poqcldq-uc.a.run.app/functions/v1/optimize-research-config",
+    "status": 502,
+    "request": {
+      "preset": "academic-deep",
+      "currentGoal": "Explain the difference between a stack and a queue"
+    },
+    "response": {
+      "error": "AI gateway error: 400"
+    }
+  },
+  {
+    "time": "2026-10-15T14:04:45.104Z",
+    "url": "https://ruflo-research-fns-vi6poqcldq-uc.a.run.app/functions/v1/optimize-research-config",
+    "status": 502,
+    "request": {
+      "preset": "industry-quick",
+      "currentGoal": "Explain the difference between a stack and a queue"
+    },
+    "response": {
+      "error": "AI gateway error: 400"
+    }
+  },
+  {
+    "time": "2026-10-15T14:04:48.189Z",
+    "url": "https://ruflo-research-fns-vi6poqcldq-uc.a.run.app/functions/v1/optimize-research-config",
+    "status": 502,
+    "request": {
+      "preset": "competitive-analysis",
+      "currentGoal": "Explain the difference between a stack and a queue"
+    },
+    "response": {
+      "error": "AI gateway error: 400"
+    }
+  },
+  {
+    "time": "2026-10-15T14:04:50.227Z",
+    "url": "https://ruflo-research-fns-vi6poqcldq-uc.a.run.app/functions/v1/optimize-research-config",
+    "status": 502,
+    "request": {
+      "preset": "technical-feasibility",
+      "currentGoal": "Explain the difference between a stack and a queue"
+    },
+    "response": {
+      "error": "AI gateway error: 400"
+    }
+  },
+  {
+    "time": "2026-10-15T14:04:50.865Z",
+    "url": "https://ruflo-research-fns-vi6poqcldq-uc.a.run.app/functions/v1/optimize-research-config",
+    "status": 502,
+    "request": {
+      "preset": "market-trends",
+      "currentGoal": "Explain the difference between a stack and a queue"
+    },
+    "response": {
+      "error": "AI gateway error: 400"
+    }
+  },
+  {
+    "time": "2026-10-15T14:04:51.291Z",
+    "url": "https://ruflo-research-fns-vi6poqcldq-uc.a.run.app/functions/v1/optimize-research-config",
+    "status": 502,
+    "request": {
+      "preset": "medical-clinical",
+      "currentGoal": "Explain the difference between a stack and a queue"
+    },
+    "response": {
+      "error": "AI gateway error: 400"
+    }
+  },
+  {
+    "time": "2026-10-15T14:04:51.729Z",
+    "url": "https://ruflo-research-fns-vi6poqcldq-uc.a.run.app/functions/v1/optimize-research-config",
+    "status": 502,
+    "request": {
+      "preset": "startup-validation",
+      "currentGoal": "Explain the difference between a stack and a queue"
+    },
+    "response": {
+      "error": "AI gateway error: 400"
+    }
+  },
+  {
+    "time": "2026-10-15T14:04:52.152Z",
+    "url": "https://ruflo-research-fns-vi6poqcldq-uc.a.run.app/functions/v1/optimize-research-config",
+    "status": 502,
+    "request": {
+      "preset": "policy-regulatory",
+      "currentGoal": "Explain the difference between a stack and a queue"
+    },
+    "response": {
+      "error": "AI gateway error: 400"
+    }
+  }
+]

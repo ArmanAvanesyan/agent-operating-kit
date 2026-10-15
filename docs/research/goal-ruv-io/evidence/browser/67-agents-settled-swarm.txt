@@ -1,0 +1,42 @@
+- region "Notifications alt+T"
+- dialog "Advanced Agent Configuration":
+  - heading "Advanced Agent Configuration" [level=2]:
+    - img
+    - text: Advanced Agent Configuration
+  - paragraph: Configure swarm topology, GOAP planning, execution strategy, and model routing
+  - text: Quick Presets
+  - button "Development development Fast iteration, verbose logging"
+  - button "Production production Optimized performance, strict validation"
+  - button "Budget budget Cost-optimized, slower execution"
+  - button "Quality quality Maximum quality, higher cost"
+  - tablist:
+    - tab "Swarm" [selected]
+    - tab "GOAP"
+    - tab "Execution"
+    - tab "Model"
+  - tabpanel "Swarm":
+    - text: Topology
+    - combobox "Topology": Hierarchical - Tree structure with coordinators
+    - text: "Maximum Agents: 10"
+    - slider
+    - text: Distribution Strategy
+    - combobox "Distribution Strategy": Adaptive - Dynamic based on load
+    - text: Auto-Scaling
+    - switch "Auto-Scaling" [checked]
+    - text: Min Agents
+    - spinbutton: "2"
+    - text: Max Agents
+    - spinbutton: "20"
+    - text: "Scale Up Threshold (%): 80"
+    - slider
+    - text: "Scale Down Threshold (%): 20"
+    - slider
+  - button "Reset to Defaults":
+    - img
+    - text: Reset to Defaults
+  - button "Save Configuration":
+    - img
+    - text: Save Configuration
+  - button "Close":
+    - img
+    - text: Close

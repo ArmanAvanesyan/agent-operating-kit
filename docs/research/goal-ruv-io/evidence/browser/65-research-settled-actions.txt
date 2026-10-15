@@ -1,0 +1,76 @@
+- region "Notifications alt+T"
+- dialog "Advanced Research Settings":
+  - heading "Advanced Research Settings" [level=2]:
+    - img
+    - text: Advanced Research Settings
+  - paragraph: Fine-tune GOAP planner, model routing, and per-step prompts for this research run.
+  - img
+  - text: "AI-Optimize Settings by Research Type:"
+  - button "Academic Research Deep, rigorous academic analysis":
+    - img
+    - text: Academic Research Deep, rigorous academic analysis
+  - button "Industry Quick Scan Fast business insights":
+    - img
+    - text: Industry Quick Scan Fast business insights
+  - button "Competitive Intel Market & competitor analysis":
+    - img
+    - text: Competitive Intel Market & competitor analysis
+  - button "Technical Study Engineering feasibility":
+    - img
+    - text: Technical Study Engineering feasibility
+  - button "Market Trends Trend analysis & forecasting":
+    - img
+    - text: Market Trends Trend analysis & forecasting
+  - button "Medical/Clinical Evidence-based medical research":
+    - img
+    - text: Medical/Clinical Evidence-based medical research
+  - button "Startup Validation Business idea validation":
+    - img
+    - text: Startup Validation Business idea validation
+  - button "Policy & Regulatory Compliance & legal research":
+    - img
+    - text: Policy & Regulatory Compliance & legal research
+  - paragraph: Fine-tune how the AI conducts research by configuring GOAP planning parameters, AI prompts, execution settings, and source filters.
+  - tablist:
+    - tab "Guidance":
+      - img
+      - text: Guidance
+    - tab "GOAP":
+      - img
+      - text: GOAP
+    - tab "Prompts":
+      - img
+      - text: Prompts
+    - tab "Parameters":
+      - img
+      - text: Parameters
+    - tab "Actions" [selected]:
+      - img
+      - text: Actions
+    - tab "Filters":
+      - img
+      - text: Filters
+  - tabpanel "Actions":
+    - heading "Action Configuration" [level=3]:
+      - img
+      - text: Action Configuration
+    - paragraph: Configure how actions are validated and executed
+    - text: Maximum Action Cost 5
+    - slider
+    - paragraph: Limit complexity of individual actions in the plan
+    - text: Enable Fallbacks
+    - paragraph: Use alternative actions when primary fails
+    - switch [checked]
+    - text: Validate Preconditions
+    - paragraph: Check all requirements before executing actions
+    - switch [checked]
+    - text: Track Effects
+    - paragraph: Monitor state changes from each action
+    - switch [checked]
+  - button "Cancel"
+  - button "Start Revised Research":
+    - img
+    - text: Start Revised Research
+  - button "Close":
+    - img
+    - text: Close

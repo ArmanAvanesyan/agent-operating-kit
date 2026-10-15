@@ -1,0 +1,5 @@
+- listbox:
+  - option "Anthropic - Highest quality" [selected]
+  - option "OpenRouter - 99% cost savings"
+  - option "Gemini - Optimized for speed"
+  - option "Local - Privacy-focused (ONNX)"

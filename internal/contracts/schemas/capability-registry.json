@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.invalid/operational/capability-registry.json",
+  "title": "PROPOSED AOK capability-registry",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "CapabilityRegistry"
+    },
+    "metadata": {
+      "$ref": "https://aok.invalid/operational/common.schema.json#/$defs/metadata"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "enum": [
+              "tool",
+              "skill",
+              "mcp",
+              "plugin",
+              "verification",
+              "template"
+            ]
+          },
+          "binding": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "enum": [
+                  "native-tool",
+                  "command",
+                  "skill",
+                  "mcp",
+                  "plugin",
+                  "verification",
+                  "template"
+                ]
+              },
+              "adapter": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "executableRef": {
+                "type": "string",
+                "minLength": 1
+              },
+              "arguments": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "sourcePath": {
+                "type": "string",
+                "minLength": 1
+              },
+              "connectionRef": {
+                "type": "string",
+                "minLength": 1
+              },
+              "tools": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "components": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "credentialRefs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "schemaPath": {
+                "type": "string",
+                "minLength": 1
+              },
+              "parameterSchema": {
+                "type": "object"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "const": "Capability"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*$"
+                },
+                "version": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+                }
+              },
+              "required": [
+                "kind",
+                "id",
+                "version"
+              ],
+              "additionalProperties": false
+            },
+            "uniqueItems": true
+          },
+          "installation": {
+            "enum": [
+              "observed",
+              "not-installed",
+              "unknown"
+            ]
+          },
+          "authorization": {
+            "const": "not-implied"
+          }
+        },
+        "required": [
+          "id",
+          "version",
+          "type",
+          "binding",
+          "dependencies",
+          "installation",
+          "authorization"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "entries"
+  ],
+  "additionalProperties": false
+}

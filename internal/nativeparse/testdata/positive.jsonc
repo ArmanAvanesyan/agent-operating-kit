@@ -1,0 +1,5 @@
+{
+  // Native comments stay outside string values.
+  "name": "demo",
+  "unknown": {"enabled": true, "count": 3,},
+}

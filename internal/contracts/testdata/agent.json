@@ -1,0 +1,213 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "Agent",
+  "metadata": {
+    "id": "repository-explorer",
+    "name": "Repository Explorer",
+    "version": "0.1.0",
+    "description": "Source-grounded project exploration."
+  },
+  "identity": {
+    "purpose": "Explain repository structure and readiness.",
+    "communication": {
+      "style": "concise",
+      "evidence": "file-references"
+    },
+    "boundaries": [
+      "Separate implementation from proposals.",
+      "Record unknowns and incomplete coverage."
+    ]
+  },
+  "roles": {
+    "primary": "explorer",
+    "supporting": [
+      "architecture-analyst"
+    ]
+  },
+  "instructions": {
+    "sources": [
+      {
+        "path": "examples/instructions.md"
+      }
+    ],
+    "parameters": {
+      "depth": {
+        "type": "string",
+        "enum": [
+          "overview",
+          "standard",
+          "deep"
+        ],
+        "default": "standard"
+      }
+    }
+  },
+  "execution": {
+    "defaultProfile": {
+      "kind": "ExecutionProfile",
+      "id": "opencode-exploration",
+      "version": "0.1.0"
+    },
+    "allowedProfiles": [
+      {
+        "kind": "ExecutionProfile",
+        "id": "opencode-exploration",
+        "version": "0.1.0"
+      },
+      {
+        "kind": "ExecutionProfile",
+        "id": "agy-exploration",
+        "version": "0.1.0"
+      }
+    ],
+    "fallbackPolicy": "explicit-only",
+    "fallbackProfiles": []
+  },
+  "capabilities": {
+    "tools": [
+      {
+        "required": true,
+        "kind": "Tool",
+        "id": "filesystem.read",
+        "version": "0.1.0"
+      },
+      {
+        "required": true,
+        "kind": "Tool",
+        "id": "repository.search",
+        "version": "0.1.0"
+      },
+      {
+        "required": false,
+        "kind": "Tool",
+        "id": "source.structure",
+        "version": "0.1.0"
+      }
+    ],
+    "skills": [
+      {
+        "required": true,
+        "kind": "Skill",
+        "id": "project-exploration",
+        "version": "0.1.0"
+      },
+      {
+        "required": false,
+        "kind": "Skill",
+        "id": "environment-readiness",
+        "version": "0.1.0"
+      }
+    ],
+    "mcps": [
+      {
+        "required": false,
+        "tools": [
+          "search",
+          "read"
+        ],
+        "kind": "MCP",
+        "id": "project-knowledge",
+        "version": "0.1.0"
+      }
+    ],
+    "plugins": []
+  },
+  "permissions": {
+    "filesystem": {
+      "read": [
+        "workspace"
+      ],
+      "write": [
+        "reports"
+      ]
+    },
+    "network": {
+      "mode": "denied"
+    },
+    "secrets": {
+      "mode": "references-only"
+    },
+    "externalMutations": {
+      "mode": "denied"
+    },
+    "actions": {
+      "default": "deny",
+      "rules": [
+        {
+          "action": "repository.read",
+          "resource": "workspace",
+          "decision": "allow",
+          "enforcementOwner": "executor"
+        },
+        {
+          "action": "artifact.write",
+          "resource": "reports",
+          "decision": "allow",
+          "enforcementOwner": "executor"
+        }
+      ]
+    }
+  },
+  "environment": {
+    "profile": {
+      "kind": "EnvironmentProfile",
+      "id": "repository-analysis",
+      "version": "0.1.0"
+    },
+    "readinessRequired": true
+  },
+  "outputs": {
+    "contract": {
+      "kind": "OutputContract",
+      "id": "repository-exploration-report",
+      "version": "0.1.0"
+    },
+    "allowedContracts": [
+      {
+        "kind": "OutputContract",
+        "id": "repository-exploration-report",
+        "version": "0.1.0"
+      }
+    ],
+    "parameters": {
+      "includeEvidence": true
+    }
+  },
+  "verification": {
+    "required": [
+      "output-schema-valid",
+      "evidence-references-resolve",
+      "coverage-and-limitations-present"
+    ]
+  },
+  "delegation": {
+    "enabled": false,
+    "allowedAgents": [],
+    "maxDepth": 0
+  },
+  "invocationContract": {
+    "kind": "InvocationContract",
+    "id": "repository-exploration-invocation",
+    "version": "0.1.0"
+  },
+  "contextPolicy": {
+    "kind": "ContextPolicy",
+    "id": "repository-context",
+    "version": "0.1.0"
+  },
+  "lifecyclePolicy": {
+    "kind": "LifecyclePolicy",
+    "id": "bounded-analysis",
+    "version": "0.1.0"
+  },
+  "evaluationContract": {
+    "kind": "EvaluationContract",
+    "id": "exploration-evaluation",
+    "version": "0.1.0"
+  },
+  "migrationContract": {
+    "kind": "MigrationContract",
+    "id": "agent-contract-versioning",
+    "version": "0.1.0"
+  }
+}

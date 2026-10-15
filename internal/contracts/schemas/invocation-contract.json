@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.invalid/operational/invocation-contract.json",
+  "title": "PROPOSED AOK invocation-contract",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "InvocationContract"
+    },
+    "metadata": {
+      "$ref": "https://aok.invalid/operational/common.schema.json#/$defs/metadata"
+    },
+    "executionMode": {
+      "enum": [
+        "interactive",
+        "primary",
+        "subagent",
+        "batch-worker",
+        "reviewer"
+      ]
+    },
+    "selection": {
+      "type": "object",
+      "properties": {
+        "when": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "excludeWhen": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "automatic": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "when",
+        "excludeWhen",
+        "automatic"
+      ],
+      "additionalProperties": false
+    },
+    "inputSchema": {
+      "type": "string",
+      "minLength": 1
+    },
+    "examples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "inputs": {
+            "type": "object"
+          },
+          "expectedSelection": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "description",
+          "inputs",
+          "expectedSelection"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "executionMode",
+    "selection",
+    "inputSchema",
+    "examples"
+  ],
+  "additionalProperties": false
+}

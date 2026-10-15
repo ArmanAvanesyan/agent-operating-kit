@@ -16,8 +16,8 @@ Codex and Claude Code can consume the same neutral pack.
 ### Developer (git checkout)
 
 - Python 3 for `./scripts/aok` (stdlib only; no pip install for kit validation).
-- Optional: Go toolchain when building the CLI locally from `cmd/aok` (when
-  present). See [CONTRIBUTING.md](../CONTRIBUTING.md).
+- Optional: Go toolchain when building the CLI locally from `cmd/aok`. See
+  [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 The installer treats `codex` as optional. `aok doctor` reports optional command
 availability separately from required AOK files and local registration.
@@ -75,19 +75,10 @@ aok validate
 
 On Windows, use `aok.cmd` from `~/.local/bin` when that wrapper is on `PATH`.
 
-Until the Go binary ships with full command parity, you can still invoke the
-Python kit CLI from an install root or git checkout (developer path):
-
-```bash
-# macOS install root (developer / transitional)
-"$HOME/Library/Application Support/Agent Operating Kit/agent-operating-kit/scripts/aok" doctor
-
-# Linux user
-"${XDG_DATA_HOME:-$HOME/.local/share}/agent-operating-kit/agent-operating-kit/scripts/aok" doctor
-
-# Linux system
-/opt/agent-operating-kit/agent-operating-kit/scripts/aok doctor
-```
+`aok` on `PATH` is the current end-user path after a release install. For a git
+checkout or deferred Python-only commands (`task` / `hooks` / `import`), use
+`./scripts/aok` from the repository (or the `scripts/aok` copy under an install
+root when needed).
 
 ## Git Install
 

@@ -3,6 +3,14 @@
 Short near-term directions for Agent Operating Kit. This is a stub, not a
 commitment calendar.
 
+## Shipped
+
+- **Thin Go CLI binary** — cross-platform `aok` binaries build in release CI and
+  installers place the binary on `PATH` without Python on the device; Python
+  `scripts/aok` remains for contributors and for `task` / `hooks` / `import`.
+  See [docs/cli-distribution.md](docs/cli-distribution.md) and
+  [docs/release-checklist.md](docs/release-checklist.md).
+
 ## Planned themes
 
 - **Native Cursor packaging** — move beyond generated import bundles toward a
@@ -16,11 +24,6 @@ commitment calendar.
 - **Scaffold pin maintenance** — refresh pins in
   `packs/phased-rollout-template` (tooling, Python/runtime floors, Actions) when
   regenerating that template.
-- **Thin Go CLI binary** — implemented: cross-platform `aok` binaries build in
-  release CI and installers place the binary on `PATH` without Python on the
-  device; Python `scripts/aok` remains for contributors and for `task` /
-  `hooks` / `import`. See [docs/cli-distribution.md](docs/cli-distribution.md)
-  and [docs/release-checklist.md](docs/release-checklist.md).
 
 ## Related docs
 

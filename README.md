@@ -260,6 +260,21 @@ Kanban is the active default flow. XP and Lean are active overlays. FDD, DSDM,
 and AUP are scaffolded catalog entries, and AM is planned. See
 `docs/methodology-profiles.md`.
 
+## Work-Item Templates
+
+Generate methodology-aware neutral templates, GitHub Issue Forms, and Azure
+DevOps desired-state guidance without changing remote resources:
+
+```bash
+./scripts/aok work-item list --flow kanban --overlay xp
+./scripts/aok work-item scaffold /path/to/project
+./scripts/aok work-item validate /path/to/project
+```
+
+Every export includes Epic, Feature, Task, Bug, Spike, Incident, Risk, and
+Change. Selected flows and overlays add their native types. See
+`docs/work-item-types.md`.
+
 ## Repository Relationships
 
 - `ArmanAvanesyan/agent-operating-kit` is the canonical public project.
@@ -294,8 +309,8 @@ AOK can render each pack into parseable target contracts:
 7. Record GitHub, swarmd, or local lifecycle updates.
 
 The neutral schema lives in `schemas/`. Tool-specific target behavior lives in
-`adapters/`. Methodology profiles live in `methodologies/`, and reusable
-workflow content lives in `packs/`.
+`adapters/`. Methodology profiles live in `methodologies/`, work-item contracts
+live in `work-items/`, and reusable workflow content lives in `packs/`.
 
 ## Claude Code Toolbox Migration
 
@@ -317,6 +332,7 @@ migration guidance.
 - Install and first-run onboarding: `docs/install-and-onboarding.md`
 - Codex local environments: `docs/codex-local-environments.md`
 - Project initialization: `docs/project-init-guide.md`
+- Methodology-aware work items: `docs/work-item-types.md`
 - Target support: `docs/targets-support-matrix.md`
 - Release checklist: `docs/release-checklist.md`
 - Uninstall and rollback: `docs/uninstall-and-rollback.md`

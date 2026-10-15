@@ -15,6 +15,8 @@
   metadata, three-level MoSCoW priorities, and read-only requirement validation.
 - Add curated AUP model and iteration templates, seven-discipline evidence,
   lifecycle milestone contracts, and read-only iteration validation.
+- Add a 19-entry methodology-aware work-item catalog with deterministic neutral
+  Markdown, GitHub Issue Form, and Azure DevOps desired-state scaffolding.
 
 ## 0.4.0
 

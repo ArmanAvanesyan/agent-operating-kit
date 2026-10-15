@@ -120,6 +120,17 @@ aok methodology scaffold /path/to/project --flow fdd
 
 This local export leaves `.aok/project.json` and remote work systems unchanged.
 
+Work-item templates are a separate explicit export:
+
+```bash
+aok work-item scaffold /path/to/project
+aok work-item validate /path/to/project
+```
+
+This writes neutral task templates, GitHub Issue Forms, and Azure DevOps
+desired-state guidance based on the selected methodology. It does not change
+the project methodology or any remote work system. See `work-item-types.md`.
+
 ## Rollback
 
 For generated files that did not previously exist, remove the files listed in

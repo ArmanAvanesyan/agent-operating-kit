@@ -11,6 +11,10 @@ criteria, target repo, selected roles, verification plan, lifecycle status, and
 external links. It can render to Markdown for local agents or map to `swarmd`
 MCP calls for runtime state.
 
+`workItemType` may optionally classify the packet using AOK's neutral,
+methodology-aware work-item catalog. Classification adds intake guidance but
+does not replace the authoritative neutral status and phase axes.
+
 ### Role
 
 A role is a reusable operating posture such as implementer, reviewer, QA, or

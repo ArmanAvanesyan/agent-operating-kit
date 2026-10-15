@@ -31,6 +31,30 @@
   },
   "required": ["title", "spec", "status", "phase", "acceptanceCriteria", "verification"],
   "properties": {
+    "workItemType": {
+      "type": "string",
+      "enum": [
+        "epic",
+        "feature",
+        "task",
+        "bug",
+        "spike",
+        "incident",
+        "risk",
+        "change",
+        "xp-user-story",
+        "lean-improvement",
+        "lean-experiment",
+        "fdd-feature",
+        "dsdm-requirement",
+        "aup-use-case",
+        "aup-user-story",
+        "aup-non-functional",
+        "aup-business-rule",
+        "aup-defect",
+        "aup-technical"
+      ]
+    },
     "title": { "type": "string", "minLength": 1 },
     "spec": { "type": "string", "minLength": 1 },
     "status": {

@@ -61,8 +61,10 @@ Spot check Codex local-environment templates:
   binding schema.
 - `docs/methodology-profiles.md` matches the active profile catalog, generated
   default policy, and project CLI.
+- `docs/work-item-types.md` matches the 19-type catalog, local provider
+  renderers, and offline scaffold validation.
 - Release kit, Codex plugin, and pack archives include the neutral
-  `methodologies/` catalog and active fragments.
+  `methodologies/` and `work-items/` catalogs and templates.
 
 ## Compatibility Checks
 

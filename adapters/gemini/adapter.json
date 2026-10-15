@@ -9,12 +9,14 @@
   "renders": [
     "task-packet",
     "role",
+    "hook",
     "skill",
     "pack",
     "mcp-config"
   ],
   "entrypoints": [
     "adapters/gemini/README.md",
+    "docs/adapters/gemini.md",
     "scripts/aok",
     "packs/*/pack.json"
   ],
@@ -28,6 +30,6 @@
   "bundle": {
     "artifactName": "aok-gemini-bundles.zip",
     "format": "aok-import-bundle",
-    "importInstructions": "Use the release bundle at bundles/gemini/<pack>/ as reusable role, skill, hook, and task guidance."
+    "importInstructions": "See docs/adapters/gemini.md for host-specific import steps. Bundle: bundles/gemini/<pack>/."
   }
 }

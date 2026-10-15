@@ -26,14 +26,14 @@ commitment calendar.
   Min / Tested host versions (or explicitly `Untracked`); recording process and
   optional release smoke live in `docs/host-compatibility.md` and
   `docs/release-checklist.md`.
+- **Deeper non-Codex / non-Claude import guides** — `docs/adapters/` pages plus
+  expanded READMEs for Cursor, OpenCode, Gemini, OpenClaw, and Hermes Agent
+  (prerequisites, bundle paths, verification, failure modes).
 
 ## Planned themes
 
 - **Native Cursor packaging** — move beyond generated import bundles toward a
   clearer native Cursor rules/skills/hooks story when a stable format exists.
-- **Deeper non-Codex / non-Claude import guides** — expand adapter READMEs and
-  ops docs for Cursor, OpenCode, Gemini, OpenClaw, and Hermes Agent with
-  current host import steps and known gaps.
 - **Scaffold pin maintenance** — refresh pins in
   `packs/phased-rollout-template` (tooling, Python/runtime floors, Actions) when
   regenerating that template.

@@ -16,6 +16,7 @@
   ],
   "entrypoints": [
     "adapters/opencode/README.md",
+    "docs/adapters/opencode.md",
     "scripts/aok",
     "packs/*/pack.json"
   ],
@@ -29,6 +30,6 @@
   "bundle": {
     "artifactName": "aok-opencode-bundles.zip",
     "format": "aok-import-bundle",
-    "importInstructions": "Use the release bundle at bundles/opencode/<pack>/ and import the included guidance, roles, hooks, skills, tasks, and aok-bundle.json into the project workspace."
+    "importInstructions": "See docs/adapters/opencode.md for host-specific import steps. Bundle: bundles/opencode/<pack>/."
   }
 }

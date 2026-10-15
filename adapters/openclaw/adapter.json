@@ -16,6 +16,7 @@
   ],
   "entrypoints": [
     "adapters/openclaw/README.md",
+    "docs/adapters/openclaw.md",
     "scripts/aok",
     "packs/*/pack.json"
   ],
@@ -29,6 +30,6 @@
   "bundle": {
     "artifactName": "aok-openclaw-bundles.zip",
     "format": "aok-import-bundle",
-    "importInstructions": "Use the release bundle at bundles/openclaw/<pack>/ and import the included role, skill, lifecycle, and task files into the host workflow."
+    "importInstructions": "See docs/adapters/openclaw.md for host-specific import steps. Bundle: bundles/openclaw/<pack>/."
   }
 }

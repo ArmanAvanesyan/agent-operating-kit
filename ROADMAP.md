@@ -22,6 +22,10 @@ commitment calendar.
 - **Homebrew / Scoop / winget** — package-manager templates under `packaging/`,
   regenerated from Release `SHA256SUMS` / `index.json`. **PyPI is not planned**
   for the Go `aok` binary.
+- **Host compatibility tracking** — `docs/targets-support-matrix.md` tracks
+  Min / Tested host versions (or explicitly `Untracked`); recording process and
+  optional release smoke live in `docs/host-compatibility.md` and
+  `docs/release-checklist.md`.
 
 ## Planned themes
 
@@ -30,9 +34,6 @@ commitment calendar.
 - **Deeper non-Codex / non-Claude import guides** — expand adapter READMEs and
   ops docs for Cursor, OpenCode, Gemini, OpenClaw, and Hermes Agent with
   current host import steps and known gaps.
-- **Host compatibility tracking** — keep
-  `docs/targets-support-matrix.md` current with min/tested host versions (or
-  explicitly “untracked”) and support levels.
 - **Scaffold pin maintenance** — refresh pins in
   `packs/phased-rollout-template` (tooling, Python/runtime floors, Actions) when
   regenerating that template.

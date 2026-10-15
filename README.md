@@ -60,7 +60,7 @@ and [`packaging/`](packaging/)).
 Regenerate manifests from a release tag or local `dist/release`:
 
 ```bash
-./scripts/packaging/generate-from-release.sh --version 0.5.0
+./scripts/packaging/generate-from-release.sh --version 0.6.0
 ```
 
 ## Developer First Success Path

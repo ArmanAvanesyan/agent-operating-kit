@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+## 0.6.0
+
+- Go CLI full command parity for `task`, `hooks`, and `import` in the release
+  binary (Python `scripts/aok` remains for contributors).
+- Go release builder (`cmd/aok-release` via `scripts/release/build.sh`) replaces
+  the Python `build.py` path for kit zips, cross-compiled binaries, installers,
+  bundles, `SHA256SUMS`, and `index.json`.
+- Optional secrets-gated code signing in release CI
+  (`scripts/release/sign.sh`); unsigned artifacts remain the default when
+  secrets or tools are absent.
+- Homebrew / Scoop / winget packaging templates under `packaging/`, regenerated
+  from Release checksums (`scripts/packaging/generate-from-release.sh`).
+  **PyPI is not planned** for the Go `aok` binary.
+
 ## 0.5.0
 
 - Ship the thin Go CLI (`cmd/aok`) for end-user install without Python on the

@@ -10,7 +10,7 @@ required.
 `.codex-plugin/plugin.json` → `version`.
 
 GitHub Releases, installer artifact names, and published Go CLI binaries
-(`aok-<version>-…`) should track that value (for example `0.5.0`). The thin
+(`aok-<version>-…`) should track that value (for example `0.6.0`). The thin
 release binary version matches the kit version from
 `.codex-plugin/plugin.json`. Release packaging lives under `scripts/release/`
 and is documented in `docs/release-checklist.md` and
@@ -26,7 +26,7 @@ same release).
 `hooks.json` has its own `version` field. It versions the hook catalog and
 command wiring, not the kit release.
 
-**Current skew (intentional):** kit `0.5.0` vs `hooks.json` `0.1.0`. Do not
+**Current skew (intentional):** kit `0.6.0` vs `hooks.json` `0.1.0`. Do not
 force these to match unless a release process explicitly decides to couple
 them.
 
@@ -35,7 +35,7 @@ them.
 Each pack versions its own content via pack manifests / `pack.content.json`
 (and optional `claude-code/plugin.json` where present). Many packs remain at
 `0.1.0` (or nearby, such as `0.2.0` for a pack-specific bump) while the kit is
-at `0.5.0`. That is expected: pack content can ship or stabilize on a different
+at `0.6.0`. That is expected: pack content can ship or stabilize on a different
 cadence than the kit CLI and installers.
 
 ## Schemas and adapters

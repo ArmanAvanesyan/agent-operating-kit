@@ -1,0 +1,54 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "GoalContract",
+  "metadata": {
+    "id": "explore-repository",
+    "version": "0.1.0",
+    "description": "Illustrative proposal fixture; no execution or integration implied."
+  },
+  "outcome": "Produce a source-grounded repository exploration report and inventory.",
+  "scope": {
+    "repositories": [
+      "assignment-workspace"
+    ],
+    "writeRoots": [
+      "docs/reports/explore-aok-001"
+    ]
+  },
+  "successPredicates": [
+    {
+      "id": "report-valid",
+      "description": "Required report sections and source references are valid.",
+      "verifierRef": "report-valid-verifier",
+      "required": true
+    },
+    {
+      "id": "coverage-reconciled",
+      "description": "Inventory coverage and unknowns are explicit.",
+      "verifierRef": "coverage-reconciled-verifier",
+      "required": true
+    }
+  ],
+  "invariants": [
+    {
+      "id": "application-unchanged",
+      "description": "No application source was changed.",
+      "verifierRef": "application-unchanged-verifier",
+      "required": true
+    }
+  ],
+  "limits": {
+    "maxAttempts": 2,
+    "maxReplans": 1,
+    "timeoutSeconds": 900
+  },
+  "stopConditions": [
+    "verified-success",
+    "cancelled",
+    "budget-exhausted",
+    "blocked",
+    "no-defensible-next-step"
+  ],
+  "verificationPolicy": "all-required-pass-no-required-unknown",
+  "planRef": "exploration-plan"
+}

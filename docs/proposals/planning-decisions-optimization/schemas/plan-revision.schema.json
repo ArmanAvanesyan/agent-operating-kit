@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.example/proposals/planning-decisions-optimization/plan-revision.schema.json",
+  "title": "PROPOSED AOK PlanRevision",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "PlanRevision"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    },
+    "planRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "fromVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "toVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "trigger": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "stepId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "operation": {
+            "enum": [
+              "add",
+              "modify",
+              "remove"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "stepId",
+          "operation",
+          "reason"
+        ],
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "preservedEvidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "invalidatedEvidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "authorizationRef": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "enum": [
+        "proposed",
+        "accepted",
+        "rejected"
+      ]
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "planRef",
+    "fromVersion",
+    "toVersion",
+    "trigger",
+    "evidence",
+    "changes",
+    "preservedEvidence",
+    "invalidatedEvidence",
+    "authorizationRef",
+    "state"
+  ],
+  "additionalProperties": false
+}

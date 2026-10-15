@@ -1,0 +1,25 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "PlanRevision",
+  "metadata": {
+    "id": "exploration-plan-revision-1",
+    "version": "0.1.0",
+    "description": "Illustrative proposal fixture; no execution or integration implied."
+  },
+  "planRef": "exploration-plan",
+  "fromVersion": "0.1.0",
+  "toVersion": "0.2.0",
+  "trigger": "Illustrative future discovery of an additional package.",
+  "evidence": [],
+  "changes": [
+    {
+      "stepId": "inspect",
+      "operation": "modify",
+      "reason": "Expand bounded inventory to include the newly found package."
+    }
+  ],
+  "preservedEvidence": [],
+  "invalidatedEvidence": [],
+  "authorizationRef": null,
+  "state": "proposed"
+}

@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.example/proposals/planning-decisions-optimization/decision-result.schema.json",
+  "title": "PROPOSED AOK DecisionResult",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "DecisionResult"
+    },
+    "decisionRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "fixture": {
+      "type": "boolean"
+    },
+    "status": {
+      "enum": [
+        "decided",
+        "abstained",
+        "failed"
+      ]
+    },
+    "value": {
+      "type": [
+        "boolean",
+        "string",
+        "number",
+        "array",
+        "null"
+      ]
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "confidence": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "confidenceMeaning": {
+      "enum": [
+        "unavailable",
+        "provider-reported-uncalibrated",
+        "calibrated"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "observedProvider": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "authorizationGranted": {
+      "const": false
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "decisionRef",
+    "fixture",
+    "status",
+    "value",
+    "evidence",
+    "confidence",
+    "confidenceMeaning",
+    "reason",
+    "observedProvider",
+    "authorizationGranted"
+  ],
+  "additionalProperties": false
+}

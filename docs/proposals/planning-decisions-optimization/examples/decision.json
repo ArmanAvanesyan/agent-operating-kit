@@ -1,0 +1,31 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "DecisionContract",
+  "metadata": {
+    "id": "choose-exploration-depth",
+    "version": "0.1.0",
+    "description": "Illustrative proposal fixture; no execution or integration implied."
+  },
+  "decisionType": "choice",
+  "inputSchema": "examples/decision-input.schema.json",
+  "choices": [
+    "overview",
+    "standard",
+    "deep"
+  ],
+  "mechanism": "deterministic",
+  "adapterRef": "aok-rule-evaluator-proposed",
+  "evidenceRequired": true,
+  "uncertainty": {
+    "allowAbstention": true,
+    "onMissingEvidence": "abstain",
+    "calibrationRef": null
+  },
+  "consequences": {
+    "authority": "recommendation-only",
+    "allowedOutcomes": [
+      "recommend-depth",
+      "request-more-context"
+    ]
+  }
+}

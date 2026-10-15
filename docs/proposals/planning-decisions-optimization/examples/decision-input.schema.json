@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "requestedDepth": {
+      "enum": [
+        "overview",
+        "standard",
+        "deep"
+      ]
+    },
+    "repositoryScopeKnown": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "requestedDepth",
+    "repositoryScopeKnown"
+  ],
+  "additionalProperties": false
+}

@@ -58,3 +58,10 @@ EvaluationContract and MigrationContract. All are proposed additions; existing A
 capabilities in the baseline table are unchanged. Registry examples illustrate bindings
 but leave unresolved external/tool/role/check references explicitly blocked. Full snapshots
 and synthetic blocked run records are design fixtures, not observed execution evidence.
+
+## Planning, decisions and optimization
+
+The [companion proposal](../planning-decisions-optimization/README.md) connects goals,
+plans and typed decisions to agent assignments and verified results, with optional
+offline optimization experiments. Its schemas and adapter mappings are proposed;
+they add no operational planner, decision provider or optimizer.

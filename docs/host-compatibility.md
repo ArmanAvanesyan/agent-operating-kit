@@ -16,9 +16,9 @@ adapter format drift and untested host versions, not a kit lockfile.
 | Hermes Agent | Untracked |
 | swarmd (MCP) | Untracked — see [swarmd integration](swarmd-integration.md) |
 
-Kit version (see `.codex-plugin/plugin.json`, currently `0.6.1`) is independent
-of host versions. Pack and Claude marketplace plugin versions may also differ
-from the kit; that skew is intentional unless a release notes otherwise.
+Kit version (see `.codex-plugin/plugin.json`) is independent of host versions.
+Pack and Claude marketplace plugin versions may also differ from the kit; that
+skew is intentional unless a release notes otherwise.
 
 ## Smoke log — 2026-10-15 (kit 0.6.1)
 

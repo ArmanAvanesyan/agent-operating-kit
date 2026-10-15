@@ -146,11 +146,22 @@ func rel(root, path string) string {
 	return r
 }
 func readBounded(path string) ([]byte, error) {
+	info, e := os.Lstat(path)
+	if e != nil {
+		return nil, e
+	}
+	if !info.Mode().IsRegular() {
+		return nil, fmt.Errorf("input must be a regular non-symlink file")
+	}
 	f, e := os.Open(path)
 	if e != nil {
 		return nil, e
 	}
 	defer f.Close()
+	opened, e := f.Stat()
+	if e != nil || !opened.Mode().IsRegular() || !os.SameFile(info, opened) {
+		return nil, fmt.Errorf("input changed while opening")
+	}
 	b, e := io.ReadAll(io.LimitReader(f, contracts.MaxDocumentBytes+1))
 	if e != nil {
 		return nil, e

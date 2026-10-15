@@ -380,3 +380,21 @@ func TestInvalidBindingAndDuplicateDeliverable(t *testing.T) {
 		}
 	}
 }
+
+func TestBoundedReadRejectsNonRegularFiles(t *testing.T) {
+	root := t.TempDir()
+	if _, err := readBounded(root); err == nil {
+		t.Fatal("directory accepted")
+	}
+	target := filepath.Join(root, "target")
+	if err := os.WriteFile(target, []byte("{}"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	link := filepath.Join(root, "link")
+	if err := os.Symlink(target, link); err != nil {
+		t.Skip(err)
+	}
+	if _, err := readBounded(link); err == nil {
+		t.Fatal("symlink accepted")
+	}
+}

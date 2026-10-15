@@ -96,6 +96,25 @@ Spot check Codex local-environment templates:
   - `openclaw`
   - `hermes-agent`
 
+### Optional host smoke (Codex + Claude Code + Cursor)
+
+When practical, smoke the three primary hosts against this kit version and
+record results using the template in
+[host-compatibility.md](host-compatibility.md):
+
+1. Install or enable the kit / pack for **Codex**, **Claude Code**, and
+   **Cursor** (native installer, marketplace, or generated bundle import).
+2. Confirm at least one pack surface is visible to the host (rule, skill, or
+   plugin) for each smoke.
+3. Update **Tested** cells in
+   [targets-support-matrix.md](targets-support-matrix.md) (and swarmd notes in
+   [swarmd-integration.md](swarmd-integration.md) if exercised).
+4. Leave cells as `Untracked` when a host was not available — do not invent
+   versions.
+
+This step is optional for cutting a release; unsigned binaries and package
+manifests do not depend on it.
+
 ## Release Notes
 
 Build release artifacts:

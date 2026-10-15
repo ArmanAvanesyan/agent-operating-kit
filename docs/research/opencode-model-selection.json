@@ -1,0 +1,68 @@
+{
+  "kind": "opencode-model-selection-research",
+  "checkedOn": "2026-10-15",
+  "scope": "User-requested subset, not exhaustive catalog",
+  "evidence": "model-selection-evidence/2026-10-15/opencode-models.stdout.txt",
+  "sources": {
+    "catalog": "https://opencode.ai/v2/docs/console/models/"
+  },
+  "models": [
+    {
+      "label": "DeepSeek V4.1 Flash Free",
+      "selector": "opencode/deepseek-v4.1-flash-free",
+      "verification": "local-cli-list-and-official-catalog",
+      "source": "https://opencode.ai/v2/docs/console/models/",
+      "benchmarkReproduced": false,
+      "offer": "Free",
+      "effort": null,
+      "effortNote": "Not established by model listing; no effort tier inferred.",
+      "priceGuarantee": false
+    },
+    {
+      "label": "Nemotron 3 Ultra Free",
+      "selector": "opencode/nemotron-3-ultra-free",
+      "verification": "local-cli-list-and-official-catalog",
+      "source": "https://opencode.ai/v2/docs/console/models/",
+      "benchmarkReproduced": false,
+      "offer": "Free",
+      "effort": null,
+      "effortNote": "Not established by model listing; no effort tier inferred.",
+      "priceGuarantee": false
+    },
+    {
+      "label": "Nemotron 3.5 Lightning Free",
+      "selector": "opencode/nemotron-3.5-lightning-free",
+      "verification": "local-cli-list-and-official-catalog",
+      "source": "https://opencode.ai/v2/docs/console/models/",
+      "benchmarkReproduced": false,
+      "offer": "Free",
+      "effort": null,
+      "effortNote": "Not established by model listing; no effort tier inferred.",
+      "priceGuarantee": false
+    },
+    {
+      "label": "Nemotron 3.5 Super VL Free",
+      "selector": "opencode/nemotron-3.5-super-vl-free",
+      "verification": "local-cli-list-and-official-catalog",
+      "source": "https://opencode.ai/v2/docs/console/models/",
+      "benchmarkReproduced": false,
+      "offer": "Free",
+      "effort": null,
+      "effortNote": "Not established by model listing; no effort tier inferred.",
+      "priceGuarantee": false
+    },
+    {
+      "label": "LongCat 2.5 Preview Free",
+      "selector": "opencode/longcat-2.5-preview-free",
+      "verification": "local-cli-list-and-official-catalog",
+      "source": "https://opencode.ai/v2/docs/console/models/",
+      "benchmarkReproduced": false,
+      "offer": "Free",
+      "effort": null,
+      "effortNote": "Not established by model listing; no effort tier inferred.",
+      "priceGuarantee": false
+    }
+  ],
+  "recommendationsStatus": "No cross-model ranking established; evaluate on repository tasks before routing.",
+  "aokIntegration": "Research only; no runtime routing, adapter, or default changed."
+}

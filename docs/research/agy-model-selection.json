@@ -1,0 +1,75 @@
+{
+  "kind": "agy-model-selection-research",
+  "checkedOn": "2026-10-15",
+  "scope": "User-requested subset, not exhaustive catalog",
+  "evidence": "model-selection-evidence/2026-10-15/agy-models.stdout.txt",
+  "sources": {
+    "opencode": "https://opencode.ai/v2/docs/console/models/",
+    "agy": "https://antigravity.google/docs/models",
+    "effort": "https://antigravity.google/docs/cli/commands/effort/"
+  },
+  "models": [
+    {
+      "label": "Gemini 3.8 Flash (High)",
+      "selector": "gemini-3.8-flash-high",
+      "verification": "local-cli-list-and-official-catalog",
+      "source": "https://antigravity.google/docs/models",
+      "benchmarkReproduced": false,
+      "effort": "high",
+      "thinking": null,
+      "scheduledRemoval": null
+    },
+    {
+      "label": "Gemini 3.8 Flash (Medium)",
+      "selector": "gemini-3.8-flash-medium",
+      "verification": "local-cli-list-and-official-catalog",
+      "source": "https://antigravity.google/docs/models",
+      "benchmarkReproduced": false,
+      "effort": "medium",
+      "thinking": null,
+      "scheduledRemoval": null
+    },
+    {
+      "label": "Gemini 3.8 Flash (Low)",
+      "selector": "gemini-3.8-flash-low",
+      "verification": "local-cli-list-and-official-catalog",
+      "source": "https://antigravity.google/docs/models",
+      "benchmarkReproduced": false,
+      "effort": "low",
+      "thinking": null,
+      "scheduledRemoval": null
+    },
+    {
+      "label": "Claude Opus 4.6 (Thinking)",
+      "selector": "claude-opus-4-6-thinking",
+      "verification": "local-cli-list-and-official-catalog",
+      "source": "https://antigravity.google/docs/models",
+      "benchmarkReproduced": false,
+      "effort": null,
+      "thinking": true,
+      "scheduledRemoval": "2026-11-02"
+    },
+    {
+      "label": "Claude Sonnet 4.6 (Thinking)",
+      "selector": "claude-sonnet-4-6",
+      "verification": "local-cli-list-and-official-catalog",
+      "source": "https://antigravity.google/docs/models",
+      "benchmarkReproduced": false,
+      "effort": null,
+      "thinking": true,
+      "scheduledRemoval": "2026-11-02"
+    },
+    {
+      "label": "GPT-OSS 120B (medium)",
+      "selector": "gpt-oss-120b-medium",
+      "verification": "local-cli-list-and-official-catalog",
+      "source": "https://antigravity.google/docs/models",
+      "benchmarkReproduced": false,
+      "effort": "medium",
+      "thinking": null,
+      "scheduledRemoval": "2026-11-02"
+    }
+  ],
+  "recommendationsStatus": "No cross-model ranking established; evaluate on repository tasks before routing.",
+  "aokIntegration": "Research only; no runtime routing, adapter, or default changed."
+}

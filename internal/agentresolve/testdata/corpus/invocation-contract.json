@@ -1,0 +1,39 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "examples": [
+    {
+      "description": "Explore the assigned workspace.",
+      "expectedSelection": true,
+      "inputs": {
+        "depth": "deep",
+        "repository": "."
+      }
+    },
+    {
+      "description": "Deployment is outside this agent scope.",
+      "expectedSelection": false,
+      "inputs": {
+        "depth": "standard",
+        "repository": "."
+      }
+    }
+  ],
+  "executionMode": "subagent",
+  "inputSchema": "assets/schemas/input.schema.json",
+  "kind": "InvocationContract",
+  "metadata": {
+    "description": "Proposed documentation fixture; not operational configuration.",
+    "id": "repository-exploration-invocation",
+    "name": "Repository Exploration Invocation",
+    "version": "0.1.0"
+  },
+  "selection": {
+    "automatic": false,
+    "excludeWhen": [
+      "Task requires deployment or application-code edits."
+    ],
+    "when": [
+      "User requests bounded repository exploration."
+    ]
+  }
+}

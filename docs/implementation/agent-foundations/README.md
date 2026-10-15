@@ -1,7 +1,8 @@
 # Agent foundations delivery contract
 
-Status: foundations in progress. `aok agent validate` is implemented in the Go
-CLI; the remaining commands below are planned.
+Status: foundations in progress. `aok agent validate` and static
+`aok agent resolve` are implemented in the Go CLI. Resolution remains blocked
+where readiness and native enforcement evidence are unavailable.
 The historical [agent specification](../../proposals/agent-spec/README.md) and
 [planning proposal](../../proposals/planning-decisions-optimization/README.md)
 remain design assets. Their illustrative unresolved references do not form a
@@ -85,8 +86,8 @@ workers and one reviewer, with isolated worktrees for concurrent edits.
 |---|---|---|
 | 1 | This reconciliation and [native inventory](native-inventory.md) | Merged: [PR #48](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/48) |
 | 2 | Offline schemas, typed envelope/references, strict parsers, positive/negative fixtures | Merged: [PR #49](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/49) |
-| 3 | Typed models, registries, invocation/context/assignment and reference semantics | In progress |
-| 4 | Deterministic resolution, immutable evidence, permission/path protections | Pending |
+| 3 | Typed models, registries, invocation/context/assignment and reference semantics | Merged: [PR #50](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/50) |
+| 4 | Deterministic resolution, immutable evidence, permission/path protections | In progress |
 | 5 | Planning DAG, revisions, traceability, decision results | Pending |
 | 6 | Shared native interface, provenance/sidecars, semantic comparison | Pending |
 | 7 | OpenCode native adapter | Pending |
@@ -126,3 +127,7 @@ historical proposal assets.
 Stage 3 adds [local agent validation](../../agent-validation.md) and typed
 decoding for the initial eleven resource kinds. Static validation does not imply
 readiness or authorization. Resolution, planning and native adapters remain open.
+
+Stage 4 adds [static resolution](../../agent-resolution.md), captured source hashes,
+permission intersection and non-overwriting report output. It does not dispatch
+work or establish native/runtime enforcement.

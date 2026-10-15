@@ -9,6 +9,10 @@ Host AI tool versions use **Min** (declared floor, if any) and **Tested**
 [Host compatibility](host-compatibility.md) for the recording process and
 log template.
 
+**2026-10-15 (kit 0.6.1):** AOK-side smoke (`version` / `validate` / render
+bundle for codex, claude-code, cursor) passed. No host AI CLIs were present on
+the smoke runner, so all **Tested** cells below remain `Untracked`.
+
 ## Target Matrix
 
 | Target | Status | Support level | Min | Tested | Import / bundle path | Known gaps |

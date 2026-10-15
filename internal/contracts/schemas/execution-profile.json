@@ -144,6 +144,9 @@
       ],
       "additionalProperties": false
     },
+    "permissionRestrictions": {
+      "$ref": "common.schema.json#/$defs/permissions"
+    },
     "limits": {
       "type": "object",
       "properties": {

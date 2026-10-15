@@ -146,12 +146,13 @@ type ActionRule struct {
 
 type ExecutionProfile struct {
 	DocumentHeader
-	Client        ClientSettings              `json:"client"`
-	Model         ModelSettings               `json:"model"`
-	Compatibility CompatibilitySettings       `json:"compatibility"`
-	Limits        *ExecutionLimits            `json:"limits,omitempty"`
-	Environment   ProfileEnvironment          `json:"environment"`
-	Extensions    *map[string]json.RawMessage `json:"extensions,omitempty"`
+	Client                 ClientSettings              `json:"client"`
+	Model                  ModelSettings               `json:"model"`
+	Compatibility          CompatibilitySettings       `json:"compatibility"`
+	PermissionRestrictions *Permissions                `json:"permissionRestrictions,omitempty"`
+	Limits                 *ExecutionLimits            `json:"limits,omitempty"`
+	Environment            ProfileEnvironment          `json:"environment"`
+	Extensions             *map[string]json.RawMessage `json:"extensions,omitempty"`
 }
 type ClientSettings struct {
 	Adapter           string  `json:"adapter"`

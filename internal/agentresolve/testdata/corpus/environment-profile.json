@@ -1,0 +1,35 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "credentialRefs": [],
+  "isolation": "workspace",
+  "kind": "EnvironmentProfile",
+  "metadata": {
+    "description": "Proposed documentation fixture; not operational configuration.",
+    "id": "repository-analysis",
+    "name": "Repository Analysis",
+    "version": "0.1.0"
+  },
+  "mutationOnDiscovery": false,
+  "network": "denied",
+  "readinessChecks": [
+    "source-paths-resolve",
+    "required-tools-discoverable",
+    "permissions-enforceable"
+  ],
+  "requirements": [
+    {
+      "discovery": "trusted-executable-version-probe",
+      "ref": "python3",
+      "required": true
+    },
+    {
+      "discovery": "trusted-cli-discovery",
+      "ref": "opencode",
+      "required": true
+    }
+  ],
+  "roots": {
+    "reports": "workspace/docs/reports/{assignmentId}",
+    "workspace": "assignment.inputs.repository"
+  }
+}

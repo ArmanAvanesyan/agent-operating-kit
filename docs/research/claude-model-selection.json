@@ -1,0 +1,409 @@
+{
+  "kind": "claude-model-selection-export",
+  "extractedOn": "2026-10-15",
+  "interactiveSelector": false,
+  "note": "No interactive selector was found on the reviewed pages. Official fields normalize published guidance; derivedMapping is repository synthesis, not Anthropic guidance. API pricing/context are dated snapshots; benchmarks were not reproduced.",
+  "sources": [
+    "https://platform.claude.com/docs/en/about-claude/models/choosing-a-model",
+    "https://platform.claude.com/docs/en/models/overview",
+    "https://platform.claude.com/docs/en/build-with-claude/effort",
+    "https://platform.claude.com/docs/en/about-claude/models/optimizing-for-cost-and-intelligence",
+    "https://code.claude.com/docs/en/model-config",
+    "https://claude.com/blog/claude-model-and-effort-level-in-claude-code",
+    "https://academy.claude.com/tutorials/choosing-the-right-claude-model"
+  ],
+  "official": {
+    "models": {
+      "claude-fable-5-1": {
+        "name": "Claude Fable 5.1",
+        "positioning": "Demanding reasoning and long-horizon agentic work",
+        "latency": "Slower",
+        "priceInPerMTok": 10,
+        "priceOutPerMTok": 50,
+        "thinking": "adaptive, always on",
+        "defaultEffort": "high",
+        "contextTokens": 1000000,
+        "maxOutputTokens": 128000
+      },
+      "claude-opus-5-5": {
+        "name": "Claude Opus 5.5",
+        "positioning": "Long-running agentic coding and knowledge work",
+        "latency": "Moderate",
+        "priceInPerMTok": 4,
+        "priceOutPerMTok": 20,
+        "thinking": "adaptive, always on",
+        "defaultEffort": "medium",
+        "contextTokens": 1000000,
+        "maxOutputTokens": 128000
+      },
+      "claude-sonnet-5-5": {
+        "name": "Claude Sonnet 5.5",
+        "positioning": "Best combination of speed and intelligence",
+        "latency": "Fast",
+        "priceInPerMTok": 2,
+        "priceOutPerMTok": 10,
+        "thinking": "adaptive",
+        "defaultEffort": "high",
+        "defaultEffortClaudeCode": "medium",
+        "contextTokens": 1000000,
+        "maxOutputTokens": 128000
+      },
+      "claude-haiku-5-5": {
+        "name": "Claude Haiku 5.5",
+        "positioning": "High-volume, latency-sensitive tasks such as classification, extraction, and routing",
+        "latency": "Fastest",
+        "priceInPerMTok": 0.1,
+        "priceOutPerMTok": 0.5,
+        "priceNote": "from",
+        "thinking": "adaptive",
+        "defaultEffort": "medium",
+        "contextTokens": 1000000,
+        "maxOutputTokens": 128000
+      }
+    },
+    "selectionMatrix": [
+      {
+        "need": "The highest available capability",
+        "model": "claude-fable-5-1",
+        "examples": [
+          "Agent sessions that run for hours",
+          "Multistep deep research",
+          "Analysis carried through to a finished document, spreadsheet, or deck"
+        ]
+      },
+      {
+        "need": "Complex agentic coding and enterprise work",
+        "model": "claude-opus-5-5",
+        "examples": [
+          "Multihour autonomous coding agents",
+          "Large-scale refactoring",
+          "Complex systems engineering",
+          "Vision-heavy workflows",
+          "Computer use"
+        ]
+      },
+      {
+        "need": "Speed and capability for everyday coding, agent, and enterprise workloads",
+        "model": "claude-sonnet-5-5",
+        "examples": [
+          "Code generation",
+          "Data analysis",
+          "Content creation",
+          "Visual understanding",
+          "Agentic tool use"
+        ]
+      },
+      {
+        "need": "The lowest latency and price",
+        "model": "claude-haiku-5-5",
+        "examples": [
+          "Real-time applications",
+          "High-volume intelligent processing",
+          "Cost-sensitive deployments needing strong reasoning",
+          "Sub-agent tasks"
+        ]
+      }
+    ],
+    "startWith": "claude-opus-5-5",
+    "escalateToFableWhen": "evals on Opus 5.5 at xhigh or max still fall short on demanding reasoning or long-horizon agentic work",
+    "effortLevels": [
+      {
+        "level": "max",
+        "description": "Absolute maximum capability with no constraints on token spending",
+        "typicalUse": "Tasks requiring the deepest possible reasoning and most thorough analysis"
+      },
+      {
+        "level": "xhigh",
+        "description": "Extended capability for long-horizon work",
+        "typicalUse": "Long-running agentic and coding tasks (over 30 minutes) with token budgets in the millions"
+      },
+      {
+        "level": "high",
+        "description": "Spends as many tokens as the task needs for excellent results",
+        "typicalUse": "Complex reasoning, difficult coding problems, agentic tasks"
+      },
+      {
+        "level": "medium",
+        "description": "Balanced approach with moderate token savings",
+        "typicalUse": "Agentic tasks that require a balance of speed, cost, and performance"
+      },
+      {
+        "level": "low",
+        "description": "Most efficient. Significant token savings with some capability reduction",
+        "typicalUse": "Simpler tasks that need the best speed and lowest costs, such as subagents"
+      }
+    ],
+    "claudeCodeEffortGuidance": {
+      "low": "Quick exchanges where you review each result, such as brainstorming, a first sketch, or a small change like a rename",
+      "medium": "Day-to-day engineering work with a clear scope, such as implementing a new feature",
+      "high": "Work where verification matters or edge cases are likely, such as fixing a bug in an existing codebase",
+      "xhigh": "Deeper reasoning at higher token spend",
+      "max": "Hard problems you want Claude to work through without you, such as finding security vulnerabilities; prone to overthinking"
+    },
+    "claudeCodeAliases": {
+      "fable": "claude-fable-5-1",
+      "best": "fable where available else opus",
+      "opus": "claude-opus-5-5",
+      "sonnet": "claude-sonnet-5-5",
+      "haiku": "claude-haiku-5-5",
+      "opusplan": "opus in plan mode, sonnet for execution",
+      "default": "account/provider/organization runtime default; docs list Opus 5.5 for eligible accounts"
+    },
+    "blogRules": {
+      "smallerModelWhen": "work is routine: edits you can describe precisely, mechanical changes, questions about code already in context",
+      "largerModelWhen": "problem is genuinely hard: subtle bugs, unfamiliar domains, architecture decisions",
+      "raiseEffortWhen": "Claude skipped a file, did not run tests, or did not double-check",
+      "raiseModelWhen": "Claude had all pertinent context, clearly tried, and still got it wrong"
+    },
+    "effortPersistence": {
+      "source": "https://code.claude.com/docs/en/model-config",
+      "ultrathink": "In-context instruction; API effort unchanged.",
+      "selection": "Enter saves per-model effort; Alt+Enter session-only where supported.",
+      "legacyUserEffortLevel": "Ignored for Opus 5.5 and later models; project/local/managed/--settings overrides still apply across models."
+    }
+  },
+  "derivedMapping": {
+    "policy": "Moving toward quality never lowers model tier. Effort is monotonic within a tier but can reset when upgrading models; adjacent priorities may share a cell. This is repository-derived guidance, not a vendor selector.",
+    "priorities": [
+      "latency-cost",
+      "balanced",
+      "quality"
+    ],
+    "rows": [
+      {
+        "workType": "Software engineering",
+        "task": "Fix a well-scoped bug",
+        "recommendations": {
+          "latency-cost": {
+            "model": "claude-sonnet-5-5",
+            "effort": "medium"
+          },
+          "balanced": {
+            "model": "claude-sonnet-5-5",
+            "effort": "high"
+          },
+          "quality": {
+            "model": "claude-opus-5-5",
+            "effort": "high"
+          }
+        }
+      },
+      {
+        "workType": "Software engineering",
+        "task": "Small precise edits, renames, mechanical changes",
+        "recommendations": {
+          "latency-cost": {
+            "model": "claude-haiku-5-5",
+            "effort": "low"
+          },
+          "balanced": {
+            "model": "claude-sonnet-5-5",
+            "effort": "low"
+          },
+          "quality": {
+            "model": "claude-sonnet-5-5",
+            "effort": "medium"
+          }
+        }
+      },
+      {
+        "workType": "Software engineering",
+        "task": "Build application features",
+        "recommendations": {
+          "latency-cost": {
+            "model": "claude-sonnet-5-5",
+            "effort": "medium"
+          },
+          "balanced": {
+            "model": "claude-opus-5-5",
+            "effort": "medium"
+          },
+          "quality": {
+            "model": "claude-opus-5-5",
+            "effort": "high"
+          }
+        }
+      },
+      {
+        "workType": "Software engineering",
+        "task": "Migrate or refactor at scale",
+        "recommendations": {
+          "latency-cost": {
+            "model": "claude-opus-5-5",
+            "effort": "medium"
+          },
+          "balanced": {
+            "model": "claude-opus-5-5",
+            "effort": "high"
+          },
+          "quality": {
+            "model": "claude-opus-5-5",
+            "effort": "xhigh"
+          }
+        }
+      },
+      {
+        "workType": "Software engineering",
+        "task": "Multihour autonomous build, architecture decisions",
+        "recommendations": {
+          "latency-cost": {
+            "model": "claude-opus-5-5",
+            "effort": "high"
+          },
+          "balanced": {
+            "model": "claude-opus-5-5",
+            "effort": "xhigh"
+          },
+          "quality": {
+            "model": "claude-fable-5-1",
+            "effort": "xhigh"
+          }
+        }
+      },
+      {
+        "workType": "Creating deliverables",
+        "task": "Adapt or edit existing content",
+        "recommendations": {
+          "latency-cost": {
+            "model": "claude-haiku-5-5",
+            "effort": "low"
+          },
+          "balanced": {
+            "model": "claude-sonnet-5-5",
+            "effort": "medium"
+          },
+          "quality": {
+            "model": "claude-sonnet-5-5",
+            "effort": "high"
+          }
+        }
+      },
+      {
+        "workType": "Creating deliverables",
+        "task": "Create a complex document, deck, or spreadsheet",
+        "recommendations": {
+          "latency-cost": {
+            "model": "claude-sonnet-5-5",
+            "effort": "high"
+          },
+          "balanced": {
+            "model": "claude-opus-5-5",
+            "effort": "medium"
+          },
+          "quality": {
+            "model": "claude-fable-5-1",
+            "effort": "high"
+          }
+        }
+      },
+      {
+        "workType": "Research and analysis",
+        "task": "Search, extract, classify, route",
+        "recommendations": {
+          "latency-cost": {
+            "model": "claude-haiku-5-5",
+            "effort": "low"
+          },
+          "balanced": {
+            "model": "claude-haiku-5-5",
+            "effort": "medium"
+          },
+          "quality": {
+            "model": "claude-sonnet-5-5",
+            "effort": "medium"
+          }
+        }
+      },
+      {
+        "workType": "Research and analysis",
+        "task": "Analyze data and solve problems",
+        "recommendations": {
+          "latency-cost": {
+            "model": "claude-sonnet-5-5",
+            "effort": "medium"
+          },
+          "balanced": {
+            "model": "claude-opus-5-5",
+            "effort": "medium"
+          },
+          "quality": {
+            "model": "claude-opus-5-5",
+            "effort": "high"
+          }
+        }
+      },
+      {
+        "workType": "Research and analysis",
+        "task": "Multistep deep research",
+        "recommendations": {
+          "latency-cost": {
+            "model": "claude-opus-5-5",
+            "effort": "high"
+          },
+          "balanced": {
+            "model": "claude-fable-5-1",
+            "effort": "low"
+          },
+          "quality": {
+            "model": "claude-fable-5-1",
+            "effort": "high"
+          }
+        }
+      },
+      {
+        "workType": "Computer use",
+        "task": "Find controls, complete a workflow, test an app",
+        "recommendations": {
+          "latency-cost": {
+            "model": "claude-sonnet-5-5",
+            "effort": "medium"
+          },
+          "balanced": {
+            "model": "claude-opus-5-5",
+            "effort": "medium"
+          },
+          "quality": {
+            "model": "claude-opus-5-5",
+            "effort": "high"
+          }
+        }
+      },
+      {
+        "workType": "Subagents and workers",
+        "task": "Bulk fan-out work",
+        "recommendations": {
+          "latency-cost": {
+            "model": "claude-haiku-5-5",
+            "effort": "low"
+          },
+          "balanced": {
+            "model": "claude-haiku-5-5",
+            "effort": "medium"
+          },
+          "quality": {
+            "model": "claude-sonnet-5-5",
+            "effort": "medium"
+          }
+        }
+      },
+      {
+        "workType": "Security and hard problems",
+        "task": "Vulnerability hunting, frontier problems",
+        "recommendations": {
+          "latency-cost": {
+            "model": "claude-opus-5-5",
+            "effort": "high"
+          },
+          "balanced": {
+            "model": "claude-opus-5-5",
+            "effort": "max"
+          },
+          "quality": {
+            "model": "claude-fable-5-1",
+            "effort": "xhigh"
+          }
+        }
+      }
+    ]
+  }
+}

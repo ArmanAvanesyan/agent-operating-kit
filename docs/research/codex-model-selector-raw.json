@@ -1,0 +1,969 @@
+{
+  "copy": {
+    "ModelOverview": [
+      {
+        "copy": {
+          "models": {
+            "luna": {
+              "title": "Smart and efficient",
+              "description": "Scoped tasks, triage, and frequent automations"
+            },
+            "sol61": {
+              "title": "Optimized and high-performing",
+              "description": "Complex tasks where you also need to manage time and cost."
+            },
+            "astra": {
+              "title": "State-of-the-art intelligence",
+              "description": "Ambiguous problems, deep analysis, and ambitious deliverables."
+            }
+          }
+        }
+      }
+    ],
+    "ModelRecommender": [
+      {
+        "copy": {
+          "messages": {
+            "categoryLabel": {
+              "label": "What type of work are you doing?"
+            },
+            "taskLabel": {
+              "label": "What type of task are you doing?"
+            },
+            "priorityLabel": {
+              "label": "What do you want to prioritize?"
+            },
+            "recommendationLabel": {
+              "label": "Recommended model"
+            },
+            "effortLabel": {
+              "label": "Reasoning effort"
+            },
+            "developerUsageLabel": {
+              "label": "Lower latency & costs"
+            },
+            "viewModelLabel": {
+              "label": "View model"
+            },
+            "learnModelsLabel": {
+              "label": "Explore models"
+            }
+          },
+          "categories": {
+            "knowledge": {
+              "label": "Creating deliverables"
+            },
+            "engineering": {
+              "label": "Software engineering"
+            },
+            "design": {
+              "label": "3D and design"
+            },
+            "research": {
+              "label": "Research & analysis"
+            },
+            "computer": {
+              "label": "Computer use"
+            }
+          },
+          "tasks": {
+            "preciseEdits": {
+              "label": "Make small edits to existing files"
+            },
+            "linkedDecision": {
+              "label": "Create a coordinated set of files from input data"
+            },
+            "sourceDeck": {
+              "label": "Turn source material into a final output"
+            },
+            "sourceRevisions": {
+              "label": "Create a high-quality, complex deliverable"
+            },
+            "knowledgeOther": {
+              "label": "Other"
+            },
+            "focusedBug": {
+              "label": "Fix a well-scoped bug"
+            },
+            "applicationFeatures": {
+              "label": "Build application features"
+            },
+            "serviceMigration": {
+              "label": "Migrate an app or service"
+            },
+            "appRecovery": {
+              "label": "Build polished applications"
+            },
+            "engineeringOther": {
+              "label": "Other"
+            },
+            "searchSources": {
+              "label": "Search documents, messages, and emails"
+            },
+            "researchOther": {
+              "label": "Other"
+            },
+            "preciseControls": {
+              "label": "Find information or controls in an app"
+            },
+            "updateRecords": {
+              "label": "Complete a workflow in an app"
+            },
+            "websiteQa": {
+              "label": "Test an app or website"
+            },
+            "computerOther": {
+              "label": "Other"
+            },
+            "editableParts": {
+              "label": "Create editable 3D models"
+            },
+            "mechanicalModel": {
+              "label": "Animate a 3D model"
+            },
+            "interactiveScene": {
+              "label": "Build interactive 3D experiences"
+            },
+            "designOther": {
+              "label": "Other"
+            },
+            "createFiles": {
+              "label": "Create slides or spreadsheets"
+            },
+            "adaptContent": {
+              "label": "Adapt existing content"
+            },
+            "updateSoftware": {
+              "label": "Update or debug existing software"
+            },
+            "organizeInformation": {
+              "label": "Organize information and prioritize work"
+            },
+            "researchDecisions": {
+              "label": "Research decisions and verify facts"
+            },
+            "analyzeProblems": {
+              "label": "Analyze data and solve problems"
+            },
+            "visualDesign": {
+              "label": "Design a page or interface"
+            }
+          },
+          "priorities": {
+            "usage": {
+              "label": "More usage"
+            },
+            "balanced": {
+              "label": "Balanced"
+            },
+            "quality": {
+              "label": "Higher quality outputs"
+            }
+          },
+          "efforts": {
+            "low": {
+              "label": "Low"
+            },
+            "medium": {
+              "label": "Medium"
+            },
+            "high": {
+              "label": "High"
+            },
+            "xhigh": {
+              "label": "Extra high"
+            }
+          }
+        }
+      }
+    ],
+    "ModelSelectionGuidance": [
+      {
+        "copy": {
+          "guidance": {
+            "label": "Model and reasoning effort",
+            "steps": [
+              {
+                "tone": "neutral",
+                "label": "Luna \u00b7 Low",
+                "description": "Fine-grained edits, well-scoped problem-solving, and simple data extraction."
+              },
+              {
+                "tone": "neutral",
+                "label": "Luna \u00b7 Extra high",
+                "description": "Finding current context across multiple apps, prioritizing work, and solving problems with clear constraints."
+              },
+              {
+                "tone": "purple",
+                "label": "GPT-6.1 Sol \u00b7 Medium",
+                "description": "Complex technical work and coordinated deliverables you expect to revise."
+              },
+              {
+                "tone": "purple",
+                "label": "GPT-6.1 Sol \u00b7 Extra high",
+                "description": "Polished deliverables, connected visual systems, and decisions built from conflicting evidence."
+              },
+              {
+                "tone": "blue",
+                "label": "Astra \u00b7 Low",
+                "description": "Concise writing and content adaptation that preserve facts and nuance."
+              },
+              {
+                "tone": "blue",
+                "label": "Astra \u00b7 Medium",
+                "description": "Ambitious projects that need broad context, reliable interactions, and complete results."
+              },
+              {
+                "tone": "blue",
+                "label": "Astra \u00b7 Extra high",
+                "description": "Demanding analysis and complex deliverables with exacting requirements."
+              }
+            ]
+          },
+          "chart": {
+            "label": "Model strengths",
+            "description": "Abstract comparison of reviewed Insights category scores and AutomationBench completion. Small gaps in category scores are enlarged; computer use shows completion relative to the leading result. Distances across axes are not comparable benchmark scores. Available task samples and reported reasoning settings differ. The shapes preserve each source ordering and ties without numeric labels."
+          },
+          "legend": {
+            "label": "Explore a model"
+          },
+          "axes": {
+            "design": {
+              "label": "3D and",
+              "secondLine": "design"
+            },
+            "software": {
+              "label": "Software",
+              "secondLine": ""
+            },
+            "research": {
+              "label": "Research and",
+              "secondLine": "planning"
+            },
+            "deliverables": {
+              "label": "Documents",
+              "secondLine": "and slides"
+            },
+            "computer": {
+              "label": "Computer",
+              "secondLine": "use"
+            },
+            "analysis": {
+              "label": "Data and",
+              "secondLine": "analysis"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "data": {
+    "schemaVersion": 1,
+    "source": {
+      "url": "https://katias-benchmark.openai.chatgpt.site/#insights",
+      "section": "When to step up",
+      "reviewedAt": "2026-09-17",
+      "reviewedTasks": 48,
+      "totalTasks": 56
+    },
+    "policy": "Task-specific editorial recommendations informed by reviewed benchmark results. Moving toward quality never lowers the model tier or reasoning effort. Adjacent priorities can recommend the same configuration. Quality increases reasoning effort over balanced. These user-directed tradeoffs are starting points, not measured usage, cost, or guaranteed quality improvements. Benchmark results below describe only the tested configurations; additional slider settings are editorial choices. Category fallbacks are labeled separately. Current recommendations use GPT-6.1 Sol in place of GPT-6 Sol; historical benchmark results in the rationales retain their original model identity.",
+    "priorities": [
+      "usage",
+      "balanced",
+      "quality"
+    ],
+    "categories": [
+      {
+        "id": "knowledge",
+        "tasks": [
+          {
+            "id": "preciseEdits",
+            "recommendations": {
+              "usage": {
+                "model": "luna",
+                "effort": "low"
+              },
+              "balanced": {
+                "model": "luna",
+                "effort": "medium"
+              },
+              "quality": {
+                "model": "luna",
+                "effort": "high"
+              }
+            },
+            "basis": "user-directed",
+            "benchmarkTasks": [
+              "04-slide-deck-edit",
+              "06-workbook-repair"
+            ],
+            "rationale": "Luna scores 100 on surgical slide editing and workbook repair, matching Astra. These are bounded edits to existing files, not a general editing guarantee."
+          },
+          {
+            "id": "createFiles",
+            "recommendations": {
+              "usage": {
+                "model": "luna",
+                "effort": "medium"
+              },
+              "balanced": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "quality": {
+                "model": "astra",
+                "effort": "xhigh"
+              }
+            },
+            "basis": "user-directed",
+            "benchmarkTasks": [
+              "05-cash-flow-scenarios",
+              "24-native-research-deck",
+              "16-image-deck-reconstruction"
+            ],
+            "rationale": "Luna medium passes the spreadsheet at 99 and the editable visual-brief deck at 100. Sol and Astra medium pass the spreadsheet at 100. Astra extra high is the closest tested reference reconstruction at 96.6; Sol extra high scores 96. These separately tested tasks do not establish a universal file-creation advantage."
+          },
+          {
+            "id": "adaptContent",
+            "recommendations": {
+              "usage": {
+                "model": "sol61",
+                "effort": "low"
+              },
+              "balanced": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "quality": {
+                "model": "sol61",
+                "effort": "high"
+              }
+            },
+            "basis": "user-directed",
+            "benchmarkTasks": [
+              "33-native-handbook-edit",
+              "42-concise-audience-writing"
+            ],
+            "rationale": "Astra scores 100 on the structured handbook edit and 98.83 on audience-specific writing, retaining all 104 required facts. Sol omits a required qualification in the writing task. This is a fixed message packet, not a general writing guarantee."
+          },
+          {
+            "id": "linkedDecision",
+            "recommendations": {
+              "usage": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "balanced": {
+                "model": "sol61",
+                "effort": "high"
+              },
+              "quality": {
+                "model": "sol61",
+                "effort": "xhigh"
+              }
+            },
+            "basis": "user-directed",
+            "benchmarkTasks": [
+              "18-acquisition-decision-pack"
+            ],
+            "rationale": "Astra medium and extra high score 99.5 and pass the linked decision-pack requirements. Sol and Luna fail required source mapping or changed-decision checks. No result is perfect; clarity or chart-label deductions remain."
+          },
+          {
+            "id": "sourceDeck",
+            "recommendations": {
+              "usage": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "balanced": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "quality": {
+                "model": "astra",
+                "effort": "xhigh"
+              }
+            },
+            "basis": "user-directed",
+            "benchmarkTasks": [
+              "41-brand-narrative-deck",
+              "03-board-deck"
+            ],
+            "rationale": "Astra completes the brand-and-narrative deck at 95. Sol omits required facts; Luna misses palette and handoff requirements. The broader final-output label generalizes from a presentation task and does not establish superior visual taste."
+          },
+          {
+            "id": "sourceRevisions",
+            "recommendations": {
+              "usage": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "balanced": {
+                "model": "astra",
+                "effort": "high"
+              },
+              "quality": {
+                "model": "astra",
+                "effort": "xhigh"
+              }
+            },
+            "basis": "user-directed",
+            "benchmarkTasks": [
+              "52-decision-lineage-depth",
+              "25-supply-chain-decision-pack",
+              "16-image-deck-reconstruction"
+            ],
+            "rationale": "User-requested grouping for complex deliverables requiring exact source traceability or close visual matching. Astra extra high passed the tested document-lineage requirements and was the closest tested visual-reference reconstruction. This does not establish a general guarantee for every complex deliverable; the separate supply-chain source-coverage task remained incomplete for all models."
+          },
+          {
+            "id": "knowledgeOther",
+            "recommendations": {
+              "usage": {
+                "model": "sol61",
+                "effort": "low"
+              },
+              "balanced": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "quality": {
+                "model": "astra",
+                "effort": "xhigh"
+              }
+            },
+            "basis": "editorial-fallback",
+            "benchmarkTasks": [
+              "04-slide-deck-edit",
+              "06-workbook-repair",
+              "05-cash-flow-scenarios",
+              "24-native-research-deck",
+              "33-native-handbook-edit",
+              "16-image-deck-reconstruction",
+              "42-concise-audience-writing",
+              "18-acquisition-decision-pack",
+              "41-brand-narrative-deck",
+              "03-board-deck",
+              "52-decision-lineage-depth",
+              "25-supply-chain-decision-pack"
+            ],
+            "rationale": "Category-level fallback inferred from the reviewed tasks, not a separately measured benchmark result. More usage favors a smaller configuration; higher quality favors additional reasoning or a larger model for unspecified requirements."
+          }
+        ]
+      },
+      {
+        "id": "engineering",
+        "tasks": [
+          {
+            "id": "focusedBug",
+            "recommendations": {
+              "usage": {
+                "model": "luna",
+                "effort": "low"
+              },
+              "balanced": {
+                "model": "luna",
+                "effort": "medium"
+              },
+              "quality": {
+                "model": "luna",
+                "effort": "high"
+              }
+            },
+            "basis": "user-directed",
+            "benchmarkTasks": [
+              "29-focused-patch-portfolio"
+            ],
+            "rationale": "All four models score 100 in all three runs of the eight-patch portfolio. Requested fixes, regression behavior, and handoffs pass. The three runs reuse one small packet, so they show repeatability on that input rather than a general reliability rate. Medium and high provide editorial options for additional checking, not measured improvements over low."
+          },
+          {
+            "id": "updateSoftware",
+            "recommendations": {
+              "usage": {
+                "model": "luna",
+                "effort": "medium"
+              },
+              "balanced": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "quality": {
+                "model": "sol61",
+                "effort": "xhigh"
+              }
+            },
+            "basis": "user-directed",
+            "benchmarkTasks": [
+              "44-audio-editor-regression",
+              "51-versioned-service-release",
+              "21-ledger-online-migration",
+              "10-date-boundary-fix",
+              "29-focused-patch-portfolio"
+            ],
+            "rationale": "Luna, Sol and Astra score 100 at medium and extra high on the editor regression task. Medium service-release runs also score 100; the separate invoice-ledger migration was tested at extra high. Sol and Astra score 100 at low on the date-boundary repair, while Luna required a later medium probe under changed conditions. These results support scoped updates, not general software parity."
+          },
+          {
+            "id": "applicationFeatures",
+            "recommendations": {
+              "usage": {
+                "model": "sol61",
+                "effort": "low"
+              },
+              "balanced": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "quality": {
+                "model": "sol61",
+                "effort": "xhigh"
+              }
+            },
+            "basis": "user-directed",
+            "benchmarkTasks": [
+              "50-async-ui-continuity",
+              "55-atomic-replay-ledger"
+            ],
+            "rationale": "Sol and Astra pass at 100 on the asynchronous UI and atomic-ledger contracts. Luna retains focus or diagnostic failures despite passing core behavior. The supporting results apply to these tasks, not every application feature."
+          },
+          {
+            "id": "serviceMigration",
+            "recommendations": {
+              "usage": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "balanced": {
+                "model": "sol61",
+                "effort": "high"
+              },
+              "quality": {
+                "model": "astra",
+                "effort": "xhigh"
+              }
+            },
+            "basis": "user-directed",
+            "benchmarkTasks": [
+              "09-job-queue-migration",
+              "21-ledger-online-migration"
+            ],
+            "rationale": "Astra scores 100 at medium and extra high on the job-queue migration. Sol scores 95 and Luna 93\u201394 with operational corrections remaining. All three score 100 on the separate invoice-ledger migration, so this is not a blanket migration advantage."
+          },
+          {
+            "id": "appRecovery",
+            "recommendations": {
+              "usage": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "balanced": {
+                "model": "astra",
+                "effort": "medium"
+              },
+              "quality": {
+                "model": "astra",
+                "effort": "xhigh"
+              }
+            },
+            "basis": "user-directed",
+            "benchmarkTasks": [
+              "17-offline-field-operations",
+              "35-changing-booking-app",
+              "20-resilient-dispatch-console"
+            ],
+            "rationale": "Astra passes the booking app at 100 and the offline app at 96\u201397. Other models leave required UI or recovery defects. Astra still fails the dispatch-console task at 98. The polished-application label is editorial; these tasks measured completeness and recovery rather than general visual polish."
+          },
+          {
+            "id": "engineeringOther",
+            "recommendations": {
+              "usage": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "balanced": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "quality": {
+                "model": "astra",
+                "effort": "xhigh"
+              }
+            },
+            "basis": "editorial-fallback",
+            "benchmarkTasks": [
+              "29-focused-patch-portfolio",
+              "44-audio-editor-regression",
+              "10-date-boundary-fix",
+              "51-versioned-service-release",
+              "21-ledger-online-migration",
+              "50-async-ui-continuity",
+              "55-atomic-replay-ledger",
+              "31-incremental-event-normalizer",
+              "49-streaming-contract-interactions",
+              "48-bounded-memory-query-engine",
+              "09-job-queue-migration",
+              "17-offline-field-operations",
+              "35-changing-booking-app",
+              "20-resilient-dispatch-console"
+            ],
+            "rationale": "Category-level fallback inferred from the reviewed tasks, not a separately measured benchmark result. More usage favors a smaller configuration; higher quality favors additional reasoning or a larger model for unspecified requirements. The consolidated Software engineering category retains the former engineering fallback; named debugging tasks retain their task-specific settings."
+          }
+        ]
+      },
+      {
+        "id": "design",
+        "tasks": [
+          {
+            "id": "visualDesign",
+            "recommendations": {
+              "usage": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "balanced": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "quality": {
+                "model": "sol61",
+                "effort": "high"
+              }
+            },
+            "basis": "editorial-fallback",
+            "benchmarkTasks": [
+              "20-resilient-dispatch-console",
+              "35-changing-booking-app",
+              "41-brand-narrative-deck"
+            ],
+            "rationale": "Editorial starting points for page and interface design, informed by related app-interface and visual-brief tasks. Sol medium offers the smaller configuration; GPT-6.1 Sol medium and high offer options for more demanding work and additional checking. This is not a separately measured design benchmark or a claim of general visual taste or measured gains from higher effort."
+          },
+          {
+            "id": "editableParts",
+            "recommendations": {
+              "usage": {
+                "model": "sol61",
+                "effort": "low"
+              },
+              "balanced": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "quality": {
+                "model": "sol61",
+                "effort": "high"
+              }
+            },
+            "basis": "user-directed",
+            "benchmarkTasks": [
+              "39-multiview-parametric-cad"
+            ],
+            "rationale": "Sol and Astra score 100 on all six CAD parts and their revisions. Luna geometry matches but a required named parameter is absent. This tests the editing contract, not general spatial ability."
+          },
+          {
+            "id": "mechanicalModel",
+            "recommendations": {
+              "usage": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "balanced": {
+                "model": "sol61",
+                "effort": "high"
+              },
+              "quality": {
+                "model": "sol61",
+                "effort": "xhigh"
+              }
+            },
+            "basis": "user-directed",
+            "benchmarkTasks": [
+              "02-parametric-desk-lamp"
+            ],
+            "rationale": "Keep GPT-6.1 Sol at high reasoning as the balanced animation setting, with medium for lower latency and cost and extra high for more reasoning. These effort choices are editorial, not directly measured animation results. In the related mechanical-model task, Astra scores 98 with an accepted shape compromise. Luna scores 92 and needs intersection, diffuser, and cable-guide repairs; Sol scores 83 and fails mechanical requirements. One lamp does not establish a general animation or design hierarchy."
+          },
+          {
+            "id": "interactiveScene",
+            "recommendations": {
+              "usage": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "balanced": {
+                "model": "sol61",
+                "effort": "high"
+              },
+              "quality": {
+                "model": "astra",
+                "effort": "xhigh"
+              }
+            },
+            "basis": "user-directed",
+            "benchmarkTasks": [
+              "01-tidal-observatory",
+              "19-kinetic-pavilion"
+            ],
+            "rationale": "Astra extra high scores 99.2 and fixes geometry and mobile inspection issues present at medium. Luna historically passing outputs still need geometry or mobile-tour repairs; Sol extra high fails the shoreline check. This is not a general 3D ranking or a perfect result."
+          },
+          {
+            "id": "designOther",
+            "recommendations": {
+              "usage": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "balanced": {
+                "model": "sol61",
+                "effort": "high"
+              },
+              "quality": {
+                "model": "astra",
+                "effort": "xhigh"
+              }
+            },
+            "basis": "editorial-fallback",
+            "benchmarkTasks": [
+              "39-multiview-parametric-cad",
+              "02-parametric-desk-lamp",
+              "01-tidal-observatory",
+              "19-kinetic-pavilion"
+            ],
+            "rationale": "Category-level fallback inferred from the reviewed tasks, not a separately measured benchmark result. More usage favors a smaller configuration; higher quality favors additional reasoning or a larger model for unspecified requirements."
+          }
+        ]
+      },
+      {
+        "id": "research",
+        "tasks": [
+          {
+            "id": "organizeInformation",
+            "recommendations": {
+              "usage": {
+                "model": "luna",
+                "effort": "low"
+              },
+              "balanced": {
+                "model": "luna",
+                "effort": "medium"
+              },
+              "quality": {
+                "model": "sol61",
+                "effort": "high"
+              }
+            },
+            "basis": "user-directed",
+            "benchmarkTasks": [
+              "30-grounded-record-extraction",
+              "13-slack-email-triage",
+              "32-inbox-action-routing",
+              "12-customer-data-pipeline"
+            ],
+            "rationale": "Luna, Sol and Astra score 100 on the fixed structured-extraction packet. Luna medium scores 98 on live-context triage and 100 on synthetic routing; Sol medium scores 100 on both. Sol and Astra score 100 on messy-data preparation while Luna scores 97. Medium accounts for preparation and prioritization beyond simple extraction."
+          },
+          {
+            "id": "searchSources",
+            "recommendations": {
+              "usage": {
+                "model": "luna",
+                "effort": "medium"
+              },
+              "balanced": {
+                "model": "luna",
+                "effort": "high"
+              },
+              "quality": {
+                "model": "luna",
+                "effort": "xhigh"
+              }
+            },
+            "basis": "user-directed",
+            "benchmarkTasks": [
+              "27-long-context-authority-audit"
+            ],
+            "rationale": "All four models scored 100 at extra high on the fixed long-context authority audit, including superseded decisions, dependencies, and deliberately unanswerable questions. Only extra high was tested. Medium and high are user-directed editorial alternatives for the lower-priority positions; their sufficiency is not established by this benchmark."
+          },
+          {
+            "id": "researchDecisions",
+            "recommendations": {
+              "usage": {
+                "model": "sol61",
+                "effort": "low"
+              },
+              "balanced": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "quality": {
+                "model": "sol61",
+                "effort": "xhigh"
+              }
+            },
+            "basis": "user-directed",
+            "benchmarkTasks": [
+              "43-evidence-verification-batch",
+              "14-vendor-decision-memo",
+              "56-qualified-source-reconciliation",
+              "15-conflicting-product-plan"
+            ],
+            "rationale": "Sol medium scores 100 on vendor decisions and qualified-source contracts. On the conflicting product plan, Sol extra high scores 99 and Astra extra high scores 100. Sol and Astra also score 100 at low and medium on the fact-verification task. Higher effort is not required for every fact check."
+          },
+          {
+            "id": "analyzeProblems",
+            "recommendations": {
+              "usage": {
+                "model": "luna",
+                "effort": "medium"
+              },
+              "balanced": {
+                "model": "sol61",
+                "effort": "high"
+              },
+              "quality": {
+                "model": "astra",
+                "effort": "xhigh"
+              }
+            },
+            "basis": "user-directed",
+            "benchmarkTasks": [
+              "11-kpi-causal-diagnosis",
+              "22-rollout-identification-study",
+              "28-thermal-inverse-solver",
+              "23-crew-recovery-optimizer",
+              "45-proof-counterexample-portfolio"
+            ],
+            "rationale": "Astra and Luna score 100 on activation diagnosis at extra high; Sol scores 99. Astra scores 100 on the causal study and inverse solver, while Sol scores 98.5 and 100 and Luna 97 and 99. Sol and Astra medium already score 100 on the planning and proof tasks. These are task-specific results, not a general mathematical ranking."
+          },
+          {
+            "id": "researchOther",
+            "recommendations": {
+              "usage": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "balanced": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "quality": {
+                "model": "sol61",
+                "effort": "xhigh"
+              }
+            },
+            "basis": "editorial-fallback",
+            "benchmarkTasks": [
+              "30-grounded-record-extraction",
+              "13-slack-email-triage",
+              "32-inbox-action-routing",
+              "27-long-context-authority-audit",
+              "43-evidence-verification-batch",
+              "14-vendor-decision-memo",
+              "56-qualified-source-reconciliation",
+              "15-conflicting-product-plan",
+              "12-customer-data-pipeline",
+              "11-kpi-causal-diagnosis",
+              "22-rollout-identification-study",
+              "28-thermal-inverse-solver",
+              "23-crew-recovery-optimizer",
+              "45-proof-counterexample-portfolio"
+            ],
+            "rationale": "Category-level fallback inferred from the reviewed tasks, not a separately measured benchmark result. More usage favors a smaller configuration; higher quality favors additional reasoning or a larger model for unspecified requirements. The consolidated research, decisions, and analysis category uses the former complex-analysis fallback to cover unspecified analytical work. This is an editorial default, not a measured result."
+          }
+        ]
+      },
+      {
+        "id": "computer",
+        "tasks": [
+          {
+            "id": "preciseControls",
+            "recommendations": {
+              "usage": {
+                "model": "sol61",
+                "effort": "low"
+              },
+              "balanced": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "quality": {
+                "model": "sol61",
+                "effort": "high"
+              }
+            },
+            "basis": "user-directed",
+            "benchmarkTasks": [
+              "38-dense-interface-targeting"
+            ],
+            "rationale": "Use Sol medium as the default, Sol low when prioritizing lower latency and cost, and GPT-6.1 Sol high when prioritizing quality. These are user-directed editorial choices. Sol low hits 117 of 120 static targets and scores 99. Astra low hits all 120 and scores 100. Luna medium hits 118 and scores 99.3333. These results do not establish gains for the untested settings or live multi-step navigation performance."
+          },
+          {
+            "id": "updateRecords",
+            "recommendations": {
+              "usage": {
+                "model": "sol61",
+                "effort": "low"
+              },
+              "balanced": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "quality": {
+                "model": "sol61",
+                "effort": "high"
+              }
+            },
+            "basis": "user-directed",
+            "benchmarkTasks": [
+              "07-browser-crm",
+              "47-scoped-admin-workflows"
+            ],
+            "rationale": "Sol scores 100 on CRM reconciliation and scoped admin workflows. Luna scores 91 on CRM and 98 on admin, where saved actions pass but required screenshots are missing. This gap concerns evidence delivery, not incorrect saved values."
+          },
+          {
+            "id": "websiteQa",
+            "recommendations": {
+              "usage": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "balanced": {
+                "model": "sol61",
+                "effort": "high"
+              },
+              "quality": {
+                "model": "sol61",
+                "effort": "xhigh"
+              }
+            },
+            "basis": "user-directed",
+            "benchmarkTasks": [
+              "08-browser-checkout-qa"
+            ],
+            "rationale": "Sol and Astra find all six seeded checkout defects. Sol scores 99.75 with whitespace-only and non-ASCII ZIP cases untested; Astra extra high scores 100. Luna misses the mobile defect and needs evidence work. Physical touch and full screen-reader behavior were outside scope."
+          },
+          {
+            "id": "computerOther",
+            "recommendations": {
+              "usage": {
+                "model": "sol61",
+                "effort": "low"
+              },
+              "balanced": {
+                "model": "sol61",
+                "effort": "medium"
+              },
+              "quality": {
+                "model": "sol61",
+                "effort": "xhigh"
+              }
+            },
+            "basis": "editorial-fallback",
+            "benchmarkTasks": [
+              "38-dense-interface-targeting",
+              "07-browser-crm",
+              "47-scoped-admin-workflows",
+              "08-browser-checkout-qa"
+            ],
+            "rationale": "Category-level fallback inferred from the reviewed tasks, not a separately measured benchmark result. More usage favors a smaller configuration; higher quality favors additional reasoning or a larger model for unspecified requirements."
+          }
+        ]
+      }
+    ]
+  }
+}

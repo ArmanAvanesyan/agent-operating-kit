@@ -145,6 +145,18 @@ Local dry-run (always safe without secrets):
 ./scripts/release/sign.sh dist/release
 ```
 
+## Package manager manifests
+
+After GitHub Release assets exist:
+
+```bash
+./scripts/packaging/generate-from-release.sh --version <version>
+```
+
+Confirm `packaging/out/` Homebrew / Scoop / winget files pin the correct URLs
+and SHA256 digests. Token-gated tap/bucket pushes are optional (see
+`packaging/README.md`). **PyPI is not planned** for the Go binary.
+
 Include:
 
 - version or tag

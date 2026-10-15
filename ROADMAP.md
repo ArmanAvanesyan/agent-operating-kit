@@ -19,11 +19,12 @@ commitment calendar.
 - **Optional code signing** — secrets-gated macOS / Windows (and optional Linux
   cosign) in release CI via `scripts/release/sign.sh`; unsigned path remains
   default when secrets are absent.
+- **Homebrew / Scoop / winget** — package-manager templates under `packaging/`,
+  regenerated from Release `SHA256SUMS` / `index.json`. **PyPI is not planned**
+  for the Go `aok` binary.
 
 ## Planned themes
 
-- **Homebrew / Scoop / winget** — package-manager install channels that consume
-  GitHub Release assets. **PyPI is not planned** for the Go `aok` binary.
 - **Native Cursor packaging** — move beyond generated import bundles toward a
   clearer native Cursor rules/skills/hooks story when a stable format exists.
 - **Deeper non-Codex / non-Claude import guides** — expand adapter READMEs and

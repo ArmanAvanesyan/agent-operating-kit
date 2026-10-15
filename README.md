@@ -44,6 +44,25 @@ falls back to a copy if junction creation is unavailable. The CLI entrypoint is
 `~/.local/bin/aok.cmd` (release path: Go binary / shim, not a link to
 `scripts/aok`).
 
+## Install via package managers
+
+GitHub Releases remain the source of truth for binaries. Homebrew, Scoop, and
+winget consume those assets (see [docs/cli-distribution.md](docs/cli-distribution.md)
+and [`packaging/`](packaging/)).
+
+| Channel | Status |
+|---|---|
+| Homebrew | Formula templates under `packaging/homebrew/` (tap such as `ArmanAvanesyan/homebrew-aok`) |
+| Scoop | Bucket manifest templates under `packaging/scoop/` |
+| winget | Manifest templates under `packaging/winget/` |
+| PyPI | **Not planned** for the Go `aok` binary (wrong distribution model) |
+
+Regenerate manifests from a release tag or local `dist/release`:
+
+```bash
+./scripts/packaging/generate-from-release.sh --version 0.5.0
+```
+
 ## Developer First Success Path
 
 Use this path when you are comfortable with the terminal and want a validated

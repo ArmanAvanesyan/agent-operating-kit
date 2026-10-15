@@ -2,10 +2,18 @@
 
 ## Unreleased
 
-- Document upcoming thin Go CLI binary distribution: release `aok` binaries on
-  GitHub Releases for installer/`PATH` installs without Python on the device;
-  Python `scripts/aok` remains the developer entrypoint until command parity is
-  complete. See `docs/cli-distribution.md` and `ROADMAP.md`.
+- Ship the thin Go CLI (`cmd/aok`) for end-user install without Python on the
+  device: `version`, `doctor`, `validate`, `install`, `claude setup`,
+  `codex setup` / `local-env`, `project init|validate`, and
+  `render pack|all|bundle|bundles`.
+- Release publish cross-compiles five platform binaries
+  (`aok-<version>-{darwin,linux}-{arm64,amd64}` / `windows-amd64.exe`), lists
+  them in `SHA256SUMS` and `index.json`, and bundles `bin/aok` into installers
+  that invoke the binary for `install` / `doctor`.
+- PATH install copies the Go binary to `~/.local/bin` (Unix) or `aok.exe` +
+  `aok.cmd` (Windows); `install --replace` upgrades old Python shims.
+- Python `scripts/aok` remains the contributor entrypoint; `task` / `hooks` /
+  `import` stay Python-only. See `docs/cli-distribution.md`.
 
 ## 0.4.0
 

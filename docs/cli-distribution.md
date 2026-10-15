@@ -4,10 +4,10 @@ Canonical guide for how Agent Operating Kit ships the `aok` CLI: the thin Go
 release binary for end users, and the Python `scripts/aok` entrypoint for
 contributors.
 
-This document describes the **intended** distribution model. Binary build and
-publish plumbing will match these names and install outcomes when implemented;
-until then, release installers and developer checkouts continue to use the
-Python kit CLI.
+This document describes the **implemented** distribution model. Release CI
+cross-compiles platform binaries, lists them in `SHA256SUMS` / `index.json`, and
+bundles `bin/aok` into installers that invoke the binary for `install` /
+`doctor` without Python on the end-user path.
 
 ## Two Entrypoints
 
@@ -19,7 +19,8 @@ Python kit CLI.
 - **Release path:** installers place a platform binary on `PATH` and install kit
   content under the usual roots. Users run `aok` without cloning the repo.
 - **Developer path:** clone the repository and run `./scripts/aok` for validate,
-  render, install helpers, and any commands not yet on the binary.
+  render, install helpers, and any commands not yet on the binary (or prefer
+  Python while authoring kit content).
 
 ## User Runtime Guarantee
 
@@ -31,11 +32,12 @@ For the **release binary** install path:
   locally) to produce the binary.
 
 Python remains required only for git-checkout / contributor workflows that call
-`./scripts/aok` directly.
+`./scripts/aok` directly, and for maintainer release packaging that still invokes
+Python `scripts/aok render bundles` when building release zip artifacts.
 
 ## Artifact Naming Convention
 
-Published release names (intended; match release plumbing when implemented):
+Published release names (match `scripts/release/build.py`):
 
 | Artifact | Role |
 |---|---|
@@ -67,8 +69,8 @@ Release installers keep the same kit install roots:
 
 `PATH` outcomes for the release path:
 
-- Unix: `~/.local/bin/aok` is the **Go binary** (or a thin shim that invokes it),
-  not a symlink to `scripts/aok`.
+- Unix: `~/.local/bin/aok` is the **Go binary** (file copy), not a symlink to
+  `scripts/aok`.
 - Windows: `~/.local/bin/aok.cmd` launches the installed `aok.exe`, not the
   Python kit script.
 
@@ -80,7 +82,7 @@ Plugin marketplace registration and install roots are unchanged. See
 Go runs in **CI only** for release builds (contributors may also build locally;
 see [CONTRIBUTING.md](../CONTRIBUTING.md)).
 
-Intended release matrix:
+Release matrix:
 
 | OS | Arch | Published name |
 |---|---|---|
@@ -104,26 +106,22 @@ Full steps: [release-checklist.md](release-checklist.md).
 
 ## Command Parity
 
-Parity is tracked until the binary covers the core user surface. For first-ship
-docs, mark core user commands as **intended on the binary**; developer-only
-commands may stay on Python `scripts/aok`.
-
-| Command / area | Release binary (intended) | Python `scripts/aok` |
+| Command / area | Release binary | Python `scripts/aok` |
 |---|---|---|
-| `install` / installer-driven setup | Yes | Yes (checkout / helpers) |
-| `doctor` | Yes | Yes |
-| `validate` | Yes | Yes |
-| `version` | Yes | Yes |
-| `render` (pack / all / bundles) | Yes | Yes |
-| `codex setup` / Codex helpers | Yes (core setup) | Yes (full surface) |
-| `claude setup` | Yes | Yes |
-| Project init / local-env extras | Tracked for parity | Yes |
+| `install` / installer-driven setup | Yes (implemented) | Yes (checkout / helpers) |
+| `doctor` | Yes (implemented) | Yes |
+| `validate` | Yes (implemented) | Yes |
+| `version` | Yes (implemented) | Yes |
+| `render` (`pack` / `all` / `bundle` / `bundles`) | Yes (implemented) | Yes (also used by release packaging) |
+| `codex setup` / `codex local-env` | Yes (implemented) | Yes |
+| `claude setup` | Yes (implemented) | Yes |
+| `project init` / `project validate` | Yes (implemented) | Yes |
 | Release packaging (`scripts/release`) | No (maintainer) | Yes (Python) |
-| Other developer-only helpers | May stay Python | Yes |
+| `task`, `hooks`, `import`, other developer helpers | No (stay on Python) | Yes |
 
-Until parity is complete, contributors should prefer `./scripts/aok` for any
-command the binary does not yet expose. End-user docs assume the binary path for
-install, doctor, validate, version, render, and Codex/Claude setup.
+Contributors should prefer `./scripts/aok` for `task` / `hooks` / `import` and
+for day-to-day kit authoring. End-user docs assume the binary path for install,
+doctor, validate, version, render, and Codex/Claude setup.
 
 ## Uninstall
 

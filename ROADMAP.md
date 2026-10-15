@@ -16,11 +16,11 @@ commitment calendar.
 - **Scaffold pin maintenance** — refresh pins in
   `packs/phased-rollout-template` (tooling, Python/runtime floors, Actions) when
   regenerating that template.
-- **Thin Go CLI binary** — build and publish cross-platform `aok` binaries on
-  GitHub Releases so installer/PATH installs work without Python on the device;
-  Python `scripts/aok` stays for contributors and until command parity is
-  complete. See [docs/cli-distribution.md](docs/cli-distribution.md) and
-  [docs/release-checklist.md](docs/release-checklist.md).
+- **Thin Go CLI binary** — implemented: cross-platform `aok` binaries build in
+  release CI and installers place the binary on `PATH` without Python on the
+  device; Python `scripts/aok` remains for contributors and for `task` /
+  `hooks` / `import`. See [docs/cli-distribution.md](docs/cli-distribution.md)
+  and [docs/release-checklist.md](docs/release-checklist.md).
 
 ## Related docs
 

@@ -10,11 +10,14 @@ import (
 )
 
 func runAgent(args []string, stdout, stderr io.Writer) (int, error) {
+	if len(args) > 0 && args[0] == "native" {
+		return runNative(args[1:], stdout, stderr)
+	}
 	if len(args) > 0 && args[0] == "resolve" {
 		return runAgentResolve(args[1:], stdout, stderr)
 	}
 	usage := func(w io.Writer) {
-		fmt.Fprintln(w, "Usage: aok agent validate <directory> [--json]\n       aok agent resolve <assignment> --out <directory> [--root <corpus>] [--json]\nValidate or resolve local agent contracts without executing work.")
+		fmt.Fprintln(w, "Usage: aok agent validate <directory> [--json]\n       aok agent resolve <assignment> --out <directory> [--root <corpus>] [--json]\n       aok agent native inspect|import|export|compare --target <target> --scope <scope> --input <path>\nValidate or resolve local agent contracts without executing work.")
 	}
 	if len(args) == 1 && (args[0] == "--help" || args[0] == "help") {
 		usage(stdout)

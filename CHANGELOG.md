@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.5.0
+
 - Ship the thin Go CLI (`cmd/aok`) for end-user install without Python on the
   device: `version`, `doctor`, `validate`, `install`, `claude setup`,
   `codex setup` / `local-env`, `project init|validate`, and

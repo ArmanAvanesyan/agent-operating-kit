@@ -14,14 +14,15 @@ JSON manifests — keep changes small, validated, and documented.
 | Situation | Use |
 |---|---|
 | Pack, adapter, schema, or docs work; kit authorship | `./scripts/aok` (Python) |
-| P3-only commands (`task`, `hooks`, `import`) | `./scripts/aok` (Python) |
+| `task` / `hooks` / `import` without a Go build | `./scripts/aok` (Python; still supported) |
+| `task` / `hooks` / `import` on the release entrypoint | Go CLI from `cmd/aok` or installed `aok` |
 | Exercising the end-user release entrypoint | Build/run the Go CLI from `cmd/aok` |
 | End-user install without a checkout | Release binary on `PATH` (see [docs/cli-distribution.md](docs/cli-distribution.md)) |
 
-Prefer `./scripts/aok` for kit authorship and for deferred Python-only commands
-(`task` / `hooks` / `import`). Use the Go CLI from `cmd/aok` when exercising the
-release entrypoint. Release CI builds the Go binary; end users do not need Go or
-Python.
+Prefer `./scripts/aok` for kit authorship. `task` / `hooks` / `import` work on
+both the Python checkout CLI and the Go release binary (keep Python working in
+parallel). Use the Go CLI from `cmd/aok` when exercising the release entrypoint.
+Release CI builds the Go binary; end users do not need Go or Python.
 
 ### Building the Go CLI locally
 
@@ -65,8 +66,8 @@ and supported target coverage.
 | `core/` | Conceptual model |
 | `packs/` | Reusable workflow content |
 | `adapters/` | Per-target mappings and import docs |
-| `scripts/aok` | Python kit CLI (authorship, validate/render helpers, P3 commands) |
-| `cmd/aok` | Implemented Go release CLI (end-user `PATH` binary) |
+| `scripts/aok` | Python kit CLI (authorship, validate/render helpers; dual `task`/`hooks`/`import`) |
+| `cmd/aok` | Go release CLI (end-user `PATH` binary, including `task`/`hooks`/`import`) |
 | `docs/` | Operator and integration guides |
 
 ## Adding a pack

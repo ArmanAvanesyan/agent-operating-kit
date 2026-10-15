@@ -117,11 +117,15 @@ Full steps: [release-checklist.md](release-checklist.md).
 | `claude setup` | Yes (implemented) | Yes |
 | `project init` / `project validate` | Yes (implemented) | Yes |
 | Release packaging (`scripts/release`) | No (maintainer) | Yes (Python) |
-| `task`, `hooks`, `import`, other developer helpers | No (stay on Python) | Yes |
+| `task sync` / `task packet` | Yes (implemented; requires `gh` on `PATH`) | Yes |
+| `hooks pre` / `hooks after` | Yes (implemented) | Yes |
+| `import history` | Yes (implemented) | Yes |
 
-Contributors should prefer `./scripts/aok` for `task` / `hooks` / `import` and
-for day-to-day kit authoring. End-user docs assume the binary path for install,
-doctor, validate, version, render, and Codex/Claude setup.
+`task` / `hooks` / `import` are available on both entrypoints. Python
+`./scripts/aok` remains for kit authorship and checkout workflows without a Go
+build. End-user docs assume the binary path for install, doctor, validate,
+version, render, Codex/Claude setup, and these contributor helpers when the
+release binary is installed.
 
 ## Uninstall
 

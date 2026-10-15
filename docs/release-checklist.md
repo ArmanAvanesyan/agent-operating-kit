@@ -115,6 +115,10 @@ record results using the template in
 This step is optional for cutting a release; unsigned binaries and package
 manifests do not depend on it.
 
+**Intentional defaults (0.6.1):** unsigned Releases + `SHA256SUMS` trust, and
+same-repo Scoop/Homebrew/winget layout (no external tap/bucket required). See
+[cli-distribution.md](cli-distribution.md) and [`packaging/README.md`](../packaging/README.md).
+
 ## Release Notes
 
 Build release artifacts:

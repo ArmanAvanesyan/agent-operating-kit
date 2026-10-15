@@ -16,9 +16,32 @@ adapter format drift and untested host versions, not a kit lockfile.
 | Hermes Agent | Untracked |
 | swarmd (MCP) | Untracked — see [swarmd integration](swarmd-integration.md) |
 
-Kit version (see `.codex-plugin/plugin.json`, currently `0.6.0`) is independent
-of host versions. Pack and Claude marketplace plugin versions may also differ
-from the kit; that skew is intentional unless a release notes otherwise.
+Kit version (see `.codex-plugin/plugin.json`) is independent of host versions.
+Pack and Claude marketplace plugin versions may also differ from the kit; that
+skew is intentional unless a release notes otherwise.
+
+## Smoke log — 2026-10-15 (kit 0.6.1)
+
+AOK-side smoke on the implementer VM (UTC). Host AI CLIs were **not** installed
+on this runner, so every matrix **Tested** cell stays `Untracked` (no invented
+host versions).
+
+| Field | Value |
+|---|---|
+| Date (UTC) | 2026-10-15 |
+| Kit version | 0.6.1 (release cut; smoke also exercised `v0.6.0` linux-amd64 binary + checkout `./scripts/aok`) |
+| Commands | `aok version`; `aok validate`; `aok render pack|bundle engineering-guardrails` for `codex`, `claude-code`, `cursor` |
+| Result | pass — validation OK; renders/bundles written under `build/` |
+| Host CLIs detected | none (`codex`, `claude`, `cursor`, `agent`, `gemini`, `opencode` not on `PATH`) |
+| Tester | cloud agent (unsigned packaging + 0.6.1 plan) |
+
+### Host compatibility smoke (primary hosts)
+
+| Product | Version or build id | Surfaces tested | Result |
+|---|---|---|---|
+| Codex Desktop / CLI | *(not installed)* | — | skipped — leave Tested `Untracked` |
+| Claude Code | *(not installed)* | — | skipped — leave Tested `Untracked` |
+| Cursor | *(not installed)* | — | skipped — leave Tested `Untracked` |
 
 ## Per-target summary
 

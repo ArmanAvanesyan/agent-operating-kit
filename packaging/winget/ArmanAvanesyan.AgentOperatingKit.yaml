@@ -1,0 +1,26 @@
+# winget manifest package (single-file style template).
+# Split into Version/Installer/Locale manifests when opening a winget-pkgs PR.
+# Placeholders: 0.6.1 https://github.com/ArmanAvanesyan/agent-operating-kit/releases/download/v0.6.1/aok-0.6.1-windows-amd64.exe 83232B172B86AD241D41F91EAF0B1E553A9AE172CEE36E7AC188AEEFBB1A7B46 ArmanAvanesyan ArmanAvanesyan.AgentOperatingKit
+PackageIdentifier: ArmanAvanesyan.AgentOperatingKit
+PackageVersion: 0.6.1
+PackageLocale: en-US
+Publisher: ArmanAvanesyan
+PublisherUrl: https://github.com/ArmanAvanesyan/agent-operating-kit
+PackageName: Agent Operating Kit
+PackageUrl: https://github.com/ArmanAvanesyan/agent-operating-kit
+License: MIT
+ShortDescription: Cross-tool agent operating kit CLI (aok)
+Moniker: aok
+Tags:
+  - cli
+  - agents
+  - codex
+Installers:
+  - Architecture: x64
+    InstallerType: portable
+    InstallerUrl: https://github.com/ArmanAvanesyan/agent-operating-kit/releases/download/v0.6.1/aok-0.6.1-windows-amd64.exe
+    InstallerSha256: 83232B172B86AD241D41F91EAF0B1E553A9AE172CEE36E7AC188AEEFBB1A7B46
+    Commands:
+      - aok
+ManifestType: singleton
+ManifestVersion: 1.6.0

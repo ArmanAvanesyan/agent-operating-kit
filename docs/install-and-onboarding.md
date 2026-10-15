@@ -5,12 +5,41 @@ Codex and Claude Code can consume the same neutral pack.
 
 ## Requirements
 
-- macOS or another Unix-like shell environment.
-- Python 3 for `scripts/aok`.
+### End-user (release installers)
+
+- macOS, Windows, or Linux (user or system install).
+- No Python runtime and no Go toolchain on the device for the release path.
+  Installers place a thin Go `aok` binary on `PATH`. See
+  [cli-distribution.md](cli-distribution.md).
 - Optional but useful: `git`, `gh`, `codex`, and Claude Code.
+
+### Developer (git checkout)
+
+- Python 3 for `./scripts/aok` (stdlib only; no pip install for kit validation).
+- Optional: Go toolchain when building the CLI locally from `cmd/aok`. See
+  [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 The installer treats `codex` as optional. `aok doctor` reports optional command
 availability separately from required AOK files and local registration.
+
+## Release trust (unsigned)
+
+GitHub Release binaries and installers are **unsigned** unless maintainers
+configure optional signing secrets. Verify the download with the Release
+`SHA256SUMS` file. Your OS may show a one-time trust warning on first run;
+that is expected. See [cli-distribution.md](cli-distribution.md).
+
+## Install via package managers
+
+Same-repo manifests (no separate tap/bucket required):
+
+| Channel | Command |
+|---|---|
+| Scoop | `scoop bucket add aok https://github.com/ArmanAvanesyan/agent-operating-kit` then `scoop install aok` |
+| Homebrew | `brew install --formula https://raw.githubusercontent.com/ArmanAvanesyan/agent-operating-kit/main/packaging/homebrew/aok.rb` |
+| winget | Manifests under `packaging/winget/`; submit to `microsoft/winget-pkgs` when ready |
+
+Details: [`packaging/README.md`](../packaging/README.md).
 
 ## Release Installers
 
@@ -44,25 +73,31 @@ Install paths:
 
 Each installer writes a setup report near its install root.
 
-On Windows, the installer writes `~/.local/bin/aok.cmd` as the CLI wrapper. The
-plugin directory uses a junction when Windows allows it and falls back to a copy
-when junction creation is unavailable.
+On Windows, the installer writes `~/.local/bin/aok.cmd` as the CLI wrapper that
+launches the release `aok.exe`. The plugin directory uses a junction when
+Windows allows it and falls back to a copy when junction creation is
+unavailable.
 
-No Git checkout is required. The installer still uses the bundled Python CLI
-internally so it can preserve existing marketplace entries and generate the
-setup report.
+No Git checkout is required. The release path puts the Go `aok` binary on
+`PATH` (not a symlink to `scripts/aok`) and installs kit content under the
+roots above. Marketplace registration and setup reports are produced by the
+installer / binary path.
 
 ## Optional Manual Verification
 
-Technical users can verify the installed copy:
+Prefer the `aok` binary on `PATH` after a release install:
 
 ```bash
-"$HOME/Library/Application Support/Agent Operating Kit/agent-operating-kit/scripts/aok" doctor
-"$HOME/Library/Application Support/Agent Operating Kit/agent-operating-kit/scripts/aok" validate
+aok doctor
+aok validate
 ```
 
-On Windows, run the same commands against
-`%LOCALAPPDATA%\Agent Operating Kit\agent-operating-kit\scripts\aok`.
+On Windows, use `aok.cmd` from `~/.local/bin` when that wrapper is on `PATH`.
+
+`aok` on `PATH` is the current end-user path after a release install. For a git
+checkout or deferred Python-only commands (`task` / `hooks` / `import`), use
+`./scripts/aok` from the repository (or the `scripts/aok` copy under an install
+root when needed).
 
 ## Git Install
 
@@ -80,12 +115,13 @@ Use `./scripts/aok codex setup --project /path/to/project` only when you want
 to initialize a separate downstream project with AOK files and Codex local
 environment assets. Do not point `--project` at the AOK repo checkout itself.
 
-The installer writes:
+The installer / setup helpers write:
 
 - `~/.agents/plugins/marketplace.json`
 - `~/.agents/plugins/plugins/agent-operating-kit` as a symlink on Unix, or a
   junction/copy on Windows
-- `~/.local/bin/aok` as a symlink on Unix, or `~/.local/bin/aok.cmd` on Windows
+- `~/.local/bin/aok` on Unix (release: Go binary or shim to it; developer
+  checkout may still link `scripts/aok`), or `~/.local/bin/aok.cmd` on Windows
 
 ## Codex First Success
 

@@ -11,7 +11,9 @@ adapters or content packs, not separate operating models.
 ## No-Terminal Install
 
 Use this path when you want the shortest route to a working install without
-cloning the repository.
+cloning the repository. Release installers put a thin Go `aok` binary on
+`PATH` so you do not need Python or a Go toolchain on the device. See
+[docs/cli-distribution.md](docs/cli-distribution.md).
 
 1. Open the latest GitHub release.
 2. Download the installer for your platform:
@@ -39,12 +41,36 @@ Each installer writes a setup report near its install root.
 
 On Windows, AOK installs the plugin directory with a junction when possible and
 falls back to a copy if junction creation is unavailable. The CLI entrypoint is
-`~/.local/bin/aok.cmd`.
+`~/.local/bin/aok.cmd` (release path: Go binary / shim, not a link to
+`scripts/aok`).
+
+## Install via package managers
+
+GitHub Releases remain the source of truth for binaries. **Releases are
+unsigned**; verify with the Release `SHA256SUMS` file (OS may warn once on
+first run). Homebrew, Scoop, and winget install from this repository’s
+published manifests — no separate tap/bucket repo required (see
+[docs/cli-distribution.md](docs/cli-distribution.md) and
+[`packaging/`](packaging/)).
+
+| Channel | Install |
+|---|---|
+| Scoop | `scoop bucket add aok https://github.com/ArmanAvanesyan/agent-operating-kit` then `scoop install aok` (`bucket/aok.json`) |
+| Homebrew | `brew install --formula https://raw.githubusercontent.com/ArmanAvanesyan/agent-operating-kit/main/packaging/homebrew/aok.rb` (classic tap deferred) |
+| winget | Manifests under `packaging/winget/`; submit to `microsoft/winget-pkgs` when ready |
+| PyPI | **Not planned** for the Go `aok` binary (wrong distribution model) |
+
+Regenerate manifests from a release tag or local `dist/release` (updates
+`bucket/`, `packaging/homebrew/aok.rb`, and `packaging/winget/*.yaml`):
+
+```bash
+./scripts/packaging/generate-from-release.sh --version 0.6.1
+```
 
 ## Developer First Success Path
 
 Use this path when you are comfortable with the terminal and want a validated
-checkout.
+checkout. The developer CLI remains the Python entrypoint at `./scripts/aok`.
 
 ```bash
 git clone https://github.com/ArmanAvanesyan/agent-operating-kit.git
@@ -247,6 +273,9 @@ yet enabled. See `docs/work-system-bootstrap.md`.
 
 ## Methodology Profiles
 
+Methodology, work-item, and work-system commands currently use the contributor
+Python entrypoint (`./scripts/aok`), not the distributed Go binary.
+
 Projects use one flow and optional practice overlays independently of their
 GitHub or Azure DevOps binding:
 
@@ -330,10 +359,12 @@ migration guidance.
 ## Operations
 
 - Install and first-run onboarding: `docs/install-and-onboarding.md`
+- CLI distribution (Go binary vs Python): `docs/cli-distribution.md`
 - Codex local environments: `docs/codex-local-environments.md`
 - Project initialization: `docs/project-init-guide.md`
 - Methodology-aware work items: `docs/work-item-types.md`
 - Target support: `docs/targets-support-matrix.md`
+- Host compatibility: `docs/host-compatibility.md`
 - Release checklist: `docs/release-checklist.md`
 - Uninstall and rollback: `docs/uninstall-and-rollback.md`
 - `swarmd` integration: `docs/swarmd-integration.md`
@@ -350,3 +381,8 @@ python3 -m py_compile scripts/aok
 Validation is dependency-free and checks required docs, schemas, adapter
 manifests, pack manifests, pack content, JSON syntax, Claude Code marketplace
 metadata, and supported target coverage.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for local validation, render checks, and
+conventions for packs, adapters, and schema changes.

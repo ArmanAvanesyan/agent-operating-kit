@@ -101,12 +101,12 @@ Workspace kind is detected as:
 5. Commit the project-side operating files in that project, not in the AOK
    checkout.
 
-Remote boards are a separate follow-up. Run `aok work-system setup github` or
-`aok work-system setup azure-devops` after local initialization. A verified
+Remote boards are a separate follow-up. Run `./scripts/aok work-system setup github` or
+`./scripts/aok work-system setup azure-devops` after local initialization. A verified
 binding written to `.aok/project.json` is preserved by later project init runs.
 See `work-system-bootstrap.md`.
 
-Methodology can be changed later with `aok methodology set`. Existing explicit
+Methodology can be changed later with `./scripts/aok methodology set`. Existing explicit
 methodology and work-system bindings are preserved when init is run without
 methodology flags. See `methodology-profiles.md`.
 
@@ -115,7 +115,7 @@ inspect FDD, DSDM, or AUP roles and artifact templates without selecting the
 flow, run:
 
 ```bash
-aok methodology scaffold /path/to/project --flow fdd
+./scripts/aok methodology scaffold /path/to/project --flow fdd
 ```
 
 This local export leaves `.aok/project.json` and remote work systems unchanged.
@@ -123,8 +123,8 @@ This local export leaves `.aok/project.json` and remote work systems unchanged.
 Work-item templates are a separate explicit export:
 
 ```bash
-aok work-item scaffold /path/to/project
-aok work-item validate /path/to/project
+./scripts/aok work-item scaffold /path/to/project
+./scripts/aok work-item validate /path/to/project
 ```
 
 This writes neutral task templates, GitHub Issue Forms, and Azure DevOps

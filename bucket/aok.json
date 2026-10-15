@@ -1,0 +1,28 @@
+{
+  "version": "0.6.1",
+  "description": "Cross-tool agent operating kit CLI",
+  "homepage": "https://github.com/ArmanAvanesyan/agent-operating-kit",
+  "license": "MIT",
+  "architecture": {
+    "64bit": {
+      "url": "https://github.com/ArmanAvanesyan/agent-operating-kit/releases/download/v0.6.1/aok-0.6.1-windows-amd64.exe",
+      "hash": "83232b172b86ad241d41f91eaf0b1e553a9ae172cee36e7ac188aeefbb1a7b46",
+      "bin": [
+        [
+          "aok-0.6.1-windows-amd64.exe",
+          "aok"
+        ]
+      ]
+    }
+  },
+  "checkver": {
+    "github": "https://github.com/ArmanAvanesyan/agent-operating-kit"
+  },
+  "autoupdate": {
+    "architecture": {
+      "64bit": {
+        "url": "https://github.com/ArmanAvanesyan/agent-operating-kit/releases/download/v$version/aok-$version-windows-amd64.exe"
+      }
+    }
+  }
+}

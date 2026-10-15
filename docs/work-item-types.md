@@ -26,21 +26,24 @@ Acceptance criteria remain embedded in each work item. FDD Subject Areas and
 Business Activities, DSDM increments and timeboxes, and AUP iterations remain
 planning containers rather than work-item types.
 
+The export commands use the contributor Python CLI (`./scripts/aok`) from
+a checkout or extracted kit, rather than the distributed Go binary.
+
 ## Commands
 
 ```bash
-aok work-item list
-aok work-item list --flow kanban --overlay xp --overlay lean --json
-aok work-item scaffold /path/to/project
-aok work-item validate /path/to/project
+./scripts/aok work-item list
+./scripts/aok work-item list --flow kanban --overlay xp --overlay lean --json
+./scripts/aok work-item scaffold /path/to/project
+./scripts/aok work-item validate /path/to/project
 ```
 
 Export a scaffolded flow without changing `.aok/project.json`:
 
 ```bash
-aok work-item scaffold /path/to/project --flow fdd
-aok work-item scaffold /path/to/project --flow dsdm --provider github
-aok work-item scaffold /path/to/project --flow aup --provider azure-devops
+./scripts/aok work-item scaffold /path/to/project --flow fdd
+./scripts/aok work-item scaffold /path/to/project --flow dsdm --provider github
+./scripts/aok work-item scaffold /path/to/project --flow aup --provider azure-devops
 ```
 
 `--provider` accepts `neutral`, `github`, `azure-devops`, or `all`; `all` is

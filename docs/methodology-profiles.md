@@ -24,6 +24,9 @@ These axes are deliberately independent. A DSDM project may be in
 Review. An FDD feature may move from `design-by-feature` to
 `build-by-feature` without defining new task phases.
 
+Methodology selection and scaffold commands use the contributor Python CLI
+from the kit checkout (`./scripts/aok`); they are not yet Go binary commands.
+
 ## Support
 
 | Profile | Kind | Support |
@@ -48,13 +51,13 @@ state and enforcement are implemented.
 Kanban with no overlays is the default:
 
 ```bash
-aok project init /path/to/project
+./scripts/aok project init /path/to/project
 ```
 
 Select active overlays by repeating `--overlay`:
 
 ```bash
-aok project init /path/to/project \
+./scripts/aok project init /path/to/project \
   --flow kanban \
   --overlay xp \
   --overlay lean
@@ -66,14 +69,14 @@ flags. Providing `--overlay` without `--flow` is rejected.
 ## Reconfigure
 
 ```bash
-aok methodology set /path/to/project \
+./scripts/aok methodology set /path/to/project \
   --flow kanban \
   --overlay xp \
   --overlay lean
 
-aok methodology show /path/to/project
-aok methodology validate /path/to/project
-aok methodology list
+./scripts/aok methodology show /path/to/project
+./scripts/aok methodology validate /path/to/project
+./scripts/aok methodology list
 ```
 
 `methodology set` replaces the complete selection. Omitting `--overlay` clears
@@ -112,9 +115,9 @@ Export the roles, editable artifact templates, and reference documentation for
 a scaffolded flow without selecting it:
 
 ```bash
-aok methodology scaffold /path/to/project --flow fdd
-aok methodology scaffold /path/to/project --flow dsdm --json
-aok methodology scaffold /path/to/project --flow aup
+./scripts/aok methodology scaffold /path/to/project --flow fdd
+./scripts/aok methodology scaffold /path/to/project --flow dsdm --json
+./scripts/aok methodology scaffold /path/to/project --flow aup
 ```
 
 The command writes methodology-specific roles under `agents/roles/`, artifact
@@ -132,7 +135,7 @@ those roles but cannot assume sponsor, stakeholder, business-visionary, or
 other human approval authority.
 
 Methodology-aware issue and work-item templates use the separate
-`aok work-item scaffold` command. Core types are always included; active
+`./scripts/aok work-item scaffold` command. Core types are always included; active
 overlays and explicitly exported scaffolded flows add their native types.
 See `work-item-types.md`.
 
@@ -184,8 +187,8 @@ For example, `Generate PDF for Invoice`. The classic article form,
 Validate names without selecting or activating FDD:
 
 ```bash
-aok methodology validate-feature --name "Generate PDF for Invoice"
-aok methodology validate-feature \
+./scripts/aok methodology validate-feature --name "Generate PDF for Invoice"
+./scripts/aok methodology validate-feature \
   --name "Calculate the total amount of a Sale" \
   --json
 ```
@@ -230,14 +233,14 @@ Could Have target are advisory capacity guidance, not validation failures.
 Validate a requirement definition without selecting or activating DSDM:
 
 ```bash
-aok methodology validate-requirement \
+./scripts/aok methodology validate-requirement \
   --id REQ-014 \
   --theme Billing \
   --outcome "Produce customer-ready invoice PDF" \
   --project-moscow must \
   --acceptance "The PDF contains the approved invoice fields"
 
-aok methodology validate-requirement \
+./scripts/aok methodology validate-requirement \
   --id REQ-014 \
   --outcome "Produce customer-ready invoice PDF" \
   --project-moscow must \
@@ -287,7 +290,7 @@ reason that it does not apply.
 Validate an iteration without selecting or activating AUP:
 
 ```bash
-aok methodology validate-iteration \
+./scripts/aok methodology validate-iteration \
   --id I-12 \
   --stage construction \
   --objective "Deliver invoice generation increment" \

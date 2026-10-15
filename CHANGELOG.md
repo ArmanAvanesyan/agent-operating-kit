@@ -20,6 +20,52 @@
 - Include GitHub sync and release workflow files in release kits so extracted
   kits satisfy their own required-file validation.
 
+## 0.6.1
+
+- Same-repo Homebrew / Scoop / winget packaging layout and docs: unsigned
+  Releases trust via `SHA256SUMS`; Scoop `bucket/`; Homebrew raw-URL formula;
+  winget manifests under `packaging/winget/` (external tap/bucket / winget-pkgs
+  pushes remain optional).
+- Dependabot GitHub Actions major bumps: `actions/checkout` v7,
+  `actions/upload-artifact` v7, `softprops/action-gh-release` v3.
+- Refresh `packs/phased-rollout-template` scaffold pins: FastAPI / uvicorn /
+  pydantic / pydantic-settings floors; Actions `checkout@v7`, GCP auth/setup
+  `@v3`, hadolint-action `@v3.5.0`. UV `0.13.1` + `setup-uv@v10` and Python
+  `3.12` remain current (no bump).
+- Cursor bundles emit an additive native project tree (`.cursor/rules/*.mdc`,
+  `.cursor/skills/*/SKILL.md`, hooks checklist) alongside `aok-bundle.json`.
+- Host compatibility smoke log for 0.6.1 (AOK-side validate/render); matrix
+  **Tested** cells remain `Untracked` where host CLIs were unavailable.
+
+## 0.6.0
+
+- Go CLI full command parity for `task`, `hooks`, and `import` in the release
+  binary (Python `scripts/aok` remains for contributors).
+- Go release builder (`cmd/aok-release` via `scripts/release/build.sh`) replaces
+  the Python `build.py` path for kit zips, cross-compiled binaries, installers,
+  bundles, `SHA256SUMS`, and `index.json`.
+- Optional secrets-gated code signing in release CI
+  (`scripts/release/sign.sh`); unsigned artifacts remain the default when
+  secrets or tools are absent.
+- Homebrew / Scoop / winget packaging templates under `packaging/`, regenerated
+  from Release checksums (`scripts/packaging/generate-from-release.sh`).
+  **PyPI is not planned** for the Go `aok` binary.
+
+## 0.5.0
+
+- Ship the thin Go CLI (`cmd/aok`) for end-user install without Python on the
+  device: `version`, `doctor`, `validate`, `install`, `claude setup`,
+  `codex setup` / `local-env`, `project init|validate`, and
+  `render pack|all|bundle|bundles`.
+- Release publish cross-compiles five platform binaries
+  (`aok-<version>-{darwin,linux}-{arm64,amd64}` / `windows-amd64.exe`), lists
+  them in `SHA256SUMS` and `index.json`, and bundles `bin/aok` into installers
+  that invoke the binary for `install` / `doctor`.
+- PATH install copies the Go binary to `~/.local/bin` (Unix) or `aok.exe` +
+  `aok.cmd` (Windows); `install --replace` upgrades old Python shims.
+- Python `scripts/aok` remains the contributor entrypoint; `task` / `hooks` /
+  `import` stay Python-only. See `docs/cli-distribution.md`.
+
 ## 0.4.0
 
 - Add Codex App local-environment setup and action helper templates.

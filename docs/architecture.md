@@ -8,10 +8,16 @@ workflow content.
 1. `schemas/`: JSON Schema contracts for neutral AOK objects.
 2. `core/`: conceptual model and rendering rules.
 3. `methodologies/`: selectable flow and practice-overlay profiles.
-4. `packs/`: reusable workflow content and curated adapter assets.
-5. `adapters/`: target-specific mappings for Codex, Claude Code, Cursor,
+4. `work-items/`: methodology-aware intake contracts and provider exports.
+5. `packs/`: reusable workflow content and curated adapter assets.
+6. `adapters/`: target-specific mappings for Codex, Claude Code, Cursor,
    OpenCode, Gemini, OpenClaw, and Hermes Agent.
-6. `scripts/`: local CLI, install, sync, and validation commands.
+7. `scripts/`: Python kit CLI (`scripts/aok`), install helpers, sync, and
+   validation — the maintained source for contributors and kit logic.
+8. Distribution layer: Go `aok` binary (`cmd/aok`, module
+   `github.com/ArmanAvanesyan/agent-operating-kit`) built in release CI and
+   published on GitHub Releases so end-user `PATH` installs need neither
+   Python nor Go on the device. See [cli-distribution.md](cli-distribution.md).
 
 ## Source Of Truth
 
@@ -23,6 +29,8 @@ AOK owns the neutral model:
 - skill
 - pack
 - methodology profile
+- methodology artifact
+- work-item type
 - tool adapter
 
 Tool-specific files are projections. They can be hand-curated when a target has
@@ -48,6 +56,11 @@ They do not fork task-packet fields, lifecycle statuses, or work-system provider
 mappings. General-purpose packs remain independently installable workflow
 content.
 
+The `methodology`, `work-item`, and `work-system` command groups currently
+use the contributor Python entrypoint (`./scripts/aok`). They are not yet
+implemented by the distributed Go `aok` binary. Their catalogs and templates
+ship in release archives so local exports from the kit remain available.
+
 ## Runtime Boundary
 
 AOK is not a daemon and does not own persistent queue state. `swarmd` remains
@@ -59,10 +72,10 @@ call `swarmd`, but `swarmd` stays a separate repository and lifecycle.
 - `packs/*/pack.json` defines supported targets and per-target render mapping.
 - `packs/*/pack.content.json` stores neutral content (roles, hooks, skills,
   templates, task packets).
-- `scripts/aok render pack <pack-id> --target <target>` outputs parseable JSON
-  contracts for all targets.
-- `scripts/aok render all --target all` bulk-renders all packs for every
-  target.
+- The release Go binary (`cmd/aok`) implements `render` for end-user installs.
+- Contributors and CI packaging may still call Python
+  `scripts/aok render pack <pack-id> --target <target>` (and
+  `scripts/aok render all --target all`) when building release bundles.
 
 ## Compatibility Policy
 

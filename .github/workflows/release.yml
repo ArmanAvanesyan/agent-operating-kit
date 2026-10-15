@@ -12,7 +12,10 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.x"
       - name: Build release artifacts
         run: ./scripts/release/build.sh dist/release
       - name: Validate kit
@@ -22,16 +25,51 @@ jobs:
           ./scripts/aok codex local-env validate templates --json > dist/release/codex-local-environment.json
           ./scripts/aok codex local-env actions templates
           python3 -m py_compile scripts/aok
-          python3 -m py_compile scripts/release/build.py
+          go test ./...
           ./scripts/aok doctor --json > dist/release/doctor.json || true
           python3 -m json.tool dist/release/index.json >/dev/null
+          VERSION="$(python3 -c 'import json; print(json.load(open(".codex-plugin/plugin.json"))["version"])')"
+          for name in \
+            "aok-${VERSION}-darwin-arm64" \
+            "aok-${VERSION}-darwin-amd64" \
+            "aok-${VERSION}-linux-amd64" \
+            "aok-${VERSION}-linux-arm64" \
+            "aok-${VERSION}-windows-amd64.exe"
+          do
+            test -f "dist/release/$name"
+            grep -q "$name" dist/release/SHA256SUMS
+            grep -q "$name" dist/release/index.json
+          done
+      - name: Optional code signing
+        # Always run; scripts/release/sign.sh no-ops when secrets/tools are absent
+        # so unsigned releases still publish successfully.
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+          MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          AOK_ENABLE_NOTARIZE: ${{ secrets.AOK_ENABLE_NOTARIZE }}
+          WINDOWS_CERT: ${{ secrets.WINDOWS_CERT }}
+          WINDOWS_CERT_PWD: ${{ secrets.WINDOWS_CERT_PWD }}
+          AZURE_TRUSTED_SIGNING_CLIENT_ID: ${{ secrets.AZURE_TRUSTED_SIGNING_CLIENT_ID }}
+          AZURE_TRUSTED_SIGNING_TENANT_ID: ${{ secrets.AZURE_TRUSTED_SIGNING_TENANT_ID }}
+          AZURE_TRUSTED_SIGNING_CLIENT_SECRET: ${{ secrets.AZURE_TRUSTED_SIGNING_CLIENT_SECRET }}
+          AZURE_TRUSTED_SIGNING_ACCOUNT: ${{ secrets.AZURE_TRUSTED_SIGNING_ACCOUNT }}
+          AZURE_TRUSTED_SIGNING_PROFILE: ${{ secrets.AZURE_TRUSTED_SIGNING_PROFILE }}
+          AZURE_TRUSTED_SIGNING_ENDPOINT: ${{ secrets.AZURE_TRUSTED_SIGNING_ENDPOINT }}
+          COSIGN_KEY: ${{ secrets.COSIGN_KEY }}
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+          AOK_ENABLE_LINUX_SIGN: ${{ vars.AOK_ENABLE_LINUX_SIGN }}
+        run: ./scripts/release/sign.sh dist/release
       - name: Upload workflow artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: agent-operating-kit-release
           path: dist/release/**
       - name: Publish GitHub release
         if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: dist/release/**

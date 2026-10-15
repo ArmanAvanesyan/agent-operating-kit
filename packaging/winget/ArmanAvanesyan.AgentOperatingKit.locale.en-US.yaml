@@ -1,0 +1,15 @@
+PackageIdentifier: ArmanAvanesyan.AgentOperatingKit
+PackageVersion: 0.6.1
+PackageLocale: en-US
+Publisher: ArmanAvanesyan
+PublisherUrl: https://github.com/ArmanAvanesyan/agent-operating-kit
+PackageName: Agent Operating Kit
+PackageUrl: https://github.com/ArmanAvanesyan/agent-operating-kit
+License: MIT
+ShortDescription: Cross-tool agent operating kit CLI (aok)
+Moniker: aok
+Tags:
+  - cli
+  - agents
+ManifestType: defaultLocale
+ManifestVersion: 1.6.0

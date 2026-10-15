@@ -16,6 +16,7 @@
   ],
   "entrypoints": [
     "adapters/hermes-agent/README.md",
+    "docs/adapters/hermes-agent.md",
     "scripts/aok",
     "packs/*/pack.json"
   ],
@@ -29,6 +30,6 @@
   "bundle": {
     "artifactName": "aok-hermes-agent-bundles.zip",
     "format": "aok-import-bundle",
-    "importInstructions": "Use the release bundle at bundles/hermes-agent/<pack>/ and import the included assignment, role, skill, and lifecycle files into the host workflow."
+    "importInstructions": "See docs/adapters/hermes-agent.md for host-specific import steps. Bundle: bundles/hermes-agent/<pack>/."
   }
 }

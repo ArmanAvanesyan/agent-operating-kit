@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Validate kit
+        run: ./scripts/aok validate
+      - name: Compile Python entrypoints
+        run: python3 -m py_compile scripts/aok
+
+  go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.x"
+      - name: Build Go CLI
+        run: go build -o dist/aok ./cmd/aok
+      - name: Test Go packages
+        run: go test ./...

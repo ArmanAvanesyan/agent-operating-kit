@@ -1,11 +1,14 @@
 # Work-System Bootstrap
 
+Work-system commands use the contributor Python CLI (`./scripts/aok`) from
+a checkout or extracted kit. They are not yet implemented in the Go binary.
+
 AOK separates local project initialization from remote work-system setup:
 
 ```bash
 aok project init /path/to/project
-aok work-system setup github --owner OWNER --project-number 12 --path /path/to/project
-aok work-system validate /path/to/project
+./scripts/aok work-system setup github --owner OWNER --project-number 12 --path /path/to/project
+./scripts/aok work-system validate /path/to/project
 ```
 
 ## Support Levels
@@ -36,12 +39,12 @@ Every provider must represent:
 Authenticate with `gh auth login`, then discover by number or exact title:
 
 ```bash
-aok work-system setup github \
+./scripts/aok work-system setup github \
   --owner example-org \
   --project-number 12 \
   --json
 
-aok work-system setup github \
+./scripts/aok work-system setup github \
   --owner example-org \
   --project-title "Agent Work" \
   --path /path/to/project \
@@ -59,7 +62,7 @@ Install the Azure DevOps CLI extension and authenticate with Microsoft Entra,
 token itself.
 
 ```bash
-aok work-system setup azure-devops \
+./scripts/aok work-system setup azure-devops \
   --organization https://dev.azure.com/example \
   --project Platform \
   --team "Platform Team" \
@@ -93,8 +96,8 @@ credentials. A failed check leaves the file unchanged.
 `aok project init` preserves an existing binding. Re-run live validation with:
 
 ```bash
-aok work-system validate /path/to/project
-aok work-system validate /path/to/project --json
+./scripts/aok work-system validate /path/to/project
+./scripts/aok work-system validate /path/to/project --json
 ```
 
 Validation fails when authentication is unavailable, a bound resource cannot

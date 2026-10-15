@@ -77,7 +77,7 @@
         ]
       },
       "notes": "Codex support is delivered through the native AOK Codex plugin bundle; generated pack output should retain plugin metadata from .codex-plugin/plugin.json.",
-      "importInstructions": "Install the AOK macOS release installer or import this Codex plugin-oriented bundle."
+      "importInstructions": "Install the AOK release installer for your platform (macOS Apple Silicon, macOS Intel, Windows, Linux user, or Linux system) or import this Codex plugin-oriented bundle."
     },
     "claude-code": {
       "status": "active",
@@ -126,7 +126,11 @@
       "payload": {
         "contract": "aok-task-rules"
       },
-      "importInstructions": "Use the release bundle at bundles/cursor/ship-pipeline/ and import the included rules, roles, hooks, skills, tasks, and aok-bundle.json into the project workspace."
+      "importInstructions": "See docs/adapters/cursor.md. Copy .cursor/rules and .cursor/skills from bundles/cursor/<pack>/ into the project; keep aok-bundle.json as audit fallback.",
+      "nativePackageFormats": [
+        ".cursor/rules",
+        ".cursor/skills"
+      ]
     },
     "opencode": {
       "status": "active",
@@ -141,7 +145,7 @@
       "payload": {
         "contract": "aok-task-rules"
       },
-      "importInstructions": "Use the release bundle at bundles/opencode/ship-pipeline/ and import the included guidance, roles, hooks, skills, tasks, and aok-bundle.json into the project workspace."
+      "importInstructions": "See docs/adapters/opencode.md for host-specific import steps. Bundle: bundles/opencode/<pack>/."
     },
     "gemini": {
       "status": "active",
@@ -156,7 +160,7 @@
       "payload": {
         "contract": "aok-skill-contract"
       },
-      "importInstructions": "Use the release bundle at bundles/gemini/ship-pipeline/ as reusable role, skill, hook, and task guidance."
+      "importInstructions": "See docs/adapters/gemini.md for host-specific import steps. Bundle: bundles/gemini/<pack>/."
     },
     "openclaw": {
       "status": "active",
@@ -171,7 +175,7 @@
       "payload": {
         "contract": "aok-role-skill-bridge"
       },
-      "importInstructions": "Use the release bundle at bundles/openclaw/ship-pipeline/ and import the included role, skill, lifecycle, and task files into the host workflow."
+      "importInstructions": "See docs/adapters/openclaw.md for host-specific import steps. Bundle: bundles/openclaw/<pack>/."
     },
     "hermes-agent": {
       "status": "active",
@@ -186,7 +190,7 @@
       "payload": {
         "contract": "aok-task-rules"
       },
-      "importInstructions": "Use the release bundle at bundles/hermes-agent/ship-pipeline/ and import the included assignment, role, skill, and lifecycle files into the host workflow."
+      "importInstructions": "See docs/adapters/hermes-agent.md for host-specific import steps. Bundle: bundles/hermes-agent/<pack>/."
     }
   },
   "adapters": {

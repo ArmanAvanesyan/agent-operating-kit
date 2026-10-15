@@ -14,70 +14,185 @@
     "requiredInputs",
     "hookExpectations",
     "roleEmphasis",
-    "compatibleFlows"
+    "compatibleFlows",
+    "lifecycle",
+    "featureContract",
+    "requirementContract",
+    "iterationContract",
+    "roleCatalog",
+    "artifactCatalog",
+    "ceremonies",
+    "gates",
+    "phaseMappings"
   ],
   "properties": {
-    "id": {
-      "type": "string",
-      "pattern": "^[a-z0-9][a-z0-9-]*$"
-    },
-    "kind": {
-      "type": "string",
-      "enum": ["flow", "overlay"]
-    },
-    "displayName": {
-      "type": "string",
-      "minLength": 1
-    },
-    "description": {
-      "type": "string",
-      "minLength": 1
-    },
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "kind": { "type": "string", "enum": ["flow", "overlay"] },
+    "displayName": { "type": "string", "minLength": 1 },
+    "description": { "type": "string", "minLength": 1 },
     "supportLevel": {
       "type": "string",
       "enum": ["active", "scaffolded", "planned"]
     },
-    "order": {
-      "type": "integer",
-      "minimum": 0
-    },
-    "default": {
-      "type": "boolean"
-    },
-    "fragment": {
-      "type": ["string", "null"]
-    },
+    "order": { "type": "integer", "minimum": 0 },
+    "default": { "type": "boolean" },
+    "fragment": { "type": ["string", "null"] },
     "requiredInputs": {
       "type": "array",
-      "items": {
-        "type": "string",
-        "minLength": 1
-      },
+      "items": { "type": "string", "minLength": 1 },
       "uniqueItems": true
     },
     "hookExpectations": {
       "type": "array",
-      "items": {
-        "type": "string",
-        "minLength": 1
-      },
+      "items": { "type": "string", "minLength": 1 },
       "uniqueItems": true
     },
     "roleEmphasis": {
       "type": "array",
-      "items": {
-        "type": "string",
-        "minLength": 1
-      },
+      "items": { "type": "string", "minLength": 1 },
       "uniqueItems": true
     },
     "compatibleFlows": {
       "type": "array",
-      "items": {
-        "type": "string",
-        "pattern": "^[a-z0-9][a-z0-9-]*$"
-      },
+      "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
       "uniqueItems": true
+    },
+    "lifecycle": {
+      "type": ["object", "null"],
+      "properties": {
+        "initialStage": { "type": "string" },
+        "stages": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "name", "scope", "repeatable", "allowedPhases"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+              "name": { "type": "string", "minLength": 1 },
+              "scope": {
+                "type": "string",
+                "enum": ["project", "release", "feature", "iteration"]
+              },
+              "repeatable": { "type": "boolean" },
+              "allowedPhases": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": ["intake", "planning", "build", "qa", "review", "release", "operate"]
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "transitions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["from", "to", "loop"],
+            "properties": {
+              "from": { "type": "string" },
+              "to": { "type": "string" },
+              "loop": { "type": "boolean" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["initialStage", "stages", "transitions"],
+      "additionalProperties": false
+    },
+    "featureContract": { "type": ["string", "null"] },
+    "requirementContract": { "type": ["string", "null"] },
+    "iterationContract": { "type": ["string", "null"] },
+    "roleCatalog": { "type": ["string", "null"] },
+    "artifactCatalog": { "type": ["string", "null"] },
+    "ceremonies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "trigger", "lifecycleStages", "participants", "outputs", "humanCheckpoint"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "name": { "type": "string", "minLength": 1 },
+          "trigger": {
+            "type": "string",
+            "enum": ["stage-entry", "stage-exit", "cadence", "on-demand"]
+          },
+          "lifecycleStages": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "participants": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "outputs": {
+            "type": "array",
+            "items": { "type": "string" },
+            "uniqueItems": true
+          },
+          "humanCheckpoint": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "gates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "from", "to", "severity", "requiredInputs", "requiredArtifacts", "requiredRoles", "humanApproval"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "from": { "type": "string" },
+          "to": { "type": "string" },
+          "severity": { "type": "string", "enum": ["warn", "block"] },
+          "requiredInputs": {
+            "type": "array",
+            "items": { "type": "string" },
+            "uniqueItems": true
+          },
+          "requiredArtifacts": {
+            "type": "array",
+            "items": { "type": "string" },
+            "uniqueItems": true
+          },
+          "requiredRoles": {
+            "type": "array",
+            "items": { "type": "string" },
+            "uniqueItems": true
+          },
+          "humanApproval": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "phaseMappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["lifecycleStage", "phases"],
+        "properties": {
+          "lifecycleStage": { "type": "string" },
+          "phases": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["intake", "planning", "build", "qa", "review", "release", "operate"]
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          }
+        },
+        "additionalProperties": false
+      }
     }
   },
   "additionalProperties": false

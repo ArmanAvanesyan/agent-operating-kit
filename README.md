@@ -197,6 +197,38 @@ intentionally want AOK to replace `AGENTS.md` after writing a backup.
 
 See `docs/project-init-guide.md` for the full guide.
 
+Scaffolded delivery frameworks can be inspected without selecting them:
+
+```bash
+./scripts/aok methodology scaffold /path/to/project --flow fdd
+./scripts/aok methodology scaffold /path/to/project --flow dsdm
+./scripts/aok methodology scaffold /path/to/project --flow aup
+./scripts/aok methodology validate-feature --name "Generate PDF for Invoice"
+./scripts/aok methodology validate-requirement \
+  --id REQ-014 \
+  --outcome "Produce customer-ready invoice PDF" \
+  --project-moscow must \
+  --acceptance "The generated PDF matches the approved invoice content"
+./scripts/aok methodology validate-iteration \
+  --id I-12 \
+  --stage construction \
+  --objective "Deliver invoice generation increment" \
+  --work-item use-case=UC-03 \
+  --discipline model=docs/architecture.md \
+  --discipline implementation=PR-142 \
+  --discipline test=reports/test-results.xml \
+  --discipline deployment=not-applicable:No-release-activity \
+  --discipline configuration-management=build-142 \
+  --discipline project-management=docs/iteration-plan.md \
+  --discipline environment=ci/run-912
+```
+
+The export contains methodology-specific roles, artifacts, lifecycle stages,
+ceremonies, and gates. It does not modify project methodology state.
+FDD exports curated domain, feature-list, planning, design, inspection, and
+milestone-tracking templates; the validator checks short and classic FDD names
+without activating the flow.
+
 ## Work-System Bootstrap
 
 After local project initialization, inspect an existing GitHub Project or Azure

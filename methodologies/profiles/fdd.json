@@ -6,15 +6,50 @@
   "supportLevel": "scaffolded",
   "order": 20,
   "fragment": null,
-  "requiredInputs": [
-    "Feature ID",
-    "Model link"
+  "requiredInputs": ["Feature ID", "Model link"],
+  "hookExpectations": ["Confirm the feature belongs to an approved feature list."],
+  "roleEmphasis": ["Domain modeling and chief-programmer-style feature ownership."],
+  "compatibleFlows": [],
+  "lifecycle": {
+    "initialStage": "develop-overall-model",
+    "stages": [
+      {"id": "develop-overall-model", "name": "Develop Overall Model", "scope": "project", "repeatable": false, "allowedPhases": ["planning"]},
+      {"id": "build-features-list", "name": "Build Features List", "scope": "project", "repeatable": false, "allowedPhases": ["intake", "planning"]},
+      {"id": "plan-by-feature", "name": "Plan By Feature", "scope": "project", "repeatable": false, "allowedPhases": ["planning"]},
+      {"id": "design-by-feature", "name": "Design By Feature", "scope": "feature", "repeatable": true, "allowedPhases": ["planning"]},
+      {"id": "build-by-feature", "name": "Build By Feature", "scope": "feature", "repeatable": true, "allowedPhases": ["build", "qa", "review", "release"]}
+    ],
+    "transitions": [
+      {"from": "develop-overall-model", "to": "build-features-list", "loop": false},
+      {"from": "build-features-list", "to": "plan-by-feature", "loop": false},
+      {"from": "plan-by-feature", "to": "design-by-feature", "loop": false},
+      {"from": "design-by-feature", "to": "build-by-feature", "loop": false},
+      {"from": "build-by-feature", "to": "design-by-feature", "loop": true}
+    ]
+  },
+  "featureContract": "fdd/feature-contract.json",
+  "requirementContract": null,
+  "iterationContract": null,
+  "roleCatalog": "fdd/roles.json",
+  "artifactCatalog": "fdd/artifacts.json",
+  "ceremonies": [
+    {"id": "domain-modeling-workshop", "name": "Domain Modeling Workshop", "trigger": "stage-entry", "lifecycleStages": ["develop-overall-model"], "participants": ["fdd-chief-architect", "fdd-domain-expert", "fdd-chief-programmer", "fdd-class-owner"], "outputs": ["fdd-overall-model"], "humanCheckpoint": true},
+    {"id": "feature-planning", "name": "Feature Planning", "trigger": "stage-entry", "lifecycleStages": ["plan-by-feature"], "participants": ["fdd-project-manager", "fdd-development-manager", "fdd-chief-programmer", "fdd-domain-expert"], "outputs": ["fdd-feature-plan"], "humanCheckpoint": true},
+    {"id": "design-inspection", "name": "Design Inspection", "trigger": "stage-exit", "lifecycleStages": ["design-by-feature"], "participants": ["fdd-chief-programmer", "fdd-class-owner", "fdd-domain-expert"], "outputs": ["fdd-design-package", "fdd-inspection-record"], "humanCheckpoint": false},
+    {"id": "code-inspection", "name": "Code Inspection", "trigger": "stage-exit", "lifecycleStages": ["build-by-feature"], "participants": ["fdd-chief-programmer", "fdd-class-owner", "fdd-tester"], "outputs": ["fdd-inspection-record", "fdd-feature-build"], "humanCheckpoint": false},
+    {"id": "regular-build", "name": "Regular Build", "trigger": "cadence", "lifecycleStages": ["build-by-feature"], "participants": ["fdd-build-engineer", "fdd-release-manager"], "outputs": ["fdd-feature-build", "fdd-feature-status-report"], "humanCheckpoint": false}
   ],
-  "hookExpectations": [
-    "Confirm the feature belongs to an approved feature list."
+  "gates": [
+    {"id": "approve-feature-list", "from": "build-features-list", "to": "plan-by-feature", "severity": "block", "requiredInputs": ["subjectArea", "businessActivity", "featureName", "featureNameParts", "estimatedEffortDays"], "requiredArtifacts": ["fdd-feature-list"], "requiredRoles": ["fdd-project-manager", "fdd-chief-architect", "fdd-domain-expert"], "humanApproval": true},
+    {"id": "start-feature-design", "from": "plan-by-feature", "to": "design-by-feature", "severity": "block", "requiredInputs": ["subjectArea", "businessActivity", "featureId", "featureName", "featureNameParts", "estimatedEffortDays", "approvedFeatureListMembership"], "requiredArtifacts": ["fdd-feature-list", "fdd-feature-plan"], "requiredRoles": ["fdd-chief-programmer"], "humanApproval": false},
+    {"id": "start-feature-build", "from": "design-by-feature", "to": "build-by-feature", "severity": "block", "requiredInputs": ["featureId", "designInspectionPassed"], "requiredArtifacts": ["fdd-design-package", "fdd-inspection-record"], "requiredRoles": ["fdd-chief-programmer", "fdd-class-owner"], "humanApproval": false},
+    {"id": "complete-feature", "from": "build-by-feature", "to": "design-by-feature", "severity": "block", "requiredInputs": ["featureId", "featureMilestones", "codeInspectionPassed", "verificationEvidence", "promotedToBuild"], "requiredArtifacts": ["fdd-feature-build", "fdd-feature-status-report", "fdd-inspection-record"], "requiredRoles": ["fdd-chief-programmer", "fdd-tester"], "humanApproval": false}
   ],
-  "roleEmphasis": [
-    "Domain modeling and chief-programmer-style feature ownership."
-  ],
-  "compatibleFlows": []
+  "phaseMappings": [
+    {"lifecycleStage": "develop-overall-model", "phases": ["planning"]},
+    {"lifecycleStage": "build-features-list", "phases": ["intake", "planning"]},
+    {"lifecycleStage": "plan-by-feature", "phases": ["planning"]},
+    {"lifecycleStage": "design-by-feature", "phases": ["planning"]},
+    {"lifecycleStage": "build-by-feature", "phases": ["build", "qa", "review", "release"]}
+  ]
 }

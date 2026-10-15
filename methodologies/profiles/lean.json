@@ -16,5 +16,14 @@
   ],
   "compatibleFlows": [
     "kanban"
-  ]
+  ],
+  "lifecycle": null,
+  "featureContract": null,
+  "requirementContract": null,
+  "iterationContract": null,
+  "roleCatalog": null,
+  "artifactCatalog": null,
+  "ceremonies": [],
+  "gates": [],
+  "phaseMappings": []
 }

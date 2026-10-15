@@ -17,5 +17,53 @@
   "roleEmphasis": [
     "Business ambassador and delivery governance."
   ],
-  "compatibleFlows": []
+  "compatibleFlows": [],
+  "lifecycle": {
+    "initialStage": "pre-project",
+    "stages": [
+      {"id": "pre-project", "name": "Pre-Project", "scope": "project", "repeatable": false, "allowedPhases": ["intake", "planning"]},
+      {"id": "feasibility", "name": "Feasibility", "scope": "project", "repeatable": false, "allowedPhases": ["planning"]},
+      {"id": "foundations", "name": "Foundations", "scope": "project", "repeatable": false, "allowedPhases": ["planning"]},
+      {"id": "evolutionary-development", "name": "Evolutionary Development", "scope": "iteration", "repeatable": true, "allowedPhases": ["build", "qa", "review"]},
+      {"id": "deployment", "name": "Deployment", "scope": "release", "repeatable": true, "allowedPhases": ["release"]},
+      {"id": "post-project", "name": "Post-Project", "scope": "project", "repeatable": false, "allowedPhases": ["operate"]}
+    ],
+    "transitions": [
+      {"from": "pre-project", "to": "feasibility", "loop": false},
+      {"from": "feasibility", "to": "foundations", "loop": false},
+      {"from": "foundations", "to": "evolutionary-development", "loop": false},
+      {"from": "evolutionary-development", "to": "evolutionary-development", "loop": true},
+      {"from": "evolutionary-development", "to": "deployment", "loop": false},
+      {"from": "deployment", "to": "evolutionary-development", "loop": true},
+      {"from": "deployment", "to": "post-project", "loop": false}
+    ]
+  },
+  "featureContract": null,
+  "requirementContract": "dsdm/requirement-contract.json",
+  "iterationContract": null,
+  "roleCatalog": "dsdm/roles.json",
+  "artifactCatalog": "dsdm/artifacts.json",
+  "ceremonies": [
+    {"id": "facilitated-workshop", "name": "Facilitated Workshop", "trigger": "on-demand", "lifecycleStages": ["feasibility", "foundations", "evolutionary-development"], "participants": ["dsdm-workshop-facilitator", "dsdm-business-analyst", "dsdm-business-ambassador", "dsdm-solution-developer"], "outputs": ["dsdm-prioritised-requirements-list"], "humanCheckpoint": true},
+    {"id": "daily-standup", "name": "Daily Stand-up", "trigger": "cadence", "lifecycleStages": ["evolutionary-development"], "participants": ["dsdm-team-leader", "dsdm-business-ambassador", "dsdm-solution-developer", "dsdm-solution-tester"], "outputs": [], "humanCheckpoint": false},
+    {"id": "timebox-kickoff", "name": "Timebox Kick-off", "trigger": "stage-entry", "lifecycleStages": ["evolutionary-development"], "participants": ["dsdm-team-leader", "dsdm-business-ambassador", "dsdm-solution-developer", "dsdm-solution-tester"], "outputs": ["dsdm-timebox-plan"], "humanCheckpoint": true},
+    {"id": "timebox-midpoint-review", "name": "Mid-Timebox Review", "trigger": "cadence", "lifecycleStages": ["evolutionary-development"], "participants": ["dsdm-team-leader", "dsdm-business-ambassador", "dsdm-solution-developer", "dsdm-solution-tester"], "outputs": ["dsdm-timebox-plan", "dsdm-evolving-solution"], "humanCheckpoint": true},
+    {"id": "timebox-closeout", "name": "Timebox Close-out", "trigger": "stage-exit", "lifecycleStages": ["evolutionary-development"], "participants": ["dsdm-team-leader", "dsdm-business-ambassador", "dsdm-solution-tester"], "outputs": ["dsdm-timebox-review-record"], "humanCheckpoint": true}
+  ],
+  "gates": [
+    {"id": "authorize-feasibility", "from": "pre-project", "to": "feasibility", "severity": "block", "requiredInputs": [], "requiredArtifacts": ["dsdm-terms-of-reference"], "requiredRoles": ["dsdm-business-sponsor"], "humanApproval": true},
+    {"id": "approve-foundations", "from": "foundations", "to": "evolutionary-development", "severity": "block", "requiredInputs": ["requirementId", "requirementOutcome", "projectMoscow", "acceptanceCriteria"], "requiredArtifacts": ["dsdm-business-case", "dsdm-prioritised-requirements-list", "dsdm-solution-architecture-definition", "dsdm-development-approach-definition", "dsdm-delivery-plan", "dsdm-foundations-summary"], "requiredRoles": ["dsdm-business-sponsor", "dsdm-business-visionary", "dsdm-technical-coordinator", "dsdm-project-manager"], "humanApproval": true},
+    {"id": "start-timebox", "from": "evolutionary-development", "to": "evolutionary-development", "severity": "block", "requiredInputs": ["timebox", "timeboxMoscow", "acceptanceCriteria", "assignedTimeboxScope"], "requiredArtifacts": ["dsdm-timebox-plan"], "requiredRoles": ["dsdm-team-leader", "dsdm-business-ambassador"], "humanApproval": true},
+    {"id": "close-timebox", "from": "evolutionary-development", "to": "evolutionary-development", "severity": "block", "requiredInputs": ["timebox", "verificationEvidence", "businessAmbassadorAcceptance"], "requiredArtifacts": ["dsdm-timebox-review-record", "dsdm-evolving-solution"], "requiredRoles": ["dsdm-business-ambassador", "dsdm-solution-tester"], "humanApproval": true},
+    {"id": "authorize-deployment", "from": "evolutionary-development", "to": "deployment", "severity": "block", "requiredInputs": ["acceptedEvolvingSolution"], "requiredArtifacts": ["dsdm-evolving-solution", "dsdm-timebox-review-record", "dsdm-delivery-plan"], "requiredRoles": ["dsdm-business-visionary", "dsdm-business-ambassador", "dsdm-solution-tester", "dsdm-technical-coordinator"], "humanApproval": true},
+    {"id": "close-project", "from": "deployment", "to": "post-project", "severity": "block", "requiredInputs": [], "requiredArtifacts": ["dsdm-project-review-report", "dsdm-deployed-solution"], "requiredRoles": ["dsdm-business-sponsor", "dsdm-business-visionary"], "humanApproval": true}
+  ],
+  "phaseMappings": [
+    {"lifecycleStage": "pre-project", "phases": ["intake", "planning"]},
+    {"lifecycleStage": "feasibility", "phases": ["planning"]},
+    {"lifecycleStage": "foundations", "phases": ["planning"]},
+    {"lifecycleStage": "evolutionary-development", "phases": ["build", "qa", "review"]},
+    {"lifecycleStage": "deployment", "phases": ["release"]},
+    {"lifecycleStage": "post-project", "phases": ["operate"]}
+  ]
 }

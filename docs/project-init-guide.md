@@ -110,6 +110,16 @@ Methodology can be changed later with `aok methodology set`. Existing explicit
 methodology and work-system bindings are preserved when init is run without
 methodology flags. See `methodology-profiles.md`.
 
+Scaffolded methodology flows remain separate from project initialization. To
+inspect FDD, DSDM, or AUP roles and artifact templates without selecting the
+flow, run:
+
+```bash
+aok methodology scaffold /path/to/project --flow fdd
+```
+
+This local export leaves `.aok/project.json` and remote work systems unchanged.
+
 ## Rollback
 
 For generated files that did not previously exist, remove the files listed in

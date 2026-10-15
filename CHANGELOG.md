@@ -7,6 +7,14 @@
 - Preserve verified work-system bindings across `aok project init`.
 - Add project methodology selection with active Kanban, XP, and Lean policy
   composition plus scaffolded FDD, DSDM, AUP, and planned AM catalog entries.
+- Add structured FDD, DSDM, and AUP lifecycle, role, artifact, ceremony, gate,
+  and phase-mapping catalogs with safe local scaffold export.
+- Add curated FDD feature/domain artifacts, structured feature metadata,
+  classic milestone tracking, and read-only feature-name validation.
+- Add curated DSDM product templates, structured requirement and timebox
+  metadata, three-level MoSCoW priorities, and read-only requirement validation.
+- Add curated AUP model and iteration templates, seven-discipline evidence,
+  lifecycle milestone contracts, and read-only iteration validation.
 
 ## 0.4.0
 

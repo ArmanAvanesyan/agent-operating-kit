@@ -6,14 +6,51 @@
   "supportLevel": "scaffolded",
   "order": 40,
   "fragment": null,
-  "requiredInputs": [
-    "Discipline checklist"
+  "requiredInputs": ["Discipline checklist"],
+  "hookExpectations": ["Record evidence for every required delivery discipline."],
+  "roleEmphasis": ["Architecture, modeling, implementation, test, and deployment disciplines."],
+  "compatibleFlows": [],
+  "lifecycle": {
+    "initialStage": "inception",
+    "stages": [
+      {"id": "inception", "name": "Inception", "scope": "project", "repeatable": false, "allowedPhases": ["intake", "planning"]},
+      {"id": "elaboration", "name": "Elaboration", "scope": "project", "repeatable": true, "allowedPhases": ["planning", "build", "qa"]},
+      {"id": "construction", "name": "Construction", "scope": "iteration", "repeatable": true, "allowedPhases": ["planning", "build", "qa", "review"]},
+      {"id": "transition", "name": "Transition", "scope": "release", "repeatable": true, "allowedPhases": ["qa", "review", "release", "operate"]}
+    ],
+    "transitions": [
+      {"from": "inception", "to": "elaboration", "loop": false},
+      {"from": "elaboration", "to": "elaboration", "loop": true},
+      {"from": "elaboration", "to": "construction", "loop": false},
+      {"from": "construction", "to": "construction", "loop": true},
+      {"from": "construction", "to": "transition", "loop": false},
+      {"from": "transition", "to": "inception", "loop": true}
+    ]
+  },
+  "featureContract": null,
+  "requirementContract": null,
+  "iterationContract": "aup/iteration-contract.json",
+  "roleCatalog": "aup/roles.json",
+  "artifactCatalog": "aup/artifacts.json",
+  "ceremonies": [
+    {"id": "iteration-planning", "name": "Iteration Planning", "trigger": "stage-entry", "lifecycleStages": ["inception", "elaboration", "construction", "transition"], "participants": ["aup-project-manager", "aup-stakeholder", "aup-architect-modeler", "aup-developer", "aup-tester"], "outputs": ["aup-iteration-plan", "aup-risk-list"], "humanCheckpoint": true},
+    {"id": "architecture-review", "name": "Architecture Review", "trigger": "stage-exit", "lifecycleStages": ["elaboration"], "participants": ["aup-architect-modeler", "aup-stakeholder", "aup-developer"], "outputs": ["aup-architecture-model"], "humanCheckpoint": true},
+    {"id": "iteration-demonstration", "name": "Iteration Demonstration", "trigger": "stage-exit", "lifecycleStages": ["elaboration", "construction", "transition"], "participants": ["aup-stakeholder", "aup-project-manager", "aup-developer", "aup-tester"], "outputs": ["aup-iteration-assessment", "aup-test-results"], "humanCheckpoint": true},
+    {"id": "retrospective", "name": "Iteration Retrospective", "trigger": "stage-exit", "lifecycleStages": ["elaboration", "construction", "transition"], "participants": ["aup-project-manager", "aup-developer", "aup-tester", "aup-environment-specialist"], "outputs": ["aup-iteration-assessment"], "humanCheckpoint": false},
+    {"id": "deployment-review", "name": "Deployment Review", "trigger": "stage-exit", "lifecycleStages": ["transition"], "participants": ["aup-deployment-engineer", "aup-configuration-manager", "aup-stakeholder", "aup-tester"], "outputs": ["aup-deployment-package"], "humanCheckpoint": true}
   ],
-  "hookExpectations": [
-    "Record evidence for every required delivery discipline."
+  "gates": [
+    {"id": "lifecycle-objectives", "from": "inception", "to": "elaboration", "severity": "block", "requiredInputs": ["iterationId", "iterationObjective", "selectedWork", "disciplineEvidence", "environmentReadiness"], "requiredArtifacts": ["aup-vision", "aup-requirements-model", "aup-risk-list", "aup-iteration-plan"], "requiredRoles": ["aup-stakeholder", "aup-project-manager", "aup-environment-specialist"], "humanApproval": true},
+    {"id": "complete-elaboration-iteration", "from": "elaboration", "to": "elaboration", "severity": "block", "requiredInputs": ["iterationId", "iterationObjective", "selectedWork", "disciplineEvidence", "verificationEvidence"], "requiredArtifacts": ["aup-iteration-plan", "aup-iteration-assessment", "aup-risk-list", "aup-test-results"], "requiredRoles": ["aup-stakeholder", "aup-project-manager", "aup-architect-modeler", "aup-tester"], "humanApproval": true},
+    {"id": "lifecycle-architecture", "from": "elaboration", "to": "construction", "severity": "block", "requiredInputs": ["disciplineEvidence", "architectureRiskEvidence", "verificationEvidence"], "requiredArtifacts": ["aup-requirements-model", "aup-architecture-model", "aup-risk-list", "aup-iteration-plan", "aup-iteration-assessment", "aup-test-results"], "requiredRoles": ["aup-architect-modeler", "aup-stakeholder", "aup-tester"], "humanApproval": true},
+    {"id": "complete-construction-iteration", "from": "construction", "to": "construction", "severity": "block", "requiredInputs": ["iterationId", "iterationObjective", "selectedWork", "disciplineEvidence", "integratedBuild", "verificationEvidence", "configurationBaseline"], "requiredArtifacts": ["aup-iteration-plan", "aup-iteration-assessment", "aup-implementation", "aup-test-results", "aup-risk-list", "aup-configuration-record"], "requiredRoles": ["aup-stakeholder", "aup-project-manager", "aup-developer", "aup-tester", "aup-configuration-manager"], "humanApproval": true},
+    {"id": "initial-operational-capability", "from": "construction", "to": "transition", "severity": "block", "requiredInputs": ["disciplineEvidence", "integratedBuild", "verificationEvidence", "configurationBaseline", "deploymentReadiness"], "requiredArtifacts": ["aup-implementation", "aup-test-results", "aup-deployment-plan", "aup-configuration-record", "aup-iteration-assessment", "aup-risk-list"], "requiredRoles": ["aup-developer", "aup-tester", "aup-deployment-engineer", "aup-configuration-manager", "aup-stakeholder"], "humanApproval": true},
+    {"id": "product-release", "from": "transition", "to": "inception", "severity": "block", "requiredInputs": ["disciplineEvidence", "verificationEvidence", "configurationBaseline", "stakeholderAcceptance", "operationalReadiness"], "requiredArtifacts": ["aup-deployment-plan", "aup-deployment-package", "aup-test-results", "aup-configuration-record", "aup-iteration-assessment"], "requiredRoles": ["aup-stakeholder", "aup-deployment-engineer", "aup-configuration-manager", "aup-tester"], "humanApproval": true}
   ],
-  "roleEmphasis": [
-    "Architecture, modeling, implementation, test, and deployment disciplines."
-  ],
-  "compatibleFlows": []
+  "phaseMappings": [
+    {"lifecycleStage": "inception", "phases": ["intake", "planning"]},
+    {"lifecycleStage": "elaboration", "phases": ["planning", "build", "qa"]},
+    {"lifecycleStage": "construction", "phases": ["planning", "build", "qa", "review"]},
+    {"lifecycleStage": "transition", "phases": ["qa", "review", "release", "operate"]}
+  ]
 }

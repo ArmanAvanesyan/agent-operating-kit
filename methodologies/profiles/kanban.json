@@ -16,5 +16,14 @@
     "The orchestrator maintains flow and explicit handoffs.",
     "Each primary agent owns at most one active task."
   ],
-  "compatibleFlows": []
+  "compatibleFlows": [],
+  "lifecycle": null,
+  "featureContract": null,
+  "requirementContract": null,
+  "iterationContract": null,
+  "roleCatalog": null,
+  "artifactCatalog": null,
+  "ceremonies": [],
+  "gates": [],
+  "phaseMappings": []
 }

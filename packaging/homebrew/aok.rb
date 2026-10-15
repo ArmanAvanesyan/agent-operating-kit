@@ -4,17 +4,17 @@
 class Aok < Formula
   desc "Cross-tool agent operating kit CLI"
   homepage "https://github.com/ArmanAvanesyan/agent-operating-kit"
-  version "0.6.0"
+  version "0.6.1"
   license "MIT"
 
   on_arm do
-    url "https://github.com/ArmanAvanesyan/agent-operating-kit/releases/download/v0.6.0/aok-0.6.0-darwin-arm64"
-    sha256 "1af4a2343348d55041bc7a7f8bc319acbc5b4a48c71e60d09268bc0c2d8864f8"
+    url "https://github.com/ArmanAvanesyan/agent-operating-kit/releases/download/v0.6.1/aok-0.6.1-darwin-arm64"
+    sha256 "38f1a5b234ee49c7020087f63755cd7ae93bf36d980fc8330d8d63bca9157bda"
   end
 
   on_intel do
-    url "https://github.com/ArmanAvanesyan/agent-operating-kit/releases/download/v0.6.0/aok-0.6.0-darwin-amd64"
-    sha256 "288c1f3edd7156d63c10dca8e4df681115bc2e4b1d477881e852e4393fddc7f9"
+    url "https://github.com/ArmanAvanesyan/agent-operating-kit/releases/download/v0.6.1/aok-0.6.1-darwin-amd64"
+    sha256 "e2c5ed921708c538e8e35a77c13dfb6eb810be2d390350fe65637a6ddfcc9f70"
   end
 
   def install

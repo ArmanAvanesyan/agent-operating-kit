@@ -7,8 +7,10 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
+	"regexp"
 
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/contracts"
+	"github.com/ArmanAvanesyan/agent-operating-kit/internal/evidence"
 )
 
 var ErrBundleTooLarge = errors.New("native bundle exceeds 4 MiB")
@@ -80,6 +82,12 @@ func validateBundle(bundle Bundle, target, scope string, descriptor Descriptor) 
 }
 
 func validateBundleShape(bundle Bundle) error {
+	if err := validateCanonical(bundle.Canonical); err != nil {
+		return err
+	}
+	if err := validateAssets(bundle.Document.Assets); err != nil {
+		return err
+	}
 	if bundle.Version != BundleVersion || bundle.Target == "" || bundle.Scope == "" || bundle.AdapterVersion == "" || bundle.Completeness != "draft-incomplete" {
 		return errors.New("native bundle header is invalid or unsupported")
 	}
@@ -184,6 +192,7 @@ func cloneBoundFiles(files []BoundFile) []BoundFile {
 
 func cloneBundle(bundle Bundle) Bundle {
 	out := bundle
+	out.Canonical = cloneCanonical(bundle.Canonical)
 	out.OriginalFiles = cloneBoundFiles(bundle.OriginalFiles)
 	out.RenderedFiles = cloneBoundFiles(bundle.RenderedFiles)
 	out.Document = cloneDocument(bundle.Document)
@@ -202,4 +211,50 @@ func sanitizeAdapterDiagnostics(in []contracts.Diagnostic, target string) []cont
 		out = append(out, contracts.Diagnostic{Code: "native.adapter.diagnostic", Source: target, Severity: severity, Message: "adapter reported a native input condition"})
 	}
 	return out
+}
+
+func validateAssets(assets map[string][]byte) error {
+	if len(assets) == 0 {
+		return nil
+	}
+	files := []File{}
+	for path, data := range assets {
+		files = append(files, File{Path: path, Format: "text", Data: data})
+	}
+	return validateFiles(files)
+}
+
+func cloneCanonical(c *CanonicalProvenance) *CanonicalProvenance {
+	if c == nil {
+		return nil
+	}
+	out := *c
+	out.Sources = append([]CanonicalSource(nil), c.Sources...)
+	return &out
+}
+
+var digestPattern = regexp.MustCompile("^[a-f0-9]{64}$")
+var versionPattern = regexp.MustCompile("^[0-9]+\\.[0-9]+\\.[0-9]+$")
+var idPattern = regexp.MustCompile("^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$")
+
+func validateCanonical(c *CanonicalProvenance) error {
+	if c == nil {
+		return nil
+	}
+	if !digestPattern.MatchString(c.SnapshotDigest) || len(c.Sources) == 0 || len(c.Sources) > 512 {
+		return errors.New("invalid canonical provenance")
+	}
+	for kind, ref := range map[string]contracts.Reference{"Agent": c.Agent, "ExecutionProfile": c.Profile, "AgentAssignment": c.Assignment} {
+		if ref.Kind != kind || !idPattern.MatchString(ref.ID) || !versionPattern.MatchString(ref.Version) {
+			return errors.New("invalid canonical selection pin")
+		}
+	}
+	seen := map[string]bool{}
+	for _, source := range c.Sources {
+		if evidence.CheckPath(source.Path) != nil || seen[source.Path] || !digestPattern.MatchString(source.SHA256) {
+			return errors.New("invalid canonical source hash")
+		}
+		seen[source.Path] = true
+	}
+	return nil
 }

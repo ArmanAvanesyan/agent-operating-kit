@@ -9,19 +9,23 @@ import (
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/contracts"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/evidence"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapter"
+	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/opencode"
+	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativebridge"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeio"
 )
 
 // Production adapters register here in their own reviewed implementation PRs.
 func nativeEngine() *nativeadapter.Engine {
-	return nativeadapter.NewEngine(nativeadapter.NewRegistry())
+	registry := nativeadapter.NewRegistry()
+	_ = registry.Register(opencode.New())
+	return nativeadapter.NewEngine(registry)
 }
 func runNative(args []string, stdout, stderr io.Writer) (int, error) {
 	return runNativeWithEngine(args, stdout, stderr, nativeEngine())
 }
 func runNativeWithEngine(args []string, stdout, stderr io.Writer, engine *nativeadapter.Engine) (int, error) {
 	usage := func(w io.Writer) {
-		fmt.Fprintln(w, "Usage: aok agent native inspect|import|export|compare --target <target> --scope <scope> --input <path> [--out <new-directory>] [--source <native-input>] [--against <bundle>] [--sidecar <bundle>] [--require <canonical-field>] [--json]")
+		fmt.Fprintln(w, "Usage: aok agent native inspect|import|export|compare --target <target> --scope <scope> --input <path> [--out <new-directory>] [--source <native-input> | --root <canonical-corpus>] [--against <bundle>] [--sidecar <bundle>] [--require <canonical-field>] [--json]")
 	}
 	if len(args) == 1 && (args[0] == "--help" || args[0] == "help") {
 		usage(stdout)
@@ -48,7 +52,7 @@ func runNativeWithEngine(args []string, stdout, stderr io.Writer, engine *native
 			continue
 		}
 		switch a {
-		case "--target", "--scope", "--input", "--out", "--source", "--against", "--sidecar", "--require":
+		case "--target", "--scope", "--input", "--out", "--source", "--against", "--sidecar", "--require", "--root":
 		default:
 			usage(stderr)
 			return 2, nil
@@ -75,11 +79,11 @@ func runNativeWithEngine(args []string, stdout, stderr io.Writer, engine *native
 			known = true
 		}
 	}
-	if !known || scope == "" || input == "" || (op == "import" || op == "export") && flags["--out"] == "" || op == "export" && flags["--source"] == "" || op == "compare" && flags["--against"] == "" {
+	if !known || scope == "" || input == "" || (op == "import" || op == "export") && flags["--out"] == "" || op == "export" && flags["--source"] == "" && flags["--root"] == "" || op == "compare" && flags["--against"] == "" {
 		usage(stderr)
 		return 2, nil
 	}
-	if (flags["--out"] != "" && op != "import" && op != "export") || (flags["--source"] != "" && op != "export") || (flags["--against"] != "" && op != "compare") || (flags["--sidecar"] != "" && op != "import") {
+	if (flags["--root"] != "" && (op != "export" || flags["--source"] != "")) || (flags["--out"] != "" && op != "import" && op != "export") || (flags["--source"] != "" && op != "export") || (flags["--against"] != "" && op != "compare") || (flags["--sidecar"] != "" && op != "import") {
 		usage(stderr)
 		return 2, nil
 	}
@@ -98,7 +102,10 @@ func runNativeWithEngine(args []string, stdout, stderr io.Writer, engine *native
 	var bundle nativeadapter.Bundle
 	var outputFiles []nativeadapter.File
 	bundlePresent := false
-	if op == "export" {
+	if op == "export" && flags["--root"] != "" {
+		outputFiles, bundle, report = nativebridge.Export(engine, target, scope, input, flags["--root"], controls)
+		bundlePresent = bundle.Version != ""
+	} else if op == "export" {
 		b, err := loadBundle(input)
 		if err != nil {
 			fail("native.input.bundle", input, "bundle is missing, malformed or exceeds limits")
@@ -154,11 +161,22 @@ func runNativeWithEngine(args []string, stdout, stderr io.Writer, engine *native
 		}
 		for _, f := range outputFiles {
 			lower := strings.ToLower(f.Path)
-			if lower == "report.json" || lower == "aok-native.json" {
+			if lower == "report.json" || lower == "aok-native.json" || lower == nativeio.ManifestName {
 				fail("native.output.collision", f.Path, "native output conflicts with a reserved report path")
 				break
 			}
 			toWrite[f.Path] = f.Data
+		}
+		if len(outputFiles) > 0 {
+			manifest := nativeio.Manifest{Version: "aok-native-input/v1", Files: []nativeio.Entry{}}
+			for _, file := range outputFiles {
+				manifest.Files = append(manifest.Files, nativeio.Entry{Path: file.Path, Format: file.Format})
+			}
+			b, err := json.MarshalIndent(manifest, "", "  ")
+			if err != nil {
+				return 1, err
+			}
+			toWrite[nativeio.ManifestName] = append(b, '\n')
 		}
 		// Invalid input/integrity results write diagnostics only.
 		if report.Status == "invalid" {
@@ -169,7 +187,7 @@ func runNativeWithEngine(args []string, stdout, stderr io.Writer, engine *native
 			return 1, err
 		}
 		toWrite["report.json"] = append(b, '\n')
-		if err := evidence.WriteFiles(out, toWrite, input, flags["--source"], flags["--against"], flags["--sidecar"]); err != nil {
+		if err := evidence.WriteFiles(out, toWrite, input, flags["--source"], flags["--against"], flags["--sidecar"], flags["--root"]); err != nil {
 			fail("native.output.path", out, "output must be a new safe directory outside the explicit inputs")
 		}
 	}

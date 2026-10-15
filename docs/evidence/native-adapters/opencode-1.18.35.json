@@ -1,0 +1,144 @@
+{
+  "target": "opencode",
+  "scope": "project",
+  "hostVersion": "1.18.35",
+  "observedAt": "2026-10-15T21:47:57.804500+00:00",
+  "command": [
+    "opencode",
+    "--pure",
+    "debug",
+    "agent",
+    "probe"
+  ],
+  "isolation": {
+    "cwd": "$PROBE_ROOT/export",
+    "HOME": "$PROBE_ROOT/home",
+    "XDG_CONFIG_HOME": "$PROBE_ROOT/config",
+    "XDG_DATA_HOME": "$PROBE_ROOT/data",
+    "XDG_CACHE_HOME": "$PROBE_ROOT/cache"
+  },
+  "nativeLoading": "verified",
+  "runtimeEnforcement": "not-tested",
+  "modelExecution": "not-run",
+  "canonicalCompleteness": "draft-incomplete",
+  "sourceFixture": "internal/nativeadapters/opencode/testdata/probe.md",
+  "sourceSHA256": "a34516ec9ae4c0fdc62c7f31aadffea57f1ba8108d4ab8ed4ef9dd0ff671ecc0",
+  "renderedSHA256": "c3d2464a6d338d69086e37cd9634f23b5fdabee22799a7e24b47b12d318bb625",
+  "cliResults": {
+    "import": "blocked",
+    "export": "blocked",
+    "compare": "valid"
+  },
+  "hostExitCode": 0,
+  "resolved": {
+    "name": "probe",
+    "mode": "subagent",
+    "permission": [
+      {
+        "permission": "*",
+        "action": "allow",
+        "pattern": "*"
+      },
+      {
+        "permission": "doom_loop",
+        "action": "ask",
+        "pattern": "*"
+      },
+      {
+        "permission": "external_directory",
+        "pattern": "*",
+        "action": "ask"
+      },
+      {
+        "permission": "external_directory",
+        "pattern": "$PROBE_ROOT/data/opencode/tool-output/*",
+        "action": "allow"
+      },
+      {
+        "permission": "external_directory",
+        "pattern": "/tmp/opencode/*",
+        "action": "allow"
+      },
+      {
+        "permission": "question",
+        "action": "deny",
+        "pattern": "*"
+      },
+      {
+        "permission": "plan_enter",
+        "action": "deny",
+        "pattern": "*"
+      },
+      {
+        "permission": "plan_exit",
+        "action": "deny",
+        "pattern": "*"
+      },
+      {
+        "permission": "read",
+        "pattern": "*",
+        "action": "allow"
+      },
+      {
+        "permission": "read",
+        "pattern": "*.env",
+        "action": "ask"
+      },
+      {
+        "permission": "read",
+        "pattern": "*.env.*",
+        "action": "ask"
+      },
+      {
+        "permission": "read",
+        "pattern": "*.env.example",
+        "action": "allow"
+      },
+      {
+        "permission": "bash",
+        "action": "deny",
+        "pattern": "*"
+      },
+      {
+        "permission": "edit",
+        "action": "deny",
+        "pattern": "*"
+      },
+      {
+        "permission": "external_directory",
+        "pattern": "$PROBE_ROOT/data/opencode/tool-output/*",
+        "action": "allow"
+      }
+    ],
+    "options": {
+      "futureField": {
+        "enabled": true
+      }
+    },
+    "native": false,
+    "model": {
+      "providerID": "openai",
+      "modelID": "gpt-6-luna"
+    },
+    "prompt": "Read-only fixture body; this is not an executable instruction.",
+    "description": "Synthetic read-only discovery fixture",
+    "tools": {
+      "invalid": true,
+      "question": false,
+      "bash": false,
+      "read": true,
+      "glob": true,
+      "grep": true,
+      "task": true,
+      "webfetch": true,
+      "todowrite": true,
+      "skill": true,
+      "apply_patch": false
+    }
+  },
+  "limitations": [
+    "Configuration loading only; no tool or model execution.",
+    "Inherited broad defaults remain present; parsed bash/edit denials do not prove runtime enforcement.",
+    "Unknown native content is preserved, not validated against every provider option."
+  ]
+}

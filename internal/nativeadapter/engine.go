@@ -162,6 +162,9 @@ func (e *Engine) Import(target, scope string, files []File, prior *Bundle, requi
 		renderedFiles = cloneBoundFiles(prior.RenderedFiles)
 	}
 	b := Bundle{Version: BundleVersion, Target: target, Scope: scope, AdapterVersion: d.AdapterVersion, Completeness: "draft-incomplete", OriginalFiles: originalFiles, RenderedFiles: renderedFiles, Document: cloneDocument(doc)}
+	if prior != nil {
+		b.Canonical = cloneCanonical(prior.Canonical)
+	}
 	if prior == nil {
 		add(&r, "native.provenance.incomplete", target, "sidecar", "warning", "no prior sidecar was supplied; imported projection remains an incomplete canonical draft")
 	}
@@ -429,6 +432,9 @@ func checkControls(r *Report, d Descriptor, required []Control, doc Document) {
 }
 
 func validateDocument(doc Document, d Descriptor) error {
+	if err := validateAssets(doc.Assets); err != nil {
+		return err
+	}
 	known := map[string]bool{}
 	for _, f := range d.Fields {
 		known[f.NeutralPath] = true
@@ -657,7 +663,14 @@ func cloneFiles(files []File) []File {
 	return out
 }
 func cloneDocument(d Document) Document {
-	return Document{Fields: cloneRawMap(d.Fields), Unknown: cloneRawMap(d.Unknown)}
+	assets := map[string][]byte{}
+	for k, v := range d.Assets {
+		assets[k] = append([]byte(nil), v...)
+	}
+	if d.Assets == nil {
+		assets = nil
+	}
+	return Document{Fields: cloneRawMap(d.Fields), Unknown: cloneRawMap(d.Unknown), Assets: assets}
 }
 func cloneRawMap(in map[string]json.RawMessage) map[string]json.RawMessage {
 	if in == nil {
@@ -707,6 +720,14 @@ func compareDocuments(a, b Document) []Difference {
 	}
 	compareMap("", a.Fields, b.Fields)
 	compareMap("unknown.", a.Unknown, b.Unknown)
+	assetMap := func(values map[string][]byte) map[string]json.RawMessage {
+		m := map[string]json.RawMessage{}
+		for k, v := range values {
+			m[k], _ = json.Marshal(v)
+		}
+		return m
+	}
+	compareMap("assets.", assetMap(a.Assets), assetMap(b.Assets))
 	return out
 }
 

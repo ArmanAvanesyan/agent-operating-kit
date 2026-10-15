@@ -13,6 +13,9 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.x"
       - name: Build release artifacts
         run: ./scripts/release/build.sh dist/release
       - name: Validate kit
@@ -23,8 +26,21 @@ jobs:
           ./scripts/aok codex local-env actions templates
           python3 -m py_compile scripts/aok
           python3 -m py_compile scripts/release/build.py
+          go test ./...
           ./scripts/aok doctor --json > dist/release/doctor.json || true
           python3 -m json.tool dist/release/index.json >/dev/null
+          VERSION="$(python3 -c 'import json; print(json.load(open(".codex-plugin/plugin.json"))["version"])')"
+          for name in \
+            "aok-${VERSION}-darwin-arm64" \
+            "aok-${VERSION}-darwin-amd64" \
+            "aok-${VERSION}-linux-amd64" \
+            "aok-${VERSION}-linux-arm64" \
+            "aok-${VERSION}-windows-amd64.exe"
+          do
+            test -f "dist/release/$name"
+            grep -q "$name" dist/release/SHA256SUMS
+            grep -q "$name" dist/release/index.json
+          done
       - name: Upload workflow artifacts
         uses: actions/upload-artifact@v4
         with:

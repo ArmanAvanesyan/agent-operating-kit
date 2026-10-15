@@ -108,7 +108,7 @@ Confirm installer artifacts are present:
 - `agent-operating-kit-<version>-linux-user-installer.tar.gz`
 - `agent-operating-kit-<version>-linux-system-installer.tar.gz`
 
-Confirm Go CLI binary artifacts are present (when publish plumbing is enabled):
+Confirm Go CLI binary artifacts are present (built by `scripts/release/build.py`):
 
 - `aok-<version>-darwin-arm64`
 - `aok-<version>-darwin-amd64`
@@ -117,8 +117,9 @@ Confirm Go CLI binary artifacts are present (when publish plumbing is enabled):
 - `aok-<version>-windows-amd64.exe`
 
 Confirm `index.json` lists those binaries (and installers), and `SHA256SUMS`
-covers every published file. Installers should bundle `aok` / `aok.exe` for
-`PATH` installs.
+covers every published file. Platform installers bundle `bin/aok` /
+`bin/aok.exe` and invoke that binary for `install` / `doctor` (no Python on
+the end-user path).
 
 Include:
 

@@ -39,6 +39,7 @@ var (
 		"scripts/install.sh",
 		"scripts/project-init.sh",
 		"scripts/release/build.sh",
+		"scripts/release/sign.sh",
 		"cmd/aok-release",
 		"go.mod",
 		"scripts/validate.sh",

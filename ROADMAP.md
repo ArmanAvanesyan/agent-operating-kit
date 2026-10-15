@@ -16,11 +16,12 @@ commitment calendar.
 - **Go release builder** — `cmd/aok-release` (via `scripts/release/build.sh`)
   builds kit zips, cross-compiled binaries, installers, bundles (via Go
   `aok render bundles`), `SHA256SUMS`, and `index.json`.
+- **Optional code signing** — secrets-gated macOS / Windows (and optional Linux
+  cosign) in release CI via `scripts/release/sign.sh`; unsigned path remains
+  default when secrets are absent.
 
 ## Planned themes
 
-- **Optional code signing** — secrets-gated macOS / Windows (and optional Linux)
-  signing in release CI; unsigned path remains default when secrets are absent.
 - **Homebrew / Scoop / winget** — package-manager install channels that consume
   GitHub Release assets. **PyPI is not planned** for the Go `aok` binary.
 - **Native Cursor packaging** — move beyond generated import bundles toward a

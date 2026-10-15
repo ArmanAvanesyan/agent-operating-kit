@@ -127,6 +127,24 @@ covers every published file. Platform installers bundle `bin/aok` /
 `bin/aok.exe` and invoke that binary for `install` / `doctor` (no Python on
 the end-user path).
 
+## Optional code signing (secrets-gated)
+
+Release CI runs `scripts/release/sign.sh` after the build and before publishing.
+**Missing secrets must not fail the release** — unsigned artifacts remain valid.
+
+| Platform | Mechanism | Secrets / vars |
+|---|---|---|
+| macOS | `codesign` on darwin binaries | `MACOS_CERTIFICATE` (base64 PKCS#12), `MACOS_CERTIFICATE_PWD`, optional `MACOS_SIGNING_IDENTITY` |
+| macOS notarize (optional) | `xcrun notarytool` stub | `APPLE_ID`, `APPLE_TEAM_ID`, `APPLE_APP_SPECIFIC_PASSWORD`; set secret/env `AOK_ENABLE_NOTARIZE=1` to attempt |
+| Windows | Azure Trusted Signing or Authenticode PFX | Trusted Signing: `AZURE_TRUSTED_SIGNING_*` (client id/tenant/secret/account/profile/endpoint); or `WINDOWS_CERT` + `WINDOWS_CERT_PWD` (base64 PFX) with `osslsigncode`/`signtool` on the runner |
+| Linux | Optional cosign over `SHA256SUMS` (off by default) | Repo var `AOK_ENABLE_LINUX_SIGN=1` + `COSIGN_KEY` (+ optional `COSIGN_PASSWORD`) |
+
+Local dry-run (always safe without secrets):
+
+```bash
+./scripts/release/sign.sh dist/release
+```
+
 Include:
 
 - version or tag

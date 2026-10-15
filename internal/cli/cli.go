@@ -48,6 +48,12 @@ func Run(argv []string, stdout, stderr io.Writer) int {
 		code, err = runProject(args, stdout, stderr)
 	case "render":
 		code, err = runRender(args, stdout, stderr)
+	case "task":
+		code, err = runTask(args, stdout, stderr)
+	case "hooks":
+		code, err = runHooks(args, stdout, stderr)
+	case "import":
+		code, err = runImport(args, stdout, stderr)
 	default:
 		fmt.Fprintf(stderr, "unknown command: %s\n", cmd)
 		printUsage(stderr)
@@ -82,6 +88,9 @@ Commands:
   codex local-env      init|validate|actions
   project init|validate
   render pack|all|bundle|bundles
+  task sync|packet      Sync GitHub issue/PR or emit task packet (requires gh)
+  hooks pre|after       Pre/after task packet checks
+  import history        Keyword digest of agent history files
 
 Environment:
   AOK_ROOT             Override kit root discovery`)

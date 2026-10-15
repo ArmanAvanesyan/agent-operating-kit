@@ -23,6 +23,14 @@ Run Python kit validation (content, manifests, packaging sources):
 ./scripts/aok validate
 python3 -m py_compile scripts/aok
 python3 -m py_compile scripts/release/build.py
+go test ./...
+```
+
+Build release artifacts with the Go maintainer tool (preferred; `build.py` is
+deprecated):
+
+```bash
+./scripts/release/build.sh dist/release
 ```
 
 Build and test the thin Go CLI across the release matrix (when `cmd/aok` is

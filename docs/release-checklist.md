@@ -22,12 +22,10 @@ Run Python kit validation (content, manifests, packaging sources):
 ./scripts/validate.sh
 ./scripts/aok validate
 python3 -m py_compile scripts/aok
-python3 -m py_compile scripts/release/build.py
 go test ./...
 ```
 
-Build release artifacts with the Go maintainer tool (preferred; `build.py` is
-deprecated):
+Build release artifacts with the Go maintainer tool:
 
 ```bash
 ./scripts/release/build.sh dist/release
@@ -116,7 +114,7 @@ Confirm installer artifacts are present:
 - `agent-operating-kit-<version>-linux-user-installer.tar.gz`
 - `agent-operating-kit-<version>-linux-system-installer.tar.gz`
 
-Confirm Go CLI binary artifacts are present (built by `scripts/release/build.py`):
+Confirm Go CLI binary artifacts are present (built by `cmd/aok-release`):
 
 - `aok-<version>-darwin-arm64`
 - `aok-<version>-darwin-amd64`

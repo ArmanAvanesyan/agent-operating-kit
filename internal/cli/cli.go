@@ -34,6 +34,12 @@ func Run(argv []string, stdout, stderr io.Writer) int {
 		return 0
 	case "version":
 		code, err = runVersion(args, stdout, stderr)
+	case "doctor":
+		code, err = runDoctor(args, stdout, stderr)
+	case "validate":
+		code, err = runValidate(args, stdout, stderr)
+	case "install":
+		code, err = runInstall(args, stdout, stderr)
 	default:
 		fmt.Fprintf(stderr, "unknown command: %s\n", cmd)
 		printUsage(stderr)
@@ -60,11 +66,12 @@ Usage:
 
 Commands:
   version              Print kit version from .codex-plugin/plugin.json
+  doctor               Check install and required kit files
+  validate             Validate kit content
+  install              Register marketplace plugin and install PATH binary
 
 Environment:
-  AOK_ROOT             Override kit root discovery
-
-More commands land in later Go CLI slices (doctor, validate, install, …).`)
+  AOK_ROOT             Override kit root discovery`)
 }
 
 func requireRoot() (string, error) {

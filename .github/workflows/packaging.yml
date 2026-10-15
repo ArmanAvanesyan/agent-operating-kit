@@ -1,0 +1,97 @@
+name: Packaging
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Kit version without v prefix (default: plugin.json)"
+        required: false
+        default: ""
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Resolve version
+        id: ver
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            echo "version=${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
+          elif [[ "${GITHUB_REF_TYPE}" == "tag" && "${GITHUB_REF_NAME}" == v* ]]; then
+            echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+          else
+            VERSION="$(python3 -c 'import json; print(json.load(open(".codex-plugin/plugin.json"))["version"])')"
+            echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Generate package manifests
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ./scripts/packaging/generate-from-release.sh --version "${{ steps.ver.outputs.version }}"
+      - name: Upload packaging artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: aok-packaging-${{ steps.ver.outputs.version }}
+          path: packaging/out/**
+
+      # Token-gated pushes: set PACKAGING_PUSH_TOKEN (and optional tap/bucket remotes)
+      # as repository secrets to enable automatic PRs/pushes. Without the token,
+      # this job still succeeds with uploaded artifacts only.
+      - name: Push Homebrew tap (token-gated)
+        if: ${{ secrets.PACKAGING_PUSH_TOKEN != '' && secrets.HOMEBREW_TAP_REPO != '' }}
+        env:
+          GH_TOKEN: ${{ secrets.PACKAGING_PUSH_TOKEN }}
+          TAP_REPO: ${{ secrets.HOMEBREW_TAP_REPO }}
+          VERSION: ${{ steps.ver.outputs.version }}
+        run: |
+          set -euo pipefail
+          work="$(mktemp -d)"
+          git clone "https://x-access-token:${GH_TOKEN}@github.com/${TAP_REPO}.git" "${work}"
+          mkdir -p "${work}/Formula"
+          cp packaging/out/homebrew/aok.rb "${work}/Formula/aok.rb"
+          cd "${work}"
+          git config user.name "aok-packaging-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "aok-${VERSION}"
+          git add Formula/aok.rb
+          git commit -m "aok ${VERSION}" || exit 0
+          git push -u origin "aok-${VERSION}"
+          gh pr create --repo "${TAP_REPO}" --title "aok ${VERSION}" --body "Automated formula update from agent-operating-kit ${VERSION}." || true
+
+      - name: Push Scoop bucket (token-gated)
+        if: ${{ secrets.PACKAGING_PUSH_TOKEN != '' && secrets.SCOOP_BUCKET_REPO != '' }}
+        env:
+          GH_TOKEN: ${{ secrets.PACKAGING_PUSH_TOKEN }}
+          BUCKET_REPO: ${{ secrets.SCOOP_BUCKET_REPO }}
+          VERSION: ${{ steps.ver.outputs.version }}
+        run: |
+          set -euo pipefail
+          work="$(mktemp -d)"
+          git clone "https://x-access-token:${GH_TOKEN}@github.com/${BUCKET_REPO}.git" "${work}"
+          cp packaging/out/scoop/aok.json "${work}/aok.json"
+          cd "${work}"
+          git config user.name "aok-packaging-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "aok-${VERSION}"
+          git add aok.json
+          git commit -m "aok ${VERSION}" || exit 0
+          git push -u origin "aok-${VERSION}"
+          gh pr create --repo "${BUCKET_REPO}" --title "aok ${VERSION}" --body "Automated Scoop manifest update from agent-operating-kit ${VERSION}." || true
+
+      - name: Note winget-pkgs
+        env:
+          HAS_PUSH_TOKEN: ${{ secrets.PACKAGING_PUSH_TOKEN != '' }}
+          HAS_WINGET_REPO: ${{ secrets.WINGET_PKGS_REPO != '' }}
+        run: |
+          echo "winget manifests are in the workflow artifact."
+          echo "Open a PR against microsoft/winget-pkgs when publishing."
+          if [ "${HAS_PUSH_TOKEN}" = "true" ] && [ "${HAS_WINGET_REPO}" = "true" ]; then
+            echo "WINGET_PKGS_REPO is configured; extend this job to open a manifests PR when ready."
+          fi

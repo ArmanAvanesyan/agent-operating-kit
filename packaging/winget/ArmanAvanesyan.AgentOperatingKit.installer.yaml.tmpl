@@ -1,0 +1,14 @@
+# winget installer manifest template (for winget-pkgs multi-file layout).
+PackageIdentifier: {{PACKAGE_ID}}
+PackageVersion: {{VERSION}}
+InstallerLocale: en-US
+InstallerType: portable
+Commands:
+  - aok
+Installers:
+  - Architecture: x64
+    InstallerUrl: {{WINDOWS_AMD64_URL}}
+    InstallerSha256: {{WINDOWS_AMD64_SHA256}}
+    NestedInstallerType: portable
+ManifestType: installer
+ManifestVersion: 1.6.0

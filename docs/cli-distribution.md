@@ -128,6 +128,32 @@ build. End-user docs assume the binary path for install, doctor, validate,
 version, render, Codex/Claude setup, and these contributor helpers when the
 release binary is installed.
 
+## Install via package managers
+
+Package managers consume GitHub Release binaries (same artifact names as above).
+Templates and a regenerator live under [`packaging/`](../packaging/):
+
+| Channel | How |
+|---|---|
+| Homebrew | `packaging/homebrew/aok.rb.tmpl` → formula for a dedicated tap |
+| Scoop | `packaging/scoop/aok.json.tmpl` → bucket manifest |
+| winget | `packaging/winget/*.yaml.tmpl` → winget-pkgs (or private source) |
+
+```bash
+./scripts/packaging/generate-from-release.sh --version <version>
+# or from a local build:
+./scripts/packaging/generate-from-release.sh --dist dist/release
+```
+
+CI: `.github/workflows/packaging.yml` regenerates on `v*` tags and uploads
+artifacts. Pushing to an external tap/bucket is token-gated
+(`PACKAGING_PUSH_TOKEN`, optional `HOMEBREW_TAP_REPO` / `SCOOP_BUCKET_REPO`).
+
+### PyPI
+
+**Closed / not planned** for the Go `aok` binary. Native binaries are not Python
+packages; use Releases, installers, or Homebrew / Scoop / winget instead.
+
 ## Uninstall
 
 Two separable pieces:

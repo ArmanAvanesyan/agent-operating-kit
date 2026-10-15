@@ -1,0 +1,170 @@
+{
+  "kind": "aok-development-workflow-research-sources",
+  "version": 1,
+  "reviewedOn": "2026-10-15",
+  "method": "Official pages reviewed in the research conversation; relevant AOK source files inspected at the baseline commit. Summaries are paraphrases, not mirrored articles.",
+  "baselineCommit": "a34fecc7d9cd54ffe29ad47a428f348e394c93b1",
+  "runtimeVerification": "No model inference, migration campaign, native Goal lifecycle, sandbox enforcement or multi-agent execution was tested.",
+  "sources": [
+    {
+      "id": "O1",
+      "publisher": "OpenAI",
+      "title": "Using PLANS.md for multi-hour problem solving",
+      "url": "https://developers.openai.com/cookbook/articles/codex_exec_plans",
+      "sourceType": "archived-recipe",
+      "supports": "A self-contained living plan can preserve progress, decisions, acceptance and recovery for complex work. ExecPlan is a repository-defined convention.",
+      "limitations": "The page is marked archived; do not adopt its historical model recommendation or treat PLANS.md as an execution engine.",
+      "reviewedOn": "2026-10-15"
+    },
+    {
+      "id": "O2",
+      "publisher": "OpenAI",
+      "title": "Harness engineering",
+      "url": "https://openai.com/index/harness-engineering/",
+      "sourceType": "engineering-case-study",
+      "supports": "Repository navigation, enforceable boundaries, observable applications and maintained knowledge improve agent execution.",
+      "limitations": "A particular team experiment; its throughput and autonomy are not guarantees for other repositories.",
+      "reviewedOn": "2026-10-15"
+    },
+    {
+      "id": "O3",
+      "publisher": "OpenAI",
+      "title": "Custom Code Review rules for Codex",
+      "url": "https://developers.openai.com/blog/custom-code-review-rules-for-codex",
+      "sourceType": "product-guidance",
+      "supports": "Scoped AGENTS.md review rules can encode consequential invariants and safe alternatives; evaluate violations and safe counterexamples.",
+      "limitations": "Additional review guidance does not replace tests, required approvals or branch protection.",
+      "reviewedOn": "2026-10-15"
+    },
+    {
+      "id": "O4",
+      "publisher": "OpenAI",
+      "title": "Maintaining software with the GPT-6 family",
+      "url": "https://developers.openai.com/blog/maintaining-software-with-the-gpt-6-family",
+      "sourceType": "engineering-case-study",
+      "supports": "Gather evidence for maintenance candidates, prioritize benefit, start small and expand after review; feed findings into the next prompt.",
+      "limitations": "Reported results and model comparisons are specific to the described work and were not reproduced here.",
+      "reviewedOn": "2026-10-15"
+    },
+    {
+      "id": "O5",
+      "publisher": "OpenAI",
+      "title": "Migrate a Legacy Codebase with Sandbox Agents",
+      "url": "https://developers.openai.com/cookbook/examples/agents_sdk/sandboxed-code-migration/sandboxed_code_migration_agent?site_locale=en",
+      "sourceType": "cookbook-example",
+      "supports": "Keep trusted orchestration outside isolated task workspaces; validate returned patches and typed reports; stage and verify each migration unit.",
+      "limitations": "The demonstrated host/sandbox architecture is one deployment pattern, not an AOK capability or a universal sandbox security guarantee.",
+      "reviewedOn": "2026-10-15"
+    },
+    {
+      "id": "O6",
+      "publisher": "OpenAI",
+      "title": "Iterating Development Workflows with Codex",
+      "url": "https://developers.openai.com/cookbook/examples/codex/iterating-development-workflows-with-codex?site_locale=en",
+      "sourceType": "workflow-recipe",
+      "supports": "Separate goals, plans, phase context, build evidence and review ownership; use observed friction to improve procedures and forward-test them.",
+      "limitations": "The extra files and directory names are optional conventions. Example approval policies must be reconciled with the actual user authorization and project policy.",
+      "reviewedOn": "2026-10-15"
+    },
+    {
+      "id": "O7",
+      "publisher": "OpenAI",
+      "title": "Using Goals in Codex",
+      "url": "https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex",
+      "sourceType": "product-guidance",
+      "supports": "Goals are durable thread-scoped objectives with evidence-based completion, continuation controls and budget accounting.",
+      "limitations": "Native thread state is distinct from repository files, schedules and permissions. AOK has no native Goal adapter in this snapshot.",
+      "reviewedOn": "2026-10-15"
+    },
+    {
+      "id": "A1",
+      "publisher": "Anthropic",
+      "title": "Best practices for Claude Code",
+      "url": "https://code.claude.com/docs/en/best-practices",
+      "sourceType": "product-guidance",
+      "supports": "Explore and plan when uncertainty warrants it; provide executable verification and specific context; use direct execution for small clear edits.",
+      "limitations": "Recommendations require task-specific judgment; the article is not a requirement for a new approval before every authorized edit.",
+      "reviewedOn": "2026-10-15"
+    },
+    {
+      "id": "A2",
+      "publisher": "Anthropic",
+      "title": "Common workflows",
+      "url": "https://code.claude.com/docs/en/common-workflows",
+      "sourceType": "product-guidance",
+      "supports": "Recipes cover exploration, debugging, refactoring, testing, documentation, PRs, session resumption, worktrees and scripted use.",
+      "limitations": "Examples are tool-specific and do not establish that AOK renders or executes them.",
+      "reviewedOn": "2026-10-15"
+    },
+    {
+      "id": "A3",
+      "publisher": "Anthropic",
+      "title": "Effective harnesses for long-running agents",
+      "url": "https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents",
+      "sourceType": "engineering-case-study",
+      "supports": "Initialization and incremental coding sessions use startup instructions, feature state, progress notes and Git history for continuity.",
+      "limitations": "One experimental pattern, initially focused on full-stack application development; it does not prove multiple agents always outperform one.",
+      "reviewedOn": "2026-10-15"
+    },
+    {
+      "id": "A4",
+      "publisher": "Anthropic",
+      "title": "Harness design for long-running application development",
+      "url": "https://www.anthropic.com/engineering/harness-design-long-running-apps",
+      "sourceType": "engineering-case-study",
+      "supports": "A separate evaluator can exercise a running app; calibrate its judgment and remove scaffolding that no longer improves outcomes.",
+      "limitations": "Evaluation is not infallible; examples show overhead and model-specific tradeoffs rather than a universal quality guarantee.",
+      "reviewedOn": "2026-10-15"
+    },
+    {
+      "id": "A5",
+      "publisher": "Anthropic",
+      "title": "Building effective agents",
+      "url": "https://www.anthropic.com/engineering/building-effective-agents",
+      "sourceType": "architecture-guidance",
+      "supports": "Choose simple solutions first; prompt chaining, routing, parallelization, orchestrator/worker and evaluator loops fit different task structures.",
+      "limitations": "Architecture patterns are options rather than a mandate to use an SDK, multiple agents or adaptive execution.",
+      "reviewedOn": "2026-10-15"
+    },
+    {
+      "id": "A6",
+      "publisher": "Anthropic",
+      "title": "Effective context engineering for AI agents",
+      "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
+      "sourceType": "engineering-guidance",
+      "supports": "Treat context as finite; retrieve relevant information and preserve useful state through compaction, notes and appropriate separation.",
+      "limitations": "Long context is not equivalent to reliable retrieval, and notes are not authoritative evidence without provenance.",
+      "reviewedOn": "2026-10-15"
+    },
+    {
+      "id": "A7",
+      "publisher": "Anthropic",
+      "title": "Keep Claude working toward a goal",
+      "url": "https://code.claude.com/docs/en/goal",
+      "sourceType": "product-guidance",
+      "supports": "A session-scoped /goal uses a separate evaluator after turns and has documented automatic clearing and stopping conditions.",
+      "limitations": "Do not assume Codex Goal persistence, lifecycle or pause semantics; a goal does not change permissions.",
+      "reviewedOn": "2026-10-15"
+    },
+    {
+      "id": "A8",
+      "publisher": "Anthropic",
+      "title": "Orchestrate subagents at scale with dynamic workflows",
+      "url": "https://code.claude.com/docs/en/workflows",
+      "sourceType": "product-guidance",
+      "supports": "A JavaScript script can codify orchestration of many subagents, with documented run management and resumption behavior.",
+      "limitations": "Feature availability and runtime behavior are vendor-specific; separate contexts do not imply isolated shared resources.",
+      "reviewedOn": "2026-10-15"
+    },
+    {
+      "id": "A9",
+      "publisher": "Anthropic",
+      "title": "How Anthropic runs large-scale code migrations with Claude Code",
+      "url": "https://claude.com/resources/articles/ai-code-migration",
+      "sourceType": "engineering-case-study",
+      "supports": "Build a behavioral judge, stress-test translation rules, use resumable units, classify repeated failures and verify old/new parity.",
+      "limitations": "A unit being translated or an output file existing is not campaign acceptance; compatibility and integration still need evidence.",
+      "reviewedOn": "2026-10-15"
+    }
+  ]
+}

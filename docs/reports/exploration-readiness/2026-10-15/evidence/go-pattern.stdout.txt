@@ -1,0 +1,88 @@
+{
+  "kind": "aok-structural-evidence",
+  "version": 1,
+  "file": "cmd/aok/main.go",
+  "backend": "ast-grep",
+  "mode": "pattern",
+  "query": "func $NAME($$$ARGS) { $$$BODY }",
+  "language": "go",
+  "status": "observed",
+  "limitations": [
+    "Syntax/text/statistics are not resolved references or runtime behavior.",
+    "One explicit file only; empty results are not repository-wide absence proof."
+  ],
+  "sourceSha256": "5aa237e5ded1ebb0be7d607dfdca0230823b5dfade09186e03d993479d561d41",
+  "revision": "9dec920f6cb202e4733f5d8d9504441d51cfe729",
+  "toolVersion": "ast-grep 0.51.0",
+  "exitCode": 0,
+  "evidence": [
+    {
+      "text": "func main() {\n\tos.Exit(cli.Run(os.Args[1:], os.Stdout, os.Stderr))\n}",
+      "range": {
+        "byteOffset": {
+          "start": 95,
+          "end": 163
+        },
+        "start": {
+          "line": 8,
+          "column": 0
+        },
+        "end": {
+          "line": 10,
+          "column": 1
+        }
+      },
+      "file": "cmd/aok/main.go",
+      "lines": "func main() {\n\tos.Exit(cli.Run(os.Args[1:], os.Stdout, os.Stderr))\n}",
+      "charCount": {
+        "leading": 0,
+        "trailing": 0
+      },
+      "language": "Go",
+      "metaVariables": {
+        "single": {
+          "NAME": {
+            "text": "main",
+            "range": {
+              "byteOffset": {
+                "start": 100,
+                "end": 104
+              },
+              "start": {
+                "line": 8,
+                "column": 5
+              },
+              "end": {
+                "line": 8,
+                "column": 9
+              }
+            }
+          }
+        },
+        "multi": {
+          "ARGS": [],
+          "BODY": [
+            {
+              "text": "os.Exit(cli.Run(os.Args[1:], os.Stdout, os.Stderr))\n",
+              "range": {
+                "byteOffset": {
+                  "start": 110,
+                  "end": 162
+                },
+                "start": {
+                  "line": 9,
+                  "column": 1
+                },
+                "end": {
+                  "line": 10,
+                  "column": 0
+                }
+              }
+            }
+          ]
+        },
+        "transformed": {}
+      }
+    }
+  ]
+}

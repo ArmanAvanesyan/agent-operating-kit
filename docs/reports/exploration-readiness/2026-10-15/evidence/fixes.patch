@@ -1,0 +1,101 @@
+diff --git a/core/model.md b/core/model.md
+index 4d3225c..2e3ee55 100644
+--- a/core/model.md
++++ b/core/model.md
+@@ -36 +36,2 @@ hints. Tool adapters render skills as Codex skills, Claude Code slash commands,
+-Cursor rules, OpenCode commands, or equivalent target formats.
++Cursor skills alongside rules, or equivalent target formats. OpenCode currently receives
++a structured contract and Markdown guidance; native import behavior remains adapter-specific.
+diff --git a/docs/project-exploration-and-readiness.md b/docs/project-exploration-and-readiness.md
+index 247a189..e2c443c 100644
+--- a/docs/project-exploration-and-readiness.md
++++ b/docs/project-exploration-and-readiness.md
+@@ -50 +50,2 @@ The wrapper stages a bounded copy in a temporary directory, isolates ast-grep co
+-and never enables rewrites. It records tool version, selected file and backend-specific
++and never enables rewrites. Extensionless Python/shell entrypoints are supported
++when their shebang identifies the language. It records tool version, selected file and backend-specific
+@@ -97,0 +99,7 @@ Optional test binaries were installed under a temporary directory, not globally.
++
++## Repository self-check
++
++The [2026-10-15 AOK self-check](reports/exploration-readiness/2026-10-15/README.md)
++saves source-linked exploration, readiness and command evidence, including historical
++failures and their fixes. It exercises extensionless Python CLI analysis, a fresh Go
++binary, tests and scratch-project initialization without altering global installation.
+diff --git a/skills/project-exploration/references/structural-analysis.md b/skills/project-exploration/references/structural-analysis.md
+index 20acd2f..077f0a5 100644
+--- a/skills/project-exploration/references/structural-analysis.md
++++ b/skills/project-exploration/references/structural-analysis.md
+@@ -14 +14,2 @@ ast-grep project configuration and requests JSON. It never passes rewrite/update
+-It rejects symlink paths, outside-root paths, oversized files and non-source extensions.
++It rejects symlink paths, outside-root paths, oversized files and non-source extensions. Extensionless Python/shell scripts require a recognized
++shebang and are staged with a matching language suffix; they are never executed.
+diff --git a/skills/project-exploration/scripts/structure.py b/skills/project-exploration/scripts/structure.py
+index e8d1cfb..4f88f6f 100644
+--- a/skills/project-exploration/scripts/structure.py
++++ b/skills/project-exploration/scripts/structure.py
+@@ -8,0 +9 @@ import os
++import re
+@@ -76,0 +78,18 @@ def run_bounded(argv: list[str], cwd: str, timeout: float = 10,
++def source_suffix(path: Path) -> str:
++    """Recognize extensionless Python/shell entrypoints without executing them."""
++    suffix = path.suffix.lower()
++    if suffix in SOURCE_EXTENSIONS:
++        return suffix
++    if suffix or path.name.startswith('.'):
++        raise ValueError('select a supported source file, not configuration or secrets')
++    with path.open('rb') as source:
++        first_line = source.readline(256)
++    if first_line.startswith(b'#!'):
++        interpreter = first_line.decode('utf-8', errors='replace')
++        if re.search(r'(?:/|\s)python(?:[0-9]+(?:\.[0-9]+)*)?(?:\s|$)', interpreter):
++            return '.py'
++        if re.search(r'(?:/|\s)(?:bash|sh)(?:\s|$)', interpreter):
++            return '.sh'
++    raise ValueError('extensionless source requires a recognized Python or shell shebang')
++
++
+@@ -88,2 +107,2 @@ def selected_file(root: Path, relative: str, max_bytes: int) -> Path:
+-    if not path.is_file() or path.suffix.lower() not in SOURCE_EXTENSIONS:
+-        raise ValueError('select a supported source file, not configuration or secrets')
++    if not path.is_file():
++        raise ValueError('select a regular source file')
+@@ -91,0 +111 @@ def selected_file(root: Path, relative: str, max_bytes: int) -> Path:
++    source_suffix(path)
+@@ -116 +136 @@ def query(root: Path, relative: str, mode: str, pattern: str | None = None,
+-        staged = Path(directory) / ('input' + path.suffix)
++        staged = Path(directory) / ('input' + source_suffix(path))
+diff --git a/tests/test_exploration_readiness.py b/tests/test_exploration_readiness.py
+index fc17465..6de87ed 100644
+--- a/tests/test_exploration_readiness.py
++++ b/tests/test_exploration_readiness.py
+@@ -90,0 +91,29 @@ class ExplorationTests(unittest.TestCase):
++    def test_extensionless_entrypoints_require_known_shebang(self):
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            cases = [('cli', '#!/usr/bin/env python3\nprint(1)\n', '.py'),
++                     ('setup', '#!/bin/sh\necho ready\n', '.sh')]
++            for name, source, suffix in cases:
++                path = root / name
++                path.write_text(source)
++                self.assertEqual(structure.selected_file(root, name, 100), path.resolve())
++                self.assertEqual(structure.source_suffix(path), suffix)
++            for name, source in [('unknown', 'print(1)'), ('.env', '#!/bin/sh\nSECRET=value'),
++                                 ('config.txt', '#!/bin/sh\necho x')]:
++                (root / name).write_text(source)
++                with self.assertRaises(ValueError):
++                    structure.selected_file(root, name, 100)
++
++    def test_extensionless_query_uses_staged_language_suffix(self):
++        if not structure.shutil.which('rg'):
++            self.skipTest('ripgrep unavailable')
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            path = root / 'cli'
++            original = '#!/usr/bin/env python3\nprint(1)\n'
++            path.write_text(original)
++            report = structure.query(root, 'cli', 'text', 'print')
++            self.assertEqual(report['status'], 'observed', report)
++            self.assertEqual(report['evidence'][0]['path']['text'], 'cli')
++            self.assertEqual(path.read_text(), original)
++

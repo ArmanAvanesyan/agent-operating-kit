@@ -1,0 +1,1 @@
+PASS: JSON, report links, source fingerprints, evidence paths, final readiness and retained historical failure

@@ -47,7 +47,8 @@ python3 skills/project-exploration/scripts/structure.py /path/to/project \
 Modes use ripgrep, ast-grep and Tokei respectively. Outline support is detected; missing
 backends, unsupported outline, invalid output, timeouts and output limits are explicit.
 The wrapper stages a bounded copy in a temporary directory, isolates ast-grep configuration
-and never enables rewrites. It records tool version, selected file and backend-specific
+and never enables rewrites. Extensionless Python/shell entrypoints are supported
+when their shebang identifies the language. It records tool version, selected file and backend-specific
 evidence. Results are syntax/text/statistics, not resolved call graphs or runtime proof.
 Probe, LSP integration and bulk rule catalogs remain future work.
 
@@ -95,3 +96,10 @@ warnings treated as errors. Both skills passed Skill Creator structural validati
 kit validation, Python compilation and whitespace checks passed. Live checks used
 ripgrep, ast-grep 0.51.0 (Python/Go/TypeScript patterns and Python outline) and Tokei 15.0.0.
 Optional test binaries were installed under a temporary directory, not globally.
+
+## Repository self-check
+
+The [2026-10-15 AOK self-check](reports/exploration-readiness/2026-10-15/README.md)
+saves source-linked exploration, readiness and command evidence, including historical
+failures and their fixes. It exercises extensionless Python CLI analysis, a fresh Go
+binary, tests and scratch-project initialization without altering global installation.

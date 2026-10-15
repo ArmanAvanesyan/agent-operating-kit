@@ -1,0 +1,8 @@
+OK .codex/config.toml - /private/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/aok-readiness-project-7oi9gkrw/.codex/config.toml
+OK .codex/setup.sh - /private/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/aok-readiness-project-7oi9gkrw/.codex/setup.sh
+OK .codex/aok-action.sh - /private/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/aok-readiness-project-7oi9gkrw/.codex/aok-action.sh
+OK .codex/aok-local-environment.json - /private/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/aok-readiness-project-7oi9gkrw/.codex/aok-local-environment.json
+OK .codex/environments/environment.toml - /private/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/aok-readiness-project-7oi9gkrw/.codex/environments/environment.toml
+OK manifest - /private/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/aok-readiness-project-7oi9gkrw/.codex/aok-local-environment.json
+OK environment.toml - /private/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/aok-readiness-project-7oi9gkrw/.codex/environments/environment.toml
+OK Codex generated config schema - locally-observed

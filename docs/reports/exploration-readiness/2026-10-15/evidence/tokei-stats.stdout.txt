@@ -1,0 +1,58 @@
+{
+  "kind": "aok-structural-evidence",
+  "version": 1,
+  "file": "scripts/aok",
+  "backend": "tokei",
+  "mode": "stats",
+  "query": null,
+  "language": null,
+  "status": "observed",
+  "limitations": [
+    "Syntax/text/statistics are not resolved references or runtime behavior.",
+    "One explicit file only; empty results are not repository-wide absence proof."
+  ],
+  "sourceSha256": "26d1114f49b17d9b75526134e04fbf428ac331a87b461dce8e6ba92056d57ac4",
+  "revision": "9dec920f6cb202e4733f5d8d9504441d51cfe729",
+  "toolVersion": "tokei 15.0.0 compiled with serialization support: json",
+  "exitCode": 0,
+  "evidence": {
+    "Python": {
+      "blanks": 443,
+      "code": 5566,
+      "comments": 1,
+      "reports": [
+        {
+          "stats": {
+            "blanks": 443,
+            "code": 5566,
+            "comments": 1,
+            "blobs": {}
+          },
+          "name": "scripts/aok"
+        }
+      ],
+      "children": {},
+      "inaccurate": false
+    },
+    "Total": {
+      "blanks": 443,
+      "code": 5566,
+      "comments": 1,
+      "reports": [],
+      "children": {
+        "Python": [
+          {
+            "stats": {
+              "blanks": 443,
+              "code": 5566,
+              "comments": 1,
+              "blobs": {}
+            },
+            "name": "scripts/aok"
+          }
+        ]
+      },
+      "inaccurate": false
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "baseRevision": "9dec920f6cb202e4733f5d8d9504441d51cfe729",
+  "branch": "codex/verify-exploration-readiness",
+  "capturedAt": "2026-10-15T18:04:49.212253+00:00",
+  "initialUserChanges": [],
+  "workingTree": "Uncommitted task fixes and reports; see patch and source hashes.",
+  "sourceFiles": {
+    "README.md": "c607fe3d22bf03e23ada8041bd9427fb8ecd9c347be5c2acb54aa306ddf75aaf",
+    "core/model.md": "a6ab8b3c80808fb946bfc991f9a17fad6ab2746969d3e5356e943210da1a5168",
+    "docs/architecture.md": "ec0c3688ab5b0f85f5351fc2c07e86a62c75b2fa939efa7f333ad879b82ff9aa",
+    "docs/targets-support-matrix.md": "a7cc6ea30566c33daaab34ec5813c17a0c545506156a4079d58586ee1d355e92",
+    "docs/project-exploration-and-readiness.md": "ed187efd5f25116a480425fe0cf3752e75af9fb07dd7f582f3f19869ab032ab3",
+    ".github/workflows/ci.yml": "26e5fa5495641259cc624e86236a64aff14386082a2b96b106b24d0765ce2f45",
+    ".codex-plugin/plugin.json": "2c32eafcf9a91836a3ba74c1baf44d0cfd7adb42363af0da95979bc95c08abb3",
+    "scripts/aok": "26d1114f49b17d9b75526134e04fbf428ac331a87b461dce8e6ba92056d57ac4",
+    "go.mod": "9996d486ceeba4c8761cd3369f901d075fd9b8064a5cf0f6b4357133cf878229",
+    "cmd/aok/main.go": "5aa237e5ded1ebb0be7d607dfdca0230823b5dfade09186e03d993479d561d41",
+    "internal/cli/cli.go": "15218c2900c1166f7799ecf31622c53d2800d30b5e945854eeb25fba41204c7d",
+    "internal/releasebuild/releasebuild.go": "f661dd82e62270b3e3ac8a79dfea987b4537d6883de2f5c2c5671610b45801ec",
+    "skills/project-exploration/SKILL.md": "51d06565a444ff00e49dfbf84a65f5b387bea6b197bad7be05f336f807f71c5c",
+    "skills/environment-readiness/SKILL.md": "8e40d4803715ea60e0e17cee92c40a3fe5c89692f4ba64dd87b03c98591119ad",
+    "skills/project-exploration/scripts/inventory.py": "e89fa2e768195505d27b6bcaf075b6a972315cbb95d11b50949c1925f025b123",
+    "skills/project-exploration/scripts/structure.py": "8ac35695da8497f830148d0bb05e598d7a8da76d0c727ea91c809729c16cbf7c",
+    "skills/project-exploration/references/structural-analysis.md": "706829baac565f80c6c0bbbf183508c54237185c013e1dba5a48bcebaa289289",
+    "skills/environment-readiness/scripts/assess.py": "8dcd390f8b96a78965cda611d5f9b65491b3a2c87d308e313b43b1cb38b85fff",
+    "tests/test_exploration_readiness.py": "9670ba0feed3a357fec7fcfac17f26378d6555aa884b581dc52950bade656990"
+  },
+  "instructions": "User-supplied/local AGENTS instructions read; local-only content not copied into report."
+}

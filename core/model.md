@@ -33,7 +33,8 @@ native tool event.
 A skill is reusable task guidance or executable workflow content. The neutral
 skill schema records the intent, inputs, body/source paths, and target render
 hints. Tool adapters render skills as Codex skills, Claude Code slash commands,
-Cursor rules, OpenCode commands, or equivalent target formats.
+Cursor skills alongside rules, or equivalent target formats. OpenCode currently receives
+a structured contract and Markdown guidance; native import behavior remains adapter-specific.
 
 ### Pack
 

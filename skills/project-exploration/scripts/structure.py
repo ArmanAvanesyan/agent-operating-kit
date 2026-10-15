@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import signal
 from pathlib import Path
 import shutil
@@ -74,6 +75,24 @@ def run_bounded(argv: list[str], cwd: str, timeout: float = 10,
             **{key: bytes(value).decode('utf-8', errors='replace') for key, value in output.items()}}
 
 
+def source_suffix(path: Path) -> str:
+    """Recognize extensionless Python/shell entrypoints without executing them."""
+    suffix = path.suffix.lower()
+    if suffix in SOURCE_EXTENSIONS:
+        return suffix
+    if suffix or path.name.startswith('.'):
+        raise ValueError('select a supported source file, not configuration or secrets')
+    with path.open('rb') as source:
+        first_line = source.readline(256)
+    if first_line.startswith(b'#!'):
+        interpreter = first_line.decode('utf-8', errors='replace')
+        if re.search(r'(?:/|\s)python(?:[0-9]+(?:\.[0-9]+)*)?(?:\s|$)', interpreter):
+            return '.py'
+        if re.search(r'(?:/|\s)(?:bash|sh)(?:\s|$)', interpreter):
+            return '.sh'
+    raise ValueError('extensionless source requires a recognized Python or shell shebang')
+
+
 def selected_file(root: Path, relative: str, max_bytes: int) -> Path:
     root = root.resolve(strict=True)
     path = root / relative
@@ -85,10 +104,11 @@ def selected_file(root: Path, relative: str, max_bytes: int) -> Path:
         if current.is_symlink():
             raise ValueError('symlink paths are not supported')
     path.resolve(strict=True).relative_to(root)
-    if not path.is_file() or path.suffix.lower() not in SOURCE_EXTENSIONS:
-        raise ValueError('select a supported source file, not configuration or secrets')
+    if not path.is_file():
+        raise ValueError('select a regular source file')
     if path.stat().st_size > max_bytes:
         raise ValueError('file exceeds byte limit')
+    source_suffix(path)
     return path
 
 
@@ -113,7 +133,7 @@ def query(root: Path, relative: str, mode: str, pattern: str | None = None,
         # Isolate automatic project config discovery; stage only the selected source.
         config = Path(directory) / 'sgconfig.yml'
         config.write_text('ruleDirs: []\n')
-        staged = Path(directory) / ('input' + path.suffix)
+        staged = Path(directory) / ('input' + source_suffix(path))
         with path.open('rb') as source:
             contents = source.read(max_bytes + 1)
         if len(contents) > max_bytes:

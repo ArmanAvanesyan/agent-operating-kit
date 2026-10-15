@@ -1,0 +1,19 @@
+test_ast_patterns_exclude_comments_in_supported_pilot_languages (test_exploration_readiness.ExplorationTests.test_ast_patterns_exclude_comments_in_supported_pilot_languages) ... ok
+test_extensionless_entrypoints_require_known_shebang (test_exploration_readiness.ExplorationTests.test_extensionless_entrypoints_require_known_shebang) ... ok
+test_extensionless_query_uses_staged_language_suffix (test_exploration_readiness.ExplorationTests.test_extensionless_query_uses_staged_language_suffix) ... ok
+test_invalid_backend_json_and_unsupported_outline (test_exploration_readiness.ExplorationTests.test_invalid_backend_json_and_unsupported_outline) ... ok
+test_inventory_limits_hidden_config_and_no_symlink_following (test_exploration_readiness.ExplorationTests.test_inventory_limits_hidden_config_and_no_symlink_following) ... ok
+test_missing_backend_does_not_claim_empty_success (test_exploration_readiness.ExplorationTests.test_missing_backend_does_not_claim_empty_success) ... ok
+test_process_limits_timeout_and_output (test_exploration_readiness.ExplorationTests.test_process_limits_timeout_and_output) ... ok
+test_source_scope_rejects_symlinks_traversal_and_size (test_exploration_readiness.ExplorationTests.test_source_scope_rejects_symlinks_traversal_and_size) ... ok
+test_text_backend_extracts_matches_and_preserves_source (test_exploration_readiness.ExplorationTests.test_text_backend_extracts_matches_and_preserves_source) ... ok
+test_tokei_stats_preserve_original_filename (test_exploration_readiness.ExplorationTests.test_tokei_stats_preserve_original_filename) ... ok
+test_cli_returns_nonzero_for_unexecuted_check_without_running_it (test_exploration_readiness.ReadinessTests.test_cli_returns_nonzero_for_unexecuted_check_without_running_it) ... ok
+test_optional_failures_are_retained_and_invalid_records_rejected (test_exploration_readiness.ReadinessTests.test_optional_failures_are_retained_and_invalid_records_rejected) ... ok
+test_ready_requires_actual_required_records_and_revision_match (test_exploration_readiness.ReadinessTests.test_ready_requires_actual_required_records_and_revision_match) ... ok
+test_required_failure_unexecuted_and_na_never_ready (test_exploration_readiness.ReadinessTests.test_required_failure_unexecuted_and_na_never_ready) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 1.600s
+
+OK

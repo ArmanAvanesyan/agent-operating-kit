@@ -40,14 +40,16 @@ updated executable was quarantined. Neither original executable was invoked
 during that restoration audit. The restored backup SHA-256 is recorded in
 [`agy-1.4.2.json`](../../../docs/evidence/native-adapters/agy-1.4.2.json).
 
-For the 1.4.2 probe, the executable was copied before invocation. The
-documented `agy agent` roster command ran with a generated AOK fixture inside
-an isolated project and HOME. It exited successfully with empty stdout and
-stderr; the same command on an empty control project produced the same result.
-This does not prove discovery, so the native loading gate remains open. The
-command's evidence and fixture hash are recorded in
-[`agy-1.4.2.json`](../../../docs/evidence/native-adapters/agy-1.4.2.json) and
-can be repeated with [`probe-gemini-agy.sh`](../../../scripts/native-loading/probe-gemini-agy.sh).
+The historical `agy agent` trial returned empty output and is inconclusive. A
+subsequent isolated 1.3.6 probe copied the executable before invoking it. Installed help recognizes
+`agent`/`agents` as listing aliases, but `agents` returned no output for either
+the generated fixture or an empty project. The optional `--json` flag is not
+supported. The documented interactive `/agents` manager showed an
+authentication screen, so no roster was available without signing in. The
+probe did not authenticate, persist the URL, or invoke a model. Native loading
+remains unverified. See [`agy-1.3.6-loading.json`](../../../docs/evidence/native-adapters/agy-1.3.6-loading.json)
+for the isolated results and [`agy-1.4.2.json`](../../../docs/evidence/native-adapters/agy-1.4.2.json)
+for the historical version/restoration audit.
 
 The adapter tests validate parsing, preservation, and semantic round-tripping;
 they do not establish host discovery, selection, invocation, or enforcement.

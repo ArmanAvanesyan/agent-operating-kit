@@ -74,3 +74,26 @@ native roster, absent/malformed controls and exact workspace bytes, prints JSON,
 and removes its owned containers/volume. The explicit base-image cache remains.
 This proves the recorded Linux scope/version, not Darwin loading or runtime
 permission enforcement.
+
+## Installed Hermes profile check
+
+`probe-hermes-installed.py --environment /absolute/path/to/installed-environment
+--aok /absolute/path/to/aok` selects an existing environment containing `venv/`
+and `workspace/`. It invokes the installed Python CLI entrypoint directly,
+without the package-manager launcher, and records that selection limit.
+Workspaces with `.git` or `install-stamp.json` are refused to avoid unplanned
+bootstrap work. The covered workspace has neither; no bootstrap marker or
+installed source is changed to make the probe pass.
+
+The probe imports/exports the committed native fixture through AOK, requires
+blocked draft status, then checks native profile listing and empty/malformed
+controls. Malformed config falls back to defaults; it is not reported as native
+rejection. Metadata and SOUL loading use separate installed components. The SOUL loader
+returns a body with surrounding whitespace stripped; equality and its loaded
+hash cover that normalized body. A separate raw-file SHA-256 check verifies
+that CLI startup leaves the exported SOUL file unchanged. All host processes use
+an explicit environment, disposable home, process-group timeouts, denied
+network access and outside-root write denial. No credentials or profile-provided
+commands run. This verifies the explicitly selected entrypoint's profile scope;
+normal launcher selection, complete profile readiness and runtime enforcement
+remain unverified.

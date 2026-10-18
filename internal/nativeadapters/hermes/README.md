@@ -26,18 +26,23 @@ The projection is intentionally partial:
   keys, credential assignments in text, and unrecognized paths are rejected.
 
 The shared engine still marks these imports as incomplete drafts and runtime
-enforcement as unverified. The reproducible loader probe uses a clean
-environment, a Darwin write sandbox rooted at a unique temporary directory,
-and process-group timeouts. The installed source's direct config loader,
-profile-metadata reader, and SOUL prompt loader were exercised against AOK-
-rendered files in a disposable `HERMES_HOME`; malformed config and missing
-profile controls were also checked. This verifies those component loaders, but
-does not establish full Hermes CLI profile discovery/selection. The Hermes
-launcher is avoided by this final probe after an earlier invocation entered
-dependency preparation and was stopped; the descriptor
-continues to report host loading as unavailable and this package does not claim
-a full profile loading or readiness gate. See
-`docs/evidence/native-adapters/hermes-profile-loader.json`.
+enforcement as unverified. A bounded probe directly invoked the installed
+environment's `venv/bin/python -B -m hermes_cli.main profile list` against an
+AOK-rendered profile in an isolated `HERMES_HOME`; the generated profile was
+listed with its configured model. Missing and malformed configuration controls
+were also checked. Separately, the exact installed workspace's
+`agent.prompt_builder.load_soul_md(home_override=...)` returned the AOK-rendered
+SOUL body with surrounding whitespace stripped and its expected body hash,
+and returned `None` for a missing profile. The exported file itself was
+unchanged after CLI startup.
+The profile-list command does not load SOUL; these are separate observations.
+The descriptor records verified profile loading for the directly invoked
+installed entrypoint, with CLI selection by the package-manager launcher left
+unverified. Runtime enforcement and canonical readiness remain unverified.
+Repeat the bounded installed-environment check with
+[`probe-hermes-installed.py`](../../../scripts/native-loading/probe-hermes-installed.py).
+See [`hermes-cli-profile-list.json`](../../../docs/evidence/native-adapters/hermes-cli-profile-list.json)
+and [`hermes-profile-loader.json`](../../../docs/evidence/native-adapters/hermes-profile-loader.json).
 
 The selected inventory does not prove that a full Hermes home is complete.
 Hermes profiles may also depend on `.env`, auth stores, skills, MCP data, and
@@ -54,12 +59,13 @@ Format facts were checked against the official [Profiles](https://hermesagent.no
 and [Personality & SOUL.md](https://hermesagent.nousresearch.com/docs/user-guide/features/personality/)
 documentation, plus installed source under
 `~/.hermes/hermes-agent/hermes_cli/profiles.py`, `config.py`, and
-`hermes_constants.py`. The inspected source checkout identifies as
-`v0.21.6+canary.20261010T070026Z-249-gd4d2ab7b5` at commit
-`d4d2ab7b5d104166e7e22a02cafd12f1fe456a31`; its `pyproject.toml` reports a
-placeholder version (`0.0.0`), so source-to-installed-CLI equivalence was not
-established. `adapterVersion` is the local mapping revision, not a verified
-Hermes runtime version.
+`hermes_constants.py`. The directly invoked installed workspace reported
+`Hermes Agent vunknown (2026.9.24)` on Python 3.14.7. Its relevant source
+files are pinned by SHA-256 in the evidence record. The environment path was selected explicitly; a
+package-manager launcher receipt linking the normal `hermes` command to this
+environment was not verified. The separately inspected source checkout's Git
+revision is not used as the installed runtime identity. `adapterVersion` is the
+local mapping revision, not a Hermes runtime version.
 
 The YAML parser rejects duplicate keys, tags, anchors, aliases, merge keys,
 date/time values, invalid UTF-8/BOM, non-finite numbers, and documents beyond

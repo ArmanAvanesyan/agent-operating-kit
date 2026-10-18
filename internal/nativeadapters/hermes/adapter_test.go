@@ -108,7 +108,11 @@ func TestPresenceMarkersOnlyPreserveOtherwiseEmptyNativeContainers(t *testing.T)
 	}
 }
 
-func TestEngineImportExportCompareStaysHostUnavailableAndBlocksRequiredControls(t *testing.T) {
+func TestEngineImportExportCompareKeepsRuntimeUnverifiedAndBlocksRequiredControls(t *testing.T) {
+	descriptor := New().Descriptor()
+	if descriptor.HostLoading.HostVersion != "Hermes Agent vunknown (2026.9.24)" || len(descriptor.HostLoading.Scopes) != 1 || descriptor.HostLoading.Scopes[0] != "profile" || len(descriptor.HostLoading.Evidence) == 0 {
+		t.Fatalf("loading evidence must stay tied to the tested entrypoint and scope: %+v", descriptor.HostLoading)
+	}
 	registry := nativeadapter.NewRegistry()
 	if err := registry.Register(New()); err != nil {
 		t.Fatal(err)
@@ -117,16 +121,16 @@ func TestEngineImportExportCompareStaysHostUnavailableAndBlocksRequiredControls(
 	files := fixtureInventory(t)
 	required := []nativeadapter.Control{{Path: "agent.permissions.network.mode", Required: true}}
 	bundle, imported := engine.Import("hermes-agent", "profile", files, nil, required)
-	if imported.Status != "blocked" || bundle.Digest == "" || imported.HostLoading.Status != "unavailable" || imported.RuntimeEnforcement != "unverified" {
+	if imported.Status != "blocked" || bundle.Digest == "" || imported.HostLoading.Status != "verified" || imported.RuntimeEnforcement != "unverified" {
 		t.Fatalf("import overstated readiness: report=%+v bundle=%+v", imported, bundle)
 	}
 	assertDiagnostic(t, imported, "native.control.required-unsupported")
 	outputs, rendered, exported := engine.Export("hermes-agent", "profile", files, bundle, required)
-	if exported.Status != "blocked" || len(outputs) != 3 || rendered.Digest == "" || exported.HostLoading.Status != "unavailable" || exported.RuntimeEnforcement != "unverified" {
+	if exported.Status != "blocked" || len(outputs) != 3 || rendered.Digest == "" || exported.HostLoading.Status != "verified" || exported.RuntimeEnforcement != "unverified" {
 		t.Fatalf("export overstated readiness: files=%d report=%+v", len(outputs), exported)
 	}
 	comparison := engine.Compare("hermes-agent", "profile", outputs, rendered, nil)
-	if comparison.Status != "valid" || comparison.MappingStatus != "compatible" || len(comparison.Differences) != 0 || comparison.HostLoading.Status != "unavailable" || comparison.RuntimeEnforcement != "unverified" {
+	if comparison.Status != "valid" || comparison.MappingStatus != "compatible" || len(comparison.Differences) != 0 || comparison.HostLoading.Status != "verified" || comparison.RuntimeEnforcement != "unverified" {
 		t.Fatalf("comparison implied loading/runtime proof or semantic drift: %+v", comparison)
 	}
 }

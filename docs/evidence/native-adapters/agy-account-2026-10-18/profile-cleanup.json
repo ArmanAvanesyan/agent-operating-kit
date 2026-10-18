@@ -1,0 +1,8 @@
+{
+  "kind": "aok-agy-private-profile-cleanup/v1",
+  "originalExpiryPreserved": "2026-10-18T07:59:43.482355Z",
+  "privateHomeRemoved": true,
+  "rootRemoved": true,
+  "credentialContentsRead": false,
+  "sourceProfileReadyBeforeCleanup": true
+}

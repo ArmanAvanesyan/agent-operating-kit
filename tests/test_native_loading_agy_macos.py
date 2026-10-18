@@ -166,6 +166,30 @@ class AgyMacOSInteractiveTests(unittest.TestCase):
         self.assertTrue(state["localPromptObserved"])
         self.assertTrue(probe.may_send_manager_command(state))
 
+    def test_account_header_requires_full_native_frame_and_never_retains_identity(self):
+        border = "─" * 160
+        account = "     ▀▀  ▀▀       operator@example.com (Antigravity Example Tier)"
+        rows = ["█ Antigravity CLI 1.4.2", account, "█ Gemini 3.8 Flash (High)",
+                border, ">", border, "? for shortcuts   Gemini"]
+        state = probe.state_from_bytes("\r\n".join(rows).encode())
+        self.assertTrue(state["framedNativePromptObserved"])
+        self.assertTrue(probe.may_send_manager_command(state))
+        self.assertNotIn("operator", json.dumps(state))
+        self.assertNotIn("example.com", json.dumps(state))
+        for changed in (
+            [account], rows[:-1],
+            [rows[0], account.replace(" (Antigravity", " (Other"), *rows[2:]],
+            [rows[0], account.replace("Example Tier", "login required"), *rows[2:]],
+            [rows[0], account.replace("Example Tier", "invalid account"), *rows[2:]],
+            [rows[0], account + " Sign in", *rows[2:]],
+            [*rows, "Sign in to continue"],
+            [*rows, "API key required"],
+            [*rows, "fatal error"],
+        ):
+            with self.subTest(rows=changed):
+                observed = probe.state_from_bytes("\r\n".join(changed).encode())
+                self.assertFalse(probe.may_send_manager_command(observed))
+
     def test_prompt_frame_rejects_missing_or_reordered_context_and_model_selectors(self):
         separator = "─" * 160
         good = ["█ Antigravity CLI 1.4.2", "█ Gemini API key", "█ Gemini 2.5 Pro",

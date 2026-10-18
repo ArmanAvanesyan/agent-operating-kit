@@ -79,6 +79,10 @@ MANAGER_HEADER = re.compile(r"available agents", re.I)
 AGY_CLI_VERSION_HEADER = re.compile(
     r"[ \t\u2580-\u259f]*Antigravity CLI [0-9]+\.[0-9]+\.[0-9]+[ \t\u2580-\u259f]*", re.I)
 AGY_MODEL_STATUS = re.compile(r"[ \t\u2580-\u259f]*Gemini API key[ \t\u2580-\u259f]*", re.I)
+AGY_ACCOUNT_STATUS = re.compile(
+    r"[ \t\u2580-\u259f]*[^\s@()]{1,64}@[^\s@()]{1,189}\.[A-Za-z]{2,24}"
+    r" \(Antigravity (?P<tier>[A-Za-z]{1,24}(?: [A-Za-z]{1,24})?)\)"
+    r"[ \t\u2580-\u259f]*")
 ANSI = re.compile(rb"\x1b(?:\[[0-?]*[ -/]*[@-~]|\][^\x07]*(?:\x07|\x1b\\))")
 
 
@@ -430,6 +434,20 @@ def state_from_bytes(data, *, width=160, height=80):
     }
 
 
+def _native_status_row(row):
+    """Public provider row or bounded account/product envelope; never retain identity.
+
+    A matching row alone grants no input. The complete version/model/prompt
+    frame is still required, and other authentication/error rows still block.
+    Product tiers are labels, not evidence of backend authentication.
+    """
+    if AGY_MODEL_STATUS.fullmatch(row):
+        return True
+    account = AGY_ACCOUNT_STATUS.fullmatch(row)
+    return bool(account and not AUTH.search(account['tier']) and
+                not ERROR.search(account['tier']))
+
+
 def _framed_native_prompt(rows):
     """Recognize the pinned CLI's exact local `>` prompt panel, not arbitrary `>`."""
     separator = "─" * 160
@@ -440,7 +458,7 @@ def _framed_native_prompt(rows):
         if not AGY_CLI_VERSION_HEADER.fullmatch(rows[index]):
             continue
         status_index = index + 1
-        if not AGY_MODEL_STATUS.fullmatch(rows[status_index]):
+        if not _native_status_row(rows[status_index]):
             continue
         model_row = rows[index + 2]
         if (not re.fullmatch(r"[ \t\u2580-\u259f]*[A-Za-z][A-Za-z0-9 ._()/-]{0,80}[ \t\u2580-\u259f]*", model_row) or
@@ -471,7 +489,7 @@ def _framed_native_manager(rows):
             continue
         status = header + 1
         model = header + 2
-        if (not AGY_MODEL_STATUS.fullmatch(rows[status]) or
+        if (not _native_status_row(rows[status]) or
                 not re.fullmatch(r"[ \t\u2580-\u259f]*[A-Za-z][A-Za-z0-9 ._()/-]{0,80}[ \t\u2580-\u259f]*", rows[model]) or
                 not re.search(r"\bGemini\b", rows[model], re.I)):
             continue

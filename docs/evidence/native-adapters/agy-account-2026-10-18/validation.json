@@ -1,0 +1,28 @@
+{
+  "kind": "aok-agy-account-validation/v1",
+  "python": {
+    "tests": 238,
+    "skipped": 2,
+    "status": "passed",
+    "sandboxNote": "Initial restricted run failed existing PTY and nested-sandbox permission tests. Rerun with required OS access passed."
+  },
+  "goTests": "passed: go test ./...",
+  "kitValidation": "passed",
+  "pythonCompilation": "passed",
+  "agentProposalChecker": "passed:17 schemas,17 examples,39 negative cases",
+  "planningProposalChecker": "passed:8 schemas,7 examples,20 negative cases",
+  "renderSmoke": "passed",
+  "installedBinarySHA256": "2a6bd844ae3431d35203af44f31bdd5e26f5ffe287d47c62a46862bf44099fc2",
+  "installedBinaryUnchanged": true,
+  "sourceHashes": {
+    "scripts/native-loading/prepare_agy_account_login.py": "005e408df16b776e8cae6e0c4dfbb7fbcee975f7390b79cbdef3859272580a96",
+    "scripts/native-loading/probe_agy_account_manager.py": "f3931ed7cf357f3046d2c6ad33e64c4ef92b531678a9ff3ab69b68a1381761bc",
+    "scripts/native-loading/probe_agy_local_manager.py": "c3344f15578ad97db96a4de015589de157930d39ee0d70efad5dcfc374cc3bfa",
+    "scripts/native-loading/probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+    "internal/nativeadapters/agy/adapter.go": "ae7c827d64f6958994ff9e9cddfba04547661d0a397f90b85c0091126f0b2d5b"
+  },
+  "nativeGate": "open: positive/absent controls pass; malformed explicit parse error absent",
+  "backendAuthentication": "not-independently-verified",
+  "inference": "not-run",
+  "allTemporaryAccountProfilesRemoved": true
+}

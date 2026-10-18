@@ -1,0 +1,38 @@
+"""Fresh approved OAuth, exact reviewed setup actions; no model or manager input."""
+import importlib.util,json,os,sys,time,hashlib
+from pathlib import Path
+repo=Path('/Users/armanavanesyan/oss/own/agent-operating-kit')
+spec=importlib.util.spec_from_file_location('account_local_helper',repo/'scripts/native-loading/probe_agy_local_manager.py')
+h=importlib.util.module_from_spec(spec);spec.loader.exec_module(h)
+m=h.login
+original_capture=m._capture_login; original_state=m.state_from_bytes; original_select=m.select.select
+snapshot=None; last_digest=None; changed=time.monotonic(); actions=set(); context={}
+def state_from_bytes(data):
+ global snapshot,last_digest,changed
+ state=original_state(data)
+ if state.get('terminalAmbiguityObserved'): snapshot=None; return state
+ text=m.AGY.terminal_text(data,width=m.LOGIN_WIDTH,height=m.LOGIN_HEIGHT)
+ digest=hashlib.sha256(text.encode()).hexdigest()
+ if digest!=last_digest: changed=time.monotonic();last_digest=digest
+ snapshot=(state,text,digest)
+ return state
+def select_control(r,w,x,timeout):
+ global snapshot,changed
+ ready=original_select(r,w,x,timeout)
+ if ready[0] or snapshot is None or time.monotonic()-changed<.7:return ready
+ state,text,digest=snapshot
+ action=h.onboarding_action(text,state,context['root'])
+ if action and action[0]!='color' and action[0] not in actions and len(actions)<7:
+  name,value=action
+  m.append_audit(context['audit'],'approved-account-onboarding-action',action=name,screenSHA256=digest,scope='owned-isolated-root-only')
+  os.write(context['master'],value);actions.add(name);snapshot=None;changed=time.monotonic()
+  print(json.dumps({'approvedAction':name}),flush=True)
+ return ready
+def capture(master,*args,**kwargs):
+ context.update(master=master,root=Path(kwargs['case_root']),audit=kwargs['audit_path'])
+ return original_capture(master,*args,**kwargs)
+m.state_from_bytes=state_from_bytes;m.select.select=select_control;m._capture_login=capture
+m.MANUAL_OAUTH_MODE=True
+result=m.prepare(timeout=300,authorization_code_file=Path(sys.argv[1]))
+Path(sys.argv[2]).write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps({'status':result['status'],'root':result['root'],'auditRoot':result['auditRoot'],'actions':sorted(actions)}),flush=True)

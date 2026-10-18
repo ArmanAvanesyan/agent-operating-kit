@@ -1,0 +1,103 @@
+{
+  "events": [
+    {
+      "at": "2026-10-18T07:46:01.651853+00:00",
+      "authenticationMode": "local",
+      "binarySHA256": "fa85a90abded17bcd1b185bbd1d6b1b82065f093ad4700d4dbacd3be2433294c",
+      "event": "probe-prepared",
+      "resumedCheckpoint": false,
+      "rootCreatedAt": "2026-10-18T07:46:01.647709Z",
+      "rootExpiresAt": "2026-10-18T08:01:01.647709Z",
+      "sessionId": "59e1770b-d06f-4865-9d57-a225205aea7d",
+      "sourceHashes": {
+        "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+        "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+        "prepare_agy_login.py": "a37628a4ce4a34108e6f8d9dc2c20570d222d6e8b8e0651bd321c6ae80143bdd",
+        "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+        "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+        "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+        "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+      },
+      "sourceSHA256": "a37628a4ce4a34108e6f8d9dc2c20570d222d6e8b8e0651bd321c6ae80143bdd",
+      "terminalGeometry": {
+        "columns": 160,
+        "rows": 80
+      }
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 26873,
+      "pid": 26873,
+      "purpose": "agy-login-signal-preflight"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 26873,
+      "pgid": 26873,
+      "pid": 26873,
+      "purpose": "agy-login-signal-preflight"
+    },
+    {
+      "at": "2026-10-18T07:46:02.722136+00:00",
+      "event": "preflight-owned",
+      "pgid": 26873,
+      "pid": 26873
+    },
+    {
+      "at": "2026-10-18T07:46:02.759812+00:00",
+      "directChildFallback": false,
+      "event": "owned-group-cleanup",
+      "groupAbsentVerified": true,
+      "groupCleanupFailed": false,
+      "pgid": 26873,
+      "pid": 26873,
+      "priorSignalErrors": [],
+      "purpose": "agy-login-signal-preflight"
+    },
+    {
+      "at": "2026-10-18T07:46:02.760253+00:00",
+      "event": "preflight-clean",
+      "pgid": 26873,
+      "pid": 26873,
+      "returnCode": -15
+    },
+    {
+      "at": "2026-10-18T07:46:02.782145+00:00",
+      "cleanupFailed": false,
+      "event": "login-preparation-failed",
+      "reasonType": "FileExistsError",
+      "sessionId": "59e1770b-d06f-4865-9d57-a225205aea7d"
+    }
+  ],
+  "kind": "aok-agy-account-audit/v1",
+  "sources": [
+    {
+      "path": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f.py.txt",
+      "sha256": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f"
+    },
+    {
+      "path": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5.py.txt",
+      "sha256": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5"
+    },
+    {
+      "path": "a37628a4ce4a34108e6f8d9dc2c20570d222d6e8b8e0651bd321c6ae80143bdd.py.txt",
+      "sha256": "a37628a4ce4a34108e6f8d9dc2c20570d222d6e8b8e0651bd321c6ae80143bdd"
+    },
+    {
+      "path": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc.py.txt",
+      "sha256": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc"
+    },
+    {
+      "path": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014.py.txt",
+      "sha256": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014"
+    },
+    {
+      "path": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f.py.txt",
+      "sha256": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f"
+    },
+    {
+      "path": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507.py.txt",
+      "sha256": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+from pathlib import Path
+import importlib.util,json,os,signal,subprocess,time,stat
+spec=importlib.util.spec_from_file_location('recover_helper',Path.cwd()/'scripts/native-loading/prepare_agy_login.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+r=Path('/private/tmp/aok-agy-session-ko3mk7ab');a=Path('/private/tmp/aok-agy-login-audit-yb9u09ce/audit.jsonl');events=[json.loads(x) for x in a.read_text().splitlines()];native=next(x['pid'] for x in events if x['event']=='native-start-gated');parent=int(subprocess.check_output(['ps','-p',str(native),'-o','ppid='],text=True).strip())
+marker=json.loads((r/'owned-session.json').read_text());assert marker['valid'] is False and marker.get('readyPromptObserved') is not True
+from datetime import datetime,timezone
+assert datetime.fromisoformat(marker['expiresAt'].replace('Z','+00:00'))>datetime.now(timezone.utc)
+assert m.file_sha(r/'antigravity')==m.PINNED_BINARY_SHA256
+es=[json.loads(x) for x in a.read_text().splitlines()];assert any(e['event']=='approved-account-onboarding-action' and e.get('action')=='trust-owned-synthetic-root' for e in es)
+assert any(e['event']=='native-start-gated' and e['pid']==native and e['pgid']==native for e in es)
+assert r.resolve()==r and r.stat().st_uid==os.getuid() and stat.S_IMODE(r.stat().st_mode)==0o700
+assert (r/'home').resolve()==r/'home' and stat.S_IMODE((r/'home').stat().st_mode)==0o700
+
+def procs():
+ rows=[]
+ for line in subprocess.check_output(['ps','-axo','pid=,ppid=,pgid=,uid=,stat=,command='],text=True).splitlines():
+  f=line.split(None,5)
+  if len(f)==6:rows.append((int(f[0]),int(f[1]),int(f[2]),int(f[3]),f[4],f[5]))
+ return rows
+rows=procs();group=[x for x in rows if x[2]==native];assert len(group)==1
+assert group[0][:4]==(native,parent,native,os.getuid()) and group[0][5]==str(r/'antigravity')
+p=next(x for x in rows if x[0]==parent);assert p[3]==os.getuid() and '/private/tmp/aok-agy-final-account-login.py ' in p[5]
+os.killpg(native,signal.SIGSTOP);time.sleep(.1)
+assert all('T' in x[4] for x in procs() if x[2]==native)
+held=r/'held-home-for-reviewed-recovery';assert not held.exists();(r/'home').rename(held)
+os.kill(parent,signal.SIGINT)
+for _ in range(100):
+ if not any(x[0] in (parent,native) or x[2]==native for x in procs()):break
+ time.sleep(.1)
+else:raise RuntimeError('cleanup not complete; retained HOME remains held')
+es=[json.loads(x) for x in a.read_text().splitlines()];assert any(e['event']=='native-login-cleanup' and e.get('cleaned') is True for e in es)
+assert not (r/'home').exists();held.rename(r/'home')
+marker.update(valid=False,readyPromptObserved=False,phase='after-color-scheme',binarySHA256=m.PINNED_BINARY_SHA256)
+m._atomic_json(r/'owned-session.json',marker)
+m.validate_onboarding_checkpoint(r,cleanup_native_log=True)
+report={'kind':'aok-agy-manual-checkpoint-recovery/v1','root':str(r),'nativePID':native,'controllerPID':parent,'exactOwnedGroupVerified':True,'stoppedBeforeHomeRename':True,'nativeGroupCleanedBeforeHomeRestore':True,'credentialContentsRead':False,'originalExpiryPreserved':marker['expiresAt'],'valid':False,'readyPromptObserved':False,'phase':'after-color-scheme','proof':'fresh code submitted; sharing disabled; terms accepted; owned trust confirmed; prompt unrecognized','strictCheckpointValidationPassed':True}
+Path('/private/tmp/aok-agy-final-account-recovery.json').write_text(json.dumps(report,indent=2)+'\n')
+print('Owned native group cleaned; diagnostic checkpoint recovered, invalid and unexpired. No credential reads.')

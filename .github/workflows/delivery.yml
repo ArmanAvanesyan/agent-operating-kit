@@ -1,0 +1,40 @@
+name: Repository delivery
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+jobs:
+  delivery:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install -r packs/repository-delivery/config/requirements-dev.txt
+      - name: Test embedded engine and preservation contracts
+        working-directory: packs/repository-delivery
+        run: make quality-fast PYTHON=python
+      # Real swarmd compatibility is separately gated; no private secret is required.
+  installed-delivery:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22.x'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Build real release and exercise installed content
+        shell: bash
+        run: |
+          go run ./cmd/aok-release --root . --dist "$RUNNER_TEMP/delivery-release"
+          python scripts/testing/verify-delivery-release.py --release-dir "$RUNNER_TEMP/delivery-release"

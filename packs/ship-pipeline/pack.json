@@ -22,7 +22,8 @@
   ],
   "sourceRefs": {
     "neutral": [
-      "pack.content.json"
+      "pack.content.json",
+      "../repository-delivery"
     ],
     "claude-code": [
       "claude-code/plugin.json",

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -208,10 +209,11 @@ func validateAdapters(root string, errors *[]string) {
 
 func validatePacks(root string, errors *[]string) {
 	expected := map[string]bool{
-		"engineering-guardrails":    true,
-		"ship-pipeline":             true,
-		"phased-rollout-template":   true,
-		"batch-resolve-conflicts":   true,
+		"engineering-guardrails":  true,
+		"ship-pipeline":           true,
+		"phased-rollout-template": true,
+		"batch-resolve-conflicts": true,
+		"repository-delivery":     true,
 	}
 	packRoot := filepath.Join(root, "packs")
 	found := map[string]bool{}
@@ -262,6 +264,18 @@ func validatePacks(root string, errors *[]string) {
 		} {
 			if _, ok := data[key]; !ok {
 				*errors = append(*errors, "packs/"+name+"/pack.json: missing "+key)
+			}
+		}
+		if raw, ok := data["skillRoot"]; ok {
+			rel, valid := raw.(string)
+			clean := filepath.Clean(filepath.FromSlash(rel))
+			if !valid || !safePackPath(base, rel) || clean == "." {
+				*errors = append(*errors, "packs/"+name+"/pack.json: skillRoot must be a safe relative path")
+			} else {
+				info, err := os.Lstat(filepath.Join(base, clean))
+				if err != nil || !info.IsDir() || info.Mode()&os.ModeSymlink != 0 {
+					*errors = append(*errors, "packs/"+name+"/pack.json: skillRoot target missing or unsafe")
+				}
 			}
 		}
 		if data["name"] != name {
@@ -333,7 +347,7 @@ func validatePacks(root string, errors *[]string) {
 					} else {
 						for _, rel := range sources {
 							s, ok := rel.(string)
-							if !ok || !existsFile(filepath.Join(base, filepath.FromSlash(s))) {
+							if !ok || !(existsFile(filepath.Join(base, filepath.FromSlash(s))) || existsDir(filepath.Join(base, filepath.FromSlash(s)))) {
 								*errors = append(*errors, fmt.Sprintf("packs/%s/pack.json: targetRender[%s] sourceRefs missing %v", name, target, rel))
 							}
 						}
@@ -364,7 +378,7 @@ func validatePacks(root string, errors *[]string) {
 					if !ok {
 						continue
 					}
-					if !existsFile(filepath.Join(base, filepath.FromSlash(s))) {
+					if !(existsFile(filepath.Join(base, filepath.FromSlash(s))) || existsDir(filepath.Join(base, filepath.FromSlash(s)))) {
 						*errors = append(*errors, "packs/"+name+"/pack.json: sourceRef "+s+" missing")
 					}
 				}
@@ -429,6 +443,30 @@ func validatePacks(root string, errors *[]string) {
 			}
 		}
 	}
+}
+
+func safePackPath(base, rel string) bool {
+	if !regexp.MustCompile(`^[A-Za-z0-9_.-]+(/[A-Za-z0-9_.-]+)*$`).MatchString(rel) {
+		return false
+	}
+	for _, part := range strings.Split(rel, "/") {
+		if part == "." || part == ".." {
+			return false
+		}
+	}
+	clean := filepath.Clean(filepath.FromSlash(rel))
+	if rel == "" || strings.Contains(rel, "\\") || filepath.IsAbs(clean) || clean == ".." || strings.HasPrefix(clean, ".."+string(filepath.Separator)) {
+		return false
+	}
+	cur := base
+	for _, part := range strings.Split(clean, string(filepath.Separator)) {
+		cur = filepath.Join(cur, part)
+		info, err := os.Lstat(cur)
+		if err != nil || info.Mode()&os.ModeSymlink != 0 {
+			return false
+		}
+	}
+	return true
 }
 
 func validateClaudeCodeMarketplace(root string, errors *[]string) {

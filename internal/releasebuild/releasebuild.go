@@ -59,6 +59,7 @@ var (
 		"work-items",
 		"scripts/aok",
 		"skills",
+		"packs/repository-delivery",
 		"templates/.codex",
 		"hooks.json",
 		"LICENSE",
@@ -78,7 +79,7 @@ var (
 		"CHANGELOG.md",
 	}
 
-	skipDirs     = map[string]bool{".git": true, "__pycache__": true, ".pytest_cache": true, ".mypy_cache": true, ".ruff_cache": true}
+	skipDirs     = map[string]bool{".git": true, ".venv": true, "venv": true, "__pycache__": true, ".pytest_cache": true, ".mypy_cache": true, ".ruff_cache": true, "dist": true, "build": true, "coverage": true}
 	skipSuffixes = map[string]bool{".pyc": true, ".pyo": true, ".DS_Store": true}
 
 	goBinaryTargets = []struct {
@@ -129,7 +130,7 @@ func LoadVersion(root string) (string, error) {
 }
 
 func isSkipped(name string) bool {
-	if skipDirs[name] || skipSuffixes[name] {
+	if skipDirs[name] || skipSuffixes[name] || strings.HasPrefix(name, ".coverage") || strings.HasSuffix(name, ".egg-info") {
 		return true
 	}
 	for suf := range skipSuffixes {
@@ -140,14 +141,34 @@ func isSkipped(name string) bool {
 	return false
 }
 
+func safeReleaseInput(root, path string) (os.FileInfo, error) {
+	rel, err := filepath.Rel(root, path)
+	if err != nil || rel == ".." || strings.HasPrefix(rel, ".."+string(filepath.Separator)) {
+		return nil, fmt.Errorf("path escapes release root")
+	}
+	current := root
+	var info os.FileInfo
+	for _, part := range strings.Split(rel, string(filepath.Separator)) {
+		current = filepath.Join(current, part)
+		info, err = os.Lstat(current)
+		if err != nil {
+			return nil, err
+		}
+		if info.Mode()&os.ModeSymlink != 0 || (!info.IsDir() && !info.Mode().IsRegular()) {
+			return nil, fmt.Errorf("not a regular release resource: %s", current)
+		}
+	}
+	return info, nil
+}
+
 func iterFiles(root string, paths []string) ([]string, error) {
 	seen := map[string]bool{}
 	var files []string
 	for _, raw := range paths {
 		path := filepath.Join(root, raw)
-		info, err := os.Stat(path)
+		info, err := safeReleaseInput(root, path)
 		if err != nil {
-			return nil, fmt.Errorf("release input does not exist: %s", raw)
+			return nil, fmt.Errorf("unsafe or missing release input %s: %w", raw, err)
 		}
 		if info.IsDir() {
 			err := filepath.WalkDir(path, func(p string, d os.DirEntry, err error) error {
@@ -166,6 +187,12 @@ func iterFiles(root string, paths []string) ([]string, error) {
 						}
 						return nil
 					}
+				}
+				if d.Type()&os.ModeSymlink != 0 {
+					return fmt.Errorf("refusing symlink release input: %s", p)
+				}
+				if !d.IsDir() && !d.Type().IsRegular() {
+					return fmt.Errorf("refusing special release input: %s", p)
 				}
 				if d.IsDir() || isSkipped(d.Name()) {
 					return nil

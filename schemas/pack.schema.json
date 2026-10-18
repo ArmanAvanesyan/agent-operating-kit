@@ -10,6 +10,7 @@
     "description": { "type": "string", "minLength": 1 },
     "sourceRepo": { "type": "string", "minLength": 1 },
     "neutralContent": { "type": "string", "minLength": 1 },
+    "skillRoot": { "type": "string", "minLength": 1, "pattern": "^[A-Za-z0-9_.-]+(/[A-Za-z0-9_.-]+)*$", "not": { "pattern": "(^|/)\\.\\.?(/|$)" } },
     "sourceRefs": {
       "type": "object",
       "additionalProperties": {
@@ -79,6 +80,7 @@
             "type": "object",
             "additionalProperties": true
           },
+          "nativePackageFormats": { "type": "array", "items": { "type": "string", "minLength": 1 } },
           "importInstructions": { "type": "string" },
           "assets": {
             "type": "array",

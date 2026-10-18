@@ -424,25 +424,28 @@ func markdownList(title string, items []map[string]any, fields []string) string 
 func copyBundleSource(root, packDir, rel, bundleDir string, copied *[]string) error {
 	src := filepath.Join(packDir, filepath.FromSlash(rel))
 	src, _ = filepath.Abs(src)
-	if _, err := os.Stat(src); err != nil {
-		return nil
-	}
 	rootAbs, _ := filepath.Abs(root)
 	relToRoot, err := filepath.Rel(rootAbs, src)
 	if err != nil || strings.HasPrefix(relToRoot, "..") {
 		return kit.NewErrorf("Refusing to copy source outside kit root: %s", rel)
 	}
-	dest := filepath.Join(bundleDir, "sources", relToRoot)
+	if err := rejectSymlinkComponents(rootAbs, src); err != nil {
+		return kit.NewErrorf("Refusing unsafe source %s: %v", rel, err)
+	}
 	info, err := os.Stat(src)
 	if err != nil {
-		return err
+		return kit.NewErrorf("Bundle source missing: %s", rel)
 	}
+	dest := filepath.Join(bundleDir, "sources", relToRoot)
 	if info.IsDir() {
 		_ = os.RemoveAll(dest)
-		if err := copyTree(src, dest); err != nil {
+		if err := copyFilteredPackTree(src, dest); err != nil {
 			return err
 		}
 	} else {
+		if !info.Mode().IsRegular() {
+			return kit.NewErrorf("Refusing special bundle source: %s", rel)
+		}
 		if err := os.MkdirAll(filepath.Dir(dest), 0o755); err != nil {
 			return err
 		}
@@ -454,8 +457,67 @@ func copyBundleSource(root, packDir, rel, bundleDir string, copied *[]string) er
 			return err
 		}
 	}
-	*copied = append(*copied, filepath.ToSlash(filepath.Join("sources", rel)))
+	*copied = append(*copied, filepath.ToSlash(filepath.Join("sources", relToRoot)))
 	return nil
+}
+
+func rejectSymlinkComponents(root, path string) error {
+	rel, err := filepath.Rel(root, path)
+	if err != nil || rel == ".." || strings.HasPrefix(rel, ".."+string(filepath.Separator)) {
+		return fmt.Errorf("path escapes kit root")
+	}
+	cur := root
+	for _, part := range strings.Split(rel, string(filepath.Separator)) {
+		cur = filepath.Join(cur, part)
+		info, err := os.Lstat(cur)
+		if err != nil {
+			return err
+		}
+		if info.Mode()&os.ModeSymlink != 0 {
+			return fmt.Errorf("symlink component: %s", cur)
+		}
+	}
+	return nil
+}
+
+func copyFilteredPackTree(src, dest string) error {
+	return filepath.Walk(src, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if path == src {
+			return os.MkdirAll(dest, 0o755)
+		}
+		rel, err := filepath.Rel(src, path)
+		if err != nil {
+			return err
+		}
+		if info.Mode()&os.ModeSymlink != 0 || (!info.IsDir() && !info.Mode().IsRegular()) {
+			return kit.NewErrorf("Refusing unsafe pack source: %s", path)
+		}
+		if info.IsDir() && skipSupportDir(info.Name()) {
+			return filepath.SkipDir
+		}
+		target := filepath.Join(dest, rel)
+		if info.IsDir() {
+			return os.MkdirAll(target, 0o755)
+		}
+		if strings.HasSuffix(info.Name(), ".pyc") || strings.HasSuffix(info.Name(), ".pyo") || strings.HasPrefix(info.Name(), ".coverage") || info.Name() == ".DS_Store" {
+			return nil
+		}
+		if err := os.MkdirAll(filepath.Dir(target), 0o755); err != nil {
+			return err
+		}
+		data, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		return os.WriteFile(target, data, info.Mode())
+	})
+}
+
+func skipSupportDir(name string) bool {
+	return name == ".git" || name == ".venv" || name == "venv" || name == "__pycache__" || name == ".pytest_cache" || name == ".mypy_cache" || name == ".ruff_cache" || name == "dist" || name == "build" || name == "coverage" || strings.HasPrefix(name, ".coverage") || strings.HasSuffix(name, ".egg-info")
 }
 
 func copyTree(src, dest string) error {
@@ -506,9 +568,20 @@ func RenderTargetBundle(root, packName, target, outDir string) (string, error) {
 	if name, _ := manifest["name"].(string); name != "" {
 		packName = name
 	}
+	if raw, ok := manifest["skillRoot"]; ok {
+		root, valid := raw.(string)
+		if !valid || !validSkillRoot(packDir, root) {
+			return "", kit.NewErrorf("Invalid skillRoot in packs/%s/pack.json", packName)
+		}
+	}
 	content, _, err := loadPackContent(packName, packDir, manifest)
 	if err != nil {
 		return "", err
+	}
+	if skillRoot, ok := manifest["skillRoot"].(string); ok {
+		if err := validateSkillGuides(packDir, skillRoot, asMapSlice(content["skills"])); err != nil {
+			return "", err
+		}
 	}
 	bundleDir := filepath.Join(outDir, target, packName)
 	_ = os.RemoveAll(bundleDir)
@@ -543,6 +616,9 @@ func RenderTargetBundle(root, packName, target, outDir string) (string, error) {
 				sourceRefs[s] = true
 			}
 		}
+	}
+	if skillRoot, ok := manifest["skillRoot"].(string); ok && skillRoot != "" {
+		sourceRefs["."] = true
 	}
 	var keys []string
 	for k := range sourceRefs {
@@ -579,15 +655,26 @@ func RenderTargetBundle(root, packName, target, outDir string) (string, error) {
 	var nativeFiles []string
 	switch target {
 	case "codex":
-		_ = kit.WriteJSON(filepath.Join(bundleDir, ".codex-plugin", "plugin.json"), map[string]any{
+		plugin := map[string]any{
 			"name":        "aok-" + packName,
 			"version":     orString(manifest["version"], "0.1.0"),
 			"description": orString(manifest["description"], ""),
 			"aokPack":     packName,
-		})
+		}
+		if skillRoot, ok := manifest["skillRoot"].(string); ok && skillRoot != "" {
+			plugin["skills"] = "./sources/packs/" + packName + "/" + filepath.ToSlash(filepath.Clean(skillRoot)) + "/"
+		}
+		_ = kit.WriteJSON(filepath.Join(bundleDir, ".codex-plugin", "plugin.json"), plugin)
 	case "claude-code":
 		claudeSrc := filepath.Join(packDir, "claude-code")
-		if info, err := os.Stat(claudeSrc); err == nil && info.IsDir() {
+		if skillRoot, ok := manifest["skillRoot"].(string); ok && skillRoot != "" {
+			wrappers, err := writeSkillReferenceWrappers(bundleDir, packName, skillRoot, asMapSlice(content["skills"]), "skills")
+			if err != nil {
+				return "", err
+			}
+			nativeFiles = append(nativeFiles, wrappers...)
+			_ = kit.WriteJSON(filepath.Join(bundleDir, ".claude-plugin", "plugin.json"), map[string]any{"name": packName, "version": orString(manifest["version"], "0.1.0"), "description": orString(manifest["description"], ""), "skills": []string{"./skills"}})
+		} else if info, err := os.Stat(claudeSrc); err == nil && info.IsDir() {
 			if err := copyTree(claudeSrc, filepath.Join(bundleDir, "claude-code")); err != nil {
 				return "", err
 			}
@@ -605,6 +692,13 @@ func RenderTargetBundle(root, packName, target, outDir string) (string, error) {
 		if err != nil {
 			return "", err
 		}
+		if skillRoot, ok := manifest["skillRoot"].(string); ok && skillRoot != "" {
+			wrappers, err := writeSkillReferenceWrappers(bundleDir, packName, skillRoot, asMapSlice(content["skills"]), filepath.Join(".cursor", "skills"))
+			if err != nil {
+				return "", err
+			}
+			nativeFiles = append(nativeFiles, wrappers...)
+		}
 	default:
 		_ = kit.WriteJSON(filepath.Join(bundleDir, "import.json"), map[string]any{
 			"kind":     "aok-target-import",
@@ -620,15 +714,18 @@ func RenderTargetBundle(root, packName, target, outDir string) (string, error) {
 	files = append(files, nativeFiles...)
 	sort.Strings(files)
 	bundle := map[string]any{
-		"kind":                 "aok-bundle",
-		"version":              orString(manifest["version"], "0.1.0"),
-		"pack":                 packName,
-		"target":               target,
-		"supportLevel":         supportLevel,
-		"generatedAt":          time.Now().UTC().Format(time.RFC3339),
-		"contract":             rendered,
-		"files":                files,
+		"kind":                  "aok-bundle",
+		"version":               orString(manifest["version"], "0.1.0"),
+		"pack":                  packName,
+		"target":                target,
+		"supportLevel":          supportLevel,
+		"generatedAt":           time.Now().UTC().Format(time.RFC3339),
+		"contract":              rendered,
+		"files":                 files,
 		"sourceContentIncluded": true,
+	}
+	if skillRoot, ok := manifest["skillRoot"].(string); ok && skillRoot != "" {
+		bundle["resourcePaths"] = map[string]any{"canonicalSkills": filepath.ToSlash(filepath.Join("sources", "packs", packName, skillRoot)), "claudeSkills": "skills", "cursorSkills": ".cursor/skills"}
 	}
 	if err := kit.WriteJSON(filepath.Join(bundleDir, "aok-bundle.json"), bundle); err != nil {
 		return "", err
@@ -637,6 +734,52 @@ func RenderTargetBundle(root, packName, target, outDir string) (string, error) {
 		return "", err
 	}
 	return bundleDir, nil
+}
+
+func writeSkillReferenceWrappers(bundleDir, packName, skillRoot string, skills []map[string]any, hostDir string) ([]string, error) {
+	var out []string
+	for _, skill := range skills {
+		slug := regexp.MustCompile(`[^a-zA-Z0-9_-]+`).ReplaceAllString(strings.ToLower(orString(skill["id"], orString(skill["name"], "skill"))), "-")
+		guide := orString(skill["sourcePath"], filepath.ToSlash(filepath.Join(skillRoot, slug, "SKILL.md")))
+		rel := filepath.ToSlash(filepath.Join(hostDir, slug, "SKILL.md"))
+		guidePath := filepath.Join(bundleDir, "sources", "packs", packName, filepath.FromSlash(guide))
+		guide, _ = filepath.Rel(filepath.Dir(filepath.Join(bundleDir, rel)), guidePath)
+		guide = filepath.ToSlash(guide)
+		body := fmt.Sprintf("---\nname: %s\ndescription: %q\n---\n\nRead the canonical bundled guide at [%s](%s).\n", slug, orString(skill["description"], slug), slug, guide)
+		if err := os.MkdirAll(filepath.Dir(filepath.Join(bundleDir, rel)), 0o755); err != nil {
+			return nil, err
+		}
+		if err := os.WriteFile(filepath.Join(bundleDir, rel), []byte(body), 0o644); err != nil {
+			return nil, err
+		}
+		out = append(out, rel)
+	}
+	return out, nil
+}
+
+func validSkillRoot(packDir, raw string) bool {
+	if !regexp.MustCompile(`^[A-Za-z0-9_.-]+(/[A-Za-z0-9_.-]+)*$`).MatchString(raw) {
+		return false
+	}
+	for _, part := range strings.Split(raw, "/") {
+		if part == "." || part == ".." {
+			return false
+		}
+	}
+	clean := filepath.Clean(filepath.FromSlash(raw))
+	if filepath.IsAbs(clean) || clean == ".." || strings.HasPrefix(clean, ".."+string(filepath.Separator)) {
+		return false
+	}
+	cur := packDir
+	for _, part := range strings.Split(clean, string(filepath.Separator)) {
+		cur = filepath.Join(cur, part)
+		info, err := os.Lstat(cur)
+		if err != nil || info.Mode()&os.ModeSymlink != 0 {
+			return false
+		}
+	}
+	info, err := os.Stat(cur)
+	return err == nil && info.IsDir()
 }
 
 func writeBundleIndex(kitRoot, outputRoot string, bundles []string) (string, error) {

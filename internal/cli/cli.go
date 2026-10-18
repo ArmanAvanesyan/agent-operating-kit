@@ -36,6 +36,8 @@ func Run(argv []string, stdout, stderr io.Writer) int {
 		code, err = runVersion(args, stdout, stderr)
 	case "doctor":
 		code, err = runDoctor(args, stdout, stderr)
+	case "delivery":
+		code, err = runDelivery(args, stdout, stderr)
 	case "validate":
 		code, err = runValidate(args, stdout, stderr)
 	case "install":
@@ -87,6 +89,7 @@ Usage:
 Commands:
   version              Print kit version from .codex-plugin/plugin.json
   doctor               Check install and required kit files
+  delivery             Repository delivery workflow
   validate             Validate kit content
   agent validate/resolve  Validate contracts or emit static resolution evidence
   planning validate/ready Validate plans or calculate eligibility from evidence
@@ -100,6 +103,10 @@ Commands:
   task sync|packet      Sync GitHub issue/PR or emit task packet (requires gh)
   hooks pre|after       Pre/after task packet checks
   import history        Keyword digest of agent history files
+
+Delivery:
+  aok delivery --help  Show repository delivery commands
+  aok delivery <args>  Run the repository-delivery pack
 
 Environment:
   AOK_ROOT             Override kit root discovery`)

@@ -1,4 +1,4 @@
-include Makefile pack.json pack.content.json import-provenance.json README.md
+include Makefile pack.json pack.content.json import-provenance.json plugin.json README.md
 include .claude-plugin/plugin.json
 recursive-include docs *.md
 recursive-include skills *.md

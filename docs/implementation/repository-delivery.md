@@ -42,5 +42,6 @@ Use clean immutable exports, fresh databases and test-only producers outside
 original checkouts for compatibility. Public CI has no mandatory private secret.
 Unavailable real runtime checks are unexecuted, never presumed passing.
 Windows certification, producer/heartbeat/recovery, live AOK submission, automatic
-routing and dependency installation are proposals/out of scope. Existing legacy
-distribution and all retained private checkpoints remain in place.
+routing and dependency installation are proposals/out of scope. Retained private
+checkpoints remain in place. The standalone repository is retired; this pack is
+the only maintained copy.

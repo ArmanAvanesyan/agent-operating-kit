@@ -1,0 +1,11 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "repo-delivery",
+  "version": "0.1.0",
+  "description": "Preserve repository state and collect revision-bound delivery evidence.",
+  "extensions": {
+    "com.openai": {
+      "onboardingSkill": "./skills/repo-delivery-setup/SKILL.md"
+    }
+  }
+}

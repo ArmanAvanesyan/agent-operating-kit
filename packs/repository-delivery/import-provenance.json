@@ -1,6 +1,7 @@
 {
   "sourceRepository": "ArmanAvanesyan/repo-delivery",
   "sourceCommit": "cf7bae5f45dba2473bf6f8134128e6c5e1f819e7",
+  "status": "retired",
   "files": [
     {
       "path": "MANIFEST.in",
@@ -319,7 +320,7 @@
     "Namespaced skill directories/frontmatter and relative links",
     "AOK CLI and installed-package routing/dependency guidance",
     "POSIX guard and actionable missing dependency errors",
-    "Delivery policy remains authoritative in this pack; legacy repository unchanged",
+    "Delivery policy remains authoritative in this pack; the upstream repository is retired and this pack is the only maintained copy",
     "Bind explicit hooks to isolated installed helper identity; missing or moved content fails closed.",
     "Keep upstream task-packet schema frozen and validate compatibility against the canonical AOK owner.",
     "Require supported optional jsonschema version only for contract consumption."

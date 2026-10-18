@@ -2,7 +2,7 @@
   "name": "repository-delivery",
   "kind": "pack",
   "description": "Preservation-aware repository delivery, snapshot-bound evidence and optional fenced integrations.",
-  "sourceRepo": "ArmanAvanesyan/repo-delivery",
+  "sourceRepo": "ArmanAvanesyan/agent-operating-kit",
   "neutralContent": "pack.content.json",
   "supportedTargets": [
     "codex",

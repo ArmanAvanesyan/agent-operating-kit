@@ -8,6 +8,7 @@ Codex project TOML is also registered; [its source mapping and parser evidence](
 Cursor project Markdown is registered with an [open native-loading gate](../internal/nativeadapters/cursor/README.md).
 Gemini project Markdown is registered; [its host is unavailable](../internal/nativeadapters/gemini/README.md), so native loading remains blocked.
 OpenClaw has an [isolated-home JSON/JSONC roster and workspace projection](../internal/nativeadapters/openclaw/README.md); its absent host keeps the native gate open.
+Hermes has a [bounded native profile projection](../internal/nativeadapters/hermes/README.md); full profile completeness and safe native loading remain unverified.
 Other known targets without a registered adapter report a blocked result.
 Shared parser tests alone do not establish native completion.
 

@@ -1,0 +1,8 @@
+model:
+  default: anthropic/claude-sonnet-4
+  provider: anthropic
+  temperature: 0.2
+terminal:
+  cwd: /workspace/project
+tools:
+  profile: coding

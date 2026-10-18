@@ -51,6 +51,10 @@ func Export(engine *nativeadapter.Engine, target, scope, assignment, root string
 	for _, path := range []string{"agent.metadata.id", "agent.identity.purpose", "agent.instructions.sources", "executionProfile.model.selector"} {
 		required(path)
 	}
+	if s.Agent.Identity.Callsign != nil {
+		set("agent.identity.callsign", s.Agent.Identity.Callsign)
+		required("agent.identity.callsign")
+	}
 	if supported["executionProfile.model.reasoning.mode"] {
 		mode := s.Profile.Model.Reasoning.Mode
 		if mode != "provider-default" && mode != "effort" {

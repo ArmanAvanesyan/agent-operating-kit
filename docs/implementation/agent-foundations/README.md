@@ -94,8 +94,8 @@ workers and one reviewer, with isolated worktrees for concurrent edits.
 | 8 | Claude Code native adapter | Merged: [PR #55](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/55); project discovery verified |
 | 9 | Codex native adapter | Merged: [PR #56](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/56); full loading gate open |
 | 10 | Cursor native adapter | Merged: [PR #57](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/57); loading gate open |
-| 11 | Gemini native adapter | In progress; host unavailable |
-| 12 | OpenClaw native adapter | Pending; host unavailable |
+| 11 | Gemini native adapter | Merged: [PR #58](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/58); host unavailable |
+| 12 | OpenClaw native adapter | In progress; host unavailable |
 | 13 | Hermes native adapter | Pending; scope feasibility gate |
 | 14 | agy native adapter and target registration | Pending |
 | 15 | End-to-end, distribution and operator documentation | Pending |

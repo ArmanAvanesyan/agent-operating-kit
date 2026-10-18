@@ -13,6 +13,7 @@ import (
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/codex"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/cursor"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/gemini"
+	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/openclaw"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/opencode"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativebridge"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeio"
@@ -26,6 +27,7 @@ func nativeEngine() *nativeadapter.Engine {
 	_ = registry.Register(codex.New())
 	_ = registry.Register(cursor.New())
 	_ = registry.Register(gemini.New())
+	_ = registry.Register(openclaw.New())
 	return nativeadapter.NewEngine(registry)
 }
 func runNative(args []string, stdout, stderr io.Writer) (int, error) {

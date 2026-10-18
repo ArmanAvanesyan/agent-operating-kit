@@ -8,7 +8,7 @@ newer than installed hosts; each adapter must pin its tested format and host.
 
 | Target | Native format and candidate scope | Local host | Remaining native gate |
 |---|---|---|---|
-| Codex | Project `.codex/agents/<name>.toml`; project `.codex/config.toml` controls concurrency | `codex-cli 0.162.1`; temporary npm `0.163.0` | [No-turn interface audit](../../evidence/native-adapters/codex-cursor-discovery-2026.10.18.json); [startup parser acceptance verified](../../evidence/native-adapters/codex-0.162.1.json); child-agent loading/selection remains unverified |
+| Codex | `project-registered`: `.codex/config.toml` registration plus `.codex/agents/<name>.toml`; standalone `project` retained | `codex-cli 0.162.1`; earlier temporary npm `0.163.0` | [Explicit registered role loading verified](../../evidence/native-adapters/codex-project-registered-0.162.1.json); standalone discovery, child-agent selection and runtime enforcement remain unverified |
 | Claude Code | Project `.claude/agents/*.md`, YAML frontmatter and prompt body; user/plugin scopes differ | `2.1.281` | Project discovery verified; [evidence](../../evidence/native-adapters/claude-2.1.281.json); plugin loading/runtime enforcement unverified |
 | OpenCode | Project `.opencode/agents/*.md` or `opencode.json` agent entries | `1.18.35` | Project loading and round trip verified; [evidence](../../evidence/native-adapters/opencode-1.18.35.json); runtime enforcement unverified |
 | Cursor | Project `.cursor/agents/*.md`, YAML frontmatter and prompt body | `cursor-agent 2026.04.17-787b533` | [ACP startup/privacy blocker](../../evidence/native-adapters/codex-cursor-discovery-2026.10.18.json); shipped-component discovery verified, full CLI gate open |
@@ -23,6 +23,10 @@ newer than installed hosts; each adapter must pin its tested format and host.
   native TOML examples include name, description, model,
   model_reasoning_effort and developer_instructions. Do not assume every global
   config field is accepted in an agent definition.
+- [Codex config reference](https://learn.chatgpt.com/docs/config-file/config-reference):
+  `[agents.<name>]` supplies `description` and `config_file`; relative role-file
+  paths resolve from the declaring config. The registered project adapter
+  supports this explicit registration separately from standalone-file discovery.
 - [Claude Code subagents](https://code.claude.com/docs/en/sub-agents): native
   frontmatter configures identity, tools/model and other scope-sensitive fields.
   Plugin agents do not have the same hooks, MCP and permission-mode behavior as
@@ -64,7 +68,7 @@ subsequent temporary package versions and source-only Hermes identity are
 recorded with their distinct provenance above.
 The earlier Hermes/agy help and listing probes were intended to be read-only;
 the subsequent bootstrap/update side effects and audit are recorded below. OpenCode, Claude and Gemini project adapters plus the OpenClaw isolated-home Linux adapter have generated-file discovery
-evidence linked above. The other three native gates remain open. Gemini verification
+evidence linked above. Codex also has explicit registered project role-file loading evidence. The other two native gates remain open. Gemini verification
 used a temporary install; its earlier unintended global updater install was attributed
 and removed, and agy was restored from its verified pre-update backup. See the
 [follow-up audit](../../evidence/native-adapters/loading-followup.md). Future evidence must record

@@ -6,7 +6,7 @@ CLI discovery, invocation and runtime enforcement are separate observations.
 
 | Target | Follow-up result | Overall loading gate |
 |---|---|---|
-| Codex 0.162.1 / temporary 0.163.0 | Trusted positive/empty config/read controls and generated app-server schemas expose no custom-role discovery/selection interface; earlier loopback request audit also exposed no role identity | Open; no-turn loading proof unavailable |
+| Codex 0.162.1 | New explicit project registration loads the AOK-exported role; absent registration, malformed config, malformed referenced role and missing-file controls distinguish actual loading | Verified for `project-registered` loading only; standalone discovery and child-agent invocation unverified |
 | Cursor 2026.04.17 | Shipped loader component discovers generated file; absent/malformed controls discover none; scalar/control/blank-prompt incompatibilities fixed; new copied ACP startup fails under keychain-denying privacy boundary | Open; full CLI discovery/selection not established |
 | Gemini CLI 0.61.0 | Actual guarded TUI discovers generated name/description before auth; empty-project control does not | Verified for project discovery only |
 | OpenClaw 2026.9.4 | Actual Linux CLI roster loads id/model; absent/malformed controls and exact workspace/missing-file loader controls pass | Verified for Linux isolated-home loading only; Darwin CLI unverified |
@@ -15,7 +15,7 @@ CLI discovery, invocation and runtime enforcement are separate observations.
 
 The implemented adapter commands still produce incomplete draft candidates and
 report runtime enforcement as unverified. No inference or authentication was
-performed. Three of the six original loading gates remain open at this checkpoint.
+performed. Two of the six original loading gates remain open at this checkpoint.
 
 ## Evidence and reproduction
 
@@ -80,7 +80,8 @@ installed only in a temporary private npm prefix with package lifecycle scripts
 disabled. The installed user CLI was not upgraded. Cursor's keychain-denied
 startup failure is recorded separately from its documented authentication flow;
 it is not evidence of a parser failure or a successful discovery attempt.
-Both gates remain open. No credentials, model turns or remote network requests
+Both gates remained open at that checkpoint. The registered-scope follow-up below
+supersedes the Codex loading conclusion. No credentials, model turns or remote network requests
 were used in these host probes.
 
 ## Installed Hermes entrypoint and agy recheck
@@ -104,3 +105,26 @@ PR [67](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/67) was clear
 by independent automated Luna review at `84ff7ff227718d405479e15cd248ed8295113d27`
 and passed all eight CI checks before squash merge. Agent review is not human
 approval.
+
+
+## Codex explicit project registration
+
+The [registered-scope evidence](codex-project-registered-0.162.1.json) uses a
+freshly built AOK binary to import/export a two-file `project-registered`
+inventory. The [bounded reproducer](../../../scripts/native-loading/verify_codex_project_registered.py)
+runs copied Codex CLI 0.162.1 under a network-denying, temporary-write-only OS
+sandbox with a synthetic trusted project and isolated `CODEX_HOME`.
+
+The positive `config/read` resolves `[agents.aok-probe].config_file`, and an
+ephemeral read-only `thread/start` completes without configuration warnings.
+A standalone role without registration produces no registered agent. Malformed
+project config fails the config read; malformed referenced role and missing-file
+controls emit native role-loading warnings. These controls establish that the
+client reads the referenced file, beyond echoing the registration table.
+
+This closes the target's native-loading gate for `project-registered` only.
+Standalone discovery, child-agent invocation, instruction use, model
+compatibility and runtime enforcement remain unverified. No turn, authentication
+or inference request is sent. Import/export results remain blocked incomplete
+drafts, and unknown native settings are preserved without execution or a claim
+that their wider dependencies are satisfied.

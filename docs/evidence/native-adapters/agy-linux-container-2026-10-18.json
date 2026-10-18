@@ -154,7 +154,8 @@
     "reviewedProbeSha256": "dc1ce0649c7be09a9886be106ca648d59ab066416e0bf63700146232b4fd0863",
     "currentNonPromotingProbeSha256": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
     "result": "not-verified; no name or description was observed in any control",
-    "autoPromotion": false
+    "autoPromotion": false,
+    "executedSourceArchive": "not-retained; original run hash is retained, but the exact pre-qualification-change source bytes are unavailable"
   },
   "observedAt": "2026-10-18T03:02:58.962849+00:00",
   "package": {

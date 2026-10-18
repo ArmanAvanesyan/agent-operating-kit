@@ -263,5 +263,8 @@ This does not identify the upstream reason for the empty command or verify
 the interactive `/agents` manager. The reproducer records candidate
 observations only and cannot automatically promote the native-loading gate.
 Its post-run qualification change is explicitly separated from the hash of
-the script that generated these observations. Both loading gates remain open;
+the script that generated these observations. The exact pre-change script
+bytes were not archived; the original run hash and current reproducer are
+retained, and this limits exact-source reproducibility of that historical run.
+Both loading gates remain open;
 the overall native-only completion gate remains incomplete.

@@ -57,3 +57,23 @@ func TestDirectoryNeverDiscoversAmbientFiles(t *testing.T) {
 		t.Fatal("read directory without explicit inventory")
 	}
 }
+
+func TestMarkdownExtensionInferenceForExplicitAndManifestInputs(t *testing.T) {
+	for _, name := range []string{"reviewer.md", "reviewer.MDC", "reviewer.markdown"} {
+		t.Run(name, func(t *testing.T) {
+			root := t.TempDir()
+			if err := os.WriteFile(filepath.Join(root, name), []byte("---\nname: reviewer\n---\nReview only."), 0600); err != nil {
+				t.Fatal(err)
+			}
+			if err := os.WriteFile(filepath.Join(root, ManifestName), []byte(`{"version":"aok-native-input/v1","files":[{"path":"`+name+`"}]}`), 0600); err != nil {
+				t.Fatal(err)
+			}
+			for _, input := range []string{filepath.Join(root, name), root} {
+				files, err := Load(input)
+				if err != nil || len(files) != 1 || files[0].Format != "markdown" {
+					t.Fatalf("extension inference for %s: files=%v err=%v", input, files, err)
+				}
+			}
+		})
+	}
+}

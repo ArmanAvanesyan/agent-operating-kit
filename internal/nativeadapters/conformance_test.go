@@ -3,6 +3,8 @@ package nativeadapters_test
 import (
 	"bytes"
 	"os"
+	"path"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -54,6 +56,18 @@ func TestAllNativeAdaptersConformToEngineBoundaries(t *testing.T) {
 func runAdapterConformance(t *testing.T, tc adapterCase) {
 	t.Helper()
 	descriptor := tc.adapter.Descriptor()
+	// Evidence references must resolve to repository artifacts, not free-form
+	// claims. This checks traceability only; it never executes a host probe.
+	for _, reference := range descriptor.HostLoading.Evidence {
+		if !strings.HasPrefix(reference, "docs/") || path.Clean(reference) != reference || strings.Contains(reference, "\\") {
+			t.Fatalf("host evidence is not a repository artifact path: %q", reference)
+		}
+		info, err := os.Stat(filepath.Join("..", "..", filepath.FromSlash(reference)))
+		if err != nil || !info.Mode().IsRegular() || info.Size() == 0 {
+			t.Fatalf("missing evidence artifact %q: %v", reference, err)
+		}
+	}
+
 	scopeSupported := false
 	for _, scope := range descriptor.Scopes {
 		if scope == tc.scope {

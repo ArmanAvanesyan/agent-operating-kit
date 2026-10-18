@@ -40,7 +40,7 @@ Sources checked:
 - [CLI `/agents` command](https://www.antigravity.google/docs/cli/commands/agents)
 - [CLI subagent guide](https://antigravity.google/docs/cli-subagents)
 
-`Descriptor().HostLoading.Status` remains `not-run`. A bounded probe observed
+At this historical probe, `Descriptor().HostLoading.Status` was `not-run`. A bounded probe observed
 the installed executable change from 1.3.6 to 1.4.2 after non-isolated
 help/list invocations. The exact pre-probe 1.3.6 backup was later version-checked
 as a copy under a write guard and atomically restored to the original path; the
@@ -170,7 +170,7 @@ shows the same default-only list for AOK-rendered positive, absent and malformed
 project files. Minimal definitions, explicit `mainAgent: true` and flat-file
 layout diagnostics also failed to expose the custom fixture. These observations
 do not identify an individual field or layout as the cause and do not justify
-changing the adapter's rendering speculatively. The status stays `not-run`
+changing the adapter's rendering speculatively. At that stage the status stayed `not-run`
 (no qualifying native-loading evidence); backend auth and runtime enforcement
 remain unverified. An authenticated account-mode comparison remains open.
 
@@ -183,7 +183,7 @@ Separate absent and malformed controls omit the fixture. This supersedes the
 earlier default-only synthetic-provider result for positive discovery; it does
 not identify the precise cause of provider-dependent behavior. The full gate
 still requires explicit native malformed-file rejection, which was not visible.
-`HostLoading.Status` therefore remains `not-run`; selection, inference, backend
+At that stage `HostLoading.Status` therefore remained `not-run`; selection, inference, backend
 authentication, and runtime enforcement remain unverified. No speculative native
 format change was made. The original temporary profile and all copies were removed.
 
@@ -194,7 +194,7 @@ The [follow-up investigation](../../../docs/agy-malformed-verification.md) verif
 the native `--log-file` flag and repeated all three account-mode controls with
 a bounded owned-log reader. The log was nonempty and untruncated; no recognized
 YAML/frontmatter rejection was observed for the malformed fixture. Positive
-discovery still passes. The full gate and `HostLoading.Status: not-run` remain
+discovery still passes. At that stage the full gate and `HostLoading.Status: not-run` remained
 unchanged. An opt-in probe can now qualify an explicit native-log error only
 when a recognized parser phrase and the exact fixture path occur on the same
 row; unavailable, truncated or unrelated diagnostics cannot qualify it.

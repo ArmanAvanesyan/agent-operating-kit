@@ -166,6 +166,11 @@ it: preserved settings can affect the native host beyond the selected role.
 Exports create new directories; they do not merge into an installed config.
 Codex adapter version 0.2.0 requires reimporting older 0.1.0 sidecars.
 
+For the original completion-gate audit, remaining limits and current regression
+evidence, see the [completion audit](native-adapter-completion-audit.md). Native
+loading below is retained host evidence, not a claim that this audit reran every
+client, authenticated session or installed profile.
+
 ## Supported scopes and host evidence
 
 Each adapter declares a scope and a separate host-loading state. Host evidence

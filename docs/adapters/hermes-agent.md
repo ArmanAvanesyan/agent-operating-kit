@@ -1,5 +1,11 @@
 # Hermes Agent import guide
 
+This guide covers generated **pack bundles**. The separate Go CLI native-agent
+adapter and its bounded loading evidence are documented in the
+[native operator guide](../native-adapter-operations.md) and
+[completion audit](../native-adapter-completion-audit.md). Pack bundle loading,
+native agent discovery and runtime enforcement have separate acceptance gates.
+
 Status: active · Support level: `generated-bundle` · Host Min/Tested: see
 [targets-support-matrix.md](../targets-support-matrix.md).
 

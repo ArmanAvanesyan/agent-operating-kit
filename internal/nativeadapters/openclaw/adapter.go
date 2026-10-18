@@ -34,7 +34,7 @@ func (Adapter) Descriptor() nativeadapter.Descriptor {
 		Target: target, AdapterVersion: version, Scopes: []string{scope},
 		HostLoading: nativeadapter.HostLoadingEvidence{
 			Status: "verified", HostVersion: "2026.9.4 (Linux; Node 26.7.0)", Scopes: []string{scope},
-			Evidence: []string{"docs/evidence/native-adapters/openclaw-container-2026.9.4.json: isolated Linux CLI roster and exact workspace bytes; no inference or runtime enforcement"},
+			Evidence: []string{"docs/evidence/native-adapters/openclaw-container-2026.9.4.json"},
 		},
 		Fields: []nativeadapter.FieldCapability{
 			{NeutralPath: "agent.metadata.id", NativePath: "agents.entries.<id> (key)", Support: "native", EnforcementOwner: "native"},

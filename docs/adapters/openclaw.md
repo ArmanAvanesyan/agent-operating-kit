@@ -1,5 +1,11 @@
 # OpenClaw import guide
 
+This guide covers generated **pack bundles**. The separate Go CLI native-agent
+adapter and its bounded loading evidence are documented in the
+[native operator guide](../native-adapter-operations.md) and
+[completion audit](../native-adapter-completion-audit.md). Pack bundle loading,
+native agent discovery and runtime enforcement have separate acceptance gates.
+
 Status: active · Support level: `generated-bundle` · Host Min/Tested: see
 [targets-support-matrix.md](../targets-support-matrix.md).
 
@@ -60,4 +66,4 @@ Release zip path: `bundles/openclaw/<pack>/`.
 ## Known gaps
 
 - Native OpenClaw installer and tool-call wiring are pending.
-- Host version Untracked until recorded in the matrix.
+- Pack/install host smoke remains Untracked in the pack matrix; the separate agent adapter has versioned native-loading evidence.

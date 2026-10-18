@@ -1,0 +1,34 @@
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/cmd/aok	13.020s
+?   	github.com/ArmanAvanesyan/agent-operating-kit/cmd/aok-release	[no test files]
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/agentpolicy	0.856s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/agentresolve	2.172s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/agentvalidate	3.347s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/cli	2.571s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/contracts	2.714s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/decision	2.690s
+?   	github.com/ArmanAvanesyan/agent-operating-kit/internal/doctor	[no test files]
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/evidence	2.999s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/experiment	3.338s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/hooks	3.657s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/importhistory	3.990s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/install	4.312s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/kit	4.644s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapter	4.973s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters	5.302s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/agy	5.692s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/claude	5.435s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/codex	4.853s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/cursor	4.795s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/gemini	4.985s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/hermes	5.352s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/openclaw	5.421s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/opencode	5.549s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativebridge	6.669s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeio	5.909s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeparse	6.169s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/planning	15.199s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/releasebuild	19.834s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/render	6.238s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/setup	6.194s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/task	6.111s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/validate	6.123s

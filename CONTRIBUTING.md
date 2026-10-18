@@ -16,6 +16,7 @@ JSON manifests — keep changes small, validated, and documented.
 | Pack, adapter, schema, or docs work; kit authorship | `./scripts/aok` (Python) |
 | `task` / `hooks` / `import` without a Go build | `./scripts/aok` (Python; still supported) |
 | `task` / `hooks` / `import` on the release entrypoint | Go CLI from `cmd/aok` or installed `aok` |
+| Agent validation/resolution, planning, decisions, native agent adapters | Built Go CLI; these commands are not provided by the Python entrypoint |
 | Exercising the end-user release entrypoint | Build/run the Go CLI from `cmd/aok` |
 | End-user install without a checkout | Release binary on `PATH` (see [docs/cli-distribution.md](docs/cli-distribution.md)) |
 

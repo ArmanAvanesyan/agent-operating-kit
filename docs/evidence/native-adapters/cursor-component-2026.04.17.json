@@ -1,0 +1,48 @@
+{
+  "observedAt": "2026-10-18T00:46:48.165533+00:00",
+  "aokBinarySHA256": "d66430072fbd03c7f78e18dd34602e8e25fedfd106d4bfe49f1dcc4c5b9b6936",
+  "target": "cursor",
+  "scope": "project",
+  "hostVersion": "2026.04.17-787b533",
+  "bundleSHA256": "b229d091e5199812927f0c74918d6b53e61fcc869fe39c2f94bad2ab1c049d2e",
+  "runtime": "bundled Node",
+  "module": "../local-exec/dist/index.js",
+  "export": "Vz (LocalSubagentsService)",
+  "instrumentation": "Only webpack startup entry replaced in memory; module factories unchanged; network disabled",
+  "fixture": "internal/nativeadapters/cursor/testdata/reviewer.md",
+  "sourceSHA256": "3a248c5de1d02dec0aa40218074d5beafa081747f2db5326c7ae92e402c8eae5",
+  "renderedSHA256": "d64ff08526ad4d1354a5f72eea9370b1a9d771abf7392b00aa876f9a1faa5acf",
+  "cliResults": {
+    "import": "blocked",
+    "export": "blocked",
+    "compare": "valid"
+  },
+  "observations": {
+    "positive": [
+      {
+        "name": "reviewer",
+        "description": "Reviews changes for correctness and security.",
+        "model": "inherit",
+        "prompt": "Review the requested changes. Report concrete findings with file and line references.",
+        "fullPath": "$PROBE_ROOT/export/.cursor/agents/reviewer.md"
+      }
+    ],
+    "absent": [],
+    "malformed": [],
+    "quoted-scalar": [
+      {
+        "name": "reviewer",
+        "description": "\"Review: exact scalar\"",
+        "model": "inherit",
+        "prompt": "Prompt",
+        "fullPath": "$PROBE_ROOT/export/.cursor/agents/reviewer.md"
+      }
+    ]
+  },
+  "componentDiscovery": "verified",
+  "nativeLoading": "not-run",
+  "runtimeEnforcement": "unverified",
+  "modelExecution": "not-run",
+  "blocker": "No supported full CLI discovery interface was verified; component discovery is narrower than CLI startup/selection.",
+  "adapterFix": "Reject mapped scalar values whose YAML semantics differ from this installed line-oriented host parser."
+}

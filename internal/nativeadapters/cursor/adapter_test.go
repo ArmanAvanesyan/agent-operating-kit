@@ -188,3 +188,29 @@ func cloneDocument(doc nativeadapter.Document) nativeadapter.Document {
 	}
 	return out
 }
+
+func TestHostScalarMismatchRejected(t *testing.T) {
+	for _, header := range []string{
+		"name: reviewer\ndescription: \"Review: exact scalar\"\n",
+		"name: reviewer\ndescription: >\n  Review changes\n",
+		"Name: other\n",
+		"name: reviewer\ncustom:\n  name: other\n",
+		"name: reviewer\nmodel: inherit # comment\n",
+	} {
+		files := []nativeadapter.File{{Path: ".cursor/agents/reviewer.md", Format: "markdown", Data: []byte("---\n" + header + "---\nPrompt")}}
+		if _, _, err := New().Decode("project", files); err == nil {
+			t.Fatalf("accepted scalar mismatch: %s", header)
+		}
+	}
+}
+func TestExportRejectsUnrepresentableHostScalar(t *testing.T) {
+	files := []nativeadapter.File{{Path: ".cursor/agents/reviewer.md", Format: "markdown", Data: []byte("---\nname: reviewer\ndescription: Review changes\n---\nPrompt")}}
+	doc, _, err := New().Decode("project", files)
+	if err != nil {
+		t.Fatal(err)
+	}
+	doc.Fields["agent.identity.purpose"] = json.RawMessage(`"Review: exact scalar"`)
+	if _, _, err := New().Encode("project", doc); err == nil {
+		t.Fatal("export silently changed description in native loader")
+	}
+}

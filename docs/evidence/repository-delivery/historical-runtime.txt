@@ -1,0 +1,13 @@
+test_real_changed_artifact_refuses_finalization_atomically (test_swarmd_integration.FencedRuntimeIntegrationTests.test_real_changed_artifact_refuses_finalization_atomically) ... ok
+test_real_cli_fenced_finalization_keeps_token_out_of_output (test_swarmd_integration.FencedRuntimeIntegrationTests.test_real_cli_fenced_finalization_keeps_token_out_of_output) ... ok
+test_real_expired_and_revoked_leases_refuse_finalization (test_swarmd_integration.FencedRuntimeIntegrationTests.test_real_expired_and_revoked_leases_refuse_finalization) ... ok
+test_real_failed_outcome_and_retry_conflict (test_swarmd_integration.FencedRuntimeIntegrationTests.test_real_failed_outcome_and_retry_conflict) ... ok
+test_real_fenced_success_persists_handoff_and_review_child (test_swarmd_integration.FencedRuntimeIntegrationTests.test_real_fenced_success_persists_handoff_and_review_child) ... ok
+test_real_wrong_token_revision_and_outcome_do_not_mutate (test_swarmd_integration.FencedRuntimeIntegrationTests.test_real_wrong_token_revision_and_outcome_do_not_mutate) ... ok
+test_real_empty_attempt_export_and_tool_errors (test_swarmd_integration.SwarmdRuntimeIntegrationTests.test_real_empty_attempt_export_and_tool_errors) ... ok
+test_real_mcp_read_after_fixture_task_creation (test_swarmd_integration.SwarmdRuntimeIntegrationTests.test_real_mcp_read_after_fixture_task_creation) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 3.184s
+
+OK

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Embed repository-delivery as an optional Python 3.11+ capability behind the Go
+  CLI, with eight canonical skills, preservation/evidence schemas, complete
+  installed/rendered support trees and scoped shipping compatibility guidance.
+
 - Add scaffolded, read-only GitHub Projects and Azure DevOps work-system
   discovery, desired-state planning, validation, and verified local bindings.
 - Preserve verified work-system bindings across `aok project init`.

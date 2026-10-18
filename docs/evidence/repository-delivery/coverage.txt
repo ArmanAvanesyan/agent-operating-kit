@@ -1,0 +1,18 @@
+Name                                    Stmts   Miss  Cover
+-----------------------------------------------------------
+src/repo_delivery/__init__.py               0      0   100%
+src/repo_delivery/adapters.py             200     17    92%
+src/repo_delivery/cli.py                   44      1    98%
+src/repo_delivery/core.py                 224     13    94%
+src/repo_delivery/delivery_cli.py         145      7    95%
+src/repo_delivery/evidence.py             152      3    98%
+src/repo_delivery/extensions_cli.py        97      5    95%
+src/repo_delivery/github.py               140      4    97%
+src/repo_delivery/hooks.py                 96     16    83%
+src/repo_delivery/integration.py          109      3    97%
+src/repo_delivery/planning.py             161      0   100%
+src/repo_delivery/runtime_finalize.py      66      0   100%
+src/repo_delivery/validation.py            81      0   100%
+src/repo_delivery/workspace.py            230     26    89%
+-----------------------------------------------------------
+TOTAL                                    1745     95    95%

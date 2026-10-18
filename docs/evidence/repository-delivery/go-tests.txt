@@ -1,0 +1,34 @@
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/cmd/aok	5.073s
+?   	github.com/ArmanAvanesyan/agent-operating-kit/cmd/aok-release	[no test files]
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/agentpolicy	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/agentresolve	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/agentvalidate	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/cli	2.955s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/contracts	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/decision	(cached)
+?   	github.com/ArmanAvanesyan/agent-operating-kit/internal/doctor	[no test files]
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/evidence	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/experiment	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/hooks	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/importhistory	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/install	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/kit	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapter	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/agy	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/claude	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/codex	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/cursor	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/gemini	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/hermes	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/openclaw	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/opencode	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativebridge	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeio	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeparse	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/planning	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/releasebuild	15.143s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/render	1.942s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/setup	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/task	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/validate	(cached)

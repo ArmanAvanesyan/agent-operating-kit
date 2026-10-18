@@ -1,0 +1,59 @@
+{
+  "status": "local-gates-passed",
+  "aokBaseline": "40fe464c9f19626d4712a226771435c35076a04e",
+  "repoDeliverySource": "cf7bae5f45dba2473bf6f8134128e6c5e1f819e7",
+  "swarmdPins": [
+    "f7a515320f4e939e608b13c15dca8b7f4aa25b88",
+    "0a4298b1cbbc3cd848f20a97527752e270abc6c3"
+  ],
+  "engineTests": 145,
+  "engineSkipped": 0,
+  "coveragePercent": 95,
+  "runtimeFinalizeCoveragePercent": 100,
+  "historicalRuntimeTests": 8,
+  "schemaCount": 25,
+  "workflowCount": 8,
+  "relocatedRendererBundles": 14,
+  "installedProof": {
+    "status": "passed",
+    "platform": "darwin",
+    "installer": "macos-intel",
+    "existingGoValidationWithoutPython": true,
+    "installedDeliveryFlow": true,
+    "sourceCheckoutRequiredByInstalledHelper": false
+  },
+  "preservation": {
+    "aok": {
+      "baselineHead": "40fe464c9f19626d4712a226771435c35076a04e",
+      "observedHead": "40fe464c9f19626d4712a226771435c35076a04e",
+      "headUnchanged": true,
+      "originalStatusUnchanged": true,
+      "trackedDiffUnchanged": true,
+      "retainedWorktreesUnchanged": true
+    },
+    "repo-delivery": {
+      "baselineHead": "cf7bae5f45dba2473bf6f8134128e6c5e1f819e7",
+      "observedHead": "cf7bae5f45dba2473bf6f8134128e6c5e1f819e7",
+      "headUnchanged": true,
+      "originalStatusUnchanged": true,
+      "trackedDiffUnchanged": true,
+      "retainedWorktreesUnchanged": true
+    },
+    "swarmd": {
+      "baselineHead": "0a4298b1cbbc3cd848f20a97527752e270abc6c3",
+      "observedHead": "b113532505fdd1e3b9cf8249adb9a4066ba0edc1",
+      "headUnchanged": false,
+      "originalStatusUnchanged": true,
+      "trackedDiffUnchanged": true,
+      "retainedWorktreesUnchanged": false
+    }
+  },
+  "limitations": [
+    "Helpers certified on Linux/macOS; Windows operations fail closed.",
+    "Native discovery/runtime enforcement beyond generated entrypoints not established by syntax or relocation tests.",
+    "Agent review is not submitted GitHub approval.",
+    "No runtime producer/heartbeat/recovery/quorum/AOK submission.",
+    "Concurrent swarmd HEAD and worktree-list change observed; not restored or modified by this task.",
+    "Private checkpoint bytes were not uploaded or inspected; preservation comparison covers repository observations only."
+  ]
+}

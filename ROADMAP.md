@@ -47,3 +47,12 @@ _(none — planned ROADMAP themes from the 0.6.0 cut are shipped)_
 - [docs/targets-support-matrix.md](docs/targets-support-matrix.md)
 - [docs/cli-distribution.md](docs/cli-distribution.md)
 - [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## Embedded repository delivery
+
+The repository-delivery pack adds deterministic preservation and delivery helpers,
+an optional Python bridge in the Go CLI, and complete installed/rendered resources.
+See [design and acceptance](docs/implementation/repository-delivery.md) and
+[validation evidence](docs/evidence/repository-delivery-validation.md). Windows
+certification and live runtime orchestration remain future work; embedding does not
+add a producer, heartbeat, recovery, approval quorum or AOK submission endpoint.

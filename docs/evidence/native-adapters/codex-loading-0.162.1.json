@@ -1,6 +1,6 @@
 {
-  "observedAt": "2026-10-18T00:46:51.093112+00:00",
-  "aokBinarySHA256": "d66430072fbd03c7f78e18dd34602e8e25fedfd106d4bfe49f1dcc4c5b9b6936",
+  "observedAt": "2026-10-18T01:01:33.275196+00:00",
+  "aokBinarySHA256": "b900b90e5823be0ad7e40b5cb60dc821e9e4d20e8cddb6cf079bcad5b773de65",
   "target": "codex",
   "scope": "project",
   "hostVersion": "codex-cli 0.162.1",
@@ -31,7 +31,7 @@
       "generatedAgentIdentityVisible": false,
       "generatedAgentDescriptionVisible": false,
       "malformedWarning": false,
-      "requestSHA256": "b7acd85b2ce68f9de04bfe8ebbee83b94faa2e22ef3a8c847fa785fc9b2bcc6d"
+      "requestSHA256": "b5827c6d5e59f67abbae6d4d1c5e42c8ca7508a1ee0097bb629d3db8e827d1ad"
     },
     "multi_agent:absent": {
       "exitCode": 1,
@@ -50,7 +50,7 @@
       "generatedAgentIdentityVisible": false,
       "generatedAgentDescriptionVisible": false,
       "malformedWarning": false,
-      "requestSHA256": "dd4efa818237a03b0f91186dcb7f005bc6d317c25e5974b439bb9f8900058824"
+      "requestSHA256": "e1976a8d0d3c49032aed0fc580e596e54aca31eb672c8b385ff00f1c2388d3be"
     },
     "multi_agent:malformed": {
       "exitCode": 1,
@@ -69,7 +69,7 @@
       "generatedAgentIdentityVisible": false,
       "generatedAgentDescriptionVisible": false,
       "malformedWarning": false,
-      "requestSHA256": "8a8f2c09932bfd1ffba64e31f7667d4d65aa8be2d5d2841c2a60dba62d3a333d"
+      "requestSHA256": "3059b4480431e769ad8fb57ced2879157f350278cdfdbbfcb578e861f9495061"
     },
     "multi_agent_v2:positive": {
       "exitCode": 1,
@@ -88,7 +88,7 @@
       "generatedAgentIdentityVisible": false,
       "generatedAgentDescriptionVisible": false,
       "malformedWarning": false,
-      "requestSHA256": "7b0440d60d1c8648ee0ebaea5e62f350c978c8c82018c9f7ccca948880a76979"
+      "requestSHA256": "a4d47b7a79f93d849d82f6bd093bf0dcbcdbece713715a8482b6db3b443f1dda"
     },
     "multi_agent_v2:absent": {
       "exitCode": 1,
@@ -107,7 +107,7 @@
       "generatedAgentIdentityVisible": false,
       "generatedAgentDescriptionVisible": false,
       "malformedWarning": false,
-      "requestSHA256": "df738a9fb3dfae69ad7e2c021ce7ba2be6582064a012996ed8e444ca65c929b9"
+      "requestSHA256": "66a78ae3d684f299248d44233dc9e1aa9272e8220fd08541d2144684301c8020"
     },
     "multi_agent_v2:malformed": {
       "exitCode": 1,
@@ -126,10 +126,11 @@
       "generatedAgentIdentityVisible": false,
       "generatedAgentDescriptionVisible": false,
       "malformedWarning": false,
-      "requestSHA256": "36a0109f4ea1d300db21b3e821eb5891f5fb8d05d84cc29c96106101ce4cda3c"
+      "requestSHA256": "ba3103e4220b41cb70c97305a7ebe5fd0c950105b6695a1cd03d312593591ad3"
     }
   },
   "isolation": "Temporary HOME/CODEX_HOME/cwd; allow-listed environment without credentials; analytics/feedback disabled",
+  "writeConfinement": "Darwin sandbox-exec; writes limited to resolved temporary root and terminal/null devices",
   "provider": "Ephemeral loopback HTTP sink; always returns HTTP 400; no model implementation or output",
   "nativeLoading": "not-run",
   "nativeParsing": "see prior app-server parser evidence",

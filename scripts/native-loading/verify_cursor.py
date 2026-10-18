@@ -12,6 +12,7 @@ import os
 from pathlib import Path
 import subprocess
 import tempfile
+from native_confinement import run_confined
 
 ENTRY = 'var __webpack_exports__=__webpack_require__("./src/index.tsx")'
 EXPOSE = 'module.exports=__webpack_require__("../local-exec/dist/index.js")'
@@ -98,9 +99,8 @@ m.paths=Module._nodeModulePaths(path.dirname(file));m._compile(patched,file);
                 exported.write_text('---\nname: reviewer\n---\n \ufeff \n')
             else:
                 exported.write_bytes(generated)
-            result = subprocess.run([str(host / "node"), str(harness), str(bundle),
-                                     str(root / "export")], env=env, cwd=root,
-                                    capture_output=True, text=True, timeout=30)
+            result = run_confined([str(host / "node"), str(harness), str(bundle),
+                                     str(root / "export")], root=root, env=env, cwd=root, timeout=30)
             assert result.returncode == 0, "Native loader component failed"
             rows = json.loads(result.stdout)
             for row in rows:
@@ -112,14 +112,14 @@ m.paths=Module._nodeModulePaths(path.dirname(file));m._compile(patched,file);
         assert row["description"] == "Reviews changes for correctness and security."
         assert not observations["absent"] and not observations["malformed"] and not observations["blank-prompt"]
         assert observations["quoted-scalar"][0]["description"] == '"Review: exact scalar"'
-        version = subprocess.run([str(host / "cursor-agent"), "--version"], env=env,
-                                 capture_output=True, text=True, timeout=15)
+        version = run_confined([str(host / "cursor-agent"), "--version"], root=root, env=env, timeout=15)
         assert version.returncode == 0
         print(json.dumps({
             "observedAt": datetime.now(timezone.utc).isoformat(),
             "aokBinarySHA256": sha(aok.read_bytes()),
             "target": "cursor", "scope": "project", "hostVersion": version.stdout.strip(),
             "bundleSHA256": sha(original), "runtime": "bundled Node",
+            "writeConfinement": "Darwin sandbox-exec; writes limited to resolved temporary root and terminal/null devices",
             "module": MODULE, "export": "Vz (LocalSubagentsService)",
             "instrumentation": "Only webpack startup entry replaced in memory; module factories unchanged; Node TCP connect, HTTP(S) request and fetch guarded",
             "fixture": str(fixture.relative_to(repo)), "sourceSHA256": sha(fixture.read_bytes()),

@@ -13,6 +13,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 import threading
+from native_confinement import run_confined
 
 
 def sha(data):
@@ -98,9 +99,7 @@ def main():
                     ]:
                         cmd.extend(["-c", setting])
                     cmd.append("Synthetic local request-construction probe. No work is requested.")
-                    result = subprocess.run(cmd, cwd=root / "export", env=env,
-                                            stdin=subprocess.DEVNULL, capture_output=True,
-                                            text=True, timeout=30)
+                    result = run_confined(cmd, root=root, cwd=root / "export", env=env, timeout=30)
                     requests = captured[before:]
                     assert requests, "No loopback request captured; investigation required"
                     assert result.returncode != 0, "Capture sink must fail without inference"
@@ -119,8 +118,7 @@ def main():
             server.shutdown()
             server.server_close()
             thread.join(timeout=5)
-        version = subprocess.run([str(codex), "--version"], env=env, capture_output=True,
-                                 text=True, timeout=15)
+        version = run_confined([str(codex), "--version"], root=root, env=env, timeout=15)
         assert version.returncode == 0
         print(json.dumps({
             "observedAt": datetime.now(timezone.utc).isoformat(),
@@ -130,6 +128,7 @@ def main():
             "sourceSHA256": sha(fixture.read_bytes()), "renderedSHA256": sha(generated),
             "cliResults": statuses, "observations": observations,
             "isolation": "Temporary HOME/CODEX_HOME/cwd; allow-listed environment without credentials; analytics/feedback disabled",
+            "writeConfinement": "Darwin sandbox-exec; writes limited to resolved temporary root and terminal/null devices",
             "provider": "Ephemeral loopback HTTP sink; always returns HTTP 400; no model implementation or output",
             "nativeLoading": "not-run", "nativeParsing": "see prior app-server parser evidence", "modelExecution": "not-run",
             "priorParserEvidence": "docs/evidence/native-adapters/codex-0.162.1.json",

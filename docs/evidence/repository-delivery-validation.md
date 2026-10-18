@@ -91,4 +91,5 @@ interpreter or dependency is installed automatically. Helpers are initially
 certified for Linux/macOS; Windows preservation is blocked. Generated host
 entrypoints and static loading do not prove native runtime policy enforcement.
 There is no producer, heartbeat, recovery, approval quorum or AOK submission.
-The legacy repository/distribution remains unchanged, and the PR must stay open.
+At validation time the standalone repository was left unchanged. That repository
+is now retired; this record remains evidence of the imported `cf7bae5` snapshot.

@@ -37,13 +37,13 @@ from a bundle, or resolve that launcher relative to the bundle location. Native
 entrypoints are generated from canonical guides; do not copy a wrapper alone.
 `skillRoot` is optional: existing pack discovery remains unchanged without it.
 
-The import provenance records repo-delivery commit
+The import provenance records the closed import of repo-delivery commit
 `cf7bae5f45dba2473bf6f8134128e6c5e1f819e7`, original file hashes and intentional
 integration changes. Hashes identify upstream input bytes, not edited AOK files.
 Its frozen AOK task-packet schema remains historical evidence; AOK's root schema
 is authoritative. Evidence versions, checkpoint formats and backlog/runtime
-markers are unchanged. Maintain future workflow changes here, not two manually
-synchronized engines. The legacy repository/distribution is not removed.
+markers are unchanged. Maintain future workflow changes only in this pack.
+The standalone repository is retired.
 
 Existing explicitly installed hooks reference the helper installation used to
 create them. Moving/removing that installation fails closed. Reinstallation or

@@ -11,9 +11,10 @@ complete bundled support tree. Never copy only a skill file without its resource
 
 Read [usage](docs/README.md), [delivery](docs/delivery.md),
 [integrations](docs/integrations.md), and [design](docs/design.md).
-[Import provenance](import-provenance.json) records the unchanged source snapshot
-and intentional integration changes. Historical upstream validation is evidence
-of that upstream revision, not evidence of a new AOK run.
+[Import provenance](import-provenance.json) is a closed import of the upstream
+snapshot and intentional integration changes, not a live upstream. Historical
+upstream validation is evidence of that upstream revision, not evidence of a new
+AOK run. The standalone repository is retired; this pack is the only maintained copy.
 
 No setup/render/install action registers a hook, stores credentials, creates a
 runtime producer, merges a PR or cleans a retained worktree. Those effects require

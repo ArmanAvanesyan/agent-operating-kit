@@ -158,7 +158,7 @@ is narrower than field parsing and remains separate from runtime enforcement.
 | `agy` | `project` | `not-run` | Parser and round-trip checks only. |
 | `gemini` | `project` | Verified project discovery for temporary Gemini CLI 0.61.0 | Guarded positive/empty TUI checks before authentication; no invocation or runtime-enforcement claim. |
 | `openclaw` | `isolated-home` | Verified Linux loading for OpenClaw 2026.9.4 / Node 26.7.0 | Network-disabled container roster and workspace controls; Darwin CLI remains unverified. |
-| `hermes-agent` | `profile` | `unavailable` | Native source components load config/meta/SOUL; launcher/bootstrap and complete profile loading remain unverified. |
+| `hermes-agent` | `profile` | Verified direct installed CLI entrypoint, source-hash bound | Native profile list reads exported model/metadata; separate SOUL loader proof; normal launcher selection and runtime enforcement unverified. |
 
 “Verified” in this table means only that a bounded isolated discovery probe
 found the expected native agent file for that host version and scope. It does

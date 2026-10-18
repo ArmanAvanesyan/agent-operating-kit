@@ -10,12 +10,12 @@ CLI discovery, invocation and runtime enforcement are separate observations.
 | Cursor 2026.04.17 | Shipped loader component discovers generated file; absent/malformed controls discover none; scalar/control/blank-prompt incompatibilities fixed; new copied ACP startup fails under keychain-denying privacy boundary | Open; full CLI discovery/selection not established |
 | Gemini CLI 0.61.0 | Actual guarded TUI discovers generated name/description before auth; empty-project control does not | Verified for project discovery only |
 | OpenClaw 2026.9.4 | Actual Linux CLI roster loads id/model; absent/malformed controls and exact workspace/missing-file loader controls pass | Verified for Linux isolated-home loading only; Darwin CLI unverified |
-| Hermes Agent | Installed source components load model, metadata and SOUL; malformed config falls back with a recorded parse failure | Open; full CLI/profile sufficiency and source-to-CLI equivalence unverified |
-| agy | Copied 1.4.2 executable returns the same empty listing for positive/empty controls | Open |
+| Hermes Agent, direct installed entrypoint | Actual installed CLI lists exported profile/model; separate installed metadata/SOUL loaders pass expected-content and missing controls | Verified for the explicitly selected installed profile entrypoint; normal launcher selection unverified |
+| agy 1.3.6 | Copied executable listing aliases return the same empty output; interactive /agents reaches a login screen with no login completed | Open; manager discovery unavailable before login in this probe |
 
 The implemented adapter commands still produce incomplete draft candidates and
 report runtime enforcement as unverified. No inference or authentication was
-performed. Four of the six original loading gates remain open at this checkpoint.
+performed. Three of the six original loading gates remain open at this checkpoint.
 
 ## Evidence and reproduction
 
@@ -82,3 +82,25 @@ startup failure is recorded separately from its documented authentication flow;
 it is not evidence of a parser failure or a successful discovery attempt.
 Both gates remain open. No credentials, model turns or remote network requests
 were used in these host probes.
+
+## Installed Hermes entrypoint and agy recheck
+
+The [installed Hermes CLI evidence](hermes-cli-profile-list.json) and bounded
+[`probe-hermes-installed.py`](../../../scripts/native-loading/probe-hermes-installed.py)
+cover actual AOK import/export, CLI profile listing, empty/malformed controls,
+and separate installed metadata and SOUL loaders. The reported CLI version is
+`vunknown (2026.9.24)`; exact source hashes and Python 3.14.7 identify the tested
+entrypoint. The probe uses the existing environment directly and does not run
+the package-manager launcher. Launcher selection, complete profile readiness,
+model execution and runtime policy enforcement remain unverified.
+
+The [copied agy 1.3.6 evidence](agy-1.3.6-loading.json) records empty alias results
+and the interactive manager's login barrier. Only loopback bind/inbound traffic
+was permitted; a canary verified remote connections were denied. No login URL,
+state, challenge or raw terminal transcript is saved. The original executable
+was never launched or replaced during this recheck.
+
+PR [67](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/67) was cleared
+by independent automated Luna review at `84ff7ff227718d405479e15cd248ed8295113d27`
+and passed all eight CI checks before squash merge. Agent review is not human
+approval.

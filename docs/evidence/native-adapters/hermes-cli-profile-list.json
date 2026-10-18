@@ -1,0 +1,80 @@
+{
+  "target": "hermes-agent",
+  "scope": "profile",
+  "observedAt": "2026-10-18",
+  "hostVersion": "Hermes Agent vunknown (2026.9.24)",
+  "pythonVersion": "3.14.7",
+  "invocation": "<HERMES_ENV>/venv/bin/python -B -m hermes_cli.main profile list",
+  "invocationSelection": "directly selected installed environment entrypoint; package-manager launcher selection equivalence not established",
+  "installedEnvironment": "<HERMES_ENV>",
+  "installedWorkspaceHasGitMetadata": false,
+  "installedWorkspaceHasInstallStamp": false,
+  "installedSourceSHA256": {
+    "hermes_cli/main.py": "c046ef5cb633677dee346321e81df7e418908f092d9b3a4b6cf8cf902890e6a4",
+    "hermes_cli/config.py": "a469923872fc1e4d905089bb4cc4af5c8cc4104f9f72a159656205c07cdb80ef",
+    "hermes_cli/profiles.py": "9f05944c6f85d16f10024562b9fcc4efc13c69b7b97eed69fb2e7e01094ef83f",
+    "hermes_cli/profile_cmd.py": "4cbd4b10418b4bff7231e26828345ea65e0a74f24c1f080883e9eef1cb89894d",
+    "hermes_cli/boot_bootstrap.py": "ff1cbe91e3ff860ac5c342df0fee581f9393c354f5ce4db3bdebdef332b31ebc",
+    "agent/prompt_builder.py": "563cd638e76308b216cc1a7ff4313f5b0df6d7b83f9b4c92dd6cd0cdadec847c"
+  },
+  "aokRenderedInputs": {
+    "source": "AOK Hermes adapter testdata passed through native import/export",
+    "config.yaml": "7f66bd42dcb35f9b56f56b6637c4556c9cd40a27696b1f70640624a122c0c718",
+    "profile.yaml": "decde473df2941d0e41dce59f307374dbaf4e6db4e54de8c7053928a601957f7",
+    "SOUL.md": "8e7b0931b9ef2a99d4860b4a7a5ca6d1ffa0311615209e926ddc3be1ebbcff4f"
+  },
+  "profileList": {
+    "status": "verified",
+    "exitCode": 0,
+    "fixtureProfileListed": "Builder (default)",
+    "listedModel": "anthropic/claude-sonnet-4",
+    "missingConfigControl": "default listed with model unavailable",
+    "malformedConfigControl": "default fallback shown with no model; Hermes formatting-error/default-settings warning observed",
+    "emptyConfigControl": "default profile shown with no model; configured fixture model absent"
+  },
+  "soulComponent": {
+    "loader": "agent.prompt_builder.load_soul_md(home_override=fixture)",
+    "status": "verified",
+    "loadedBodySha256": "caf511604e929596df1f13e2e89a976900b99ca8b998b955546925bf3419f4b6",
+    "missingProfileControl": "returned None",
+    "descriptionComponent": "read_profile_meta loaded Focused software engineering assistant.; missing profile description empty",
+    "soulHashAfterCLIStartupMatchesExport": true,
+    "normalization": "Native load_soul_md strips surrounding whitespace; loadedBodySha256 is the normalized body hash. Exported SOUL.md has its own raw-file hash, checked unchanged after CLI startup."
+  },
+  "interpretation": {
+    "profileDiscovery": "The directly invoked installed CLI listed the generated profile. The separate installed SOUL loader consumed the generated prompt file.",
+    "profileListConsumedSoul": false,
+    "sourceToLauncherEquivalence": "unverified",
+    "runtimeEnforcement": "unverified",
+    "modelExecution": "not-run",
+    "canonicalCompleteness": "draft-incomplete"
+  },
+  "isolation": {
+    "environment": "env -i with explicit HOME, TMPDIR, PYTHONPATH, and PYTHONDONTWRITEBYTECODE=1",
+    "sandbox": "Darwin sandbox-exec denied writes outside a unique <TEMP_ROOT> and denied network access",
+    "timeout": "bounded process-group timeout; no detached descendants observed",
+    "credentials": "not copied or selected",
+    "bootstrap": "The CLI entrypoint calls its bootstrap check; installed workspace lacked .git metadata and install-stamp.json so the check found no bootstrap identity. No bootstrap marker or installed code was modified."
+  },
+  "limitations": [
+    "The environment was selected explicitly by path; package-manager receipt/launcher equivalence remains unverified.",
+    "The profile list command does not consume SOUL.md; prompt-loader success is a separate component observation.",
+    "The isolated profile inventory is incomplete and does not establish auth, skills, MCP, or runtime enforcement behavior.",
+    "Malformed configuration falls back to defaults instead of being rejected by the native CLI."
+  ],
+  "reproducer": {
+    "script": "scripts/native-loading/probe-hermes-installed.py",
+    "scriptSha256": "2915ff31223736e956dd36edabe60cfff6bca36af10baa8224d91e45bca5557e",
+    "command": "python3 -B scripts/native-loading/probe-hermes-installed.py --environment <HERMES_ENV> --aok <AOK_BINARY>",
+    "aokBinarySha256": "a89c28b2884995895d2a78f2a1c7841e72648446354f7baa1683fdb9c72f725f",
+    "importStatus": "blocked",
+    "bundleCompleteness": "draft-incomplete",
+    "exportStatus": "blocked"
+  },
+  "primaryRepeat": {
+    "allControlsPassed": true,
+    "sameAokAndRenderedHashes": true,
+    "runtimeEnforcement": "unverified",
+    "modelInvocation": "not-run"
+  }
+}

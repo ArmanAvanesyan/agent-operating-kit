@@ -14,8 +14,8 @@ newer than installed hosts; each adapter must pin its tested format and host.
 | Cursor | Project `.cursor/agents/*.md`, YAML frontmatter and prompt body | `cursor-agent 2026.04.17-787b533` | [ACP startup/privacy blocker](../../evidence/native-adapters/codex-cursor-discovery-2026.10.18.json); shipped-component discovery verified, full CLI gate open |
 | Gemini | Project `.gemini/agents/*.md`; personal `~/.gemini/agents/*.md` | Temporary npm CLI 0.61.0 | Guarded project discovery verified before auth; [evidence](../../evidence/native-adapters/gemini-cli-0.61.0.json); invocation/runtime enforcement unverified |
 | OpenClaw | Config roster plus workspace bootstrap files; isolated configuration-home scope | Temporary npm 2026.9.4 / Linux Node 26.7.0 | Isolated roster/workspace discovery verified; [container evidence](../../evidence/native-adapters/openclaw-container-2026.9.4.json); Darwin CLI and runtime enforcement unverified |
-| Hermes Agent | Candidate isolated profile/home, with config and persona files; broader than specialist definition | Source `v0.21.6+canary.20261010T070026Z-249-gd4d2ab7b5d` | [Config/SOUL/profile source-component loading verified](../../evidence/native-adapters/hermes-profile-loader.json); source-to-CLI equivalence and full profile sufficiency unverified |
-| agy | Workspace `.agents/agents/<name>.md` or `<name>/agent.md`, YAML frontmatter | `1.3.6` | Native projection implemented; isolated probes gave no discovery evidence |
+| Hermes Agent | Candidate isolated profile/home, with config and persona files; broader than specialist definition | Direct installed CLI `vunknown (2026.9.24)`, Python 3.14.7; source hashes recorded | [Profile-list and separate metadata/SOUL loading verified](../../evidence/native-adapters/hermes-cli-profile-list.json); package-manager launcher selection and full profile sufficiency unverified |
+| agy | Workspace `.agents/agents/<name>.md` or `<name>/agent.md`, YAML frontmatter | `1.3.6` | [Copied 1.3.6 CLI audit](../../evidence/native-adapters/agy-1.3.6-loading.json): listing aliases return no entries; interactive manager requires login |
 
 ## Official sources and limits
 
@@ -64,7 +64,7 @@ subsequent temporary package versions and source-only Hermes identity are
 recorded with their distinct provenance above.
 The earlier Hermes/agy help and listing probes were intended to be read-only;
 the subsequent bootstrap/update side effects and audit are recorded below. OpenCode, Claude and Gemini project adapters plus the OpenClaw isolated-home Linux adapter have generated-file discovery
-evidence linked above. The other four native gates remain open. Gemini verification
+evidence linked above. The other three native gates remain open. Gemini verification
 used a temporary install; its earlier unintended global updater install was attributed
 and removed, and agy was restored from its verified pre-update backup. See the
 [follow-up audit](../../evidence/native-adapters/loading-followup.md). Future evidence must record

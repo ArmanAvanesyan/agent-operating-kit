@@ -29,9 +29,14 @@ type adapter struct{}
 func (adapter) Descriptor() nativeadapter.Descriptor {
 	return nativeadapter.Descriptor{
 		Target: "hermes-agent", AdapterVersion: adapterVersion, Scopes: []string{"profile"},
-		// Hermes is installed, but its launcher is unsafe to probe in a temporary
-		// home and no safe direct native loader has been verified.
-		HostLoading: nativeadapter.HostLoadingEvidence{Status: "unavailable"},
+		// The installed CLI's profile list read a generated, credential-free
+		// profile under an isolated home. This establishes profile discovery,
+		// not runtime enforcement or agent execution.
+		HostLoading: nativeadapter.HostLoadingEvidence{
+			Status: "verified", HostVersion: "Hermes Agent vunknown (2026.9.24)",
+			Evidence: []string{"docs/evidence/native-adapters/hermes-cli-profile-list.json"},
+			Scopes: []string{"profile"},
+		},
 		Fields: []nativeadapter.FieldCapability{
 			{NeutralPath: "agent.identity.purpose", NativePath: "profile.yaml.description", Support: "native", EnforcementOwner: "native"},
 			{NeutralPath: "executionProfile.model.selector", NativePath: "config.yaml.model.default", Support: "native", EnforcementOwner: "native"},

@@ -5,6 +5,7 @@ OpenCode and Claude Code project Markdown are registered; see its [mapping and h
 Claude also supports plugin parsing/rendering, but its plugin loading gate remains
 unverified. See [Claude mappings and evidence](../internal/nativeadapters/claude/README.md).
 Codex project TOML is also registered; [its source mapping and parser evidence](../internal/nativeadapters/codex/README.md) do not yet establish child-agent loading.
+Cursor project Markdown is registered with an [open native-loading gate](../internal/nativeadapters/cursor/README.md).
 Other known targets without a registered adapter report a blocked result.
 Shared parser tests alone do not establish native completion.
 

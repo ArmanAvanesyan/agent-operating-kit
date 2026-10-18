@@ -24,9 +24,13 @@ type adapter struct{}
 func (adapter) Descriptor() nativeadapter.Descriptor {
 	return nativeadapter.Descriptor{
 		Target: "gemini", AdapterVersion: adapterVersion, Scopes: []string{"project"},
-		// The Gemini host is not available in this environment. This status is
-		// deliberately not a successful load check or a gate completion claim.
-		HostLoading: nativeadapter.HostLoadingEvidence{Status: "unavailable"},
+		// Pinned CLI 0.61.0 displayed the generated agent in its project discovery
+		// UI and omitted it in an empty-project control before authentication.
+		// This verifies project discovery only, not invocation or enforcement.
+		HostLoading: nativeadapter.HostLoadingEvidence{
+			Status: "verified", HostVersion: "gemini-cli@0.61.0", Scopes: []string{"project"},
+			Evidence: []string{"official bundled loadAgentsFromDirectory accepted the exported fixture and rejected malformed YAML; actual CLI project discovery displayed repository-explorer with the expected description and omitted it in an empty control before authentication; invocation and runtime enforcement unverified"},
+		},
 		Fields: []nativeadapter.FieldCapability{
 			{NeutralPath: "agent.metadata.id", NativePath: "frontmatter.name", Support: "native", EnforcementOwner: "native"},
 			{NeutralPath: "agent.identity.purpose", NativePath: "frontmatter.description", Support: "native", EnforcementOwner: "native"},

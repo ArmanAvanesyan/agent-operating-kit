@@ -1,0 +1,51 @@
+{
+  "target": "agy",
+  "checkedAt": "2026-10-18T00:48:32Z",
+  "hostVersion": "agy@1.4.2",
+  "observedVersionDiscrepancy": {
+    "before": "1.3.6",
+    "after": "agy@1.4.2",
+    "cause": "undetermined; no explicit update command was run, and non-isolated help/list invocations preceded the change"
+  },
+  "probeKind": "CLI roster command on private executable copy",
+  "scope": "project",
+  "fixture": {
+    "path": ".agents/agents/repository-explorer/agent.md",
+    "sha256": "a48f7fea192c9ab3c636c631ecd2e1615b6e9b4a6f4685c28464c6b69acd2616"
+  },
+  "sourceExecutableSha256": "fa85a90abded17bcd1b185bbd1d6b1b82065f093ad4700d4dbacd3be2433294c",
+  "backupRestoration": {
+    "restoredVersion": "agy@1.3.6",
+    "restoredPath": "<HOME>/.local/bin/agy",
+    "backupPath": "<HOME>/.local/bin/agy.1792284100432917000.old",
+    "restoredSHA256": "2a6bd844ae3431d35203af44f31bdd5e26f5ffe287d47c62a46862bf44099fc2",
+    "copyVersionProbe": {
+      "version": "agy@1.3.6",
+      "exitCode": 0,
+      "writeGuarded": true,
+      "backupHashUnchanged": true
+    },
+    "updatedExecutableSHA256BeforeRestore": "fa85a90abded17bcd1b185bbd1d6b1b82065f093ad4700d4dbacd3be2433294c",
+    "method": "The backup was copied to a temporary path and version-checked under a Darwin write guard. The updated executable was atomically moved to a temporary quarantine path, then the verified backup inode was atomically restored at the original path.",
+    "originalExecutableInvokedDuringAudit": false
+  },
+  "positive": {
+    "command": "agy agent",
+    "exitCode": 0,
+    "stdoutBytes": 0,
+    "stderrBytes": 0
+  },
+  "emptyControl": {
+    "command": "agy agent",
+    "exitCode": 0,
+    "stdoutBytes": 0
+  },
+  "loadingStatus": "not-verified",
+  "reason": "the documented roster command exited successfully but returned no output with either the generated fixture or the empty control project",
+  "modelInvocation": "not-run",
+  "runtimeEnforcement": "unverified",
+  "sources": [
+    "https://www.antigravity.google/docs/cli/commands/agents/",
+    "https://antigravity.google/docs/cli/subagents"
+  ]
+}

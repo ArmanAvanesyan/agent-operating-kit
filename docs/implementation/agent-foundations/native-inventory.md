@@ -12,7 +12,7 @@ newer than installed hosts; each adapter must pin its tested format and host.
 | Claude Code | Project `.claude/agents/*.md`, YAML frontmatter and prompt body; user/plugin scopes differ | `2.1.281` | Project discovery verified; [evidence](../../evidence/native-adapters/claude-2.1.281.json); plugin loading/runtime enforcement unverified |
 | OpenCode | Project `.opencode/agents/*.md` or `opencode.json` agent entries | `1.18.35` | Project loading and round trip verified; [evidence](../../evidence/native-adapters/opencode-1.18.35.json); runtime enforcement unverified |
 | Cursor | Project `.cursor/agents/*.md`, YAML frontmatter and prompt body | `cursor-agent 2026.04.17-787b533` | [Loading blocker](../../evidence/native-adapters/cursor-loading-blocker.json): no safe discovery command identified; parser round trips do not close gate |
-| Gemini | Project `.gemini/agents/*.md`; personal `~/.gemini/agents/*.md` | Not installed | Bounded Markdown projection implemented; native host loading unavailable |
+| Gemini | Project `.gemini/agents/*.md`; personal `~/.gemini/agents/*.md` | Temporary npm CLI 0.61.0 | Guarded project discovery verified before auth; [evidence](../../evidence/native-adapters/gemini-cli-0.61.0.json); invocation/runtime enforcement unverified |
 | OpenClaw | Config roster plus workspace bootstrap files; isolated configuration-home scope | Not installed | Single-entry roster/workspace projection implemented; native host unavailable, full dependencies unverified |
 | Hermes Agent | Candidate isolated profile/home, with config and persona files; broader than specialist definition | `v0.21.6+636.gd4d2ab7 (2026.9.24)` | Bounded config/SOUL/profile projection implemented; full profile sufficiency and safe native loader unverified |
 | agy | Workspace `.agents/agents/<name>.md` or `<name>/agent.md`, YAML frontmatter | `1.3.6` | Native projection implemented; isolated probes gave no discovery evidence |
@@ -60,8 +60,12 @@ newer than installed hosts; each adapter must pin its tested format and host.
 
 `command -v` located Codex, Claude, OpenCode, Cursor, Hermes and agy. It did not
 locate Gemini or OpenClaw. Versions above came from each host's `--version`.
-Hermes profile/help and agy agent listing were read-only probes. OpenCode and Claude project adapters have isolated generated-file discovery
-evidence linked above. The other six native gates remain open. Future evidence must record
+The earlier Hermes/agy help and listing probes were intended to be read-only;
+the subsequent bootstrap/update side effects and audit are recorded below. OpenCode, Claude and Gemini project adapters have isolated generated-file discovery
+evidence linked above. The other five native gates remain open. Gemini verification
+used a temporary install; its earlier unintended global updater install was attributed
+and removed, and agy was restored from its verified pre-update backup. See the
+[follow-up audit](../../evidence/native-adapters/loading-followup.md). Future evidence must record
 exact commands, sanitized output, isolated configuration paths, native fixture
 hashes, host version, scope, and whether the observation proves syntax, discovery,
 loading or runtime enforcement. Never conflate those categories.

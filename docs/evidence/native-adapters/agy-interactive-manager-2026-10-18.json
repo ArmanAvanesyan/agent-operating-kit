@@ -1,0 +1,114 @@
+{
+  "aok": {
+    "binarySha256": "a89c28b2884995895d2a78f2a1c7841e72648446354f7baa1683fdb9c72f725f",
+    "bundleCompleteness": "draft-incomplete",
+    "exportStatus": "blocked",
+    "importStatus": "blocked"
+  },
+  "auditPath": "docs/evidence/native-adapters/agy-interactive-manager-run-2026-10-18.jsonl",
+  "authentication": "not-run",
+  "authenticationFollowUp": {
+    "status": "user-authentication-required",
+    "documentedMethods": [
+      "local OS keyring token profile",
+      "browser OAuth on first local sign-in",
+      "ADC or Gemini API key for documented headless use"
+    ],
+    "portableCredentialFileDocumented": false,
+    "reviewedHostPath": "~/.gemini/antigravity-cli (names only; no file contents read)",
+    "detail": "All three isolated no-network TTY runs stopped at the authentication barrier. No /agents command was sent. Completing authentication for the isolated profile requires the user; no keychain value was read or copied.",
+    "officialDocumentation": "https://www.antigravity.google/docs/install/"
+  },
+  "candidateManagerEvidence": false,
+  "cases": {
+    "absent": {
+      "cleanupVerified": true,
+      "containerId": "a2c462a80332d72e5e8c7ade57509d6e136df35635267623023db7a3437811ef",
+      "state": {
+        "authBarrierObserved": true,
+        "bytesObserved": 864,
+        "commandSent": false,
+        "descriptionObserved": false,
+        "errorObserved": false,
+        "hostAttachExitCode": 137,
+        "localPromptObserved": false,
+        "managerSectionObserved": false,
+        "nameObserved": false,
+        "parseErrorObserved": false
+      }
+    },
+    "malformed": {
+      "cleanupVerified": true,
+      "containerId": "22c04792de5a4222f542fb983bb0c54c437062cc70cf8934aa303b83a7efb776",
+      "state": {
+        "authBarrierObserved": true,
+        "bytesObserved": 880,
+        "commandSent": false,
+        "descriptionObserved": false,
+        "errorObserved": false,
+        "hostAttachExitCode": 137,
+        "localPromptObserved": false,
+        "managerSectionObserved": false,
+        "nameObserved": false,
+        "parseErrorObserved": false
+      }
+    },
+    "positive": {
+      "cleanupVerified": true,
+      "containerId": "6af2a8aa666a98343094a5aaec7346e3abcc99985330b706e9aa928285898978",
+      "state": {
+        "authBarrierObserved": true,
+        "bytesObserved": 880,
+        "commandSent": false,
+        "descriptionObserved": false,
+        "errorObserved": false,
+        "hostAttachExitCode": 137,
+        "localPromptObserved": false,
+        "managerSectionObserved": false,
+        "nameObserved": false,
+        "parseErrorObserved": false
+      }
+    }
+  },
+  "derivedImage": {
+    "base": "node@sha256:4db36457f406501e6f608802e5da617e5fbd0e80b75901b6a09de1ae5a667d32",
+    "networkDuringBuild": "none",
+    "platform": "linux/amd64",
+    "removed": true
+  },
+  "environment": {
+    "cacheStatus": "already-present; no pull performed",
+    "context": "desktop-linux",
+    "daemon": "docker-desktop 29.4.0 Docker Desktop",
+    "endpoint": "local Docker Desktop Unix socket",
+    "image": "node@sha256:4db36457f406501e6f608802e5da617e5fbd0e80b75901b6a09de1ae5a667d32",
+    "imageId": "sha256:4db36457f406501e6f608802e5da617e5fbd0e80b75901b6a09de1ae5a667d32"
+  },
+  "fixture": {
+    "expectedDescription": "Synthetic AGY adapter discovery fixture",
+    "expectedName": "aok-probe",
+    "path": ".agents/agents/aok-probe/agent.md",
+    "sha256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76"
+  },
+  "limitations": [
+    "The report never promotes nativeLoading automatically.",
+    "Only the documented /agents command is sent, and only after a local input prompt without auth/error markers.",
+    "No authentication, agent selection, ordinary prompt, model invocation, imported command, or enforcement is tested."
+  ],
+  "modelInvocation": "not-run",
+  "nativeLoading": "not-verified",
+  "observedAt": "2026-10-18T03:27:41.539974+00:00",
+  "package": {
+    "archiveSha512": "4a393afc1369cee94e817c1b430c9128d02b12ebd4d5703ace5cd47b2333e216d673fb0097cbf7195f757b110163ba9850e9eea3fdbbaddd4b25668b82c03f05",
+    "binarySha256": "085f43e0d0628a8a8dabe1e547067818fa2c0adc86cfac98a3c4492918f455ef",
+    "manifestSha256": "7942274fb64e30a5106669af06e09a64e3fa7a1e8bb854d7a9e044a3773b69d2",
+    "manifestUrl": "https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/linux_amd64.json",
+    "payloadUrl": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.2-4835981233356800/linux-x64/cli_linux_x64.tar.gz",
+    "version": "1.4.2"
+  },
+  "probeSource": "docs/evidence/native-adapters/agy-interactive-manager-probe-source-497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc.py",
+  "probeSourceSha256": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+  "runtimeEnforcement": "unverified",
+  "scope": "project",
+  "target": "antigravity"
+}

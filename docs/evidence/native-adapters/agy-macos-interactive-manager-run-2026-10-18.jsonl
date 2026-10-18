@@ -1,0 +1,10 @@
+{"at": "2026-10-18T03:37:56.945237+00:00", "event": "source-pinned", "path": "docs/evidence/native-adapters/agy-macos-interactive-source-a8988a3b7f3823af6911264e42b95a51ac88a31d56016dba56505c8ce0acff5c.py", "sha256": "a8988a3b7f3823af6911264e42b95a51ac88a31d56016dba56505c8ce0acff5c"}
+{"event": "owned_process_group", "expectedPGID": 73439, "pid": 73439, "purpose": "agy-signal-preflight"}
+{"event": "owned_process_group", "expectedPGID": 73439, "pgid": 73439, "pid": 73439, "purpose": "agy-signal-preflight"}
+{"at": "2026-10-18T03:37:58.196209+00:00", "event": "signal-preflight-owned", "pgid": 73439, "pid": 73439}
+{"directChildFallback": false, "event": "owned_group_cleanup", "groupCleanupFailed": false, "pgid": 73439, "pid": 73439, "purpose": "agy-signal-preflight"}
+{"at": "2026-10-18T03:37:58.196945+00:00", "event": "signal-preflight-complete", "pgid": 73439, "pid": 73439, "reaped": true}
+{"event": "owned_process_group", "expectedPGID": 73440, "pid": 73440, "purpose": "agy-interactive-positive"}
+{"event": "owned_process_group", "expectedPGID": 73440, "pgid": 73440, "pid": 73440, "purpose": "agy-interactive-positive"}
+{"at": "2026-10-18T03:37:58.200737+00:00", "case": "positive", "event": "native-startup-gated", "gate": "case-owned-startup-gate", "pgid": 73440, "pid": 73440}
+{"descendantsMayRemain": true, "directChildFallback": true, "directChildReaped": true, "errorType": "PermissionError", "event": "owned_group_cleanup", "fallbackErrorType": null, "groupCleanupFailed": true, "pgid": 73440, "pid": 73440, "purpose": "agy-interactive-positive"}

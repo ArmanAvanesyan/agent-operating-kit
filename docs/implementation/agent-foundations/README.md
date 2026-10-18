@@ -1,7 +1,7 @@
 # Agent foundations delivery contract
 
 Status: static foundations and all eight native adapter projections are implemented
-in the Go CLI. The native-only release remains incomplete: six host-loading gates
+in the Go CLI. The native-only release remains incomplete: five host-loading gates
 are open and runtime enforcement is unverified. See the
 [operator guide](../../native-adapter-operations.md) for commands and limits.
 The historical [agent specification](../../proposals/agent-spec/README.md) and
@@ -95,7 +95,7 @@ workers and one reviewer, with isolated worktrees for concurrent edits.
 | 8 | Claude Code native adapter | Merged: [PR #55](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/55); project discovery verified |
 | 9 | Codex native adapter | Merged: [PR #56](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/56); full loading gate open |
 | 10 | Cursor native adapter | Merged: [PR #57](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/57); loading gate open |
-| 11 | Gemini native adapter | Merged: [PR #58](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/58); host unavailable |
+| 11 | Gemini native adapter | Merged: [PR #58](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/58); project discovery verified in the follow-up evidence |
 | 12 | OpenClaw native adapter | Merged: [PR #59](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/59); host unavailable |
 | 13 | Hermes native adapter | Merged: [PR #60](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/60); native loader unavailable |
 | 14 | agy native adapter and target registration | Merged: [PR #61](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/61); loading gate open |
@@ -143,11 +143,11 @@ native loading gates remain separate work.
 
 ## Remaining native-loading gates
 
-OpenCode 1.18.35 and Claude Code 2.1.281 have isolated project discovery evidence.
+OpenCode 1.18.35, Claude Code 2.1.281 and Gemini CLI 0.61.0 have isolated project discovery evidence.
 Codex has parser-startup evidence but no verified generated-agent loading;
-Cursor lacks a verified read-only discovery interface; agy probes returned no
-discovery evidence. Gemini and OpenClaw hosts are unavailable. Hermes has no
-verified safe loader probe. These six gates require versioned isolated native
+Cursor has shipped-component discovery but lacks verified full CLI discovery; agy probes returned no
+discovery evidence. OpenClaw has no verified isolated CLI roster result yet. Hermes has no
+verified safe loader probe. These five gates require versioned isolated native
 loading evidence for generated fixtures before this release can be called complete.
 No runtime enforcement claim follows from either parsing or discovery. See the
 [compatibility inventory](native-inventory.md) and each adapter README for sources.

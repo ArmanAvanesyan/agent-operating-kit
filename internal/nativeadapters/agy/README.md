@@ -32,9 +32,24 @@ Sources checked:
 - [CLI `/agents` command](https://www.antigravity.google/docs/cli/commands/agents)
 - [CLI subagent guide](https://antigravity.google/docs/cli-subagents)
 
-`Descriptor().HostLoading.Status` is `not-run`. The installed AGY CLI is
-reported as version 1.3.6, but prior isolated agent probes returned empty
-output and do not prove that generated definitions load. These tests validate
-only parsing, preservation, and semantic round-tripping; they do not establish
-host discovery, selection, invocation, or enforcement. No model or native
-command was run by this adapter.
+`Descriptor().HostLoading.Status` remains `not-run`. A bounded probe observed
+the installed executable change from 1.3.6 to 1.4.2 after non-isolated
+help/list invocations. The exact pre-probe 1.3.6 backup was later version-checked
+as a copy under a write guard and atomically restored to the original path; the
+updated executable was quarantined. Neither original executable was invoked
+during that restoration audit. The restored backup SHA-256 is recorded in
+[`agy-1.4.2.json`](../../../docs/evidence/native-adapters/agy-1.4.2.json).
+
+For the 1.4.2 probe, the executable was copied before invocation. The
+documented `agy agent` roster command ran with a generated AOK fixture inside
+an isolated project and HOME. It exited successfully with empty stdout and
+stderr; the same command on an empty control project produced the same result.
+This does not prove discovery, so the native loading gate remains open. The
+command's evidence and fixture hash are recorded in
+[`agy-1.4.2.json`](../../../docs/evidence/native-adapters/agy-1.4.2.json) and
+can be repeated with [`probe-gemini-agy.sh`](../../../scripts/native-loading/probe-gemini-agy.sh).
+
+The adapter tests validate parsing, preservation, and semantic round-tripping;
+they do not establish host discovery, selection, invocation, or enforcement.
+No model or imported/custom command was run. All CLI state created during the
+probe was confined to the temporary HOME.

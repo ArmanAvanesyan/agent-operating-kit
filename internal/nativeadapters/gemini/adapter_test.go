@@ -50,7 +50,11 @@ func TestGeminiAdapterMapsSupportedFieldsAndPreservesUnknowns(t *testing.T) {
 	}
 }
 
-func TestEngineImportExportCompareAndHostUnavailability(t *testing.T) {
+func TestEngineImportExportCompareAndHostLoaderEvidence(t *testing.T) {
+	descriptor := New().Descriptor()
+	if descriptor.HostLoading.Status != "verified" || descriptor.HostLoading.HostVersion != "gemini-cli@0.61.0" || len(descriptor.HostLoading.Scopes) != 1 || descriptor.HostLoading.Scopes[0] != "project" || len(descriptor.HostLoading.Evidence) == 0 {
+		t.Fatalf("project CLI discovery evidence is not scope-bound: %+v", descriptor.HostLoading)
+	}
 	registry := nativeadapter.NewRegistry()
 	if err := registry.Register(New()); err != nil {
 		t.Fatal(err)
@@ -63,17 +67,17 @@ func TestEngineImportExportCompareAndHostUnavailability(t *testing.T) {
 	input := []nativeadapter.File{{Path: ".gemini/agents/security-auditor.md", Format: "md", Data: data}}
 	unsupported := []nativeadapter.Control{{Path: "agent.permissions.network.mode", Required: true}}
 	bundle, imported := engine.Import("gemini", "project", input, nil, unsupported)
-	if imported.Status != "blocked" || bundle.Digest == "" || imported.HostLoading.Status != "unavailable" || imported.RuntimeEnforcement != "unverified" {
-		t.Fatalf("import claimed availability or gate completion: %+v", imported)
+	if imported.Status != "blocked" || bundle.Digest == "" || imported.HostLoading.Status != "verified" || imported.RuntimeEnforcement != "unverified" {
+		t.Fatalf("import overstated host or enforcement evidence: %+v", imported)
 	}
 	assertDiagnostic(t, imported, "native.control.required-unsupported")
 	outputs, renderedBundle, exported := engine.Export("gemini", "project", input, bundle, nil)
-	if exported.Status != "blocked" || len(outputs) != 1 || renderedBundle.Digest == "" || exported.HostLoading.Status != "unavailable" || exported.RuntimeEnforcement != "unverified" {
+	if exported.Status != "blocked" || len(outputs) != 1 || renderedBundle.Digest == "" || exported.HostLoading.Status != "verified" || exported.RuntimeEnforcement != "unverified" {
 		t.Fatalf("export candidate/host state: files=%d report=%+v", len(outputs), exported)
 	}
 	compared := engine.Compare("gemini", "project", outputs, renderedBundle, nil)
-	if compared.Status != "valid" || compared.MappingStatus != "compatible" || len(compared.Differences) != 0 || compared.HostLoading.Status != "unavailable" || compared.RuntimeEnforcement != "unverified" {
-		t.Fatalf("semantic compare or unavailable host state: %+v", compared)
+	if compared.Status != "valid" || compared.MappingStatus != "compatible" || len(compared.Differences) != 0 || compared.HostLoading.Status != "verified" || compared.RuntimeEnforcement != "unverified" {
+		t.Fatalf("semantic compare or unverified enforcement state: %+v", compared)
 	}
 }
 

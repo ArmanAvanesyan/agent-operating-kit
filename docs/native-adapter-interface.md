@@ -6,7 +6,7 @@ Claude also supports plugin parsing/rendering, but its plugin loading gate remai
 unverified. See [Claude mappings and evidence](../internal/nativeadapters/claude/README.md).
 Codex project TOML is also registered; [its source mapping and parser evidence](../internal/nativeadapters/codex/README.md) do not yet establish child-agent loading.
 Cursor project Markdown is registered with an [open native-loading gate](../internal/nativeadapters/cursor/README.md).
-Gemini project Markdown is registered; [its host is unavailable](../internal/nativeadapters/gemini/README.md), so native loading remains blocked.
+Gemini project Markdown has [versioned guarded CLI discovery evidence](../internal/nativeadapters/gemini/README.md); invocation and runtime enforcement remain unverified.
 OpenClaw has an [isolated-home JSON/JSONC roster and workspace projection](../internal/nativeadapters/openclaw/README.md); its absent host keeps the native gate open.
 Hermes has a [bounded native profile projection](../internal/nativeadapters/hermes/README.md); full profile completeness and safe native loading remain unverified.
 agy has a [project native agent adapter](../internal/nativeadapters/agy/README.md), with native loading still unverified. All eight native targets are registered in `kit.NativeTargets`; this is separate from the seven pack-render targets in `kit.SupportedTargets`. agy registration does not add pack-render support.

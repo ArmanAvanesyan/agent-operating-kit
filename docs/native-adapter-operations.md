@@ -156,7 +156,7 @@ is narrower than field parsing and remains separate from runtime enforcement.
 | `codex` | `project` | `not-run` | Parser and round-trip checks only. |
 | `cursor` | `project` | `not-run` | Parser and round-trip checks only. |
 | `agy` | `project` | `not-run` | Parser and round-trip checks only. |
-| `gemini` | `project` | `unavailable` | Host unavailable for loading verification. |
+| `gemini` | `project` | Verified project discovery for temporary Gemini CLI 0.61.0 | Guarded positive/empty TUI checks before authentication; no invocation or runtime-enforcement claim. |
 | `openclaw` | `isolated-home` | `unavailable` | Host unavailable for loading verification. |
 | `hermes-agent` | `profile` | `unavailable` | No safe native loader probe established. |
 

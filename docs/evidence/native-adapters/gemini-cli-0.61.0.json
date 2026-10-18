@@ -1,0 +1,133 @@
+{
+  "target": "gemini",
+  "checkedAt": "2026-10-18T00:48:26Z",
+  "hostVersion": "gemini-cli@0.61.0",
+  "probeKind": "bundled-source-loader",
+  "scope": "project",
+  "fixture": {
+    "path": ".gemini/agents/repository-explorer.md",
+    "sha256": "8f3d432383d1de21784a587c1e1befa432df6b7dc6acd36348866f8a0da6eff8"
+  },
+  "loader": {
+    "method": "bundled-source-loader",
+    "positive": {
+      "agentCount": 1,
+      "agents": [
+        {
+          "name": "repository-explorer",
+          "description": "Explain repository structure and readiness.",
+          "model": "gemini-2.5-flash",
+          "sourceHash": "8f3d432383d1de21784a587c1e1befa432df6b7dc6acd36348866f8a0da6eff8"
+        }
+      ],
+      "errorCount": 0
+    },
+    "malformed": {
+      "agentCount": 0,
+      "agents": [],
+      "errorCount": 1
+    },
+    "missing": {
+      "agentCount": 0,
+      "agents": [],
+      "errorCount": 0
+    }
+  },
+  "cliSurface": {
+    "command": "gemini --help",
+    "exitCode": 0,
+    "agentListingCommandMentioned": false,
+    "discoveryReason": "gemini --help lists no standalone agent-listing command. Official CLI docs specify /agents list as an interactive local command; project discovery was checked using the actual TUI before authentication."
+  },
+  "cliDiscovery": "verified",
+  "modelInvocation": "not-run",
+  "runtimeEnforcement": "unverified",
+  "sources": [
+    "https://geminicli.com/docs/core/subagents/",
+    "https://github.com/google-gemini/gemini-cli/blob/v0.61.0/packages/core/src/agents/agentLoader.ts",
+    "https://geminicli.com/docs/cli/trusted-folders/",
+    "https://geminicli.com/docs/reference/commands/",
+    "https://geminicli.com/docs/reference/configuration/"
+  ],
+  "startupProbe": {
+    "command": "gemini (no arguments)",
+    "hostVersion": "gemini-cli@0.61.0",
+    "workspace": "empty temporary project directory",
+    "environment": "allow-listed PATH plus temporary HOME/XDG/TMP; no credential variables",
+    "inputSent": false,
+    "timeoutSeconds": 10,
+    "exitCode": 1,
+    "terminalEvidence": [
+      "Waiting for authentication... (Press Esc or Ctrl+C to cancel)",
+      "Do you trust the files in this folder?",
+      "Skipping project agents due to untrusted folder. To enable, ensure that the project root is trusted."
+    ],
+    "result": "Startup reached the project trust prompt; before trust selection it skipped project agents. The CLI then remained at the no-input startup/authentication wait until the bounded alarm terminated it. No login, trust selection, slash command, model prompt, or model invocation was performed."
+  },
+  "cliDiscoveryBarrier": "Project discovery is verified by the real CLI positive and empty controls before auth. Invocation and runtime enforcement were not tested.",
+  "trustedStartupProbe": {
+    "command": "gemini --debug (no positional prompt; interactive TUI)",
+    "hostVersion": "gemini-cli@0.61.0",
+    "workspace": "disposable project containing only the AOK-exported .gemini/agents/repository-explorer.md fixture",
+    "trust": "GEMINI_CLI_TRUST_WORKSPACE=true, documented setting; temporary HOME/XDG/TMP",
+    "input": "One key acknowledged/enabled the discovered agent only in the disposable HOME; no login or model prompt was sent.",
+    "result": "TUI displayed New Agents Discovered with repository-explorer and its expected description before presenting authentication choices. Temporary acknowledgments/agents.json recorded the expected source SHA256.",
+    "positiveFixture": {
+      "path": ".gemini/agents/repository-explorer.md",
+      "sha256": "8f3d432383d1de21784a587c1e1befa432df6b7dc6acd36348866f8a0da6eff8",
+      "acknowledged": true
+    },
+    "autoUpdater": "Enabled by default in this first trusted run; it initiated the global update detailed in autoUpdaterSideEffect."
+  },
+  "autoUpdaterSideEffect": {
+    "attribution": "proven by npm debug log written under the isolated HOME of this run",
+    "npmLog": "<TEMP_ROOT>/home/.npm/_logs/2026-10-18T00_51_18_806Z-debug-0.log",
+    "command": "npm install --global @google/gemini-cli@0.64.0",
+    "result": "npm log recorded successful global install",
+    "globalPackage": {
+      "path": "<GLOBAL_PREFIX>/lib/node_modules/@google/gemini-cli",
+      "version": "0.64.0",
+      "mtime": "2026-10-18T00:51:22.139Z"
+    },
+    "globalShim": {
+      "path": "<GLOBAL_PREFIX>/bin/gemini",
+      "target": "../lib/node_modules/@google/gemini-cli/bundle/gemini.js",
+      "mtime": "2026-10-18T00:51:22.139Z"
+    },
+    "cleanup": "Primary removed only the proven-created <GLOBAL_PREFIX>/bin/gemini symlink, version 0.64.0 package directory, and newly created empty @google namespace after attribution review. The temporary root/raw npm log was then removed by this worker; sanitized argv/path/version/timestamp are preserved in this evidence."
+  },
+  "guardedCLIControls": {
+    "command": "gemini --debug (no positional prompt; interactive TUI)",
+    "hostVersion": "gemini-cli@0.61.0",
+    "timeoutSeconds": 8,
+    "credentials": "No credential environment variables passed; no auth method selected.",
+    "settings": {
+      "general.enableAutoUpdate": false,
+      "general.enableAutoUpdateNotification": false,
+      "experimental.enableAgents": true,
+      "privacy.usageStatisticsEnabled": false
+    },
+    "runtimeNpmGuard": "NPM_CONFIG_PREFIX and npm_config_prefix plus npm cache, userconfig, globalconfig, and HOME were confined to the disposable probe root; npm config get prefix confirmed the temp prefix.",
+    "positive": {
+      "project": "AOK-exported .gemini/agents/repository-explorer.md only",
+      "discovery": "TUI displayed New Agents Discovered with repository-explorer and expected description",
+      "sourceSHA256": "8f3d432383d1de21784a587c1e1befa432df6b7dc6acd36348866f8a0da6eff8",
+      "inputSent": false
+    },
+    "emptyControl": {
+      "project": "empty disposable project, separate HOME",
+      "discovery": "No New Agents Discovered panel or custom agent identity; reached authentication choices with no method selected",
+      "inputSent": false
+    },
+    "modelInvocation": "not-run",
+    "result": "Positive project discovery matched the fixture identity/hash; the empty control showed no custom agent. Discovery occurred before auth in both cases.",
+    "sandbox": {
+      "available": "/usr/bin/sandbox-exec was verified",
+      "profile": "(version 1)(allow default)(deny file-write*)(allow file-write* (subpath \"<resolved-temp-root>\") (literal \"/dev/null\") (literal \"/dev/tty\"))",
+      "resolvedTempRoot": "<TEMP_ROOT>",
+      "probe": "A write test inside the root succeeded; final positive and empty TUI launches ran under this guard. No update banner appeared."
+    },
+    "inputSent": false,
+    "exit": "bounded 8-second no-input startup; harness alarm terminated process with exit 1 after the discovery/auth UI was captured"
+  }
+}

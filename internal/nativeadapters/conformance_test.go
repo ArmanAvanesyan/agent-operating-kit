@@ -29,7 +29,7 @@ func TestAllNativeAdaptersConformToEngineBoundaries(t *testing.T) {
 		{name: "claude-code", target: "claude-code", scope: "project", hostStatus: "verified", adapter: claude.New(), files: []nativeadapter.File{{Path: ".claude/agents/reviewer.md", Format: "markdown", Data: []byte("---\nname: aok-reviewer\ndescription: Synthetic review agent\nmodel: sonnet\ncustomField: retained\n---\nReview only the supplied synthetic content.\n")}}},
 		{name: "codex", target: "codex", scope: "project", hostStatus: "not-run", adapter: codex.New(), files: []nativeadapter.File{readNative(t, "codex/testdata/probe.toml", ".codex/agents/aok-probe.toml", "toml")}},
 		{name: "cursor", target: "cursor", scope: "project", hostStatus: "not-run", adapter: cursor.New(), files: []nativeadapter.File{readNative(t, "cursor/testdata/reviewer.md", ".cursor/agents/reviewer.md", "markdown")}},
-		{name: "gemini", target: "gemini", scope: "project", hostStatus: "unavailable", adapter: gemini.New(), files: []nativeadapter.File{readNative(t, "gemini/testdata/security-auditor.md", ".gemini/agents/security-auditor.md", "markdown")}},
+		{name: "gemini", target: "gemini", scope: "project", hostStatus: "verified", adapter: gemini.New(), files: []nativeadapter.File{readNative(t, "gemini/testdata/security-auditor.md", ".gemini/agents/security-auditor.md", "markdown")}},
 		{name: "hermes-agent", target: "hermes-agent", scope: "profile", hostStatus: "unavailable", adapter: hermes.New(), files: []nativeadapter.File{
 			readNative(t, "hermes/testdata/config.yaml", "config.yaml", "yaml"),
 			readNative(t, "hermes/testdata/SOUL.md", "SOUL.md", "markdown"),

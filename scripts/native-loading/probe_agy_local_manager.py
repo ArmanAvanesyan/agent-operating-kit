@@ -63,7 +63,7 @@ def onboarding_action(text, state, root):
 def safe_manager_state(state):
     result = login._safe_state(state)
     for key in ("managerSectionObserved", "nameObserved", "descriptionObserved",
-                "parseErrorObserved", "noAgentsLabelObserved"):
+                "parseErrorObserved", "noAgentsLabelObserved", "framedNativeManagerObserved"):
         result[key] = state.get(key)
     return result
 
@@ -135,6 +135,9 @@ class CaseCapture:
         self.actions = []
         self.public_rows = []
         self.load_diagnostics = []
+        self.minimum_manager_stable_seconds = .6
+        self.manager_stable_seconds = 0.0
+        self.manager_observation_seconds = 0.0
 
     def manager_rows(self, text, root):
         return public_synthetic_rows(text, root)
@@ -178,10 +181,13 @@ class CaseCapture:
             if not state or state.get("terminalAmbiguityObserved") or time.monotonic() - changed < .6:
                 continue
             if self.command_sent:
-                if time.monotonic() - self.command_at < 5:
+                if (time.monotonic() - self.command_at < 5 or
+                        time.monotonic() - changed < self.minimum_manager_stable_seconds):
                     continue
                 # Capture the stable current manager screen; never select an agent.
                 if state.get("managerSectionObserved") or state.get("errorObserved") or state.get("authBarrierObserved"):
+                    self.manager_stable_seconds = time.monotonic() - changed
+                    self.manager_observation_seconds = time.monotonic() - self.command_at
                     self.manager = safe_manager_state(state)
                     self.public_rows = self.manager_rows(text, Path(case_root))
                     self.load_diagnostics = self.diagnostics(Path(case_root))

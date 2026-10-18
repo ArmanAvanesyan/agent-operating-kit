@@ -177,7 +177,7 @@ is narrower than field parsing and remains separate from runtime enforcement.
 | `claude-code` | `project`, `plugin` | Verified project discovery only for Claude Code 2.1.281 | Evidence applies to project scope only; plugin parsing is not a discovery check. No model execution or permission-enforcement claim. |
 | `codex` | `project`, `project-registered` | Verified registered project loading for Codex CLI 0.162.1 | Registration plus referenced role-file loading; standalone `project` remains `not-run`. No child-agent invocation or runtime-enforcement claim. |
 | `cursor` | `project` | Verified native command-picker discovery for 2026.10.16-e3cb207 | Authenticated positive/absent/blank-body controls under an explicit Git retrieval shim; no selected-agent startup, inference or enforcement claim. |
-| `agy` | `project` | `not-run`, 1.4.2 evidence linked | Fresh isolated account-mode `/agents` discovers the valid agent and omits absent/malformed definitions; explicit malformed-file parse rejection is still unobserved, so the full native gate remains open. |
+| `agy` | `project` | Verified startup discovery for Darwin x64 1.4.2 under `agy-project-discovery/v2` | Two isolated same-workspace/HOME cycles show valid → malformed → exact repair behavior, with cold malformed and unchanged guard controls. Explicit native parse-error reporting, invocation and runtime enforcement remain unverified. |
 | `gemini` | `project` | Verified project discovery for temporary Gemini CLI 0.61.0 | Guarded positive/empty TUI checks before authentication; no invocation or runtime-enforcement claim. |
 | `openclaw` | `isolated-home` | Verified Linux loading for OpenClaw 2026.9.4 / Node 26.7.0 | Network-disabled container roster and workspace controls; Darwin CLI remains unverified. |
 | `hermes-agent` | `profile` | Verified direct installed CLI entrypoint, source-hash bound | Native profile list reads exported model/metadata; separate SOUL loader proof; normal launcher selection and runtime enforcement unverified. |
@@ -233,7 +233,13 @@ role discovery. This earlier authentication-only result is superseded by the
 reviewed project discovery follow-up below; runtime enforcement is unverified.
 
 
-## agy interactive manager verification follow-up
+## agy investigation history
+
+The following paragraphs retain the earlier probe conclusions. The current
+scoped status is established by the [v2 discovery gate review](agy-discovery-cycle-verification.md),
+which closes project startup discovery without claiming a native parser error.
+
+### Interactive manager follow-up
 
 The [agy adapter notes](../internal/nativeadapters/agy/README.md#interactive-manager-follow-up-2026-10-18)
 separate the isolated Linux authentication barrier from the Darwin generic
@@ -241,7 +247,7 @@ startup error under an existing-keyring-only configuration. Neither reached a
 ready prompt or sent `/agents`. Source snapshots, control outcomes and process
 audits are retained. Native loading and runtime enforcement remain unverified.
 
-## Native startup diagnosis
+### Native startup diagnosis (historical)
 
 The [isolated startup investigation](native-startup-diagnostics.md) corrects the
 agy macOS launcher failure and records Cursor initialization diagnostics. The agy

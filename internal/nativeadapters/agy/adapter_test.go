@@ -115,6 +115,9 @@ func TestRequiredUnsupportedControlsBlock(t *testing.T) {
 		{Path: "agent.permissions.filesystem.write", Required: true},
 		{Path: "agent.permissions.network.mode", Required: true},
 	})
+	if r.HostLoading.Status != "verified" || r.RuntimeEnforcement != "unverified" {
+		t.Fatalf("discovery must remain separate from runtime enforcement: %+v", r)
+	}
 	if r.Status != "blocked" {
 		t.Fatalf("required unsupported controls did not block: %+v", r)
 	}

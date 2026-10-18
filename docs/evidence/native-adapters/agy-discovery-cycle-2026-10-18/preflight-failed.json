@@ -1,0 +1,40 @@
+{
+  "accountRowsRetained": false,
+  "agentSelection": "not-run",
+  "aokSHA256": "6428236d9fbcf473987f8e497f05fad5f9713489363e271a2c31e40215af0ac5",
+  "binarySHA256": "fa85a90abded17bcd1b185bbd1d6b1b82065f093ad4700d4dbacd3be2433294c",
+  "candidateNativeLoadingEvidence": false,
+  "cycles": [
+    {
+      "freshSeedCopy": true,
+      "homeIdentity": "5104d17a350898c438a37e2e5b53868520efbcdc7e5c5bfdd4ae498b6ba88bb5",
+      "phases": [],
+      "privateRootRemoved": true,
+      "workspaceIdentity": "a0027534e14e4aa92825835dae331958aced678324c070b2f2f6ccd5389d34ce"
+    }
+  ],
+  "diagnosticCodes": [
+    "gate.replication"
+  ],
+  "failureType": "ValueError",
+  "fixtureRelativePath": ".agents/agents/aok-probe/agent.md",
+  "gateContract": "agy-project-discovery/v2",
+  "guardDescription": "Synthetic cycle guard 9c479d18",
+  "guardFixtureUTF8": "---\nname: aok-cycle-guard-9c479d18\ndescription: Synthetic cycle guard 9c479d18\nmodel: flash\nsubagent: true\n---\nInert discovery control.\n",
+  "guardName": "aok-cycle-guard-9c479d18",
+  "guardSHA256": "8c9cd544b10f3d8d2918a7f364e51a413bed3d6f64607296837d0a7dbe8ab27c",
+  "kind": "aok-agy-discovery-cycle/v1",
+  "logContentRetained": false,
+  "malformedFixtureUTF8": "---\ndescription: [Synthetic AGY adapter discovery fixture\nfuturePolicy:\n    retain: true\nmodel: flash\nname: aok-probe\nsubagent: true\ntools:\n    - view_file\n---\n# Agent instructions\n\nThis synthetic body is inert test content. Do not execute it.\n",
+  "modelInvocation": "not-run",
+  "nativeParserErrorReporting": "not-verified",
+  "provider": "isolated-oauth-account",
+  "renderedFixtureUTF8": "---\ndescription: Synthetic AGY adapter discovery fixture\nfuturePolicy:\n    retain: true\nmodel: flash\nname: aok-probe\nsubagent: true\ntools:\n    - view_file\n---\n# Agent instructions\n\nThis synthetic body is inert test content. Do not execute it.\n",
+  "scope": "project",
+  "sourceProfileRemoved": true,
+  "terminalGeometry": {
+    "columns": 160,
+    "rows": 80
+  },
+  "version": "1.4.2"
+}

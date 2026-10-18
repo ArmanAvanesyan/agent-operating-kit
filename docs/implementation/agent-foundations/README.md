@@ -94,12 +94,12 @@ workers and one reviewer, with isolated worktrees for concurrent edits.
 | 7 | OpenCode native adapter | Merged: [PR #54](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/54); project loading verified on 1.18.35 |
 | 8 | Claude Code native adapter | Merged: [PR #55](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/55); project discovery verified |
 | 9 | Codex native adapter | Merged: [PR #56](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/56); registered project loading verified, standalone discovery and invocation unverified |
-| 10 | Cursor native adapter | Merged: [PR #57](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/57); loading gate open |
+| 10 | Cursor native adapter | Merged: [PR #57](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/57); versioned project discovery verified in follow-up evidence |
 | 11 | Gemini native adapter | Merged: [PR #58](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/58); project discovery verified in the follow-up evidence |
 | 12 | OpenClaw native adapter | Merged: [PR #59](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/59); isolated Linux loading verified in follow-up evidence |
 | 13 | Hermes native adapter | Merged: [PR #60](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/60); direct installed CLI profile loading verified; normal launcher selection unverified |
-| 14 | agy native adapter and target registration | Merged: [PR #61](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/61); loading gate open |
-| 15 | End-to-end, distribution and operator documentation | Implemented in this change; release completion blocked on native gates |
+| 14 | agy native adapter and target registration | Merged: [PR #61](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/61); versioned project discovery verified in follow-up evidence |
+| 15 | End-to-end, distribution and operator documentation | Implemented in this change; all eight targets now have bounded native scopes; runtime completion remains separate |
 
 For every implementation PR: relevant targeted tests; kit validation; Python
 regressions and compilation; Go tests/build; relevant render smoke tests; both
@@ -141,16 +141,20 @@ Stage 6 adds the [shared native adapter interface](../../native-adapter-interfac
 explicit file capture and private non-overwriting outputs. Client adapters and
 native loading gates remain separate work.
 
-## Remaining native-loading gates
+## Native-loading gate status
 
-OpenCode 1.18.35, Claude Code 2.1.281 and Gemini CLI 0.61.0 have isolated project discovery evidence.
-Codex CLI 0.162.1 loads explicitly registered project role files, with malformed/missing-file
-negative controls; standalone discovery and child-agent invocation remain unverified.
-Cursor has shipped-component discovery but lacks verified full CLI discovery; agy probes returned no
-discovery evidence. OpenClaw 2026.9.4 has isolated Linux roster/workspace evidence, with Darwin CLI
-loading unverified. Hermes has direct installed CLI profile-list evidence plus separate metadata/SOUL
-component evidence; package-manager launcher selection remains unverified.
-The two open target gates require versioned isolated native
-loading evidence for generated fixtures before this release can be called complete.
-No runtime enforcement claim follows from either parsing or discovery. See the
-[compatibility inventory](native-inventory.md) and each adapter README for sources.
+All eight targets now have at least one bounded versioned native-loading scope.
+OpenCode, Claude Code and Gemini have project discovery evidence. Codex has
+explicit registered project role-file loading; standalone discovery and child-agent
+invocation remain unverified. Cursor has authenticated command-picker discovery
+under an explicit Git retrieval shim. OpenClaw has isolated Linux roster/workspace
+loading; Darwin loading remains unverified. Hermes has direct installed CLI
+profile-list evidence; normal package-manager launcher selection remains unverified.
+
+agy's [versioned discovery contract](../../agy-discovery-cycle-verification.md)
+closes project startup discovery on Darwin x64 1.4.2 using repeated valid → malformed
+→ exact repair controls plus a cold malformed replicate and an unchanged guard.
+It does not establish explicit parser-error reporting. Historical stricter
+comparators remain unqualified and unchanged. No runtime enforcement or complete
+runtime release claim follows from these scope-limited loading results. See the
+[compatibility inventory](native-inventory.md) and adapter notes for host pins.

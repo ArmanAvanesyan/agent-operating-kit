@@ -5,11 +5,11 @@ OpenCode and Claude Code project Markdown are registered; see its [mapping and h
 Claude also supports plugin parsing/rendering, but its plugin loading gate remains
 unverified. See [Claude mappings and evidence](../internal/nativeadapters/claude/README.md).
 Codex supports standalone project TOML and the two-file `project-registered` scope; [versioned native role-file loading](../internal/nativeadapters/codex/README.md) is verified only for the registered scope. Child-agent invocation and runtime enforcement remain unverified.
-Cursor project Markdown is registered with an [open native-loading gate](../internal/nativeadapters/cursor/README.md).
+Cursor project Markdown is registered with [versioned native command-picker discovery evidence](../internal/nativeadapters/cursor/README.md).
 Gemini project Markdown has [versioned guarded CLI discovery evidence](../internal/nativeadapters/gemini/README.md); invocation and runtime enforcement remain unverified.
 OpenClaw has an [isolated-home JSON/JSONC roster and workspace projection](../internal/nativeadapters/openclaw/README.md); pinned Linux CLI roster/workspace loading is verified in a disposable container; runtime enforcement remains unverified.
 Hermes has a [bounded native profile projection](../internal/nativeadapters/hermes/README.md); direct installed CLI profile loading is verified, with normal launcher selection, full profile completeness and runtime enforcement unverified.
-agy has a [project native agent adapter](../internal/nativeadapters/agy/README.md), with native loading still unverified. All eight native targets are registered in `kit.NativeTargets`; this is separate from the seven pack-render targets in `kit.SupportedTargets`. agy registration does not add pack-render support.
+agy has a [project native agent adapter](../internal/nativeadapters/agy/README.md), with [versioned project startup-discovery evidence](agy-discovery-cycle-verification.md). Native error reporting, invocation and runtime enforcement remain unverified. All eight native targets are registered in `kit.NativeTargets`; this is separate from the seven pack-render targets in `kit.SupportedTargets`. agy registration does not add pack-render support.
 Shared parser tests alone do not establish native completion.
 
 The Go CLI accepts explicit operations, target, scope and input:

@@ -1,5 +1,13 @@
 # Antigravity CLI (AGY) native agent adapter
 
+Current status: **verified project startup discovery**, pinned Darwin x64 1.4.2,
+under [`agy-project-discovery/v2`](../../../docs/agy-discovery-cycle-verification.md).
+Nine isolated observations include valid → malformed → repaired cycles and a
+cold malformed control. Native parse-error reporting and runtime enforcement
+remain unverified. The sections below record historical investigation states;
+older `not-run` statements describe those earlier probes, not the current descriptor.
+
+
 This adapter handles one explicitly supplied, project-scoped Markdown agent
 file. AGY's official docs describe both `.agents/agents/<name>.md` and
 `.agents/agents/<name>/agent.md`; the adapter accepts either and emits the

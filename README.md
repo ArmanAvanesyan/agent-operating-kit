@@ -401,6 +401,8 @@ and decision validation, and explicit native agent import/export/compare for eig
 clients. See the [operator guide](docs/native-adapter-operations.md),
 [agent resolution](docs/agent-resolution.md), and
 [planning foundations](docs/planning-foundations.md). These commands do not
-execute workflows or models. One native-loading gate remains open; runtime
-policy enforcement is unverified. agy native registration is separate from the
-seven-target pack renderer. The Python contributor entrypoint is unchanged.
+execute workflows or models. All eight targets have bounded versioned
+native-loading evidence; runtime policy enforcement is unverified. See the
+[agy discovery gate review](docs/agy-discovery-cycle-verification.md) for its
+observable-behavior acceptance and remaining parser-error limitation. agy native
+registration is separate from the seven-target pack renderer. The Python contributor entrypoint is unchanged.

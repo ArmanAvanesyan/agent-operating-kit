@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repo-delivery.local/schemas/cleanup-plan.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "kind": {
+      "const": "cleanup-plan"
+    },
+    "repository": {
+      "type": "string"
+    },
+    "source_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "baseline_revision": {
+      "type": "string",
+      "pattern": "^([a-f0-9]{40}|[a-f0-9]{64})$"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "branch"
+              },
+              "name": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "string",
+                "pattern": "^([a-f0-9]{40}|[a-f0-9]{64})$"
+              },
+              "state": {
+                "enum": [
+                  "delete",
+                  "retained-checked-out",
+                  "retained-unmerged"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "name",
+              "revision",
+              "state"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "worktree"
+              },
+              "name": {
+                "type": "string"
+              },
+              "revision": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^([a-f0-9]{40}|[a-f0-9]{64})$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "source_sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "state": {
+                "enum": [
+                  "delete",
+                  "retained-primary",
+                  "retained-locked",
+                  "retained-dirty",
+                  "retained-unmerged"
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "name",
+              "revision",
+              "source_sha256",
+              "state"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "plan_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "required": [
+    "schema_version",
+    "kind",
+    "repository",
+    "source_sha256",
+    "baseline_revision",
+    "entries",
+    "plan_sha256"
+  ],
+  "additionalProperties": false
+}

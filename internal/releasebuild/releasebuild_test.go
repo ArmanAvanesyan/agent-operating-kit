@@ -1,6 +1,8 @@
 package releasebuild
 
 import (
+	"debug/macho"
+	"encoding/binary"
 	"encoding/json"
 	"os"
 	"path/filepath"
@@ -66,6 +68,24 @@ func TestBuildSmokeWithFakeBundles(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	for _, arch := range []string{"amd64", "arm64"} {
+		binaryPath := filepath.Join(dist, "aok-0.0.0-test-darwin-"+arch)
+		image, err := macho.Open(binaryPath)
+		if err != nil {
+			t.Fatal(err)
+		}
+		found := false
+		for _, load := range image.Loads {
+			raw := load.Raw()
+			if len(raw) >= 4 && binary.LittleEndian.Uint32(raw[:4]) == 0x1b {
+				found = true
+			}
+		}
+		image.Close()
+		if !found {
+			t.Fatalf("Darwin %s release lacks LC_UUID", arch)
+		}
+	}
 	if len(artifacts) < 10 {
 		t.Fatalf("too few artifacts: %d", len(artifacts))
 	}
@@ -128,5 +148,45 @@ func TestExplorationSkillsIncludedInCodexPlugin(t *testing.T) {
 		if !found[path] {
 			t.Errorf("Codex plugin missing skill resource: %s", path)
 		}
+	}
+}
+
+func TestReleaseRefusesSymlinkPayloadAndFiltersCaches(t *testing.T) {
+	root := t.TempDir()
+	pack := filepath.Join(root, "packs", "repository-delivery")
+	if err := os.MkdirAll(pack, 0755); err != nil {
+		t.Fatal(err)
+	}
+	outside := filepath.Join(t.TempDir(), "private")
+	if err := os.WriteFile(outside, []byte("must not package"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	link := filepath.Join(pack, "leak")
+	if err := os.Symlink(outside, link); err != nil {
+		t.Skip(err)
+	}
+	if _, err := iterFiles(root, []string{"packs"}); err == nil {
+		t.Fatal("symlink file accepted")
+	}
+	if _, err := iterFiles(root, []string{"packs/repository-delivery/leak"}); err == nil {
+		t.Fatal("direct symlink accepted")
+	}
+	if err := os.Remove(link); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(filepath.Join(pack, ".venv"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	for _, rel := range []string{".coverage", ".venv/cache", "cache.pyc", "safe.py"} {
+		if err := os.WriteFile(filepath.Join(pack, rel), []byte("fixture"), 0600); err != nil {
+			t.Fatal(err)
+		}
+	}
+	files, err := iterFiles(root, []string{"packs"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(files) != 1 || filepath.Base(files[0]) != "safe.py" {
+		t.Fatalf("cache leakage: %v", files)
 	}
 }

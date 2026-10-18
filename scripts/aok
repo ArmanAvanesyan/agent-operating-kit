@@ -11,6 +11,7 @@ import os
 import re
 import shlex
 import shutil
+import stat
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -3467,23 +3468,74 @@ def markdown_list(title: str, items: list[dict], fields: tuple[str, ...]) -> str
 
 
 def copy_bundle_source(base: Path, rel: str, bundle_dir: Path, copied: list[str]) -> None:
-    src = (base / rel).resolve()
-    if not src.exists():
-        return
+    src_raw = Path(os.path.abspath(base / rel))
+    root = KIT_ROOT.resolve()
+    src = src_raw.resolve(strict=True)
     try:
-        source_rel = src.relative_to(KIT_ROOT.resolve())
+        source_rel = src.relative_to(root)
+        lexical_rel = src_raw.relative_to(root)
     except ValueError as exc:
         raise AokError(f"Refusing to copy source outside kit root: {rel}") from exc
+    _reject_source_symlinks(root, lexical_rel)
     dest = bundle_dir / "sources" / source_rel
     dest.parent.mkdir(parents=True, exist_ok=True)
     if src.is_dir():
+        _validate_support_tree(src)
         if dest.exists():
             shutil.rmtree(dest)
-        shutil.copytree(src, dest)
+        shutil.copytree(src, dest, ignore=_support_ignore, symlinks=False)
     else:
+        if not stat.S_ISREG(src.stat().st_mode):
+            raise AokError(f"Refusing special bundle source: {rel}")
         shutil.copy2(src, dest)
-    copied.append(str(Path("sources") / rel))
+    copied.append(str(Path("sources") / source_rel))
 
+
+def _skip_support_name(name: str) -> bool:
+    return name in {".git", ".venv", "venv", "__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache", "dist", "build", "coverage"} or name.startswith(".coverage") or name.endswith((".egg-info", ".pyc", ".pyo"))
+
+
+def _support_ignore(directory: str, names: list[str]) -> set[str]:
+    return {name for name in names if _skip_support_name(name)}
+
+
+def _validate_support_tree(root: Path) -> None:
+    for current, dirs, files in os.walk(root, followlinks=False):
+        dirs[:] = [name for name in dirs if not _skip_support_name(name)]
+        for name in [*dirs, *files]:
+            path = Path(current) / name
+            mode = path.lstat().st_mode
+            if stat.S_ISLNK(mode) or not (stat.S_ISDIR(mode) or stat.S_ISREG(mode)):
+                raise AokError(f"Refusing unsafe bundle source: {path}")
+
+
+def _reject_source_symlinks(root: Path, rel: Path) -> None:
+    current = root
+    for part in rel.parts:
+        if part == "..":
+            current = current.parent
+            continue
+        current = current / part
+        if current.is_symlink():
+            raise AokError(f"Refusing symlink bundle source: {current}")
+
+
+def write_skill_reference_wrappers(bundle_dir: Path, pack_name: str, skill_root: str, skills: list, host_dir: Path) -> list[str]:
+    files: list[str] = []
+    for skill in skills:
+        if not isinstance(skill, dict):
+            continue
+        slug = _cursor_slug(str(skill.get("id") or skill.get("name") or "skill"))
+        source = str(skill.get("sourcePath") or f"{skill_root}/{slug}/SKILL.md")
+        rel = host_dir / slug / "SKILL.md"
+        guide = Path(os.path.relpath(bundle_dir / "sources" / "packs" / pack_name / source, (bundle_dir / rel).parent))
+        description = str(skill.get("description") or slug).replace('"', "'")
+        body = f'---\nname: {slug}\ndescription: "{description}"\n---\n\nRead the canonical bundled guide at [{slug}]({guide.as_posix()}).\n'
+        target = bundle_dir / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(body)
+        files.append(rel.as_posix())
+    return files
 
 def bundle_readme(pack_name: str, target: str, support_level: str) -> str:
     return f"""# {pack_name} for {target}
@@ -3648,7 +3700,18 @@ def write_cursor_native_tree(bundle_dir: Path, pack_dir: Path, content: dict) ->
 def render_target_bundle(pack_name: str, target: str, out_dir: Path) -> Path:
     manifest, pack_dir = load_pack_manifest(pack_name)
     pack_name = manifest.get("name") or pack_name
+    if "skillRoot" in manifest and not _valid_skill_root(pack_dir, manifest["skillRoot"]):
+        raise AokError(f"Invalid skillRoot in packs/{pack_name}/pack.json")
     content, _ = load_pack_content(pack_name, pack_dir, manifest)
+    if manifest.get("skillRoot"):
+        for skill in content.get("skills", []):
+            guide = skill.get("sourcePath") or f"{manifest['skillRoot']}/{_cursor_slug(str(skill.get('id') or skill.get('name') or 'skill'))}/SKILL.md"
+            path = Path(guide)
+            if not isinstance(guide, str) or not re.fullmatch(r"[A-Za-z0-9_.-]+(/[A-Za-z0-9_.-]+)*", guide) or any(part in (".", "..") for part in guide.split("/")) or not guide.startswith(manifest["skillRoot"] + "/"):
+                raise AokError("Unsafe canonical skill guide")
+            _reject_source_symlinks(pack_dir, path)
+            if not (pack_dir / path).is_file():
+                raise AokError("Missing canonical skill guide")
     bundle_dir = out_dir / target / pack_name
     if bundle_dir.exists():
         shutil.rmtree(bundle_dir)
@@ -3665,6 +3728,8 @@ def render_target_bundle(pack_name: str, target: str, out_dir: Path) -> Path:
     for ref in target_render.get("sourceRefs", []) if isinstance(target_render, dict) else []:
         if isinstance(ref, str):
             source_refs.add(ref)
+    if manifest.get("skillRoot"):
+        source_refs.add(".")
     for ref in sorted(source_refs):
         copy_bundle_source(pack_dir, ref, bundle_dir, source_files)
 
@@ -3687,19 +3752,25 @@ def render_target_bundle(pack_name: str, target: str, out_dir: Path) -> Path:
 
     native_files: list[str] = []
     if target == "codex":
+        plugin = {
+            "name": f"aok-{pack_name}",
+            "version": manifest.get("version", "0.1.0"),
+            "description": manifest.get("description", ""),
+            "aokPack": pack_name,
+        }
+        if manifest.get("skillRoot"):
+            plugin["skills"] = f"./sources/packs/{pack_name}/{manifest['skillRoot']}/"
         write_json(
             bundle_dir / ".codex-plugin" / "plugin.json",
-            {
-                "name": f"aok-{pack_name}",
-                "version": manifest.get("version", "0.1.0"),
-                "description": manifest.get("description", ""),
-                "aokPack": pack_name,
-            },
+            plugin,
         )
     elif target == "claude-code":
         claude_src = pack_dir / "claude-code"
-        if claude_src.exists():
+        if claude_src.exists() and not manifest.get("skillRoot"):
             shutil.copytree(claude_src, bundle_dir / "claude-code")
+        if manifest.get("skillRoot"):
+            native_files.extend(write_skill_reference_wrappers(bundle_dir, pack_name, manifest["skillRoot"], content.get("skills", []), Path("skills")))
+            write_json(bundle_dir / ".claude-plugin" / "plugin.json", {"name": pack_name, "version": manifest.get("version", "0.1.0"), "description": manifest.get("description", ""), "skills": ["./skills"]})
     elif target == "cursor":
         write_json(
             bundle_dir / "import.json",
@@ -3712,6 +3783,8 @@ def render_target_bundle(pack_name: str, target: str, out_dir: Path) -> Path:
             },
         )
         native_files = write_cursor_native_tree(bundle_dir, pack_dir, content)
+        if manifest.get("skillRoot"):
+            native_files.extend(write_skill_reference_wrappers(bundle_dir, pack_name, manifest["skillRoot"], content.get("skills", []), Path(".cursor") / "skills"))
     else:
         write_json(
             bundle_dir / "import.json",
@@ -3735,6 +3808,8 @@ def render_target_bundle(pack_name: str, target: str, out_dir: Path) -> Path:
         "files": sorted(["README.md", "roles.md", "hooks.md", "skills.md", "tasks.md", *item_files, *source_files, *native_files]),
         "sourceContentIncluded": True,
     }
+    if manifest.get("skillRoot"):
+        bundle["resourcePaths"] = {"canonicalSkills": f"sources/packs/{pack_name}/{manifest['skillRoot']}", "claudeSkills": "skills", "cursorSkills": ".cursor/skills"}
     write_json(bundle_dir / "aok-bundle.json", bundle)
     (bundle_dir / "README.md").write_text(bundle_readme(pack_name, target, support_level))
     return bundle_dir
@@ -4309,6 +4384,7 @@ def validate_packs(errors: list[str]) -> None:
         "ship-pipeline",
         "phased-rollout-template",
         "batch-resolve-conflicts",
+        "repository-delivery",
     }
     pack_root = KIT_ROOT / "packs"
     found = {path.name for path in pack_root.glob("*") if path.is_dir()} if pack_root.exists() else set()
@@ -4340,6 +4416,8 @@ def validate_packs(errors: list[str]) -> None:
             errors.append(f"packs/{name}/pack.json: name must be {name}")
         if data.get("kind") != "pack":
             errors.append(f"packs/{name}/pack.json: kind must be pack")
+        if "skillRoot" in data and not _valid_skill_root(base, data["skillRoot"]):
+            errors.append(f"packs/{name}/pack.json: skillRoot must be a safe relative path to a directory")
 
         targets = data.get("supportedTargets")
         if isinstance(targets, list):
@@ -4386,7 +4464,7 @@ def validate_packs(errors: list[str]) -> None:
                         errors.append(f"packs/{name}/pack.json: targetRender[{target}] mode=source needs sourceRefs")
                     else:
                         for rel in sources:
-                            if not isinstance(rel, str) or not (base / rel).exists():
+                            if not isinstance(rel, str) or (not (base / rel).exists() and not (rel == "." and data.get("skillRoot") and base.is_dir())):
                                 errors.append(
                                     f"packs/{name}/pack.json: targetRender[{target}] sourceRefs missing {rel}"
                                 )
@@ -4412,9 +4490,8 @@ def validate_packs(errors: list[str]) -> None:
                 for source in rel:
                     if not isinstance(source, str):
                         continue
-                    if not (base / source).exists():
+                    if not (base / source).exists() and not (source == "." and data.get("skillRoot") and base.is_dir()):
                         errors.append(f"packs/{name}/pack.json: sourceRef {source} missing")
-
         concept_graph = data.get("conceptGraph", {})
         if not isinstance(concept_graph, dict):
             errors.append(f"packs/{name}/pack.json: conceptGraph must be object")
@@ -4450,6 +4527,20 @@ def validate_packs(errors: list[str]) -> None:
                     errors.append(f"packs/{name}/pack.json: missing adapter asset {rel}")
             if adapter_name not in SUPPORTED_TARGETS:
                 errors.append(f"packs/{name}/pack.json: unknown adapter {adapter_name}")
+
+
+def _valid_skill_root(base: Path, rel: object) -> bool:
+    if not isinstance(rel, str) or not re.fullmatch(r"[A-Za-z0-9_.-]+(/[A-Za-z0-9_.-]+)*", rel) or any(part in (".", "..") for part in rel.split("/")):
+        return False
+    path = Path(rel)
+    if path.is_absolute() or ".." in path.parts:
+        return False
+    current = base
+    for part in path.parts:
+        current = current / part
+        if current.is_symlink() or not current.exists():
+            return False
+    return current.is_dir()
 
 
 def validate_methodologies(errors: list[str]) -> None:

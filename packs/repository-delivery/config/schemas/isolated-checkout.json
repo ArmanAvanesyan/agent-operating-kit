@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repo-delivery.local/schemas/isolated-checkout.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "kind": {
+      "const": "isolated-checkout"
+    },
+    "repository": {
+      "type": "string"
+    },
+    "destination": {
+      "type": "string"
+    },
+    "baseline_revision": {
+      "type": "string",
+      "pattern": "^([a-f0-9]{40}|[a-f0-9]{64})$"
+    },
+    "branch": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "kind",
+    "repository",
+    "destination",
+    "baseline_revision",
+    "branch"
+  ],
+  "additionalProperties": false
+}

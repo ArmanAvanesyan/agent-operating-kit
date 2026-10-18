@@ -1,0 +1,5 @@
+{
+  "name": "repository-delivery",
+  "version": "0.1.0",
+  "description": "Preservation-aware repository delivery, snapshot-bound evidence and optional fenced integrations."
+}

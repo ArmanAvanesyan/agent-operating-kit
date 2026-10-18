@@ -408,3 +408,9 @@ source identities and remaining limits. See the
 [agy discovery gate review](docs/agy-discovery-cycle-verification.md) for its
 observable-behavior acceptance and remaining parser-error limitation. agy native
 registration is separate from the seven-target pack renderer. The Python contributor entrypoint is unchanged.
+
+## Repository delivery
+
+The optional [repository-delivery capability](docs/repository-delivery.md) embeds
+preservation, isolated shipping and snapshot-bound evidence. Start with
+`aok delivery doctor --json`; Python 3.11+ is required only by delivery helpers.

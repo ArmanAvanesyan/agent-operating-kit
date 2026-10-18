@@ -219,3 +219,8 @@ expose these commands. See [operator instructions and native gate limits](native
 CI builds with Go 1.22, cross-compiles Linux/macOS/Windows for amd64/arm64, and
 runs built-binary validation with an empty PATH. Cross-compilation does not prove
 execution on those operating systems. No release is published by these checks.
+
+### Optional repository delivery
+
+`aok delivery` routes to bundled Python 3.11+ helpers. Existing Go commands retain
+their Python-free behavior. See [dependencies and packaging](repository-delivery.md).

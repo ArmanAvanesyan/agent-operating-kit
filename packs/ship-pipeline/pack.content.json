@@ -14,7 +14,9 @@
       ],
       "escalation": {
         "ifBlockedBy": "repeated-quality-failure",
-        "notify": ["qa-reality-checker"]
+        "notify": [
+          "qa-reality-checker"
+        ]
       }
     },
     {
@@ -31,7 +33,7 @@
     {
       "id": "ship-pr",
       "name": "ship-pr",
-      "description": "Run a ship-to-merge workflow for current branch.",
+      "description": "Preservation-aware delivery compatibility entrypoint.",
       "sourcePath": "claude-code/skills/ship-pr.md",
       "inputs": {
         "prTitle": "Optional PR title override",
@@ -52,16 +54,16 @@
     {
       "id": "ship-pipeline-packet",
       "title": "Ship branch via PR pipeline",
-      "description": "Create PR, run checks, and merge once all gates are green.",
+      "description": "Prepare and review a preserved delivery; publish or merge only with explicit authority.",
       "status": "planned",
       "phase": "execution",
       "assigneeRole": "ship-lead",
       "verification": [
-        "all required checks pass",
-        "PR state is mergeable",
-        "merge command returns success"
+        "preservation verified",
+        "snapshot-bound gates and independent review valid",
+        "required remote checks inspected"
       ],
-      "defaultDecision": "Prefer squash merge over merge commit when CI is green."
+      "defaultDecision": "Stop at the authorized delivery boundary; green checks never grant merge authority."
     }
   ]
 }

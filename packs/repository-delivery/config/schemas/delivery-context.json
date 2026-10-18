@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repo-delivery.local/schemas/delivery-context.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "kind": {
+      "const": "delivery-context"
+    },
+    "repository": {
+      "type": "string"
+    },
+    "baseline_revision": {
+      "type": "string",
+      "pattern": "^([a-f0-9]{40}|[a-f0-9]{64})$"
+    },
+    "objective": {
+      "type": "string"
+    },
+    "files_in_scope": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "gate_commands": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1
+      },
+      "minItems": 1
+    },
+    "review_policy": {
+      "enum": [
+        "independent",
+        "none"
+      ]
+    },
+    "authorized_actions": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "isolate",
+          "port",
+          "cleanup",
+          "commit",
+          "push",
+          "open-pr",
+          "merge",
+          "update-backlog",
+          "install-hook",
+          "finalize-attempt"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "actor_id": {
+      "type": "string"
+    },
+    "actor_context": {
+      "type": "string"
+    },
+    "environment_keys": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "include_ignored": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "preservation": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "manifest_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "path",
+          "manifest_sha256"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "gate_timeout_seconds": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 86400
+    },
+    "github_repository": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "initial_snapshot_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "context_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "github_review_required": {
+      "type": "boolean"
+    },
+    "integration_required_mode": {
+      "enum": [
+        null,
+        "real",
+        "mock",
+        "mixed"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "kind",
+    "repository",
+    "baseline_revision",
+    "objective",
+    "files_in_scope",
+    "gate_commands",
+    "review_policy",
+    "authorized_actions",
+    "actor_id",
+    "actor_context",
+    "environment_keys",
+    "include_ignored",
+    "preservation",
+    "gate_timeout_seconds",
+    "github_repository",
+    "initial_snapshot_sha256",
+    "context_sha256",
+    "github_review_required"
+  ],
+  "additionalProperties": false
+}

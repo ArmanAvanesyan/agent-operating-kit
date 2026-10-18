@@ -1,0 +1,10 @@
+test_all_targets_resolve_resources_after_relocation (test_resource_pack.ResourcePackTests.test_all_targets_resolve_resources_after_relocation) ... ok
+test_guide_reference_escape_is_rejected_before_rendering (test_resource_pack.ResourcePackTests.test_guide_reference_escape_is_rejected_before_rendering) ... ok
+test_ship_pipeline_includes_canonical_support (test_resource_pack.ResourcePackTests.test_ship_pipeline_includes_canonical_support) ... ok
+test_support_copy_filters_cache_and_refuses_symlinks (test_resource_pack.ResourcePackTests.test_support_copy_filters_cache_and_refuses_symlinks) ... ok
+test_unsafe_skill_roots_are_rejected (test_resource_pack.ResourcePackTests.test_unsafe_skill_roots_are_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 1.779s
+
+OK

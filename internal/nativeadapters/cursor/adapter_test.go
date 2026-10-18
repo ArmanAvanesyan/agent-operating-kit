@@ -195,6 +195,7 @@ func TestHostScalarMismatchRejected(t *testing.T) {
 		"name: reviewer\ndescription: \"Review: exact scalar\"\n",
 		"name: reviewer\ndescription: >\n  Review changes\n",
 		"Name: other\n",
+		"name: reviewer\n\ufeffname: other\n",
 		"name: reviewer\ncustom:\n  name: other\n",
 		"name: reviewer\nmodel: inherit # comment\n",
 		"name: reviewer\nreadonly: \"true\"\n",
@@ -258,5 +259,21 @@ func TestExportRejectsIncompatibleNativeControls(t *testing.T) {
 			t.Fatalf("incompatible %s exported", key)
 		}
 		delete(doc.Unknown, "frontmatter."+key)
+	}
+}
+
+func TestECMAScriptTrimPreservesNextLine(t *testing.T) {
+	body := []byte("\u0085")
+	file := nativeadapter.File{Path: ".cursor/agents/reviewer.md", Format: "markdown", Data: append([]byte("---\nname: reviewer\n---\n"), body...)}
+	doc, _, err := New().Decode("project", []nativeadapter.File{file})
+	if err != nil {
+		t.Fatal(err)
+	}
+	out, _, err := New().Encode("project", doc)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(out[0].Data[len(out[0].Data)-len(body):]) != string(body) {
+		t.Fatal("host nonblank instruction changed")
 	}
 }

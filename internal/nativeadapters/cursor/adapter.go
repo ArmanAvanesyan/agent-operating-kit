@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"path"
 	"strings"
-	"unicode"
 	"unicode/utf8"
 
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/contracts"
@@ -222,13 +221,13 @@ func mustJSON(value any) json.RawMessage {
 func compatibleHostScalars(header []byte, meta map[string]any) error {
 	native := map[string]string{}
 	for _, line := range strings.Split(string(header), "\n") {
-		line = strings.TrimSpace(line)
+		line = trimHostSpace(line)
 		if line == "" || strings.HasPrefix(line, "#") {
 			continue
 		}
 		key, value, found := strings.Cut(line, ":")
 		if found {
-			native[strings.ToLower(strings.TrimSpace(key))] = strings.TrimSpace(value)
+			native[strings.ToLower(trimHostSpace(key))] = trimHostSpace(value)
 		}
 	}
 	for _, key := range []string{"name", "description", "model", "readonly", "background", "is_background", "tools"} {
@@ -255,8 +254,17 @@ func compatibleHostScalars(header []byte, meta map[string]any) error {
 }
 
 func blankHostPrompt(body []byte) bool {
-	// ECMAScript trim includes the zero-width no-break space/BOM (U+FEFF).
-	return !utf8.Valid(body) || strings.TrimFunc(string(body), func(r rune) bool {
-		return unicode.IsSpace(r) || r == '\uFEFF'
-	}) == ""
+	return !utf8.Valid(body) || trimHostSpace(string(body)) == ""
+}
+
+// ECMAScript String.trim uses WhiteSpace and LineTerminator code points;
+// unlike unicode.IsSpace it excludes U+0085 and includes U+FEFF.
+func trimHostSpace(text string) string {
+	return strings.TrimFunc(text, func(r rune) bool {
+		switch r {
+		case '\t', '\n', '\v', '\f', '\r', ' ', '\u00a0', '\u1680', '\u2028', '\u2029', '\u202f', '\u205f', '\u3000', '\ufeff':
+			return true
+		}
+		return r >= '\u2000' && r <= '\u200a'
+	})
 }

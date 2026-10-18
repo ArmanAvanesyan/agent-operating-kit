@@ -21,6 +21,9 @@ jobs:
         run: make quality-fast PYTHON=python
       # Real swarmd compatibility is separately gated; no private secret is required.
   installed-delivery:
+    env:
+      # Go 1.22 needs an explicit Mach-O UUID on current macOS loaders.
+      GOFLAGS: -ldflags=-B=gobuildid
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:

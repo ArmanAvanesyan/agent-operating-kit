@@ -73,6 +73,16 @@ compatibility evidence remains bound to the two exact tested pins; the concurren
 advanced main is not claimed as tested. Observation-level checks cannot establish
 byte-level integrity of private checkpoints that were deliberately not read.
 
+## Hosted macOS linker correction
+
+The first Go 1.22 macOS installation job failed before delivery ran: dyld rejected
+an executable without LC_UUID. The installed-artifact job now applies
+`GOFLAGS=-ldflags=-B=gobuildid` for its bootstrap and nested Go commands. Release
+builds explicitly add the flag for Darwin targets and test both Mach-O images for
+UUID commands. This uses the [Go 1.22 backport](https://go.googlesource.com/go/+/e3fd4ba7f954d7025b8ba9e3f7961344cccad922),
+retaining the minimum-toolchain gate. The original failure was not counted as a
+passing installation; the PR's current checks record the rerun.
+
 ## Remaining limits
 
 Python 3.11+ is optional for AOK and required for delivery helper operations;

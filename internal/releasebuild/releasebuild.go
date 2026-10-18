@@ -442,7 +442,12 @@ func buildGoBinaries(root, dist, version string) ([]namedPath, error) {
 	for _, t := range goBinaryTargets {
 		name := fmt.Sprintf(t.NameTmpl, version)
 		out := filepath.Join(outDir, name)
-		cmd := exec.Command("go", "build", "-o", out, "./cmd/aok")
+		args := []string{"build", "-o", out}
+		if t.GOOS == "darwin" {
+			// Backported in Go 1.22: modern dyld requires LC_UUID.
+			args = append(args, "-ldflags=-B=gobuildid")
+		}
+		cmd := exec.Command("go", append(args, "./cmd/aok")...)
 		cmd.Dir = root
 		cmd.Env = append(os.Environ(),
 			"GOOS="+t.GOOS,

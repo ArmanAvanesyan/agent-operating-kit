@@ -1,6 +1,8 @@
 package releasebuild
 
 import (
+	"debug/macho"
+	"encoding/binary"
 	"encoding/json"
 	"os"
 	"path/filepath"
@@ -65,6 +67,24 @@ func TestBuildSmokeWithFakeBundles(t *testing.T) {
 	artifacts, err := Build(root, dist, "0.0.0-test")
 	if err != nil {
 		t.Fatal(err)
+	}
+	for _, arch := range []string{"amd64", "arm64"} {
+		binaryPath := filepath.Join(dist, "aok-0.0.0-test-darwin-"+arch)
+		image, err := macho.Open(binaryPath)
+		if err != nil {
+			t.Fatal(err)
+		}
+		found := false
+		for _, load := range image.Loads {
+			raw := load.Raw()
+			if len(raw) >= 4 && binary.LittleEndian.Uint32(raw[:4]) == 0x1b {
+				found = true
+			}
+		}
+		image.Close()
+		if !found {
+			t.Fatalf("Darwin %s release lacks LC_UUID", arch)
+		}
 	}
 	if len(artifacts) < 10 {
 		t.Fatalf("too few artifacts: %d", len(artifacts))

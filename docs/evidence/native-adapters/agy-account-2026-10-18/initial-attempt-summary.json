@@ -1,0 +1,20 @@
+{
+  "kind": "aok-agy-account-attempt-summary/v1",
+  "codeSubmittedOnce": true,
+  "optionalSharingDisabledBeforeAcceptance": true,
+  "ownedTrustConfirmed": true,
+  "accountPromptGeometryObserved": true,
+  "nativeManagerCommandSent": false,
+  "accountHeaderGap": "API-key-only status matcher rejects account/product header",
+  "diagnosticFailure": "IndexError in temporary public-plan diagnostic on startup frame; never accepted as native evidence",
+  "privateHomeRemovedByFailureCleanup": true,
+  "rootRemovedAfterCleanup": true,
+  "backendAuthentication": "not-independently-verified",
+  "nativeLoading": "not-verified",
+  "nativeOnlyReleaseComplete": false,
+  "recoveryDriver": {
+    "path": "7d4c9e94b2decbcd234484bd2ec782b58620e3e26a983dd624d9004d103c29d6.py.txt",
+    "sha256": "7d4c9e94b2decbcd234484bd2ec782b58620e3e26a983dd624d9004d103c29d6"
+  },
+  "recoveryLimitation": "Fresh-run cleanup also removed pinned executable. Recovery restored it from verified pinned source before strict invalid-checkpoint validation. Original deadline unchanged."
+}

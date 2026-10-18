@@ -1,5 +1,10 @@
 # Isolated agy onboarding investigation — 2026-10-18
 
+The later [account-mode follow-up](agy-account-verification.md) establishes positive
+project discovery in a fresh OAuth profile. The synthetic-provider results below
+remain historical evidence; the full gate still awaits explicit malformed-file
+rejection.
+
 This investigation follows the post-code stop recorded in PR #75. agy 1.4.2
 Darwin x64 remains hash-pinned; the installed client and original home/keychain
 are not used. Native manager discovery is not established by a successful

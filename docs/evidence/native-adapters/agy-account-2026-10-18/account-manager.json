@@ -1,0 +1,69 @@
+{
+  "accountRowsRetained": false,
+  "aokSHA256": "81f7a2c4c8122b96dfdab4c32f6b324e47b65c2e7984b2ab264589cbd68c2b62",
+  "backendAuthentication": "not-independently-verified",
+  "binarySHA256": "fa85a90abded17bcd1b185bbd1d6b1b82065f093ad4700d4dbacd3be2433294c",
+  "candidateNativeLoadingEvidence": false,
+  "cases": {
+    "absent": {
+      "accountRowsRetained": false,
+      "actions": [],
+      "auditRoot": "/private/tmp/aok-agy-login-audit-zdmxj1p5",
+      "cleanupVerified": false,
+      "nativeLogsRead": false,
+      "privateRootRemoved": true,
+      "profileCopy": {
+        "bytesCopied": 13141631,
+        "filesCopied": 36
+      },
+      "prompt": null,
+      "state": {
+        "commandSent": false
+      }
+    },
+    "malformed": {
+      "accountRowsRetained": false,
+      "actions": [],
+      "auditRoot": "/private/tmp/aok-agy-login-audit-4jnv96qq",
+      "cleanupVerified": false,
+      "nativeLogsRead": false,
+      "privateRootRemoved": true,
+      "profileCopy": {
+        "bytesCopied": 13141631,
+        "filesCopied": 36
+      },
+      "prompt": null,
+      "state": {
+        "commandSent": false
+      }
+    },
+    "positive": {
+      "accountRowsRetained": false,
+      "actions": [],
+      "auditRoot": "/private/tmp/aok-agy-login-audit-2hrdhehz",
+      "cleanupVerified": false,
+      "nativeLogsRead": false,
+      "privateRootRemoved": true,
+      "profileCopy": {
+        "bytesCopied": 13141631,
+        "filesCopied": 36
+      },
+      "prompt": null,
+      "state": {
+        "commandSent": false
+      }
+    }
+  },
+  "expectedDescription": "Synthetic AGY adapter discovery fixture",
+  "fixtureSHA256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76",
+  "inference": "not-run",
+  "kind": "aok-agy-account-manager/v1",
+  "minimumManagerObservationSeconds": 5,
+  "nativeLogsRead": false,
+  "network": "allowed for native metadata and refresh; original home/keychain denied",
+  "provider": "fresh isolated OAuth account profile; not synthetic API key",
+  "renderedFixtureUTF8": "---\ndescription: Synthetic AGY adapter discovery fixture\nfuturePolicy:\n    retain: true\nmodel: flash\nname: aok-probe\nsubagent: true\ntools:\n    - view_file\n---\n# Agent instructions\n\nThis synthetic body is inert test content. Do not execute it.\n",
+  "scope": "project",
+  "sourceSHA256": "1ed7d52117cf8674f1e91ea7fc454721b2ad74d9e9f2a52d79f84ba77f7c479a",
+  "version": "1.4.2"
+}

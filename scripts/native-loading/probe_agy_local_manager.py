@@ -136,6 +136,12 @@ class CaseCapture:
         self.public_rows = []
         self.load_diagnostics = []
 
+    def manager_rows(self, text, root):
+        return public_synthetic_rows(text, root)
+
+    def diagnostics(self, root):
+        return synthetic_load_diagnostics(root)
+
     def capture(self, master, deadline, *, audit_path, case_root, **unused):
         wire = bytearray()
         answered = set()
@@ -177,8 +183,8 @@ class CaseCapture:
                 # Capture the stable current manager screen; never select an agent.
                 if state.get("managerSectionObserved") or state.get("errorObserved") or state.get("authBarrierObserved"):
                     self.manager = safe_manager_state(state)
-                    self.public_rows = public_synthetic_rows(text, Path(case_root))
-                    self.load_diagnostics = synthetic_load_diagnostics(Path(case_root))
+                    self.public_rows = self.manager_rows(text, Path(case_root))
+                    self.load_diagnostics = self.diagnostics(Path(case_root))
                     return state, False
                 # A local command can update asynchronously; an echoed draft
                 # or unchanged prompt is not its manager result.

@@ -1,0 +1,23 @@
+from pathlib import Path
+import importlib.util,json,re,hashlib
+spec=importlib.util.spec_from_file_location('account_observe',Path.cwd()/'scripts/native-loading/prepare_agy_login.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+original=m.state_from_bytes;last=None
+fixed=set('antigravity cli gemini pro ultra flash high medium low thinking google oauth account api key model version welcome default agents active shift tab ctrl esc enter shortcuts for to agent plan paid free preview you are using with is available search terminal prompt help token context use settings read only mode signed in as via google ai one standard premium subscription unlimited paid tier'.split())
+def observe(data):
+ global last
+ state=original(data)
+ if state.get('terminalAmbiguityObserved'):return state
+ text=m.AGY.terminal_text(data,width=m.LOGIN_WIDTH,height=m.LOGIN_HEIGHT)
+ digest=hashlib.sha256(text.encode()).hexdigest()
+ if digest!=last:
+  last=digest
+  rows=[]
+  for i,row in enumerate(text.splitlines()):
+   if not row.strip():continue
+   words=re.findall('[A-Za-z]+',row.lower())
+   rows.append({'row':i,'fixedWords':[w if w in fixed else '[redacted]' for w in words], 'length':len(row),'promptMarker':row in ('>','❯'),'separator':row=='─'*160})
+  plan=re.search(r'\(Antigravity [A-Za-z ]{1,50}\)',text.splitlines()[2]); print(json.dumps({'publicProductPlanLabel':plan.group() if plan else None}),flush=True); header=text.splitlines()[2] if len(text.splitlines())>2 else ''; header=re.sub(r'[^\s@]+@[^\s@]+\.[^\s@]+','[account]',header); header=re.sub(r'[A-Za-z0-9_./-]+',lambda x:x.group() if x.group().lower() in fixed or x.group()=='account' else '[redacted]',header); m.append_audit(m.AUDIT_PATH,'account-screen-shape',rows=rows,redactedStatusHeader=header,screenSHA256=digest)
+ return state
+m.state_from_bytes=observe
+result=m.prepare(timeout=25,resume_login_root=Path('/private/tmp/aok-agy-session-ko3mk7ab'),retain_onboarding=True)
+print(json.dumps({'status':result['status'],'root':result['root'],'auditRoot':result['auditRoot']}))

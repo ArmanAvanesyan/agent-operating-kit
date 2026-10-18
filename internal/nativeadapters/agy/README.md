@@ -165,3 +165,16 @@ do not identify an individual field or layout as the cause and do not justify
 changing the adapter's rendering speculatively. The status stays `not-run`
 (no qualifying native-loading evidence); backend auth and runtime enforcement
 remain unverified. An authenticated account-mode comparison remains open.
+
+
+## Isolated account-mode discovery — 2026-10-18
+
+The [account-mode investigation](../../../docs/agy-account-verification.md) now
+observes the AOK-rendered project agent by name and description in `/agents`.
+Separate absent and malformed controls omit the fixture. This supersedes the
+earlier default-only synthetic-provider result for positive discovery; it does
+not identify the precise cause of provider-dependent behavior. The full gate
+still requires explicit native malformed-file rejection, which was not visible.
+`HostLoading.Status` therefore remains `not-run`; selection, inference, backend
+authentication, and runtime enforcement remain unverified. No speculative native
+format change was made. The original temporary profile and all copies were removed.

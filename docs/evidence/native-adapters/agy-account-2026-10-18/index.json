@@ -1,0 +1,51 @@
+{
+  "kind": "aok-agy-account-evidence-index/v1",
+  "observedManagerSources": [
+    {
+      "path": "1ed7d52117cf8674f1e91ea7fc454721b2ad74d9e9f2a52d79f84ba77f7c479a.py.txt",
+      "sha256": "1ed7d52117cf8674f1e91ea7fc454721b2ad74d9e9f2a52d79f84ba77f7c479a"
+    },
+    {
+      "path": "f801282997818cdc28e763b38add89bb75bf4894d511144ec5da02693a5a8681.py.txt",
+      "sha256": "f801282997818cdc28e763b38add89bb75bf4894d511144ec5da02693a5a8681"
+    }
+  ],
+  "observedFinalSourceReconstruction": "Exact intermediate driver reconstructed from retained pre-fix source plus recorded idempotence patch; SHA-256 matches native report. Final cleanup refactor is separately archived.",
+  "currentHelpers": [
+    {
+      "path": "c3344f15578ad97db96a4de015589de157930d39ee0d70efad5dcfc374cc3bfa.py.txt",
+      "sha256": "c3344f15578ad97db96a4de015589de157930d39ee0d70efad5dcfc374cc3bfa"
+    },
+    {
+      "path": "005e408df16b776e8cae6e0c4dfbb7fbcee975f7390b79cbdef3859272580a96.py.txt",
+      "sha256": "005e408df16b776e8cae6e0c4dfbb7fbcee975f7390b79cbdef3859272580a96"
+    },
+    {
+      "path": "8e824b2d7c5befa885ba67742f3b3bf4f6c9a9970f78bee61a3242279849d541.py.txt",
+      "sha256": "8e824b2d7c5befa885ba67742f3b3bf4f6c9a9970f78bee61a3242279849d541"
+    }
+  ],
+  "positiveDiscovery": true,
+  "completeNativeGate": false,
+  "remainingBlocker": "Explicit malformed YAML parse rejection was not visible.",
+  "reports": [
+    "2hrdhehz.json",
+    "4jnv96qq.json",
+    "6t8nbyj3.json",
+    "account-manager-final.json",
+    "account-manager.json",
+    "fja6axm2.json",
+    "index.json",
+    "initial-attempt-summary.json",
+    "m1ndekwm.json",
+    "profile-cleanup.json",
+    "replacement-login.json",
+    "snvfi7yz.json",
+    "ukqg_9dp.json",
+    "validation.json",
+    "vujlqw5p.json",
+    "yb9u09ce.json",
+    "yyitlvr9.json",
+    "zdmxj1p5.json"
+  ]
+}

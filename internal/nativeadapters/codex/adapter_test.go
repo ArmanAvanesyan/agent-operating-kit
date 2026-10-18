@@ -382,9 +382,9 @@ func TestProjectRegisteredRejectsInputShapeAndRenameSiblingCollision(t *testing.
 
 func TestProjectRegisteredDoesNotOverwritePreservedScalarAgentSetting(t *testing.T) {
 	doc := minimalDoc()
-	doc.Fields["agent.metadata.id"] = json.RawMessage(`"future_setting"`)
+	doc.Fields["agent.metadata.id"] = json.RawMessage(`"future-setting"`)
 	doc.Assets["instructions.md"] = []byte("Synthetic")
-	doc.Unknown["codex.config"] = json.RawMessage(`{"agents":{"future_setting":true}}`)
+	doc.Unknown["codex.config"] = json.RawMessage(`{"agents":{"future-setting":true}}`)
 	if _, _, err := New().Encode(registeredScope, doc); err == nil || !strings.Contains(err.Error(), "collides") {
 		t.Fatalf("encoding overwrote a preserved scalar setting: %v", err)
 	}
@@ -453,6 +453,8 @@ func TestProjectRegisteredRejectsSiblingPathAliasesAndCaseFoldCollisions(t *test
 		{"case-folded-path", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = 'AGENTS/AOK-PROBE.TOML'\n"},
 		{"normalized-path", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = './agents/../agents/aok-probe.toml'\n"},
 		{"backslash-path", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = 'agents\\\\aok-probe.toml'\n"},
+		{"windows-trailing-dots", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = 'agents./aok-probe.toml.'\n"},
+		{"windows-trailing-space", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = 'agents/aok-probe.toml '\n"},
 		{"case-folded-name", "[agents.AOK-PROBE]\ndescription = 'Shadow'\nconfig_file = 'agents/other.toml'\n"},
 	}
 	for _, tc := range aliasConfigs {
@@ -473,6 +475,65 @@ func TestProjectRegisteredRejectsSiblingPathAliasesAndCaseFoldCollisions(t *test
 	doc.Fields["agent.metadata.id"] = json.RawMessage(`"aok-fresh"`)
 	if _, _, err := New().Encode(registeredScope, doc); err == nil || !strings.Contains(err.Error(), "case folding") {
 		t.Fatalf("canonical rename to case-fold colliding sibling was accepted: %v", err)
+	}
+}
+
+func TestProjectRegisteredRejectsUnicodeNamesAndSiblingReferences(t *testing.T) {
+	for _, name := range []string{"é", "e\u0301"} { // NFC and NFD spellings
+		t.Run(name, func(t *testing.T) {
+			role := []byte("name = " + strconv.Quote(name) + "\ndescription = 'Unicode role'\ndeveloper_instructions = 'Synthetic'\n")
+			files := []nativeadapter.File{{Path: projectConfig, Format: "toml", Data: []byte{}}, {Path: agentDir + name + ".toml", Format: "toml", Data: role}}
+			if _, _, err := New().Decode(registeredScope, files); err == nil || !strings.Contains(err.Error(), "ASCII canonical slug") {
+				t.Fatalf("Unicode selected role name was accepted: %v", err)
+			}
+			doc := minimalDoc()
+			doc.Fields["agent.metadata.id"] = mustJSON(t, name)
+			doc.Assets["instructions.md"] = []byte("Synthetic")
+			if _, _, err := New().Encode(registeredScope, doc); err == nil || !strings.Contains(err.Error(), "ASCII canonical slug") {
+				t.Fatalf("Unicode canonical role name was accepted: %v", err)
+			}
+		})
+	}
+	base := registeredFixture(t)
+	for _, tc := range []struct{ name, table string }{
+		{"unicode-sibling-name", "[agents.\"rôle\"]\ndescription='Unicode sibling'\nconfig_file='agents/role.toml'\n"},
+		{"unicode-sibling-path", "[agents.shadow]\ndescription='Shadow'\nconfig_file='agents/rôle.toml'\n"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			files := append([]nativeadapter.File(nil), base...)
+			files[0].Data = append(append([]byte(nil), files[0].Data...), []byte(tc.table)...)
+			if _, _, err := New().Decode(registeredScope, files); err == nil || !strings.Contains(err.Error(), "unsupported portability") {
+				t.Fatalf("Unicode sibling portability ambiguity was accepted: %v", err)
+			}
+		})
+	}
+	for _, tc := range []struct {
+		name, sibling, ref string
+	}{
+		{"encode-unicode-sibling", "rôle", "agents/role.toml"},
+		{"encode-unicode-reference", "shadow", "agents/rôle.toml"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			doc := minimalDoc()
+			doc.Assets["instructions.md"] = []byte("Synthetic")
+			doc.Unknown["codex.config"] = mustJSON(t, map[string]any{"agents": map[string]any{
+				tc.sibling: map[string]any{"description": "Sibling", "config_file": tc.ref},
+			}})
+			if _, _, err := New().Encode(registeredScope, doc); err == nil || !strings.Contains(err.Error(), "unsupported portability") {
+				t.Fatalf("encoding Unicode sibling portability ambiguity succeeded: %v", err)
+			}
+		})
+	}
+	for _, ref := range []string{"agents./aok-probe.toml.", "agents/aok-probe.toml "} {
+		doc := minimalDoc()
+		doc.Fields["agent.metadata.id"] = json.RawMessage(`"aok-probe"`)
+		doc.Assets["instructions.md"] = []byte("Synthetic")
+		doc.Unknown["codex.config"] = mustJSON(t, map[string]any{"agents": map[string]any{
+			"shadow": map[string]any{"description": "Sibling", "config_file": ref},
+		}})
+		if _, _, err := New().Encode(registeredScope, doc); err == nil || !strings.Contains(err.Error(), "unsupported portability") {
+			t.Errorf("encoding nonportable alias %q succeeded: %v", ref, err)
+		}
 	}
 }
 

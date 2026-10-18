@@ -16,7 +16,12 @@ files from the explicit inventory, and selected description mismatches are
 rejected. Names reserved by Codex's `[agents]` settings (including `enabled`,
 `max_depth`, `max_threads`, and the default-subagent, interruption,
 concurrency, and runtime settings) are rejected as role identities in this
-scope.
+scope. To avoid cross-platform identity aliases, this registered scope accepts
+only lowercase ASCII canonical-slug role names and ASCII sibling names and
+references. Sibling paths with trailing-dot or trailing-space components,
+colons, or NULs are rejected. Exact `.` and `..` components are normalized for
+alias checks. The older standalone `project` scope retains its prior name
+behavior.
 
 The selected `description` maps to `agent.identity.purpose`; the TOML role
 fields map as follows:

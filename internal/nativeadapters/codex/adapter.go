@@ -278,6 +278,9 @@ func decodeRegistered(files []nativeadapter.File) (nativeadapter.Document, []con
 	if isReservedAgentSetting(name) {
 		return nativeadapter.Document{}, nil, fmt.Errorf("Codex agent name %q is a reserved [agents] project setting", name)
 	}
+	if !canonicalID.MatchString(name) {
+		return nativeadapter.Document{}, nil, errors.New("project-registered Codex role name must be an ASCII canonical slug for portable identity")
+	}
 	filename := strings.TrimSuffix(path.Base(roleFile.Path), ".toml")
 	if name != filename {
 		return nativeadapter.Document{}, nil, errors.New("registered Codex role name must match its filename")
@@ -328,10 +331,16 @@ func decodeRegistered(files []nativeadapter.File) (nativeadapter.Document, []con
 		if !ok {
 			continue
 		}
+		if !isASCII(sibling) {
+			return nativeadapter.Document{}, nil, fmt.Errorf("unsupported portability: non-ASCII sibling registration name %q", sibling)
+		}
 		if strings.EqualFold(sibling, name) {
 			return nativeadapter.Document{}, nil, fmt.Errorf("sibling Codex role %q collides with selected role %q after case folding", sibling, name)
 		}
 		if ref, ok := entry["config_file"].(string); ok && ref != "" {
+			if !isASCII(ref) || !portableRegistrationRef(ref) {
+				return nativeadapter.Document{}, nil, fmt.Errorf("unsupported portability: sibling %q config_file contains a nonportable path", sibling)
+			}
 			if registrationPathAlias(ref, wantRef) {
 				return nativeadapter.Document{}, nil, fmt.Errorf("sibling Codex role %q config_file aliases selected role path %q", sibling, wantRef)
 			}
@@ -361,6 +370,9 @@ func encodeRegistered(doc nativeadapter.Document) ([]nativeadapter.File, []contr
 	}
 	if isReservedAgentSetting(name) {
 		return nil, nil, fmt.Errorf("Codex agent name %q is a reserved [agents] project setting", name)
+	}
+	if !canonicalID.MatchString(name) {
+		return nil, nil, errors.New("project-registered Codex role name must be an ASCII canonical slug for portable identity")
 	}
 	if len(name) > 128 || strings.ContainsAny(name, `/\\`) || name == "." || name == ".." || evidence.CheckPath(agentDir+name+".toml") != nil {
 		return nil, nil, errors.New("agent name is not a valid Codex filename")
@@ -411,8 +423,14 @@ func encodeRegistered(doc nativeadapter.Document) ([]nativeadapter.File, []contr
 		}
 		entry, isRole := value.(map[string]any)
 		if isRole {
+			if !isASCII(sibling) {
+				return nil, nil, fmt.Errorf("unsupported portability: non-ASCII sibling registration name %q", sibling)
+			}
 			if ref, ok := entry["config_file"].(string); ok && registrationPathAlias(ref, "agents/"+name+".toml") {
 				return nil, nil, fmt.Errorf("preserved sibling %q config_file aliases selected output path", sibling)
+			}
+			if ref, ok := entry["config_file"].(string); ok && ref != "" && (!isASCII(ref) || !portableRegistrationRef(ref)) {
+				return nil, nil, fmt.Errorf("unsupported portability: sibling %q config_file contains a nonportable path", sibling)
 			}
 		}
 	}
@@ -454,6 +472,34 @@ func registrationPathAlias(left, right string) bool {
 		return strings.ToLower(path.Clean(strings.ReplaceAll(s, "\\", "/")))
 	}
 	return key(left) == key(right)
+}
+
+func isASCII(s string) bool {
+	for i := 0; i < len(s); i++ {
+		if s[i] >= 0x80 {
+			return false
+		}
+	}
+	return true
+}
+
+// portableRegistrationRef accepts ordinary ASCII relative paths. Dot and
+// dot-dot components are retained for lexical alias checks; trailing dots or
+// spaces, ADS separators and NULs are rejected instead of emulating Windows.
+func portableRegistrationRef(s string) bool {
+	if strings.ContainsAny(s, ":\x00") {
+		return false
+	}
+	normalized := strings.ReplaceAll(s, "\\", "/")
+	for _, component := range strings.Split(normalized, "/") {
+		if component == "." || component == ".." {
+			continue
+		}
+		if strings.HasSuffix(component, ".") || strings.HasSuffix(component, " ") {
+			return false
+		}
+	}
+	return true
 }
 
 func cloneRawMap(in map[string]json.RawMessage) map[string]json.RawMessage {

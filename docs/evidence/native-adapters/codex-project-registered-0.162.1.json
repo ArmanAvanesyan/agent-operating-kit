@@ -1,5 +1,5 @@
 {
-  "aokBinarySHA256": "bf8d45e34f5ee213209d92b1ffc27cadc28073d499c9940fe99bab82799cf228",
+  "aokBinarySHA256": "5b36f181fa7a4b6e41a30d20b14a91fdf3bf99c779198adb732fffff70c030f1",
   "aokExportStatus": "blocked",
   "aokImportStatus": "blocked",
   "cases": {
@@ -30,7 +30,7 @@
         "configWarning"
       ],
       "warningSummaries": [
-        "{\"emittedAtMs\": 1792289430498, \"method\": \"configWarning\", \"params\": {\"details\": \"Error parsing project config file <PROBE_ROOT>/malformed-config/.codex/config.toml: TOML parse error at line 1, column 18\\n  |\\n1 | [agents.aok-probe\\n  |                  ^\\nunclosed table, expected `]`\\n\", \"summary\": \"Invalid configuration; using defaults.\"}}"
+        "{\"emittedAtMs\": 1792289718913, \"method\": \"configWarning\", \"params\": {\"details\": \"Error parsing project config file <PROBE_ROOT>/malformed-config/.codex/config.toml: TOML parse error at line 1, column 18\\n  |\\n1 | [agents.aok-probe\\n  |                  ^\\nunclosed table, expected `]`\\n\", \"summary\": \"Invalid configuration; using defaults.\"}}"
       ]
     },
     "malformedRole": {
@@ -57,8 +57,8 @@
         "configWarning"
       ],
       "warningSummaries": [
-        "{\"emittedAtMs\": 1792289430737, \"method\": \"configWarning\", \"params\": {\"details\": null, \"summary\": \"Ignoring malformed agent role definition: failed to parse agent role file at <PROBE_ROOT>/malformed-role/.codex/agents/aok-probe.toml: TOML parse error at line 1, column 9\\n  |\\n1 | name = [\\n  |         ^\\nunclosed array, expected `]`\\n\"}}",
-        "{\"emittedAtMs\": 1792289430737, \"method\": \"configWarning\", \"params\": {\"details\": null, \"summary\": \"Ignoring malformed agent role definition: failed to parse agent role file at <PROBE_ROOT>/malformed-role/.codex/agents/aok-probe.toml: TOML parse error at line 1, column 9\\n  |\\n1 | name = [\\n  |         ^\\nunclosed array, expected `]`\\n\"}}"
+        "{\"emittedAtMs\": 1792289719186, \"method\": \"configWarning\", \"params\": {\"details\": null, \"summary\": \"Ignoring malformed agent role definition: failed to parse agent role file at <PROBE_ROOT>/malformed-role/.codex/agents/aok-probe.toml: TOML parse error at line 1, column 9\\n  |\\n1 | name = [\\n  |         ^\\nunclosed array, expected `]`\\n\"}}",
+        "{\"emittedAtMs\": 1792289719186, \"method\": \"configWarning\", \"params\": {\"details\": null, \"summary\": \"Ignoring malformed agent role definition: failed to parse agent role file at <PROBE_ROOT>/malformed-role/.codex/agents/aok-probe.toml: TOML parse error at line 1, column 9\\n  |\\n1 | name = [\\n  |         ^\\nunclosed array, expected `]`\\n\"}}"
       ]
     },
     "missingRole": {
@@ -85,7 +85,7 @@
         "configWarning"
       ],
       "warningSummaries": [
-        "{\"emittedAtMs\": 1792289431443, \"method\": \"configWarning\", \"params\": {\"details\": null, \"summary\": \"Ignoring malformed agent role definition: agents.aok-probe.config_file must point to an existing file at <PROBE_ROOT>/missing-role/.codex/agents/missing.toml: No such file or directory (os error 2)\"}}"
+        "{\"emittedAtMs\": 1792289720020, \"method\": \"configWarning\", \"params\": {\"details\": null, \"summary\": \"Ignoring malformed agent role definition: agents.aok-probe.config_file must point to an existing file at <PROBE_ROOT>/missing-role/.codex/agents/missing.toml: No such file or directory (os error 2)\"}}"
       ]
     },
     "positive": {
@@ -120,7 +120,7 @@
   "hostVersion": "codex-cli 0.162.1",
   "modelExecution": "not-run",
   "nativeLoading": "verified for project-registered config discovery and selected role startup validation",
-  "observedAt": "2026-10-18T02:10:31.917464+00:00",
+  "observedAt": "2026-10-18T02:15:20.577813+00:00",
   "probeScript": "scripts/native-loading/verify_codex_project_registered.py",
   "probeScriptSHA256": "e3a677131850a6377c2ec0057c854c1919a31a8f60fe76842386f1e0b1a80292",
   "runtimeEnforcement": "unverified",

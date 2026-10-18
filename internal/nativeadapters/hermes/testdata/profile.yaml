@@ -1,0 +1,7 @@
+description: Focused software engineering assistant.
+display_name: Builder
+previous_names:
+  - coder
+ui_meta:
+  hermes-bots:
+    title: Build Bot

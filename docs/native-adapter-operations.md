@@ -231,3 +231,12 @@ record successful isolated backend authentication with the pinned 2026.10.16
 CLI. Controlling-terminal and official-launcher attempts did not reach native
 role discovery. Authentication is verified; project subagent loading and runtime
 enforcement remain unverified. The two remaining loading gates are unchanged.
+
+
+## agy interactive manager verification follow-up
+
+The [agy adapter notes](../internal/nativeadapters/agy/README.md#interactive-manager-follow-up-2026-10-18)
+separate the isolated Linux authentication barrier from the Darwin generic
+startup error under an existing-keyring-only configuration. Neither reached a
+ready prompt or sent `/agents`. Source snapshots, control outcomes and process
+audits are retained. Native loading and runtime enforcement remain unverified.

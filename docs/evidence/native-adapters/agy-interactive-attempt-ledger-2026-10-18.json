@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-18",
+  "nativeLoading": "not-verified",
+  "attempts": [
+    {
+      "kind": "Linux true interactive startup",
+      "evidence": "agy-interactive-manager-2026-10-18.json",
+      "outcome": "Authentication barrier in all controls; no /agents input; container/image cleanup confirmed."
+    },
+    {
+      "kind": "Historical Darwin attempt",
+      "audit": "agy-macos-interactive-manager-run-2026-10-18.jsonl",
+      "source": "agy-macos-interactive-source-a8988a3b7f3823af6911264e42b95a51ac88a31d56016dba56505c8ce0acff5c.py",
+      "pid": 73440,
+      "pgid": 73440,
+      "outerExecution": "default workspace sandbox",
+      "outcome": "Cleanup raised PermissionError; direct leader reaped. UI result lost when finally raised. No manager-command event. Excluded from loading evidence.",
+      "followUp": "Targeted exact PGID/leader and owned executable-prefix lookups later returned no matches; retrospective detached descendant cleanup is not established."
+    },
+    {
+      "kind": "Final Darwin controls",
+      "evidence": "agy-macos-manager-diagnostic-2026-10-18.json",
+      "outerExecution": "escalated; native filesystem/Mach/browser guard retained",
+      "outcome": "107-byte generic startup error in each control; no ready prompt, no /agents input; each recorded process group confirmed absent."
+    }
+  ],
+  "modelInvocation": "not-run"
+}

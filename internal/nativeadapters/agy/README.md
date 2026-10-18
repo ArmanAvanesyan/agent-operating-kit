@@ -84,3 +84,52 @@ they do not establish host discovery, selection, invocation, or enforcement.
 No model or imported/custom command was run. Historical probe results retain
 the isolation limits recorded with each observation; the strengthened guard
 in the current reproducer does not apply retroactively.
+
+The interactive manager check stopped at AGY's authentication barrier in all
+three isolated no-network cases, so it did not send `/agents`. Official
+authentication uses a local OS keyring profile or browser OAuth; documented
+headless alternatives require user-provided ADC or a Gemini API key. No
+portable credential file is documented. Completing the isolated check needs
+the user to authenticate that test profile. No existing keychain value was
+read or copied. See the [interactive manager evidence](../../../docs/evidence/native-adapters/agy-interactive-manager-2026-10-18.json)
+and [official authentication guide](https://www.antigravity.google/docs/install/).
+
+
+## Interactive manager follow-up (2026-10-18)
+
+The no-network Linux TTY run above is separate from the
+[Darwin existing-keyring attempt](../../../docs/evidence/native-adapters/agy-macos-manager-diagnostic-2026-10-18.json).
+The latter starts the pinned copied 1.4.2 CLI in private homes/projects, permits
+only the securityd Mach lookup needed for native Keychain access, allows network
+for native initialization, and blocks browser launch and original-home reads.
+The parent never reads or copies AGY credentials. Native Keychain access is
+permitted, so the filesystem guard does not establish read-only Keychain use.
+
+All three Darwin controls stopped with a 107-byte generic startup error before
+showing a local prompt. Backend authentication was not verified, and `/agents`
+was not sent. Fixed error categories are retained; raw output is discarded to
+avoid retaining account data. The exact cause has not been established, so
+this is neither evidence of a role parser failure nor proof that a fresh login
+alone will fix it. Both native loading and runtime enforcement remain unverified.
+
+The reproducer now assigns a controlling terminal, closes the parent slave
+immediately, and closes the master before group cleanup. It saves sanitized
+state before cleanup, checks only recorded group PIDs/UIDs, and confirms group
+absence. The earlier failed Darwin attempt is explicitly excluded in the
+[attempt ledger](../../../docs/evidence/native-adapters/agy-interactive-attempt-ledger-2026-10-18.json).
+All final controls passed cleanup. Exact executed sources and startup process
+identities accompany the evidence; historical snapshots are not the active helper.
+
+```sh
+python3 -B scripts/native-loading/probe-agy-macos-interactive-manager.py \
+  --aok /path/to/aok --binary /path/to/pinned/antigravity \
+  --evidence-out docs/evidence/native-adapters/agy-new-observation.json \
+  --audit-out docs/evidence/native-adapters/agy-new-process-audit.jsonl
+```
+
+The Linux helper is `scripts/native-loading/probe-agy-interactive-manager.py`.
+Its true interactive startup stopped at login in all controls, with no `/agents`
+input. It uses a pinned cached base image, no network or host credential mounts,
+a read-only container root and disposable writable state. Neither helper invokes
+an agent or submits an ordinary prompt; only a recognized local ready prompt
+permits the documented manager command. Reports never auto-promote the loading gate.

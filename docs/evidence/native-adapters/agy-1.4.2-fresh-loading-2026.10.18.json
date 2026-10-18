@@ -1,0 +1,92 @@
+{
+  "aokFixture": {
+    "bundleCompleteness": "draft-incomplete",
+    "exportStatus": "blocked",
+    "importStatus": "blocked",
+    "nativePath": ".agents/agents/aok-probe/agent.md",
+    "renderedSha256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76",
+    "retainedRenderedPath": "internal/nativeadapters/agy/testdata/probe-aok-rendered-1.4.2.md"
+  },
+  "freshVersionHelp": {
+    "agentAndAgentsAliasesConfirmedByHelp": true,
+    "agentHelp": "Usage: antigravity agent [flags]; List available agents",
+    "agentsHelp": "Usage: antigravity agent [flags]; List available agents",
+    "rootFlagsIncludeAgentSelector": true
+  },
+  "darwinReproducerDraft": {
+    "path": "scripts/native-loading/probe-agy-fresh-1.4.2.py",
+    "status": "withdrawn-not-included; no host rerun",
+    "reason": "Process-group cleanup and audit gaps were found; historical observations remain separate."
+  },
+  "isolation": {
+    "authentication": "not-run",
+    "filesystemWritesOutsideOwnedTemporaryRoot": "denied",
+    "home": "synthetic temporary HOME",
+    "localhostBindInbound": "allowed for local service startup",
+    "modelInvocation": "not-run",
+    "originalInstalledBinarySha256AfterProbe": "2a6bd844ae3431d35203af44f31bdd5e26f5ffe287d47c62a46862bf44099fc2",
+    "remoteNetwork": "denied"
+  },
+  "nativeLoading": "not-verified",
+  "noTerminalListingControls": {
+    "absent": {
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "stdoutBytes": 0
+    },
+    "malformed": {
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "stdoutBytes": 0
+    },
+    "positive": {
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "stdoutBytes": 0
+    },
+    "result": "inconclusive; no native agent identity or parser diagnostic was emitted",
+    "workspaceShape": "each temporary workspace initialized as an isolated Git repository"
+  },
+  "observedAt": "2026-10-18T02:39:22.035652+00:00",
+  "ptyAttempt": {
+    "firstAttempt": {
+      "executablePath": "/private/tmp/aok-agy-1.4.2-x64/antigravity",
+      "failure": "process-group SIGTERM returned EPERM",
+      "pidPgid": "not recorded",
+      "temporaryRootPrefix": "/private/tmp/agy-fresh-tty.*"
+    },
+    "laterAttempt": {
+      "copiedExecutablePath": "/private/tmp/agy-fresh-probe.i6_uztgh/agy",
+      "result": "zero-byte no-input capture, exit 0; group signaling/cleanup path was not recorded; excluded",
+      "temporaryRoot": "/private/tmp/agy-fresh-probe.i6_uztgh"
+    },
+    "provenance": "manual read-only process audit of historical PTY attempts",
+    "status": "excluded-inconclusive",
+    "targetedAudit": {
+      "checks": [
+        "lsof exact original executable path",
+        "anchored process match for known executable paths",
+        "anchored process match for unique temporary executable prefix"
+      ],
+      "descendantCleanup": "unconfirmed because first attempt PID/PGID was lost",
+      "result": "no matching process identified at known paths"
+    }
+  },
+  "runtimeEnforcement": "unverified",
+  "sources": {
+    "aokBinarySha256": "a89c28b2884995895d2a78f2a1c7841e72648446354f7baa1683fdb9c72f725f",
+    "binarySha256": "fa85a90abded17bcd1b185bbd1d6b1b82065f093ad4700d4dbacd3be2433294c",
+    "downloadPageVersion": "1.4.0",
+    "downloadedArchitecture": "darwin-x64",
+    "installerManifestVersion": "1.4.2",
+    "installerScriptSha256": "62966c07365423bd4dc209355060744058fb30d60f5323e2d360e39de64e5042",
+    "manifestSha512": "c5c51179172e649d705b86994f9fa542e6a626276e529e7472573b3df139a71500424250213ff5a498b7dfec635fb2a102224431efca054b1a0955c858f1c5b5",
+    "officialAgentsCommandDocs": "https://www.antigravity.google/docs/cli/commands/agents",
+    "officialDownloadPage": "https://www.antigravity.google/download/",
+    "officialHeadlessDocs": "https://www.antigravity.google/docs/cli/headless/",
+    "officialInstallerScript": "https://antigravity.google/cli/install.sh",
+    "officialManifestUrl": "https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/darwin_amd64.json",
+    "officialPayloadUrl": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.2-4835981233356800/darwin-x64/cli_mac_x64.tar.gz",
+    "payloadSha512Verified": true
+  }
+}

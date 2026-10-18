@@ -55,7 +55,7 @@ The [2026.04.17 component probe](../../../docs/evidence/native-adapters/cursor-c
 invokes the shipped `LocalSubagentsService` against an AOK-generated file.
 Only the bundle startup entry is replaced in memory to expose its existing
 module export; the loader module/factories remain unchanged. HOME/project are
-temporary and network transports are disabled. The positive fixture is discovered
+temporary; Node TCP connect, HTTP(S) request and fetch are guarded. The positive fixture is discovered
 with its name, description, model and prompt; absent and malformed controls return
 no agents. This is component discovery, not full CLI startup, selection or
 inference. `HostLoading` stays `not-run` for the overall CLI gate.
@@ -63,9 +63,11 @@ inference. `HostLoading` stays `not-run` for the overall CLI gate.
 This installed loader splits frontmatter lines at their first colon and does
 not decode YAML quoting, block scalars or nesting. A quoted YAML description
 is returned with literal quotation marks. AOK now rejects mapped name,
-description or model scalars when the strict YAML parser and installed host
+description or model scalars, plus recognized native `readonly`, `background`,
+`is_background` and `tools` controls, when the strict YAML parser and installed host
 would interpret them differently, including shadowing by nested/case-folded
-keys. Export also rejects values requiring incompatible YAML quoting rather
+keys. Empty or whitespace-only prompts are rejected because this loader silently
+drops them. Export also rejects values requiring incompatible YAML quoting rather
 than silently changing their host meaning. This is a conservative subset pinned
 to the inspected CLI version; it does not assert that every Cursor version uses
 this parser. Other unknown frontmatter is retained without execution guarantees.

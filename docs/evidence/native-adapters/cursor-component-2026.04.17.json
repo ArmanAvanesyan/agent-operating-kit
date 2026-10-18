@@ -1,6 +1,6 @@
 {
-  "observedAt": "2026-10-18T00:46:48.165533+00:00",
-  "aokBinarySHA256": "d66430072fbd03c7f78e18dd34602e8e25fedfd106d4bfe49f1dcc4c5b9b6936",
+  "observedAt": "2026-10-18T00:49:07.689763+00:00",
+  "aokBinarySHA256": "b5fa3266dc229c6f6343570835d53ceb2d976a0cf0ac2897b3d3b75622a17b50",
   "target": "cursor",
   "scope": "project",
   "hostVersion": "2026.04.17-787b533",
@@ -8,7 +8,7 @@
   "runtime": "bundled Node",
   "module": "../local-exec/dist/index.js",
   "export": "Vz (LocalSubagentsService)",
-  "instrumentation": "Only webpack startup entry replaced in memory; module factories unchanged; network disabled",
+  "instrumentation": "Only webpack startup entry replaced in memory; module factories unchanged; Node TCP connect, HTTP(S) request and fetch guarded",
   "fixture": "internal/nativeadapters/cursor/testdata/reviewer.md",
   "sourceSHA256": "3a248c5de1d02dec0aa40218074d5beafa081747f2db5326c7ae92e402c8eae5",
   "renderedSHA256": "d64ff08526ad4d1354a5f72eea9370b1a9d771abf7392b00aa876f9a1faa5acf",
@@ -24,6 +24,9 @@
         "description": "Reviews changes for correctness and security.",
         "model": "inherit",
         "prompt": "Review the requested changes. Report concrete findings with file and line references.",
+        "permissionMode": 2,
+        "tools": [],
+        "isBackground": false,
         "fullPath": "$PROBE_ROOT/export/.cursor/agents/reviewer.md"
       }
     ],
@@ -35,9 +38,25 @@
         "description": "\"Review: exact scalar\"",
         "model": "inherit",
         "prompt": "Prompt",
+        "permissionMode": 1,
+        "tools": [],
+        "isBackground": false,
         "fullPath": "$PROBE_ROOT/export/.cursor/agents/reviewer.md"
       }
-    ]
+    ],
+    "quoted-readonly": [
+      {
+        "name": "reviewer",
+        "description": "",
+        "model": "inherit",
+        "prompt": "Prompt",
+        "permissionMode": 1,
+        "tools": [],
+        "isBackground": false,
+        "fullPath": "$PROBE_ROOT/export/.cursor/agents/reviewer.md"
+      }
+    ],
+    "blank-prompt": []
   },
   "componentDiscovery": "verified",
   "nativeLoading": "not-run",

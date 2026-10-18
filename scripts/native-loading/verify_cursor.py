@@ -79,19 +79,23 @@ const m=new Module(file,module);m.filename=file;
 m.paths=Module._nodeModulePaths(path.dirname(file));m._compile(patched,file);
 (async()=>{const rows=await new m.exports.Vz(process.argv[3],()=>false).getAllSubagents();
  console.log(JSON.stringify(rows.map(x=>({name:x.name,description:x.description,
- model:x.model,prompt:x.prompt,fullPath:x.fullPath}))))
+ model:x.model,prompt:x.prompt,permissionMode:x.permissionMode,tools:x.tools,isBackground:x.isBackground,fullPath:x.fullPath}))))
 })().catch(e=>{console.error(e.message);process.exitCode=1});
 ''')
         exported = root / "export/.cursor/agents/reviewer.md"
         generated = exported.read_bytes()
         observations = {}
-        for case in ("positive", "absent", "malformed", "quoted-scalar"):
+        for case in ("positive", "absent", "malformed", "quoted-scalar", "quoted-readonly", "blank-prompt"):
             if case == "absent":
                 exported.unlink()
             elif case == "malformed":
                 exported.write_text("Not a native frontmatter document.\n")
             elif case == "quoted-scalar":
                 exported.write_text('---\nname: reviewer\ndescription: "Review: exact scalar"\nmodel: inherit\n---\nPrompt\n')
+            elif case == "quoted-readonly":
+                exported.write_text('---\nname: reviewer\nreadonly: "true"\n---\nPrompt\n')
+            elif case == "blank-prompt":
+                exported.write_text('---\nname: reviewer\n---\n  \n')
             else:
                 exported.write_bytes(generated)
             result = subprocess.run([str(host / "node"), str(harness), str(bundle),
@@ -106,7 +110,7 @@ m.paths=Module._nodeModulePaths(path.dirname(file));m._compile(patched,file);
         row = observations["positive"][0]
         assert row["name"] == "reviewer" and row["model"] == "inherit"
         assert row["description"] == "Reviews changes for correctness and security."
-        assert not observations["absent"] and not observations["malformed"]
+        assert not observations["absent"] and not observations["malformed"] and not observations["blank-prompt"]
         assert observations["quoted-scalar"][0]["description"] == '"Review: exact scalar"'
         version = subprocess.run([str(host / "cursor-agent"), "--version"], env=env,
                                  capture_output=True, text=True, timeout=15)
@@ -117,7 +121,7 @@ m.paths=Module._nodeModulePaths(path.dirname(file));m._compile(patched,file);
             "target": "cursor", "scope": "project", "hostVersion": version.stdout.strip(),
             "bundleSHA256": sha(original), "runtime": "bundled Node",
             "module": MODULE, "export": "Vz (LocalSubagentsService)",
-            "instrumentation": "Only webpack startup entry replaced in memory; module factories unchanged; network disabled",
+            "instrumentation": "Only webpack startup entry replaced in memory; module factories unchanged; Node TCP connect, HTTP(S) request and fetch guarded",
             "fixture": str(fixture.relative_to(repo)), "sourceSHA256": sha(fixture.read_bytes()),
             "renderedSHA256": sha(generated), "cliResults": statuses,
             "observations": observations, "componentDiscovery": "verified",

@@ -46,6 +46,9 @@ func (adapter) Decode(scope string, files []nativeadapter.File) (nativeadapter.D
 	if err != nil {
 		return nativeadapter.Document{}, nil, errors.New("Cursor subagent frontmatter is invalid")
 	}
+	if strings.TrimSpace(string(body)) == "" {
+		return nativeadapter.Document{}, nil, errors.New("Cursor host requires nonblank instructions")
+	}
 	if err := compatibleHostScalars(f.Data[:len(f.Data)-len(body)], meta); err != nil {
 		return nativeadapter.Document{}, nil, err
 	}
@@ -143,7 +146,7 @@ func (adapter) Encode(scope string, doc nativeadapter.Document) ([]nativeadapter
 		front[frontKey] = value
 	}
 	body, ok := doc.Assets["instructions.md"]
-	if !ok || len(doc.Assets) != 1 {
+	if !ok || len(doc.Assets) != 1 || strings.TrimSpace(string(body)) == "" {
 		return nil, nil, errors.New("Cursor export requires exactly one instructions.md asset")
 	}
 	metadata, err := nativeparse.Encode("yaml", front)
@@ -226,7 +229,7 @@ func compatibleHostScalars(header []byte, meta map[string]any) error {
 			native[strings.ToLower(strings.TrimSpace(key))] = strings.TrimSpace(value)
 		}
 	}
-	for _, key := range []string{"name", "description", "model"} {
+	for _, key := range []string{"name", "description", "model", "readonly", "background", "is_background", "tools"} {
 		expected, exists := meta[key]
 		actual, found := native[key]
 		if exists != found {
@@ -234,6 +237,13 @@ func compatibleHostScalars(header []byte, meta map[string]any) error {
 		}
 		if exists {
 			text, ok := expected.(string)
+			if key == "readonly" || key == "background" || key == "is_background" {
+				flag, isBool := expected.(bool)
+				if !isBool || flag != (strings.ToLower(actual) == "true") {
+					return errors.New("Cursor CLI native control differs from YAML semantics")
+				}
+				continue
+			}
 			if !ok || text != actual {
 				return errors.New("Cursor CLI mapped scalar differs from YAML semantics")
 			}

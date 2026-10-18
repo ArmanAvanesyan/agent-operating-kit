@@ -279,3 +279,19 @@ func TestCredentialAssignmentsRejectedWithoutEcho(t *testing.T) {
 		}
 	}
 }
+
+func TestProviderAPIURLPreserved(t *testing.T) {
+	files := []nativeadapter.File{{Path: "config.yaml", Format: "yaml", Data: []byte("model: test\nproviders:\n  gateway:\n    api: https://llm.internal.example.com/v1\n")}, {Path: "SOUL.md", Format: "markdown", Data: []byte("Prompt")}}
+	doc, _, err := New().Decode("profile", files)
+	if err != nil {
+		t.Fatal(err)
+	}
+	out, _, err := New().Encode("profile", doc)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got, _, err := New().Decode("profile", out)
+	if err != nil || !sameDocument(doc, got) {
+		t.Fatalf("provider URL roundtrip: %v", err)
+	}
+}

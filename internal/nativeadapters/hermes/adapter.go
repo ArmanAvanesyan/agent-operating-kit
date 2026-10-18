@@ -52,7 +52,7 @@ func (adapter) Decode(scope string, files []nativeadapter.File) (nativeadapter.D
 	if err != nil {
 		return nativeadapter.Document{}, nil, errors.New("Hermes config.yaml is invalid")
 	}
-	if containsSecretKey(config) || secretAssignment.Match(configBytes) {
+	if unsafeConfig(config) || secretAssignment.Match(configBytes) {
 		return nativeadapter.Document{}, nil, errors.New("Hermes config contains a credential-bearing value")
 	}
 	if !safeText(soulBytes) {
@@ -194,7 +194,7 @@ func (adapter) Encode(scope string, doc nativeadapter.Document) ([]nativeadapter
 	} else if len(modelRemainder) > 0 || truthyRaw(doc.Unknown["config.modelPresent"]) {
 		config["model"] = modelRemainder
 	}
-	if containsSecretKey(config) {
+	if unsafeConfig(config) {
 		return nil, nil, errors.New("Hermes config contains a credential-bearing value")
 	}
 	configBytes, err := nativeparse.Encode("yaml", config)
@@ -309,7 +309,7 @@ func containsSecretKey(value any) bool {
 
 func secretKey(key string) bool {
 	n := strings.ToLower(strings.NewReplacer("_", "", "-", "").Replace(key))
-	if n == "api" || n == "apikey" || n == "password" || n == "privatekey" || n == "secret" || n == "clientsecret" || n == "accesstoken" || n == "refreshtoken" || n == "authtoken" {
+	if n == "apikey" || n == "password" || n == "privatekey" || n == "secret" || n == "clientsecret" || n == "accesstoken" || n == "refreshtoken" || n == "authtoken" {
 		return true
 	}
 	if strings.HasSuffix(n, "secretaccesskey") || strings.HasSuffix(n, "apikey") || strings.HasSuffix(n, "password") || strings.HasSuffix(n, "privatekey") || strings.HasSuffix(n, "secret") || strings.HasSuffix(n, "token") {
@@ -361,4 +361,14 @@ func truthyRaw(raw json.RawMessage) bool { return string(raw) == "true" }
 func mustJSON(value any) json.RawMessage {
 	b, _ := json.Marshal(value)
 	return b
+}
+
+// model.api is a legacy credential alias; providers.<name>.api is a URL.
+func unsafeConfig(config map[string]any) bool {
+	if model, ok := config["model"].(map[string]any); ok {
+		if _, present := model["api"]; present {
+			return true
+		}
+	}
+	return containsSecretKey(config)
 }

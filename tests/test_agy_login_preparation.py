@@ -349,6 +349,8 @@ class AgyLoginPreparationTests(unittest.TestCase):
             self.assertNotIn("authorization-code-submitted", audit.read_text())
             self.assertTrue(code_file.exists())
 
+    @mock.patch.object(probe.sys, "platform", "darwin")
+    @mock.patch.object(probe.os, "uname", lambda: os.uname_result(("Darwin", "", "", "", "x86_64")))
     def test_prepare_removes_unused_code_file_on_blocked_return(self):
         with tempfile.TemporaryDirectory() as temp:
             tmp = Path(temp)
@@ -563,6 +565,15 @@ class AgyLoginPreparationTests(unittest.TestCase):
             self.assertLess(order.index("close-81"), order.index("close-80"))
             restore_terminal.assert_called_once_with(0, ["original-tty-state"])
 
+    def test_platform_guard_rejects_unsupported_host_before_preparation(self):
+        with mock.patch.object(probe.sys, "platform", "linux"), \
+             mock.patch.object(probe, "_owned_dir") as owned:
+            with self.assertRaisesRegex(RuntimeError, "pinned for Darwin x64"):
+                probe._prepare()
+            owned.assert_not_called()
+
+    @mock.patch.object(probe.sys, "platform", "darwin")
+    @mock.patch.object(probe.os, "uname", lambda: os.uname_result(("Darwin", "", "", "", "x86_64")))
     def test_prepare_keeps_credentials_only_on_ready_and_invalidates_failure(self):
         with tempfile.TemporaryDirectory() as temp:
             tmp = Path(temp)
@@ -610,6 +621,8 @@ class AgyLoginPreparationTests(unittest.TestCase):
             self.assertFalse(marker["valid"])
             self.assertFalse((Path(result["root"]) / "home").exists())
 
+    @mock.patch.object(probe.sys, "platform", "darwin")
+    @mock.patch.object(probe.os, "uname", lambda: os.uname_result(("Darwin", "", "", "", "x86_64")))
     def test_keyboard_interrupt_invalidates_marker_and_removes_private_home(self):
         with tempfile.TemporaryDirectory() as temp:
             tmp = Path(temp)

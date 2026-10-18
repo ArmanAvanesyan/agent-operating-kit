@@ -1,7 +1,10 @@
 # Cursor project subagent adapter
 
 This adapter handles one explicitly supplied Markdown subagent under
-`.cursor/agents/`. It does not scan a project, run Cursor, or prove that Cursor
+`.cursor/agents/`. It accepts `.md`, `.mdc`, and `.markdown`, the three
+extensions included by the 2026.10.16 Cursor Agent workspace scanner, with
+case-insensitive extension matching as in the shipped scanner. It does
+not scan a project, run Cursor, or prove that Cursor
 loads a given file. `HostLoading` is `not-run` and the shared engine reports
 runtime enforcement as unverified.
 
@@ -49,7 +52,7 @@ preservation, but the native gate remains open until a host actually loads the
 generated file. Native input uses an explicit inventory with `.cursor/agents/`
 paths; a standalone basename does not establish that scope.
 
-## Installed loader verification and scalar compatibility
+## Earlier component verification and scalar compatibility
 
 The [2026.04.17 component probe](../../../docs/evidence/native-adapters/cursor-component-2026.04.17.json)
 invokes the shipped `LocalSubagentsService` against an AOK-generated file.
@@ -60,7 +63,7 @@ with its name, description, model and prompt; absent and malformed controls retu
 no agents. This is component discovery, not full CLI startup, selection or
 inference. `HostLoading` stays `not-run` for the overall CLI gate.
 
-This installed loader splits frontmatter lines at their first colon and does
+That installed loader split frontmatter lines at their first colon and did
 not decode YAML quoting, block scalars or nesting. A quoted YAML description
 is returned with literal quotation marks. AOK now rejects mapped name,
 description or model scalars, plus recognized native `readonly`, `background`,
@@ -81,8 +84,52 @@ python3 scripts/native-loading/verify_cursor.py --aok /absolute/path/to/aok \
   --host-dir /absolute/path/to/cursor-agent/versions/2026.04.17-787b533
 ```
 
-The mapping revision is `cursor-subagents-v2`; older sidecars require re-import
+The mapping revision is `cursor-subagents-v3`; older sidecars require re-import
 under the new compatibility checks rather than silently reusing old assumptions.
+
+## Fresh Cursor Agent CLI audit (2026-10-18)
+
+The [2026.10.16 CLI audit](../../../docs/evidence/native-adapters/cursor-loading-2026.10.16.json)
+used the official x86_64 package in a private temporary directory; it did not
+run the installer or modify the user's Cursor installation. Guarded `--help`
+and `--version` show no local subagent-list operation. The package's workspace
+scanner source includes `.md`, `.mdc`, and `.markdown` patterns under
+`.cursor/agents/`. A no-input CLI startup against a synthetic AOK-exported
+workspace reached `Press any key to log in...` and was terminated after eight
+seconds with network and keychain access denied. It produced no role inventory.
+The official ACP handler source similarly makes unauthenticated `session/new`
+return an authentication-required error; `initialize` reports capabilities,
+not discovered project roles. No authentication or prompt was attempted.
+
+The new release therefore supplies a filename-extension compatibility update,
+but no fresh full-CLI discovery evidence. Its project `HostLoading` status
+remains `not-run`; the older component result is limited to the exact earlier
+component version and does not prove current CLI discovery, role selection, or
+runtime enforcement.
+
+The bounded audit is reproducible with the pinned official package archive
+and a locally built AOK binary (the script does not download or install Cursor):
+
+```sh
+python3 -B scripts/native-loading/probe_cursor_fresh_cli.py \
+  --package /path/to/agent-cli-package.tar.gz \
+  --aok /path/to/aok
+```
+
+The script verifies the pinned archive hash, copies it and the supplied AOK
+binary under a private temporary root, safely extracts only regular files and
+directories there, and checks the extracted CLI and bundle hashes. It records
+the supplied AOK binary hash dynamically, creates and compares a fresh AOK
+export, then runs only `--version`, `--help`, and an eight-second no-input
+startup under network denial, real-user-home read denial, keychain lookup
+denial, and temporary write confinement. It preflights process-group signaling
+and records owned process IDs before communication; failure audits are retained
+under `/private/tmp`. It prints sanitized JSON without temporary absolute paths.
+
+The inspected workspace scanner compiles its file globs with `dot: true`, so
+hidden nested paths are not excluded by the glob itself (repository ignore
+rules can still filter a discovered path). The adapter requires a nonempty
+filename stem for every supported extension.
 
 ## Isolated ACP startup audit (2026-10-18)
 

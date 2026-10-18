@@ -1,0 +1,87 @@
+{
+  "target": "cursor",
+  "scope": "project",
+  "observedAt": "2026-10-18T02:49:05.617628Z",
+  "hostVersion": "2026.10.16-e3cb207",
+  "architecture": "darwin-x64",
+  "officialPackage": {
+    "url": "https://downloads.cursor.com/lab/2026.10.16-e3cb207/darwin/x64/agent-cli-package.tar.gz",
+    "sha256": "93372e384e9397b54b1e4fdb1812662f68e7b61c0c60cb3f2f4b788c9e0779c4",
+    "installerRun": false
+  },
+  "cliBinary": {
+    "sha256": "9c9673dc34c8aac856a3206519d8b595586b77ff62d1a18e0cd73a126d0e8d1b",
+    "versionCommand": "--version",
+    "versionOutput": "2026.10.16-e3cb207",
+    "versionOutputSHA256": "be3b9fbee811bc2460c2effd48f6ba8269fdc571efa7d0208855e6d350a8ad2e",
+    "helpCommand": "--help",
+    "helpOutputSHA256": "c24026e17118188478fcb47ed8113fa842f93df2043da5116660a368d3dc64b0",
+    "commandsIncludeSubagentList": false
+  },
+  "bundleSource": {
+    "path": "dist-package/index.js",
+    "sha256": "c3295e7743ad8c39f967bcfd0acc6c20d47e983a4d7b94254282ef74b27e5033",
+    "workspaceScannerPatterns": [
+      "**/.cursor/agents/**/*.md",
+      "**/.cursor/agents/**/*.mdc",
+      "**/.cursor/agents/**/*.markdown"
+    ],
+    "acpInitialize": "reports capabilities; subagent capability negotiation does not enumerate local agents",
+    "acpUnauthenticatedSessionNew": "returns authentication-required before creating session"
+  },
+  "sandbox": {
+    "mechanism": "sandbox-exec",
+    "network": "denied",
+    "writes": "limited to private temporary runtime directory plus /dev/null and /dev/tty",
+    "keychainMachLookup": "denied",
+    "environment": "env -i with private HOME, TMPDIR, CURSOR_CONFIG_DIR and CURSOR_DATA_DIR",
+    "installerOrGlobalMutation": false,
+    "credentialsOrPromptInput": false,
+    "realUserHomeRead": "denied",
+    "processGroupSignalPreflight": "passed under the same network-denied, home-read-denied, temporary-write sandbox profile used for AOK and Cursor commands",
+    "sources": "official archive and supplied AOK binary copied under private temporary root; archive hash verified and safely extracted there",
+    "processManagement": "new session per command; owned PID/PGID audited before communicate; TERM then bounded KILL escalation targets the verified process group; detached output pipes close after bounded drain",
+    "failureAudit": "owned process-group audit is stored separately from the temporary runtime and retained when a run fails; removed after success"
+  },
+  "aokFixture": {
+    "aokBinarySHA256": "a89c28b2884995895d2a78f2a1c7841e72648446354f7baa1683fdb9c72f725f",
+    "sourcePath": "internal/nativeadapters/cursor/testdata/reviewer.md",
+    "sourceSHA256": "3a248c5de1d02dec0aa40218074d5beafa081747f2db5326c7ae92e402c8eae5",
+    "renderedPath": "internal/nativeadapters/cursor/testdata/probe-aok-rendered.md",
+    "renderedSHA256": "d64ff08526ad4d1354a5f72eea9370b1a9d771abf7392b00aa876f9a1faa5acf",
+    "freshAokExportMatchesRetainedFixture": true,
+    "nativeAdapterControls": {
+      "optionalFieldAbsent": "adapter-test-pass",
+      "malformedInputRejected": "adapter-test-pass",
+      "hostControls": "not-observed because CLI startup stopped at login"
+    },
+    "cliStatuses": {
+      "import": "blocked",
+      "export": "blocked",
+      "compare": "valid"
+    },
+    "absentAndMalformedNativeAdapterControls": "covered by TestOptionalFrontmatterAndNameDerivedFromFilename and TestRejectsUnsafeOrMalformedNativeFiles; these are adapter tests, not host discovery controls"
+  },
+  "noInputStartup": {
+    "command": "cursor-agent --workspace <AOK-exported-synthetic-project> --trust",
+    "durationSeconds": 8.66,
+    "processGroupTerminated": true,
+    "exitCode": -15,
+    "capturedOutputSHA256": "1440ffc70e50e84a96514ee8559db4f9ded7930f917a7d4c9a0b229cc2b62a7c",
+    "sanitizedObservation": "Cursor Agent; Press any key to log in...",
+    "inputSent": false,
+    "agentInventoryObserved": false,
+    "absentAndMalformedHostControlsRun": false,
+    "reason": "Startup reached the authentication gate before emitting an agent inventory; the permitted no-auth boundary prevents reaching authenticated session creation."
+  },
+  "nativeLoading": "not-run",
+  "runtimeEnforcement": "unverified",
+  "modelExecution": "not-run",
+  "blocker": "The fresh CLI exposes no read-only local subagent-list command. Its no-input startup stops at login, and ACP session creation is authentication-gated. The package source confirms workspace scan patterns but is not proof that this CLI run loaded the exported role.",
+  "reproducer": {
+    "path": "scripts/native-loading/probe_cursor_fresh_cli.py",
+    "sha256": "4825405030ad695db3787d928d87e398e7511278b9a388627b76362edd71a92c",
+    "downloadsOrInstallsAtRuntime": false
+  },
+  "historicalEvidence": "cursor-component-2026.04.17.json is a separate older component-only result; its positive/absent/malformed observations are not attributed to this 2026.10.16 CLI."
+}

@@ -1,0 +1,39 @@
+{
+  "target": "cursor",
+  "scope": "project",
+  "hostVersion": "2026.10.16-e3cb207",
+  "recordedAt": "2026-10-18T03:38:07.845423+00:00",
+  "provenance": "manual sanitized summary of the failed existing-login attempt and its persisted process audit",
+  "existingLogin": {
+    "source": "two Cursor CLI Keychain items, explicitly selected for native login reuse",
+    "presence": "access and refresh items present; API key absent",
+    "result": "stored access token expired or below required ten-minute validity window",
+    "valuesRetained": false,
+    "originalStoreWrites": "none performed"
+  },
+  "execution": {
+    "signalPreflight": "passed",
+    "aokImport": "blocked draft written",
+    "aokExport": "blocked candidate written",
+    "authenticatedCursorStatus": "not-run; credential expiry precondition failed",
+    "cursorInteractiveMenu": "not-run",
+    "freshOAuth": "not-started; automatic approval review rejected initiating fresh OAuth after user selected existing login"
+  },
+  "cleanup": {
+    "persistedAuditEvents": 9,
+    "ownedGroupCleanupFailures": false,
+    "runtimeRoot": "TemporaryDirectory teardown completed; no cleanup error reported",
+    "credentialCopies": "removed by disposable-root teardown",
+    "uncertainty": "no authenticated native Cursor run occurred; no loading proof"
+  },
+  "source": {
+    "retainedPath": "docs/evidence/native-adapters/cursor-existing-login-probe-2026-10-18.py.txt",
+    "sha256": "976afe54fe6483218c3c23072332470ff93ec732803f79eca60adfda2a0f18cb",
+    "archive": "exact executed source retained as inert text; contains no runtime credentials"
+  },
+  "nativeLoading": "not-verified",
+  "runtimeEnforcement": "unverified",
+  "modelInvocation": "not-run",
+  "nextRequiredStep": "explicit approval and operator completion of a fresh isolated native OAuth login; browser automation is unavailable",
+  "followUp": "Historical first attempt only. User subsequently approved fresh isolated OAuth; official login completed. Later native status/getMe checks verified authentication in three controls. Original existing CLI token later passed validity checks; cause of the changed state was not established."
+}

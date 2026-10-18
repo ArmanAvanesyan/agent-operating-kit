@@ -154,3 +154,53 @@ and one sanitized `session/new` internal error, and returned no discovery
 response. This remains no loading evidence. The exact AOK-rendered draft and
 probe record are retained in [testdata](testdata/probe-aok-rendered.md) and
 [evidence](../../../docs/evidence/native-adapters/cursor-agy-offline-2026.10.18.json).
+
+
+## Authenticated isolated CLI verification (2026-10-18)
+
+Fresh browser OAuth was explicitly approved and completed in a private native
+file store. Backend `status --format json` returned authenticated user details
+in all three controls; reports retain only that boolean, never personal fields.
+The temporary OAuth store was removed after verification. Subsequent probes
+used private copies of the existing Cursor CLI credentials.
+
+The [authenticated terminal evidence](../../../docs/evidence/native-adapters/cursor-authenticated-terminal-2026-10-18.json)
+uses the pinned standalone executable and a real controlling terminal. The
+[extended run](../../../docs/evidence/native-adapters/cursor-authenticated-extended-2026-10-18.json)
+waited 60 seconds per control. Both captured no UI output. The
+[official-launcher run](../../../docs/evidence/native-adapters/cursor-authenticated-wrapper-2026-10-18.json)
+uses the package's `cursor-agent` wrapper and bundled Node entrypoint; it
+captured 83 bytes per control without reaching a recognized prompt in 45 seconds.
+The [terminal-protocol follow-up](../../../docs/evidence/native-adapters/cursor-authenticated-terminal-protocol-2026-10-18.json)
+answered only recognized standard terminal queries; none were observed. It also
+reached no prompt. These bounded observations establish neither discovery nor
+a native parser failure.
+The earlier zero-byte run without a controlling terminal is retained as a
+superseded harness attempt, not loading evidence.
+
+Each run uses a fresh home/project for an AOK-exported role, an absent role,
+and the same frontmatter with a blank prompt body. Native processes cannot
+read the real user home or access Keychain services. Writes are confined to
+the owned temporary root, `/dev/null`, `/dev/tty`, and the exact allocated PTY
+slave. Network is allowed for authentication and initialization. Harmless
+terminal fixtures confirm controlling-terminal ownership and capture under the
+guard. Closing the master before group cleanup avoids terminal teardown hangs.
+No ordinary prompt, Enter submission, agent selection, or model turn was sent.
+
+Reproduce with the pinned official archive and a built AOK binary:
+
+```sh
+python3 -B scripts/native-loading/probe_cursor_authenticated.py \
+  --package /path/to/agent-cli-package.tar.gz --aok /path/to/aok \
+  --use-existing-cli-login --menu-timeout 30 \
+  --evidence-out docs/evidence/native-adapters/cursor-new-observation.json
+```
+
+The helper copies only the named Cursor CLI access/refresh Keychain items into
+private temporary native file stores, rejects expired credentials, checks
+backend authentication, and removes copies in `finally`. It does not refresh or
+alter the original store. For a separately authorized fresh browser OAuth flow,
+`prepare_cursor_login.py` creates a private, short-lived session; pass its root
+with `--isolated-login-root` instead. Remove that owned root after use. Evidence
+keeps exact executed sources, hashes and process identities. `HostLoading`
+remains `not-run` and runtime enforcement remains unverified.

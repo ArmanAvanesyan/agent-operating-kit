@@ -1,0 +1,53 @@
+{
+  "kind": "bounded-harmless-terminal-fixtures",
+  "date": "2026-10-18",
+  "execution": "escalated outer execution with native OS sandbox guard",
+  "controllingTerminal": "setsid plus TIOCSCTTY; parent closes slave immediately after Popen",
+  "fixtures": [
+    {
+      "pid": 83605,
+      "pgid": 83605,
+      "profile": "allow default",
+      "command": "/bin/echo fixture",
+      "exit": 0,
+      "fixtureCaptured": true
+    },
+    {
+      "pid": 83606,
+      "pgid": 83606,
+      "profile": "write confinement",
+      "command": "/bin/echo fixture",
+      "exit": 0,
+      "fixtureCaptured": true
+    },
+    {
+      "pid": 83607,
+      "pgid": 83607,
+      "profile": "real home read denial",
+      "command": "/bin/echo fixture",
+      "exit": 0,
+      "fixtureCaptured": true
+    },
+    {
+      "pid": 84088,
+      "pgid": 84088,
+      "profile": "complete Cursor guard plus exact allocated PTY slave",
+      "command": "/bin/echo fixture",
+      "bytes": 9,
+      "exitBeforeHangup": 0,
+      "fixtureCaptured": true
+    },
+    {
+      "pid": 84089,
+      "pgid": 84089,
+      "profile": "complete Cursor guard plus exact allocated PTY slave",
+      "command": "Python opens /dev/tty, writes fixture-tty, prints fixture-stdout",
+      "bytes": 27,
+      "exitBeforeHangup": 0,
+      "fixtureCaptured": true
+    }
+  ],
+  "nativeClientRun": false,
+  "modelInvocation": "not-run",
+  "limits": "Harmless terminal behavior only; does not establish native CLI initialization, discovery, or policy enforcement."
+}

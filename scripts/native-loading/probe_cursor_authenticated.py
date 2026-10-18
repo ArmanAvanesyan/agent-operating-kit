@@ -1,0 +1,366 @@
+#!/usr/bin/env python3
+"""Inspect a copied Cursor CLI's native slash menu using an existing CLI login.
+
+Credentials are copied directly from the two Cursor-specific Keychain items
+to a private native file store. They never enter command arguments or reports.
+No login, logout, refresh command, prompt submission or agent invocation runs.
+"""
+import argparse
+import base64
+from datetime import datetime, timezone
+import fcntl
+import hashlib
+import json
+import math
+import os
+from pathlib import Path
+import platform
+import pty
+import pwd
+import re
+import select
+import shutil
+import stat
+import struct
+import subprocess
+import sys
+import tempfile
+import termios
+import time
+import uuid
+
+sys.dont_write_bytecode = True
+import probe_cursor_fresh_cli as safe
+
+WRAPPER_SHA256 = "2ccc9a8e167797641448b5e5c936f006ba137a2555f117f38c5eb76a5238a233"
+
+
+def validate_login_root(root):
+    """Validate the explicitly prepared, still-live private session before reading."""
+    if root.is_symlink():
+        raise RuntimeError("isolated login root must not be a symlink")
+    root = root.absolute()
+    marker_path = root / "owned-session.json"
+    source = root / "home/.cursor/auth.json"
+    for path, directory in ((root, True), (root / "home", True),
+                            (root / "home/.cursor", True), (marker_path, False), (source, False)):
+        info = path.lstat()
+        valid_type = stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode)
+        if not valid_type or info.st_uid != os.getuid() or info.st_mode & 0o077:
+            raise RuntimeError("isolated session ownership, type or permissions are unsafe")
+        if not directory and info.st_nlink != 1:
+            raise RuntimeError("isolated session files must not be hard links")
+    if root.resolve() != root or source.resolve().parent != root / "home/.cursor":
+        raise RuntimeError("isolated credential path escapes the prepared session")
+    try:
+        marker = json.loads(marker_path.read_text())
+        identifier = uuid.UUID(marker["id"])
+        created = datetime.fromisoformat(marker["createdAt"]).timestamp()
+        expires = datetime.fromisoformat(marker["expiresAt"]).timestamp()
+        now = time.time()
+        if (marker.get("kind") != "aok-cursor-native-login/v1" or identifier.version != 4 or
+                marker.get("valid") is not True or not math.isfinite(created) or
+                not math.isfinite(expires) or not created <= now + 30 or
+                not now < expires <= created + 960):
+            raise ValueError("invalid or expired session")
+    except (ValueError, KeyError, TypeError, AttributeError):
+        raise RuntimeError("prepared Cursor session is invalid or expired") from None
+    return source
+
+
+def guard(root, terminal_path=None):
+    q = lambda value: json.dumps(str(value))
+    real_home = Path(pwd.getpwuid(os.getuid()).pw_dir).resolve()
+    profile = ('(version 1)(allow default)'
+               '(deny mach-lookup (global-name "com.apple.securityd"))'
+               f'(deny file-read* (subpath {q(real_home)}))'
+               '(deny file-write*)'
+               f'(allow file-write* (subpath {q(root)}) '
+               '(literal "/dev/null") (literal "/dev/tty"))'
+               f'(deny file-write* (subpath {q(root / "host")}))')
+    if terminal_path is not None:
+        # This comes from this process's newly allocated PTY slave, never an
+        # author-supplied path. /dev/tty alone does not name the actual device.
+        profile += f'(allow file-write* (literal {q(terminal_path)}))'
+    return ["/usr/bin/sandbox-exec", "-p", profile]
+
+
+def environment(root):
+    paths = {name: root / name for name in ("home", "tmp", "config", "data")}
+    for path in paths.values():
+        path.mkdir(parents=True, exist_ok=True, mode=0o700)
+    return {"PATH": "/usr/bin:/bin", "HOME": str(paths["home"]),
+            "TMPDIR": str(paths["tmp"]), "CURSOR_CONFIG_DIR": str(paths["config"]),
+            "CURSOR_DATA_DIR": str(paths["data"]), "AGENT_CLI_CREDENTIAL_STORE": "file",
+            "NO_OPEN_BROWSER": "1", "TERM": "xterm-256color", "DIRENV_DISABLE": "1"}
+
+
+def copy_login(home, isolated_source=None):
+    credentials = {}
+    if isolated_source is not None:
+        try:
+            data = json.loads(isolated_source.read_bytes())
+            credentials = {key: data[key] for key in ("accessToken", "refreshToken")}
+        except (ValueError, KeyError, TypeError):
+            raise RuntimeError("Isolated native credential store is invalid") from None
+        if not all(isinstance(value, str) and value for value in credentials.values()):
+            raise RuntimeError("Isolated native credentials are incomplete")
+    else:
+        for key, service in (("accessToken", "cursor-access-token"),
+                             ("refreshToken", "cursor-refresh-token")):
+            result = subprocess.run(["/usr/bin/security", "find-generic-password", "-w",
+                                     "-s", service, "-a", "cursor-user"],
+                                    stdin=subprocess.DEVNULL, capture_output=True, timeout=10)
+            if result.returncode != 0:
+                raise RuntimeError("Cursor CLI credential unavailable; browser login required")
+            try:
+                credentials[key] = result.stdout.decode("utf-8").rstrip("\r\n")
+            except UnicodeDecodeError:
+                raise RuntimeError("Cursor CLI credential encoding is invalid") from None
+            if not credentials[key]:
+                raise RuntimeError("Cursor CLI credential is empty")
+    try:
+        part = credentials["accessToken"].split(".")[1]
+        claims = json.loads(base64.urlsafe_b64decode(part + "=" * (-len(part) % 4)))
+        expires = claims.get("exp")
+        if not isinstance(expires, (int, float)) or not math.isfinite(expires) or expires - time.time() < 600:
+            raise ValueError("expired or near expiry")
+    except (ValueError, KeyError, IndexError, TypeError):
+        raise RuntimeError("Existing Cursor access token needs fresh browser login") from None
+    directory = home / ".cursor"
+    directory.mkdir(mode=0o700)
+    auth = directory / "auth.json"
+    with open(auth, "x", opener=lambda path, flags: os.open(path, flags, 0o600)) as stream:
+        json.dump(credentials, stream)
+    credentials.clear()
+    return auth
+
+
+def capture(command, root, env, purpose, timeout=20):
+    proc = subprocess.Popen(guard(root) + command, cwd=root, env=env,
+                            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE, start_new_session=True)
+    group = safe.audit_spawned_child(root, proc, purpose)
+    try:
+        out, err = proc.communicate(timeout=timeout)
+        return proc.returncode, out, err
+    finally:
+        safe.terminate_owned_group(proc, group, purpose)
+        if proc.stdout:
+            proc.stdout.close()
+        if proc.stderr:
+            proc.stderr.close()
+
+
+def preflight(root, env):
+    proc = subprocess.Popen(guard(root) + ["/bin/sleep", "30"], cwd=root, env=env,
+                            stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+                            stderr=subprocess.DEVNULL, start_new_session=True)
+    group = safe.audit_spawned_child(root, proc, "authenticated-signal-preflight")
+    safe.terminate_owned_group(proc, group, "authenticated-signal-preflight")
+    return {"pid": proc.pid, "pgid": group, "terminated": proc.poll() is not None}
+
+
+def normalize(text):
+    return re.sub(r"\x1b(?:\[[0-?]*[ -/]*[@-~]|\][^\x07]*(?:\x07|\x1b\\))", "", text)
+
+
+def claim_controlling_terminal():
+    # Popen applies setsid before this hook. This single-threaded probe must
+    # give the detached child its own controlling terminal, not merely tty FDs.
+    fcntl.ioctl(0, termios.TIOCSCTTY, 0)
+
+
+def terminal_responses(data):
+    """Answer only standard terminal queries, never synthesize user input."""
+    known = ((b"\x1b[6n", b"\x1b[1;1R", "cursor-position"),
+             (b"\x1b[c", b"\x1b[?1;2c", "primary-device-attributes"),
+             (b"\x1b[>c", b"\x1b[>0;276;0c", "secondary-device-attributes"),
+             (b"\x1b]10;?\x07", b"\x1b]10;rgb:ffff/ffff/ffff\x07", "foreground-color"),
+             (b"\x1b]11;?\x07", b"\x1b]11;rgb:0000/0000/0000\x07", "background-color"))
+    return [(reply, label) for query, reply, label in known if query in data]
+
+
+def inspect_menu(cli, project, root, env, timeout=18):
+    master, slave = pty.openpty()
+    try:
+        fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack("HHHH", 40, 120, 0, 0))
+        proc = subprocess.Popen(guard(root, os.ttyname(slave)) + [str(cli), "--workspace", str(project), "--trust"],
+                                cwd=project, env=env, stdin=slave, stdout=slave,
+                                stderr=slave, start_new_session=True, close_fds=True,
+                                preexec_fn=claim_controlling_terminal)
+    except BaseException:
+        os.close(master)
+        os.close(slave)
+        raise
+    os.close(slave)
+    try:
+        group = safe.audit_spawned_child(root, proc, "native-slash-menu")
+    except BaseException:
+        os.close(master)
+        raise
+    chunks, total = [], 0
+    typed = False
+    ready = False
+    queries = []
+    exit_before_cleanup = None
+    begin = time.monotonic()
+    try:
+        while time.monotonic() - begin < timeout and total < 262144:
+            readable, _, _ = select.select([master], [], [], 0.2)
+            if readable:
+                try:
+                    data = os.read(master, min(8192, 262144 - total))
+                except OSError:
+                    break
+                if not data:
+                    break
+                chunks.append(data)
+                total += len(data)
+                for reply, label in terminal_responses(data):
+                    os.write(master, reply)
+                    queries.append(label)
+            text = normalize(b"".join(chunks).decode("utf-8", "replace"))
+            if "Press any key to log in" in text:
+                break
+            # The native prompt's hint is emitted only after the TUI mounts.
+            if not typed and any(hint in text for hint in ("/ commands", "/ for commands", "for commands", "Add a follow-up")):
+                ready = True
+                os.write(master, b"/reviewer")
+                typed = True
+            if typed and "Reviews changes for correctness and security." in text:
+                break
+    finally:
+        exit_before_cleanup = proc.poll()
+        try:
+            safe.append_audit({"event": "native-menu-observed", "pid": proc.pid,
+                               "pgid": group, "capturedBytes": total,
+                               "typedWithoutEnter": typed,
+                               "expectedDescriptionObserved": b"Reviews changes for correctness and security." in b"".join(chunks)})
+        finally:
+            try:
+                os.close(master)
+            finally:
+                safe.terminate_owned_group(proc, group, "native-slash-menu")
+    text = normalize(b"".join(chunks).decode("utf-8", "replace"))
+    return {"capturedBytes": total, "readyPromptObserved": ready,
+            "nativeExitBeforeCleanup": exit_before_cleanup,
+            "controllingTerminalConfigured": True, "terminalQueriesAnswered": queries,
+            "typedWithoutEnter": "/reviewer" if typed else None,
+            "enterSent": False, "loginBarrierObserved": "Press any key to log in" in text,
+            "expectedDescriptionObserved": "Reviews changes for correctness and security." in text,
+            "expectedNameObserved": bool(re.search(r"\breviewer\b", text)),
+            "nativeMenuMarkerObserved": "Run reviewer subagent" in text,
+            "errorMarkerObserved": any(x in text.lower() for x in ("failed to load subagents", "authentication required")),
+            "cleanupCompleted": True}
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--package", type=Path, required=True)
+    parser.add_argument("--aok", type=Path, required=True)
+    parser.add_argument("--evidence-out", type=Path, required=True)
+    parser.add_argument("--menu-timeout", type=int, choices=range(1, 121), default=18)
+    login = parser.add_mutually_exclusive_group(required=True)
+    login.add_argument("--use-existing-cli-login", action="store_true")
+    login.add_argument("--isolated-login-root", type=Path,
+                       help="private session created by prepare_cursor_login.py")
+    args = parser.parse_args()
+    if sys.platform != "darwin" or platform.machine() != "x86_64":
+        raise RuntimeError("This pinned host package requires Darwin x86_64")
+    repo = Path(__file__).resolve().parents[2]
+    output = args.evidence_out.resolve()
+    if repo not in output.parents or output.exists():
+        raise RuntimeError("evidence output must be a new repository file")
+    isolated_source = None
+    if args.isolated_login_root:
+        isolated_source = validate_login_root(args.isolated_login_root)
+    safe.require_sha(args.package, safe.PACKAGE_SHA256, "official Cursor archive")
+    audit = Path(tempfile.mkdtemp(prefix="aok-cursor-auth-audit-", dir="/private/tmp"))
+    audit.chmod(0o700)
+    safe.AUDIT_DIR, safe.AUDIT_PATH = audit, audit / "process-audit.jsonl"
+    script_bytes = Path(__file__).read_bytes()
+    (audit / "executed-probe.py").write_bytes(script_bytes)
+    try:
+        with tempfile.TemporaryDirectory(prefix="aok-cursor-auth-", dir="/private/tmp") as temp:
+            root = Path(temp).resolve()
+            package = root / "package.tar.gz"
+            shutil.copyfile(args.package, package)
+            safe.require_sha(package, safe.PACKAGE_SHA256, "copied Cursor archive")
+            safe.safe_extract(package, root / "host")
+            cli = root / "host/dist-package/cursor-agent"
+            safe.require_sha(cli, WRAPPER_SHA256, "copied Cursor CLI")
+            aok = root / "aok"
+            shutil.copyfile(args.aok, aok)
+            aok.chmod(0o700)
+            preflight_report = preflight(root, environment(root / "preflight"))
+            # Generate through the actual static adapter, before credentials enter a native child.
+            source = root / "source"
+            native = source / ".cursor/agents/reviewer.md"
+            native.parent.mkdir(parents=True)
+            native.write_bytes((repo / "internal/nativeadapters/cursor/testdata/reviewer.md").read_bytes())
+            (source / "aok-native-input.json").write_text(json.dumps({"version": "aok-native-input/v1", "files": [{"path": ".cursor/agents/reviewer.md", "format": "markdown"}]}))
+            for op, extra in (("import", ["--input", str(source), "--out", str(root / "draft")]),
+                              ("export", ["--input", str(root / "draft/aok-native.json"), "--source", str(source), "--out", str(root / "export")])):
+                code, out, _ = capture([str(aok), "agent", "native", op, "--target", "cursor", "--scope", "project", *extra, "--json"], root, environment(root / "aok-state"), "aok-" + op)
+                if code != 1 or json.loads(out).get("status") != "blocked":
+                    raise RuntimeError("expected AOK blocked draft candidate")
+            rendered = (root / "export/.cursor/agents/reviewer.md").read_bytes()
+            case_results = {}
+            status_results = {}
+            for case in ("positive", "absent", "malformed"):
+                case_root = root / case
+                env = environment(case_root)
+                project = case_root / "project"
+                project.mkdir()
+                if case != "absent":
+                    path = project / ".cursor/agents/reviewer.md"
+                    path.parent.mkdir(parents=True)
+                    # Keep the same identity/description in the invalid control:
+                    # a blank prompt must not register a usable native role.
+                    invalid = b"---\n".join(rendered.split(b"---\n", 2)[:2]) + b"---\n \n"
+                    path.write_bytes(rendered if case == "positive" else invalid)
+                auth = copy_login(case_root / "home", isolated_source)
+                try:
+                    code, out, _ = capture([str(cli), "status", "--format", "json"], root, env, "authenticated-status")
+                    try:
+                        status = json.loads(out)
+                    except (ValueError, TypeError):
+                        raise RuntimeError("native authentication status was not structured") from None
+                    status_results[case] = {"exitCode": code, "status": status.get("status"),
+                                            "backendUserDetailsReceived": bool(status.get("userInfo")),
+                                            "personalFieldsRetained": False}
+                    if code != 0 or status.get("status") != "authenticated" or not status.get("userInfo"):
+                        raise RuntimeError("existing isolated login was not backend-verified; fresh login required")
+                    case_results[case] = inspect_menu(cli, project, root, env, timeout=args.menu_timeout)
+                    safe.require_sha(cli, WRAPPER_SHA256, "Cursor CLI after native startup")
+                finally:
+                    auth.unlink(missing_ok=True)
+                    if auth.exists():
+                        raise RuntimeError("temporary credential removal could not be verified")
+            report = {"target": "cursor", "scope": "project", "hostVersion": safe.VERSION,
+                      "observedAt": datetime.now(timezone.utc).isoformat(),
+                      "nativeLoading": "not-verified", "runtimeEnforcement": "unverified",
+                      "invalidControl": "same frontmatter identity and description; blank prompt body",
+                      "modelInvocation": "not-run", "cases": case_results, "authentication": status_results,
+                      "source": {"packageSHA256": safe.PACKAGE_SHA256, "cliSHA256": WRAPPER_SHA256, "entrypoint": "official cursor-agent wrapper",
+                                 "renderedSHA256": hashlib.sha256(rendered).hexdigest(),
+                                 "aokSHA256": safe.file_sha(aok), "probeSHA256": hashlib.sha256(script_bytes).hexdigest()},
+                      "isolation": {"writes": "owned temporary root plus null, tty and exact allocated PTY slave", "realHomeRead": "denied for native children",
+                                    "keychainLookup": "denied for native children",
+                                    "credentialSource": "prepared private native login" if isolated_source else "two explicit Cursor CLI Keychain items copied by parent",
+                                    "credentialStore": "private file; originals not written; copies removed",
+                                    "network": "allowed for real backend authentication and native initialization",
+                                    "rawOutputRetained": False, "preflight": preflight_report}}
+        output.write_text(json.dumps(report, indent=2) + "\n")
+        print(json.dumps({"status": "recorded", "evidence": str(output), "cases": case_results}))
+    except BaseException:
+        print(json.dumps({"status": "failed", "auditPath": str(audit), "credentialCleanup": "per-case unlink and disposable-root teardown attempted; inspect error if teardown failed"}), file=sys.stderr)
+        raise
+    finally:
+        safe.AUDIT_PATH = safe.AUDIT_DIR = None
+    # Keep the exact executed source and process IDs in a private audit, not credentials.
+
+
+if __name__ == "__main__":
+    main()

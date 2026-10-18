@@ -222,3 +222,12 @@ retained native path and extension; a canonical export still defaults to `.md`.
 Empty filename stems are rejected. Standalone basenames do not establish a
 Cursor project scope. The `cursor-subagents-v3` mapping requires reimporting
 older sidecars; host loading and runtime enforcement remain unverified.
+
+
+## Authenticated Cursor verification follow-up
+
+The [Cursor adapter notes](../internal/nativeadapters/cursor/README.md#authenticated-isolated-cli-verification-2026-10-18)
+record successful isolated backend authentication with the pinned 2026.10.16
+CLI. Controlling-terminal and official-launcher attempts did not reach native
+role discovery. Authentication is verified; project subagent loading and runtime
+enforcement remain unverified. The two remaining loading gates are unchanged.

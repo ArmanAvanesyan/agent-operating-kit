@@ -1,0 +1,16 @@
+{
+  "kind": "aok-agy-manual-checkpoint-recovery/v1",
+  "root": "/private/tmp/aok-agy-login-2yemyt4m",
+  "nativePID": 2016,
+  "controllerPID": 2004,
+  "exactOwnedGroupVerified": true,
+  "stoppedBeforeHomeRename": true,
+  "nativeGroupCleanedBeforeHomeRestore": true,
+  "credentialContentsRead": false,
+  "originalExpiryPreserved": "2026-10-18T06:44:55.262833Z",
+  "valid": false,
+  "readyPromptObserved": false,
+  "phase": "after-color-scheme",
+  "proof": "native-color-scheme-continued audit and observed native terms screen; no consent submitted",
+  "strictCheckpointValidationPassed": true
+}

@@ -1,0 +1,33 @@
+{
+  "kind": "aok-agy-onboarding-validation/v1",
+  "python": {
+    "command": "python3 -m unittest discover -s tests",
+    "tests": 229,
+    "skipped": 2,
+    "status": "passed"
+  },
+  "go": {
+    "commands": [
+      "go test ./...",
+      "go build -o /private/tmp/aok-agy-onboarding-final ./cmd/aok"
+    ],
+    "status": "passed"
+  },
+  "kitValidation": "passed",
+  "pythonCompilation": "passed",
+  "agentProposalChecker": "passed: 17 schemas, 17 examples, 39 negative cases",
+  "planningProposalChecker": "passed: 8 schemas, 7 examples, 20 negative cases",
+  "codexRenderSmoke": "passed",
+  "sourceEvidenceVerification": "source-validation.json",
+  "nativeManagerControls": "local-manager-final.json",
+  "nativeLoadingGate": "open: custom fixture absent from valid/absent/malformed manager controls",
+  "backendAuthentication": "not-verified",
+  "inference": "not-run",
+  "sourceHashes": {
+    "scripts/native-loading/prepare_agy_login.py": "a37628a4ce4a34108e6f8d9dc2c20570d222d6e8b8e0651bd321c6ae80143bdd",
+    "scripts/native-loading/native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+    "scripts/native-loading/probe-agy-macos-interactive-manager.py": "8391a5c4f42402c79a30c6e8b3231547a659bc27381bb7a69dc9991504a68b5e",
+    "scripts/native-loading/probe_agy_local_manager.py": "75eeca55e7c9f1b8d3811d94d24fd0f68fb54b0d1385276fa0df25658092e82f",
+    "internal/nativeadapters/agy/adapter.go": "30f634e9f5a3066f1f08cc5529bed1fe7a8817628f5ab75cc1cfc12a7490504a"
+  }
+}

@@ -1,0 +1,295 @@
+#!/usr/bin/env python3
+"""Verify agy's local /agents loading with synthetic provider data, no inference.
+
+Requires explicit operator consent for required terms, disabled optional sharing,
+and trust confined to owned synthetic roots. No real account or key is used.
+"""
+import argparse
+import hashlib
+import importlib.util
+import json
+import os
+from pathlib import Path
+import re
+import select
+import shutil
+import stat
+import subprocess
+import tempfile
+import time
+
+SPEC = importlib.util.spec_from_file_location("agy_local_login", Path(__file__).with_name("prepare_agy_login.py"))
+login = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(login)
+NETWORK_POLICY = ('(deny network-outbound)(deny network-inbound)'
+                  '(allow network-inbound (local ip "localhost:*"))'
+                  '(allow network-outbound (remote ip "localhost:*"))')
+
+
+def onboarding_action(text, state, root):
+    """Only exact observed setup controls; errors/unknown screens never act."""
+    if (state.get("terminalAmbiguityObserved") or state.get("authBarrierObserved") or
+            state.get("localPromptObserved") or state.get("errorObserved")):
+        return None
+    if login.may_continue_color_scheme(state):
+        return "color", b"\r"
+    if ("Terms of Service & Data Use" in text and
+            "Google to collect and use my Interactions data," in text and
+            not state.get("colorSchemeScreenObserved")):
+        checkbox = re.findall(r"(?m)^\s*(>\s*)?\[([x ])\] Yes, I agree to help improve Antigravity CLI by allowing\s*$", text)
+        if len(checkbox) != 1:
+            return None
+        focused, checked = checkbox[0]
+        if focused and checked == "x" and "enter Toggle" in text:
+            return "disable-optional-sharing", b"\r"
+        if checked == " " and focused:
+            return "navigate-to-previous", b"\t"
+        if checked == " " and re.search(r"(?m)^\s*>\s+Previous\s+\[Done\]\s*$", text):
+            return "navigate-to-done", b"\t"
+        if (checked == " " and "enter Confirm" in text and
+                re.search(r"(?m)^\s*\[Previous\]\s*>\s+Done\s*$", text)):
+            return "accept-terms-sharing-disabled", b"\r"
+        return None
+    if (state.get("trustPromptObserved") and not state.get("termsAcceptancePromptObserved") and
+            re.search(r"(?m)^\s*Accessing workspace:\s*$", text) and
+            text.count(str(root)) == 1 and re.search(r"(?m)^" + re.escape(str(root)) + r"\s*$", text) and
+            re.search(r"(?m)^\s*> Yes, I trust this folder\s*$", text) and "enter Confirm" in text and
+            root.resolve(strict=True) == root and root.stat().st_uid == os.getuid() and
+            root.stat().st_mode & 0o777 == 0o700):
+        return "trust-owned-synthetic-root", b"\r"
+    return None
+
+
+def safe_manager_state(state):
+    result = login._safe_state(state)
+    for key in ("managerSectionObserved", "nameObserved", "descriptionObserved",
+                "parseErrorObserved", "noAgentsLabelObserved"):
+        result[key] = state.get(key)
+    return result
+
+
+def public_synthetic_rows(text, root):
+    """Rendered public controls of the synthetic-only client, never wire bytes."""
+    text = text.replace(str(root), "[owned-synthetic-root]").replace(root.name, "[owned-synthetic-root]")
+    text = re.sub(r"https?://\S+", "[link]", text)
+    text = re.sub(r"\b[^\s@]+@[^\s@]+\.[^\s@]+", "[account]", text)
+    text = re.sub(r"/Users/[^/\s]+", "/Users/[redacted]", text)
+    text = re.sub(r"4/0[A-Za-z0-9_-]+|ya29\.[A-Za-z0-9_-]+", "[redacted]", text)
+    return text.splitlines()
+
+
+def synthetic_load_diagnostics(root):
+    """Bounded known native log, only in this no-account synthetic provider probe."""
+    link = root / "home/.gemini/antigravity-cli/cli.log"
+    try:
+        target = link.resolve(strict=True)
+        target.relative_to(root.resolve(strict=True))
+        info = target.lstat()
+        if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or info.st_nlink != 1:
+            return []
+        fd = os.open(target, os.O_RDONLY | os.O_NOFOLLOW)
+        try:
+            if os.fstat(fd).st_ino != info.st_ino:
+                return []
+            content = os.read(fd, 1024 * 1024).decode("utf-8", "replace")
+        finally:
+            os.close(fd)
+    except (OSError, ValueError):
+        return []
+    matches = []
+    for row in content.splitlines():
+        if re.search(r"aok-probe|agent\.md|custom.?agent|agent definition|agent customization|mainAgent", row, re.I):
+            matches.append(" ".join(public_synthetic_rows(row[:2000], root)))
+            if len(matches) == 16:
+                break
+    return matches
+
+
+def open_evidence_output(path, repo=None):
+    """Walk from the canonical repo using directory FDs; follow no symlinks."""
+    repo = Path(repo or login.REPO)
+    if repo.resolve(strict=True) != repo:
+        raise ValueError("repository path must be canonical")
+    path = Path(path).absolute()
+    parts = path.relative_to(repo).parts
+    if not parts or any(part in (".", "..") for part in parts):
+        raise ValueError("evidence must be under the repository")
+    directory = os.open(repo, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    try:
+        for part in parts[:-1]:
+            child = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=directory)
+            os.close(directory)
+            directory = child
+        return os.open(parts[-1], os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW | os.O_WRONLY,
+                       0o600, dir_fd=directory)
+    finally:
+        os.close(directory)
+
+
+class CaseCapture:
+    def __init__(self):
+        self.command_sent = False
+        self.prompt = None
+        self.manager = None
+        self.actions = []
+        self.public_rows = []
+        self.load_diagnostics = []
+
+    def capture(self, master, deadline, *, audit_path, case_root, **unused):
+        wire = bytearray()
+        answered = set()
+        last_digest = None
+        changed = time.monotonic()
+        last_action_digest = None
+        state = {}
+        while time.monotonic() < deadline and len(wire) < 512 * 1024:
+            readable, _, _ = select.select([master], [], [], .15)
+            if readable:
+                try:
+                    block = os.read(master, min(8192, 512 * 1024 - len(wire)))
+                except BlockingIOError:
+                    continue
+                except OSError:
+                    break
+                if not block:
+                    break
+                wire.extend(block)
+                for label, reply in login.terminal_query_replies(bytes(wire), answered):
+                    os.write(master, reply)
+                    login.append_audit(audit_path, "terminal-query-answered", label=label)
+                state = login.state_from_bytes(bytes(wire))
+                if state.get("terminalAmbiguityObserved"):
+                    # Split ANSI writes may be incomplete until the next block.
+                    continue
+                text = login.AGY.terminal_text(bytes(wire), width=login.LOGIN_WIDTH, height=login.LOGIN_HEIGHT)
+                digest = hashlib.sha256(text.encode()).hexdigest()
+                if digest != last_digest:
+                    last_digest = digest
+                    changed = time.monotonic()
+                    login.append_audit(audit_path, "local-manager-screen-state", screenSHA256=digest,
+                                       state=safe_manager_state(state))
+            if not state or state.get("terminalAmbiguityObserved") or time.monotonic() - changed < .6:
+                continue
+            if self.command_sent:
+                # Capture the stable current manager screen; never select an agent.
+                if state.get("managerSectionObserved") or state.get("errorObserved") or state.get("authBarrierObserved"):
+                    self.manager = safe_manager_state(state)
+                    self.public_rows = public_synthetic_rows(text, Path(case_root))
+                    self.load_diagnostics = synthetic_load_diagnostics(Path(case_root))
+                    return state, False
+                # A local command can update asynchronously; an echoed draft
+                # or unchanged prompt is not its manager result.
+                continue
+            if login.AGY.may_send_manager_command(state):
+                self.prompt = login._safe_state(state)
+                login.append_audit(audit_path, "local-manager-command", command="/agents", prompt=self.prompt,
+                                   screenSHA256=last_digest)
+                os.write(master, b"/agents\r")
+                self.command_sent = True
+                changed = time.monotonic()
+                continue
+            if state.get("errorObserved") or state.get("authBarrierObserved"):
+                return state, False
+            action = onboarding_action(text, state, Path(case_root))
+            if (action and action[0] not in self.actions and
+                    last_action_digest != last_digest and len(self.actions) < 8):
+                name, value = action
+                self.actions.append(name)
+                login.append_audit(audit_path, "local-manager-onboarding-action", action=name,
+                                   screenSHA256=last_digest, scope="owned-synthetic-root-only")
+                os.write(master, value)
+                last_action_digest = last_digest
+                changed = time.monotonic()
+        return state, False
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--aok", type=Path, required=True)
+    parser.add_argument("--evidence-out", type=Path, required=True)
+    parser.add_argument("--fixture-variant", choices=("original", "minimal", "main-agent"), default="original")
+    parser.add_argument("--case", choices=("positive", "absent", "malformed", "all"), default="all")
+    parser.add_argument("--accept-required-terms", action="store_true", required=True)
+    parser.add_argument("--disable-optional-sharing", action="store_true", required=True)
+    parser.add_argument("--trust-owned-fixtures", action="store_true", required=True)
+    args = parser.parse_args(argv)
+    out = args.evidence_out.absolute()
+    try:
+        report_fd = open_evidence_output(out)
+    except (ValueError, OSError):
+        parser.error("evidence must be a new file under canonical, nonsymlink checkout directories")
+    original_env, original_profile = login.env_for, login.sandbox_profile
+    cases = {}
+    with tempfile.TemporaryDirectory(prefix="aok-agy-local-fixture-", dir="/private/tmp") as td:
+        staging = Path(td)
+        native_source = (login.REPO / "internal/nativeadapters/agy/testdata/probe.md").read_bytes()
+        if args.fixture_variant == "minimal":
+            native_source = (b"---\nname: aok-probe\ndescription: Synthetic AGY adapter discovery fixture\n---\n"
+                             b"This synthetic body is inert test content. Do not execute it.\n")
+        elif args.fixture_variant == "main-agent":
+            native_source = native_source.replace(b"model: flash\n", b"mainAgent: true\nmodel: flash\n")
+        fixture_repo = staging / "fixture-source"
+        fixture_source = fixture_repo / "internal/nativeadapters/agy/testdata/probe.md"
+        fixture_source.parent.mkdir(parents=True)
+        fixture_source.write_bytes(native_source)
+        _, rendered, fixture_hash, description = login.AGY.agy.base.prepare_aok(args.aok, fixture_repo, staging)
+        for case in (("positive", "absent", "malformed") if args.case == "all" else (args.case,)):
+            capture = CaseCapture()
+
+            def env(root):
+                e = original_env(root)
+                settings = Path(root) / "home/.gemini/antigravity-cli/settings.json"
+                settings.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+                settings.write_text(json.dumps({"modelProvider": "gemini"}))
+                settings.chmod(0o600)
+                e["GEMINI_API_KEY"] = "aok-offline-synthetic-not-a-credential"
+                if not (Path(root) / ".git").exists():
+                    git = shutil.which("git")
+                    if not git:
+                        raise RuntimeError("Git required for synthetic project boundary")
+                    subprocess.run([git, "init", "--quiet", "--initial-branch=main"], cwd=root,
+                        env={"PATH": "/usr/bin:/bin", "HOME": e["HOME"],
+                             "GIT_CONFIG_NOSYSTEM": "1", "GIT_CONFIG_GLOBAL": "/dev/null"},
+                        capture_output=True, check=True, timeout=15)
+                fixture = Path(root) / ".agents/agents/aok-probe/agent.md"
+                if case != "absent":
+                    fixture.parent.mkdir(parents=True, exist_ok=True)
+                    fixture.write_bytes(rendered if case == "positive" else b"---\nname: aok-probe\ndescription: [\n---\n")
+                return e
+
+            login.env_for = env
+            login.sandbox_profile = lambda *a: original_profile(*a) + NETWORK_POLICY
+            login.may_press_enter = lambda state: False
+            login._capture_login = capture.capture
+            result = login.prepare(timeout=35)
+            audit = Path(result["auditRoot"]) / "audit.jsonl"
+            events = [json.loads(line) for line in audit.read_text().splitlines()]
+            cleanup = any(e["event"] == "native-login-cleanup" and e.get("cleaned") is True for e in events)
+            state = dict(capture.manager or result.get("observation", {}).get("state", {}))
+            state["commandSent"] = capture.command_sent
+            # The login helper must never publish a prompt-ready account profile.
+            if result["status"] == "prompt-ready":
+                login.invalidate_and_remove_private_home(Path(result["root"]),
+                    json.loads((Path(result["root"]) / "owned-session.json").read_text()))
+            shutil.rmtree(result["root"])
+            cases[case] = {"state": state, "prompt": capture.prompt, "actions": capture.actions,
+                           "cleanupVerified": cleanup, "privateRootRemoved": True,
+                           "auditRoot": result["auditRoot"], "renderedPublicManagerRows": capture.public_rows,
+                           "syntheticAgentLoadDiagnostics": capture.load_diagnostics}
+    qualified = all(cases[k]["cleanupVerified"] for k in cases) and login.AGY.has_candidate_manager_evidence(
+        {k: v["state"] for k, v in cases.items()})
+    report = {"kind": "aok-agy-local-manager/v1", "version": "1.4.2", "scope": "project",
+              "sourceSHA256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+              "binarySHA256": login.PINNED_BINARY_SHA256, "fixtureSHA256": fixture_hash,
+              "expectedDescription": description, "fixtureVariant": args.fixture_variant,
+              "nativeSourceSHA256": hashlib.sha256(native_source).hexdigest(), "provider": "synthetic Gemini key; no real account",
+              "network": "external-denied-loopback-only", "backendAuthentication": "not-verified",
+              "inference": "not-run", "candidateNativeLoadingEvidence": qualified, "cases": cases}
+    with os.fdopen(report_fd, "w") as stream:
+        stream.write(json.dumps(report, indent=2) + "\n")
+    print(json.dumps({"evidence": str(out), "candidateNativeLoadingEvidence": qualified}))
+    return 0 if qualified else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

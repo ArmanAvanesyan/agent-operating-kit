@@ -1,0 +1,92 @@
+"""One isolated native onboarding run; explicit file-enum input, no model turns."""
+from pathlib import Path
+import importlib.util,json,os,re,stat,sys,time,hashlib
+spec=importlib.util.spec_from_file_location('agy_operator_helper',Path.cwd()/'scripts/native-loading/prepare_agy_login.py')
+m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+control=Path(sys.argv[1]); code=None; snapshot=None; master_fd=None; last_signature=None; last_change=0; actions=0
+owned_root=Path('/private/tmp/aok-agy-login-2yemyt4m')
+original_state=m.state_from_bytes; original_capture=m._capture_login; original_select=m.select.select
+
+def public_screen(data):
+ global snapshot,last_signature,last_change
+ state=original_state(data)
+ if state.get('terminalAmbiguityObserved'):
+  print(json.dumps({'offlineTerminalAmbiguitySite':state.get('terminalAmbiguitySite')}),flush=True);snapshot=None;return state
+ text=m.AGY.terminal_text(data,width=m.LOGIN_WIDTH,height=m.LOGIN_HEIGHT)
+ # Ignore only the exact synthetic owned-root spelling in auth classification.
+ raw_auth=state.get('authBarrierObserved')
+ state['authBarrierObserved']=bool(m.AGY.AUTH.search(text.replace(str(owned_root),'[owned-private-root]')))
+ state['ownedRootAuthLabelExcluded']=bool(raw_auth and not state['authBarrierObserved'])
+ signature=hashlib.sha256(text.encode()).hexdigest()
+ if signature!=last_signature:
+  last_signature=signature;last_change=time.monotonic()
+  if not state.get('authBarrierObserved'):
+   if 'Terms of Service & Data Use' in text:
+    start=next(i for i,x in enumerate(text.splitlines()) if 'Terms of Service & Data Use' in x)
+    public=text.splitlines()[start:start+22]
+    safe=[]
+    for row in public:
+     row=re.sub(r'https?://\S+','[link]',row)
+     row=re.sub(r'\b[^\s@]+@[^\s@]+\.[^\s@]+','[account]',row)
+     row=re.sub(r'4/0[A-Za-z0-9_-]+|ya29\.[A-Za-z0-9_-]+','[redacted]',row)
+     safe.append(row)
+    print(json.dumps({'publicTermsScreen':safe,'screenSHA256':signature}),flush=True)
+   elif state.get('trustPromptObserved') and str(owned_root) in text:
+    rows=[row.replace(str(owned_root),'[owned-private-root]') for row in text.splitlines() if row.strip()]
+    rows=[re.sub(r'https?://\S+','[link]',re.sub(r'\b[^\s@]+@[^\s@]+\.[^\s@]+','[account]',row)) for row in rows]
+    print(json.dumps({'publicOwnedTrustScreen':rows,'screenSHA256':signature}),flush=True)
+   elif not state.get('colorSchemeScreenObserved') and not m.is_ready(state):
+    fixed={'choose','rendering','mode','altscreen','inline','trust','workspace','directory','folder','yes','no','allow','enter','continue','done','select','navigate','up','down','tab','space','security','warning','cancel'}
+    print(json.dumps({'onboardingFixedRows':[{'row':i,'words':[x for x in re.findall(r'[A-Za-z]+',row.lower()) if x in fixed],'otherWords':sum(x not in fixed for x in re.findall(r'[A-Za-z]+',row.lower()))} for i,row in enumerate(text.splitlines()) if any(x in fixed for x in re.findall(r'[A-Za-z]+',row.lower()))]}),flush=True)
+ snapshot=(state,text,signature)
+ return state
+
+def select_control(r,w,x,timeout):
+ global actions,snapshot,last_change
+ ready=original_select(r,w,x,timeout)
+ if ready[0] or snapshot is None or time.monotonic()-last_change<0.6 or not control.exists():return ready
+ info=control.lstat()
+ if not stat.S_ISREG(info.st_mode) or info.st_uid!=os.getuid() or info.st_nlink!=1 or info.st_mode & 0o077 or info.st_size>512:raise RuntimeError('unsafe operator control')
+ command=json.loads(control.read_text());control.unlink()
+ state,text,signature=snapshot
+ action=command.get('action');expected=command.get('screenSHA256')
+ if expected!=signature or actions>=12 or state.get('authBarrierObserved') or state.get('terminalAmbiguityObserved') or state.get('localPromptObserved') or state.get('errorObserved'):raise RuntimeError('operator action blocked')
+ terms=('Terms of Service & Data Use' in text and 'Google to collect and use my Interactions data,' in text and 'Done' in text and not state.get('colorSchemeScreenObserved'))
+ if action=='trust-owned-root':
+  trust=(state.get('trustPromptObserved') and not state.get('termsAcceptancePromptObserved') and not state.get('colorSchemeScreenObserved') and re.search(r'(?m)^\s*Accessing workspace:\s*$',text) and text.count(str(owned_root))==1 and re.search(r'(?m)^'+re.escape(str(owned_root))+r'\s*$',text) and 'enter Confirm' in text and re.search(r'(?m)^\s*(?:>|❯)\s*(?:1[.)]\s*)?Yes, I trust this folder\s*$',text))
+  if not trust or owned_root.resolve(strict=True)!=owned_root or owned_root.stat().st_uid!=os.getuid() or stat.S_IMODE(owned_root.stat().st_mode)!=0o700:raise RuntimeError('owned trust scope not proven')
+  m.append_audit(m.AUDIT_PATH,'operator-owned-root-trust',screenSHA256=signature,root=str(owned_root),scope='isolated-synthetic-root-only')
+  os.write(master_fd,b'\r');actions+=1;snapshot=None;last_change=time.monotonic();return ready
+ if not terms or action not in {'terms-tab','terms-shift-tab','terms-disable-sharing','terms-accept-disabled'}:raise RuntimeError('unrecognized consent action')
+ checkbox=re.findall(r"(?m)^\s*(>\s*)?\[([x ])\] Yes, I agree to help improve Antigravity CLI by allowing\s*$",text)
+ if len(checkbox)!=1:raise RuntimeError('ambiguous checkbox state')
+ focused,checked=checkbox[0]
+ if action=='terms-disable-sharing' and not (focused and checked=='x' and 'enter Toggle' in text):raise RuntimeError('sharing not visibly selected for disabling')
+ if action=='terms-accept-disabled' and not (checked==' ' and re.search(r'(?m)^\s*\[Previous\]\s*>\s+Done\s*$',text) and 'enter Confirm' in text):raise RuntimeError('Done not focused or optional sharing not disabled')
+ value={'terms-tab':b'\t','terms-shift-tab':b'\x1b[Z','terms-disable-sharing':b'\r','terms-accept-disabled':b'\r'}[action]
+ m.append_audit(m.AUDIT_PATH,'operator-consent-navigation',action=action,screenSHA256=signature)
+ os.write(master_fd,value);actions+=1;snapshot=None;last_change=time.monotonic()
+ return ready
+
+def capture(master,*args,**kwargs):
+ global master_fd,owned_root
+ master_fd=master;owned_root=Path(kwargs['case_root'])
+ kwargs['resume_onboarding']=True;kwargs['resume_phase']='color-scheme';kwargs['restart_visual_setup']=False
+ return original_capture(master,*args,**kwargs)
+m.state_from_bytes=public_screen;m._capture_login=capture;m.select.select=select_control
+# Offline parser diagnosis: synthetic noncredential provider; deny all network.
+original_env=m.env_for;original_guard=m.sandbox_profile
+def env(root):
+ e=original_env(root)
+ p=Path(root)/'home/.gemini/antigravity-cli/settings.json';p.parent.mkdir(mode=0o700,parents=True,exist_ok=True)
+ p.write_text(json.dumps({'modelProvider':'gemini'}));p.chmod(0o600)
+ e['GEMINI_API_KEY']='aok-offline-synthetic-not-a-credential'
+ return e
+m.env_for=env;m.sandbox_profile=lambda *args:original_guard(*args)+'(deny network*)'
+m.MANUAL_OAUTH_MODE=False;m.may_press_enter=lambda *args,**kwargs:False
+m.may_retain_color_checkpoint=lambda *args,**kwargs:False
+result=m.prepare(timeout=120)
+print(json.dumps({'status':result['status'],'root':result['root'],'auditRoot':result['auditRoot'],'purpose':'offline synthetic-provider parser diagnosis','nativeLoading':'not-verified','network':'denied','operatorActions':actions}),flush=True)
+# No offline profile may be consumed as authentication evidence.
+import shutil
+if Path(result['root']).exists():shutil.rmtree(result['root'])

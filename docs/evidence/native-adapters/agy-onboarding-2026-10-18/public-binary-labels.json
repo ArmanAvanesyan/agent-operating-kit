@@ -1,0 +1,23 @@
+{
+  "binarySHA256": "fa85a90abded17bcd1b185bbd1d6b1b82065f093ad4700d4dbacd3be2433294c",
+  "method": "exact public literal search in pinned binary; no credential/profile reads",
+  "literals": [
+    {
+      "value": "compilation failed",
+      "firstByteOffset": 59993235
+    },
+    {
+      "value": "deprecation warning",
+      "firstByteOffset": 60064164
+    },
+    {
+      "value": "Terms of Service & Data Use",
+      "firstByteOffset": 60599578
+    },
+    {
+      "value": "Google to collect and use my Interactions data,",
+      "firstByteOffset": 61287846
+    }
+  ],
+  "loadingEvidence": false
+}

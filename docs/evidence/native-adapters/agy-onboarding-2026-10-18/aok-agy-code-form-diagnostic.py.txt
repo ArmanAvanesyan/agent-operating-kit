@@ -1,0 +1,11 @@
+from pathlib import Path
+import importlib.util,json,shutil
+spec=importlib.util.spec_from_file_location('private_agy_form_diag',Path.cwd()/'scripts/native-loading/prepare_agy_login.py')
+m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+m.MANUAL_OAUTH_MODE=True
+m.open_manual_oauth_browser=lambda wire:None
+r=m.prepare(timeout=15)
+root=Path(r['root'])
+try:print(json.dumps({'purpose':'unsubmitted native OAuth form diagnostics only','auditRoot':r['auditRoot'],'nativeLoading':'not-verified','status':r['status']}))
+finally:
+ if root.exists():shutil.rmtree(root)

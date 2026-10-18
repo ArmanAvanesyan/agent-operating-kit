@@ -76,6 +76,9 @@ PROMPT_READY_HINT = re.compile(
     re.I,
 )
 MANAGER_HEADER = re.compile(r"available agents", re.I)
+AGY_CLI_VERSION_HEADER = re.compile(
+    r"[ \t\u2580-\u259f]*Antigravity CLI [0-9]+\.[0-9]+\.[0-9]+[ \t\u2580-\u259f]*", re.I)
+AGY_MODEL_STATUS = re.compile(r"[ \t\u2580-\u259f]*Gemini API key[ \t\u2580-\u259f]*", re.I)
 ANSI = re.compile(rb"\x1b(?:\[[0-?]*[ -/]*[@-~]|\][^\x07]*(?:\x07|\x1b\\))")
 
 
@@ -369,7 +372,7 @@ def signal_preflight(root, profile=None):
         raise
 
 
-def state_from_bytes(data, *, width=80, height=24):
+def state_from_bytes(data, *, width=160, height=80):
     try:
         text = terminal_text(data, width=width, height=height)
     except _terminal.TerminalAmbiguity as error:
@@ -380,6 +383,9 @@ def state_from_bytes(data, *, width=80, height=24):
             "authBarrierObserved": False,
             "localPromptObserved": False,
             "readyHintObserved": False,
+            "framedNativePromptObserved": False,
+            "framedNativeManagerObserved": False,
+            "publicModelStatusExceptionObserved": False,
             "welcomeLabelObserved": False,
             "workspaceLabelObserved": False,
             "modelSelectionLabelObserved": False,
@@ -392,14 +398,24 @@ def state_from_bytes(data, *, width=80, height=24):
             "errorCategories": ["terminal-ambiguity"],
             "bytesObserved": len(data),
         }
-    tail = "\n".join(text.splitlines()[-4:])
+    rows = text.splitlines()
+    tail = "\n".join(rows[-4:])
+    framed_prompt, prompt_status_row = _framed_native_prompt(rows)
+    framed_manager, manager_status_row = _framed_native_manager(rows)
+    status_row = prompt_status_row if framed_prompt else manager_status_row
+    status_exception = framed_prompt or framed_manager
+    auth_rows = [row for index, row in enumerate(rows) if not status_exception or index != status_row]
+    auth_text = "\n".join(auth_rows)
     error_categories = [name for name, pattern in ERROR_CATEGORIES if pattern.search(text)]
     return {
         "startupDiagnostics": classify(data),
         "terminalAmbiguityObserved": False,
-        "authBarrierObserved": bool(AUTH.search(text)),
-        "localPromptObserved": bool(PROMPT_MARKER.search(tail)) and bool(PROMPT_READY_HINT.search(tail)),
-        "readyHintObserved": bool(PROMPT_READY_HINT.search(tail)),
+        "authBarrierObserved": bool(AUTH.search(auth_text)),
+        "localPromptObserved": framed_prompt or (bool(PROMPT_MARKER.search(tail)) and bool(PROMPT_READY_HINT.search(tail))),
+        "readyHintObserved": bool(PROMPT_READY_HINT.search(tail)) or framed_prompt,
+        "framedNativePromptObserved": framed_prompt,
+        "framedNativeManagerObserved": framed_manager,
+        "publicModelStatusExceptionObserved": status_exception and status_row is not None,
         "welcomeLabelObserved": bool(re.search(r"welcome to antigravity|antigravity cli", text, re.I)),
         "workspaceLabelObserved": bool(re.search(r"workspace|project", text, re.I)),
         "modelSelectionLabelObserved": bool(re.search(r"select (?:a )?model|choose (?:a )?model", text, re.I)),
@@ -412,6 +428,76 @@ def state_from_bytes(data, *, width=80, height=24):
         "errorCategories": error_categories,
         "bytesObserved": len(data),
     }
+
+
+def _framed_native_prompt(rows):
+    """Recognize the pinned CLI's exact local `>` prompt panel, not arbitrary `>`."""
+    separator = "─" * 160
+    all_text = "\n".join(rows)
+    if re.search(r"(?:select|choose)(?: a)? model", all_text, re.I):
+        return False, None
+    for index in range(len(rows) - 3):
+        if not AGY_CLI_VERSION_HEADER.fullmatch(rows[index]):
+            continue
+        status_index = index + 1
+        if not AGY_MODEL_STATUS.fullmatch(rows[status_index]):
+            continue
+        model_row = rows[index + 2]
+        if (not re.fullmatch(r"[ \t\u2580-\u259f]*[A-Za-z][A-Za-z0-9 ._()/-]{0,80}[ \t\u2580-\u259f]*", model_row) or
+                not re.search(r"\bGemini\b", model_row, re.I)):
+            continue
+        for prompt_index in range(index + 3, len(rows) - 3):
+            top = rows[prompt_index]
+            prompt = rows[prompt_index + 1]
+            bottom = rows[prompt_index + 2]
+            footer = rows[prompt_index + 3]
+            if (top == separator and prompt == ">" and bottom == separator and
+                    footer.startswith("? for shortcuts")):
+                return True, status_index
+    return False, None
+
+
+def _framed_native_manager(rows):
+    """Recognize the exact public AGY manager layout before exempting its API status row."""
+    separator = "─" * 160
+    workspace = re.compile(
+        r"\s*Workspace: (?P<root>/private/tmp/aok-agy-session-[A-Za-z0-9_-]{1,96})"
+        r"/\.agents/agents/\{agent_name\}/agent\.md\s*")
+    keyboard = "Keyboard: ↑/↓ Navigate  enter Select / Toggle  k Kill Active Subagent  esc Go Back"
+    if re.search(r"(?:select|choose)(?: a)? model", "\n".join(rows), re.I):
+        return False, None
+    for header in range(len(rows) - 3):
+        if not AGY_CLI_VERSION_HEADER.fullmatch(rows[header]):
+            continue
+        status = header + 1
+        model = header + 2
+        if (not AGY_MODEL_STATUS.fullmatch(rows[status]) or
+                not re.fullmatch(r"[ \t\u2580-\u259f]*[A-Za-z][A-Za-z0-9 ._()/-]{0,80}[ \t\u2580-\u259f]*", rows[model]) or
+                not re.search(r"\bGemini\b", rows[model], re.I)):
+            continue
+        for top_index in range(model + 1, len(rows) - 7):
+            if (rows[top_index] != separator or rows[top_index + 1] != ">" or
+                    rows[top_index + 2] != separator or rows[top_index + 3] != "Create New Agents"):
+                continue
+            workspace_index = top_index + 4
+            global_index = top_index + 5
+            workspace_match = workspace.fullmatch(rows[workspace_index])
+            if not workspace_match:
+                continue
+            root = workspace_match.group("root")
+            global_agents = re.compile(
+                r"\s*Global: " + re.escape(root) +
+                r"/home/\.gemini/config/agents/\{agent_name\}/agent\.md\s*")
+            if not global_agents.fullmatch(rows[global_index]):
+                continue
+            available = next((i for i in range(global_index + 1, len(rows))
+                              if rows[i] == "Available Agents"), None)
+            if available is None:
+                continue
+            if not any(row.startswith(keyboard) for row in rows[available + 1:]):
+                continue
+            return True, status
+    return False, None
 
 
 def may_send_manager_command(state):
@@ -452,7 +538,7 @@ def claim_controlling_tty():
 def run_manager_case(root, project, cli, case, timeout=25, *, isolated_source_root=None):
     master, slave = pty.openpty()
     os.set_blocking(master, False)
-    fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack("HHHH", 24, 80, 0, 0))
+    fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack("HHHH", 80, 160, 0, 0))
     gate = Path(root) / ("start-" + case)
     gate_script = (
         "import os,sys,time,pathlib; gate=pathlib.Path(sys.argv[1]); exe=sys.argv[2]; "
@@ -496,6 +582,7 @@ def run_manager_case(root, project, cli, case, timeout=25, *, isolated_source_ro
         append_audit("native-case-observed", case=case, pid=proc.pid, pgid=pgid,
                      state={key: state[key] for key in (
                          "runnerStarted", "nativeExecAttempted", "startupDiagnostics", "terminalAmbiguityObserved", "authBarrierObserved", "localPromptObserved", "readyHintObserved",
+                         "framedNativePromptObserved", "publicModelStatusExceptionObserved",
                          "welcomeLabelObserved", "workspaceLabelObserved", "modelSelectionLabelObserved",
                          "noAgentsLabelObserved", "managerSectionObserved", "nameObserved",
                          "descriptionObserved", "parseErrorObserved", "errorObserved", "errorCategories",

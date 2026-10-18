@@ -1,0 +1,300 @@
+{
+  "kind": "aok-agy-local-manager/v1",
+  "version": "1.4.2",
+  "scope": "project",
+  "sourceSHA256": "bd5a3ef25a6eaa640855cb3b56ff0459ec89a595ec251e1c251b3997d39b21e1",
+  "binarySHA256": "fa85a90abded17bcd1b185bbd1d6b1b82065f093ad4700d4dbacd3be2433294c",
+  "fixtureSHA256": "fd1755a37fa7bf8af40f4cf70bfbc790b7fed016882d13d272d5f6c0f9412f71",
+  "expectedDescription": "Synthetic AGY adapter discovery fixture",
+  "fixtureVariant": "main-agent",
+  "nativeSourceSHA256": "6f9aa96cc1165a2f7697258d357f71d856eea66ac3b0266c1b79adacf4328997",
+  "provider": "synthetic Gemini key; no real account",
+  "network": "external-denied-loopback-only",
+  "backendAuthentication": "not-verified",
+  "inference": "not-run",
+  "candidateNativeLoadingEvidence": false,
+  "cases": {
+    "positive": {
+      "state": {
+        "authBarrierObserved": true,
+        "localPromptObserved": false,
+        "readyHintObserved": false,
+        "welcomeLabelObserved": true,
+        "workspaceLabelObserved": true,
+        "modelSelectionLabelObserved": false,
+        "framedNativePromptObserved": false,
+        "publicModelStatusExceptionObserved": false,
+        "errorObserved": false,
+        "errorCategories": [],
+        "bytesObserved": 7509,
+        "googleSignInOptionObserved": false,
+        "nativeLoginChoiceObserved": false,
+        "enterHintObserved": true,
+        "authorizationCodePromptObserved": false,
+        "codeFieldDiagnostics": [],
+        "authScreenFixedRows": [
+          {
+            "row": 1,
+            "fixedWords": [
+              "antigravity",
+              "cli"
+            ],
+            "otherWordCount": 0
+          },
+          {
+            "row": 2,
+            "fixedWords": [],
+            "otherWordCount": 3
+          },
+          {
+            "row": 3,
+            "fixedWords": [],
+            "otherWordCount": 3
+          },
+          {
+            "row": 4,
+            "fixedWords": [],
+            "otherWordCount": 7
+          },
+          {
+            "row": 10,
+            "fixedWords": [
+              "new"
+            ],
+            "otherWordCount": 2
+          },
+          {
+            "row": 11,
+            "fixedWords": [
+              "workspace"
+            ],
+            "otherWordCount": 13
+          },
+          {
+            "row": 12,
+            "fixedWords": [],
+            "otherWordCount": 16
+          },
+          {
+            "row": 15,
+            "fixedWords": [],
+            "otherWordCount": 2
+          },
+          {
+            "row": 16,
+            "fixedWords": [
+              "default",
+              "default"
+            ],
+            "otherWordCount": 1
+          },
+          {
+            "row": 18,
+            "fixedWords": [
+              "enter",
+              "select"
+            ],
+            "otherWordCount": 10
+          },
+          {
+            "row": 20,
+            "fixedWords": [],
+            "otherWordCount": 3
+          }
+        ],
+        "terminalAmbiguityObserved": false,
+        "terminalAmbiguitySite": null,
+        "loginRowDiagnostics": [],
+        "startupDiagnostics": {
+          "fixedWordsObserved": [
+            "error",
+            "warning",
+            "failed",
+            "usage",
+            "trust",
+            "workspace",
+            "permission",
+            "home",
+            "config",
+            "read",
+            "terminal",
+            "authentication",
+            "agent",
+            "subagent",
+            "not",
+            "file",
+            "press",
+            "enter",
+            "esc",
+            "continue",
+            "changes",
+            "security",
+            "welcome",
+            "dark",
+            "light",
+            "select",
+            "choose",
+            "model"
+          ],
+          "terminalQueryLabels": [
+            "modify-other-keys-2",
+            "modify-other-keys-reset",
+            "kitty-keyboard",
+            "unicode-width-status",
+            "synchronized-output-status",
+            "terminal-version"
+          ],
+          "rawTextRetained": false
+        },
+        "colorSchemeScreenObserved": false,
+        "colorSchemeContinueObserved": false,
+        "errorRowDiagnostics": [],
+        "trustPromptObserved": false,
+        "termsAcceptancePromptObserved": false,
+        "codeFieldGeometry": [],
+        "authorizationCodeSubmitted": null,
+        "colorSchemeContinued": null,
+        "previewLabelMatches": [],
+        "rawGenericErrorObserved": false,
+        "previewSampleErrorRows": [],
+        "managerSectionObserved": true,
+        "nameObserved": false,
+        "descriptionObserved": false,
+        "parseErrorObserved": false,
+        "noAgentsLabelObserved": false,
+        "commandSent": true
+      },
+      "prompt": {
+        "authBarrierObserved": false,
+        "localPromptObserved": true,
+        "readyHintObserved": true,
+        "welcomeLabelObserved": true,
+        "workspaceLabelObserved": false,
+        "modelSelectionLabelObserved": false,
+        "framedNativePromptObserved": true,
+        "publicModelStatusExceptionObserved": true,
+        "errorObserved": false,
+        "errorCategories": [],
+        "bytesObserved": 6649,
+        "googleSignInOptionObserved": false,
+        "nativeLoginChoiceObserved": false,
+        "enterHintObserved": false,
+        "authorizationCodePromptObserved": false,
+        "codeFieldDiagnostics": [],
+        "authScreenFixedRows": [
+          {
+            "row": 1,
+            "fixedWords": [
+              "antigravity",
+              "cli"
+            ],
+            "otherWordCount": 0
+          },
+          {
+            "row": 2,
+            "fixedWords": [],
+            "otherWordCount": 3
+          },
+          {
+            "row": 3,
+            "fixedWords": [],
+            "otherWordCount": 3
+          },
+          {
+            "row": 4,
+            "fixedWords": [],
+            "otherWordCount": 7
+          },
+          {
+            "row": 10,
+            "fixedWords": [
+              "for"
+            ],
+            "otherWordCount": 4
+          }
+        ],
+        "terminalAmbiguityObserved": false,
+        "terminalAmbiguitySite": null,
+        "loginRowDiagnostics": [],
+        "startupDiagnostics": {
+          "fixedWordsObserved": [
+            "error",
+            "warning",
+            "failed",
+            "trust",
+            "workspace",
+            "permission",
+            "read",
+            "terminal",
+            "authentication",
+            "agent",
+            "not",
+            "file",
+            "press",
+            "enter",
+            "continue",
+            "security",
+            "welcome",
+            "dark",
+            "light",
+            "choose"
+          ],
+          "terminalQueryLabels": [
+            "modify-other-keys-2",
+            "modify-other-keys-reset",
+            "kitty-keyboard",
+            "unicode-width-status",
+            "synchronized-output-status",
+            "terminal-version"
+          ],
+          "rawTextRetained": false
+        },
+        "colorSchemeScreenObserved": false,
+        "colorSchemeContinueObserved": false,
+        "errorRowDiagnostics": [],
+        "trustPromptObserved": false,
+        "termsAcceptancePromptObserved": false,
+        "codeFieldGeometry": [],
+        "authorizationCodeSubmitted": null,
+        "colorSchemeContinued": null,
+        "previewLabelMatches": [],
+        "rawGenericErrorObserved": false,
+        "previewSampleErrorRows": []
+      },
+      "actions": [
+        "color",
+        "disable-optional-sharing",
+        "navigate-to-previous",
+        "navigate-to-done",
+        "accept-terms-sharing-disabled",
+        "trust-owned-synthetic-root"
+      ],
+      "cleanupVerified": true,
+      "privateRootRemoved": true,
+      "auditRoot": "/private/tmp/aok-agy-login-audit-h1m4c1x3",
+      "renderedPublicManagerRows": [
+        "",
+        "      \u2584 \u2580\u2584        Antigravity CLI 1.4.2",
+        "     \u2580\u2580  \u2580\u2580       Gemini API key",
+        "    \u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580      Gemini 3.1 Pro (Low)",
+        "   \u2584\u2580\u2580    \u2580\u2580\u2584     [owned-synthetic-root]",
+        "  \u2584\u2580\u2580      \u2580 \u2584",
+        "",
+        "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500",
+        ">",
+        "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500",
+        "Create New Agents",
+        "  Workspace: [owned-synthetic-root]/.agents/agents/{agent_name}/agent.md",
+        "  Global: [owned-synthetic-root]/home/.gemini/config/agents/{agent_name}/agent.md",
+        "",
+        "",
+        "Available Agents",
+        "> \u25cf default  Default agent",
+        "",
+        "Keyboard: \u2191/\u2193 Navigate  enter Select / Toggle  k Kill Active Subagent  esc Go Back",
+        "",
+        "                                                                                                                                            Gemini 3.1 Pro \u00b7 low"
+      ]
+    }
+  }
+}

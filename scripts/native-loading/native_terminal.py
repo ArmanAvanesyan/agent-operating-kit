@@ -245,10 +245,12 @@ class Screen:
         if (params, final) in {
             ("", "c"), ("0", "c"), (">", "c"), (">0", "c"),
             ("6", "n"), (">", "q"), ("?2026$", "p"), ("?1004$", "p"), ("?2027$", "p"), ("?", "u"),
+            ("0 ", "q"),
         }:
             return
-        if (params, final) in {("?5", "W"), (">1", "u"), ("<", "u")} :
-            # Default eight-column tabs and Kitty key disambiguation only.
+        if (params, final) in {("?5", "W"), (">1", "u"), ("<", "u"), ("<1", "u")}:
+            # Exact tab, keyboard-mode and cursor-style controls have no
+            # modeled cell or cursor-position effect.
             return
         private, values = self._numbers(params)
         if private == "?" and final in ("h", "l"):
@@ -508,17 +510,33 @@ def render_screen(data, width=120, height=40):
 
 
 def ambiguity_site(error):
-    """Source coordinates and bounded numeric CSI metadata; no screen text."""
+    """Source coordinates and sanitized bounded CSI metadata; no screen text."""
     trace = error.__traceback__
-    while trace.tb_next is not None:
+    csi_params = None
+    csi_final = None
+    while trace is not None:
+        frame_name = trace.tb_frame.f_code.co_name
+        local = trace.tb_frame.f_locals
+        if frame_name in ("_handle_csi", "_numbers"):
+            params = local.get("params")
+            if isinstance(params, str):
+                csi_params = params
+            final = local.get("final")
+            if isinstance(final, str):
+                csi_final = final
+        last_trace = trace
         trace = trace.tb_next
-    result = {"function": trace.tb_frame.f_code.co_name, "line": trace.tb_lineno}
-    local = trace.tb_frame.f_locals
-    params = local.get("params")
-    final = local.get("final", "m" if result["function"] == "_handle_sgr" else None)
-    if (isinstance(params, str) and len(params) <= 24 and
-            re.fullmatch(r"[?<>!]?[0-9;:$ ]*", params) and
-            all(len(number) <= 4 for number in re.findall(r"[0-9]+", params)) and
-            isinstance(final, str) and re.fullmatch(r"[@-~]", final)):
-        result["numericCSIControl"] = params + final
+    result = {"function": last_trace.tb_frame.f_code.co_name, "line": last_trace.tb_lineno}
+    if (isinstance(csi_params, str) and len(csi_params) <= MAX_CSI_BYTES and
+            all(0x20 <= ord(char) <= 0x3F for char in csi_params) and
+            isinstance(csi_final, str) and len(csi_final) == 1 and
+            0x40 <= ord(csi_final) <= 0x7E):
+        result["csiParameterCodepoints"] = [ord(char) for char in csi_params]
+        result["csiFinalCodepoint"] = ord(csi_final)
+        numbers = re.findall(r"[0-9]+", csi_params)
+        if all(len(number) <= 6 for number in numbers):
+            result["csiNumericValues"] = [int(number) for number in numbers]
+            # Keep the pre-existing compact field only for bounded numeric
+            # parameters and the permitted CSI parameter-byte grammar.
+            result["numericCSIControl"] = csi_params + csi_final
     return result

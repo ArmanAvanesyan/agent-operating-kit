@@ -177,7 +177,7 @@ is narrower than field parsing and remains separate from runtime enforcement.
 | `claude-code` | `project`, `plugin` | Verified project discovery only for Claude Code 2.1.281 | Evidence applies to project scope only; plugin parsing is not a discovery check. No model execution or permission-enforcement claim. |
 | `codex` | `project`, `project-registered` | Verified registered project loading for Codex CLI 0.162.1 | Registration plus referenced role-file loading; standalone `project` remains `not-run`. No child-agent invocation or runtime-enforcement claim. |
 | `cursor` | `project` | Verified native command-picker discovery for 2026.10.16-e3cb207 | Authenticated positive/absent/blank-body controls under an explicit Git retrieval shim; no selected-agent startup, inference or enforcement claim. |
-| `agy` | `project` | `not-run`, 1.4.2 evidence linked | Fresh Darwin and Linux container listings emit no role inventory for valid/absent/malformed files; native loading remains unverified. |
+| `agy` | `project` | `not-run`, 1.4.2 evidence linked | Darwin `/agents` opens under isolated synthetic-provider configuration, but valid/absent/malformed files show the same default-only list; native loading remains unverified. |
 | `gemini` | `project` | Verified project discovery for temporary Gemini CLI 0.61.0 | Guarded positive/empty TUI checks before authentication; no invocation or runtime-enforcement claim. |
 | `openclaw` | `isolated-home` | Verified Linux loading for OpenClaw 2026.9.4 / Node 26.7.0 | Network-disabled container roster and workspace controls; Darwin CLI remains unverified. |
 | `hermes-agent` | `profile` | Verified direct installed CLI entrypoint, source-hash bound | Native profile list reads exported model/metadata; separate SOUL loader proof; normal launcher selection and runtime enforcement unverified. |
@@ -246,6 +246,9 @@ audits are retained. Native loading and runtime enforcement remain unverified.
 The [isolated startup investigation](native-startup-diagnostics.md) corrects the
 agy macOS launcher failure and records Cursor initialization diagnostics. The agy
 native-loading gate remains open; Cursor project discovery is now verified.
-The fresh agy code submission reached welcome/onboarding labels with a generic
-error, without a ready prompt. Its private HOME was removed. A login screen,
-authenticated status, or a rendering mark does not prove project discovery.
+The [onboarding follow-up](agy-onboarding-verification.md) fixes the code form,
+preview false positive and terminal controls, records sharing-disabled consent,
+and reaches the native `/agents` manager in synthetic-only isolated sessions.
+The manager omits the custom fixture in every tested layout, so the project
+loading gate remains open. Backend authentication, inference and runtime policy
+enforcement are unverified.

@@ -172,8 +172,8 @@ welcome/onboarding labels and a generic error, without terminal ambiguity.
 No local ready prompt was established. The sanitized evidence cannot establish
 whether token exchange or persistence succeeded, or identify the error's cause.
 Its private HOME was removed, `/agents` was not sent, and neither backend
-authentication nor native loading is claimed. This is the remaining agy blocker.
-No further code was requested after that attempt.
+authentication nor native loading is claimed. That was the blocker at this historical checkpoint. The later
+[onboarding investigation](agy-onboarding-verification.md) supersedes it.
 
 Independent review tightened the current helper beyond those historical runs:
 a standalone `Authorization code` title is insufficient to authorize input.
@@ -204,3 +204,17 @@ in that file while the bounded session is live. Do not commit the directory.
 The current helper stops on the unresolved post-code screen; operator
 investigation is still needed before a ready profile and manager verification
 can be reported. A successful OAuth browser page alone cannot close this gate.
+
+## Post-code onboarding and local manager investigation
+
+The [onboarding report](agy-onboarding-verification.md) identifies the apparent
+welcome error as theme-preview sample text, fixes the actual code-entry form,
+and models only the observed Kitty keyboard-pop and cursor-style controls.
+Native terms were submitted with optional sharing visibly disabled; trust was
+confined to the owned temporary root. The original credential profile was removed.
+
+A separate synthetic-provider harness now reaches `/agents` without inference.
+Its positive, absent and malformed controls all show the default agent only,
+including after a five-second observation period. The new report preserves
+this loading blocker and documents explicit operator consent flags, source
+snapshots, process cleanup and validation. Backend authentication is unverified.

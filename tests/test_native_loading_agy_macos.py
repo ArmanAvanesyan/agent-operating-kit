@@ -154,6 +154,135 @@ class AgyMacOSInteractiveTests(unittest.TestCase):
         self.assertFalse(probe.state_from_bytes(b"\xe2\x9d\xaf ")["localPromptObserved"])
         self.assertFalse(probe.state_from_bytes(b"Type a message")["localPromptObserved"])
 
+    def test_exact_antigravity_status_frame_recognizes_local_prompt_without_auth_false_positive(self):
+        separator = "─" * 160
+        rows = ["█ Antigravity CLI 1.4.2", "█ Gemini API key", "█ Gemini 2.5 Pro",
+                "", "", "", "", separator, ">", separator,
+                "? for shortcuts   Gemini   Ctrl+K"]
+        state = probe.state_from_bytes("\r\n".join(rows).encode())
+        self.assertTrue(state["framedNativePromptObserved"])
+        self.assertTrue(state["publicModelStatusExceptionObserved"])
+        self.assertFalse(state["authBarrierObserved"])
+        self.assertTrue(state["localPromptObserved"])
+        self.assertTrue(probe.may_send_manager_command(state))
+
+    def test_prompt_frame_rejects_missing_or_reordered_context_and_model_selectors(self):
+        separator = "─" * 160
+        good = ["█ Antigravity CLI 1.4.2", "█ Gemini API key", "█ Gemini 2.5 Pro",
+                "", "", "", "", separator, ">", separator,
+                "? for shortcuts   Gemini"]
+        variants = {
+            "truncated header": good[1:],
+            "missing footer": good[:-1],
+            "missing top border": good[:7] + ["-" * 160] + good[8:],
+            "different bottom border": good[:9] + ["─" * 159] + good[10:],
+            "reordered header": [good[1], good[0], *good[2:]],
+            "model selector": good[:2] + ["█ Select model"] + good[3:],
+            "unknown model": good[:2] + ["█ Claude Sonnet"] + good[3:],
+        }
+        for label, rows in variants.items():
+            with self.subTest(label=label):
+                state = probe.state_from_bytes("\r\n".join(rows).encode())
+                self.assertFalse(state["framedNativePromptObserved"])
+                self.assertFalse(state["localPromptObserved"])
+                self.assertTrue(state["authBarrierObserved"])
+                self.assertFalse(probe.may_send_manager_command(state))
+
+    def test_frame_status_exception_never_hides_other_auth_barriers(self):
+        separator = "─" * 160
+        rows = ["█ Antigravity CLI 1.4.2", "█ Gemini API key", "█ Gemini 2.5 Pro",
+                "", "", "", "", separator, ">", separator,
+                "? for shortcuts   Gemini", "Sign in to continue"]
+        state = probe.state_from_bytes("\r\n".join(rows).encode())
+        self.assertTrue(state["framedNativePromptObserved"])
+        self.assertTrue(state["publicModelStatusExceptionObserved"])
+        self.assertTrue(state["authBarrierObserved"])
+        self.assertFalse(probe.may_send_manager_command(state))
+
+        rows[-1] = "API key required"
+        api_required = probe.state_from_bytes("\r\n".join(rows).encode())
+        self.assertTrue(api_required["authBarrierObserved"])
+        self.assertFalse(probe.may_send_manager_command(api_required))
+
+    def test_exact_public_manager_frame_exempts_status_but_is_not_a_local_prompt(self):
+        separator = "─" * 160
+        root = "/private/tmp/aok-agy-session-fixture123"
+        rows = [
+            "",
+            "      ▄ ▀▄        Antigravity CLI 1.4.2",
+            "     ▀▀  ▀▀       Gemini API key",
+            "    ▀▀▀▀▀▀▀▀      Gemini 3.1 Pro (Low)",
+            f"   ▄▀▀    ▀▀▄     {root}",
+            "  ▄▀▀      ▀ ▄",
+            "",
+            separator, ">", separator,
+            "Create New Agents",
+            f"  Workspace: {root}/.agents/agents/{{agent_name}}/agent.md",
+            f"  Global: {root}/home/.gemini/config/agents/{{agent_name}}/agent.md",
+            "", "",
+            "Available Agents",
+            "> ● default  Default agent",
+            "",
+            "Keyboard: ↑/↓ Navigate  enter Select / Toggle  k Kill Active Subagent  esc Go Back",
+        ]
+        state = probe.state_from_bytes("\r\n".join(rows).encode())
+        self.assertTrue(state["framedNativeManagerObserved"])
+        self.assertTrue(state["publicModelStatusExceptionObserved"])
+        self.assertTrue(state["managerSectionObserved"])
+        self.assertFalse(state["authBarrierObserved"])
+        self.assertFalse(state["localPromptObserved"])
+        self.assertFalse(probe.may_send_manager_command(state))
+
+    def test_manager_status_exception_requires_complete_ordered_frame(self):
+        separator = "─" * 160
+        root = "/private/tmp/aok-agy-session-fixture123"
+        good = ["█ Antigravity CLI 1.4.2", "█ Gemini API key", "█ Gemini 3.1 Pro (Low)",
+                f"█ {root}", "", separator, ">", separator,
+                "Create New Agents",
+                f" Workspace: {root}/.agents/agents/{{agent_name}}/agent.md",
+                f" Global: {root}/home/.gemini/config/agents/{{agent_name}}/agent.md",
+                "Available Agents", "> ● default Default agent",
+                "Keyboard: ↑/↓ Navigate  enter Select / Toggle  k Kill Active Subagent  esc Go Back"]
+        variants = {
+            "missing CLI header": good[1:],
+            "missing workspace template": good[:9] + good[10:],
+            "missing global template": good[:10] + good[11:],
+            "missing keyboard footer": good[:-1],
+            "reordered header": [good[1], good[0], *good[2:]],
+            "noncanonical model selector": good[:2] + ["█ Select model"] + good[3:],
+            "mismatched global root": good[:10] + [
+                " Global: /private/tmp/aok-agy-session-other/home/.gemini/config/agents/{agent_name}/agent.md"
+            ] + good[11:],
+            "workspace traversal root": good[:9] + [
+                " Workspace: /private/tmp/aok-agy-session-../.agents/agents/{agent_name}/agent.md"
+            ] + good[10:],
+            "status only": ["█ Gemini API key"],
+        }
+        for label, rows in variants.items():
+            with self.subTest(label=label):
+                state = probe.state_from_bytes("\r\n".join(rows).encode())
+                self.assertFalse(state["framedNativeManagerObserved"])
+                self.assertFalse(state["publicModelStatusExceptionObserved"])
+                self.assertTrue(state["authBarrierObserved"])
+                self.assertFalse(probe.may_send_manager_command(state))
+
+    def test_manager_frame_exception_does_not_hide_auth_text_elsewhere(self):
+        separator = "─" * 160
+        root = "/private/tmp/aok-agy-session-fixture123"
+        rows = ["█ Antigravity CLI 1.4.2", "█ Gemini API key", "█ Gemini 3.1 Pro (Low)",
+                f"█ {root}", "", separator, ">", separator,
+                "Create New Agents",
+                f" Workspace: {root}/.agents/agents/{{agent_name}}/agent.md",
+                f" Global: {root}/home/.gemini/config/agents/{{agent_name}}/agent.md",
+                "Available Agents", "> ● default Default agent",
+                "Keyboard: ↑/↓ Navigate  enter Select / Toggle  k Kill Active Subagent  esc Go Back",
+                "Sign in to continue"]
+        state = probe.state_from_bytes("\r\n".join(rows).encode())
+        self.assertTrue(state["framedNativeManagerObserved"])
+        self.assertTrue(state["publicModelStatusExceptionObserved"])
+        self.assertTrue(state["authBarrierObserved"])
+        self.assertFalse(probe.may_send_manager_command(state))
+
     def test_errors_are_reduced_to_fixed_sanitized_categories(self):
         state = probe.state_from_bytes(
             b"Error: sandbox-exec: Operation not permitted for /Users/private/account\n"

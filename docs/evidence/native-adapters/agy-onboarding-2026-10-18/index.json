@@ -1,0 +1,259 @@
+{
+  "kind": "aok-agy-onboarding-evidence-index/v1",
+  "finalReport": "local-manager-final.json",
+  "observations": [
+    {
+      "file": "1_s9u_mm.json",
+      "purpose": "synthetic-local-manager-absent",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "28k4f5gm.json",
+      "purpose": "synthetic-local-manager-absent",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "3df5l_vq.json",
+      "purpose": "unsubmitted-oauth-form",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "4ewgyx_1.json",
+      "purpose": "synthetic-loopback-public-prompt-layout",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "6vj6snmv.json",
+      "purpose": "offline-synthetic-diagnostic",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "6wq5l3ow.json",
+      "purpose": "resumed-diagnostic-checkpoint",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "71w9tenb.json",
+      "purpose": "approved-code-diagnostic-checkpoint",
+      "codeSubmissions": 1,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "7agpyayj.json",
+      "purpose": "unsubmitted-oauth-form-no-browser",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "8018moo2.json",
+      "purpose": "synthetic-loopback-cursor-style-parser-diagnostic",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "8dy426t8.json",
+      "purpose": "synthetic-loopback-prompt-status-diagnostic",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "_pethuos.json",
+      "purpose": "synthetic-local-manager-positive",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "a9z7ekh4.json",
+      "purpose": "synthetic-loopback-prompt-label-diagnostic",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "ah_vg8ss.json",
+      "purpose": "synthetic-local-manager-positive",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "anzumh8z.json",
+      "purpose": "synthetic-local-manager-malformed",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "bfetlzd0.json",
+      "purpose": "synthetic-local-manager-absent",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "dqtkd2pl.json",
+      "purpose": "synthetic-local-manager-positive",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "dtdgtfhb.json",
+      "purpose": "synthetic-local-manager-positive",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "h1m4c1x3.json",
+      "purpose": "synthetic-local-manager-positive",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "hjjwaaiw.json",
+      "purpose": "synthetic-local-manager-malformed",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "hkzcbhvc.json",
+      "purpose": "synthetic-local-manager-positive",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "iadsn980.json",
+      "purpose": "unsubmitted-oauth-form-no-browser",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "iouqt2ij.json",
+      "purpose": "synthetic-local-manager-malformed",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "j83sfzmf.json",
+      "purpose": "synthetic-local-manager-positive",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "k20opabk.json",
+      "purpose": "native-color-preview-continued-to-terms",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "kx4067fq.json",
+      "purpose": "native-consent-sharing-disabled",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "ls6bdnw2.json",
+      "purpose": "unsubmitted-oauth-form-no-browser",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "m9zz8n12.json",
+      "purpose": "synthetic-local-manager-positive",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "nhdom8tw.json",
+      "purpose": "resumed-after-color-no-consent-action",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "nkez2_pq.json",
+      "purpose": "unsubmitted-oauth-form-no-browser",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "nlqnaex8.json",
+      "purpose": "resumed-diagnostic-checkpoint",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "owpefz5q.json",
+      "purpose": "unsubmitted-oauth-form-no-browser",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "pb1p9aav.json",
+      "purpose": "synthetic-deny-all-startup-bind-failure",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "pfbu39s9.json",
+      "purpose": "approved-code-submission",
+      "codeSubmissions": 1,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "poae8t0u.json",
+      "purpose": "native-owned-root-trust-observation-only",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "r5mvlzl_.json",
+      "purpose": "unsubmitted-oauth-form",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "ujh4l8jh.json",
+      "purpose": "synthetic-loopback-keyboard-pop-parser-diagnostic",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "wnnm1623.json",
+      "purpose": "native-consent-observation-navigation-only",
+      "codeSubmissions": 1,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "wp9gbh7r.json",
+      "purpose": "synthetic-loopback-rootname-diagnostic",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "xtutjmgv.json",
+      "purpose": "synthetic-local-manager-positive",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "y0x4ifpg.json",
+      "purpose": "resumed-public-label-diagnostic",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "yks9595s.json",
+      "purpose": "resumed-public-layout-diagnostic",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    },
+    {
+      "file": "zcjalv2n.json",
+      "purpose": "native-owned-root-trust-terminal-ambiguity",
+      "codeSubmissions": 0,
+      "nativeLoading": "not-verified"
+    }
+  ],
+  "limitations": "Backend authentication/inference unverified. Historical reconstructed wrapper limitation is explicit in y0x4ifpg.json. No positive native-loading evidence."
+}

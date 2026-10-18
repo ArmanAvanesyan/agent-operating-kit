@@ -1,0 +1,24 @@
+{
+  "source": "live isolated native agy 1.4.2; controller output from audit wnnm1623",
+  "scope": "public controls only; no account, OAuth URL or credential content",
+  "initial": {
+    "selectedCheckbox": "[x]",
+    "focusedControl": "optional interaction-data sharing checkbox",
+    "footer": "\u2191/\u2193 Navigate \u00b7 enter Toggle",
+    "screenSHA256": "57a885ecdce882faf8422e4af86d2ee5523cb076b9cc30b73f18daebd0cdfc4b"
+  },
+  "afterFirstTab": {
+    "selectedCheckbox": "[x]",
+    "focusedControl": "Previous",
+    "footer": "\u2191/\u2193 Navigate \u00b7 enter Confirm",
+    "screenSHA256": "d5a3328f3e1bec559e2047410888d67a2747e7daa2d2f3df6cfdbf478d906e90"
+  },
+  "afterSecondTab": {
+    "selectedCheckbox": "[x]",
+    "focusedControl": "Done",
+    "footer": "\u2191/\u2193 Navigate \u00b7 enter Confirm",
+    "screenSHA256": "f50e2e4bf7a06dc774f4205945759a5ef8f7f450247673a64961e2a751cf427f"
+  },
+  "consentSubmitted": false,
+  "nativeLoading": "not-verified"
+}

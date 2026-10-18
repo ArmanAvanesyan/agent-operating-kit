@@ -1,0 +1,13 @@
+{
+  "kind": "aok-agy-evidence-source-validation/v1",
+  "status": "passed",
+  "jsonReportsChecked": 61,
+  "nativeObservationsWithCleanup": 42,
+  "archiveFilesVerified": 45,
+  "credentialPatternScan": "passed; no values retained",
+  "originalInstalledAGYSHA256": "2a6bd844ae3431d35203af44f31bdd5e26f5ffe287d47c62a46862bf44099fc2",
+  "originalInstalledAGYUnchanged": true,
+  "finalAOKBinaryHashVerified": true,
+  "verifierSHA256": "d0e2f7ae7ed88e2754d010f3be805d8139bc204d1899fc03a8b7d334cf0a9322",
+  "verifierArchive": "docs/evidence/native-adapters/agy-onboarding-2026-10-18/d0e2f7ae7ed88e2754d010f3be805d8139bc204d1899fc03a8b7d334cf0a9322.py.txt"
+}

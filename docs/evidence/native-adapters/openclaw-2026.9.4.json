@@ -1,0 +1,58 @@
+{
+  "target": "openclaw",
+  "scope": "isolated-home",
+  "hostVersion": "2026.9.4 (3a9d69d)",
+  "observedAt": "2026-10-18",
+  "platform": "darwin-x86_64",
+  "package": {
+    "name": "openclaw",
+    "version": "2026.9.4",
+    "registryIntegrity": "sha512-lTQpEEe1Xm3u2PCHaPEr+vP8paGk1vLdHuzdItsNToaLI6hAqRVvgJYg+GxukJhETJp4tPy/S1Gftl4KuB8n7A==",
+    "install": "temporary npm prefix; --ignore-scripts; no global install"
+  },
+  "runtime": {
+    "node": "26.7.0",
+    "cliSha256": "97464647c50a1420d530db948cb203826306ef6b3a84810b6801c338366cecaf",
+    "workspaceLoader": "loadWorkspaceBootstrapFiles",
+    "workspaceLoaderModuleSha256": "8201a6b4ee921ac2767e272924488ed7c56c9041d274070490a064968438d5cf"
+  },
+  "probe": "docs/evidence/native-adapters/profile-loading-probe.sh",
+  "isolation": "Darwin sandbox-exec denies writes outside its unique temporary root; runtime processes use env -i with explicit PATH/HOME/TMPDIR/XDG values and bounded process-group timeouts.",
+  "nativeLoading": "component-only",
+  "componentDiscovery": "verified",
+  "cliRoster": "unverified: final probe skips CLI because its pinned state-lock path is hardcoded to /tmp outside the strict temp-root sandbox",
+  "runtimeEnforcement": "not-tested",
+  "modelExecution": "not-run",
+  "canonicalCompleteness": "draft-incomplete",
+  "nativeInputFiles": {
+    "openclaw.json": "0036a40030914877773c6bb33c5f4ddbf5a7a919cc2952f30b2a087bbacc1142",
+    "AGENTS.md": "046491be31a5fd059087ba52d0603341903994e69eb96edbb51fb750a1486aba"
+  },
+  "renderedFiles": {
+    ".openclaw/openclaw.json": "6980c7306d8b43d7468fc22b694bc230020823ca7ce58639863fcb71aed307b2",
+    ".openclaw/workspace/AGENTS.md": "046491be31a5fd059087ba52d0603341903994e69eb96edbb51fb750a1486aba"
+  },
+  "stateLockSource": {
+    "module": "dist/state-database-coordinator-DBce2evc.mjs",
+    "sha256": "3b7b53c74e12d9ce3a45c18c0a868e9eb07201d23a7a6e11782c7235bfb7a460",
+    "resolution": "resolveStateLifecycleRuntimeDirectory returns /tmp on non-Windows; TMPDIR and HOME do not affect it"
+  },
+  "results": {
+    "priorAgentsListAttempt": "isolated CLI returned {ok:false,error:{type:cli_error,message:unable to open database file}} despite exit code 0; not accepted as discovery evidence",
+    "finalAgentsListProbe": "skipped after source inspection found hardcoded /tmp lock path; sandbox was not relaxed",
+    "workspaceLoader": "returned the rendered AGENTS.md bytes with the expected SHA256",
+    "missingWorkspaceControl": "reported AGENTS.md as missing",
+    "malformedConfigControl": "agents list exited 1 with a parse diagnostic"
+  },
+  "limitations": [
+    "Evidence covers one packaged version and isolated-home scope only.",
+    "No tools, commands, channels, plugins, credentials, or models were run.",
+    "Full CLI roster discovery, runtime permission enforcement, and canonical readiness remain unverified.",
+    "OpenClaw validates its complete configuration schema; preserved unknown keys may still be rejected by the host."
+  ],
+  "followup": "Linux container CLI discovery is separately verified in openclaw-container-2026.9.4.json; this file retains the narrower Darwin observation.",
+  "priorAttemptAudit": {
+    "sharedLockNamespace": "<SYSTEM_TMP>/openclaw-state-locks-<UID>",
+    "observation": "Earlier CLI attempts used the shared native lock namespace before strict write confinement was added. Individual lock-file ownership cannot be established from the available baseline; shared files were not removed or changed during cleanup. Final CLI verification uses container-private /tmp."
+  }
+}

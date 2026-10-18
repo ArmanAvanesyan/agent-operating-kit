@@ -35,7 +35,7 @@ func TestAllNativeAdaptersConformToEngineBoundaries(t *testing.T) {
 			readNative(t, "hermes/testdata/SOUL.md", "SOUL.md", "markdown"),
 			readNative(t, "hermes/testdata/profile.yaml", "profile.yaml", "yaml"),
 		}},
-		{name: "openclaw", target: "openclaw", scope: "isolated-home", hostStatus: "unavailable", adapter: openclaw.New(), files: []nativeadapter.File{
+		{name: "openclaw", target: "openclaw", scope: "isolated-home", hostStatus: "verified", adapter: openclaw.New(), files: []nativeadapter.File{
 			{Path: ".openclaw/openclaw.json", Format: "json", Data: []byte(`{"agents":{"entries":{"main":{"identity":{"name":"Main"},"model":"openai/gpt-5.4-mini"}}}}`)},
 			{Path: ".openclaw/workspace/AGENTS.md", Format: "markdown", Data: []byte("Synthetic isolated-home instruction content.\n")},
 		}},

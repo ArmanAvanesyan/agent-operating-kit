@@ -9,13 +9,13 @@ CLI discovery, invocation and runtime enforcement are separate observations.
 | Codex 0.162.1 | Both installed tool protocols inspected through a loopback-only HTTP sink; no generated role identity exposed | Open; parser acceptance only |
 | Cursor 2026.04.17 | Shipped loader component discovers generated file; absent/malformed controls discover none; scalar/control/blank-prompt incompatibilities fixed | Open; full CLI discovery/selection not established |
 | Gemini CLI 0.61.0 | Actual guarded TUI discovers generated name/description before auth; empty-project control does not | Verified for project discovery only |
-| OpenClaw | Further isolated CLI validation is required; environment-only success is insufficient | Open |
-| Hermes Agent | Full CLI/profile sufficiency requires separate proof | Open |
+| OpenClaw 2026.9.4 | Actual Linux CLI roster loads id/model; absent/malformed controls and exact workspace/missing-file loader controls pass | Verified for Linux isolated-home loading only; Darwin CLI unverified |
+| Hermes Agent | Installed source components load model, metadata and SOUL; malformed config falls back with a recorded parse failure | Open; full CLI/profile sufficiency and source-to-CLI equivalence unverified |
 | agy | Copied 1.4.2 executable returns the same empty listing for positive/empty controls | Open |
 
 The implemented adapter commands still produce incomplete draft candidates and
 report runtime enforcement as unverified. No inference or authentication was
-performed. Five of the six original loading gates remain open at this checkpoint.
+performed. Four of the six original loading gates remain open at this checkpoint.
 
 ## Evidence and reproduction
 
@@ -25,6 +25,9 @@ performed. Five of the six original loading gates remain open at this checkpoint
 - [Gemini component and actual CLI discovery](gemini-cli-0.61.0.json),
   [no-input TUI reproduction](../../../scripts/native-loading/probe-gemini-cli-discovery.sh),
   and [adapter limits](../../../internal/nativeadapters/gemini/README.md).
+- [OpenClaw Linux CLI/container evidence](openclaw-container-2026.9.4.json),
+  [Darwin component result and shared-lock audit](openclaw-2026.9.4.json),
+  and [Hermes component/bootstrap audit](hermes-profile-loader.json).
 - [agy copied-executable results and restoration audit](agy-1.4.2.json).
 - [Native-probe confinement instructions](../../../scripts/native-loading/README.md).
 
@@ -53,3 +56,17 @@ was not invoked again. The 1.4.2 evidence remains historical and does not claim
 Evidence contains synthetic fixtures, hashes and sanitized results only. Raw
 terminal/npm logs and unrelated process arguments are excluded. Repository changes
 are limited to the native adapters, verification tooling and associated evidence.
+
+PR [65](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/65) was cleared
+by independent Luna review at `24983d3bcf65c9bab1063a36bea83f4e500248bb` and
+passed all eight CI checks before squash merge.
+
+The earlier Hermes launcher attempt entered dependency preparation and was
+stopped. Source/install/cache auditing found one recent ignored bytecode file
+with no reliable pre-attempt baseline; it was left untouched and its hash is
+recorded. Earlier OpenClaw CLI attempts used the shared host lock namespace;
+individual lock-file ownership could not be established, so shared files were
+not removed or changed during cleanup. Final OpenClaw CLI verification uses
+private container `/tmp`, read-only packages/root and no network or host mounts.
+The task-owned update quarantines were removed after rechecking the restored
+agy hash and absence of the task-created global Gemini launcher.

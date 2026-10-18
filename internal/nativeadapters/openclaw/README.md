@@ -39,13 +39,37 @@ Sources checked for this mapping:
 - [Per-agent entries and routing](https://docs.openclaw.ai/gateway/config-agents/entries-and-multi-agent)
 - [Agent workspace](https://docs.openclaw.ai/agent-workspace)
 
-The host is not installed in the development environment. Accordingly,
-`Descriptor().HostLoading.Status` is `unavailable`; no host compatibility or
-runtime enforcement is inferred from the source-defined schema. Syntax and
-projection inspection only establish that the supplied bytes are understood;
-they do not establish that OpenClaw loads or enforces them. The native engine
-keeps imported/exported bundles blocked as incomplete drafts, and required
-unsupported controls block inspection/export. Permission,
-purpose, capability, tool, routing, and runtime controls are unsupported by
-this mapping. The separate host readiness gate must remain blocked until
-OpenClaw is available and a bounded loading probe is recorded.
+OpenClaw 2026.9.4 was installed in a disposable prefix with lifecycle scripts
+disabled. Its packaged `loadWorkspaceBootstrapFiles` loader returned the
+rendered `AGENTS.md` bytes while reporting a missing file in a separate
+negative control. An isolated CLI roster attempt returned
+`{"ok":false,"error":{"type":"cli_error","message":"unable to open database file"}}`
+despite exiting zero. Source inspection of the pinned state database coordinator
+found its non-Windows lifecycle lock directory hardcoded to `/tmp`, ignoring
+`TMPDIR`; the final Darwin probe therefore skips CLI roster execution under the strict
+temp-root write sandbox. This Darwin result is component-loading evidence only, recorded in
+`docs/evidence/native-adapters/openclaw-2026.9.4.json`.
+
+A separate Linux container verification completed the official pinned package's
+install lifecycle inside a disposable volume, then mounted the package read-only
+for unprivileged, network-disabled CLI runs with private `/tmp` and home tmpfs.
+No host files, credentials or Docker socket were mounted. `agents list --json`
+returned the generated agent's id/model, the absent control omitted it, malformed
+configuration failed with a parse diagnostic, and the native workspace loader
+returned the exact rendered instructions with a missing-file control. The
+version/digest/integrity and results are saved in
+[`openclaw-container-2026.9.4.json`](../../../docs/evidence/native-adapters/openclaw-container-2026.9.4.json).
+Reproduce with
+[`verify_openclaw_container.py`](../../../scripts/native-loading/verify_openclaw_container.py)
+using an explicit built AOK binary and the documented pinned Node image.
+The descriptor marks isolated-home loading verified for this Linux package.
+This does not establish Darwin CLI loading, agent invocation, runtime enforcement,
+or canonical readiness. The engine keeps imports/exports blocked as incomplete
+drafts, and required unsupported controls block inspection/export. Permission, purpose, capability, tool, routing, and
+runtime controls are unsupported by this mapping.
+
+OpenClaw validates its complete configuration schema. Preserved unknown fields
+must still be valid in the tested host version; for example, the host rejects
+unrecognized root keys even though the projection can retain them inertly.
+The committed host-load fixture uses the documented `update.checkOnStart`
+field for this preservation check.

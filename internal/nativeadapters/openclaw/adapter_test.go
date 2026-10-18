@@ -16,7 +16,7 @@ func TestNativeJSONCWorkspaceRoundTrip(t *testing.T) {
           "agents": { "entries": { "researcher": {
             "identity": { "name": "Researcher", "theme": "preserve this" },
             "model": "openai/gpt-5.4-mini", "tools": {"deny": ["exec"]}
-          } } }, "customTopLevel": {"keep":true}
+          } } }, "update": {"checkOnStart":false}
         }`)},
 		{Path: workspacePath, Format: "markdown", Data: []byte("# Instructions\n\nStay within the supplied task.\n")},
 	})
@@ -38,8 +38,8 @@ func TestNativeJSONCWorkspaceRoundTrip(t *testing.T) {
 	if _, ok := doc.Unknown["entry.tools"]; !ok {
 		t.Fatal("unmapped tools config was not preserved")
 	}
-	if _, ok := doc.Unknown["config.customTopLevel"]; !ok {
-		t.Fatal("unknown top-level config was not preserved")
+	if _, ok := doc.Unknown["config.update"]; !ok {
+		t.Fatal("valid unmapped top-level config was not preserved")
 	}
 	files, _, err := adapter.Encode(scope, doc)
 	if err != nil {
@@ -61,7 +61,7 @@ func TestNativeJSONCWorkspaceRoundTrip(t *testing.T) {
 	if entry["model"] != "openai/gpt-5.4-mini" {
 		t.Fatalf("model=%v", entry["model"])
 	}
-	if got["customTopLevel"] == nil || entry["tools"] == nil || entry["identity"].(map[string]any)["theme"] != "preserve this" {
+	if got["update"] == nil || entry["tools"] == nil || entry["identity"].(map[string]any)["theme"] != "preserve this" {
 		t.Fatalf("unknown fields relocated: %#v", got)
 	}
 	round, _, err := adapter.Decode(scope, files)
@@ -79,7 +79,11 @@ func TestNativeJSONCWorkspaceRoundTrip(t *testing.T) {
 	}
 }
 
-func TestEngineRoundTripAndBlockedHostGate(t *testing.T) {
+func TestEngineRoundTripKeepsVerifiedHostAndDraftBlocked(t *testing.T) {
+	descriptor := New().Descriptor()
+	if descriptor.HostLoading.HostVersion != "2026.9.4 (Linux; Node 26.7.0)" || len(descriptor.HostLoading.Scopes) != 1 || descriptor.HostLoading.Scopes[0] != scope || len(descriptor.HostLoading.Evidence) == 0 {
+		t.Fatalf("native loading evidence must stay version/scope bound: %+v", descriptor.HostLoading)
+	}
 	registry := nativeadapter.NewRegistry()
 	if err := registry.Register(New()); err != nil {
 		t.Fatal(err)
@@ -90,18 +94,18 @@ func TestEngineRoundTripAndBlockedHostGate(t *testing.T) {
 		{Path: workspacePath, Format: "markdown", Data: []byte("Use the project context.\n")},
 	}
 	bundle, imported := engine.Import(target, scope, files, nil, nil)
-	if imported.Status != "blocked" {
-		t.Fatalf("unverified host must remain blocked, got %s", imported.Status)
+	if imported.Status != "blocked" || imported.HostLoading.Status != "verified" || imported.RuntimeEnforcement != "unverified" {
+		t.Fatalf("host loading or draft readiness was misreported: %+v", imported)
 	}
 	rendered, _, exported := engine.Export(target, scope, files, bundle, nil)
-	if exported.Status != "blocked" {
-		t.Fatalf("unverified host must remain blocked, got %s", exported.Status)
+	if exported.Status != "blocked" || exported.HostLoading.Status != "verified" || exported.RuntimeEnforcement != "unverified" {
+		t.Fatalf("host loading or draft readiness was misreported: %+v", exported)
 	}
 	if len(rendered) != 2 {
 		t.Fatalf("rendered files=%d", len(rendered))
 	}
 	inspected := engine.Inspect(target, scope, rendered, []nativeadapter.Control{{Path: "agent.permissions.filesystem.write", Required: true}})
-	if inspected.HostLoading.Status != "unavailable" {
+	if inspected.HostLoading.Status != "verified" {
 		t.Fatalf("host loading=%q", inspected.HostLoading.Status)
 	}
 	if inspected.Status != "blocked" {

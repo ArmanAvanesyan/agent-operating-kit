@@ -1,0 +1,57 @@
+{
+  "target": "hermes-agent",
+  "scope": "profile",
+  "hostVersion": "v0.21.6+canary.20261010T070026Z-249-gd4d2ab7b5d",
+  "sourceCommit": "d4d2ab7b5d104166e7e22a02cafd12f1fe456a31",
+  "observedAt": "2026-10-18",
+  "sourceToCliEquivalence": "not-established",
+  "probe": "docs/evidence/native-adapters/profile-loading-probe.sh",
+  "isolation": "Darwin sandbox-exec denies writes outside its unique temporary root; Hermes Python uses env -i, -B, PYTHONDONTWRITEBYTECODE, and a bounded process-group timeout.",
+  "nativeLoading": "component-only",
+  "componentDiscovery": "verified",
+  "cliProfileListing": "not-run; launcher invokes dependency preparation",
+  "runtimeEnforcement": "not-tested",
+  "modelExecution": "not-run",
+  "canonicalCompleteness": "draft-incomplete",
+  "priorLauncherAttemptAudit": {
+    "attempt": "A direct `hermes profile list` invocation reached dependency-preparation output and was stopped; the launcher was not invoked again.",
+    "isolatedHermesHome": "<TEMP_ROOT>",
+    "sourceCheckoutGitStatus": "clean",
+    "recentSourceFilesObserved": [
+      {
+        "path": "hermes_cli/__pycache__/profile_distribution.cpython-314.pyc",
+        "observedMtime": "2026-10-18T04:43:04+0400",
+        "sha256": "de1f55adddce174d2a855135df6ae9c3a30d865e2e54952de4b6f0a132d1f8fa",
+        "provenance": "outside source control; cannot establish pre-attempt baseline"
+      }
+    ],
+    "sourceVenvDirectoriesObserved": [],
+    "recentHermesInstallFilesObserved": [],
+    "recentUVCacheFilesObserved": [],
+    "auditScope": "Hermes source checkout, Hermes install tree, and standard user uv cache locations; no recent package or environment writes observed outside the bytecode path above."
+  },
+  "loaderSourceSHA256": {
+    "hermes_cli/config.py": "a469923872fc1e4d905089bb4cc4af5c8cc4104f9f72a159656205c07cdb80ef",
+    "hermes_cli/profiles.py": "9f05944c6f85d16f10024562b9fcc4efc13c69b7b97eed69fb2e7e01094ef83f",
+    "agent/prompt_builder.py": "563cd638e76308b216cc1a7ff4313f5b0df6d7b83f9b4c92dd6cd0cdadec847c"
+  },
+  "renderedFiles": {
+    "config.yaml": "7f66bd42dcb35f9b56f56b6637c4556c9cd40a27696b1f70640624a122c0c718",
+    "profile.yaml": "decde473df2941d0e41dce59f307374dbaf4e6db4e54de8c7053928a601957f7",
+    "SOUL.md": "8e7b0931b9ef2a99d4860b4a7a5ca6d1ffa0311615209e926ddc3be1ebbcff4f"
+  },
+  "results": {
+    "configLoader": "loaded model.default anthropic/claude-sonnet-4",
+    "profileMetadataReader": "loaded description Focused software engineering assistant.",
+    "soulPromptLoader": "loaded SOUL.md; stripped prompt SHA256 caf511604e929596df1f13e2e89a976900b99ca8b998b955546925bf3419f4b6",
+    "missingProfileControl": "returned no SOUL content and empty description",
+    "malformedConfigControl": "recorded active parse failure and returned fallback config with empty model.default"
+  },
+  "limitations": [
+    "Direct installed source component loaders only; full CLI discovery and profile selection remain unverified.",
+    "The Hermes launcher was not used because it began dependency preparation even with an existing environment; that process was stopped.",
+    "The direct component probe uses an isolated temporary home and disables Python bytecode writes. The earlier stopped launcher attempt left one recent ignored bytecode file in the installed source tree; its pre-attempt state is unknown.",
+    "Malformed config is recorded with fallback behavior, not rejected by the component loader.",
+    "Hermes profiles can depend on auth, skills, MCP, and other runtime state outside this bounded inventory."
+  ]
+}

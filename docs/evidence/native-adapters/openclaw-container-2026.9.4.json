@@ -1,0 +1,78 @@
+{
+  "target": "openclaw",
+  "scope": "isolated-home",
+  "observedAt": "2026-10-18T01:21:01.801217+00:00",
+  "platform": "Linux container",
+  "image": "node@sha256:4db36457f406501e6f608802e5da617e5fbd0e80b75901b6a09de1ae5a667d32",
+  "package": {
+    "version": "2026.9.4",
+    "integrity": "sha512-lTQpEEe1Xm3u2PCHaPEr+vP8paGk1vLdHuzdItsNToaLI6hAqRVvgJYg+GxukJhETJp4tPy/S1Gftl4KuB8n7A==",
+    "node": "v26.7.0"
+  },
+  "aokBinarySHA256": "b900b90e5823be0ad7e40b5cb60dc821e9e4d20e8cddb6cf079bcad5b773de65",
+  "installation": "Pinned official npm package with its lifecycle scripts enabled inside the disposable install container; only its owned volume and /tmp writable; no host mounts",
+  "nativeLoading": "verified",
+  "cliRoster": "verified",
+  "runtimeEnforcement": "unverified",
+  "modelExecution": "not-run",
+  "isolation": "Unprivileged runtime containers; network none; read-only root/package; tmpfs /probe and /tmp; no host mounts or credentials",
+  "renderedFiles": {
+    ".openclaw/openclaw.json": "0949d2a3ea9b539c5513a4531559629a6d0d9c79ae16134b7aa1b4558f51fd36",
+    ".openclaw/workspace/AGENTS.md": "ab219bbcacc75c377ab7189166ac7e3d9220fcedd03e9d3cf2ec9c197288e0cd"
+  },
+  "observations": {
+    "positive": {
+      "exitCode": 0,
+      "result": [
+        {
+          "id": "probe",
+          "identityName": "Probe",
+          "identitySource": "config",
+          "workspace": "/probe/home/.openclaw/workspace",
+          "agentDir": "/probe/home/.openclaw/agents/probe/agent",
+          "model": "openai/gpt-6-luna",
+          "bindings": 0,
+          "isDefault": true
+        }
+      ]
+    },
+    "absent": {
+      "exitCode": 0,
+      "result": [
+        {
+          "id": "main",
+          "workspace": "/probe/home/.openclaw/workspace",
+          "agentDir": "/probe/home/.openclaw/agents/main/agent",
+          "bindings": 0,
+          "isDefault": true
+        }
+      ]
+    },
+    "malformed": {
+      "exitCode": 1,
+      "result": {
+        "stderr": "OpenClaw config is invalid: /probe/home/.openclaw/openclaw.json\n- <root>: JSON5 parse failed: SyntaxError: JSON5: invalid end of input at 1:11\nFix: openclaw doctor --fix\nInspect: openclaw config validate"
+      }
+    },
+    "workspace": {
+      "exitCode": 0,
+      "result": {
+        "loaded": true,
+        "contentSHA256": "ab219bbcacc75c377ab7189166ac7e3d9220fcedd03e9d3cf2ec9c197288e0cd",
+        "missingReported": true,
+        "moduleSHA256": "8201a6b4ee921ac2767e272924488ed7c56c9041d274070490a064968438d5cf"
+      }
+    }
+  },
+  "limitations": [
+    "Version/scope/fixture-bound CLI discovery only; no inference or permission enforcement tested.",
+    "OpenClaw hardcodes /tmp coordination locks; they remain inside each container's private tmpfs namespace."
+  ],
+  "probe": "scripts/native-loading/verify_openclaw_container.py",
+  "sources": [
+    "https://registry.npmjs.org/openclaw/2026.9.4",
+    "https://docs.openclaw.ai/agent-workspace",
+    "https://docs.openclaw.ai/gateway/config-agents/entries-and-multi-agent"
+  ],
+  "probeSHA256": "78778516a9282d77f3c8d0f42739a8ff7c0684ccfd5495b9119ad975acc7a1fc"
+}

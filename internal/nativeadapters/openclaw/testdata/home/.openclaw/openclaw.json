@@ -1,1 +1,1 @@
-{"agents":{"entries":{"probe":{"identity":{"name":"Probe","theme":"retained"},"model":"openai/gpt-6-luna","tools":{"deny":["exec"]}}}},"custom.setting":true}
+{"agents":{"entries":{"probe":{"identity":{"name":"Probe","theme":"retained"},"model":"openai/gpt-6-luna","tools":{"deny":["exec"]}}}},"update":{"checkOnStart":false}}

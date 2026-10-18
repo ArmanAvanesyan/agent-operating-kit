@@ -1,5 +1,5 @@
 {
-  "aokBinarySHA256": "ac68e063216d6cc5c29d2f42b5b6eab9ef1fe275d9503ceaf2c74fc8e492f17a",
+  "aokBinarySHA256": "bf8d45e34f5ee213209d92b1ffc27cadc28073d499c9940fe99bab82799cf228",
   "aokExportStatus": "blocked",
   "aokImportStatus": "blocked",
   "cases": {
@@ -30,7 +30,7 @@
         "configWarning"
       ],
       "warningSummaries": [
-        "{\"emittedAtMs\": 1792289070535, \"method\": \"configWarning\", \"params\": {\"details\": \"Error parsing project config file <PROBE_ROOT>/malformed-config/.codex/config.toml: TOML parse error at line 1, column 18\\n  |\\n1 | [agents.aok-probe\\n  |                  ^\\nunclosed table, expected `]`\\n\", \"summary\": \"Invalid configuration; using defaults.\"}}"
+        "{\"emittedAtMs\": 1792289430498, \"method\": \"configWarning\", \"params\": {\"details\": \"Error parsing project config file <PROBE_ROOT>/malformed-config/.codex/config.toml: TOML parse error at line 1, column 18\\n  |\\n1 | [agents.aok-probe\\n  |                  ^\\nunclosed table, expected `]`\\n\", \"summary\": \"Invalid configuration; using defaults.\"}}"
       ]
     },
     "malformedRole": {
@@ -57,8 +57,8 @@
         "configWarning"
       ],
       "warningSummaries": [
-        "{\"emittedAtMs\": 1792289070713, \"method\": \"configWarning\", \"params\": {\"details\": null, \"summary\": \"Ignoring malformed agent role definition: failed to parse agent role file at <PROBE_ROOT>/malformed-role/.codex/agents/aok-probe.toml: TOML parse error at line 1, column 9\\n  |\\n1 | name = [\\n  |         ^\\nunclosed array, expected `]`\\n\"}}",
-        "{\"emittedAtMs\": 1792289070714, \"method\": \"configWarning\", \"params\": {\"details\": null, \"summary\": \"Ignoring malformed agent role definition: failed to parse agent role file at <PROBE_ROOT>/malformed-role/.codex/agents/aok-probe.toml: TOML parse error at line 1, column 9\\n  |\\n1 | name = [\\n  |         ^\\nunclosed array, expected `]`\\n\"}}"
+        "{\"emittedAtMs\": 1792289430737, \"method\": \"configWarning\", \"params\": {\"details\": null, \"summary\": \"Ignoring malformed agent role definition: failed to parse agent role file at <PROBE_ROOT>/malformed-role/.codex/agents/aok-probe.toml: TOML parse error at line 1, column 9\\n  |\\n1 | name = [\\n  |         ^\\nunclosed array, expected `]`\\n\"}}",
+        "{\"emittedAtMs\": 1792289430737, \"method\": \"configWarning\", \"params\": {\"details\": null, \"summary\": \"Ignoring malformed agent role definition: failed to parse agent role file at <PROBE_ROOT>/malformed-role/.codex/agents/aok-probe.toml: TOML parse error at line 1, column 9\\n  |\\n1 | name = [\\n  |         ^\\nunclosed array, expected `]`\\n\"}}"
       ]
     },
     "missingRole": {
@@ -85,7 +85,7 @@
         "configWarning"
       ],
       "warningSummaries": [
-        "{\"emittedAtMs\": 1792289071199, \"method\": \"configWarning\", \"params\": {\"details\": null, \"summary\": \"Ignoring malformed agent role definition: agents.aok-probe.config_file must point to an existing file at <PROBE_ROOT>/missing-role/.codex/agents/missing.toml: No such file or directory (os error 2)\"}}"
+        "{\"emittedAtMs\": 1792289431443, \"method\": \"configWarning\", \"params\": {\"details\": null, \"summary\": \"Ignoring malformed agent role definition: agents.aok-probe.config_file must point to an existing file at <PROBE_ROOT>/missing-role/.codex/agents/missing.toml: No such file or directory (os error 2)\"}}"
       ]
     },
     "positive": {
@@ -120,17 +120,17 @@
   "hostVersion": "codex-cli 0.162.1",
   "modelExecution": "not-run",
   "nativeLoading": "verified for project-registered config discovery and selected role startup validation",
-  "observedAt": "2026-10-18T02:04:31.508482+00:00",
+  "observedAt": "2026-10-18T02:10:31.917464+00:00",
   "probeScript": "scripts/native-loading/verify_codex_project_registered.py",
-  "probeScriptSHA256": "bfb6c763001176131975853456118b05156ef50654d2cdf99deee653d447f271",
+  "probeScriptSHA256": "e3a677131850a6377c2ec0057c854c1919a31a8f60fe76842386f1e0b1a80292",
   "runtimeEnforcement": "unverified",
   "safety": {
     "authentication": "none",
+    "credentials": "isolated CODEX_HOME selects file-based storage; credential variables are not inherited",
     "environment": "allow-list; no credential variables",
     "homeAndProject": "disposable temporary root",
     "hostNetwork": "sandbox-exec denied network*",
     "inference": "none",
-    "keychain": "sandbox-exec denied mach-lookup to com.apple.securityd",
     "requests": [
       "app-server initialize",
       "config/read",

@@ -28,6 +28,20 @@ const (
 
 var canonicalID = regexp.MustCompile(`^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$`)
 
+// These names are project-level [agents] settings in Codex, not role names.
+// They must remain preserved as root configuration values and cannot be
+// selected or emitted as an AOK registered role.
+var reservedAgentSettings = map[string]struct{}{
+	"enabled":                            {},
+	"default_subagent_model":             {},
+	"default_subagent_reasoning_effort":  {},
+	"interrupt_message":                  {},
+	"job_max_runtime_seconds":            {},
+	"max_concurrent_threads_per_session": {},
+	"max_depth":                          {},
+	"max_threads":                        {},
+}
+
 type Adapter struct{}
 
 func New() nativeadapter.Adapter { return Adapter{} }
@@ -261,6 +275,9 @@ func decodeRegistered(files []nativeadapter.File) (nativeadapter.Document, []con
 		return nativeadapter.Document{}, nil, err
 	}
 	name, _ := rawString(role.Fields["agent.metadata.id"])
+	if isReservedAgentSetting(name) {
+		return nativeadapter.Document{}, nil, fmt.Errorf("Codex agent name %q is a reserved [agents] project setting", name)
+	}
 	filename := strings.TrimSuffix(path.Base(roleFile.Path), ".toml")
 	if name != filename {
 		return nativeadapter.Document{}, nil, errors.New("registered Codex role name must match its filename")
@@ -311,7 +328,13 @@ func decodeRegistered(files []nativeadapter.File) (nativeadapter.Document, []con
 		if !ok {
 			continue
 		}
+		if strings.EqualFold(sibling, name) {
+			return nativeadapter.Document{}, nil, fmt.Errorf("sibling Codex role %q collides with selected role %q after case folding", sibling, name)
+		}
 		if ref, ok := entry["config_file"].(string); ok && ref != "" {
+			if registrationPathAlias(ref, wantRef) {
+				return nativeadapter.Document{}, nil, fmt.Errorf("sibling Codex role %q config_file aliases selected role path %q", sibling, wantRef)
+			}
 			diagnostics = append(diagnostics, diag("codex.sibling-registration.uninspected", projectConfig, "agents."+sibling+".config_file", "warning", "sibling role registration is preserved but its referenced file is outside this explicit inventory and was not opened"))
 		}
 	}
@@ -335,6 +358,9 @@ func encodeRegistered(doc nativeadapter.Document) ([]nativeadapter.File, []contr
 	name, err := requiredString(doc.Fields, "agent.metadata.id")
 	if err != nil {
 		return nil, nil, err
+	}
+	if isReservedAgentSetting(name) {
+		return nil, nil, fmt.Errorf("Codex agent name %q is a reserved [agents] project setting", name)
 	}
 	if len(name) > 128 || strings.ContainsAny(name, `/\\`) || name == "." || name == ".." || evidence.CheckPath(agentDir+name+".toml") != nil {
 		return nil, nil, errors.New("agent name is not a valid Codex filename")
@@ -379,8 +405,16 @@ func encodeRegistered(doc nativeadapter.Document) ([]nativeadapter.File, []contr
 		}
 		agents = map[string]any{}
 	}
-	if _, collision := agents[name]; collision {
-		return nil, nil, fmt.Errorf("registered Codex role %q collides with a preserved sibling; rename requires explicit sibling removal", name)
+	for sibling, value := range agents {
+		if strings.EqualFold(sibling, name) {
+			return nil, nil, fmt.Errorf("registered Codex role %q collides with preserved [agents] key %q after case folding", name, sibling)
+		}
+		entry, isRole := value.(map[string]any)
+		if isRole {
+			if ref, ok := entry["config_file"].(string); ok && registrationPathAlias(ref, "agents/"+name+".toml") {
+				return nil, nil, fmt.Errorf("preserved sibling %q config_file aliases selected output path", sibling)
+			}
+		}
 	}
 	description, err := requiredString(doc.Fields, "agent.identity.purpose")
 	if err != nil {
@@ -406,8 +440,20 @@ func encodeRegistered(doc nativeadapter.Document) ([]nativeadapter.File, []contr
 	}, diagnostics, nil
 }
 
+func isReservedAgentSetting(name string) bool {
+	_, reserved := reservedAgentSettings[name]
+	return reserved
+}
+
 func safeRegistrationPath(s string) bool {
 	return s != "" && !strings.ContainsAny(s, "\\:\x00") && !strings.HasPrefix(s, "/") && path.Clean(s) == s && !strings.HasPrefix(s, "../")
+}
+
+func registrationPathAlias(left, right string) bool {
+	key := func(s string) string {
+		return strings.ToLower(path.Clean(strings.ReplaceAll(s, "\\", "/")))
+	}
+	return key(left) == key(right)
 }
 
 func cloneRawMap(in map[string]json.RawMessage) map[string]json.RawMessage {

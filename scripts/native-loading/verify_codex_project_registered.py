@@ -29,7 +29,7 @@ def run(command, *, root, cwd, env, timeout=30):
     cwd = Path(cwd).resolve(strict=True)
     if cwd != root and root not in cwd.parents:
         raise ValueError("probe working directory escaped its temporary root")
-    profile = ('(version 1)(allow default)(deny network*)(deny mach-lookup (global-name "com.apple.securityd"))' +
+    profile = ('(version 1)(allow default)(deny network*)' +
                '(deny file-write*)(allow file-write* (subpath ' + json.dumps(str(root)) +
                ') (literal "/dev/null") (literal "/dev/tty"))')
     proc = subprocess.Popen(['/usr/bin/sandbox-exec', '-p', profile, *map(str, command)],
@@ -112,7 +112,8 @@ def host_case(codex, root, project, *, role_bytes, config_bytes, case):
     codex_home = home / '.codex'
     home.mkdir(parents=True)
     codex_home.mkdir(parents=True)
-    trust = (f'[projects.{json.dumps(str(project.resolve()))}]\n'
+    trust = ('cli_auth_credentials_store = "file"\n' +
+             f'[projects.{json.dumps(str(project.resolve()))}]\n'
              'trust_level = "trusted"\n').encode()
     (codex_home / 'config.toml').write_bytes(trust)
     for p in (home / '.cache', home / '.config', root / 'tmp'):
@@ -121,7 +122,7 @@ def host_case(codex, root, project, *, role_bytes, config_bytes, case):
            'XDG_CONFIG_HOME': str(home / '.config'), 'XDG_CACHE_HOME': str(home / '.cache'),
            'TMPDIR': str(root / 'tmp')}
     proc = subprocess.Popen(['/usr/bin/sandbox-exec', '-p',
-        '(version 1)(allow default)(deny network*)(deny mach-lookup (global-name "com.apple.securityd"))(deny file-write*)(allow file-write* (subpath ' +
+        '(version 1)(allow default)(deny network*)(deny file-write*)(allow file-write* (subpath ' +
         json.dumps(str(root)) + ') (literal "/dev/null") (literal "/dev/tty"))',
         str(codex), 'app-server', '--listen', 'stdio://'], cwd=project, env=env,
         stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -249,7 +250,7 @@ def main():
             'exportedConfig':config_bytes.decode(),'cases':cases,
             'safety':{'homeAndProject':'disposable temporary root','environment':'allow-list; no credential variables',
                       'hostNetwork':'sandbox-exec denied network*','writes':'sandbox-exec denied writes outside temporary root',
-                      'keychain':'sandbox-exec denied mach-lookup to com.apple.securityd',
+                      'credentials':'isolated CODEX_HOME selects file-based storage; credential variables are not inherited',
                       'requests':['app-server initialize','config/read','ephemeral read-only thread/start'],
                       'turns':'none','inference':'none','authentication':'none'},
         }

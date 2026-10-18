@@ -128,3 +128,10 @@ compatibility and runtime enforcement remain unverified. No turn, authentication
 or inference request is sent. Import/export results remain blocked incomplete
 drafts, and unknown native settings are preserved without execution or a claim
 that their wider dependencies are satisfied.
+
+During review fixes, two additional copied-host `--version` checks reached their
+10-second timeout while an extra security-service Mach denial was present; the
+owned process groups were terminated. The final successful probe uses explicit
+file-based credential storage in an empty isolated `CODEX_HOME`, no inherited
+credential variables, denied network access and temporary-root write confinement.
+The cause of the earlier startup timeouts was not established.

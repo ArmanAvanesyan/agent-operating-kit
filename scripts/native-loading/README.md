@@ -110,7 +110,8 @@ The host receives only initialize, config/read and ephemeral read-only
 thread/start requests. No turn is sent. Disposable trusted projects and isolated
 `CODEX_HOME` directories distinguish the positive, absent-registration,
 malformed-config, malformed-role and missing-role cases. Network access,
-keychain service lookup and writes outside the temporary root are denied.
+writes outside the temporary root are denied. Credential storage is explicitly
+set to `file` under the isolated `CODEX_HOME`, with no credentials supplied.
 Requests have bounded reads and owned process groups are terminated on exit.
 This establishes referenced-role loading only; invocation, model compatibility
 and runtime enforcement remain unverified.

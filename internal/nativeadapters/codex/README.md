@@ -13,7 +13,10 @@ be exactly `agents/<name>.toml` relative to `.codex/config.toml`. The adapter
 does not resolve paths, access the filesystem, or open any other configured
 role. Absolute paths, traversal, backslashes, mismatched filenames, missing
 files from the explicit inventory, and selected description mismatches are
-rejected.
+rejected. Names reserved by Codex's `[agents]` settings (including `enabled`,
+`max_depth`, `max_threads`, and the default-subagent, interruption,
+concurrency, and runtime settings) are rejected as role identities in this
+scope.
 
 The selected `description` maps to `agent.identity.purpose`; the TOML role
 fields map as follows:
@@ -31,7 +34,14 @@ registered scope, unrelated root settings and sibling registrations are
 preserved under `Unknown.codex.config`; extension keys on the selected
 registration are preserved under `Unknown.codex.registered.role.*`. Encoding
 reconstructs the selected registration from mapped fields and rejects a
-renamed role that collides with a preserved sibling. A warning identifies
+renamed role that collides with a preserved sibling, including case-folded
+names. Global scalar settings such as `agents.enabled`, `agents.max_depth`,
+`agents.max_threads`, and default-subagent settings remain root config values;
+they are never interpreted as role tables. A selected identity also cannot
+collide with a preserved scalar `[agents]` key, including unknown future
+settings. Sibling `config_file` values that
+lexically alias the selected output path after slash normalization, path
+cleaning, and case folding are rejected without opening those paths. A warning identifies
 unmapped project config settings. Sibling `config_file` references receive a
 separate warning and are never opened. Unknown native settings can affect host
 behavior beyond this adapter's mapping; their preservation is not validation
@@ -72,7 +82,8 @@ python3 -B scripts/native-loading/verify_codex_project_registered.py \
 The harness rebuilds a registered native export via `agent native import` and
 `agent native export`, runs both binaries with explicit environment allow-lists,
 and confines host writes to its temporary root while denying host network
-access and keychain IPC. It prints sanitized JSON evidence and removes its
+access. Its disposable `CODEX_HOME` uses file-based credential storage and
+inherits no credential variables. It prints sanitized JSON evidence and removes its
 temporary files on exit. The script source hash is stored in the evidence
 record.
 

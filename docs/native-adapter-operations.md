@@ -150,6 +150,8 @@ Use `--target codex --scope project-registered` with an inventory containing
 exactly `.codex/config.toml` and `.codex/agents/<name>.toml`. The selected
 `[agents.<name>]` registration must match the role file's name and description
 and use `config_file = "agents/<name>.toml"`, relative to `.codex/config.toml`.
+Reserved `[agents]` setting names and collisions with preserved sibling names
+or role-file references are rejected, including case-insensitive path aliases.
 Import, export and compare use the same commands above with that target/scope.
 Canonical export generates both files. The older `project` scope still handles
 one standalone role file and has no verified loading claim.

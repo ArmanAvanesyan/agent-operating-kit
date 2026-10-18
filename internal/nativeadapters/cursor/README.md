@@ -5,7 +5,7 @@ This adapter handles one explicitly supplied Markdown subagent under
 extensions included by the 2026.10.16 Cursor Agent workspace scanner, with
 case-insensitive extension matching as in the shipped scanner. It does
 not scan a project, run Cursor, or prove that Cursor
-loads a given file. `HostLoading` is `not-run` and the shared engine reports
+loads a given file. `HostLoading` is verified for bounded project command-picker discovery on the pinned 2026.10.16 CLI; the shared engine reports
 runtime enforcement as unverified.
 
 The mapping is intentionally limited:
@@ -204,3 +204,21 @@ alter the original store. For a separately authorized fresh browser OAuth flow,
 with `--isolated-login-root` instead. Remove that owned root after use. Evidence
 keeps exact executed sources, hashes and process identities. `HostLoading`
 remains `not-run` and runtime enforcement remains unverified.
+
+
+## Verified project command-picker discovery — 2026-10-18
+
+The [reviewed gate decision](../../../docs/evidence/native-adapters/cursor-project-discovery-decision-2026-10-18.json)
+binds the [native TUI observation](../../../docs/evidence/native-adapters/cursor-command-picker-2026-10-18.json)
+and its executed source. The full adapter-exported description appears in the
+positive project's current command-picker screen and is absent from both the
+missing-file and same-frontmatter/blank-body controls. Every case authenticated
+against the backend, searched `/reviewer`, and sent no Enter. The echoed name is
+not discovery evidence; the older literal menu-marker string did not match.
+
+This supersedes earlier `not-run` discovery conclusions for the exact pinned
+2026.10.16-e3cb207 package and project scope. It establishes discovery/registration,
+not selected-agent startup, prompt-body use, model selection, inference or runtime
+policy enforcement. Networking was allowed; an immutable PATH shim refused named
+Git retrieval verbs. This is a qualified isolated loading result, not a global
+network restriction or a default-environment startup claim.

@@ -6,6 +6,8 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
+from datetime import datetime, timedelta, timezone
+import uuid
 from types import SimpleNamespace
 import unittest
 from unittest import mock
@@ -27,6 +29,88 @@ class AgyMacOSInteractiveTests(unittest.TestCase):
         self.assertIn("(deny mach-lookup)", profile)
         self.assertIn('global-name "com.apple.securityd"', profile)
         self.assertNotIn("deny network", profile)
+
+    def _make_prompt_ready_profile(self, parent, *, expires_delta=timedelta(minutes=10),
+                                   valid=True, ready=True):
+        parent = Path(parent).resolve()
+        profile = parent / f"login-profile-{uuid.uuid4()}"
+        profile.mkdir(mode=0o700)
+        home = profile / "home"
+        home.mkdir(mode=0o700)
+        config = home / ".config"
+        config.mkdir(mode=0o700)
+        (config / "profile.json").write_text('{"example":"private"}')
+        (config / "profile.json").chmod(0o600)
+        created = datetime.now(timezone.utc) - timedelta(minutes=1)
+        marker = {
+            "kind": "aok-agy-native-login/v1",
+            "id": str(uuid.uuid4()),
+            "createdAt": created.isoformat().replace("+00:00", "Z"),
+            "expiresAt": (created + expires_delta).isoformat().replace("+00:00", "Z"),
+            "valid": valid,
+            "readyPromptObserved": ready,
+            "backendAuthentication": "not-independently-verified",
+        }
+        marker_path = profile / "owned-session.json"
+        marker_path.write_text(json.dumps(marker))
+        marker_path.chmod(0o600)
+        return profile, marker
+
+    def test_isolated_login_profile_marker_and_copy_are_private_and_bounded(self):
+        with tempfile.TemporaryDirectory() as temp:
+            parent = Path(temp)
+            source, _ = self._make_prompt_ready_profile(parent)
+            destination = parent / "manager-home"
+            with mock.patch.object(probe, "PRIVATE_TEMP_ROOT", parent):
+                validated = probe.validate_isolated_login_root(source)
+                copied = probe.copy_isolated_login_home(source, destination)
+            self.assertEqual(validated["home"], source / "home")
+            self.assertEqual(copied, {"filesCopied": 1, "bytesCopied": len('{"example":"private"}')})
+            self.assertEqual((destination / ".config/profile.json").read_text(), '{"example":"private"}')
+            self.assertEqual((destination / ".config/profile.json").stat().st_mode & 0o777, 0o600)
+            self.assertEqual((destination / ".config").stat().st_mode & 0o777, 0o700)
+
+    def test_isolated_profile_rejects_invalid_marker_and_expired_profile(self):
+        with tempfile.TemporaryDirectory() as temp:
+            parent = Path(temp)
+            profile, _ = self._make_prompt_ready_profile(parent, valid=False)
+            with mock.patch.object(probe, "PRIVATE_TEMP_ROOT", parent):
+                with self.assertRaisesRegex(ValueError, "not currently prompt-ready"):
+                    probe.validate_isolated_login_root(profile)
+                profile2, marker2 = self._make_prompt_ready_profile(parent, expires_delta=timedelta(seconds=10))
+                marker2["createdAt"] = (datetime.now(timezone.utc) - timedelta(minutes=20)).isoformat().replace("+00:00", "Z")
+                marker2["expiresAt"] = (datetime.now(timezone.utc) - timedelta(minutes=19)).isoformat().replace("+00:00", "Z")
+                (profile2 / "owned-session.json").write_text(json.dumps(marker2))
+                (profile2 / "owned-session.json").chmod(0o600)
+                with self.assertRaisesRegex(ValueError, "not currently prompt-ready"):
+                    probe.validate_isolated_login_root(profile2)
+
+    def test_isolated_profile_copy_rejects_symlinks_and_hardlinks(self):
+        with tempfile.TemporaryDirectory() as temp:
+            parent = Path(temp)
+            source, _ = self._make_prompt_ready_profile(parent)
+            extra = source / "home/.config/linked"
+            extra.symlink_to(source / "home/.config/profile.json")
+            with mock.patch.object(probe, "PRIVATE_TEMP_ROOT", parent):
+                with self.assertRaisesRegex(ValueError, "unsupported file entry"):
+                    probe.copy_isolated_login_home(source, parent / "dest-symlink")
+            extra.unlink()
+            os.link(source / "home/.config/profile.json", source / "home/.config/hardlink")
+            with mock.patch.object(probe, "PRIVATE_TEMP_ROOT", parent):
+                with self.assertRaisesRegex(ValueError, "unsupported file entry"):
+                    probe.copy_isolated_login_home(source, parent / "dest-hardlink")
+
+    def test_isolated_profile_sandbox_denies_keychain_and_source_profile(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "manager"
+            source = Path(temp) / "login"
+            root.mkdir()
+            source.mkdir()
+            profile = probe.sbpl_isolated_profile(root, source)
+        self.assertIn('(deny mach-lookup (global-name \"com.apple.securityd\"))', profile)
+        self.assertNotIn('(allow mach-lookup', profile)
+        self.assertIn(f'(deny file-read* (subpath {json.dumps(str(source.resolve()))}))', profile)
+        self.assertIn('(deny file-write*)', profile)
 
     def test_candidate_requires_manager_identity_and_all_controls(self):
         pos = {"commandSent": True, "managerSectionObserved": True, "nameObserved": True,
@@ -50,6 +134,19 @@ class AgyMacOSInteractiveTests(unittest.TestCase):
         self.assertTrue(state["authBarrierObserved"])
         self.assertFalse(state["localPromptObserved"])
         self.assertFalse(probe.qualifies_positive({**state, "commandSent": False}))
+
+    def test_ambiguous_terminal_stream_cannot_authorize_manager_command(self):
+        state = probe.state_from_bytes(b"Ask anything\r\n" + "❯ ".encode() + b"\x1b[?1047h")
+        self.assertTrue(state["terminalAmbiguityObserved"])
+        self.assertFalse(state["localPromptObserved"])
+        self.assertFalse(probe.may_send_manager_command(state))
+        self.assertFalse(probe.qualifies_positive({**state, "commandSent": True}))
+
+    def test_concealed_manager_prompt_cannot_authorize_command(self):
+        state = probe.state_from_bytes(b"Ask anything\r\n\x1b[8m\xe2\x9d\xaf \x1b[28m")
+        self.assertTrue(state["terminalAmbiguityObserved"])
+        self.assertFalse(state["localPromptObserved"])
+        self.assertFalse(probe.may_send_manager_command(state))
 
     def test_prompt_requires_native_marker_plus_ready_hint(self):
         self.assertTrue(probe.state_from_bytes(b"Ask anything\r\n\xe2\x9d\xaf ")["localPromptObserved"])
@@ -109,6 +206,7 @@ class AgyMacOSInteractiveTests(unittest.TestCase):
                 order.append("cleanup")
             with mock.patch.object(probe.pty, "openpty", return_value=(90, 91)), \
                  mock.patch.object(probe.fcntl, "ioctl"), \
+                 mock.patch.object(probe.os, "set_blocking"), \
                  mock.patch.object(probe.subprocess, "Popen", return_value=proc) as popen, \
                  mock.patch.object(probe.audit, "audit_spawned_child", return_value=49201) as audited, \
                  mock.patch.object(probe, "terminate_owned_group", side_effect=cleanup), \
@@ -141,6 +239,7 @@ class AgyMacOSInteractiveTests(unittest.TestCase):
             proc.poll.return_value = 0
             with mock.patch.object(probe.pty, "openpty", return_value=(90, 91)), \
                  mock.patch.object(probe.fcntl, "ioctl"), \
+                 mock.patch.object(probe.os, "set_blocking"), \
                  mock.patch.object(probe.subprocess, "Popen", return_value=proc), \
                  mock.patch.object(probe.audit, "audit_spawned_child", side_effect=RuntimeError("audit failed")), \
                  mock.patch.object(probe.os, "close"):
@@ -212,6 +311,7 @@ class AgyMacOSInteractiveTests(unittest.TestCase):
             with mock.patch.object(probe, "AUDIT_PATH", audit_path), \
                  mock.patch.object(probe.pty, "openpty", return_value=(90, 91)), \
                  mock.patch.object(probe.fcntl, "ioctl"), \
+                 mock.patch.object(probe.os, "set_blocking"), \
                  mock.patch.object(probe.subprocess, "Popen", return_value=proc), \
                  mock.patch.object(probe.audit, "audit_spawned_child", return_value=49208), \
                  mock.patch.object(probe, "append_audit", wraps=probe.append_audit), \

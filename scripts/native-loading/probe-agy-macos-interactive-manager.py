@@ -7,7 +7,7 @@ or runs any imported command. Terminal text is inspected in memory and only
 sanitized markers are written to evidence.
 """
 import argparse
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import fcntl
 import hashlib
 import importlib.util
@@ -20,6 +20,7 @@ import re
 import select
 import shutil
 import signal
+import stat
 import subprocess
 import struct
 import sys
@@ -29,6 +30,18 @@ import time
 import uuid
 
 sys.dont_write_bytecode = True
+_diagnostics_spec = importlib.util.spec_from_file_location("native_startup_diagnostics", Path(__file__).with_name("native_startup_diagnostics.py"))
+_diagnostics = importlib.util.module_from_spec(_diagnostics_spec)
+_diagnostics_spec.loader.exec_module(_diagnostics)
+classify = _diagnostics.classify
+_terminal_spec = importlib.util.spec_from_file_location("native_terminal", Path(__file__).with_name("native_terminal.py"))
+_terminal = importlib.util.module_from_spec(_terminal_spec)
+_terminal_spec.loader.exec_module(_terminal)
+
+
+def terminal_text(data, *, width=80, height=24):
+    return _terminal.render_screen(data, width=width, height=height)
+
 
 REPO = Path(__file__).resolve().parents[2]
 CURSOR_SCRIPT = REPO / "scripts/native-loading/probe_cursor_fresh_cli.py"
@@ -86,7 +99,7 @@ def require_file_sha(path, expected):
 
 
 def sbpl(root):
-    """Write guard; only securityd Mach lookup is allowed for keychain use."""
+    """Write guard; default mode permits only the native keychain service."""
     root = Path(root).resolve(strict=True)
     real_home = Path(pwd.getpwuid(os.getuid()).pw_dir).resolve()
     q = lambda value: json.dumps(str(value))
@@ -102,6 +115,125 @@ def sbpl(root):
     )
 
 
+def sbpl_isolated_profile(root, source_root):
+    """Constrain a copied private profile without accessing native keychain."""
+    root = Path(root).resolve(strict=True)
+    source_root = Path(source_root).resolve(strict=True)
+    real_home = Path(pwd.getpwuid(os.getuid()).pw_dir).resolve()
+    q = lambda value: json.dumps(str(value))
+    return (
+        "(version 1)(allow default)"
+        f"(deny file-read* (subpath {q(real_home)}))"
+        f"(deny file-read* (subpath {q(source_root)}))"
+        "(deny file-write*)"
+        f"(allow file-write* (subpath {q(root)}) (literal \"/dev/null\") (literal \"/dev/tty\"))"
+        '(deny mach-lookup (global-name "com.apple.securityd"))'
+        '(deny process-exec (literal "/usr/bin/open"))'
+        '(deny process-exec (literal "/usr/bin/osascript"))'
+    )
+
+
+def _private_owned_path(path, *, mode=None):
+    path = Path(path)
+    info = path.lstat()
+    if stat.S_ISLNK(info.st_mode) or not stat.S_ISDIR(info.st_mode):
+        raise ValueError("isolated login root must be a real directory")
+    if info.st_uid != os.getuid() or (mode is not None and stat.S_IMODE(info.st_mode) != mode):
+        raise ValueError("isolated login root ownership or permissions are invalid")
+    if path.resolve(strict=True) != path.absolute():
+        raise ValueError("isolated login root must be canonical")
+    return info
+
+
+def validate_isolated_login_root(path, *, now=None, private_temp_root=None):
+    """Validate the bounded marker and private HOME without reading file contents."""
+    path = Path(path).absolute()
+    temp_root = Path(private_temp_root or PRIVATE_TEMP_ROOT).resolve(strict=True)
+    if path.parent.resolve(strict=True) != temp_root:
+        raise ValueError("isolated login root must be directly under private temporary storage")
+    _private_owned_path(path, mode=0o700)
+    marker_path = path / "owned-session.json"
+    marker_stat = marker_path.lstat()
+    if (not stat.S_ISREG(marker_stat.st_mode) or stat.S_ISLNK(marker_stat.st_mode) or
+            marker_stat.st_uid != os.getuid() or marker_stat.st_nlink != 1 or
+            stat.S_IMODE(marker_stat.st_mode) != 0o600 or marker_stat.st_size > 16 * 1024):
+        raise ValueError("isolated login marker is not a private regular file")
+    marker = json.loads(marker_path.read_text(encoding="utf-8"))
+    try:
+        session_id = uuid.UUID(marker.get("id", ""))
+        created = datetime.fromisoformat(marker.get("createdAt", "").replace("Z", "+00:00"))
+        expires = datetime.fromisoformat(marker.get("expiresAt", "").replace("Z", "+00:00"))
+    except (ValueError, TypeError, AttributeError) as error:
+        raise ValueError("isolated login marker identity or times are invalid") from error
+    current = now or datetime.now(timezone.utc)
+    if (marker.get("kind") != "aok-agy-native-login/v1" or session_id.version != 4 or
+            str(session_id) != marker.get("id") or marker.get("valid") is not True or
+            marker.get("readyPromptObserved") is not True or
+            marker.get("backendAuthentication") != "not-independently-verified" or
+            created.tzinfo is None or expires.tzinfo is None or current.tzinfo is None or
+            expires <= current or created > current or expires <= created or
+            expires - created > timedelta(minutes=15)):
+        raise ValueError("isolated login marker is not currently prompt-ready")
+    home = path / "home"
+    _private_owned_path(home, mode=0o700)
+    return {"root": path, "home": home, "marker": marker}
+
+
+def copy_isolated_login_home(source_root, destination_home, *, max_files=512,
+                             max_bytes=64 * 1024 * 1024):
+    """Copy only bounded, single-link regular files into a fresh private HOME."""
+    verified = validate_isolated_login_root(source_root)
+    destination_home = Path(destination_home)
+    destination_home.mkdir(mode=0o700, parents=False, exist_ok=False)
+    destination_home.chmod(0o700)
+    files = 0
+    total = 0
+    source_home = verified["home"]
+    for current, directories, names in os.walk(source_home, topdown=True, followlinks=False):
+        source_dir = Path(current)
+        relative = source_dir.relative_to(source_home)
+        target_dir = destination_home / relative
+        if relative.parts:
+            target_dir.mkdir(mode=0o700, parents=True, exist_ok=False)
+        for name in directories:
+            info = (source_dir / name).lstat()
+            if not stat.S_ISDIR(info.st_mode) or stat.S_ISLNK(info.st_mode) or info.st_uid != os.getuid():
+                raise ValueError("isolated login HOME contains an unsupported directory entry")
+        for name in names:
+            source = source_dir / name
+            info = source.lstat()
+            if (not stat.S_ISREG(info.st_mode) or stat.S_ISLNK(info.st_mode) or
+                    info.st_uid != os.getuid() or info.st_nlink != 1):
+                raise ValueError("isolated login HOME contains an unsupported file entry")
+            files += 1
+            if files > max_files or total + info.st_size > max_bytes:
+                raise ValueError("isolated login HOME exceeds copy limits")
+            flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0)
+            fd = os.open(source, flags)
+            try:
+                opened = os.fstat(fd)
+                if not stat.S_ISREG(opened.st_mode) or opened.st_nlink != 1 or opened.st_ino != info.st_ino:
+                    raise ValueError("isolated login HOME changed during copy")
+                target = target_dir / name
+                with os.fdopen(fd, "rb", closefd=False) as incoming, target.open("xb") as outgoing:
+                    copied = 0
+                    while True:
+                        block = incoming.read(1024 * 1024)
+                        if not block:
+                            break
+                        copied += len(block)
+                        if total + copied > max_bytes:
+                            raise ValueError("isolated login HOME exceeds copy limits")
+                        outgoing.write(block)
+                    if copied != opened.st_size:
+                        raise ValueError("isolated login HOME changed during copy")
+                total += copied
+                target.chmod(0o600)
+            finally:
+                os.close(fd)
+    return {"filesCopied": files, "bytesCopied": total}
+
+
 def env_for(root):
     home = Path(root) / "home"
     for p in (home, Path(root) / "tmp", home / ".config", home / ".cache"):
@@ -114,6 +246,7 @@ def env_for(root):
         "XDG_CACHE_HOME": str(home / ".cache"),
         "TERM": "xterm-256color",
         "BROWSER": "/usr/bin/false",
+        "AGY_CLI_DISABLE_AUTO_UPDATE": "true",
     }
 
 
@@ -208,9 +341,9 @@ def terminate_owned_group(proc, pgid, purpose, grace=1.0):
         ) from error
 
 
-def signal_preflight(root):
+def signal_preflight(root, profile=None):
     """Prove complete process-group cleanup with the exact AGY sandbox profile."""
-    command = ["/usr/bin/sandbox-exec", "-p", sbpl(root), "/bin/sleep", "30"]
+    command = ["/usr/bin/sandbox-exec", "-p", profile or sbpl(root), "/bin/sleep", "30"]
     proc = subprocess.Popen(command, cwd=root, env=env_for(root), stdin=subprocess.DEVNULL,
                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                             start_new_session=True, close_fds=True)
@@ -236,11 +369,34 @@ def signal_preflight(root):
         raise
 
 
-def state_from_bytes(data):
-    text = ANSI.sub(b"", data).decode("utf-8", "replace").replace("\r", "\n")
+def state_from_bytes(data, *, width=80, height=24):
+    try:
+        text = terminal_text(data, width=width, height=height)
+    except _terminal.TerminalAmbiguity as error:
+        return {
+            "terminalAmbiguitySite": _terminal.ambiguity_site(error),
+            "startupDiagnostics": classify(data),
+            "terminalAmbiguityObserved": True,
+            "authBarrierObserved": False,
+            "localPromptObserved": False,
+            "readyHintObserved": False,
+            "welcomeLabelObserved": False,
+            "workspaceLabelObserved": False,
+            "modelSelectionLabelObserved": False,
+            "noAgentsLabelObserved": False,
+            "managerSectionObserved": False,
+            "nameObserved": False,
+            "descriptionObserved": False,
+            "parseErrorObserved": False,
+            "errorObserved": False,
+            "errorCategories": ["terminal-ambiguity"],
+            "bytesObserved": len(data),
+        }
     tail = "\n".join(text.splitlines()[-4:])
     error_categories = [name for name, pattern in ERROR_CATEGORIES if pattern.search(text)]
     return {
+        "startupDiagnostics": classify(data),
+        "terminalAmbiguityObserved": False,
         "authBarrierObserved": bool(AUTH.search(text)),
         "localPromptObserved": bool(PROMPT_MARKER.search(tail)) and bool(PROMPT_READY_HINT.search(tail)),
         "readyHintObserved": bool(PROMPT_READY_HINT.search(tail)),
@@ -260,7 +416,7 @@ def state_from_bytes(data):
 
 def may_send_manager_command(state):
     return (state.get("localPromptObserved") is True and not state.get("authBarrierObserved") and
-            not state.get("errorObserved"))
+            not state.get("errorObserved") and not state.get("terminalAmbiguityObserved"))
 
 
 def _capture(master, seconds, limit=512 * 1024):
@@ -273,17 +429,19 @@ def _capture(master, seconds, limit=512 * 1024):
             continue
         try:
             block = os.read(master, min(8192, limit - total))
+        except BlockingIOError:
+            continue
         except OSError:
             break
         if not block:
             break
         chunks.append(block)
         total += len(block)
-        current = b"\n".join(chunks)
+        current = b"".join(chunks)
         state = state_from_bytes(current)
         if state["authBarrierObserved"] or state["localPromptObserved"] or state["errorObserved"]:
             break
-    return b"\n".join(chunks)
+    return b"".join(chunks)
 
 
 def claim_controlling_tty():
@@ -291,17 +449,21 @@ def claim_controlling_tty():
     fcntl.ioctl(0, termios.TIOCSCTTY, 0)
 
 
-def run_manager_case(root, project, cli, case, timeout=25):
+def run_manager_case(root, project, cli, case, timeout=25, *, isolated_source_root=None):
     master, slave = pty.openpty()
+    os.set_blocking(master, False)
     fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack("HHHH", 24, 80, 0, 0))
     gate = Path(root) / ("start-" + case)
     gate_script = (
         "import os,sys,time,pathlib; gate=pathlib.Path(sys.argv[1]); exe=sys.argv[2]; "
+        "gate.with_suffix('.runner').touch(); "
         "args=sys.argv[3:]; "
         "\nwhile not gate.exists(): time.sleep(0.025)\n"
-        "os.execv(exe,[exe,*args])"
+        "gate.with_suffix('.exec').touch(); os.execv(exe,[exe,*args])"
     )
-    argv = ["/usr/bin/sandbox-exec", "-p", sbpl(root), "/usr/bin/python3", "-B", "-c",
+    interpreter = str(Path(sys.executable).resolve(strict=True))
+    profile = sbpl_isolated_profile(root, isolated_source_root) if isolated_source_root else sbpl(root)
+    argv = ["/usr/bin/sandbox-exec", "-p", profile, interpreter, "-B", "-c",
             gate_script, str(gate), str(cli)]
     env = env_for(root)
     proc = None
@@ -322,16 +484,18 @@ def run_manager_case(root, project, cli, case, timeout=25):
         raw = _capture(master, timeout)
         state = state_from_bytes(raw)
         if may_send_manager_command(state):
-            os.write(master, b"/agents\n")
+            os.write(master, b"/agents\r")
             sent = True
             append_audit("documented-agents-command-sent", case=case, pid=proc.pid, pgid=pgid)
             raw += _capture(master, 12)
             state = state_from_bytes(raw)
+        state["runnerStarted"] = gate.with_suffix(".runner").exists()
+        state["nativeExecAttempted"] = gate.with_suffix(".exec").exists()
         state["commandSent"] = sent
         state["durationSeconds"] = round(time.monotonic() - started, 2)
         append_audit("native-case-observed", case=case, pid=proc.pid, pgid=pgid,
                      state={key: state[key] for key in (
-                         "authBarrierObserved", "localPromptObserved", "readyHintObserved",
+                         "runnerStarted", "nativeExecAttempted", "startupDiagnostics", "terminalAmbiguityObserved", "authBarrierObserved", "localPromptObserved", "readyHintObserved",
                          "welcomeLabelObserved", "workspaceLabelObserved", "modelSelectionLabelObserved",
                          "noAgentsLabelObserved", "managerSectionObserved", "nameObserved",
                          "descriptionObserved", "parseErrorObserved", "errorObserved", "errorCategories",
@@ -365,20 +529,21 @@ def qualifies_positive(state):
     return (state.get("commandSent") is True and state.get("managerSectionObserved") is True and
             state.get("nameObserved") is True and state.get("descriptionObserved") is True and
             not state.get("authBarrierObserved") and not state.get("errorObserved") and
-            not state.get("parseErrorObserved"))
+            not state.get("parseErrorObserved") and not state.get("terminalAmbiguityObserved"))
 
 
 def qualifies_absent(state):
     return (state.get("commandSent") is True and state.get("managerSectionObserved") is True and
             not state.get("nameObserved") and not state.get("descriptionObserved") and
             not state.get("authBarrierObserved") and not state.get("errorObserved") and
-            not state.get("parseErrorObserved"))
+            not state.get("parseErrorObserved") and not state.get("terminalAmbiguityObserved"))
 
 
 def qualifies_malformed(state):
     return (state.get("commandSent") is True and state.get("managerSectionObserved") is True and
             not state.get("nameObserved") and not state.get("descriptionObserved") and
-            state.get("parseErrorObserved") is True and not state.get("authBarrierObserved"))
+            state.get("parseErrorObserved") is True and not state.get("authBarrierObserved") and
+            not state.get("terminalAmbiguityObserved"))
 
 
 def has_candidate_manager_evidence(cases):
@@ -387,11 +552,13 @@ def has_candidate_manager_evidence(cases):
             qualifies_malformed(cases["malformed"]))
 
 
-def run_all_cases(root, projects, cli):
-    preflight = signal_preflight(root)
+def run_all_cases(root, projects, cli, *, isolated_source_root=None):
+    profile = sbpl_isolated_profile(root, isolated_source_root) if isolated_source_root else sbpl(root)
+    preflight = signal_preflight(root, profile)
     cases = {}
     for case in ("positive", "absent", "malformed"):
-        cases[case] = run_manager_case(root, projects / case, cli, case)
+        cases[case] = run_manager_case(root, projects / case, cli, case,
+                                       isolated_source_root=isolated_source_root)
     return preflight, cases
 
 
@@ -399,6 +566,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--aok", required=True, type=Path)
     parser.add_argument("--binary", type=Path, default=PINNED_BINARY)
+    parser.add_argument("--isolated-login-root", type=Path,
+                        help="copy an unexpired prompt-ready AOK private profile; backend authentication remains unverified")
     parser.add_argument("--evidence-out", required=True, type=Path)
     parser.add_argument("--audit-out", required=True, type=Path)
     args = parser.parse_args()
@@ -438,28 +607,46 @@ def main():
         owned_cli.chmod(0o500)
         if file_sha(owned_cli) != PINNED_BINARY_SHA256:
             raise RuntimeError("task-owned AGY copy failed integrity check")
+        isolated_login = None
+        profile_copy = None
+        if args.isolated_login_root:
+            isolated_login = validate_isolated_login_root(args.isolated_login_root)
+            profile_copy = copy_isolated_login_home(isolated_login["root"], root / "home")
         owned_aok, rendered, rendered_sha, description = agy.base.prepare_aok(aok_source, REPO, root)
         projects = agy.create_project_inputs(root, rendered)
 
         # The subprocess-group signal preflight uses the exact same profile as
         # AGY, before the native binary is started for any case.
-        preflight, cases = run_all_cases(root, projects, owned_cli)
+        preflight, cases = run_all_cases(
+            root, projects, owned_cli,
+            isolated_source_root=isolated_login["root"] if isolated_login else None,
+        )
         report = {
             "target": "antigravity", "scope": "project", "version": "1.4.2",
             "binarySha256": binary_hash, "ownedBinarySha256": file_sha(owned_cli),
             "aokSha256": sha(owned_aok.read_bytes()), "fixtureSha256": rendered_sha,
             "expectedName": "aok-probe", "expectedDescription": description,
-            "authScope": "existing native account use through AGY CLI keychain lookup only; no credential read/copy",
+            "authScope": ("prepared private file profile; backend authentication not independently verified"
+                          if isolated_login else
+                          "existing native account use through AGY CLI keychain lookup only; no credential read/copy"),
             "sandbox": {"originalHomeReads": "denied", "writesOutsideOwnedTemporaryRoot": "denied",
-                        "keychainMachLookup": "com.apple.securityd only", "network": "allowed for native account refresh and /agents manager metadata",
+                        "keychainMachLookup": ("denied" if isolated_login else "com.apple.securityd only"),
+                        "network": "allowed for native account refresh and /agents manager metadata",
                         "browserLaunch": "blocked", "ordinaryPrompt": "not sent", "agentSelection": "not performed"},
             "signalPreflight": preflight,
             "cases": cases,
             "nativeLoading": "not-verified",
             "candidateManagerEvidence": has_candidate_manager_evidence(cases),
             "runtimeEnforcement": "unverified", "modelInvocation": "not-run",
-            "authentication": "existing-keyring-only; no fresh OAuth attempted",
+            "authentication": ("not-independently-verified" if isolated_login else
+                                "existing-keyring-only; no fresh OAuth attempted"),
+            "profileSourcePath": "not-retained" if isolated_login else None,
+            "profileCopy": profile_copy,
             "probeSource": str(snapshot.relative_to(REPO)), "probeSourceSha256": source_hash,
+            "diagnosticsHelperSHA256": file_sha(Path(__file__).with_name("native_startup_diagnostics.py")),
+            "terminalRendererSHA256": file_sha(Path(__file__).with_name("native_terminal.py")),
+            "launcherInterpreterSHA256": file_sha(Path(sys.executable).resolve(strict=True)),
+            "launcherInterpreter": "resolved current Python executable; Apple developer-tools shim bypassed",
             "auditPath": str(AUDIT_PATH.relative_to(REPO)),
             "observedAt": datetime.now(timezone.utc).isoformat(),
         }

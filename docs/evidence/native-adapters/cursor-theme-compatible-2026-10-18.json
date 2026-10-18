@@ -1,0 +1,379 @@
+{
+  "target": "cursor",
+  "scope": "project",
+  "hostVersion": "2026.10.16-e3cb207",
+  "observedAt": "2026-10-18T05:10:16.961760+00:00",
+  "nativeLoading": "not-verified",
+  "runtimeEnforcement": "unverified",
+  "invalidControl": "same frontmatter identity and description; blank prompt body",
+  "modelInvocation": "not-run",
+  "diagnosticPreload": false,
+  "nativeGitSHA256": "74b90b9f97ec79bfe7886a4fc6132533b3e1014ef4195d28abd1ca9bf321f34a",
+  "observerSHA256": null,
+  "cases": {
+    "positive": {
+      "startupDiagnostics": {
+        "fixedWordsObserved": [
+          "agent",
+          "cursor",
+          "plan",
+          "changes",
+          "auto"
+        ],
+        "terminalQueryLabels": [],
+        "rawTextRetained": false
+      },
+      "capturedBytes": 814,
+      "readyPromptObserved": false,
+      "nativeExitBeforeCleanup": null,
+      "controllingTerminalConfigured": true,
+      "terminalQueriesAnswered": [
+        "background-color"
+      ],
+      "typedWithoutEnter": null,
+      "nativeSlashMenuObserved": false,
+      "promptGlyphObserved": false,
+      "enterSent": false,
+      "loginBarrierObserved": false,
+      "terminalAmbiguityObserved": false,
+      "terminalAmbiguitySite": null,
+      "expectedDescriptionObserved": false,
+      "expectedNameObserved": false,
+      "nativeMenuMarkerObserved": false,
+      "errorMarkerObserved": false,
+      "cleanupCompleted": true,
+      "blockedGitNetworkOperations": 191
+    },
+    "absent": {
+      "startupDiagnostics": {
+        "fixedWordsObserved": [
+          "agent",
+          "cursor",
+          "plan",
+          "auto",
+          "context"
+        ],
+        "terminalQueryLabels": [],
+        "rawTextRetained": false
+      },
+      "capturedBytes": 804,
+      "readyPromptObserved": false,
+      "nativeExitBeforeCleanup": null,
+      "controllingTerminalConfigured": true,
+      "terminalQueriesAnswered": [
+        "background-color"
+      ],
+      "typedWithoutEnter": null,
+      "nativeSlashMenuObserved": false,
+      "promptGlyphObserved": false,
+      "enterSent": false,
+      "loginBarrierObserved": false,
+      "terminalAmbiguityObserved": false,
+      "terminalAmbiguitySite": null,
+      "expectedDescriptionObserved": false,
+      "expectedNameObserved": false,
+      "nativeMenuMarkerObserved": false,
+      "errorMarkerObserved": false,
+      "cleanupCompleted": true,
+      "blockedGitNetworkOperations": 224
+    },
+    "malformed": {
+      "startupDiagnostics": {
+        "fixedWordsObserved": [
+          "agent",
+          "cursor",
+          "plan",
+          "auto"
+        ],
+        "terminalQueryLabels": [],
+        "rawTextRetained": false
+      },
+      "capturedBytes": 798,
+      "readyPromptObserved": false,
+      "nativeExitBeforeCleanup": null,
+      "controllingTerminalConfigured": true,
+      "terminalQueriesAnswered": [
+        "background-color"
+      ],
+      "typedWithoutEnter": null,
+      "nativeSlashMenuObserved": false,
+      "promptGlyphObserved": false,
+      "enterSent": false,
+      "loginBarrierObserved": false,
+      "terminalAmbiguityObserved": false,
+      "terminalAmbiguitySite": null,
+      "expectedDescriptionObserved": false,
+      "expectedNameObserved": false,
+      "nativeMenuMarkerObserved": false,
+      "errorMarkerObserved": false,
+      "cleanupCompleted": true,
+      "blockedGitNetworkOperations": 159
+    }
+  },
+  "authentication": {
+    "positive": {
+      "exitCode": 0,
+      "status": "authenticated",
+      "backendUserDetailsReceived": true,
+      "personalFieldsRetained": false
+    },
+    "absent": {
+      "exitCode": 0,
+      "status": "authenticated",
+      "backendUserDetailsReceived": true,
+      "personalFieldsRetained": false
+    },
+    "malformed": {
+      "exitCode": 0,
+      "status": "authenticated",
+      "backendUserDetailsReceived": true,
+      "personalFieldsRetained": false
+    }
+  },
+  "source": {
+    "packageSHA256": "93372e384e9397b54b1e4fdb1812662f68e7b61c0c60cb3f2f4b788c9e0779c4",
+    "cliSHA256": "2ccc9a8e167797641448b5e5c936f006ba137a2555f117f38c5eb76a5238a233",
+    "entrypoint": "official cursor-agent wrapper",
+    "renderedSHA256": "d64ff08526ad4d1354a5f72eea9370b1a9d771abf7392b00aa876f9a1faa5acf",
+    "aokSHA256": "56215fd81115c7feb274574702aa43d81452e2c17910953eea07d7c49a61b7cf",
+    "probeSHA256": "da898e0eae30c093698fd033fdafc1b986b463bea32cfe64284a5972f8a8ed58",
+    "diagnosticsHelperSHA256": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+    "terminalRendererSHA256": "d131a559051600304ac825d93f83224616ce7c2153d8b78b546f05c8e57cf4b4",
+    "probeArchive": "docs/evidence/native-adapters/cursor-theme-compatible-2026-10-18-source.py.txt",
+    "terminalRendererSHA256Archive": "docs/evidence/native-adapters/agy-login-dependency-d131a559051600304ac825d93f83224616ce7c2153d8b78b546f05c8e57cf4b4.py.txt",
+    "diagnosticsHelperSHA256Archive": "docs/evidence/native-adapters/native_startup_diagnostics.py-0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f.txt"
+  },
+  "isolation": {
+    "writes": "owned temporary root plus null, tty and exact allocated PTY slave",
+    "realHomeRead": "denied for native children",
+    "keychainLookup": "denied for native children",
+    "credentialSource": "two explicit Cursor CLI Keychain items copied by parent",
+    "credentialStore": "private file; originals not written; copies removed",
+    "network": "allowed for real backend authentication and native initialization",
+    "gitNetworkPolicy": "Git clone/fetch/pull/push/ls-remote/submodule refused by immutable task-owned shim",
+    "rawOutputRetained": false,
+    "preflight": {
+      "pid": 13531,
+      "pgid": 13531,
+      "terminated": true
+    }
+  },
+  "processAudit": [
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 13531,
+      "pid": 13531,
+      "purpose": "authenticated-signal-preflight"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 13531,
+      "pgid": 13531,
+      "pid": 13531,
+      "purpose": "authenticated-signal-preflight"
+    },
+    {
+      "directChildFallback": false,
+      "event": "owned_group_cleanup",
+      "groupCleanupFailed": false,
+      "pgid": 13531,
+      "pid": 13531,
+      "purpose": "authenticated-signal-preflight"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 13532,
+      "pid": 13532,
+      "purpose": "aok-import"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 13532,
+      "pgid": 13532,
+      "pid": 13532,
+      "purpose": "aok-import"
+    },
+    {
+      "directChildFallback": false,
+      "event": "owned_group_cleanup",
+      "groupCleanupFailed": false,
+      "pgid": 13532,
+      "pid": 13532,
+      "purpose": "aok-import"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 13535,
+      "pid": 13535,
+      "purpose": "aok-export"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 13535,
+      "pgid": 13535,
+      "pid": 13535,
+      "purpose": "aok-export"
+    },
+    {
+      "directChildFallback": false,
+      "event": "owned_group_cleanup",
+      "groupCleanupFailed": false,
+      "pgid": 13535,
+      "pid": 13535,
+      "purpose": "aok-export"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 13538,
+      "pid": 13538,
+      "purpose": "authenticated-status"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 13538,
+      "pgid": 13538,
+      "pid": 13538,
+      "purpose": "authenticated-status"
+    },
+    {
+      "directChildFallback": false,
+      "event": "owned_group_cleanup",
+      "groupCleanupFailed": false,
+      "pgid": 13538,
+      "pid": 13538,
+      "purpose": "authenticated-status"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 13593,
+      "pid": 13593,
+      "purpose": "native-slash-menu"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 13593,
+      "pgid": 13593,
+      "pid": 13593,
+      "purpose": "native-slash-menu"
+    },
+    {
+      "capturedBytes": 814,
+      "event": "native-menu-observed",
+      "expectedDescriptionObserved": false,
+      "pgid": 13593,
+      "pid": 13593,
+      "terminalAmbiguityObserved": false,
+      "typedWithoutEnter": false
+    },
+    {
+      "directChildFallback": false,
+      "event": "owned_group_cleanup",
+      "groupCleanupFailed": false,
+      "pgid": 13593,
+      "pid": 13593,
+      "purpose": "native-slash-menu"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 14441,
+      "pid": 14441,
+      "purpose": "authenticated-status"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 14441,
+      "pgid": 14441,
+      "pid": 14441,
+      "purpose": "authenticated-status"
+    },
+    {
+      "directChildFallback": false,
+      "event": "owned_group_cleanup",
+      "groupCleanupFailed": false,
+      "pgid": 14441,
+      "pid": 14441,
+      "purpose": "authenticated-status"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 14450,
+      "pid": 14450,
+      "purpose": "native-slash-menu"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 14450,
+      "pgid": 14450,
+      "pid": 14450,
+      "purpose": "native-slash-menu"
+    },
+    {
+      "capturedBytes": 804,
+      "event": "native-menu-observed",
+      "expectedDescriptionObserved": false,
+      "pgid": 14450,
+      "pid": 14450,
+      "terminalAmbiguityObserved": false,
+      "typedWithoutEnter": false
+    },
+    {
+      "directChildFallback": false,
+      "event": "owned_group_cleanup",
+      "groupCleanupFailed": false,
+      "pgid": 14450,
+      "pid": 14450,
+      "purpose": "native-slash-menu"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 15369,
+      "pid": 15369,
+      "purpose": "authenticated-status"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 15369,
+      "pgid": 15369,
+      "pid": 15369,
+      "purpose": "authenticated-status"
+    },
+    {
+      "directChildFallback": false,
+      "event": "owned_group_cleanup",
+      "groupCleanupFailed": false,
+      "pgid": 15369,
+      "pid": 15369,
+      "purpose": "authenticated-status"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 15376,
+      "pid": 15376,
+      "purpose": "native-slash-menu"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 15376,
+      "pgid": 15376,
+      "pid": 15376,
+      "purpose": "native-slash-menu"
+    },
+    {
+      "capturedBytes": 798,
+      "event": "native-menu-observed",
+      "expectedDescriptionObserved": false,
+      "pgid": 15376,
+      "pid": 15376,
+      "terminalAmbiguityObserved": false,
+      "typedWithoutEnter": false
+    },
+    {
+      "directChildFallback": false,
+      "event": "owned_group_cleanup",
+      "groupCleanupFailed": false,
+      "pgid": 15376,
+      "pid": 15376,
+      "purpose": "native-slash-menu"
+    }
+  ]
+}

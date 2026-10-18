@@ -1,0 +1,516 @@
+#!/usr/bin/env python3
+"""Prepare a private, short-lived AGY login profile for operator verification.
+
+The native CLI is copied and hash-pinned before launch. Its keychain service is
+denied; only a private HOME can receive file-based credentials. Terminal output
+is classified in memory and never copied to the audit or standard output.
+"""
+import argparse
+from datetime import datetime, timedelta, timezone
+import fcntl
+import hashlib
+import importlib.util
+import json
+import os
+from pathlib import Path
+import pty
+import pwd
+import re
+import select
+import shutil
+import struct
+import subprocess
+import sys
+import tempfile
+import termios
+import time
+import uuid
+
+sys.dont_write_bytecode = True
+
+REPO = Path(__file__).resolve().parents[2]
+PRIVATE_TEMP_ROOT = Path("/private/tmp")
+PINNED_BINARY = Path("/private/tmp/aok-agy-1.4.2-x64/antigravity")
+PINNED_BINARY_SHA256 = "fa85a90abded17bcd1b185bbd1d6b1b82065f093ad4700d4dbacd3be2433294c"
+MAX_LOGIN_SECONDS = 300
+SESSION_TTL = timedelta(minutes=15)
+AUDIT_PATH = None
+
+
+def _load_module(name, path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+CURSOR = _load_module("agy_login_cursor_helpers", REPO / "scripts/native-loading/probe_cursor_fresh_cli.py")
+AGY = _load_module("agy_login_native_helpers", REPO / "scripts/native-loading/probe-agy-macos-interactive-manager.py")
+
+AUTH_GOOGLE = re.compile(r"(?:sign in|log in|continue) with google|google account", re.I)
+NATIVE_LOGIN_CHOICE = re.compile(r"(?:^|[\r\n])[^\w\r\n]{0,12}(?:login|log in|sign in)[^\w\r\n]{0,20}(?:$|[\r\n])", re.I)
+ENTER_HINT = re.compile(r"(?:press\s+)?(?:enter|return)(?:\s+to)?\s+(?:select|continue|sign in|log in)|hit\s+(?:enter|return)", re.I)
+CLEAR_SCREEN = re.compile(rb"\x1b\[(?:2|3)J")
+
+
+def sha(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def file_sha(path):
+    h = hashlib.sha256()
+    with Path(path).open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            h.update(block)
+    return h.hexdigest()
+
+
+def _json_path(value):
+    return json.dumps(str(value))
+
+
+def sandbox_profile(root, owned_cli, tty_device):
+    """Use private file confinement, allow OAuth networking, deny OS keychain."""
+    root = Path(root).resolve(strict=True)
+    owned_cli = Path(owned_cli).resolve(strict=True)
+    real_home = Path(pwd.getpwuid(os.getuid()).pw_dir).resolve()
+    tty_device = str(tty_device)
+    if not tty_device.startswith("/dev/tty"):
+        raise ValueError("the allowed terminal device must be an allocated /dev/tty device")
+    # Cursor's native file boundary shape with networking enabled for the
+    # operator-approved OAuth flow. The copied vendor executable is excluded
+    # from the otherwise-owned-root write exception. No Mach exception exists.
+    return (
+        "(version 1)(allow default)"
+        f"(deny file-read* (subpath {_json_path(real_home)}))"
+        "(deny file-write*)"
+        f"(allow file-write* (subpath {_json_path(root)})"
+        ' (literal "/dev/null") (literal "/dev/tty")'
+        f" (literal {_json_path(tty_device)}))"
+        f"(deny file-write* (subpath {_json_path(owned_cli)}))"
+        '(deny mach-lookup (global-name "com.apple.securityd"))'
+    )
+
+
+def env_for(root):
+    home = Path(root) / "home"
+    tmp = Path(root) / "tmp"
+    config = home / ".config"
+    cache = home / ".cache"
+    for directory in (home, tmp, config, cache):
+        directory.mkdir(parents=True, exist_ok=True)
+        directory.chmod(0o700)
+    return {
+        "PATH": "/usr/bin:/bin",
+        "HOME": str(home),
+        "TMPDIR": str(tmp),
+        "XDG_CONFIG_HOME": str(config),
+        "XDG_CACHE_HOME": str(cache),
+        "AGY_CLI_DISABLE_AUTO_UPDATE": "true",
+        "BROWSER": "/usr/bin/open",
+        "TERM": "xterm-256color",
+        "PYTHONDONTWRITEBYTECODE": "1",
+    }
+
+
+def append_audit(path, event, **fields):
+    record = {"event": event, "at": datetime.now(timezone.utc).isoformat(), **fields}
+    with Path(path).open("a", encoding="utf-8") as stream:
+        stream.write(json.dumps(record, sort_keys=True) + "\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+
+
+def _owned_dir(prefix):
+    path = Path(tempfile.mkdtemp(prefix=prefix, dir=PRIVATE_TEMP_ROOT)).resolve(strict=True)
+    path.chmod(0o700)
+    return path
+
+
+def _atomic_json(path, value):
+    path = Path(path)
+    temporary = path.with_name(path.name + ".tmp")
+    with temporary.open("x", encoding="utf-8") as stream:
+        json.dump(value, stream, sort_keys=True, indent=2)
+        stream.write("\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+    temporary.chmod(0o600)
+    os.replace(temporary, path)
+
+
+def session_marker(session_id, created):
+    expires = created + SESSION_TTL
+    return {
+        "kind": "aok-agy-native-login/v1",
+        "id": session_id,
+        "createdAt": created.isoformat().replace("+00:00", "Z"),
+        "expiresAt": expires.isoformat().replace("+00:00", "Z"),
+        "valid": False,
+        "backendAuthentication": "not-independently-verified",
+    }
+
+
+def state_from_bytes(data):
+    """Return fixed booleans only; never return or persist terminal text."""
+    try:
+        text = AGY.terminal_text(data)
+    except AGY._terminal.TerminalAmbiguity as error:
+        return {
+            "terminalAmbiguitySite": AGY._terminal.ambiguity_site(error),
+            "startupDiagnostics": AGY.classify(data),
+            "terminalAmbiguityObserved": True,
+            "authBarrierObserved": False,
+            "localPromptObserved": False,
+            "readyHintObserved": False,
+            "welcomeLabelObserved": False,
+            "workspaceLabelObserved": False,
+            "modelSelectionLabelObserved": False,
+            "noAgentsLabelObserved": False,
+            "managerSectionObserved": False,
+            "nameObserved": False,
+            "descriptionObserved": False,
+            "parseErrorObserved": False,
+            "errorObserved": False,
+            "errorCategories": ["terminal-ambiguity"],
+            "bytesObserved": len(data),
+            "googleSignInOptionObserved": False,
+            "nativeLoginChoiceObserved": False,
+            "enterHintObserved": False,
+        }
+    state = AGY.state_from_bytes(data)
+    fixed = {"login", "log", "in", "sign", "google", "antigravity", "to", "with", "browser", "continue", "recommended", "workspace", "skip", "cancel", "exit", "quit", "or", "up", "get", "started", "your", "using", "new", "existing", "not", "logged", "connected", "open", "opens", "free", "oauth", "for", "cli", "web", "authenticate", "authentication", "enter", "select", "return", "press", "hit", "action", "option", "an", "type", "choose"}
+    state["loginRowDiagnostics"] = []
+    for row in text.splitlines():
+        words = re.findall(r"[A-Za-z]+", row.lower())
+        if "login" in words:
+            state["loginRowDiagnostics"].append({"fixedWords": [word for word in words if word in fixed], "otherWordCount": sum(word not in fixed for word in words), "leadingSpaces": len(row) - len(row.lstrip()), "numbered": bool(re.match(r"\s*[1-9][.)]", row)), "shape": re.sub(r"[^A-Za-z \t:>❯›|()\[\].-]", "?", re.sub(r"[A-Za-z]+", lambda match: match.group() if match.group().lower() in fixed else "[word]", row))})
+    state["terminalAmbiguityObserved"] = False
+    state["googleSignInOptionObserved"] = bool(AUTH_GOOGLE.search(text))
+    state["nativeLoginChoiceObserved"] = bool(NATIVE_LOGIN_CHOICE.search(text))
+    state["enterHintObserved"] = bool(ENTER_HINT.search(text))
+    return state
+
+
+def may_press_enter(state):
+    return (state.get("authBarrierObserved") is True and
+            (state.get("googleSignInOptionObserved") is True or state.get("nativeLoginChoiceObserved") is True) and
+            state.get("enterHintObserved") is True and
+            not state.get("terminalAmbiguityObserved"))
+
+
+def is_ready(state):
+    return (state.get("localPromptObserved") is True and
+            state.get("authBarrierObserved") is False and
+            state.get("errorObserved") is False and
+            not state.get("terminalAmbiguityObserved"))
+
+
+def append_stage(root, stage):
+    marker = Path(root) / ("stage-" + stage)
+    with marker.open("x", encoding="ascii") as stream:
+        stream.write(stage + "\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+
+
+def _capture_login(master, deadline, *, enter_sent, audit_path, case_root, byte_limit=512 * 1024):
+    """Capture in memory; optionally send one Enter at the explicit Google gate."""
+    chunks = []
+    total = 0
+    last_state = None
+    state = None
+    last_change = time.monotonic()
+    while time.monotonic() < deadline and total < byte_limit:
+        ready, _, _ = select.select([master], [], [], min(0.2, max(0.0, deadline - time.monotonic())))
+        if not ready:
+            if state and state.get("terminalAmbiguityObserved") and time.monotonic() - last_change >= 2:
+                append_audit(audit_path, "stable-terminal-ambiguity", state=_safe_state(state))
+                return state, enter_sent
+            continue
+        try:
+            block = os.read(master, min(8192, byte_limit - total))
+        except BlockingIOError:
+            continue
+        except OSError:
+            break
+        if not block:
+            break
+        chunks.append(block)
+        total += len(block)
+        wire = b"".join(chunks)
+        state = state_from_bytes(wire)
+        safe_state = _safe_state(state)
+        signature = {key: value for key, value in safe_state.items() if key != "bytesObserved"}
+        if signature != last_state:
+            append_audit(audit_path, "terminal-state-change", state=safe_state)
+            last_state = signature
+            last_change = time.monotonic()
+        if is_ready(state) or state.get("errorObserved"):
+            return state, enter_sent
+        if not enter_sent and may_press_enter(state):
+            append_audit(audit_path, "explicit-native-login-enter-confirmed", input="Enter", caseRoot=str(case_root))
+            os.write(master, b"\r")
+            enter_sent = True
+            append_audit(audit_path, "single-enter-sent", input="Enter")
+    return state_from_bytes(b"".join(chunks)), enter_sent
+
+
+def _record_dependencies(audit_root):
+    entries = {}
+    paths = {
+        "prepare_agy_login.py": Path(__file__).resolve(),
+        "probe_cursor_fresh_cli.py": Path(CURSOR.__file__).resolve(strict=True),
+        "probe-agy-macos-interactive-manager.py": Path(AGY.__file__).resolve(strict=True),
+        "native_startup_diagnostics.py": Path(AGY._diagnostics.__file__).resolve(strict=True),
+        "native_terminal.py": Path(AGY._terminal.__file__).resolve(strict=True),
+        "probe-agy-interactive-manager.py": Path(AGY.agy.__file__).resolve(strict=True),
+        "probe-agy-linux-container.py": Path(AGY.agy.base.__file__).resolve(strict=True),
+    }
+    for name, path in paths.items():
+        content = path.read_bytes()
+        digest = sha(content)
+        target = Path(audit_root) / name
+        target.write_bytes(content)
+        target.chmod(0o600)
+        entries[name] = digest
+    return entries
+
+
+def _preflight(root, audit_path, sbpl):
+    command = ["/usr/bin/sandbox-exec", "-p", sbpl, "/bin/sleep", "30"]
+    proc = subprocess.Popen(command, cwd=root, env=env_for(root), stdin=subprocess.DEVNULL,
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                            start_new_session=True, close_fds=True)
+    try:
+        pgid = CURSOR.audit_spawned_child(root, proc, "agy-login-signal-preflight")
+        append_audit(audit_path, "preflight-owned", pid=proc.pid, pgid=pgid)
+        AGY.terminate_owned_group(proc, pgid, "agy-login-signal-preflight")
+        append_audit(audit_path, "preflight-clean", pid=proc.pid, pgid=pgid,
+                     returnCode=proc.returncode)
+        return {"pid": proc.pid, "pgid": pgid, "terminated": proc.poll() is not None}
+    except Exception:
+        if proc.poll() is None:
+            try:
+                AGY.terminate_owned_group(proc, proc.pid, "agy-login-preflight-failure")
+            except Exception:
+                pass
+        append_audit(audit_path, "preflight-failed", pid=proc.pid, parentReaped=proc.poll() is not None)
+        raise
+
+
+def run_login(root, audit_path, cli, timeout=MAX_LOGIN_SECONDS):
+    """Start the copied CLI behind a persisted process-identity gate."""
+    master, slave = pty.openpty()
+    os.set_blocking(master, False)
+    fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack("HHHH", 24, 80, 0, 0))
+    tty_device = os.ttyname(slave)
+    profile = sandbox_profile(root, cli, tty_device)
+    gate = Path(root) / "native-start.gate"
+    runner_started = Path(root) / "runner-started"
+    exec_attempted = Path(root) / "native-exec-attempted"
+    runner = (
+        "import os,pathlib,sys,time\n"
+        "gate=pathlib.Path(sys.argv[1]); started=pathlib.Path(sys.argv[2]); "
+        "attempted=pathlib.Path(sys.argv[3]); exe=sys.argv[4]\n"
+        "def mark(path, value):\n"
+        "  with path.open('x', encoding='ascii') as f:\n"
+        "    f.write(value+'\\n'); f.flush(); os.fsync(f.fileno())\n"
+        "mark(started,'runner-started')\n"
+        "while not gate.exists(): time.sleep(0.025)\n"
+        "mark(attempted,'native-exec-attempted')\n"
+        "os.execv(exe,[exe])"
+    )
+    interpreter = str(Path(sys.executable).resolve(strict=True))
+    command = ["/usr/bin/sandbox-exec", "-p", profile, interpreter, "-B", "-c", runner,
+               str(gate), str(runner_started), str(exec_attempted), str(cli)]
+    proc = None
+    pgid = None
+    close_result = {"masterClosed": False, "slaveClosed": False}
+    state = None
+    enter_sent = False
+    started = time.monotonic()
+    try:
+        proc = subprocess.Popen(command, cwd=root, env=env_for(root), stdin=slave, stdout=slave,
+                                stderr=slave, start_new_session=True,
+                                preexec_fn=AGY.claim_controlling_tty, close_fds=True)
+        os.close(slave)
+        close_result["slaveClosed"] = True
+        pgid = CURSOR.audit_spawned_child(root, proc, "agy-private-login")
+        append_audit(audit_path, "native-start-gated", pid=proc.pid, pgid=pgid,
+                     command="antigravity", timeoutSeconds=timeout)
+        with gate.open("xb") as stream:
+            stream.write(b"go\n")
+            stream.flush()
+            os.fsync(stream.fileno())
+        deadline = time.monotonic() + min(max(1, timeout), MAX_LOGIN_SECONDS)
+        state, enter_sent = _capture_login(master, deadline, enter_sent=False,
+                                           audit_path=audit_path, case_root=root)
+        runner_seen = runner_started.is_file()
+        exec_seen = exec_attempted.is_file()
+        append_audit(audit_path, "native-login-observed", pid=proc.pid, pgid=pgid,
+                     state=_safe_state(state), enterSent=enter_sent,
+                     runnerStarted=runner_seen, nativeExecAttempted=exec_seen,
+                     durationSeconds=round(time.monotonic() - started, 2))
+        return {"promptReady": is_ready(state), "state": _safe_state(state), "enterSent": enter_sent,
+                "runnerStarted": runner_seen, "nativeExecAttempted": exec_seen,
+                "durationSeconds": round(time.monotonic() - started, 2),
+                "exitCode": proc.poll()}
+    finally:
+        try:
+            os.close(master)
+            close_result["masterClosed"] = True
+        except OSError:
+            pass
+        try:
+            if proc is not None and pgid is not None:
+                AGY.terminate_owned_group(proc, pgid, "agy-private-login")
+                append_audit(audit_path, "native-login-cleanup", pid=proc.pid, pgid=pgid,
+                             cleaned=proc.poll() is not None, closeResult=close_result)
+            elif proc is not None:
+                CURSOR.direct_child_cleanup(proc, grace=1.0)
+                append_audit(audit_path, "native-login-cleanup-failed-audit", pid=proc.pid,
+                             parentReaped=proc.poll() is not None, closeResult=close_result)
+                raise RuntimeError("process identity audit failed; login result is invalid")
+        finally:
+            if not close_result["slaveClosed"]:
+                try:
+                    os.close(slave)
+                    close_result["slaveClosed"] = True
+                except OSError:
+                    pass
+
+
+def _safe_state(state):
+    keys = ("authBarrierObserved", "localPromptObserved", "readyHintObserved",
+            "welcomeLabelObserved", "workspaceLabelObserved", "modelSelectionLabelObserved",
+            "errorObserved", "errorCategories", "bytesObserved",
+            "googleSignInOptionObserved", "nativeLoginChoiceObserved", "enterHintObserved",
+            "terminalAmbiguityObserved", "terminalAmbiguitySite", "loginRowDiagnostics", "startupDiagnostics")
+    return {key: state.get(key) for key in keys}
+
+
+def _write_invalid_marker(root, marker):
+    marker["valid"] = False
+    _atomic_json(Path(root) / "owned-session.json", marker)
+
+
+def invalidate_and_remove_private_home(root, marker):
+    """Attempt marker invalidation and HOME removal even if either operation fails."""
+    root = Path(root)
+    home = root / "home"
+    failures = []
+    try:
+        _write_invalid_marker(root, marker)
+    except Exception as error:
+        failures.append(type(error).__name__)
+        try:
+            (root / "owned-session.json").unlink(missing_ok=True)
+        except Exception as unlink_error:
+            failures.append(type(unlink_error).__name__)
+    finally:
+        try:
+            if home.exists():
+                shutil.rmtree(home)
+        except Exception as error:
+            failures.append(type(error).__name__)
+    if home.exists():
+        failures.append("HomeStillExists")
+    if failures:
+        raise RuntimeError("private HOME invalidation/removal failed")
+
+
+def prepare(binary=PINNED_BINARY, *, timeout=MAX_LOGIN_SECONDS):
+    """Run one bounded native-login preparation; returns sanitized status only."""
+    if sys.platform != "darwin" or os.uname().machine not in ("x86_64", "i386"):
+        raise RuntimeError("AGY login preparation is pinned for Darwin x64")
+    audit_root = _owned_dir("aok-agy-login-audit-")
+    root = _owned_dir("aok-agy-login-")
+    audit_path = audit_root / "audit.jsonl"
+    global AUDIT_PATH
+    AUDIT_PATH = audit_path
+    AGY.AUDIT_PATH = audit_path
+    CURSOR.AUDIT_PATH = audit_path
+    created = datetime.now(timezone.utc)
+    session_id = str(uuid.uuid4())
+    marker = session_marker(session_id, created)
+    _atomic_json(root / "owned-session.json", marker)
+    dependencies = _record_dependencies(audit_root)
+    source_hash = dependencies["prepare_agy_login.py"]
+    append_audit(audit_path, "probe-prepared", sessionId=session_id,
+                 sourceHashes=dependencies, sourceSHA256=source_hash,
+                 binarySHA256=PINNED_BINARY_SHA256, rootCreatedAt=marker["createdAt"],
+                 rootExpiresAt=marker["expiresAt"])
+    result = {"status": "blocked", "root": str(root), "auditRoot": str(audit_root),
+              "sessionId": session_id,
+              "backendAuthentication": "not-independently-verified"}
+    print(json.dumps({"status": "pending", "root": str(root),
+                      "auditRoot": str(audit_root)}, sort_keys=True), flush=True)
+    try:
+        binary = Path(binary).resolve(strict=True)
+        if file_sha(binary) != PINNED_BINARY_SHA256:
+            raise RuntimeError("pinned AGY binary hash mismatch")
+        cli = root / "antigravity"
+        shutil.copyfile(binary, cli)
+        cli.chmod(0o500)
+        if file_sha(cli) != PINNED_BINARY_SHA256:
+            raise RuntimeError("copied AGY binary hash mismatch")
+        profile = sandbox_profile(root, cli, "/dev/tty")
+        preflight = _preflight(root, audit_path, profile)
+        result["preflight"] = preflight
+        observation = run_login(root, audit_path, cli, timeout=timeout)
+        result["observation"] = observation
+        if not observation["promptReady"]:
+            invalidate_and_remove_private_home(root, marker)
+            try:
+                cli.unlink()
+            except OSError:
+                pass
+            append_audit(audit_path, "login-preparation-failed", sessionId=session_id,
+                         reason="ready-prompt-not-observed", state=observation["state"])
+            return result
+        marker["valid"] = True
+        marker["readyPromptObserved"] = True
+        _atomic_json(root / "owned-session.json", marker)
+        append_audit(audit_path, "login-preparation-prompt-ready", sessionId=session_id,
+                     state=observation["state"], expiresAt=marker["expiresAt"])
+        result["status"] = "prompt-ready"
+        return result
+    except BaseException as error:
+        cleanup_failed = False
+        try:
+            invalidate_and_remove_private_home(root, marker)
+        except Exception:
+            cleanup_failed = True
+        try:
+            (root / "antigravity").unlink()
+        except OSError:
+            pass
+        try:
+            append_audit(audit_path, "login-preparation-failed", sessionId=session_id,
+                         reasonType=type(error).__name__, cleanupFailed=cleanup_failed)
+        except Exception:
+            pass
+        if not isinstance(error, Exception):
+            raise
+        result["reasonType"] = type(error).__name__
+        if cleanup_failed:
+            result["cleanupFailed"] = True
+        return result
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--binary", type=Path, default=PINNED_BINARY)
+    parser.add_argument("--timeout", type=int, default=MAX_LOGIN_SECONDS)
+    args = parser.parse_args(argv)
+    if args.timeout < 1 or args.timeout > MAX_LOGIN_SECONDS:
+        parser.error(f"--timeout must be 1..{MAX_LOGIN_SECONDS} seconds")
+    result = prepare(args.binary, timeout=args.timeout)
+    print(json.dumps({"status": result["status"], "root": result["root"],
+                      "auditRoot": result["auditRoot"]}, sort_keys=True))
+    return 0 if result["status"] == "prompt-ready" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

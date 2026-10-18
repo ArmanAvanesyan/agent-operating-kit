@@ -133,3 +133,17 @@ input. It uses a pinned cached base image, no network or host credential mounts,
 a read-only container root and disposable writable state. Neither helper invokes
 an agent or submits an ordinary prompt; only a recognized local ready prompt
 permits the documented manager command. Reports never auto-promote the loading gate.
+
+## Resolved launcher and isolated OAuth follow-up (2026-10-18)
+
+The [startup investigation](../../../docs/native-startup-diagnostics.md)
+supersedes the earlier unexplained Darwin startup error: the Apple Python
+launcher shim failed before native execution. Resolving the running Python
+interpreter lets all three controls reach native authentication.
+
+The approved private-profile OAuth follow-up submitted a fresh code once and
+advanced to welcome/onboarding labels with a generic error. It did not establish
+a ready prompt, backend authentication, or `/agents` discovery. The private HOME
+was removed. The error's cause remains unresolved, so the native-loading gate
+stays open. Current helper fixes and tests do not retroactively establish native
+loading or runtime enforcement.

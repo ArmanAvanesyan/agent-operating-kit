@@ -26,8 +26,9 @@ func (adapter) Descriptor() nativeadapter.Descriptor {
 	return nativeadapter.Descriptor{
 		Target: "cursor", AdapterVersion: adapterVersion, Scopes: []string{"project"},
 		HostLoading: nativeadapter.HostLoadingEvidence{
-			Status: "not-run", HostVersion: "2026.10.16-e3cb207",
-			Evidence: []string{"docs/evidence/native-adapters/cursor-loading-2026.10.16.json"},
+			Status: "verified", HostVersion: "2026.10.16-e3cb207",
+			Scopes:   []string{"project"},
+			Evidence: []string{"docs/evidence/native-adapters/cursor-project-discovery-decision-2026-10-18.json"},
 		},
 		Fields: []nativeadapter.FieldCapability{
 			{NeutralPath: "agent.metadata.id", NativePath: "frontmatter.name", Support: "native", EnforcementOwner: "native"},

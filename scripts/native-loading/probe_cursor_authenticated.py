@@ -31,6 +31,8 @@ import uuid
 
 sys.dont_write_bytecode = True
 import probe_cursor_fresh_cli as safe
+from native_startup_diagnostics import classify
+from native_terminal import TerminalAmbiguity, render_screen, ambiguity_site
 
 WRAPPER_SHA256 = "2ccc9a8e167797641448b5e5c936f006ba137a2555f117f38c5eb76a5238a233"
 
@@ -77,7 +79,8 @@ def guard(root, terminal_path=None):
                '(deny file-write*)'
                f'(allow file-write* (subpath {q(root)}) '
                '(literal "/dev/null") (literal "/dev/tty"))'
-               f'(deny file-write* (subpath {q(root / "host")}))')
+               f'(deny file-write* (subpath {q(root / "host")}))'
+               f'(deny file-write* (subpath {q(root / "tools")}))')
     if terminal_path is not None:
         # This comes from this process's newly allocated PTY slave, never an
         # author-supplied path. /dev/tty alone does not name the actual device.
@@ -89,7 +92,7 @@ def environment(root):
     paths = {name: root / name for name in ("home", "tmp", "config", "data")}
     for path in paths.values():
         path.mkdir(parents=True, exist_ok=True, mode=0o700)
-    return {"PATH": "/usr/bin:/bin", "HOME": str(paths["home"]),
+    return {"PATH": "/Library/Developer/CommandLineTools/usr/bin:/usr/bin:/bin", "HOME": str(paths["home"]),
             "TMPDIR": str(paths["tmp"]), "CURSOR_CONFIG_DIR": str(paths["config"]),
             "CURSOR_DATA_DIR": str(paths["data"]), "AGENT_CLI_CREDENTIAL_STORE": "file",
             "NO_OPEN_BROWSER": "1", "TERM": "xterm-256color", "DIRENV_DISABLE": "1"}
@@ -161,8 +164,8 @@ def preflight(root, env):
     return {"pid": proc.pid, "pgid": group, "terminated": proc.poll() is not None}
 
 
-def normalize(text):
-    return re.sub(r"\x1b(?:\[[0-?]*[ -/]*[@-~]|\][^\x07]*(?:\x07|\x1b\\))", "", text)
+def normalize(data):
+    return render_screen(data, width=120, height=40)
 
 
 def claim_controlling_terminal():
@@ -173,7 +176,13 @@ def claim_controlling_terminal():
 
 def terminal_responses(data):
     """Answer only standard terminal queries, never synthesize user input."""
-    known = ((b"\x1b[6n", b"\x1b[1;1R", "cursor-position"),
+    known = ((b"\x1b[?u", b"\x1b[?0u", "kitty-keyboard-unsupported"),
+             (b"\x1b[0c", b"\x1b[?1;2c", "primary-device-attributes-explicit"),
+             (b"\x1b[>0c", b"\x1b[>0;276;0c", "secondary-device-attributes-explicit"),
+             (b"\x1b[?2026$p", b"\x1b[?2026;0$y", "synchronized-output-unsupported"),
+             (b"\x1b[?1004$p", b"\x1b[?1004;0$y", "focus-events-unsupported"),
+             (b"\x1b[>q", b"\x1bP>|AOK-probe\x1b\\", "terminal-version"),
+             (b"\x1b[6n", b"\x1b[1;1R", "cursor-position"),
              (b"\x1b[c", b"\x1b[?1;2c", "primary-device-attributes"),
              (b"\x1b[>c", b"\x1b[>0;276;0c", "secondary-device-attributes"),
              (b"\x1b]10;?\x07", b"\x1b]10;rgb:ffff/ffff/ffff\x07", "foreground-color"),
@@ -181,8 +190,28 @@ def terminal_responses(data):
     return [(reply, label) for query, reply, label in known if query in data]
 
 
+def prepare_git_policy(root):
+    """Fail Git network operations fast; never read or log Git arguments."""
+    tools = root / "tools"
+    tools.mkdir(mode=0o700)
+    shim = tools / "git"
+    shim.write_text("""#!/bin/sh
+for argument do
+  case "$argument" in
+    clone|fetch|pull|push|ls-remote|submodule)
+      printf 'blocked-git-network-operation\\n' >> "$AOK_GIT_POLICY_EVENTS"
+      exit 69 ;;
+  esac
+done
+exec /Library/Developer/CommandLineTools/usr/bin/git "$@"
+""")
+    shim.chmod(0o500)
+    return tools
+
+
 def inspect_menu(cli, project, root, env, timeout=18):
     master, slave = pty.openpty()
+    os.set_blocking(master, False)
     try:
         fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack("HHHH", 40, 120, 0, 0))
         proc = subprocess.Popen(guard(root, os.ttyname(slave)) + [str(cli), "--workspace", str(project), "--trust"],
@@ -201,9 +230,13 @@ def inspect_menu(cli, project, root, env, timeout=18):
         raise
     chunks, total = [], 0
     typed = False
+    draft = None
+    slash_opened = False
     ready = False
     queries = []
     exit_before_cleanup = None
+    terminal_ambiguous = False
+    terminal_site = None
     begin = time.monotonic()
     try:
         while time.monotonic() - begin < timeout and total < 262144:
@@ -211,6 +244,8 @@ def inspect_menu(cli, project, root, env, timeout=18):
             if readable:
                 try:
                     data = os.read(master, min(8192, 262144 - total))
+                except BlockingIOError:
+                    continue
                 except OSError:
                     break
                 if not data:
@@ -220,15 +255,39 @@ def inspect_menu(cli, project, root, env, timeout=18):
                 for reply, label in terminal_responses(data):
                     os.write(master, reply)
                     queries.append(label)
-            text = normalize(b"".join(chunks).decode("utf-8", "replace"))
+            try:
+                text = normalize(b"".join(chunks))
+                terminal_ambiguous = False
+            except TerminalAmbiguity as error:
+                terminal_site = ambiguity_site(error)
+                terminal_ambiguous = True
+                continue
             if "Press any key to log in" in text:
                 break
             # The native prompt's hint is emitted only after the TUI mounts.
-            if not typed and any(hint in text for hint in ("/ commands", "/ for commands", "for commands", "Add a follow-up")):
+            glyph = bool(re.search(r"(?:^|[\n\r])[^\n\r]{0,12}[❯›>][ \t]*(?:$|[\n\r])", text))
+            rendered = "cursor" in text.lower() and "auto" in text.lower() and any(word in text.lower() for word in ("plan", "agent", "ask"))
+            if draft is None and rendered and not any(word in text.lower() for word in ("sign in", "log in", "trust this", "error:")):
+                # Open only the native slash menu. Do not submit or select anything.
+                os.write(master, b"/")
+                draft = "/"
+                # Header-only slash is a non-submitting probe, not readiness proof.
+            core_menu = sum(bool(re.search(r"\b" + word + r"\b", text, re.I)) for word in ("models", "help", "skills", "mcp", "resume")) >= 2
+            command_picker = bool(re.search(r"\b(?:select|search|filter)\s+(?:a\s+)?commands?\b", text, re.I))
+            named_commands = len(set(re.findall(r"(?<!\w)/(model|plan|ask|new|resume|mcp|help|rules|skills)\b", text, re.I))) >= 2
+            core_menu = core_menu or named_commands or (command_picker and bool(re.search(r"\bmodel\b", text, re.I)))
+            if draft == "/" and core_menu:
+                ready = True
+                slash_opened = True
+                os.write(master, b"reviewer")
+                draft = "/reviewer"
+                typed = True
+            if draft is None and any(hint in text for hint in ("/ commands", "/ for commands", "for commands", "Add a follow-up")):
                 ready = True
                 os.write(master, b"/reviewer")
                 typed = True
-            if typed and "Reviews changes for correctness and security." in text:
+                draft = "/reviewer"
+            if draft and "Reviews changes for correctness and security." in text:
                 break
     finally:
         exit_before_cleanup = proc.poll()
@@ -236,18 +295,28 @@ def inspect_menu(cli, project, root, env, timeout=18):
             safe.append_audit({"event": "native-menu-observed", "pid": proc.pid,
                                "pgid": group, "capturedBytes": total,
                                "typedWithoutEnter": typed,
-                               "expectedDescriptionObserved": b"Reviews changes for correctness and security." in b"".join(chunks)})
+                               "expectedDescriptionObserved": b"Reviews changes for correctness and security." in b"".join(chunks),
+                               "terminalAmbiguityObserved": terminal_ambiguous})
         finally:
             try:
                 os.close(master)
             finally:
                 safe.terminate_owned_group(proc, group, "native-slash-menu")
-    text = normalize(b"".join(chunks).decode("utf-8", "replace"))
-    return {"capturedBytes": total, "readyPromptObserved": ready,
+    try:
+        text = normalize(b"".join(chunks))
+        terminal_ambiguous = False
+    except TerminalAmbiguity as error:
+        terminal_site = ambiguity_site(error)
+        text = ""
+        terminal_ambiguous = True
+        ready = False
+    return {"startupDiagnostics": classify(b"".join(chunks)), "capturedBytes": total, "readyPromptObserved": ready,
             "nativeExitBeforeCleanup": exit_before_cleanup,
             "controllingTerminalConfigured": True, "terminalQueriesAnswered": queries,
-            "typedWithoutEnter": "/reviewer" if typed else None,
+            "typedWithoutEnter": draft, "nativeSlashMenuObserved": slash_opened,
+            "promptGlyphObserved": bool(re.search(r"[❯›>]", text)),
             "enterSent": False, "loginBarrierObserved": "Press any key to log in" in text,
+            "terminalAmbiguityObserved": terminal_ambiguous, "terminalAmbiguitySite": terminal_site if terminal_ambiguous else None,
             "expectedDescriptionObserved": "Reviews changes for correctness and security." in text,
             "expectedNameObserved": bool(re.search(r"\breviewer\b", text)),
             "nativeMenuMarkerObserved": "Run reviewer subagent" in text,
@@ -260,6 +329,8 @@ def main():
     parser.add_argument("--package", type=Path, required=True)
     parser.add_argument("--aok", type=Path, required=True)
     parser.add_argument("--evidence-out", type=Path, required=True)
+    parser.add_argument("--deny-git-network", action="store_true", help="isolation policy: refuse Git fetch/clone operations without retaining arguments")
+    parser.add_argument("--trace-startup", action="store_true", help="diagnostic-only preload observing fixed public startup marks")
     parser.add_argument("--menu-timeout", type=int, choices=range(1, 121), default=18)
     login = parser.add_mutually_exclusive_group(required=True)
     login.add_argument("--use-existing-cli-login", action="store_true")
@@ -294,6 +365,7 @@ def main():
             shutil.copyfile(args.aok, aok)
             aok.chmod(0o700)
             preflight_report = preflight(root, environment(root / "preflight"))
+            git_tools = prepare_git_policy(root) if args.deny_git_network else None
             # Generate through the actual static adapter, before credentials enter a native child.
             source = root / "source"
             native = source / ".cursor/agents/reviewer.md"
@@ -332,7 +404,22 @@ def main():
                                             "personalFieldsRetained": False}
                     if code != 0 or status.get("status") != "authenticated" or not status.get("userInfo"):
                         raise RuntimeError("existing isolated login was not backend-verified; fresh login required")
-                    case_results[case] = inspect_menu(cli, project, root, env, timeout=args.menu_timeout)
+                    menu_env = dict(env)
+                    if git_tools:
+                        menu_env["PATH"] = str(git_tools) + ":" + menu_env["PATH"]
+                        menu_env["AOK_GIT_POLICY_EVENTS"] = str(case_root / "git-policy-events.txt")
+                    trace = case_root / "startup-trace.jsonl"
+                    if args.trace_startup:
+                        observer = root / "startup-observer.cjs"
+                        shutil.copyfile(Path(__file__).with_name("cursor_startup_observer.cjs"), observer)
+                        menu_env["NODE_OPTIONS"] = "--require=" + str(observer)
+                        menu_env["AOK_STARTUP_TRACE"] = str(trace)
+                    case_results[case] = inspect_menu(cli, project, root, menu_env, timeout=args.menu_timeout)
+                    if git_tools:
+                        policy_events = case_root / "git-policy-events.txt"
+                        case_results[case]["blockedGitNetworkOperations"] = policy_events.read_text().count("blocked-git-network-operation") if policy_events.exists() else 0
+                    if args.trace_startup:
+                        case_results[case]["diagnosticOnlyStartupTrace"] = [json.loads(line) for line in trace.read_text().splitlines()] if trace.exists() else []
                     safe.require_sha(cli, WRAPPER_SHA256, "Cursor CLI after native startup")
                 finally:
                     auth.unlink(missing_ok=True)
@@ -342,15 +429,18 @@ def main():
                       "observedAt": datetime.now(timezone.utc).isoformat(),
                       "nativeLoading": "not-verified", "runtimeEnforcement": "unverified",
                       "invalidControl": "same frontmatter identity and description; blank prompt body",
-                      "modelInvocation": "not-run", "cases": case_results, "authentication": status_results,
+                      "modelInvocation": "not-run", "diagnosticPreload": args.trace_startup,
+                      "nativeGitSHA256": safe.file_sha(Path("/Library/Developer/CommandLineTools/usr/bin/git")),
+                      "observerSHA256": safe.file_sha(Path(__file__).with_name("cursor_startup_observer.cjs")) if args.trace_startup else None, "cases": case_results, "authentication": status_results,
                       "source": {"packageSHA256": safe.PACKAGE_SHA256, "cliSHA256": WRAPPER_SHA256, "entrypoint": "official cursor-agent wrapper",
                                  "renderedSHA256": hashlib.sha256(rendered).hexdigest(),
-                                 "aokSHA256": safe.file_sha(aok), "probeSHA256": hashlib.sha256(script_bytes).hexdigest()},
+                                 "aokSHA256": safe.file_sha(aok), "probeSHA256": hashlib.sha256(script_bytes).hexdigest(), "diagnosticsHelperSHA256": safe.file_sha(Path(__file__).with_name("native_startup_diagnostics.py")), "terminalRendererSHA256": safe.file_sha(Path(__file__).with_name("native_terminal.py"))},
                       "isolation": {"writes": "owned temporary root plus null, tty and exact allocated PTY slave", "realHomeRead": "denied for native children",
                                     "keychainLookup": "denied for native children",
                                     "credentialSource": "prepared private native login" if isolated_source else "two explicit Cursor CLI Keychain items copied by parent",
                                     "credentialStore": "private file; originals not written; copies removed",
                                     "network": "allowed for real backend authentication and native initialization",
+                                    "gitNetworkPolicy": "Git clone/fetch/pull/push/ls-remote/submodule refused by immutable task-owned shim" if git_tools else "unchanged",
                                     "rawOutputRetained": False, "preflight": preflight_report}}
         output.write_text(json.dumps(report, indent=2) + "\n")
         print(json.dumps({"status": "recorded", "evidence": str(output), "cases": case_results}))

@@ -1,7 +1,9 @@
 package cursor
 
 import (
+	"crypto/sha256"
 	"encoding/json"
+	"fmt"
 	"os"
 	"reflect"
 	"strings"
@@ -40,10 +42,44 @@ func TestProjectSubagentRoundTripsMappedFieldsUnknownAndBody(t *testing.T) {
 	}
 }
 
-func TestFreshHostEvidenceRemainsBlockedAndLinked(t *testing.T) {
+func TestProjectDiscoveryEvidenceIsBoundToNativeControls(t *testing.T) {
 	loading := New().Descriptor().HostLoading
-	if loading.Status != "not-run" || loading.HostVersion != "2026.10.16-e3cb207" || len(loading.Evidence) != 1 || loading.Evidence[0] != "docs/evidence/native-adapters/cursor-loading-2026.10.16.json" {
-		t.Fatalf("fresh CLI blocker evidence is not linked accurately: %+v", loading)
+	if loading.Status != "verified" || loading.HostVersion != "2026.10.16-e3cb207" || len(loading.Evidence) != 1 || !reflect.DeepEqual(loading.Scopes, []string{"project"}) {
+		t.Fatalf("project discovery evidence scope changed: %+v", loading)
+	}
+	data, err := os.ReadFile("../../../" + loading.Evidence[0])
+	if err != nil {
+		t.Fatal(err)
+	}
+	var decision struct{ VerificationKind, Observation, ObservationSHA256 string }
+	if err := json.Unmarshal(data, &decision); err != nil {
+		t.Fatal(err)
+	}
+	if decision.VerificationKind != "native-project-command-picker-discovery" {
+		t.Fatal("unsupported loading claim")
+	}
+	observed, err := os.ReadFile("../../../" + decision.Observation)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if fmt.Sprintf("%x", sha256.Sum256(observed)) != decision.ObservationSHA256 {
+		t.Fatal("native observation drift")
+	}
+	var report struct {
+		ModelInvocation string
+		Cases           map[string]struct{ ExpectedDescriptionObserved, NativeSlashMenuObserved, EnterSent, TerminalAmbiguityObserved, CleanupCompleted bool }
+	}
+	if err := json.Unmarshal(observed, &report); err != nil {
+		t.Fatal(err)
+	}
+	if report.ModelInvocation != "not-run" || len(report.Cases) != 3 {
+		t.Fatal("native controls missing or invocation occurred")
+	}
+	for _, name := range []string{"positive", "absent", "malformed"} {
+		control, ok := report.Cases[name]
+		if !ok || control.ExpectedDescriptionObserved != (name == "positive") || !control.NativeSlashMenuObserved || control.EnterSent || control.TerminalAmbiguityObserved || !control.CleanupCompleted {
+			t.Fatalf("native discovery oracle invalid for %s: %+v", name, control)
+		}
 	}
 }
 

@@ -176,7 +176,7 @@ is narrower than field parsing and remains separate from runtime enforcement.
 | `opencode` | `project` | Verified discovery only for OpenCode 1.18.35 | Isolated project file discovery only; no model or tool execution, and no permission-enforcement claim. |
 | `claude-code` | `project`, `plugin` | Verified project discovery only for Claude Code 2.1.281 | Evidence applies to project scope only; plugin parsing is not a discovery check. No model execution or permission-enforcement claim. |
 | `codex` | `project`, `project-registered` | Verified registered project loading for Codex CLI 0.162.1 | Registration plus referenced role-file loading; standalone `project` remains `not-run`. No child-agent invocation or runtime-enforcement claim. |
-| `cursor` | `project` | `not-run`, fresh host identity/evidence linked | Official 2026.10.16 CLI reaches login before inventory; older shipped-component discovery remains separate. |
+| `cursor` | `project` | Verified native command-picker discovery for 2026.10.16-e3cb207 | Authenticated positive/absent/blank-body controls under an explicit Git retrieval shim; no selected-agent startup, inference or enforcement claim. |
 | `agy` | `project` | `not-run`, 1.4.2 evidence linked | Fresh Darwin and Linux container listings emit no role inventory for valid/absent/malformed files; native loading remains unverified. |
 | `gemini` | `project` | Verified project discovery for temporary Gemini CLI 0.61.0 | Guarded positive/empty TUI checks before authentication; no invocation or runtime-enforcement claim. |
 | `openclaw` | `isolated-home` | Verified Linux loading for OpenClaw 2026.9.4 / Node 26.7.0 | Network-disabled container roster and workspace controls; Darwin CLI remains unverified. |
@@ -229,8 +229,8 @@ older sidecars; host loading and runtime enforcement remain unverified.
 The [Cursor adapter notes](../internal/nativeadapters/cursor/README.md#authenticated-isolated-cli-verification-2026-10-18)
 record successful isolated backend authentication with the pinned 2026.10.16
 CLI. Controlling-terminal and official-launcher attempts did not reach native
-role discovery. Authentication is verified; project subagent loading and runtime
-enforcement remain unverified. The two remaining loading gates are unchanged.
+role discovery. This earlier authentication-only result is superseded by the
+reviewed project discovery follow-up below; runtime enforcement is unverified.
 
 
 ## agy interactive manager verification follow-up
@@ -240,3 +240,12 @@ separate the isolated Linux authentication barrier from the Darwin generic
 startup error under an existing-keyring-only configuration. Neither reached a
 ready prompt or sent `/agents`. Source snapshots, control outcomes and process
 audits are retained. Native loading and runtime enforcement remain unverified.
+
+## Native startup diagnosis
+
+The [isolated startup investigation](native-startup-diagnostics.md) corrects the
+agy macOS launcher failure and records Cursor initialization diagnostics. The agy
+native-loading gate remains open; Cursor project discovery is now verified.
+The fresh agy code submission reached welcome/onboarding labels with a generic
+error, without a ready prompt. Its private HOME was removed. A login screen,
+authenticated status, or a rendering mark does not prove project discovery.

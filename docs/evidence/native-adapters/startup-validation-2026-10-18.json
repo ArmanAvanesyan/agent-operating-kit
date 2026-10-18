@@ -1,0 +1,34 @@
+{
+  "scope": "isolated native startup probe harness",
+  "kitValidation": "passed",
+  "agentProposalChecker": "passed: 17 schemas, 17 examples, 39 negative cases",
+  "planningProposalChecker": "passed: 8 schemas, 7 examples, 20 negative cases",
+  "goTests": "go test ./... passed",
+  "goBuild": "built ./cmd/aok",
+  "renderSmoke": "engineering-guardrails/codex passed",
+  "pythonCompilation": "scripts/aok and changed native entrypoints passed",
+  "pythonRegression": {
+    "tests": 177,
+    "skipped": 2,
+    "result": "passed under host PTY/process-group permissions",
+    "outerSandboxAttempt": "failed: PTY/process-group confinement tests cannot operate under outer sandbox"
+  },
+  "installedOriginalsUnchanged": {
+    "agySHA256": "2a6bd844ae3431d35203af44f31bdd5e26f5ffe287d47c62a46862bf44099fc2",
+    "cursorIndexSHA256": "b229d091e5199812927f0c74918d6b53e61fcc869fe39c2f94bad2ab1c049d2e"
+  },
+  "nativeLoadingGatePromotion": {
+    "cursor": "reviewed version-bound project command-picker discovery only",
+    "agy": "not-verified; post-code screen has generic error, no ready prompt"
+  },
+  "evidenceIntegrity": "new JSON parsed; archived source hashes and Cursor observation hash verified; credential-pattern scan passed",
+  "independentReview": "gpt-6-luna high; current-tree input gating and cleanup findings fixed and re-reviewed; exact commit review recorded in PR",
+  "validationSourceHashes": {
+    "scripts/native-loading/prepare_agy_login.py": "6446ac7fec54893bc56a711b4aab8e357940b15ba37067ad577580245b1832bd",
+    "scripts/native-loading/native_terminal.py": "62c2473e4139d5cc9027ba5a34d7cf0a044f4e34ddb3e40f3b7e331419107639",
+    "scripts/native-loading/probe_cursor_authenticated.py": "dd2059129a3441385c1574f958debe7c839a039449c53d855f2d407dc24546e0",
+    "scripts/native-loading/probe-agy-macos-interactive-manager.py": "88733f17ff7e864e9d863c1b4c4143265a95f37bc3827c8c9254c4c7d4644684",
+    "internal/nativeadapters/cursor/adapter.go": "1a36f3498fa6d65a5758bfcd0761e1db3e857bd81213d3bf7b85da8afb500dd5",
+    "internal/cli/native_test.go": "a7c49dd0e67ed56a289478699e49b38af151825a22befb78d3ef3203874a4e16"
+  }
+}

@@ -95,7 +95,7 @@ m.paths=Module._nodeModulePaths(path.dirname(file));m._compile(patched,file);
             elif case == "quoted-readonly":
                 exported.write_text('---\nname: reviewer\nreadonly: "true"\n---\nPrompt\n')
             elif case == "blank-prompt":
-                exported.write_text('---\nname: reviewer\n---\n  \n')
+                exported.write_text('---\nname: reviewer\n---\n \ufeff \n')
             else:
                 exported.write_bytes(generated)
             result = subprocess.run([str(host / "node"), str(harness), str(bundle),

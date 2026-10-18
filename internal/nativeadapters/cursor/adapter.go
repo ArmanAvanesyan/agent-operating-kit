@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"path"
 	"strings"
+	"unicode"
+	"unicode/utf8"
 
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/contracts"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapter"
@@ -46,7 +48,7 @@ func (adapter) Decode(scope string, files []nativeadapter.File) (nativeadapter.D
 	if err != nil {
 		return nativeadapter.Document{}, nil, errors.New("Cursor subagent frontmatter is invalid")
 	}
-	if strings.TrimSpace(string(body)) == "" {
+	if blankHostPrompt(body) {
 		return nativeadapter.Document{}, nil, errors.New("Cursor host requires nonblank instructions")
 	}
 	if err := compatibleHostScalars(f.Data[:len(f.Data)-len(body)], meta); err != nil {
@@ -146,7 +148,7 @@ func (adapter) Encode(scope string, doc nativeadapter.Document) ([]nativeadapter
 		front[frontKey] = value
 	}
 	body, ok := doc.Assets["instructions.md"]
-	if !ok || len(doc.Assets) != 1 || strings.TrimSpace(string(body)) == "" {
+	if !ok || len(doc.Assets) != 1 || blankHostPrompt(body) {
 		return nil, nil, errors.New("Cursor export requires exactly one instructions.md asset")
 	}
 	metadata, err := nativeparse.Encode("yaml", front)
@@ -250,4 +252,11 @@ func compatibleHostScalars(header []byte, meta map[string]any) error {
 		}
 	}
 	return nil
+}
+
+func blankHostPrompt(body []byte) bool {
+	// ECMAScript trim includes the zero-width no-break space/BOM (U+FEFF).
+	return !utf8.Valid(body) || strings.TrimFunc(string(body), func(r rune) bool {
+		return unicode.IsSpace(r) || r == '\uFEFF'
+	}) == ""
 }

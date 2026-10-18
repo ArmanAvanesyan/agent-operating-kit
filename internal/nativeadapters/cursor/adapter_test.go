@@ -223,7 +223,7 @@ func TestExportRejectsUnrepresentableHostScalar(t *testing.T) {
 }
 
 func TestBlankHostInstructionsRejected(t *testing.T) {
-	for _, body := range []string{"", " \n\t\r\n"} {
+	for _, body := range []string{"", " \n\t\r\n", " \uFEFF \n", string([]byte{0xff})} {
 		file := nativeadapter.File{Path: ".cursor/agents/reviewer.md", Format: "markdown", Data: []byte("---\nname: reviewer\n---\n" + body)}
 		if _, _, err := New().Decode("project", []nativeadapter.File{file}); err == nil {
 			t.Fatal("blank host prompt accepted")

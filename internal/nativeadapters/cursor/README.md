@@ -99,3 +99,11 @@ The documented ACP flow includes authentication before session creation;
 `session/prompt` would begin an agent turn. No unauthenticated custom-subagent
 listing interface was identified. The earlier shipped-component result remains
 valid but does not close the full CLI gate. Runtime enforcement remains unverified.
+
+The 2026-10-18 isolated ACP probe sent only `initialize`, `initialized`, and
+`session/new`, using a synthetic invalid API key with network and keychain
+access denied. It timed out after 30 seconds, returned an initialize result
+and one sanitized `session/new` internal error, and returned no discovery
+response. This remains no loading evidence. The exact AOK-rendered draft and
+probe record are retained in [testdata](testdata/probe-aok-rendered.md) and
+[evidence](../../../docs/evidence/native-adapters/cursor-agy-offline-2026.10.18.json).

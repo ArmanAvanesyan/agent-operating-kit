@@ -176,8 +176,8 @@ is narrower than field parsing and remains separate from runtime enforcement.
 | `opencode` | `project` | Verified discovery only for OpenCode 1.18.35 | Isolated project file discovery only; no model or tool execution, and no permission-enforcement claim. |
 | `claude-code` | `project`, `plugin` | Verified project discovery only for Claude Code 2.1.281 | Evidence applies to project scope only; plugin parsing is not a discovery check. No model execution or permission-enforcement claim. |
 | `codex` | `project`, `project-registered` | Verified registered project loading for Codex CLI 0.162.1 | Registration plus referenced role-file loading; standalone `project` remains `not-run`. No child-agent invocation or runtime-enforcement claim. |
-| `cursor` | `project` | `not-run` | Parser and round-trip checks only. |
-| `agy` | `project` | `not-run` | Parser and round-trip checks only. |
+| `cursor` | `project` | `not-run` | Shipped-component discovery is separate; guarded full-CLI ACP session creation errors/timeouts provide no discovery evidence. |
+| `agy` | `project` | `not-run` | Copied CLI listings are identically empty for valid/absent/malformed files; native loading remains unverified. |
 | `gemini` | `project` | Verified project discovery for temporary Gemini CLI 0.61.0 | Guarded positive/empty TUI checks before authentication; no invocation or runtime-enforcement claim. |
 | `openclaw` | `isolated-home` | Verified Linux loading for OpenClaw 2026.9.4 / Node 26.7.0 | Network-disabled container roster and workspace controls; Darwin CLI remains unverified. |
 | `hermes-agent` | `profile` | Verified direct installed CLI entrypoint, source-hash bound | Native profile list reads exported model/metadata; separate SOUL loader proof; normal launcher selection and runtime enforcement unverified. |

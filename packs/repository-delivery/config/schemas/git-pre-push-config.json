@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repo-delivery.local/schemas/git-pre-push-config.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "kind": {
+      "const": "git-pre-push-config"
+    },
+    "repository": {
+      "type": "string"
+    },
+    "context": {
+      "type": "string"
+    },
+    "gates": {
+      "type": "string"
+    },
+    "review": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "fail_mode": {
+      "const": "closed"
+    }
+  },
+  "required": [
+    "schema_version",
+    "kind",
+    "repository",
+    "context",
+    "gates",
+    "review",
+    "fail_mode"
+  ],
+  "additionalProperties": false
+}

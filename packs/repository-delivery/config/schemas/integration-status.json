@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repo-delivery.local/schemas/integration-status.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "kind": {
+      "const": "integration-status"
+    },
+    "ready": {
+      "const": true
+    },
+    "context_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "snapshot_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "receipt_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "mode": {
+      "enum": [
+        "real",
+        "mock",
+        "mixed"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "kind",
+    "ready",
+    "context_sha256",
+    "snapshot_sha256",
+    "receipt_sha256",
+    "mode"
+  ],
+  "additionalProperties": false
+}

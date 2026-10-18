@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repo-delivery.local/schemas/runtime-finalization.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "reference",
+    "outcome",
+    "task",
+    "server"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "kind": {
+      "const": "runtime-finalization"
+    },
+    "reference": {
+      "type": "object",
+      "properties": {
+        "attempt_id": {
+          "type": "string"
+        },
+        "task_id": {
+          "type": "string"
+        },
+        "worker": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "string",
+          "pattern": "^([a-f0-9]{40}|[a-f0-9]{64})$"
+        },
+        "tree": {
+          "type": "string",
+          "pattern": "^([a-f0-9]{40}|[a-f0-9]{64})$"
+        },
+        "environment": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "attempt_id",
+        "task_id",
+        "worker",
+        "revision",
+        "tree",
+        "environment"
+      ],
+      "additionalProperties": false
+    },
+    "outcome": {
+      "enum": [
+        "complete",
+        "failed"
+      ]
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "status",
+        "claimed_by"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "complete",
+            "failed"
+          ]
+        },
+        "claimed_by": {
+          "type": "string"
+        }
+      }
+    },
+    "server": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "const": "swarmd"
+        }
+      }
+    }
+  }
+}

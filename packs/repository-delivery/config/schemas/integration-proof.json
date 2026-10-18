@@ -1,0 +1,348 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repo-delivery.local/schemas/integration-proof.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "kind": {
+      "const": "integration-proof"
+    },
+    "context_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "snapshot_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "environment": {
+      "type": "object",
+      "properties": {
+        "platform": {
+          "type": "string"
+        },
+        "python": {
+          "type": "string"
+        },
+        "git": {
+          "type": "string"
+        },
+        "selected_variables": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        }
+      },
+      "required": [
+        "platform",
+        "python",
+        "git",
+        "selected_variables"
+      ],
+      "additionalProperties": false
+    },
+    "specification": {
+      "type": "object",
+      "properties": {
+        "required_mode": {
+          "enum": [
+            "real",
+            "mock",
+            "mixed"
+          ]
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "mode": {
+                    "const": "real"
+                  },
+                  "endpoint": {
+                    "type": "string"
+                  },
+                  "version_field": {
+                    "type": "string"
+                  },
+                  "expected_version": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "mode",
+                  "endpoint",
+                  "version_field",
+                  "expected_version"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "mode": {
+                    "const": "mock"
+                  },
+                  "version": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "mode",
+                  "version"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "timeout_seconds": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 60
+        }
+      },
+      "required": [
+        "required_mode",
+        "services",
+        "timeout_seconds"
+      ],
+      "additionalProperties": false
+    },
+    "mode": {
+      "enum": [
+        "real",
+        "mock",
+        "mixed"
+      ]
+    },
+    "services": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "mode": {
+            "enum": [
+              "real",
+              "mock"
+            ]
+          },
+          "endpoint": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "observed_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "response_sha256": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "available": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "mode",
+          "endpoint",
+          "observed_version",
+          "response_sha256",
+          "available"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "gates_executed": {
+      "type": "boolean"
+    },
+    "gates": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "schema_version": {
+              "const": 1
+            },
+            "kind": {
+              "const": "gate-receipt"
+            },
+            "context_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "snapshot_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "environment": {
+              "type": "object",
+              "properties": {
+                "platform": {
+                  "type": "string"
+                },
+                "python": {
+                  "type": "string"
+                },
+                "git": {
+                  "type": "string"
+                },
+                "selected_variables": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  }
+                }
+              },
+              "required": [
+                "platform",
+                "python",
+                "git",
+                "selected_variables"
+              ],
+              "additionalProperties": false
+            },
+            "source_unchanged": {
+              "type": "boolean"
+            },
+            "passed": {
+              "type": "boolean"
+            },
+            "results": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "argv": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "minItems": 1
+                  },
+                  "returncode": {
+                    "type": "integer"
+                  },
+                  "timed_out": {
+                    "type": "boolean"
+                  },
+                  "stdout_sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "stderr_sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "duration_seconds": {
+                    "type": "number",
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "argv",
+                  "returncode",
+                  "timed_out",
+                  "stdout_sha256",
+                  "stderr_sha256",
+                  "duration_seconds"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "receipt_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "schema_version",
+            "kind",
+            "context_sha256",
+            "snapshot_sha256",
+            "environment",
+            "source_unchanged",
+            "passed",
+            "results",
+            "receipt_sha256"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "source_unchanged": {
+      "type": "boolean"
+    },
+    "passed": {
+      "type": "boolean"
+    },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "receipt_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "required": [
+    "schema_version",
+    "kind",
+    "context_sha256",
+    "snapshot_sha256",
+    "environment",
+    "specification",
+    "mode",
+    "services",
+    "gates_executed",
+    "gates",
+    "source_unchanged",
+    "passed",
+    "blockers",
+    "receipt_sha256"
+  ],
+  "additionalProperties": false
+}

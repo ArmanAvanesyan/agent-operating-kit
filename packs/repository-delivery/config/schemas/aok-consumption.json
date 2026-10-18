@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repo-delivery.local/schemas/aok-consumption.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "kind": {
+      "const": "aok-consumption"
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "schema_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "schema_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "document_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "schema_id",
+        "schema_sha256",
+        "document_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "packet": {
+      "type": "object"
+    },
+    "policy": {
+      "anyOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "policy_source": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "schema_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "schema_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "document_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "schema_id",
+            "schema_sha256",
+            "document_sha256"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "proposal": {
+      "type": "object",
+      "properties": {
+        "objective": {
+          "type": "string"
+        },
+        "acceptance_criteria": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "verification_commands": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "objective",
+        "acceptance_criteria",
+        "verification_commands"
+      ],
+      "additionalProperties": false
+    },
+    "runtime_status": {
+      "type": "null"
+    },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "kind",
+    "source",
+    "packet",
+    "policy",
+    "policy_source",
+    "proposal",
+    "runtime_status",
+    "gaps"
+  ],
+  "additionalProperties": false
+}

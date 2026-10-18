@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repo-delivery.local/schemas/hook-installation.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "kind": {
+      "const": "hook-installation"
+    },
+    "host": {
+      "const": "posix-git-pre-push"
+    },
+    "repository": {
+      "type": "string"
+    },
+    "hook": {
+      "type": "string"
+    },
+    "config": {
+      "type": "string"
+    },
+    "fail_mode": {
+      "const": "closed"
+    }
+  },
+  "required": [
+    "schema_version",
+    "kind",
+    "host",
+    "repository",
+    "hook",
+    "config",
+    "fail_mode"
+  ],
+  "additionalProperties": false
+}

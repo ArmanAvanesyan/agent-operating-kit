@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repo-delivery.local/schemas/review-receipt.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "kind": {
+      "const": "review-receipt"
+    },
+    "context_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "reviewer": {
+      "type": "string"
+    },
+    "reviewer_context": {
+      "type": "string"
+    },
+    "snapshot_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "outcome": {
+      "enum": [
+        "approved",
+        "changes-requested"
+      ]
+    },
+    "report": {
+      "type": "string"
+    },
+    "receipt_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "required": [
+    "schema_version",
+    "kind",
+    "context_sha256",
+    "reviewer",
+    "reviewer_context",
+    "snapshot_sha256",
+    "outcome",
+    "report",
+    "receipt_sha256"
+  ],
+  "additionalProperties": false
+}

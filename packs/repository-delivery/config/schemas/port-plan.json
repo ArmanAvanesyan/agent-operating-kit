@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repo-delivery.local/schemas/port-plan.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "kind": {
+      "const": "port-plan"
+    },
+    "repository": {
+      "type": "string"
+    },
+    "source_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "checkpoint": {
+      "type": "string"
+    },
+    "manifest_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "baseline_revision": {
+      "type": "string",
+      "pattern": "^([a-f0-9]{40}|[a-f0-9]{64})$"
+    },
+    "destination": {
+      "type": "string"
+    },
+    "branch": {
+      "type": "string"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "state": {
+            "enum": [
+              "write",
+              "delete",
+              "identical",
+              "unchanged-local",
+              "omitted",
+              "conflict"
+            ]
+          }
+        },
+        "required": [
+          "path",
+          "state"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "plan_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "required": [
+    "schema_version",
+    "kind",
+    "repository",
+    "source_sha256",
+    "checkpoint",
+    "manifest_sha256",
+    "baseline_revision",
+    "destination",
+    "branch",
+    "entries",
+    "plan_sha256"
+  ],
+  "additionalProperties": false
+}

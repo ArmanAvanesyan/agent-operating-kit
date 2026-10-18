@@ -1,0 +1,171 @@
+{
+  "name": "repository-delivery",
+  "kind": "pack",
+  "description": "Preservation-aware repository delivery, snapshot-bound evidence and optional fenced integrations.",
+  "sourceRepo": "ArmanAvanesyan/repo-delivery",
+  "neutralContent": "pack.content.json",
+  "supportedTargets": [
+    "codex",
+    "claude-code",
+    "cursor",
+    "opencode",
+    "gemini",
+    "openclaw",
+    "hermes-agent"
+  ],
+  "concepts": [
+    "task-packet",
+    "role",
+    "skill",
+    "pack",
+    "mcp-config"
+  ],
+  "sourceRefs": {
+    "neutral": [
+      "."
+    ]
+  },
+  "conceptGraph": {
+    "roles": [
+      "repository-delivery-lead"
+    ],
+    "hooks": [],
+    "skills": [
+      "repo-delivery-architecture-to-backlog",
+      "repo-delivery-checkpoint-port",
+      "repo-delivery-issue-to-pr",
+      "repo-delivery-pr-converge",
+      "repo-delivery-real-integration-proof",
+      "repo-delivery-setup",
+      "repo-delivery-workspace-inspect",
+      "repo-delivery-workspace-reconcile"
+    ],
+    "templates": [],
+    "taskPackets": [
+      "repository-delivery-packet"
+    ]
+  },
+  "targetRender": {
+    "codex": {
+      "status": "active",
+      "mode": "source",
+      "supportLevel": "native-install",
+      "artifactName": "repository-delivery.codex.json",
+      "packageFormat": "codex-plugin-bundle",
+      "bundleRefs": [
+        "."
+      ],
+      "sourceRefs": [
+        "."
+      ],
+      "notes": "Codex support is delivered through the native AOK Codex plugin bundle; generated pack output should retain plugin metadata from .codex-plugin/plugin.json.",
+      "importInstructions": "Use the bundled repository-delivery skills and helper support tree; read docs/repository-delivery.md in AOK. Python 3.11+ is optional and required only for delivery helper operations."
+    },
+    "claude-code": {
+      "status": "active",
+      "mode": "source",
+      "supportLevel": "compatibility-asset",
+      "artifactName": "repository-delivery.claude-code.json",
+      "packageFormat": "claude-code-marketplace",
+      "bundleRefs": [
+        "."
+      ],
+      "sourceRefs": [
+        "."
+      ],
+      "notes": "Claude Code support is a compatibility marketplace bundle backed by preserved pack assets, not a separate operating model.",
+      "importInstructions": "Use the bundled repository-delivery skills and helper support tree; read docs/repository-delivery.md in AOK. Python 3.11+ is optional and required only for delivery helper operations."
+    },
+    "cursor": {
+      "status": "active",
+      "mode": "generated",
+      "supportLevel": "generated-bundle",
+      "artifactName": "repository-delivery.cursor.json",
+      "packageFormat": "aok-import-bundle",
+      "bundleRefs": [
+        "."
+      ],
+      "payload": {
+        "contract": "aok-repository-delivery"
+      },
+      "importInstructions": "Use the bundled repository-delivery skills and helper support tree; read docs/repository-delivery.md in AOK. Python 3.11+ is optional and required only for delivery helper operations.",
+      "nativePackageFormats": [
+        ".cursor/rules",
+        ".cursor/skills"
+      ]
+    },
+    "opencode": {
+      "status": "active",
+      "mode": "generated",
+      "supportLevel": "generated-bundle",
+      "artifactName": "repository-delivery.opencode.json",
+      "packageFormat": "aok-import-bundle",
+      "bundleRefs": [
+        "."
+      ],
+      "payload": {
+        "contract": "aok-repository-delivery"
+      },
+      "importInstructions": "Use the bundled repository-delivery skills and helper support tree; read docs/repository-delivery.md in AOK. Python 3.11+ is optional and required only for delivery helper operations."
+    },
+    "gemini": {
+      "status": "active",
+      "mode": "generated",
+      "supportLevel": "generated-bundle",
+      "artifactName": "repository-delivery.gemini.json",
+      "packageFormat": "aok-import-bundle",
+      "bundleRefs": [
+        "."
+      ],
+      "payload": {
+        "contract": "aok-repository-delivery"
+      },
+      "importInstructions": "Use the bundled repository-delivery skills and helper support tree; read docs/repository-delivery.md in AOK. Python 3.11+ is optional and required only for delivery helper operations."
+    },
+    "openclaw": {
+      "status": "active",
+      "mode": "generated",
+      "supportLevel": "generated-bundle",
+      "artifactName": "repository-delivery.openclaw.json",
+      "packageFormat": "aok-import-bundle",
+      "bundleRefs": [
+        "."
+      ],
+      "payload": {
+        "contract": "aok-repository-delivery"
+      },
+      "importInstructions": "Use the bundled repository-delivery skills and helper support tree; read docs/repository-delivery.md in AOK. Python 3.11+ is optional and required only for delivery helper operations."
+    },
+    "hermes-agent": {
+      "status": "active",
+      "mode": "generated",
+      "supportLevel": "generated-bundle",
+      "artifactName": "repository-delivery.hermes-agent.json",
+      "packageFormat": "aok-import-bundle",
+      "bundleRefs": [
+        "."
+      ],
+      "payload": {
+        "contract": "aok-repository-delivery"
+      },
+      "importInstructions": "Use the bundled repository-delivery skills and helper support tree; read docs/repository-delivery.md in AOK. Python 3.11+ is optional and required only for delivery helper operations."
+    }
+  },
+  "adapters": {
+    "claude-code": {
+      "pluginPath": ".claude-plugin/plugin.json",
+      "readmePath": "README.md",
+      "assets": [
+        "skills/repo-delivery-architecture-to-backlog/SKILL.md",
+        "skills/repo-delivery-checkpoint-port/SKILL.md",
+        "skills/repo-delivery-issue-to-pr/SKILL.md",
+        "skills/repo-delivery-pr-converge/SKILL.md",
+        "skills/repo-delivery-real-integration-proof/SKILL.md",
+        "skills/repo-delivery-setup/SKILL.md",
+        "skills/repo-delivery-workspace-inspect/SKILL.md",
+        "skills/repo-delivery-workspace-reconcile/SKILL.md"
+      ]
+    }
+  },
+  "skillRoot": "skills"
+}

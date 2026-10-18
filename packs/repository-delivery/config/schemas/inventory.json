@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repo-delivery.local/schemas/inventory.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "kind": {
+      "const": "inventory"
+    },
+    "repository": {
+      "type": "string"
+    },
+    "head": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^([a-f0-9]{40}|[a-f0-9]{64})$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "branch": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "refs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^([a-f0-9]{40}|[a-f0-9]{64})$"
+      }
+    },
+    "status_base64": {
+      "type": "string"
+    },
+    "worktrees_base64": {
+      "type": "string"
+    },
+    "ignored": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "schema_version",
+    "kind",
+    "repository",
+    "head",
+    "branch",
+    "refs",
+    "status_base64",
+    "worktrees_base64",
+    "ignored"
+  ],
+  "additionalProperties": false
+}

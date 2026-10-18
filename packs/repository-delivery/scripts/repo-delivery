@@ -1,0 +1,9 @@
+#!/usr/bin/env python3
+import sys
+if sys.version_info < (3, 11):
+    sys.stderr.write("repository-delivery requires Python 3.11+; select it with AOK_DELIVERY_PYTHON.\n")
+    raise SystemExit(1)
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+from repo_delivery.cli import main
+raise SystemExit(main())

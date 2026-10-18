@@ -1,0 +1,108 @@
+{
+  "kind": "pack-content",
+  "name": "repository-delivery",
+  "version": "0.1.0",
+  "description": "Embedded repository workflow guidance and deterministic evidence helpers; not a runtime scheduler.",
+  "roles": [
+    {
+      "id": "repository-delivery-lead",
+      "name": "Repository Delivery Lead",
+      "callsign": "repository-delivery-lead",
+      "responsibilities": [
+        "Preserve source work and checkpoints before isolated delivery.",
+        "Bind gate and review evidence to the final source snapshot.",
+        "Reconcile GitHub/runtime facts only within explicit user authority."
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "id": "repo-delivery-architecture-to-backlog",
+      "name": "repo-delivery-architecture-to-backlog",
+      "description": "Reconcile architecture, implementation, research, and roadmap into a dependency-aware GitHub backlog, reusing existing issues.",
+      "sourcePath": "skills/repo-delivery-architecture-to-backlog/SKILL.md",
+      "inputs": {
+        "repository": "Explicit target repository and user-authorized scope"
+      }
+    },
+    {
+      "id": "repo-delivery-checkpoint-port",
+      "name": "repo-delivery-checkpoint-port",
+      "description": "Port selected useful local changes from a verified checkpoint onto a pinned baseline while retaining source work and reporting omitted or superseded changes.",
+      "sourcePath": "skills/repo-delivery-checkpoint-port/SKILL.md",
+      "inputs": {
+        "repository": "Explicit target repository and user-authorized scope"
+      }
+    },
+    {
+      "id": "repo-delivery-issue-to-pr",
+      "name": "repo-delivery-issue-to-pr",
+      "description": "Deliver a GitHub issue in an isolated checkout with repository gates, snapshot-bound evidence, independent review, and an authorized pull request.",
+      "sourcePath": "skills/repo-delivery-issue-to-pr/SKILL.md",
+      "inputs": {
+        "repository": "Explicit target repository and user-authorized scope"
+      }
+    },
+    {
+      "id": "repo-delivery-pr-converge",
+      "name": "repo-delivery-pr-converge",
+      "description": "Reconcile a pull request\u2019s current CI and submitted reviews, fix findings, and merge only when required checks and source-bound local evidence support an authorized merge.",
+      "sourcePath": "skills/repo-delivery-pr-converge/SKILL.md",
+      "inputs": {
+        "repository": "Explicit target repository and user-authorized scope"
+      }
+    },
+    {
+      "id": "repo-delivery-real-integration-proof",
+      "name": "repo-delivery-real-integration-proof",
+      "description": "Run and record source-bound integration evidence with explicit real, mock, or mixed service coverage and environment blockers.",
+      "sourcePath": "skills/repo-delivery-real-integration-proof/SKILL.md",
+      "inputs": {
+        "repository": "Explicit target repository and user-authorized scope"
+      }
+    },
+    {
+      "id": "repo-delivery-setup",
+      "name": "repo-delivery-setup",
+      "description": "Orient a repository to repo-delivery's local inspection and preservation helpers without changing its configuration or connecting remote services.",
+      "sourcePath": "skills/repo-delivery-setup/SKILL.md",
+      "inputs": {
+        "repository": "Explicit target repository and user-authorized scope"
+      }
+    },
+    {
+      "id": "repo-delivery-workspace-inspect",
+      "name": "repo-delivery-workspace-inspect",
+      "description": "Inventory a Git workspace, preserve selected local changes in a verified checkpoint, or compare local content against a pinned revision before consolidation.",
+      "sourcePath": "skills/repo-delivery-workspace-inspect/SKILL.md",
+      "inputs": {
+        "repository": "Explicit target repository and user-authorized scope"
+      }
+    },
+    {
+      "id": "repo-delivery-workspace-reconcile",
+      "name": "repo-delivery-workspace-reconcile",
+      "description": "Plan and apply authorized cleanup of merged local branches and unused worktrees while retaining dirty, ignored, unmerged work and durable checkpoints.",
+      "sourcePath": "skills/repo-delivery-workspace-reconcile/SKILL.md",
+      "inputs": {
+        "repository": "Explicit target repository and user-authorized scope"
+      }
+    }
+  ],
+  "taskPackets": [
+    {
+      "id": "repository-delivery-packet",
+      "title": "Deliver a preserved repository change through reviewed evidence",
+      "description": "Inspect, preserve, isolate, validate and publish only authorized effects.",
+      "status": "planned",
+      "phase": "execution",
+      "assigneeRole": "repository-delivery-lead",
+      "verification": [
+        "source and checkpoints remain preserved",
+        "required gates and independent review bind the final snapshot",
+        "only authorized remote mutations occurred"
+      ],
+      "defaultDecision": "Opening a PR does not authorize merge or cleanup."
+    }
+  ]
+}

@@ -3,10 +3,11 @@
 This adapter handles one explicitly supplied Markdown subagent under
 `.cursor/agents/`. It accepts `.md`, `.mdc`, and `.markdown`, the three
 extensions included by the 2026.10.16 Cursor Agent workspace scanner, with
-case-insensitive extension matching as in the shipped scanner. It does
-not scan a project, run Cursor, or prove that Cursor
-loads a given file. `HostLoading` is verified for bounded project command-picker discovery on the pinned 2026.10.16 CLI; the shared engine reports
-runtime enforcement as unverified.
+case-insensitive extension matching as in the shipped scanner. Import/export
+does not scan a project or run Cursor. Separate, version-bound native evidence
+verifies project command-picker discovery for the exported fixture on the
+pinned 2026.10.16 CLI. Selected-agent startup and prompt-body use are unverified;
+the shared engine also reports runtime enforcement as unverified.
 
 The mapping is intentionally limited:
 

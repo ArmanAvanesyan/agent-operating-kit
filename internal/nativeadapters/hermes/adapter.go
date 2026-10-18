@@ -309,7 +309,7 @@ func containsSecretKey(value any) bool {
 
 func secretKey(key string) bool {
 	n := strings.ToLower(strings.NewReplacer("_", "", "-", "").Replace(key))
-	if n == "apikey" || n == "password" || n == "privatekey" || n == "secret" || n == "clientsecret" || n == "accesstoken" || n == "refreshtoken" || n == "authtoken" {
+	if n == "api" || n == "apikey" || n == "password" || n == "privatekey" || n == "secret" || n == "clientsecret" || n == "accesstoken" || n == "refreshtoken" || n == "authtoken" {
 		return true
 	}
 	if strings.HasSuffix(n, "secretaccesskey") || strings.HasSuffix(n, "apikey") || strings.HasSuffix(n, "password") || strings.HasSuffix(n, "privatekey") || strings.HasSuffix(n, "secret") || strings.HasSuffix(n, "token") {

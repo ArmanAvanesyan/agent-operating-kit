@@ -259,7 +259,7 @@ func TestCredentialAssignmentsRejectedWithoutEcho(t *testing.T) {
 	if err := registry.Register(New()); err != nil {
 		t.Fatal(err)
 	}
-	for _, f := range []nativeadapter.File{{Path: "config.yaml", Format: "yaml", Data: []byte("model: test\nextra: \"OPENAI_API_KEY=private-value-fixture\"\n")}, {Path: "SOUL.md", Format: "markdown", Data: []byte("- OPENAI_API_KEY=private-value-fixture\n")}, {Path: "config.yaml", Format: "yaml", Data: []byte("model: test\naws_secret_access_key: private-value-fixture\n")}, {Path: "SOUL.md", Format: "markdown", Data: []byte("export OPENAI_API_KEY=private-value-fixture\n")}} {
+	for _, f := range []nativeadapter.File{{Path: "config.yaml", Format: "yaml", Data: []byte("model:\n  default: provider/model\n  api: private-value-fixture\n")}, {Path: "config.yaml", Format: "yaml", Data: []byte("model: test\nextra: \"OPENAI_API_KEY=private-value-fixture\"\n")}, {Path: "SOUL.md", Format: "markdown", Data: []byte("- OPENAI_API_KEY=private-value-fixture\n")}, {Path: "config.yaml", Format: "yaml", Data: []byte("model: test\naws_secret_access_key: private-value-fixture\n")}, {Path: "SOUL.md", Format: "markdown", Data: []byte("export OPENAI_API_KEY=private-value-fixture\n")}} {
 		files := []nativeadapter.File{{Path: "config.yaml", Format: "yaml", Data: []byte("model: test\n")}, {Path: "SOUL.md", Format: "markdown", Data: []byte("Prompt")}}
 		for i := range files {
 			if files[i].Path == f.Path {

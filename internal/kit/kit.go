@@ -12,14 +12,18 @@ import (
 )
 
 const (
-	PluginName             = "agent-operating-kit"
-	MarketplaceName        = "private-local"
-	MarketplaceDisplay     = "Private Local"
-	ClaudeMarketplaceName  = "aok-claude-code"
-	ClaudeRootPlugin       = "agent-operating-kit"
-	PluginManifestRelPath  = ".codex-plugin/plugin.json"
-	EnvRoot                = "AOK_ROOT"
+	PluginName            = "agent-operating-kit"
+	MarketplaceName       = "private-local"
+	MarketplaceDisplay    = "Private Local"
+	ClaudeMarketplaceName = "aok-claude-code"
+	ClaudeRootPlugin      = "agent-operating-kit"
+	PluginManifestRelPath = ".codex-plugin/plugin.json"
+	EnvRoot               = "AOK_ROOT"
 )
+
+// NativeTargets lists native-definition adapters, separately from pack render targets.
+// Registration does not assert host loading or runtime enforcement.
+var NativeTargets = []string{"codex", "claude-code", "cursor", "opencode", "gemini", "openclaw", "hermes-agent", "agy"}
 
 var SupportedTargets = []string{
 	"codex",

@@ -9,7 +9,7 @@ Cursor project Markdown is registered with an [open native-loading gate](../inte
 Gemini project Markdown is registered; [its host is unavailable](../internal/nativeadapters/gemini/README.md), so native loading remains blocked.
 OpenClaw has an [isolated-home JSON/JSONC roster and workspace projection](../internal/nativeadapters/openclaw/README.md); its absent host keeps the native gate open.
 Hermes has a [bounded native profile projection](../internal/nativeadapters/hermes/README.md); full profile completeness and safe native loading remain unverified.
-Other known targets without a registered adapter report a blocked result.
+agy has a [project native agent adapter](../internal/nativeadapters/agy/README.md), with native loading still unverified. All eight native targets are registered in `kit.NativeTargets`; this is separate from the seven pack-render targets in `kit.SupportedTargets`. agy registration does not add pack-render support.
 Shared parser tests alone do not establish native completion.
 
 The Go CLI accepts explicit operations, target, scope and input:

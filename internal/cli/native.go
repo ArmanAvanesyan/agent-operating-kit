@@ -8,7 +8,9 @@ import (
 
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/contracts"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/evidence"
+	"github.com/ArmanAvanesyan/agent-operating-kit/internal/kit"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapter"
+	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/agy"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/claude"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/codex"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/cursor"
@@ -30,6 +32,7 @@ func nativeEngine() *nativeadapter.Engine {
 	_ = registry.Register(gemini.New())
 	_ = registry.Register(openclaw.New())
 	_ = registry.Register(hermes.New())
+	_ = registry.Register(agy.New())
 	return nativeadapter.NewEngine(registry)
 }
 func runNative(args []string, stdout, stderr io.Writer) (int, error) {
@@ -86,7 +89,7 @@ func runNativeWithEngine(args []string, stdout, stderr io.Writer, engine *native
 	}
 	target, scope, input := flags["--target"], flags["--scope"], flags["--input"]
 	known := false
-	for _, v := range []string{"codex", "claude-code", "cursor", "opencode", "gemini", "openclaw", "hermes-agent", "agy"} {
+	for _, v := range kit.NativeTargets {
 		if target == v {
 			known = true
 		}

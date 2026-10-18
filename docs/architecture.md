@@ -39,7 +39,7 @@ index of intent and compatibility.
 
 ## Claude Code Toolbox
 
-`claude-code-toolbox` is represented as curated packs:
+`claude-code-toolbox` is retired. AOK owns the maintained replacements as curated packs:
 
 - `engineering-guardrails`
 - `ship-pipeline`
@@ -48,6 +48,8 @@ index of intent and compatibility.
 
 Their Claude Code plugin files are preserved under each `packs/*/claude-code/`.
 A neutral `packs/*/pack.content.json` entry is the canonical definition.
+All required assets are stored in AOK; the retired repository is not a build,
+installation, rendering, or runtime dependency.
 
 ## Methodology Boundary
 

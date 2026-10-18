@@ -2,7 +2,7 @@
   "name": "phased-rollout-template",
   "kind": "pack",
   "description": "Project scaffold templates for phased rollouts with CI, deploy docs, and engineering process docs.",
-  "sourceRepo": "ArmanAvanesyan/claude-code-toolbox",
+  "sourceRepo": "ArmanAvanesyan/agent-operating-kit",
   "neutralContent": "pack.content.json",
   "supportedTargets": [
     "codex",

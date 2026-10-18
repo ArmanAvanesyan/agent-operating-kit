@@ -314,8 +314,8 @@ remains separate. See [project exploration and readiness](docs/project-explorati
 ## Repository Relationships
 
 - `ArmanAvanesyan/agent-operating-kit` is the canonical public project.
-- `ArmanAvanesyan/claude-code-toolbox` is represented here as Claude Code
-  adapter assets and curated packs.
+- `claude-code-toolbox` is retired. AOK owns its Claude Code adapter assets
+  and curated packs; no checkout or access to the old repository is required.
 - `ArmanAvanesyan/swarmd` remains separate. AOK integrates with it through MCP
   by generating config and mapping task packets, roles, decisions, and events
   onto the `swarmd` MCP surface.
@@ -350,7 +350,7 @@ live in `work-items/`, and reusable workflow content lives in `packs/`.
 
 ## Claude Code Toolbox Migration
 
-The former Claude Code Toolbox content is now represented as AOK packs:
+Claude Code Toolbox is retired. Its maintained replacements are AOK packs:
 
 - `adapters/claude-code/aok-plugin` as the root AOK Claude Code control plugin
 - `packs/engineering-guardrails`

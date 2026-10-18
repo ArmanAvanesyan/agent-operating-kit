@@ -2,7 +2,7 @@
   "name": "ship-pipeline",
   "kind": "pack",
   "description": "PR ship workflow, CI recovery skill, and CI fixer agent instructions.",
-  "sourceRepo": "ArmanAvanesyan/claude-code-toolbox",
+  "sourceRepo": "ArmanAvanesyan/agent-operating-kit",
   "neutralContent": "pack.content.json",
   "supportedTargets": [
     "codex",

@@ -4,8 +4,9 @@ Status: active compatibility adapter.
 Support level: `compatibility-asset`.  
 Host version: untracked (see `docs/host-compatibility.md`).
 
-The Claude Code adapter preserves useful `claude-code-toolbox` plugin assets while
-making AOK the source of truth. On kit **0.4.0**, Claude Code remains a
+The Claude Code adapter maintains the plugin assets migrated from the retired
+`claude-code-toolbox`. AOK is the source of truth and contains all required assets;
+the old repository and local checkout are not required. On kit **0.4.0**, Claude Code remains a
 **marketplace / compatibility** path alongside Codex’s multi-platform native
 installers — not a second operating model.
 

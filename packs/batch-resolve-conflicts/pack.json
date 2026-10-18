@@ -2,7 +2,7 @@
   "name": "batch-resolve-conflicts",
   "kind": "pack",
   "description": "Parallel PR conflict resolution workflow with canonical shared-file recovery rules.",
-  "sourceRepo": "ArmanAvanesyan/claude-code-toolbox",
+  "sourceRepo": "ArmanAvanesyan/agent-operating-kit",
   "neutralContent": "pack.content.json",
   "supportedTargets": [
     "codex",

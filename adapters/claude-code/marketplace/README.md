@@ -1,7 +1,8 @@
 # Claude Code Marketplace Compatibility
 
-This directory preserves a Claude Code marketplace entrypoint for content that
-originated in `claude-code-toolbox`.
+This directory is the AOK-owned Claude Code marketplace entrypoint. Content
+originally migrated from `claude-code-toolbox` is maintained entirely in AOK.
+The toolbox is retired; registration and installation require no access to it.
 
 Register this directory as a Claude Code marketplace:
 

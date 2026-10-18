@@ -1,8 +1,9 @@
 # Migration From Claude Code Toolbox
 
-`agent-operating-kit` is now the canonical project. `claude-code-toolbox`
-content is represented inside AOK as Claude Code adapter assets and curated
-workflow packs.
+`claude-code-toolbox` is retired. `agent-operating-kit` owns and maintains its
+replacement Claude Code adapter assets and workflow packs. AOK installation,
+validation, rendering, and runtime use do not require the old repository or a
+local toolbox checkout. Old names below identify settings to migrate only.
 
 ## What Changed
 
@@ -33,6 +34,10 @@ workflow packs.
    canonical marketplace name is `aok-claude-code`.
 4. Use the setup helper when possible so existing settings are backed up before
    editing: `aok claude setup --enable all`.
+   After verifying the replacements, remove old marketplace entries (`toolbox`,
+   `claude-code-toolbox`, or custom keys pointing at the retired checkout) and
+   old enabled-plugin suffixes from user and project-local settings. The helper
+   registers AOK; do not assume it removes every legacy entry.
 5. For new targets and future tools, generate target bundles with:
    `./scripts/aok render bundles --target all`.
 6. For target-specific contract inspection, generate target contracts with:
@@ -49,7 +54,7 @@ Before migration, a Claude Code setup may point directly at a local
     "claude-code-toolbox": {
       "source": {
         "source": "directory",
-        "path": "/path/to/claude-code-toolbox/marketplace"
+        "path": "/path/to/claude-code-toolbox"
       }
     }
   },
@@ -117,27 +122,31 @@ If Claude Code cannot find a plugin, check:
   `/path/to/agent-operating-kit/adapters/claude-code/marketplace`.
 - enabled plugin entries use the same `@aok-claude-code` suffix.
 
-## Migration Rollback
+## Shipping Workflow Dependency
 
-To roll back temporarily:
+AOK's `/ship-pr` uses the AOK `repository-delivery` capability. Install/enable
+that capability alongside `ship-pipeline`; its helpers require Python 3.11+.
+The workflow preserves local work and requires explicit authority for publication
+and merge. It does not retain the toolbox's unconditional auto-merge behavior.
+See [repository delivery](repository-delivery.md).
 
-1. Restore the old `extraKnownMarketplaces` entry in `~/.claude/settings.json`.
-2. Change enabled plugin suffixes back to the old marketplace key.
-3. Leave the AOK checkout in place if other targets use its generated renders.
+## Recovery
 
-Rollback should be temporary. New pack content and cross-target behavior should
-continue to land in AOK first.
+The setup helper's timestamped settings backup can recover unrelated settings.
+Keep the AOK marketplace path and plugin suffixes when recovering configuration;
+the retired toolbox is not a supported rollback source.
 
-## Compatibility Note
+Before deleting an old local checkout, preserve any uncommitted work and verify
+that user and project settings no longer reference it. No toolbox clone or
+remote repository is needed afterward.
 
-The old toolbox repository can remain as a compatibility pointer, but new
-content and integration decisions should land in AOK first. If a Claude Code
-feature remains target-specific, keep it under the relevant pack's `claude-code/`
-and update both `pack.content.json` and `pack.json`.
+## Compatibility and Historical Names
 
-## Deprecation and Compatibility
+The four plugin names remain available through `aok-claude-code`; old marketplace
+keys and `@toolbox` suffixes are not aliases and must be migrated.
+All maintenance belongs in AOK's pack manifests, neutral content, and
+`packs/*/claude-code/` assets. The old repository need not be retained as a pointer.
 
-- Existing `claude-code-toolbox` usage is still supported via compatible plugin
-  names in `adapters/claude-code/marketplace/.claude-plugin/marketplace.json`.
-- Non-Claude targets consume generated, self-contained import bundles; native
-  marketplace installers are planned where not yet available.
+The Python renderer retains the legacy `targetContract` value
+`claude-code-toolbox-compatible` for existing contract consumers. This is a
+compatibility identifier, not a repository reference or an external dependency.

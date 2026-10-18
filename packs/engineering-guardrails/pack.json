@@ -2,7 +2,7 @@
   "name": "engineering-guardrails",
   "kind": "pack",
   "description": "Guardrail hooks for future annotations, production asserts, migration conventions, pre-commit freshness, and session reminders.",
-  "sourceRepo": "ArmanAvanesyan/claude-code-toolbox",
+  "sourceRepo": "ArmanAvanesyan/agent-operating-kit",
   "neutralContent": "pack.content.json",
   "supportedTargets": [
     "codex",

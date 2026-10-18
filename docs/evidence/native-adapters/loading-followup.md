@@ -11,7 +11,7 @@ CLI discovery, invocation and runtime enforcement are separate observations.
 | Gemini CLI 0.61.0 | Actual guarded TUI discovers generated name/description before auth; empty-project control does not | Verified for project discovery only |
 | OpenClaw 2026.9.4 | Actual Linux CLI roster loads id/model; absent/malformed controls and exact workspace/missing-file loader controls pass | Verified for Linux isolated-home loading only; Darwin CLI unverified |
 | Hermes Agent, direct installed entrypoint | Actual installed CLI lists exported profile/model; separate installed metadata/SOUL loaders pass expected-content and missing controls | Verified for the explicitly selected installed profile entrypoint; normal launcher selection unverified |
-| agy 1.3.6 | Copied executable listing returns identical empty output for retained AOK-exported, absent and malformed fixtures; earlier interactive manager requires login | Open; manager discovery unavailable before login in this probe |
+| agy installed 1.3.6 / temporary official 1.4.2 | Fresh help confirms listing aliases; isolated Git-root valid/absent/malformed listings remain identical empty output | Open; no native agent inventory established |
 
 The implemented adapter commands still produce incomplete draft candidates and
 report runtime enforcement as unverified. No inference or authentication was
@@ -210,3 +210,61 @@ and exact fixture/package/source hashes accompany the evidence.
 The older April shipped-component result is not attributed to October's full
 CLI. Both Cursor and agy loading gates remain open; no runtime-enforcement
 claim follows from the extension compatibility fix.
+
+PR [71](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/71) was cleared
+by independent gpt-6-luna review at
+`a292d1727679ad39e6b2db4badec23cc523c85e6` after cleanup and portable-test
+fixes. All eight CI checks passed before squash merge, and the local 74-test
+Python suite passed with two platform skips. Agent review is not human approval.
+
+## Fresh agy package and evidence correction
+
+The [fresh Darwin package audit](agy-1.4.2-fresh-loading-2026.10.18.json)
+records the official installer manifest resolving to 1.4.2 while the download
+page advertised 1.4.0. The installer was read as data; its checksum-verified
+package ran only as a temporary copy. The user's installed 1.3.6 executable
+was not launched or replaced.
+
+Fresh 1.4.2 help explicitly describes `agent`/`agents` as listing aliases.
+The earlier statement that 1.3.6 help established those aliases was unsupported
+by the retained byte-count-only observation and is retracted. The earlier
+commands' empty output remains historical evidence, not proof of discovery.
+Fresh non-terminal positive, absent, and malformed controls used isolated Git
+repositories and still produced identical zero-byte results. The official
+[`/agents` documentation](https://www.antigravity.google/docs/cli/commands/agents)
+describes a TUI manager; an empty listing subcommand does not establish that
+the documented manager loaded a role.
+
+Two Darwin terminal observations are excluded. The first encountered EPERM
+during group termination without retaining its PID/PGID; the later attempt
+did not establish whether its fallback cleanup was used. Targeted checks of
+the known executable paths and unique temporary prefix identified no matching
+process, but complete descendant cleanup remains unconfirmed because the
+first process-group identity was lost. The manual audit is retained separately;
+neither terminal attempt is native-loading evidence. The replacement Darwin
+probe draft was withdrawn before another native run; it is not shipped as a
+reproducer. Further verification uses an isolated container instead.
+
+The [Linux container evidence](agy-linux-container-2026-10-18.json) records
+official 1.4.2 under a local digest-pinned, COPY-only image, with read-only
+root/package, an unprivileged user, no mounts or credentials, closed stdin,
+resource limits and no network. Private loopback remains available inside the
+container namespace without reaching host services. Each control started from
+a real synthetic Git repository and a separate disposable home/project.
+
+Version/help succeeded, but both non-terminal and terminal `agents` commands
+returned no agent inventory in every control. Non-terminal output was zero
+bytes; terminal capture contained four bytes of probe separator whitespace.
+All three containers and the UUID-tagged derived image were removed with
+ownership and absence checks. The cached public base image and Docker build
+cache are not globally pruned.
+
+This does not identify the upstream reason for the empty command or verify
+the interactive `/agents` manager. The reproducer records candidate
+observations only and cannot automatically promote the native-loading gate.
+Its post-run qualification change is explicitly separated from the hash of
+the script that generated these observations. The exact pre-change script
+bytes were not archived; the original run hash and current reproducer are
+retained, and this limits exact-source reproducibility of that historical run.
+Both loading gates remain open;
+the overall native-only completion gate remains incomplete.

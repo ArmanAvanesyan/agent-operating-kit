@@ -75,6 +75,32 @@ and removes its owned containers/volume. The explicit base-image cache remains.
 This proves the recorded Linux scope/version, not Darwin loading or runtime
 permission enforcement.
 
+## Fresh agy container check
+
+`probe-agy-linux-container.py --aok /absolute/path/to/aok --retain-render
+/absolute/repo/path/to/new-fixture.md --evidence-out
+/absolute/repo/path/to/new-evidence.json` uses the already-running local
+`desktop-linux` Docker context and the same cached digest-pinned Node image
+listed above. It refuses a different endpoint/image and never starts an engine.
+It downloads the pinned official Linux x64 1.4.2 archive as inert data and
+checks its manifest/checksum before building a COPY-only image. No vendor
+code runs during the build or on the host. AOK runs locally to make a blocked
+draft candidate; native agy runs only in the container.
+
+Runtime uses a read-only image/root, private tmpfs home/project/tmp, closed
+stdin, an unprivileged user, dropped capabilities, resource limits, no host
+mounts or credentials, and `--network none`. Loopback belongs to the private
+container namespace. Real synthetic Git repositories distinguish positive,
+absent and malformed controls; TTY commands receive no input. UUID labels and
+ownership/absence checks bound removal to the run's containers and derived
+image. The cached public base and Docker build cache may remain.
+
+The saved 1.4.2 run produced no inventory in any control. The current helper
+reports candidate observations only; it cannot automatically close the native
+loading gate. The evidence distinguishes its executed-script hash from the
+post-run qualification change. The withdrawn Darwin probe is not shipped;
+historical terminal failures remain a separate manual audit.
+
 ## Installed Hermes profile check
 
 `probe-hermes-installed.py --environment /absolute/path/to/installed-environment

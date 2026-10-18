@@ -1,0 +1,186 @@
+{
+  "aok": {
+    "binarySha256": "a89c28b2884995895d2a78f2a1c7841e72648446354f7baa1683fdb9c72f725f",
+    "bundleCompleteness": "draft-incomplete",
+    "exportStatus": "blocked",
+    "importStatus": "blocked"
+  },
+  "authentication": "not-run",
+  "cliRoster": "not-verified",
+  "container": {
+    "capabilities": "all dropped",
+    "credentials": "none supplied",
+    "hostMounts": "none",
+    "network": "none; private loopback namespace",
+    "rootFilesystem": "read-only",
+    "stdin": "closed; TTY allocated for TTY case",
+    "timeouts": "12 seconds per native TTY listing, 45 seconds per container",
+    "tmpfs": [
+      "/probe",
+      "/tmp"
+    ],
+    "user": "1000:1000"
+  },
+  "controls": {
+    "absent": {
+      "cleanupVerified": true,
+      "containerReturnCode": 0,
+      "summary": {
+        "help": {
+          "agentsHelpExitCode": 0,
+          "exitCode": 0,
+          "hasAgentCommand": true,
+          "hasListAvailable": true
+        },
+        "nonTTY": {
+          "authPromptMarkerObserved": false,
+          "errorMarkerObserved": false,
+          "exitCode": 0,
+          "expectedDescriptionObserved": false,
+          "expectedNameObserved": false,
+          "parseErrorMarkerObserved": false,
+          "stderrBytes": 0,
+          "stdoutBytes": 0
+        },
+        "version": {
+          "exitCode": 0,
+          "version14": true
+        }
+      },
+      "tty": {
+        "authPromptMarkerObserved": false,
+        "errorMarkerObserved": false,
+        "expectedDescriptionObserved": false,
+        "expectedNameObserved": false,
+        "parseErrorMarkerObserved": false,
+        "returnCode": 0,
+        "stdoutBytes": 4
+      }
+    },
+    "malformed": {
+      "cleanupVerified": true,
+      "containerReturnCode": 0,
+      "summary": {
+        "help": {
+          "agentsHelpExitCode": 0,
+          "exitCode": 0,
+          "hasAgentCommand": true,
+          "hasListAvailable": true
+        },
+        "nonTTY": {
+          "authPromptMarkerObserved": false,
+          "errorMarkerObserved": false,
+          "exitCode": 0,
+          "expectedDescriptionObserved": false,
+          "expectedNameObserved": false,
+          "parseErrorMarkerObserved": false,
+          "stderrBytes": 0,
+          "stdoutBytes": 0
+        },
+        "version": {
+          "exitCode": 0,
+          "version14": true
+        }
+      },
+      "tty": {
+        "authPromptMarkerObserved": false,
+        "errorMarkerObserved": false,
+        "expectedDescriptionObserved": false,
+        "expectedNameObserved": false,
+        "parseErrorMarkerObserved": false,
+        "returnCode": 0,
+        "stdoutBytes": 4
+      }
+    },
+    "positive": {
+      "cleanupVerified": true,
+      "containerReturnCode": 0,
+      "summary": {
+        "help": {
+          "agentsHelpExitCode": 0,
+          "exitCode": 0,
+          "hasAgentCommand": true,
+          "hasListAvailable": true
+        },
+        "nonTTY": {
+          "authPromptMarkerObserved": false,
+          "errorMarkerObserved": false,
+          "exitCode": 0,
+          "expectedDescriptionObserved": false,
+          "expectedNameObserved": false,
+          "parseErrorMarkerObserved": false,
+          "stderrBytes": 0,
+          "stdoutBytes": 0
+        },
+        "version": {
+          "exitCode": 0,
+          "version14": true
+        }
+      },
+      "tty": {
+        "authPromptMarkerObserved": false,
+        "errorMarkerObserved": false,
+        "expectedDescriptionObserved": false,
+        "expectedNameObserved": false,
+        "parseErrorMarkerObserved": false,
+        "returnCode": 0,
+        "stdoutBytes": 4
+      }
+    }
+  },
+  "derivedImage": {
+    "base": "node@sha256:4db36457f406501e6f608802e5da617e5fbd0e80b75901b6a09de1ae5a667d32",
+    "copyOnlyDockerfile": true,
+    "networkDuringBuild": "none",
+    "platform": "linux/amd64",
+    "removedAfterProbe": true,
+    "tag": "aok-agy-probe:<UUID>"
+  },
+  "environment": {
+    "context": "desktop-linux",
+    "daemon": "docker-desktop 29.4.0 Docker Desktop",
+    "endpoint": "local Docker Desktop Unix socket",
+    "image": "node@sha256:4db36457f406501e6f608802e5da617e5fbd0e80b75901b6a09de1ae5a667d32"
+  },
+  "limitations": [
+    "The current reproducer never automatically verifies native loading. Its candidate observations require independent review of complete positive/negative controls, clean roster identity and successful cleanup.",
+    "No credentials, authentication, model inference, ordinary prompt input, agent selection, or enforcement were tested.",
+    "Linux-container evidence is distinct from prior Darwin observations."
+  ],
+  "modelInvocation": "not-run",
+  "nativeLoading": "not-verified",
+  "qualificationReview": {
+    "provenance": "post-run review of the recorded sanitized control summaries",
+    "reviewedProbeSha256": "dc1ce0649c7be09a9886be106ca648d59ab066416e0bf63700146232b4fd0863",
+    "currentNonPromotingProbeSha256": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+    "result": "not-verified; no name or description was observed in any control",
+    "autoPromotion": false,
+    "executedSourceArchive": "not-retained; original run hash is retained, but the exact pre-qualification-change source bytes are unavailable"
+  },
+  "observedAt": "2026-10-18T03:02:58.962849+00:00",
+  "package": {
+    "archiveBytes": 63937290,
+    "archiveSha512": "4a393afc1369cee94e817c1b430c9128d02b12ebd4d5703ace5cd47b2333e216d673fb0097cbf7195f757b110163ba9850e9eea3fdbbaddd4b25668b82c03f05",
+    "binaryBytes": 221286656,
+    "binarySha256": "085f43e0d0628a8a8dabe1e547067818fa2c0adc86cfac98a3c4492918f455ef",
+    "manifestSha256": "7942274fb64e30a5106669af06e09a64e3fa7a1e8bb854d7a9e044a3773b69d2",
+    "manifestUrl": "https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/linux_amd64.json",
+    "payloadUrl": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.4.2-4835981233356800/linux-x64/cli_linux_x64.tar.gz",
+    "version": "1.4.2"
+  },
+  "probe": "scripts/native-loading/probe-agy-linux-container.py",
+  "probeSha256": "dc1ce0649c7be09a9886be106ca648d59ab066416e0bf63700146232b4fd0863",
+  "renderedFixture": {
+    "expectedDescription": "Synthetic AGY adapter discovery fixture",
+    "expectedName": "aok-probe",
+    "nativePath": ".agents/agents/aok-probe/agent.md",
+    "path": "internal/nativeadapters/agy/testdata/probe-aok-rendered-linux-1.4.2.md",
+    "sha256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76"
+  },
+  "runtimeEnforcement": "unverified",
+  "scope": "project",
+  "source": "Official manifest-pinned Linux x64 archive; downloaded as data, checksum-verified, never executed on the host.",
+  "target": "antigravity",
+  "terminalCaptureFraming": "Each TTY segment contains four separator-whitespace bytes inserted around the command by the probe; no native agent name or description was observed.",
+  "cacheRetention": "The cached public base image and Docker build cache were not globally pruned; owned runtime containers and the derived image tag were removed."
+}

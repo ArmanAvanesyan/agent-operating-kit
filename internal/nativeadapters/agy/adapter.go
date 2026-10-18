@@ -33,7 +33,13 @@ func New() nativeadapter.Adapter { return Adapter{} }
 func (Adapter) Descriptor() nativeadapter.Descriptor {
 	return nativeadapter.Descriptor{
 		Target: target, AdapterVersion: version, Scopes: []string{projectScope},
-		HostLoading: nativeadapter.HostLoadingEvidence{Status: "not-run", Scopes: []string{projectScope}},
+		HostLoading: nativeadapter.HostLoadingEvidence{
+			Status: "not-run", Scopes: []string{projectScope}, HostVersion: "1.4.2",
+			Evidence: []string{
+				"docs/evidence/native-adapters/agy-1.4.2-fresh-loading-2026.10.18.json",
+				"docs/evidence/native-adapters/agy-linux-container-2026-10-18.json",
+			},
+		},
 		Fields: []nativeadapter.FieldCapability{
 			{NeutralPath: "agent.metadata.id", NativePath: "frontmatter.name", Support: "native", EnforcementOwner: "native"},
 			{NeutralPath: "agent.identity.purpose", NativePath: "frontmatter.description", Support: "native", EnforcementOwner: "native"},

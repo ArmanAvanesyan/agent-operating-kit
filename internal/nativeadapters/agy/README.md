@@ -42,14 +42,20 @@ during that restoration audit. The restored backup SHA-256 is recorded in
 
 The historical `agy agent` trial returned empty output and is inconclusive. A
 subsequent isolated 1.3.6 probe copied the executable before invoking it. Installed help recognizes
-`agent`/`agents` as listing aliases, but `agents` returned no output for either
-the generated fixture or an empty project. The optional `--json` flag is not
-supported. The documented interactive `/agents` manager showed an
-authentication screen, so no roster was available without signing in. The
-probe did not authenticate, persist the URL, or invoke a model. Native loading
-remains unverified. See [`agy-1.3.6-loading.json`](../../../docs/evidence/native-adapters/agy-1.3.6-loading.json)
-for the isolated results and [`agy-1.4.2.json`](../../../docs/evidence/native-adapters/agy-1.4.2.json)
-for the historical version/restoration audit.
+`agent`/`agents` as listing aliases, but `agents` returned no output for the
+retained AOK-rendered fixture, an empty project, or a malformed agent file.
+The optional `--json` flag is not supported. Official headless `-p` is a
+prompt path, so it was not used to invoke `/agents`; the documented interactive
+manager showed an authentication screen. No authentication or model invocation
+occurred. Native loading remains unverified. See
+[`agy-1.3.6-loading.json`](../../../docs/evidence/native-adapters/agy-1.3.6-loading.json)
+for the prior isolated results, [the retained offline probe record](../../../docs/evidence/native-adapters/cursor-agy-offline-2026.10.18.json)
+for the positive/absent/malformed controls and exact rendered bytes, and
+[`agy-1.4.2.json`](../../../docs/evidence/native-adapters/agy-1.4.2.json) for
+the historical version/restoration audit.
+
+The 2026-10-18 offline probe denied remote network access and allowed only
+localhost bind/inbound for the listing command's local service startup.
 
 The adapter tests validate parsing, preservation, and semantic round-tripping;
 they do not establish host discovery, selection, invocation, or enforcement.

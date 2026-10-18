@@ -7,11 +7,11 @@ CLI discovery, invocation and runtime enforcement are separate observations.
 | Target | Follow-up result | Overall loading gate |
 |---|---|---|
 | Codex 0.162.1 | New explicit project registration loads the AOK-exported role; absent registration, malformed config, malformed referenced role and missing-file controls distinguish actual loading | Verified for `project-registered` loading only; standalone discovery and child-agent invocation unverified |
-| Cursor 2026.04.17 | Shipped loader component discovers generated file; absent/malformed controls discover none; scalar/control/blank-prompt incompatibilities fixed; new copied ACP startup fails under keychain-denying privacy boundary | Open; full CLI discovery/selection not established |
+| Cursor 2026.04.17 | Shipped loader component discovers generated file; absent/malformed controls discover none; scalar/control/blank-prompt incompatibilities fixed; guarded ACP initializes but session creation errors and the probe times out | Open; full CLI discovery/selection not established |
 | Gemini CLI 0.61.0 | Actual guarded TUI discovers generated name/description before auth; empty-project control does not | Verified for project discovery only |
 | OpenClaw 2026.9.4 | Actual Linux CLI roster loads id/model; absent/malformed controls and exact workspace/missing-file loader controls pass | Verified for Linux isolated-home loading only; Darwin CLI unverified |
 | Hermes Agent, direct installed entrypoint | Actual installed CLI lists exported profile/model; separate installed metadata/SOUL loaders pass expected-content and missing controls | Verified for the explicitly selected installed profile entrypoint; normal launcher selection unverified |
-| agy 1.3.6 | Copied executable listing aliases return the same empty output; interactive /agents reaches a login screen with no login completed | Open; manager discovery unavailable before login in this probe |
+| agy 1.3.6 | Copied executable listing returns identical empty output for retained AOK-exported, absent and malformed fixtures; earlier interactive manager requires login | Open; manager discovery unavailable before login in this probe |
 
 The implemented adapter commands still produce incomplete draft candidates and
 report runtime enforcement as unverified. No inference or authentication was
@@ -135,3 +135,52 @@ owned process groups were terminated. The final successful probe uses explicit
 file-based credential storage in an empty isolated `CODEX_HOME`, no inherited
 credential variables, denied network access and temporary-root write confinement.
 The cause of the earlier startup timeouts was not established.
+
+
+## Cursor and agy offline controls
+
+The [offline probe record](cursor-agy-offline-2026.10.18.json) and
+[bounded reproducer](../../../scripts/native-loading/probe-cursor-agy-offline.py)
+retain actual AOK-imported/exported draft bytes for both clients, hashes,
+pinned installed identities, controls and sanitized protocol outcomes.
+Neither loading gate is promoted. The source's pinned hashes identify the
+versions; a guarded Cursor version-only check timed out, so the final reproducer
+does not invoke `--version`. It rejects a different source hash.
+
+Cursor ACP receives only initialize, initialized and session/new requests with
+a synthetic invalid API key. Initialize returns a result; session creation
+returns an internal error and the process reaches its 30-second timeout. The
+555 captured stdout bytes contain one error record. The cause remains unresolved;
+this does not prove a parser failure or native agent discovery. No authenticate
+or session/prompt request is sent. Remote networking, outside-root writes and
+keychain service lookup are denied.
+
+agy's copied 1.3.6 binary returns exit 0 with empty output for positive, absent
+and malformed files. Empty output is not discovery evidence. The retained
+[native draft](../../../internal/nativeadapters/agy/testdata/probe-aok-rendered.md)
+closes the prior fixture-retention gap. Remote networking and outside-root
+writes are denied, with only localhost bind/inbound allowed for the listing
+probe. No login or model invocation is performed. The official
+[Cursor ACP flow](https://cursor.com/docs/cli/acp) and
+[agy headless documentation](https://www.antigravity.google/docs/cli/headless/)
+inform the probe: documented headless print sends a prompt, so it is excluded.
+No documented local-only headless slash-command path was identified.
+
+One Cursor help-only command ran before the intended inner guard. The separate
+manual audit records its zero shell exit, the unchanged original bundle hash,
+wrapper/Node hashes and no compile-cache files changed during the audit window.
+No authentication or model prompt was sent. The reproducer does not emit this
+historical audit as a fresh observation. Subsequent probes use copied hosts and
+the recorded guards.
+
+Review also corrected timeout accounting: Python communicate returns cumulative
+output after a timeout; appending the earlier prefix duplicated a response.
+Two CI-discovered mocked-process tests now exercise TERM and KILL capture paths
+through the real confinement helper. The saved final evidence counts the
+response once; raw protocol messages, state and unrelated process arguments
+are excluded.
+
+PR [69](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/69) was cleared
+by independent gpt-6-luna review at
+`8ccec2127d0fb19042e7e83fd0d7f6fd7be83a45` and passed all eight CI checks before
+squash merge. Agent review is not human approval.

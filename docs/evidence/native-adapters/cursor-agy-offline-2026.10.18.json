@@ -1,0 +1,133 @@
+{
+  "agy": {
+    "agentsAlias": {
+      "absent": {
+        "exitCode": 0,
+        "stderrBytes": 0,
+        "stderrSummary": [],
+        "stdoutBytes": 0
+      },
+      "malformed": {
+        "exitCode": 0,
+        "stderrBytes": 0,
+        "stderrSummary": [],
+        "stdoutBytes": 0
+      },
+      "positive": {
+        "exitCode": 0,
+        "stderrBytes": 0,
+        "stderrSummary": [],
+        "stdoutBytes": 0
+      }
+    },
+    "copiedBinarySha256": "2a6bd844ae3431d35203af44f31bdd5e26f5ffe287d47c62a46862bf44099fc2",
+    "fixture": {
+      "path": ".agents/agents/aok-probe/agent.md",
+      "retainedPath": "internal/nativeadapters/agy/testdata/probe-aok-rendered.md",
+      "retainedSha256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76",
+      "sha256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76",
+      "sourceTestFixtureSha256": "9e5070ad028066741acac62ccafed697d77a762e967da80effad39679f3fc28f"
+    },
+    "headless": {
+      "documentedLocalSlashPathIdentified": false,
+      "reason": "official docs define -p/--print as sending a single prompt; no local-only slash command path documented; not run"
+    },
+    "help": {
+      "agent": {
+        "exitCode": 0,
+        "mentionsAgentSelector": false,
+        "mentionsOutputFormat": false,
+        "mentionsPrint": false,
+        "stderrBytes": 101,
+        "stdoutBytes": 0
+      },
+      "agents": {
+        "exitCode": 0,
+        "mentionsAgentSelector": false,
+        "mentionsOutputFormat": false,
+        "mentionsPrint": false,
+        "stderrBytes": 101,
+        "stdoutBytes": 0
+      },
+      "root": {
+        "exitCode": 0,
+        "mentionsAgentSelector": true,
+        "mentionsOutputFormat": true,
+        "mentionsPrint": true,
+        "stderrBytes": 2912,
+        "stdoutBytes": 0
+      }
+    },
+    "hostVersion": "1.3.6",
+    "nativeLoading": "not-verified",
+    "versionIdentity": "pinned installed binary SHA-256"
+  },
+  "aokBinarySha256": "a89c28b2884995895d2a78f2a1c7841e72648446354f7baa1683fdb9c72f725f",
+  "cursor": {
+    "acp": {
+      "argv": [
+        "cursor-agent",
+        "--api-key",
+        "<SYNTHETIC_INVALID_KEY>",
+        "acp"
+      ],
+      "authenticateSent": false,
+      "discoveryEvidence": false,
+      "errors": [
+        {
+          "class": "backend-or-unknown",
+          "code": -32603,
+          "id": 2,
+          "messageClass": "present",
+          "sameAsPrevious": false
+        }
+      ],
+      "exitCode": 124,
+      "initializeResponse": {
+        "response": "result"
+      },
+      "keychainMachDenied": true,
+      "remoteNetworkDenied": true,
+      "requestsSent": [
+        "initialize",
+        "initialized",
+        "session/new"
+      ],
+      "responseMethods": [],
+      "sessionPromptSent": false,
+      "stderrBytes": 0,
+      "stderrSummary": [],
+      "stdoutBytes": 555
+    },
+    "aokBundleCompleteness": "draft-incomplete",
+    "aokExport": "blocked",
+    "aokImport": "blocked",
+    "copiedIndexSha256": "b229d091e5199812927f0c74918d6b53e61fcc869fe39c2f94bad2ab1c049d2e",
+    "hostVersion": "2026.04.17-787b533",
+    "nativeLoading": "not-verified",
+    "renderedFixtureSha256": "d64ff08526ad4d1354a5f72eea9370b1a9d771abf7392b00aa876f9a1faa5acf",
+    "retainedRenderPath": "internal/nativeadapters/cursor/testdata/probe-aok-rendered.md",
+    "retainedRenderSha256": "d64ff08526ad4d1354a5f72eea9370b1a9d771abf7392b00aa876f9a1faa5acf",
+    "versionIdentity": "pinned installed bundle hash; --version is not run under the offline guard"
+  },
+  "manualIncidentAudit": {
+    "compileCacheFilesChangedDuringAuditWindow": false,
+    "event": "one unconfined cursor-agent --help invocation; output piped through sed -n 250,320p",
+    "nodeSha256": "f1f2f5700285deadd6836f66463687f13275177b92ad744fa2699cfb50dcd0a5",
+    "originalIndexSha256AfterAudit": "b229d091e5199812927f0c74918d6b53e61fcc869fe39c2f94bad2ab1c049d2e",
+    "provenance": "manual read-only audit of help-only event",
+    "scope": "Hash and metadata audit only; no credentials, broad process listings, or process arguments inspected.",
+    "shellExitCode": 0,
+    "visibleOutput": "none",
+    "wrapperSha256": "8756ac4a808cc90b220416ac8743560aa473a94d6fe5911bb602c250c046c4a3"
+  },
+  "modelInvocation": "not-run",
+  "observedAt": "2026-10-18T02:16:51.709286+00:00",
+  "probeScriptSha256": "eda2120e1808af7964c9d17464aa699f637bf865772921c7f663fb6afe142cc9",
+  "runtimeEnforcement": "unverified",
+  "sandbox": {
+    "network": "remote denied; AGY listing allows localhost bind/inbound",
+    "processTimeoutSeconds": 30,
+    "writesOutsideTempRoot": "denied"
+  }
+}

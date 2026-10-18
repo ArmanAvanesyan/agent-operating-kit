@@ -115,3 +115,33 @@ set to `file` under the isolated `CODEX_HOME`, with no credentials supplied.
 Requests have bounded reads and owned process groups are terminated on exit.
 This establishes referenced-role loading only; invocation, model compatibility
 and runtime enforcement remain unverified.
+
+## Cursor and agy offline recheck
+
+`probe-cursor-agy-offline.py --aok /absolute/path/to/aok --cursor-host-dir
+/absolute/path/to/cursor-agent/version --agy-binary /absolute/path/to/agy`
+requires the exact installed source hashes recorded in the saved evidence.
+It copies both hosts before invocation and ties the version labels to those
+pins; it does not launch the original executables or run `--version`.
+
+AOK imports/exports committed synthetic inputs. Rendered bytes are retained in
+the corresponding adapter's `testdata/probe-aok-rendered.md`; an existing file
+with different bytes is refused. Optional `--retain-cursor-render` and
+`--retain-agy-render` destinations must remain inside the repository. The parent
+script writes only these explicit research fixtures; native child processes
+have write access only to the disposable root.
+
+Cursor receives a synthetic invalid API key and initialize/initialized/session-new
+requests, with keychain service lookup and remote networking denied. It sends
+no authentication or prompt request. agy receives only help/list commands;
+listing permits localhost bind/inbound while remote networking remains denied.
+The guarded source is unchanged; no protocol response or authentication state
+is forged. Timeouts terminate the owned process group and preserve cumulative
+output once. The helper's TERM and KILL capture regressions run in standard
+Python test discovery without launching a native host.
+
+The generated report records current UTC time and this script's hash. The
+historical help-only incident audit is separate manually recorded evidence,
+not a fresh output of this reproducer. These controls did not establish native
+loading for either client. Do not run headless print or authenticate to make
+the no-inference probe pass.

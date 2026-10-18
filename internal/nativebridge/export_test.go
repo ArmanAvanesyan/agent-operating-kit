@@ -9,6 +9,7 @@ import (
 
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapter"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/codex"
+	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/openclaw"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/opencode"
 )
 
@@ -108,5 +109,33 @@ func TestCanonicalCodexEffortProjection(t *testing.T) {
 	files, b, r := Export(nativeadapter.NewEngine(registry), "codex", "project", filepath.Join(root, "assignment.json"), root, nil)
 	if len(files) != 1 || r.Status != "blocked" || string(b.Document.Fields["executionProfile.model.reasoning.effort"]) != `"medium"` {
 		t.Fatalf("effort mapping lost: %+v", r)
+	}
+}
+
+func TestCanonicalOpenClawCallsign(t *testing.T) {
+	root := fixture(t)
+	for file, update := range map[string]func(map[string]any){"execution-profile.json": func(p map[string]any) { p["client"].(map[string]any)["adapter"] = "openclaw" }, "agent.json": func(p map[string]any) { p["identity"].(map[string]any)["callsign"] = "Scout" }} {
+		path := filepath.Join(root, file)
+		data, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		var obj map[string]any
+		if err := json.Unmarshal(data, &obj); err != nil {
+			t.Fatal(err)
+		}
+		update(obj)
+		data, _ = json.Marshal(obj)
+		if err := os.WriteFile(path, data, 0600); err != nil {
+			t.Fatal(err)
+		}
+	}
+	registry := nativeadapter.NewRegistry()
+	if err := registry.Register(openclaw.New()); err != nil {
+		t.Fatal(err)
+	}
+	files, b, r := Export(nativeadapter.NewEngine(registry), "openclaw", "isolated-home", filepath.Join(root, "assignment.json"), root, nil)
+	if len(files) != 2 || r.Status != "blocked" || string(b.Document.Fields["agent.identity.callsign"]) != `"Scout"` {
+		t.Fatalf("callsign lost: %+v", r)
 	}
 }

@@ -532,7 +532,7 @@ func sensitiveKey(k string) bool {
 	}
 	// Provider prefixes do not make common credential environment keys safe.
 	// Reference/limit suffixes are not matched (for example apiKeyRef/maxTokens).
-	for _, suffix := range []string{"apikey", "password", "privatekey", "accesstoken", "clientsecret", "refreshtoken", "authtoken", "bearertoken", "apisecret", "secretkey", "secretaccesskey"} {
+	for _, suffix := range []string{"apikey", "password", "privatekey", "accesstoken", "clientsecret", "refreshtoken", "authtoken", "bearertoken", "apisecret", "secretkey", "secretaccesskey", "secret"} {
 		if strings.HasSuffix(n, suffix) {
 			return true
 		}

@@ -393,3 +393,14 @@ metadata, and supported target coverage.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for local validation, render checks, and
 conventions for packs, adapters, and schema changes.
+
+## Static agent and planning foundations (Go CLI)
+
+The built Go binary provides canonical agent validation/resolution, planning
+and decision validation, and explicit native agent import/export/compare for eight
+clients. See the [operator guide](docs/native-adapter-operations.md),
+[agent resolution](docs/agent-resolution.md), and
+[planning foundations](docs/planning-foundations.md). These commands do not
+execute workflows or models. Six native-loading gates remain open; runtime
+policy enforcement is unverified. agy native registration is separate from the
+seven-target pack renderer. The Python contributor entrypoint is unchanged.

@@ -1,6 +1,7 @@
 # Native agent format inventory
 
-Observed 2026-10-16. This is a feasibility inventory, not adapter completion or
+Host inventory observed 2026-10-16; implementation status updated 2026-10-18.
+This is a feasibility inventory, not adapter completion or
 runtime enforcement evidence. Version/help inspection did not run inference,
 install software, or change user configuration. Official documentation may be
 newer than installed hosts; each adapter must pin its tested format and host.
@@ -11,10 +12,10 @@ newer than installed hosts; each adapter must pin its tested format and host.
 | Claude Code | Project `.claude/agents/*.md`, YAML frontmatter and prompt body; user/plugin scopes differ | `2.1.281` | Project discovery verified; [evidence](../../evidence/native-adapters/claude-2.1.281.json); plugin loading/runtime enforcement unverified |
 | OpenCode | Project `.opencode/agents/*.md` or `opencode.json` agent entries | `1.18.35` | Project loading and round trip verified; [evidence](../../evidence/native-adapters/opencode-1.18.35.json); runtime enforcement unverified |
 | Cursor | Project `.cursor/agents/*.md`, YAML frontmatter and prompt body | `cursor-agent 2026.04.17-787b533` | [Loading blocker](../../evidence/native-adapters/cursor-loading-blocker.json): no safe discovery command identified; parser round trips do not close gate |
-| Gemini | Project `.gemini/agents/*.md`; personal `~/.gemini/agents/*.md` | Not installed | Native host loading unavailable; documentation feasibility only |
-| OpenClaw | Config roster plus workspace bootstrap files; isolated configuration-home scope | Not installed | Native host unavailable; pin roster version and validate bundle dependencies |
-| Hermes Agent | Candidate isolated profile/home, with config and persona files; broader than specialist definition | `v0.21.6+636.gd4d2ab7 (2026.9.24)` | Verify minimally sufficient profile, exclude credentials/runtime state and demonstrate native loading |
-| agy | Workspace `.agents/agents/<name>.md` or `<name>/agent.md`, YAML frontmatter | `1.3.6` | Verify discovery of test agent; listing models does not meet gate |
+| Gemini | Project `.gemini/agents/*.md`; personal `~/.gemini/agents/*.md` | Not installed | Bounded Markdown projection implemented; native host loading unavailable |
+| OpenClaw | Config roster plus workspace bootstrap files; isolated configuration-home scope | Not installed | Single-entry roster/workspace projection implemented; native host unavailable, full dependencies unverified |
+| Hermes Agent | Candidate isolated profile/home, with config and persona files; broader than specialist definition | `v0.21.6+636.gd4d2ab7 (2026.9.24)` | Bounded config/SOUL/profile projection implemented; full profile sufficiency and safe native loader unverified |
+| agy | Workspace `.agents/agents/<name>.md` or `<name>/agent.md`, YAML frontmatter | `1.3.6` | Native projection implemented; isolated probes gave no discovery evidence |
 
 ## Official sources and limits
 
@@ -59,8 +60,8 @@ newer than installed hosts; each adapter must pin its tested format and host.
 
 `command -v` located Codex, Claude, OpenCode, Cursor, Hermes and agy. It did not
 locate Gemini or OpenClaw. Versions above came from each host's `--version`.
-Hermes profile/help and agy agent listing were read-only probes. The OpenCode adapter now has isolated generated-file loading evidence linked
-above. Other native gates remain open. Future evidence must record
+Hermes profile/help and agy agent listing were read-only probes. OpenCode and Claude project adapters have isolated generated-file discovery
+evidence linked above. The other six native gates remain open. Future evidence must record
 exact commands, sanitized output, isolated configuration paths, native fixture
 hashes, host version, scope, and whether the observation proves syntax, discovery,
 loading or runtime enforcement. Never conflate those categories.

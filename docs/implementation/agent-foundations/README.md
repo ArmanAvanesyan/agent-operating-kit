@@ -1,8 +1,9 @@
 # Agent foundations delivery contract
 
-Status: foundations in progress. `aok agent validate` and static
-`aok agent resolve` are implemented in the Go CLI. Resolution remains blocked
-where readiness and native enforcement evidence are unavailable.
+Status: static foundations and all eight native adapter projections are implemented
+in the Go CLI. The native-only release remains incomplete: six host-loading gates
+are open and runtime enforcement is unverified. See the
+[operator guide](../../native-adapter-operations.md) for commands and limits.
 The historical [agent specification](../../proposals/agent-spec/README.md) and
 [planning proposal](../../proposals/planning-decisions-optimization/README.md)
 remain design assets. Their illustrative unresolved references do not form a
@@ -97,8 +98,8 @@ workers and one reviewer, with isolated worktrees for concurrent edits.
 | 11 | Gemini native adapter | Merged: [PR #58](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/58); host unavailable |
 | 12 | OpenClaw native adapter | Merged: [PR #59](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/59); host unavailable |
 | 13 | Hermes native adapter | Merged: [PR #60](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/60); native loader unavailable |
-| 14 | agy native adapter and target registration | In progress; native loading not verified |
-| 15 | End-to-end, distribution and operator documentation | Pending |
+| 14 | agy native adapter and target registration | Merged: [PR #61](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/61); loading gate open |
+| 15 | End-to-end, distribution and operator documentation | Implemented in this change; release completion blocked on native gates |
 
 For every implementation PR: relevant targeted tests; kit validation; Python
 regressions and compilation; Go tests/build; relevant render smoke tests; both
@@ -116,7 +117,7 @@ bundles do not satisfy native completion. Missing hosts or suitable formats rema
 explicit blockers while independent PRs continue. The overall release remains
 incomplete until all eight native gates pass.
 
-## Implemented library boundary
+## Delivery-stage boundaries (historical)
 
 Stage 2 adds [operational contract parsing](../../../internal/contracts/README.md)
 and [inert native parsing](../../../internal/nativeparse/README.md). It does not
@@ -139,3 +140,14 @@ boundary checks. It does not run workflows, optimizers or model inference.
 Stage 6 adds the [shared native adapter interface](../../native-adapter-interface.md),
 explicit file capture and private non-overwriting outputs. Client adapters and
 native loading gates remain separate work.
+
+## Remaining native-loading gates
+
+OpenCode 1.18.35 and Claude Code 2.1.281 have isolated project discovery evidence.
+Codex has parser-startup evidence but no verified generated-agent loading;
+Cursor lacks a verified read-only discovery interface; agy probes returned no
+discovery evidence. Gemini and OpenClaw hosts are unavailable. Hermes has no
+verified safe loader probe. These six gates require versioned isolated native
+loading evidence for generated fixtures before this release can be called complete.
+No runtime enforcement claim follows from either parsing or discovery. See the
+[compatibility inventory](native-inventory.md) and each adapter README for sources.

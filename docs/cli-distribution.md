@@ -209,3 +209,13 @@ flowchart LR
 - [release-checklist.md](release-checklist.md)
 - [architecture.md](architecture.md)
 - [ROADMAP.md](../ROADMAP.md)
+
+## Static foundations commands
+
+The built Go binary embeds operational schemas and native parsers. Agent validation,
+resolution, planning/decision checks, and the eight native agent adapters run without
+Python or runtime schema downloads. The contributor Python entrypoint does not
+expose these commands. See [operator instructions and native gate limits](native-adapter-operations.md).
+CI builds with Go 1.22, cross-compiles Linux/macOS/Windows for amd64/arm64, and
+runs built-binary validation with an empty PATH. Cross-compilation does not prove
+execution on those operating systems. No release is published by these checks.

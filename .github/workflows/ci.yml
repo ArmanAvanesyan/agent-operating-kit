@@ -26,6 +26,42 @@ jobs:
         with:
           go-version: "1.22.x"
       - name: Build Go CLI
-        run: go build -o dist/aok ./cmd/aok
+        run: go build -o "$RUNNER_TEMP/aok" ./cmd/aok
       - name: Test Go packages
         run: go test ./...
+      - name: Run built CLI without Python on PATH
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/no-python"
+          PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" agent validate internal/planning/testdata/corpus
+          PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" planning validate internal/planning/testdata/corpus
+
+  go-cross-compile:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+          - goos: linux
+            goarch: arm64
+          - goos: darwin
+            goarch: amd64
+          - goos: darwin
+            goarch: arm64
+          - goos: windows
+            goarch: amd64
+          - goos: windows
+            goarch: arm64
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.x"
+      - name: Compile Go CLI for ${{ matrix.goos }}/${{ matrix.goarch }}
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: "0"
+        run: go build -o "$RUNNER_TEMP/aok-${{ matrix.goos }}-${{ matrix.goarch }}" ./cmd/aok

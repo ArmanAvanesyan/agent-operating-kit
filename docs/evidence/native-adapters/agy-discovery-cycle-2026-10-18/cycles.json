@@ -1,0 +1,1721 @@
+{
+  "accountRowsRetained": false,
+  "agentSelection": "not-run",
+  "aokSHA256": "6428236d9fbcf473987f8e497f05fad5f9713489363e271a2c31e40215af0ac5",
+  "binarySHA256": "fa85a90abded17bcd1b185bbd1d6b1b82065f093ad4700d4dbacd3be2433294c",
+  "candidateNativeLoadingEvidence": true,
+  "cycles": [
+    {
+      "freshSeedCopy": true,
+      "homeIdentity": "68dc7de00b6c06cef89939f084ef11c6d7fe6a15a53165238590b18b3b4f1427",
+      "phases": [
+        {
+          "actions": [
+            "trust-owned-synthetic-root"
+          ],
+          "afterSHA256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76",
+          "auditRoot": "/private/tmp/aok-agy-cycle-audit-bap6hn18",
+          "cleanupVerified": true,
+          "fixtureRelativePath": ".agents/agents/aok-probe/agent.md",
+          "fixtureValidation": {
+            "diagnosticCodes": [],
+            "exitCode": 0,
+            "inputSHA256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76",
+            "status": "valid"
+          },
+          "guardSHA256": "54b934cbed33a79f08564511fbb14f27803a5dc6291e7b1014b68a8a2218d3e0",
+          "guardUnchanged": true,
+          "homeIdentity": "68dc7de00b6c06cef89939f084ef11c6d7fe6a15a53165238590b18b3b4f1427",
+          "inputSHA256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76",
+          "managerObservationSeconds": 5.1663905419409275,
+          "managerStableSeconds": 5.060090912040323,
+          "nativeExecAttempted": true,
+          "phase": "valid",
+          "runnerStarted": true,
+          "sourceHashes": {
+            "agy_discovery_gate.py": "526d03fa13dc60b663aa6ffb03ebc3cc31ab558bb8748437c614886d5e5d1f9c",
+            "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+            "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+            "prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+            "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+            "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+            "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+            "probe_agy_account_manager.py": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c",
+            "probe_agy_discovery_cycle.py": "8077bbe4df9bc7600e90ffe6403ce597dbb022c7ad6eec9c4d09d0916e0f189a",
+            "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+          },
+          "state": {
+            "authBarrierObserved": false,
+            "authScreenFixedRows": [
+              {
+                "fixedWords": [
+                  "antigravity",
+                  "cli"
+                ],
+                "otherWordCount": 0,
+                "row": 1
+              },
+              {
+                "fixedWords": [
+                  "antigravity"
+                ],
+                "otherWordCount": 6,
+                "row": 2
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 3,
+                "row": 3
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 7,
+                "row": 4
+              },
+              {
+                "fixedWords": [
+                  "new"
+                ],
+                "otherWordCount": 2,
+                "row": 10
+              },
+              {
+                "fixedWords": [
+                  "workspace"
+                ],
+                "otherWordCount": 13,
+                "row": 11
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 16,
+                "row": 12
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 2,
+                "row": 15
+              },
+              {
+                "fixedWords": [
+                  "default",
+                  "default"
+                ],
+                "otherWordCount": 1,
+                "row": 16
+              },
+              {
+                "fixedWords": [
+                  "a",
+                  "a"
+                ],
+                "otherWordCount": 6,
+                "row": 17
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 7,
+                "row": 18
+              },
+              {
+                "fixedWords": [
+                  "enter",
+                  "select"
+                ],
+                "otherWordCount": 10,
+                "row": 20
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 3,
+                "row": 22
+              }
+            ],
+            "authorizationCodePromptObserved": false,
+            "authorizationCodeSubmitted": null,
+            "bytesObserved": 7209,
+            "codeFieldDiagnostics": [],
+            "codeFieldGeometry": [],
+            "colorSchemeContinueObserved": false,
+            "colorSchemeContinued": null,
+            "colorSchemeScreenObserved": false,
+            "commandSent": true,
+            "completeControlledList": true,
+            "descriptionObserved": true,
+            "enterHintObserved": true,
+            "errorCategories": [],
+            "errorObserved": false,
+            "errorRowDiagnostics": [],
+            "framedNativeManagerObserved": true,
+            "framedNativePromptObserved": false,
+            "googleSignInOptionObserved": false,
+            "guardEntryVisible": true,
+            "localPromptObserved": false,
+            "loginRowDiagnostics": [],
+            "managerSectionObserved": true,
+            "modelSelectionLabelObserved": false,
+            "nameObserved": true,
+            "nativeLoginChoiceObserved": false,
+            "noAgentsLabelObserved": false,
+            "parseErrorObserved": false,
+            "previewLabelMatches": [],
+            "previewSampleErrorRows": [],
+            "publicModelStatusExceptionObserved": true,
+            "rawGenericErrorObserved": false,
+            "readyHintObserved": false,
+            "startupDiagnostics": {
+              "fixedWordsObserved": [
+                "usage",
+                "trust",
+                "workspace",
+                "permission",
+                "home",
+                "config",
+                "read",
+                "agent",
+                "subagent",
+                "not",
+                "loading",
+                "enter",
+                "esc",
+                "changes",
+                "welcome",
+                "select",
+                "model"
+              ],
+              "rawTextRetained": false,
+              "terminalQueryLabels": [
+                "modify-other-keys-2",
+                "modify-other-keys-reset",
+                "kitty-keyboard",
+                "unicode-width-status",
+                "synchronized-output-status",
+                "terminal-version"
+              ]
+            },
+            "targetEntryVisible": true,
+            "terminalAmbiguityObserved": false,
+            "terminalAmbiguitySite": null,
+            "termsAcceptancePromptObserved": false,
+            "trustPromptObserved": false,
+            "welcomeLabelObserved": true,
+            "workspaceLabelObserved": true
+          },
+          "workspaceIdentity": "b9ea227082058bee2f3a1972e65bac6fd4ed199e202ff4206529ae533a141186"
+        },
+        {
+          "actions": [],
+          "afterSHA256": "d4f9f0acb373cfb7b4511e4c057b982ccecbcf73b2696518182fa4f575841578",
+          "auditRoot": "/private/tmp/aok-agy-cycle-audit-_s6b5lzc",
+          "cleanupVerified": true,
+          "fixtureRelativePath": ".agents/agents/aok-probe/agent.md",
+          "fixtureValidation": {
+            "diagnosticCodes": [
+              "native.decode"
+            ],
+            "exitCode": 1,
+            "inputSHA256": "d4f9f0acb373cfb7b4511e4c057b982ccecbcf73b2696518182fa4f575841578",
+            "status": "invalid"
+          },
+          "guardSHA256": "54b934cbed33a79f08564511fbb14f27803a5dc6291e7b1014b68a8a2218d3e0",
+          "guardUnchanged": true,
+          "homeIdentity": "68dc7de00b6c06cef89939f084ef11c6d7fe6a15a53165238590b18b3b4f1427",
+          "inputSHA256": "d4f9f0acb373cfb7b4511e4c057b982ccecbcf73b2696518182fa4f575841578",
+          "managerObservationSeconds": 5.123946998966858,
+          "managerStableSeconds": 5.056647470220923,
+          "nativeExecAttempted": true,
+          "phase": "malformed",
+          "runnerStarted": true,
+          "sourceHashes": {
+            "agy_discovery_gate.py": "526d03fa13dc60b663aa6ffb03ebc3cc31ab558bb8748437c614886d5e5d1f9c",
+            "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+            "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+            "prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+            "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+            "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+            "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+            "probe_agy_account_manager.py": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c",
+            "probe_agy_discovery_cycle.py": "8077bbe4df9bc7600e90ffe6403ce597dbb022c7ad6eec9c4d09d0916e0f189a",
+            "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+          },
+          "state": {
+            "authBarrierObserved": false,
+            "authScreenFixedRows": [
+              {
+                "fixedWords": [
+                  "antigravity",
+                  "cli"
+                ],
+                "otherWordCount": 0,
+                "row": 1
+              },
+              {
+                "fixedWords": [
+                  "antigravity"
+                ],
+                "otherWordCount": 6,
+                "row": 2
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 3,
+                "row": 3
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 7,
+                "row": 4
+              },
+              {
+                "fixedWords": [
+                  "new"
+                ],
+                "otherWordCount": 2,
+                "row": 10
+              },
+              {
+                "fixedWords": [
+                  "workspace"
+                ],
+                "otherWordCount": 13,
+                "row": 11
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 16,
+                "row": 12
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 2,
+                "row": 15
+              },
+              {
+                "fixedWords": [
+                  "default",
+                  "default"
+                ],
+                "otherWordCount": 1,
+                "row": 16
+              },
+              {
+                "fixedWords": [
+                  "a",
+                  "a"
+                ],
+                "otherWordCount": 6,
+                "row": 17
+              },
+              {
+                "fixedWords": [
+                  "enter",
+                  "select"
+                ],
+                "otherWordCount": 10,
+                "row": 19
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 3,
+                "row": 21
+              }
+            ],
+            "authorizationCodePromptObserved": false,
+            "authorizationCodeSubmitted": null,
+            "bytesObserved": 6005,
+            "codeFieldDiagnostics": [],
+            "codeFieldGeometry": [],
+            "colorSchemeContinueObserved": false,
+            "colorSchemeContinued": null,
+            "colorSchemeScreenObserved": false,
+            "commandSent": true,
+            "completeControlledList": true,
+            "descriptionObserved": false,
+            "enterHintObserved": true,
+            "errorCategories": [],
+            "errorObserved": false,
+            "errorRowDiagnostics": [],
+            "framedNativeManagerObserved": true,
+            "framedNativePromptObserved": false,
+            "googleSignInOptionObserved": false,
+            "guardEntryVisible": true,
+            "localPromptObserved": false,
+            "loginRowDiagnostics": [],
+            "managerSectionObserved": true,
+            "modelSelectionLabelObserved": false,
+            "nameObserved": false,
+            "nativeLoginChoiceObserved": false,
+            "noAgentsLabelObserved": false,
+            "parseErrorObserved": false,
+            "previewLabelMatches": [],
+            "previewSampleErrorRows": [],
+            "publicModelStatusExceptionObserved": true,
+            "rawGenericErrorObserved": false,
+            "readyHintObserved": false,
+            "startupDiagnostics": {
+              "fixedWordsObserved": [
+                "workspace",
+                "home",
+                "config",
+                "agent",
+                "subagent",
+                "not",
+                "enter",
+                "esc",
+                "welcome",
+                "select"
+              ],
+              "rawTextRetained": false,
+              "terminalQueryLabels": [
+                "modify-other-keys-2",
+                "modify-other-keys-reset",
+                "kitty-keyboard",
+                "unicode-width-status",
+                "synchronized-output-status",
+                "terminal-version"
+              ]
+            },
+            "targetEntryVisible": false,
+            "terminalAmbiguityObserved": false,
+            "terminalAmbiguitySite": null,
+            "termsAcceptancePromptObserved": false,
+            "trustPromptObserved": false,
+            "welcomeLabelObserved": true,
+            "workspaceLabelObserved": true
+          },
+          "workspaceIdentity": "b9ea227082058bee2f3a1972e65bac6fd4ed199e202ff4206529ae533a141186"
+        },
+        {
+          "actions": [],
+          "afterSHA256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76",
+          "auditRoot": "/private/tmp/aok-agy-cycle-audit-on7nqcue",
+          "cleanupVerified": true,
+          "fixtureRelativePath": ".agents/agents/aok-probe/agent.md",
+          "fixtureValidation": {
+            "diagnosticCodes": [],
+            "exitCode": 0,
+            "inputSHA256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76",
+            "status": "valid"
+          },
+          "guardSHA256": "54b934cbed33a79f08564511fbb14f27803a5dc6291e7b1014b68a8a2218d3e0",
+          "guardUnchanged": true,
+          "homeIdentity": "68dc7de00b6c06cef89939f084ef11c6d7fe6a15a53165238590b18b3b4f1427",
+          "inputSHA256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76",
+          "managerObservationSeconds": 5.133354105055332,
+          "managerStableSeconds": 5.056907331105322,
+          "nativeExecAttempted": true,
+          "phase": "repaired",
+          "runnerStarted": true,
+          "sourceHashes": {
+            "agy_discovery_gate.py": "526d03fa13dc60b663aa6ffb03ebc3cc31ab558bb8748437c614886d5e5d1f9c",
+            "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+            "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+            "prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+            "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+            "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+            "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+            "probe_agy_account_manager.py": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c",
+            "probe_agy_discovery_cycle.py": "8077bbe4df9bc7600e90ffe6403ce597dbb022c7ad6eec9c4d09d0916e0f189a",
+            "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+          },
+          "state": {
+            "authBarrierObserved": false,
+            "authScreenFixedRows": [
+              {
+                "fixedWords": [
+                  "antigravity",
+                  "cli"
+                ],
+                "otherWordCount": 0,
+                "row": 1
+              },
+              {
+                "fixedWords": [
+                  "antigravity"
+                ],
+                "otherWordCount": 6,
+                "row": 2
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 3,
+                "row": 3
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 7,
+                "row": 4
+              },
+              {
+                "fixedWords": [
+                  "new"
+                ],
+                "otherWordCount": 2,
+                "row": 10
+              },
+              {
+                "fixedWords": [
+                  "workspace"
+                ],
+                "otherWordCount": 13,
+                "row": 11
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 16,
+                "row": 12
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 2,
+                "row": 15
+              },
+              {
+                "fixedWords": [
+                  "default",
+                  "default"
+                ],
+                "otherWordCount": 1,
+                "row": 16
+              },
+              {
+                "fixedWords": [
+                  "a",
+                  "a"
+                ],
+                "otherWordCount": 6,
+                "row": 17
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 7,
+                "row": 18
+              },
+              {
+                "fixedWords": [
+                  "enter",
+                  "select"
+                ],
+                "otherWordCount": 10,
+                "row": 20
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 3,
+                "row": 22
+              }
+            ],
+            "authorizationCodePromptObserved": false,
+            "authorizationCodeSubmitted": null,
+            "bytesObserved": 6713,
+            "codeFieldDiagnostics": [],
+            "codeFieldGeometry": [],
+            "colorSchemeContinueObserved": false,
+            "colorSchemeContinued": null,
+            "colorSchemeScreenObserved": false,
+            "commandSent": true,
+            "completeControlledList": true,
+            "descriptionObserved": true,
+            "enterHintObserved": true,
+            "errorCategories": [],
+            "errorObserved": false,
+            "errorRowDiagnostics": [],
+            "framedNativeManagerObserved": true,
+            "framedNativePromptObserved": false,
+            "googleSignInOptionObserved": false,
+            "guardEntryVisible": true,
+            "localPromptObserved": false,
+            "loginRowDiagnostics": [],
+            "managerSectionObserved": true,
+            "modelSelectionLabelObserved": false,
+            "nameObserved": true,
+            "nativeLoginChoiceObserved": false,
+            "noAgentsLabelObserved": false,
+            "parseErrorObserved": false,
+            "previewLabelMatches": [],
+            "previewSampleErrorRows": [],
+            "publicModelStatusExceptionObserved": true,
+            "rawGenericErrorObserved": false,
+            "readyHintObserved": false,
+            "startupDiagnostics": {
+              "fixedWordsObserved": [
+                "workspace",
+                "directory",
+                "current",
+                "home",
+                "config",
+                "agent",
+                "subagent",
+                "not",
+                "loading",
+                "enter",
+                "esc",
+                "changes",
+                "welcome",
+                "select"
+              ],
+              "rawTextRetained": false,
+              "terminalQueryLabels": [
+                "modify-other-keys-2",
+                "modify-other-keys-reset",
+                "kitty-keyboard",
+                "unicode-width-status",
+                "synchronized-output-status",
+                "terminal-version"
+              ]
+            },
+            "targetEntryVisible": true,
+            "terminalAmbiguityObserved": false,
+            "terminalAmbiguitySite": null,
+            "termsAcceptancePromptObserved": false,
+            "trustPromptObserved": false,
+            "welcomeLabelObserved": true,
+            "workspaceLabelObserved": true
+          },
+          "workspaceIdentity": "b9ea227082058bee2f3a1972e65bac6fd4ed199e202ff4206529ae533a141186"
+        },
+        {
+          "actions": [],
+          "afterSHA256": null,
+          "auditRoot": "/private/tmp/aok-agy-cycle-audit-b0h22nwt",
+          "cleanupVerified": true,
+          "fixtureRelativePath": ".agents/agents/aok-probe/agent.md",
+          "fixtureValidation": {
+            "status": "absent"
+          },
+          "guardSHA256": "54b934cbed33a79f08564511fbb14f27803a5dc6291e7b1014b68a8a2218d3e0",
+          "guardUnchanged": true,
+          "homeIdentity": "68dc7de00b6c06cef89939f084ef11c6d7fe6a15a53165238590b18b3b4f1427",
+          "inputSHA256": null,
+          "managerObservationSeconds": 5.1443227138370275,
+          "managerStableSeconds": 5.067246721126139,
+          "nativeExecAttempted": true,
+          "phase": "absent",
+          "runnerStarted": true,
+          "sourceHashes": {
+            "agy_discovery_gate.py": "526d03fa13dc60b663aa6ffb03ebc3cc31ab558bb8748437c614886d5e5d1f9c",
+            "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+            "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+            "prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+            "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+            "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+            "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+            "probe_agy_account_manager.py": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c",
+            "probe_agy_discovery_cycle.py": "8077bbe4df9bc7600e90ffe6403ce597dbb022c7ad6eec9c4d09d0916e0f189a",
+            "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+          },
+          "state": {
+            "authBarrierObserved": false,
+            "authScreenFixedRows": [
+              {
+                "fixedWords": [
+                  "antigravity",
+                  "cli"
+                ],
+                "otherWordCount": 0,
+                "row": 1
+              },
+              {
+                "fixedWords": [
+                  "antigravity"
+                ],
+                "otherWordCount": 6,
+                "row": 2
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 3,
+                "row": 3
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 7,
+                "row": 4
+              },
+              {
+                "fixedWords": [
+                  "new"
+                ],
+                "otherWordCount": 2,
+                "row": 10
+              },
+              {
+                "fixedWords": [
+                  "workspace"
+                ],
+                "otherWordCount": 13,
+                "row": 11
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 16,
+                "row": 12
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 2,
+                "row": 15
+              },
+              {
+                "fixedWords": [
+                  "default",
+                  "default"
+                ],
+                "otherWordCount": 1,
+                "row": 16
+              },
+              {
+                "fixedWords": [
+                  "a",
+                  "a"
+                ],
+                "otherWordCount": 6,
+                "row": 17
+              },
+              {
+                "fixedWords": [
+                  "enter",
+                  "select"
+                ],
+                "otherWordCount": 10,
+                "row": 19
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 3,
+                "row": 21
+              }
+            ],
+            "authorizationCodePromptObserved": false,
+            "authorizationCodeSubmitted": null,
+            "bytesObserved": 6836,
+            "codeFieldDiagnostics": [],
+            "codeFieldGeometry": [],
+            "colorSchemeContinueObserved": false,
+            "colorSchemeContinued": null,
+            "colorSchemeScreenObserved": false,
+            "commandSent": true,
+            "completeControlledList": true,
+            "descriptionObserved": false,
+            "enterHintObserved": true,
+            "errorCategories": [],
+            "errorObserved": false,
+            "errorRowDiagnostics": [],
+            "framedNativeManagerObserved": true,
+            "framedNativePromptObserved": false,
+            "googleSignInOptionObserved": false,
+            "guardEntryVisible": true,
+            "localPromptObserved": false,
+            "loginRowDiagnostics": [],
+            "managerSectionObserved": true,
+            "modelSelectionLabelObserved": false,
+            "nameObserved": false,
+            "nativeLoginChoiceObserved": false,
+            "noAgentsLabelObserved": false,
+            "parseErrorObserved": false,
+            "previewLabelMatches": [],
+            "previewSampleErrorRows": [],
+            "publicModelStatusExceptionObserved": true,
+            "rawGenericErrorObserved": false,
+            "readyHintObserved": false,
+            "startupDiagnostics": {
+              "fixedWordsObserved": [
+                "workspace",
+                "directory",
+                "home",
+                "config",
+                "agent",
+                "subagent",
+                "not",
+                "loading",
+                "enter",
+                "esc",
+                "welcome",
+                "select"
+              ],
+              "rawTextRetained": false,
+              "terminalQueryLabels": [
+                "modify-other-keys-2",
+                "modify-other-keys-reset",
+                "kitty-keyboard",
+                "unicode-width-status",
+                "synchronized-output-status",
+                "terminal-version"
+              ]
+            },
+            "targetEntryVisible": false,
+            "terminalAmbiguityObserved": false,
+            "terminalAmbiguitySite": null,
+            "termsAcceptancePromptObserved": false,
+            "trustPromptObserved": false,
+            "welcomeLabelObserved": true,
+            "workspaceLabelObserved": true
+          },
+          "workspaceIdentity": "b9ea227082058bee2f3a1972e65bac6fd4ed199e202ff4206529ae533a141186"
+        }
+      ],
+      "privateRootRemoved": true,
+      "workspaceIdentity": "b9ea227082058bee2f3a1972e65bac6fd4ed199e202ff4206529ae533a141186"
+    },
+    {
+      "freshSeedCopy": true,
+      "homeIdentity": "b19ae9f5cd8f24ec0eb5e7a1c024630bccc2e215b762d1225ee66ad5dbc5a4c8",
+      "phases": [
+        {
+          "actions": [
+            "trust-owned-synthetic-root"
+          ],
+          "afterSHA256": "d4f9f0acb373cfb7b4511e4c057b982ccecbcf73b2696518182fa4f575841578",
+          "auditRoot": "/private/tmp/aok-agy-cycle-audit-zfp9gx3l",
+          "cleanupVerified": true,
+          "fixtureRelativePath": ".agents/agents/aok-probe/agent.md",
+          "fixtureValidation": {
+            "diagnosticCodes": [
+              "native.decode"
+            ],
+            "exitCode": 1,
+            "inputSHA256": "d4f9f0acb373cfb7b4511e4c057b982ccecbcf73b2696518182fa4f575841578",
+            "status": "invalid"
+          },
+          "guardSHA256": "54b934cbed33a79f08564511fbb14f27803a5dc6291e7b1014b68a8a2218d3e0",
+          "guardUnchanged": true,
+          "homeIdentity": "b19ae9f5cd8f24ec0eb5e7a1c024630bccc2e215b762d1225ee66ad5dbc5a4c8",
+          "inputSHA256": "d4f9f0acb373cfb7b4511e4c057b982ccecbcf73b2696518182fa4f575841578",
+          "managerObservationSeconds": 5.145620396127924,
+          "managerStableSeconds": 5.073359939968213,
+          "nativeExecAttempted": true,
+          "phase": "cold-malformed",
+          "runnerStarted": true,
+          "sourceHashes": {
+            "agy_discovery_gate.py": "526d03fa13dc60b663aa6ffb03ebc3cc31ab558bb8748437c614886d5e5d1f9c",
+            "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+            "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+            "prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+            "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+            "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+            "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+            "probe_agy_account_manager.py": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c",
+            "probe_agy_discovery_cycle.py": "8077bbe4df9bc7600e90ffe6403ce597dbb022c7ad6eec9c4d09d0916e0f189a",
+            "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+          },
+          "state": {
+            "authBarrierObserved": false,
+            "authScreenFixedRows": [
+              {
+                "fixedWords": [
+                  "antigravity",
+                  "cli"
+                ],
+                "otherWordCount": 0,
+                "row": 1
+              },
+              {
+                "fixedWords": [
+                  "antigravity"
+                ],
+                "otherWordCount": 6,
+                "row": 2
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 3,
+                "row": 3
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 8,
+                "row": 4
+              },
+              {
+                "fixedWords": [
+                  "new"
+                ],
+                "otherWordCount": 2,
+                "row": 10
+              },
+              {
+                "fixedWords": [
+                  "workspace"
+                ],
+                "otherWordCount": 14,
+                "row": 11
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 17,
+                "row": 12
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 2,
+                "row": 15
+              },
+              {
+                "fixedWords": [
+                  "default",
+                  "default"
+                ],
+                "otherWordCount": 1,
+                "row": 16
+              },
+              {
+                "fixedWords": [
+                  "a",
+                  "a"
+                ],
+                "otherWordCount": 6,
+                "row": 17
+              },
+              {
+                "fixedWords": [
+                  "enter",
+                  "select"
+                ],
+                "otherWordCount": 10,
+                "row": 19
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 3,
+                "row": 21
+              }
+            ],
+            "authorizationCodePromptObserved": false,
+            "authorizationCodeSubmitted": null,
+            "bytesObserved": 6972,
+            "codeFieldDiagnostics": [],
+            "codeFieldGeometry": [],
+            "colorSchemeContinueObserved": false,
+            "colorSchemeContinued": null,
+            "colorSchemeScreenObserved": false,
+            "commandSent": true,
+            "completeControlledList": true,
+            "descriptionObserved": false,
+            "enterHintObserved": true,
+            "errorCategories": [],
+            "errorObserved": false,
+            "errorRowDiagnostics": [],
+            "framedNativeManagerObserved": true,
+            "framedNativePromptObserved": false,
+            "googleSignInOptionObserved": false,
+            "guardEntryVisible": true,
+            "localPromptObserved": false,
+            "loginRowDiagnostics": [],
+            "managerSectionObserved": true,
+            "modelSelectionLabelObserved": false,
+            "nameObserved": false,
+            "nativeLoginChoiceObserved": false,
+            "noAgentsLabelObserved": false,
+            "parseErrorObserved": false,
+            "previewLabelMatches": [],
+            "previewSampleErrorRows": [],
+            "publicModelStatusExceptionObserved": true,
+            "rawGenericErrorObserved": false,
+            "readyHintObserved": false,
+            "startupDiagnostics": {
+              "fixedWordsObserved": [
+                "trust",
+                "workspace",
+                "permission",
+                "directory",
+                "current",
+                "home",
+                "config",
+                "read",
+                "agent",
+                "subagent",
+                "not",
+                "loading",
+                "enter",
+                "esc",
+                "changes",
+                "welcome",
+                "select"
+              ],
+              "rawTextRetained": false,
+              "terminalQueryLabels": [
+                "modify-other-keys-2",
+                "modify-other-keys-reset",
+                "kitty-keyboard",
+                "unicode-width-status",
+                "synchronized-output-status",
+                "terminal-version"
+              ]
+            },
+            "targetEntryVisible": false,
+            "terminalAmbiguityObserved": false,
+            "terminalAmbiguitySite": null,
+            "termsAcceptancePromptObserved": false,
+            "trustPromptObserved": false,
+            "welcomeLabelObserved": true,
+            "workspaceLabelObserved": true
+          },
+          "workspaceIdentity": "14680bfef957b63d6e2d8115275a720c5c56e8b1bea1c50233227b164dc9f303"
+        },
+        {
+          "actions": [],
+          "afterSHA256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76",
+          "auditRoot": "/private/tmp/aok-agy-cycle-audit-x1h0yolb",
+          "cleanupVerified": true,
+          "fixtureRelativePath": ".agents/agents/aok-probe/agent.md",
+          "fixtureValidation": {
+            "diagnosticCodes": [],
+            "exitCode": 0,
+            "inputSHA256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76",
+            "status": "valid"
+          },
+          "guardSHA256": "54b934cbed33a79f08564511fbb14f27803a5dc6291e7b1014b68a8a2218d3e0",
+          "guardUnchanged": true,
+          "homeIdentity": "b19ae9f5cd8f24ec0eb5e7a1c024630bccc2e215b762d1225ee66ad5dbc5a4c8",
+          "inputSHA256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76",
+          "managerObservationSeconds": 5.126717389095575,
+          "managerStableSeconds": 5.045842132065445,
+          "nativeExecAttempted": true,
+          "phase": "valid",
+          "runnerStarted": true,
+          "sourceHashes": {
+            "agy_discovery_gate.py": "526d03fa13dc60b663aa6ffb03ebc3cc31ab558bb8748437c614886d5e5d1f9c",
+            "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+            "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+            "prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+            "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+            "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+            "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+            "probe_agy_account_manager.py": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c",
+            "probe_agy_discovery_cycle.py": "8077bbe4df9bc7600e90ffe6403ce597dbb022c7ad6eec9c4d09d0916e0f189a",
+            "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+          },
+          "state": {
+            "authBarrierObserved": false,
+            "authScreenFixedRows": [
+              {
+                "fixedWords": [
+                  "antigravity",
+                  "cli"
+                ],
+                "otherWordCount": 0,
+                "row": 1
+              },
+              {
+                "fixedWords": [
+                  "antigravity"
+                ],
+                "otherWordCount": 6,
+                "row": 2
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 3,
+                "row": 3
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 8,
+                "row": 4
+              },
+              {
+                "fixedWords": [
+                  "new"
+                ],
+                "otherWordCount": 2,
+                "row": 10
+              },
+              {
+                "fixedWords": [
+                  "workspace"
+                ],
+                "otherWordCount": 14,
+                "row": 11
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 17,
+                "row": 12
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 2,
+                "row": 15
+              },
+              {
+                "fixedWords": [
+                  "default",
+                  "default"
+                ],
+                "otherWordCount": 1,
+                "row": 16
+              },
+              {
+                "fixedWords": [
+                  "a",
+                  "a"
+                ],
+                "otherWordCount": 6,
+                "row": 17
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 7,
+                "row": 18
+              },
+              {
+                "fixedWords": [
+                  "enter",
+                  "select"
+                ],
+                "otherWordCount": 10,
+                "row": 20
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 3,
+                "row": 22
+              }
+            ],
+            "authorizationCodePromptObserved": false,
+            "authorizationCodeSubmitted": null,
+            "bytesObserved": 6379,
+            "codeFieldDiagnostics": [],
+            "codeFieldGeometry": [],
+            "colorSchemeContinueObserved": false,
+            "colorSchemeContinued": null,
+            "colorSchemeScreenObserved": false,
+            "commandSent": true,
+            "completeControlledList": true,
+            "descriptionObserved": true,
+            "enterHintObserved": true,
+            "errorCategories": [],
+            "errorObserved": false,
+            "errorRowDiagnostics": [],
+            "framedNativeManagerObserved": true,
+            "framedNativePromptObserved": false,
+            "googleSignInOptionObserved": false,
+            "guardEntryVisible": true,
+            "localPromptObserved": false,
+            "loginRowDiagnostics": [],
+            "managerSectionObserved": true,
+            "modelSelectionLabelObserved": false,
+            "nameObserved": true,
+            "nativeLoginChoiceObserved": false,
+            "noAgentsLabelObserved": false,
+            "parseErrorObserved": false,
+            "previewLabelMatches": [],
+            "previewSampleErrorRows": [],
+            "publicModelStatusExceptionObserved": true,
+            "rawGenericErrorObserved": false,
+            "readyHintObserved": false,
+            "startupDiagnostics": {
+              "fixedWordsObserved": [
+                "usage",
+                "workspace",
+                "home",
+                "config",
+                "agent",
+                "subagent",
+                "not",
+                "enter",
+                "esc",
+                "changes",
+                "welcome",
+                "select",
+                "model"
+              ],
+              "rawTextRetained": false,
+              "terminalQueryLabels": [
+                "modify-other-keys-2",
+                "modify-other-keys-reset",
+                "kitty-keyboard",
+                "unicode-width-status",
+                "synchronized-output-status",
+                "terminal-version"
+              ]
+            },
+            "targetEntryVisible": true,
+            "terminalAmbiguityObserved": false,
+            "terminalAmbiguitySite": null,
+            "termsAcceptancePromptObserved": false,
+            "trustPromptObserved": false,
+            "welcomeLabelObserved": true,
+            "workspaceLabelObserved": true
+          },
+          "workspaceIdentity": "14680bfef957b63d6e2d8115275a720c5c56e8b1bea1c50233227b164dc9f303"
+        },
+        {
+          "actions": [],
+          "afterSHA256": "d4f9f0acb373cfb7b4511e4c057b982ccecbcf73b2696518182fa4f575841578",
+          "auditRoot": "/private/tmp/aok-agy-cycle-audit-mtyvkq4l",
+          "cleanupVerified": true,
+          "fixtureRelativePath": ".agents/agents/aok-probe/agent.md",
+          "fixtureValidation": {
+            "diagnosticCodes": [
+              "native.decode"
+            ],
+            "exitCode": 1,
+            "inputSHA256": "d4f9f0acb373cfb7b4511e4c057b982ccecbcf73b2696518182fa4f575841578",
+            "status": "invalid"
+          },
+          "guardSHA256": "54b934cbed33a79f08564511fbb14f27803a5dc6291e7b1014b68a8a2218d3e0",
+          "guardUnchanged": true,
+          "homeIdentity": "b19ae9f5cd8f24ec0eb5e7a1c024630bccc2e215b762d1225ee66ad5dbc5a4c8",
+          "inputSHA256": "d4f9f0acb373cfb7b4511e4c057b982ccecbcf73b2696518182fa4f575841578",
+          "managerObservationSeconds": 5.137095948914066,
+          "managerStableSeconds": 5.063652306096628,
+          "nativeExecAttempted": true,
+          "phase": "malformed",
+          "runnerStarted": true,
+          "sourceHashes": {
+            "agy_discovery_gate.py": "526d03fa13dc60b663aa6ffb03ebc3cc31ab558bb8748437c614886d5e5d1f9c",
+            "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+            "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+            "prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+            "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+            "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+            "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+            "probe_agy_account_manager.py": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c",
+            "probe_agy_discovery_cycle.py": "8077bbe4df9bc7600e90ffe6403ce597dbb022c7ad6eec9c4d09d0916e0f189a",
+            "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+          },
+          "state": {
+            "authBarrierObserved": false,
+            "authScreenFixedRows": [
+              {
+                "fixedWords": [
+                  "antigravity",
+                  "cli"
+                ],
+                "otherWordCount": 0,
+                "row": 1
+              },
+              {
+                "fixedWords": [
+                  "antigravity"
+                ],
+                "otherWordCount": 6,
+                "row": 2
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 3,
+                "row": 3
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 8,
+                "row": 4
+              },
+              {
+                "fixedWords": [
+                  "new"
+                ],
+                "otherWordCount": 2,
+                "row": 10
+              },
+              {
+                "fixedWords": [
+                  "workspace"
+                ],
+                "otherWordCount": 14,
+                "row": 11
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 17,
+                "row": 12
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 2,
+                "row": 15
+              },
+              {
+                "fixedWords": [
+                  "default",
+                  "default"
+                ],
+                "otherWordCount": 1,
+                "row": 16
+              },
+              {
+                "fixedWords": [
+                  "a",
+                  "a"
+                ],
+                "otherWordCount": 6,
+                "row": 17
+              },
+              {
+                "fixedWords": [
+                  "enter",
+                  "select"
+                ],
+                "otherWordCount": 10,
+                "row": 19
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 3,
+                "row": 21
+              }
+            ],
+            "authorizationCodePromptObserved": false,
+            "authorizationCodeSubmitted": null,
+            "bytesObserved": 6011,
+            "codeFieldDiagnostics": [],
+            "codeFieldGeometry": [],
+            "colorSchemeContinueObserved": false,
+            "colorSchemeContinued": null,
+            "colorSchemeScreenObserved": false,
+            "commandSent": true,
+            "completeControlledList": true,
+            "descriptionObserved": false,
+            "enterHintObserved": true,
+            "errorCategories": [],
+            "errorObserved": false,
+            "errorRowDiagnostics": [],
+            "framedNativeManagerObserved": true,
+            "framedNativePromptObserved": false,
+            "googleSignInOptionObserved": false,
+            "guardEntryVisible": true,
+            "localPromptObserved": false,
+            "loginRowDiagnostics": [],
+            "managerSectionObserved": true,
+            "modelSelectionLabelObserved": false,
+            "nameObserved": false,
+            "nativeLoginChoiceObserved": false,
+            "noAgentsLabelObserved": false,
+            "parseErrorObserved": false,
+            "previewLabelMatches": [],
+            "previewSampleErrorRows": [],
+            "publicModelStatusExceptionObserved": true,
+            "rawGenericErrorObserved": false,
+            "readyHintObserved": false,
+            "startupDiagnostics": {
+              "fixedWordsObserved": [
+                "workspace",
+                "home",
+                "config",
+                "agent",
+                "subagent",
+                "not",
+                "enter",
+                "esc",
+                "welcome",
+                "select"
+              ],
+              "rawTextRetained": false,
+              "terminalQueryLabels": [
+                "modify-other-keys-2",
+                "modify-other-keys-reset",
+                "kitty-keyboard",
+                "unicode-width-status",
+                "synchronized-output-status",
+                "terminal-version"
+              ]
+            },
+            "targetEntryVisible": false,
+            "terminalAmbiguityObserved": false,
+            "terminalAmbiguitySite": null,
+            "termsAcceptancePromptObserved": false,
+            "trustPromptObserved": false,
+            "welcomeLabelObserved": true,
+            "workspaceLabelObserved": true
+          },
+          "workspaceIdentity": "14680bfef957b63d6e2d8115275a720c5c56e8b1bea1c50233227b164dc9f303"
+        },
+        {
+          "actions": [],
+          "afterSHA256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76",
+          "auditRoot": "/private/tmp/aok-agy-cycle-audit-0lnykzd_",
+          "cleanupVerified": true,
+          "fixtureRelativePath": ".agents/agents/aok-probe/agent.md",
+          "fixtureValidation": {
+            "diagnosticCodes": [],
+            "exitCode": 0,
+            "inputSHA256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76",
+            "status": "valid"
+          },
+          "guardSHA256": "54b934cbed33a79f08564511fbb14f27803a5dc6291e7b1014b68a8a2218d3e0",
+          "guardUnchanged": true,
+          "homeIdentity": "b19ae9f5cd8f24ec0eb5e7a1c024630bccc2e215b762d1225ee66ad5dbc5a4c8",
+          "inputSHA256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76",
+          "managerObservationSeconds": 5.141986998962238,
+          "managerStableSeconds": 5.065208490937948,
+          "nativeExecAttempted": true,
+          "phase": "repaired",
+          "runnerStarted": true,
+          "sourceHashes": {
+            "agy_discovery_gate.py": "526d03fa13dc60b663aa6ffb03ebc3cc31ab558bb8748437c614886d5e5d1f9c",
+            "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+            "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+            "prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+            "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+            "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+            "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+            "probe_agy_account_manager.py": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c",
+            "probe_agy_discovery_cycle.py": "8077bbe4df9bc7600e90ffe6403ce597dbb022c7ad6eec9c4d09d0916e0f189a",
+            "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+          },
+          "state": {
+            "authBarrierObserved": false,
+            "authScreenFixedRows": [
+              {
+                "fixedWords": [
+                  "antigravity",
+                  "cli"
+                ],
+                "otherWordCount": 0,
+                "row": 1
+              },
+              {
+                "fixedWords": [
+                  "antigravity"
+                ],
+                "otherWordCount": 6,
+                "row": 2
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 3,
+                "row": 3
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 8,
+                "row": 4
+              },
+              {
+                "fixedWords": [
+                  "new"
+                ],
+                "otherWordCount": 2,
+                "row": 10
+              },
+              {
+                "fixedWords": [
+                  "workspace"
+                ],
+                "otherWordCount": 14,
+                "row": 11
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 17,
+                "row": 12
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 2,
+                "row": 15
+              },
+              {
+                "fixedWords": [
+                  "default",
+                  "default"
+                ],
+                "otherWordCount": 1,
+                "row": 16
+              },
+              {
+                "fixedWords": [
+                  "a",
+                  "a"
+                ],
+                "otherWordCount": 6,
+                "row": 17
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 7,
+                "row": 18
+              },
+              {
+                "fixedWords": [
+                  "enter",
+                  "select"
+                ],
+                "otherWordCount": 10,
+                "row": 20
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 3,
+                "row": 22
+              }
+            ],
+            "authorizationCodePromptObserved": false,
+            "authorizationCodeSubmitted": null,
+            "bytesObserved": 6721,
+            "codeFieldDiagnostics": [],
+            "codeFieldGeometry": [],
+            "colorSchemeContinueObserved": false,
+            "colorSchemeContinued": null,
+            "colorSchemeScreenObserved": false,
+            "commandSent": true,
+            "completeControlledList": true,
+            "descriptionObserved": true,
+            "enterHintObserved": true,
+            "errorCategories": [],
+            "errorObserved": false,
+            "errorRowDiagnostics": [],
+            "framedNativeManagerObserved": true,
+            "framedNativePromptObserved": false,
+            "googleSignInOptionObserved": false,
+            "guardEntryVisible": true,
+            "localPromptObserved": false,
+            "loginRowDiagnostics": [],
+            "managerSectionObserved": true,
+            "modelSelectionLabelObserved": false,
+            "nameObserved": true,
+            "nativeLoginChoiceObserved": false,
+            "noAgentsLabelObserved": false,
+            "parseErrorObserved": false,
+            "previewLabelMatches": [],
+            "previewSampleErrorRows": [],
+            "publicModelStatusExceptionObserved": true,
+            "rawGenericErrorObserved": false,
+            "readyHintObserved": false,
+            "startupDiagnostics": {
+              "fixedWordsObserved": [
+                "workspace",
+                "directory",
+                "current",
+                "home",
+                "config",
+                "agent",
+                "subagent",
+                "not",
+                "loading",
+                "enter",
+                "esc",
+                "changes",
+                "welcome",
+                "select"
+              ],
+              "rawTextRetained": false,
+              "terminalQueryLabels": [
+                "modify-other-keys-2",
+                "modify-other-keys-reset",
+                "kitty-keyboard",
+                "unicode-width-status",
+                "synchronized-output-status",
+                "terminal-version"
+              ]
+            },
+            "targetEntryVisible": true,
+            "terminalAmbiguityObserved": false,
+            "terminalAmbiguitySite": null,
+            "termsAcceptancePromptObserved": false,
+            "trustPromptObserved": false,
+            "welcomeLabelObserved": true,
+            "workspaceLabelObserved": true
+          },
+          "workspaceIdentity": "14680bfef957b63d6e2d8115275a720c5c56e8b1bea1c50233227b164dc9f303"
+        },
+        {
+          "actions": [],
+          "afterSHA256": null,
+          "auditRoot": "/private/tmp/aok-agy-cycle-audit-2bv7z8ac",
+          "cleanupVerified": true,
+          "fixtureRelativePath": ".agents/agents/aok-probe/agent.md",
+          "fixtureValidation": {
+            "status": "absent"
+          },
+          "guardSHA256": "54b934cbed33a79f08564511fbb14f27803a5dc6291e7b1014b68a8a2218d3e0",
+          "guardUnchanged": true,
+          "homeIdentity": "b19ae9f5cd8f24ec0eb5e7a1c024630bccc2e215b762d1225ee66ad5dbc5a4c8",
+          "inputSHA256": null,
+          "managerObservationSeconds": 5.12779906205833,
+          "managerStableSeconds": 5.056678529130295,
+          "nativeExecAttempted": true,
+          "phase": "absent",
+          "runnerStarted": true,
+          "sourceHashes": {
+            "agy_discovery_gate.py": "526d03fa13dc60b663aa6ffb03ebc3cc31ab558bb8748437c614886d5e5d1f9c",
+            "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+            "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+            "prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+            "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+            "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+            "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+            "probe_agy_account_manager.py": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c",
+            "probe_agy_discovery_cycle.py": "8077bbe4df9bc7600e90ffe6403ce597dbb022c7ad6eec9c4d09d0916e0f189a",
+            "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+          },
+          "state": {
+            "authBarrierObserved": false,
+            "authScreenFixedRows": [
+              {
+                "fixedWords": [
+                  "antigravity",
+                  "cli"
+                ],
+                "otherWordCount": 0,
+                "row": 1
+              },
+              {
+                "fixedWords": [
+                  "antigravity"
+                ],
+                "otherWordCount": 6,
+                "row": 2
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 3,
+                "row": 3
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 8,
+                "row": 4
+              },
+              {
+                "fixedWords": [
+                  "new"
+                ],
+                "otherWordCount": 2,
+                "row": 10
+              },
+              {
+                "fixedWords": [
+                  "workspace"
+                ],
+                "otherWordCount": 14,
+                "row": 11
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 17,
+                "row": 12
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 2,
+                "row": 15
+              },
+              {
+                "fixedWords": [
+                  "default",
+                  "default"
+                ],
+                "otherWordCount": 1,
+                "row": 16
+              },
+              {
+                "fixedWords": [
+                  "a",
+                  "a"
+                ],
+                "otherWordCount": 6,
+                "row": 17
+              },
+              {
+                "fixedWords": [
+                  "enter",
+                  "select"
+                ],
+                "otherWordCount": 10,
+                "row": 19
+              },
+              {
+                "fixedWords": [],
+                "otherWordCount": 3,
+                "row": 21
+              }
+            ],
+            "authorizationCodePromptObserved": false,
+            "authorizationCodeSubmitted": null,
+            "bytesObserved": 6649,
+            "codeFieldDiagnostics": [],
+            "codeFieldGeometry": [],
+            "colorSchemeContinueObserved": false,
+            "colorSchemeContinued": null,
+            "colorSchemeScreenObserved": false,
+            "commandSent": true,
+            "completeControlledList": true,
+            "descriptionObserved": false,
+            "enterHintObserved": true,
+            "errorCategories": [],
+            "errorObserved": false,
+            "errorRowDiagnostics": [],
+            "framedNativeManagerObserved": true,
+            "framedNativePromptObserved": false,
+            "googleSignInOptionObserved": false,
+            "guardEntryVisible": true,
+            "localPromptObserved": false,
+            "loginRowDiagnostics": [],
+            "managerSectionObserved": true,
+            "modelSelectionLabelObserved": false,
+            "nameObserved": false,
+            "nativeLoginChoiceObserved": false,
+            "noAgentsLabelObserved": false,
+            "parseErrorObserved": false,
+            "previewLabelMatches": [],
+            "previewSampleErrorRows": [],
+            "publicModelStatusExceptionObserved": true,
+            "rawGenericErrorObserved": false,
+            "readyHintObserved": false,
+            "startupDiagnostics": {
+              "fixedWordsObserved": [
+                "workspace",
+                "directory",
+                "current",
+                "home",
+                "config",
+                "agent",
+                "subagent",
+                "not",
+                "loading",
+                "enter",
+                "esc",
+                "changes",
+                "welcome",
+                "select"
+              ],
+              "rawTextRetained": false,
+              "terminalQueryLabels": [
+                "modify-other-keys-2",
+                "modify-other-keys-reset",
+                "kitty-keyboard",
+                "unicode-width-status",
+                "synchronized-output-status",
+                "terminal-version"
+              ]
+            },
+            "targetEntryVisible": false,
+            "terminalAmbiguityObserved": false,
+            "terminalAmbiguitySite": null,
+            "termsAcceptancePromptObserved": false,
+            "trustPromptObserved": false,
+            "welcomeLabelObserved": true,
+            "workspaceLabelObserved": true
+          },
+          "workspaceIdentity": "14680bfef957b63d6e2d8115275a720c5c56e8b1bea1c50233227b164dc9f303"
+        }
+      ],
+      "privateRootRemoved": true,
+      "workspaceIdentity": "14680bfef957b63d6e2d8115275a720c5c56e8b1bea1c50233227b164dc9f303"
+    }
+  ],
+  "diagnosticCodes": [],
+  "fixtureRelativePath": ".agents/agents/aok-probe/agent.md",
+  "gateContract": "agy-project-discovery/v2",
+  "guardDescription": "Synthetic cycle guard 2984a483",
+  "guardFixtureUTF8": "---\nname: aok-cycle-guard-2984a483\ndescription: Synthetic cycle guard 2984a483\nmodel: flash\nsubagent: true\n---\nInert discovery control.\n",
+  "guardName": "aok-cycle-guard-2984a483",
+  "guardSHA256": "54b934cbed33a79f08564511fbb14f27803a5dc6291e7b1014b68a8a2218d3e0",
+  "kind": "aok-agy-discovery-cycle/v1",
+  "logContentRetained": false,
+  "malformedFixtureUTF8": "---\ndescription: [Synthetic AGY adapter discovery fixture\nfuturePolicy:\n    retain: true\nmodel: flash\nname: aok-probe\nsubagent: true\ntools:\n    - view_file\n---\n# Agent instructions\n\nThis synthetic body is inert test content. Do not execute it.\n",
+  "modelInvocation": "not-run",
+  "nativeParserErrorReporting": "not-verified",
+  "provider": "isolated-oauth-account",
+  "renderedFixtureUTF8": "---\ndescription: Synthetic AGY adapter discovery fixture\nfuturePolicy:\n    retain: true\nmodel: flash\nname: aok-probe\nsubagent: true\ntools:\n    - view_file\n---\n# Agent instructions\n\nThis synthetic body is inert test content. Do not execute it.\n",
+  "scope": "project",
+  "sourceProfileRemoved": true,
+  "terminalGeometry": {
+    "columns": 160,
+    "rows": 80
+  },
+  "version": "1.4.2"
+}

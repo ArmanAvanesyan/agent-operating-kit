@@ -1,0 +1,318 @@
+{
+  "auditMappings": {
+    "cycle-1-absent": {
+      "originalAuditRoot": "/private/tmp/aok-agy-cycle-audit-b0h22nwt",
+      "savedAudit": "audits/cycle-1-absent.jsonl"
+    },
+    "cycle-1-malformed": {
+      "originalAuditRoot": "/private/tmp/aok-agy-cycle-audit-_s6b5lzc",
+      "savedAudit": "audits/cycle-1-malformed.jsonl"
+    },
+    "cycle-1-repaired": {
+      "originalAuditRoot": "/private/tmp/aok-agy-cycle-audit-on7nqcue",
+      "savedAudit": "audits/cycle-1-repaired.jsonl"
+    },
+    "cycle-1-valid": {
+      "originalAuditRoot": "/private/tmp/aok-agy-cycle-audit-bap6hn18",
+      "savedAudit": "audits/cycle-1-valid.jsonl"
+    },
+    "cycle-2-absent": {
+      "originalAuditRoot": "/private/tmp/aok-agy-cycle-audit-2bv7z8ac",
+      "savedAudit": "audits/cycle-2-absent.jsonl"
+    },
+    "cycle-2-cold-malformed": {
+      "originalAuditRoot": "/private/tmp/aok-agy-cycle-audit-zfp9gx3l",
+      "savedAudit": "audits/cycle-2-cold-malformed.jsonl"
+    },
+    "cycle-2-malformed": {
+      "originalAuditRoot": "/private/tmp/aok-agy-cycle-audit-mtyvkq4l",
+      "savedAudit": "audits/cycle-2-malformed.jsonl"
+    },
+    "cycle-2-repaired": {
+      "originalAuditRoot": "/private/tmp/aok-agy-cycle-audit-0lnykzd_",
+      "savedAudit": "audits/cycle-2-repaired.jsonl"
+    },
+    "cycle-2-valid": {
+      "originalAuditRoot": "/private/tmp/aok-agy-cycle-audit-x1h0yolb",
+      "savedAudit": "audits/cycle-2-valid.jsonl"
+    },
+    "failed-preflight": {
+      "originalAuditRoot": "/private/tmp/aok-agy-cycle-audit-e_613c0c",
+      "savedAudit": "audits/failed-preflight.jsonl"
+    },
+    "login": {
+      "originalAuditRoot": "/private/tmp/aok-agy-login-audit-vproiwnb",
+      "savedAudit": "audits/login.jsonl"
+    },
+    "login-preflight-attempt": {
+      "originalAuditRoot": "/private/tmp/aok-agy-login-audit-yw4b9wyo",
+      "savedAudit": "audits/login-preflight-attempt.jsonl"
+    }
+  },
+  "files": {
+    "audits/cycle-1-absent.jsonl": {
+      "bytes": 32051,
+      "sha256": "e35f446da12f234eab7dfb4a80dc95676d67cc70c192c537c4dc2ffa2efd2f7e"
+    },
+    "audits/cycle-1-malformed.jsonl": {
+      "bytes": 31334,
+      "sha256": "832d61c86d0dca35d19697f797dabcba824527629f09e6653111eac4505e9ade"
+    },
+    "audits/cycle-1-repaired.jsonl": {
+      "bytes": 31923,
+      "sha256": "5ad57c222b63da1bbeffc95ea12f2f6f2f847ff492703ecd20dc38860e68c164"
+    },
+    "audits/cycle-1-valid.jsonl": {
+      "bytes": 32691,
+      "sha256": "65ced1bc35051fbca3b389d8ca90a184da7576ce7f5fb31ce9cb9a4089e97541"
+    },
+    "audits/cycle-2-absent.jsonl": {
+      "bytes": 33575,
+      "sha256": "e647e78d32f08c9a786409cfd07f4348e75be70cc3831b3bd36dfb6201a86667"
+    },
+    "audits/cycle-2-cold-malformed.jsonl": {
+      "bytes": 34655,
+      "sha256": "83fd015e91d799e8d4a60c240fecb700946fc1b99d2d59c926ff45fe4bc9bf0c"
+    },
+    "audits/cycle-2-malformed.jsonl": {
+      "bytes": 33099,
+      "sha256": "13075f2189e8a86494ae03ebd77c1a99a66be7472f6afbba0660a13ded83f9c0"
+    },
+    "audits/cycle-2-repaired.jsonl": {
+      "bytes": 33679,
+      "sha256": "5e3e7f04c03df23dacfca2d5fa18b61f0428f20b2bf6af59312571fb7b993be0"
+    },
+    "audits/cycle-2-valid.jsonl": {
+      "bytes": 34101,
+      "sha256": "7c01da8760c8a8c5b6dcf01e3d3a7fa3884eae91c36be9f6c195757286f111cb"
+    },
+    "audits/failed-preflight.jsonl": {
+      "bytes": 1093,
+      "sha256": "a77815332884c74ab1078bbecd928391c6a124bf3e0533e5c81cc1f6aa66b6c6"
+    },
+    "audits/login-preflight-attempt.jsonl": {
+      "bytes": 81409,
+      "sha256": "5ccc06115732684c8de3d1cc23ba23e4f5ab210901a965c530e832c57d877871"
+    },
+    "audits/login.jsonl": {
+      "bytes": 84192,
+      "sha256": "965a2a622f21de063b910b184046743dcf876150bb7be8a9ffce5dea6cd5f854"
+    },
+    "cycles.json": {
+      "bytes": 64477,
+      "sha256": "f274c09d352052c5fa89e58df30b22223075e43227ce194f136d81584fd74f69"
+    },
+    "login-preflight-attempt.json": {
+      "bytes": 4079,
+      "sha256": "5e686750a8ad458ef1b7797aa99b9a092c2796081b2facfeef5d0f2c67366792"
+    },
+    "login.json": {
+      "bytes": 4080,
+      "sha256": "d278237adcf15f6cde2ba0a1eda8b7bbcececf5ef1873c955beff7f1d370ef1c"
+    },
+    "preflight-failed.json": {
+      "bytes": 2022,
+      "sha256": "772c429646677c492d7f860867fd360b5e0e5f23d1356af9af69e9f8574ff778"
+    },
+    "sources/09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c.py": {
+      "bytes": 10033,
+      "sha256": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c"
+    },
+    "sources/0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507.py": {
+      "bytes": 20003,
+      "sha256": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+    },
+    "sources/0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f.py": {
+      "bytes": 2272,
+      "sha256": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f"
+    },
+    "sources/122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005.py": {
+      "bytes": 68586,
+      "sha256": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005"
+    },
+    "sources/497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc.py": {
+      "bytes": 20400,
+      "sha256": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc"
+    },
+    "sources/526d03fa13dc60b663aa6ffb03ebc3cc31ab558bb8748437c614886d5e5d1f9c.py": {
+      "bytes": 6232,
+      "sha256": "526d03fa13dc60b663aa6ffb03ebc3cc31ab558bb8748437c614886d5e5d1f9c"
+    },
+    "sources/5974895b107aaba7891ee43d0dcb76df9418fe35fa11a731bc9542e3e51f7b62.py": {
+      "bytes": 13474,
+      "sha256": "5974895b107aaba7891ee43d0dcb76df9418fe35fa11a731bc9542e3e51f7b62"
+    },
+    "sources/6a8630f6343b221e7efaa6214d37c5ce043a89f0944a0778d915b79bff193c24.py": {
+      "bytes": 16699,
+      "sha256": "6a8630f6343b221e7efaa6214d37c5ce043a89f0944a0778d915b79bff193c24"
+    },
+    "sources/8077bbe4df9bc7600e90ffe6403ce597dbb022c7ad6eec9c4d09d0916e0f189a.py": {
+      "bytes": 13473,
+      "sha256": "8077bbe4df9bc7600e90ffe6403ce597dbb022c7ad6eec9c4d09d0916e0f189a"
+    },
+    "sources/eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f.py": {
+      "bytes": 37345,
+      "sha256": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f"
+    },
+    "sources/ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014.py": {
+      "bytes": 24897,
+      "sha256": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014"
+    },
+    "sources/fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5.py": {
+      "bytes": 22053,
+      "sha256": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5"
+    }
+  },
+  "gateContract": "agy-project-discovery/v2",
+  "kind": "aok-agy-discovery-evidence-index/v1",
+  "limits": [
+    "discovery only",
+    "explicit native YAML diagnostics unverified",
+    "no agent selection or inference"
+  ],
+  "sharedCapture": {
+    "binding": "primary attestation: frozen during both runs; supplemental to per-phase sourceHashes",
+    "sha256": "6a8630f6343b221e7efaa6214d37c5ce043a89f0944a0778d915b79bff193c24",
+    "source": "scripts/native-loading/probe_agy_local_manager.py"
+  },
+  "sourceEpochs": {
+    "cycle-1-absent": {
+      "agy_discovery_gate.py": "526d03fa13dc60b663aa6ffb03ebc3cc31ab558bb8748437c614886d5e5d1f9c",
+      "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+      "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+      "prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+      "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+      "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+      "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+      "probe_agy_account_manager.py": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c",
+      "probe_agy_discovery_cycle.py": "8077bbe4df9bc7600e90ffe6403ce597dbb022c7ad6eec9c4d09d0916e0f189a",
+      "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+    },
+    "cycle-1-malformed": {
+      "agy_discovery_gate.py": "526d03fa13dc60b663aa6ffb03ebc3cc31ab558bb8748437c614886d5e5d1f9c",
+      "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+      "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+      "prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+      "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+      "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+      "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+      "probe_agy_account_manager.py": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c",
+      "probe_agy_discovery_cycle.py": "8077bbe4df9bc7600e90ffe6403ce597dbb022c7ad6eec9c4d09d0916e0f189a",
+      "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+    },
+    "cycle-1-repaired": {
+      "agy_discovery_gate.py": "526d03fa13dc60b663aa6ffb03ebc3cc31ab558bb8748437c614886d5e5d1f9c",
+      "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+      "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+      "prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+      "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+      "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+      "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+      "probe_agy_account_manager.py": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c",
+      "probe_agy_discovery_cycle.py": "8077bbe4df9bc7600e90ffe6403ce597dbb022c7ad6eec9c4d09d0916e0f189a",
+      "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+    },
+    "cycle-1-valid": {
+      "agy_discovery_gate.py": "526d03fa13dc60b663aa6ffb03ebc3cc31ab558bb8748437c614886d5e5d1f9c",
+      "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+      "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+      "prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+      "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+      "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+      "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+      "probe_agy_account_manager.py": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c",
+      "probe_agy_discovery_cycle.py": "8077bbe4df9bc7600e90ffe6403ce597dbb022c7ad6eec9c4d09d0916e0f189a",
+      "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+    },
+    "cycle-2-absent": {
+      "agy_discovery_gate.py": "526d03fa13dc60b663aa6ffb03ebc3cc31ab558bb8748437c614886d5e5d1f9c",
+      "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+      "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+      "prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+      "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+      "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+      "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+      "probe_agy_account_manager.py": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c",
+      "probe_agy_discovery_cycle.py": "8077bbe4df9bc7600e90ffe6403ce597dbb022c7ad6eec9c4d09d0916e0f189a",
+      "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+    },
+    "cycle-2-cold-malformed": {
+      "agy_discovery_gate.py": "526d03fa13dc60b663aa6ffb03ebc3cc31ab558bb8748437c614886d5e5d1f9c",
+      "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+      "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+      "prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+      "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+      "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+      "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+      "probe_agy_account_manager.py": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c",
+      "probe_agy_discovery_cycle.py": "8077bbe4df9bc7600e90ffe6403ce597dbb022c7ad6eec9c4d09d0916e0f189a",
+      "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+    },
+    "cycle-2-malformed": {
+      "agy_discovery_gate.py": "526d03fa13dc60b663aa6ffb03ebc3cc31ab558bb8748437c614886d5e5d1f9c",
+      "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+      "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+      "prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+      "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+      "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+      "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+      "probe_agy_account_manager.py": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c",
+      "probe_agy_discovery_cycle.py": "8077bbe4df9bc7600e90ffe6403ce597dbb022c7ad6eec9c4d09d0916e0f189a",
+      "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+    },
+    "cycle-2-repaired": {
+      "agy_discovery_gate.py": "526d03fa13dc60b663aa6ffb03ebc3cc31ab558bb8748437c614886d5e5d1f9c",
+      "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+      "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+      "prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+      "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+      "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+      "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+      "probe_agy_account_manager.py": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c",
+      "probe_agy_discovery_cycle.py": "8077bbe4df9bc7600e90ffe6403ce597dbb022c7ad6eec9c4d09d0916e0f189a",
+      "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+    },
+    "cycle-2-valid": {
+      "agy_discovery_gate.py": "526d03fa13dc60b663aa6ffb03ebc3cc31ab558bb8748437c614886d5e5d1f9c",
+      "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+      "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+      "prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+      "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+      "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+      "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+      "probe_agy_account_manager.py": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c",
+      "probe_agy_discovery_cycle.py": "8077bbe4df9bc7600e90ffe6403ce597dbb022c7ad6eec9c4d09d0916e0f189a",
+      "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+    },
+    "failed-preflight": {
+      "agy_discovery_gate.py": "526d03fa13dc60b663aa6ffb03ebc3cc31ab558bb8748437c614886d5e5d1f9c",
+      "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+      "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+      "prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+      "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+      "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+      "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+      "probe_agy_account_manager.py": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c",
+      "probe_agy_discovery_cycle.py": "5974895b107aaba7891ee43d0dcb76df9418fe35fa11a731bc9542e3e51f7b62",
+      "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+    },
+    "login": {
+      "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+      "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+      "prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+      "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+      "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+      "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+      "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+    },
+    "login-preflight-attempt": {
+      "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+      "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+      "prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+      "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+      "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+      "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+      "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+    }
+  }
+}

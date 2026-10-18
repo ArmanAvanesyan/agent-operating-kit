@@ -34,8 +34,11 @@ func (Adapter) Descriptor() nativeadapter.Descriptor {
 	return nativeadapter.Descriptor{
 		Target: target, AdapterVersion: version, Scopes: []string{projectScope},
 		HostLoading: nativeadapter.HostLoadingEvidence{
-			Status: "not-run", Scopes: []string{projectScope}, HostVersion: "1.4.2",
+			Status: "verified", Scopes: []string{projectScope}, HostVersion: "1.4.2",
 			Evidence: []string{
+				"docs/agy-discovery-cycle-verification.md",
+				"docs/evidence/native-adapters/agy-discovery-cycle-2026-10-18/cycles.json",
+				"docs/evidence/native-adapters/agy-discovery-cycle-2026-10-18/index.json",
 				"docs/evidence/native-adapters/agy-1.4.2-fresh-loading-2026.10.18.json",
 				"docs/evidence/native-adapters/agy-linux-container-2026-10-18.json",
 				"docs/evidence/native-adapters/agy-onboarding-2026-10-18/local-manager-final.json",

@@ -25,7 +25,7 @@ type adapterCase struct {
 
 func TestAllNativeAdaptersConformToEngineBoundaries(t *testing.T) {
 	cases := []adapterCase{
-		{name: "agy", target: "agy", scope: "project", hostStatus: "not-run", adapter: agy.New(), files: []nativeadapter.File{readNative(t, "agy/testdata/probe.md", ".agents/agents/aok-probe/agent.md", "markdown")}},
+		{name: "agy", target: "agy", scope: "project", hostStatus: "verified", adapter: agy.New(), files: []nativeadapter.File{readNative(t, "agy/testdata/probe.md", ".agents/agents/aok-probe/agent.md", "markdown")}},
 		{name: "claude-code", target: "claude-code", scope: "project", hostStatus: "verified", adapter: claude.New(), files: []nativeadapter.File{{Path: ".claude/agents/reviewer.md", Format: "markdown", Data: []byte("---\nname: aok-reviewer\ndescription: Synthetic review agent\nmodel: sonnet\ncustomField: retained\n---\nReview only the supplied synthetic content.\n")}}},
 		{name: "codex", target: "codex", scope: "project", hostStatus: "not-run", adapter: codex.New(), files: []nativeadapter.File{readNative(t, "codex/testdata/probe.toml", ".codex/agents/aok-probe.toml", "toml")}},
 		{name: "codex-registered", target: "codex", scope: "project-registered", hostStatus: "verified", adapter: codex.New(), files: []nativeadapter.File{

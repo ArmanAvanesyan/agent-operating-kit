@@ -1,0 +1,79 @@
+[
+  {
+    "command": [
+      "go",
+      "version"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "python3",
+      "--version"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "python3",
+      "-m",
+      "py_compile",
+      "scripts/aok"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "bash",
+      "-n",
+      "scripts/release/build.sh",
+      "scripts/packaging/generate-from-release.sh"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "./scripts/aok",
+      "validate"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "python3",
+      "docs/proposals/agent-spec/validate_examples.py"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "python3",
+      "docs/proposals/planning-decisions-optimization/validate_examples.py"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "./scripts/aok",
+      "render",
+      "all",
+      "--target",
+      "all",
+      "--out",
+      "/private/tmp/aok-completion-validation-t5i0e2as/renders"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "./scripts/aok",
+      "render",
+      "bundles",
+      "--target",
+      "all",
+      "--out",
+      "/private/tmp/aok-completion-validation-t5i0e2as/bundles"
+    ],
+    "exitCode": 0
+  }
+]

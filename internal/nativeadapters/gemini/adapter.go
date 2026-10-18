@@ -29,7 +29,7 @@ func (adapter) Descriptor() nativeadapter.Descriptor {
 		// This verifies project discovery only, not invocation or enforcement.
 		HostLoading: nativeadapter.HostLoadingEvidence{
 			Status: "verified", HostVersion: "gemini-cli@0.61.0", Scopes: []string{"project"},
-			Evidence: []string{"official bundled loadAgentsFromDirectory accepted the exported fixture and rejected malformed YAML; actual CLI project discovery displayed repository-explorer with the expected description and omitted it in an empty control before authentication; invocation and runtime enforcement unverified"},
+			Evidence: []string{"docs/evidence/native-adapters/gemini-cli-0.61.0.json"},
 		},
 		Fields: []nativeadapter.FieldCapability{
 			{NeutralPath: "agent.metadata.id", NativePath: "frontmatter.name", Support: "native", EnforcementOwner: "native"},

@@ -172,7 +172,7 @@ func TestCursorExtendedFormatInventoryRoundTrip(t *testing.T) {
 		t.Fatal(err)
 	}
 	for name, content := range map[string]string{
-		"aok-native-input.json":                  `{"version":"aok-native-input/v1","files":[{"path":".cursor/agents/nested/native-probe.MDC","format":"markdown"}]}`,
+		"aok-native-input.json":                  `{"version":"aok-native-input/v1","files":[{"path":".cursor/agents/nested/native-probe.MDC"}]}`,
 		".cursor/agents/nested/native-probe.MDC": "---\nname: native-probe\ndescription: Synthetic extension check\n---\nReview only synthetic content.\n",
 	} {
 		if err := os.WriteFile(filepath.Join(input, name), []byte(content), 0600); err != nil {
@@ -194,6 +194,15 @@ func TestCursorExtendedFormatInventoryRoundTrip(t *testing.T) {
 		if !reflect.DeepEqual(report.HostLoading, cursor.New().Descriptor().HostLoading) || report.RuntimeEnforcement != "unverified" {
 			t.Fatalf("extended syntax must preserve version-bound host evidence and unverified runtime: %+v", report)
 		}
+	}
+	// A loose single file loses its project-relative path at capture; format
+	// inference must not bypass Cursor's .cursor/agents scope check.
+	for _, suffix := range []string{"MDC", "markdown"} {
+		file := filepath.Join(input, "direct."+suffix)
+		if err := os.WriteFile(file, []byte("---\nname: native-probe\ndescription: Synthetic extension check\n---\nReview only synthetic content.\n"), 0600); err != nil {
+			t.Fatal(err)
+		}
+		run("inspect", 1, "--input", file)
 	}
 	draft, candidate := filepath.Join(root, "draft"), filepath.Join(root, "candidate")
 	run("import", 1, "--input", input, "--out", draft)

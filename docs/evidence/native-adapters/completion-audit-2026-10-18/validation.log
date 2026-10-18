@@ -1,0 +1,71 @@
+{"command": ["go", "version"], "exitCode": 0}
+go version go1.27.2 darwin/amd64
+{"command": ["python3", "--version"], "exitCode": 0}
+Python 3.14.6
+{"command": ["python3", "-m", "py_compile", "scripts/aok"], "exitCode": 0}
+{"command": ["bash", "-n", "scripts/release/build.sh", "scripts/packaging/generate-from-release.sh"], "exitCode": 0}
+{"command": ["./scripts/aok", "validate"], "exitCode": 0}
+Kit validation passed: /Users/armanavanesyan/oss/own/agent-operating-kit
+{"command": ["python3", "docs/proposals/agent-spec/validate_examples.py"], "exitCode": 0}
+PASS: 17 draft schemas, 17 examples, 39 negative cases, input/task schemas, snapshot hashes, fixture consistency and local links
+{"command": ["python3", "docs/proposals/planning-decisions-optimization/validate_examples.py"], "exitCode": 0}
+PASS: 8 schemas, 7 examples, 20 negative cases, graph/split/reference checks and local links
+{"command": ["./scripts/aok", "render", "all", "--target", "all", "--out", "/private/tmp/aok-completion-validation-t5i0e2as/renders"], "exitCode": 0}
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/codex/batch-resolve-conflicts.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/claude-code/batch-resolve-conflicts.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/cursor/batch-resolve-conflicts.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/opencode/batch-resolve-conflicts.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/gemini/batch-resolve-conflicts.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/openclaw/batch-resolve-conflicts.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/hermes-agent/batch-resolve-conflicts.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/codex/engineering-guardrails.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/claude-code/engineering-guardrails.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/cursor/engineering-guardrails.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/opencode/engineering-guardrails.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/gemini/engineering-guardrails.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/openclaw/engineering-guardrails.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/hermes-agent/engineering-guardrails.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/codex/phased-rollout-template.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/claude-code/phased-rollout-template.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/cursor/phased-rollout-template.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/opencode/phased-rollout-template.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/gemini/phased-rollout-template.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/openclaw/phased-rollout-template.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/hermes-agent/phased-rollout-template.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/codex/ship-pipeline.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/claude-code/ship-pipeline.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/cursor/ship-pipeline.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/opencode/ship-pipeline.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/gemini/ship-pipeline.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/openclaw/ship-pipeline.json
+Wrote render: /private/tmp/aok-completion-validation-t5i0e2as/renders/hermes-agent/ship-pipeline.json
+{"command": ["./scripts/aok", "render", "bundles", "--target", "all", "--out", "/private/tmp/aok-completion-validation-t5i0e2as/bundles"], "exitCode": 0}
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/codex/batch-resolve-conflicts
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/claude-code/batch-resolve-conflicts
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/cursor/batch-resolve-conflicts
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/opencode/batch-resolve-conflicts
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/gemini/batch-resolve-conflicts
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/openclaw/batch-resolve-conflicts
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/hermes-agent/batch-resolve-conflicts
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/codex/engineering-guardrails
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/claude-code/engineering-guardrails
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/cursor/engineering-guardrails
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/opencode/engineering-guardrails
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/gemini/engineering-guardrails
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/openclaw/engineering-guardrails
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/hermes-agent/engineering-guardrails
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/codex/phased-rollout-template
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/claude-code/phased-rollout-template
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/cursor/phased-rollout-template
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/opencode/phased-rollout-template
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/gemini/phased-rollout-template
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/openclaw/phased-rollout-template
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/hermes-agent/phased-rollout-template
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/codex/ship-pipeline
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/claude-code/ship-pipeline
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/cursor/ship-pipeline
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/opencode/ship-pipeline
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/gemini/ship-pipeline
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/openclaw/ship-pipeline
+Wrote bundle: /private/tmp/aok-completion-validation-t5i0e2as/bundles/hermes-agent/ship-pipeline
+Wrote bundle index: /private/tmp/aok-completion-validation-t5i0e2as/bundles/index.json

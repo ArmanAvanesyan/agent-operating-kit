@@ -1,0 +1,16 @@
+.........{"case": "positive", "commandSent": true, "managerObserved": true, "nameObserved": true}
+{"case": "absent", "commandSent": true, "managerObserved": true, "nameObserved": false}
+{"case": "malformed", "commandSent": true, "managerObserved": true, "nameObserved": false}
+........................................................{"auditRoot": "/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/tmp6_t1ogbv/roots/aok-agy-login-audit-1", "root": "/private/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/tmp6_t1ogbv/roots/aok-agy-session-0", "status": "pending"}
+......{"auditRoot": "/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/tmp5_la4568/roots/aok-agy-login-audit-1", "root": "/private/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/tmp5_la4568/roots/aok-agy-session-0", "status": "pending"}
+{"auditRoot": "/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/tmp5_la4568/roots/aok-agy-login-audit-3", "root": "/private/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/tmp5_la4568/roots/aok-agy-session-2", "status": "pending"}
+.{"auditRoot": "/private/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/tmp4g_vmew0/roots/aok-agy-login-audit-1", "root": "/private/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/tmp4g_vmew0/roots/aok-agy-session-0", "status": "pending"}
+.{"auditRoot": "/private/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/tmp2doeewwm/aok-agy-login-audit-1", "root": "/private/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/tmp2doeewwm/aok-agy-session-0", "status": "pending"}
+{"auditRoot": "/private/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/tmp2doeewwm/aok-agy-login-audit-2", "root": "/private/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/tmp2doeewwm/aok-agy-session-0", "status": "pending"}
+......{"auditRoot": "/private/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/tmpox0aikrh/aok-agy-login-audit-0", "root": "/private/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/tmpox0aikrh/aok-agy-login-checkpoint-4c80025d-7f28-42d7-ae8c-0c58408f8a96", "status": "pending"}
+.{"auditRoot": "/private/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/tmptwr9md7v/aok-agy-login-audit-0", "root": "/private/var/folders/0d/8_l3l4pj0jq4v6k1qk3y4wtr0000gn/T/tmptwr9md7v/aok-agy-login-checkpoint-bdf3e47f-52bc-47e2-9ea6-8b54b05637b4", "status": "pending"}
+..................................................s........s........................................................................................................................
+----------------------------------------------------------------------
+Ran 260 tests in 58.836s
+
+OK (skipped=2)

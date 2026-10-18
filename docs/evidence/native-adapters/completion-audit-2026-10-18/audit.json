@@ -1,0 +1,861 @@
+{
+  "adapters": [
+    {
+      "evidence": {
+        "bytes": 3533,
+        "path": "docs/evidence/native-adapters/opencode-1.18.35.json",
+        "sha256": "9124949b8426b3b23307cc474354ad7d45367194ef06c3180055b3250a19a3c7"
+      },
+      "limits": [
+        "config resolution only; no execution or enforcement"
+      ],
+      "loadingVerdict": "retained native evidence reviewed",
+      "qualifiedScope": "project",
+      "retainedHostVersion": "1.18.35",
+      "target": "opencode"
+    },
+    {
+      "evidence": {
+        "bytes": 1675,
+        "path": "docs/evidence/native-adapters/claude-2.1.281.json",
+        "sha256": "fec1342d86e25aadcf6388ff3a9204a6e0459fec8d33ec6fef182b7ff5878b7b"
+      },
+      "limits": [
+        "plugin loading not-run; prompt use and runtime unverified"
+      ],
+      "loadingVerdict": "retained native evidence reviewed",
+      "qualifiedScope": "project",
+      "retainedHostVersion": "2.1.281",
+      "target": "claude-code"
+    },
+    {
+      "evidence": {
+        "bytes": 6969,
+        "path": "docs/evidence/native-adapters/codex-project-registered-0.162.1.json",
+        "sha256": "ad71e2645f680d8d1225a3230ecfb8b338a1e1e5a0584035c69e64048b3daeac"
+      },
+      "limits": [
+        "standalone project not-run; no child invocation or runtime enforcement"
+      ],
+      "loadingVerdict": "retained native evidence reviewed",
+      "qualifiedScope": "project-registered",
+      "retainedHostVersion": "Codex CLI 0.162.1",
+      "target": "codex"
+    },
+    {
+      "evidence": {
+        "bytes": 2549,
+        "path": "docs/evidence/native-adapters/cursor-project-discovery-decision-2026-10-18.json",
+        "sha256": "2c8fcc0b15457f627063857bd21e0907b2fcf29f1894deb5432c07577640edfd"
+      },
+      "limits": [
+        "command-picker only; explicit Git retrieval shim; no selected startup/inference/enforcement"
+      ],
+      "loadingVerdict": "retained native evidence reviewed",
+      "qualifiedScope": "project",
+      "retainedHostVersion": "2026.10.16-e3cb207",
+      "target": "cursor"
+    },
+    {
+      "evidence": {
+        "bytes": 6850,
+        "path": "docs/evidence/native-adapters/gemini-cli-0.61.0.json",
+        "sha256": "23703588df14eca52a4a99dbda7b0c7eb51a0bdcec915655ccd4f75cadcf1792"
+      },
+      "limits": [
+        "TUI before authentication; separate bundled-loader controls; no invocation/enforcement"
+      ],
+      "loadingVerdict": "retained native evidence reviewed",
+      "qualifiedScope": "project",
+      "retainedHostVersion": "gemini-cli@0.61.0",
+      "target": "gemini"
+    },
+    {
+      "evidence": {
+        "bytes": 3104,
+        "path": "docs/evidence/native-adapters/openclaw-container-2026.9.4.json",
+        "sha256": "f89cf854f34b8c81de71bbf79b97fb636f043a42658349bcb18073dc0de0e80a"
+      },
+      "limits": [
+        "bounded Linux roster/workspace only; Darwin and runtime unverified"
+      ],
+      "loadingVerdict": "retained native evidence reviewed",
+      "qualifiedScope": "isolated-home",
+      "retainedHostVersion": "2026.9.4 (Linux; Node 26.7.0)",
+      "target": "openclaw"
+    },
+    {
+      "evidence": {
+        "bytes": 4755,
+        "path": "docs/evidence/native-adapters/hermes-cli-profile-list.json",
+        "sha256": "a1eedb9a5fd9201d9e0f4e2f03f8a1668fc21181e762100d40ae69d5d5b05799"
+      },
+      "limits": [
+        "source-identified installed environment; package-manager launcher and runtime unverified"
+      ],
+      "loadingVerdict": "retained native evidence reviewed",
+      "qualifiedScope": "profile",
+      "retainedHostVersion": "Hermes Agent vunknown (2026.9.24)",
+      "target": "hermes-agent"
+    },
+    {
+      "evidence": {
+        "bytes": 64477,
+        "path": "docs/evidence/native-adapters/agy-discovery-cycle-2026-10-18/cycles.json",
+        "sha256": "f274c09d352052c5fa89e58df30b22223075e43227ce194f136d81584fd74f69"
+      },
+      "limits": [
+        "Darwin x64 v2 discovery only; explicit parser-error reporting and runtime unverified"
+      ],
+      "loadingVerdict": "retained native evidence reviewed",
+      "qualifiedScope": "project",
+      "retainedHostVersion": "1.4.2",
+      "target": "agy"
+    }
+  ],
+  "auditedOn": "2026-10-18",
+  "authenticationRun": false,
+  "baseCommit": "93f778b225c632ff31372ab69651581a5ad57fbe",
+  "endToEnd": {
+    "allCasesPassed": true,
+    "builtBinarySHA256": "b10e0f01e9611969009c7b6cfe308ba1f102000bd6a48ffd3ea1a05a23c5acb3",
+    "expectedCaseCount": 10,
+    "operationsPerScope": [
+      "inspect",
+      "required-unsupported",
+      "import",
+      "export",
+      "compare",
+      "sidecar-reimport",
+      "sidecar-loss",
+      "source-drift-export",
+      "source-drift-import"
+    ],
+    "runtimePATH": "empty",
+    "scopeCases": [
+      "agy-project",
+      "claude-code-plugin",
+      "claude-code-project",
+      "codex-project",
+      "codex-project-registered",
+      "cursor-project",
+      "gemini-project",
+      "hermes-agent-profile",
+      "openclaw-isolated-home",
+      "opencode-project"
+    ]
+  },
+  "fixtureBindings": [
+    {
+      "bytes": 4330,
+      "path": "internal/agentresolve/testdata/corpus/agent.json",
+      "sha256": "0a385aaeb38695ed6cded2209f429bbdc760003ca707c789f2428f2ea8e16a4c"
+    },
+    {
+      "bytes": 16,
+      "path": "internal/agentresolve/testdata/corpus/assets/AGENTS.md",
+      "sha256": "0248b11ff59e2490f1281b0d40c28f11ddf5f6d5ea95ea24f94178dcc4d2fe4a"
+    },
+    {
+      "bytes": 19,
+      "path": "internal/agentresolve/testdata/corpus/assets/exploration.md",
+      "sha256": "aba00521ff8d2e4da297e196d22e7ccca4b5cc814cfd1d717080b05afa724a53"
+    },
+    {
+      "bytes": 12,
+      "path": "internal/agentresolve/testdata/corpus/assets/instructions.md",
+      "sha256": "934652dce41d62d3c9ff34b2c5e44e3addaedc67d6137328a9fe75a63c51dbac"
+    },
+    {
+      "bytes": 247,
+      "path": "internal/agentresolve/testdata/corpus/assets/schemas/base.schema.json",
+      "sha256": "c4e17c159e042c892366c60e9fa289ba980a059d12306a020619dbe9dc6323cc"
+    },
+    {
+      "bytes": 84,
+      "path": "internal/agentresolve/testdata/corpus/assets/schemas/input.schema.json",
+      "sha256": "d40a2610808cd87a220042d28d39ac85197ceba3317d1c6f9d3fc8fed1a321d6"
+    },
+    {
+      "bytes": 102,
+      "path": "internal/agentresolve/testdata/corpus/assets/schemas/inventory.schema.json",
+      "sha256": "f9ccec05bc93e5abaeae86d8c3d53edf3a8556dff7645215a5ebf80165dd7a7f"
+    },
+    {
+      "bytes": 102,
+      "path": "internal/agentresolve/testdata/corpus/assets/schemas/result.schema.json",
+      "sha256": "f9ccec05bc93e5abaeae86d8c3d53edf3a8556dff7645215a5ebf80165dd7a7f"
+    },
+    {
+      "bytes": 5,
+      "path": "internal/agentresolve/testdata/corpus/assets/skills/project.md",
+      "sha256": "9c53c074d7ac6a2728b638ac1f376c5fa9eb8f71603017c3ea638c2fd40548df"
+    },
+    {
+      "bytes": 5,
+      "path": "internal/agentresolve/testdata/corpus/assets/skills/readiness.md",
+      "sha256": "9c53c074d7ac6a2728b638ac1f376c5fa9eb8f71603017c3ea638c2fd40548df"
+    },
+    {
+      "bytes": 778,
+      "path": "internal/agentresolve/testdata/corpus/assets/task.json",
+      "sha256": "4f2659fec619c6d1da3e61327e78987f11f6eec9b54d2a398b6a6a8aade32b05"
+    },
+    {
+      "bytes": 728,
+      "path": "internal/agentresolve/testdata/corpus/assignment.json",
+      "sha256": "9669d03c1363c5964e83dc66d83e5cfd6659f34cf86bbf644845b47d73a39eee"
+    },
+    {
+      "bytes": 4383,
+      "path": "internal/agentresolve/testdata/corpus/capability-registry.json",
+      "sha256": "ec2688f8af6cf4b14570ca311b9f1919756de5165475b9a160593da84ec3e362"
+    },
+    {
+      "bytes": 614,
+      "path": "internal/agentresolve/testdata/corpus/context-policy.json",
+      "sha256": "fa94512c247b8180befcec0ad2055bf5d956f25c4f1d81ec90407d58c5bf2eff"
+    },
+    {
+      "bytes": 858,
+      "path": "internal/agentresolve/testdata/corpus/environment-profile.json",
+      "sha256": "4ade2a206aa876c0714194127158cf131535133d4aece9f3c22ad21efe1cf8c2"
+    },
+    {
+      "bytes": 1377,
+      "path": "internal/agentresolve/testdata/corpus/evaluation-contract.json",
+      "sha256": "7ade707c6926e0f2d46afebd1d1818aeb7cd12b14e12d071069cc7ff0b1fa560"
+    },
+    {
+      "bytes": 708,
+      "path": "internal/agentresolve/testdata/corpus/execution-profile.json",
+      "sha256": "889ec6fc381f84055f999e829b36d4c8902f0565d7370c0e86e0186261417492"
+    },
+    {
+      "bytes": 975,
+      "path": "internal/agentresolve/testdata/corpus/invocation-contract.json",
+      "sha256": "9c0d7f4c390cd39ff4922f8a095d993e1f38ad61a0645c87a905d4984a28a2ab"
+    },
+    {
+      "bytes": 2336,
+      "path": "internal/agentresolve/testdata/corpus/lifecycle-policy.json",
+      "sha256": "291d94287ebc84b2d10995e82d1371c77a6f0163d0daac73707486f15b1b4322"
+    },
+    {
+      "bytes": 744,
+      "path": "internal/agentresolve/testdata/corpus/migration-contract.json",
+      "sha256": "4fb159a07718da96461d35804033e3b32ed05d58e29f66dfab54ea3adc160d60"
+    },
+    {
+      "bytes": 1034,
+      "path": "internal/agentresolve/testdata/corpus/output-contract.json",
+      "sha256": "3e9a4c4083a9a875471d3a1d5d6be0f696484a3c0b93c0bb82014dbed587c301"
+    },
+    {
+      "bytes": 243,
+      "path": "internal/nativeadapters/agy/testdata/probe-aok-rendered-1.4.2.md",
+      "sha256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76"
+    },
+    {
+      "bytes": 243,
+      "path": "internal/nativeadapters/agy/testdata/probe-aok-rendered-linux-1.4.2.md",
+      "sha256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76"
+    },
+    {
+      "bytes": 243,
+      "path": "internal/nativeadapters/agy/testdata/probe-aok-rendered.md",
+      "sha256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76"
+    },
+    {
+      "bytes": 239,
+      "path": "internal/nativeadapters/agy/testdata/probe.md",
+      "sha256": "9e5070ad028066741acac62ccafed697d77a762e967da80effad39679f3fc28f"
+    },
+    {
+      "bytes": 165,
+      "path": "internal/nativeadapters/claude/testdata/project/.claude/agents/aok-probe.md",
+      "sha256": "45e8d4ec5e8b6cb25948ef2cc7f5330a630153e0978b335893207f1c737ba2ec"
+    },
+    {
+      "bytes": 103,
+      "path": "internal/nativeadapters/claude/testdata/project/aok-native-input.json",
+      "sha256": "1a38a82b2470845f6c31af8ce49e1b2ca28aa9935d408a32c98f07259697742d"
+    },
+    {
+      "bytes": 250,
+      "path": "internal/nativeadapters/codex/testdata/probe.toml",
+      "sha256": "ccf2bd30d60b70b6276f1a4749f663a586ebecd8033699f6f2b6c739784514f1"
+    },
+    {
+      "bytes": 219,
+      "path": "internal/nativeadapters/cursor/testdata/probe-aok-rendered.md",
+      "sha256": "d64ff08526ad4d1354a5f72eea9370b1a9d771abf7392b00aa876f9a1faa5acf"
+    },
+    {
+      "bytes": 219,
+      "path": "internal/nativeadapters/cursor/testdata/reviewer.md",
+      "sha256": "3a248c5de1d02dec0aa40218074d5beafa081747f2db5326c7ae92e402c8eae5"
+    },
+    {
+      "bytes": 294,
+      "path": "internal/nativeadapters/gemini/testdata/security-auditor.md",
+      "sha256": "1153dfb275748bf8654f840bfdad3c8e39c477234c4517c89af8ef12dc200c53"
+    },
+    {
+      "bytes": 117,
+      "path": "internal/nativeadapters/hermes/testdata/SOUL.md",
+      "sha256": "8e7b0931b9ef2a99d4860b4a7a5ca6d1ffa0311615209e926ddc3be1ebbcff4f"
+    },
+    {
+      "bytes": 162,
+      "path": "internal/nativeadapters/hermes/testdata/aok-native-input.json",
+      "sha256": "c2addb7a4d55dfbab7d57128f2d966cdf9eeb76ce6e558319eb904a664c29236"
+    },
+    {
+      "bytes": 146,
+      "path": "internal/nativeadapters/hermes/testdata/config.yaml",
+      "sha256": "45bf5936a6800646e1bead1fabac764a857178dfd0e7a94fc69f663cc8f58dda"
+    },
+    {
+      "bytes": 146,
+      "path": "internal/nativeadapters/hermes/testdata/profile.yaml",
+      "sha256": "a5486ee42bd990755117c7e4ec668930ad1c35bf65d899e546347663f7ee4f2e"
+    },
+    {
+      "bytes": 168,
+      "path": "internal/nativeadapters/openclaw/testdata/home/.openclaw/openclaw.json",
+      "sha256": "83ba5c41a118afeeb79b146183dc75d53a520d9976489de53ae6b8ab6d0bf9b0"
+    },
+    {
+      "bytes": 68,
+      "path": "internal/nativeadapters/openclaw/testdata/home/.openclaw/workspace/AGENTS.md",
+      "sha256": "ab219bbcacc75c377ab7189166ac7e3d9220fcedd03e9d3cf2ec9c197288e0cd"
+    },
+    {
+      "bytes": 156,
+      "path": "internal/nativeadapters/openclaw/testdata/home/aok-native-input.json",
+      "sha256": "8245fe4d85e311d5201c2cd18195b1076139de6c44883bfb5217f101cac7a687"
+    },
+    {
+      "bytes": 229,
+      "path": "internal/nativeadapters/opencode/testdata/probe.md",
+      "sha256": "a34516ec9ae4c0fdc62c7f31aadffea57f1ba8108d4ab8ed4ef9dd0ff671ecc0"
+    },
+    {
+      "bytes": 4330,
+      "path": "internal/planning/testdata/corpus/agent.json",
+      "sha256": "0a385aaeb38695ed6cded2209f429bbdc760003ca707c789f2428f2ea8e16a4c"
+    },
+    {
+      "bytes": 16,
+      "path": "internal/planning/testdata/corpus/assets/AGENTS.md",
+      "sha256": "0248b11ff59e2490f1281b0d40c28f11ddf5f6d5ea95ea24f94178dcc4d2fe4a"
+    },
+    {
+      "bytes": 19,
+      "path": "internal/planning/testdata/corpus/assets/exploration.md",
+      "sha256": "aba00521ff8d2e4da297e196d22e7ccca4b5cc814cfd1d717080b05afa724a53"
+    },
+    {
+      "bytes": 12,
+      "path": "internal/planning/testdata/corpus/assets/instructions.md",
+      "sha256": "934652dce41d62d3c9ff34b2c5e44e3addaedc67d6137328a9fe75a63c51dbac"
+    },
+    {
+      "bytes": 247,
+      "path": "internal/planning/testdata/corpus/assets/schemas/base.schema.json",
+      "sha256": "c4e17c159e042c892366c60e9fa289ba980a059d12306a020619dbe9dc6323cc"
+    },
+    {
+      "bytes": 84,
+      "path": "internal/planning/testdata/corpus/assets/schemas/input.schema.json",
+      "sha256": "d40a2610808cd87a220042d28d39ac85197ceba3317d1c6f9d3fc8fed1a321d6"
+    },
+    {
+      "bytes": 102,
+      "path": "internal/planning/testdata/corpus/assets/schemas/inventory.schema.json",
+      "sha256": "f9ccec05bc93e5abaeae86d8c3d53edf3a8556dff7645215a5ebf80165dd7a7f"
+    },
+    {
+      "bytes": 102,
+      "path": "internal/planning/testdata/corpus/assets/schemas/result.schema.json",
+      "sha256": "f9ccec05bc93e5abaeae86d8c3d53edf3a8556dff7645215a5ebf80165dd7a7f"
+    },
+    {
+      "bytes": 5,
+      "path": "internal/planning/testdata/corpus/assets/skills/project.md",
+      "sha256": "9c53c074d7ac6a2728b638ac1f376c5fa9eb8f71603017c3ea638c2fd40548df"
+    },
+    {
+      "bytes": 5,
+      "path": "internal/planning/testdata/corpus/assets/skills/readiness.md",
+      "sha256": "9c53c074d7ac6a2728b638ac1f376c5fa9eb8f71603017c3ea638c2fd40548df"
+    },
+    {
+      "bytes": 74,
+      "path": "internal/planning/testdata/corpus/assets/synthetic-evidence.txt",
+      "sha256": "f1f6e2f68b03ee52fd915bccbf7287871b8ecfba364a55bf17788f089e93080d"
+    },
+    {
+      "bytes": 778,
+      "path": "internal/planning/testdata/corpus/assets/task.json",
+      "sha256": "4f2659fec619c6d1da3e61327e78987f11f6eec9b54d2a398b6a6a8aade32b05"
+    },
+    {
+      "bytes": 728,
+      "path": "internal/planning/testdata/corpus/assignment.json",
+      "sha256": "9669d03c1363c5964e83dc66d83e5cfd6659f34cf86bbf644845b47d73a39eee"
+    },
+    {
+      "bytes": 4383,
+      "path": "internal/planning/testdata/corpus/capability-registry.json",
+      "sha256": "ec2688f8af6cf4b14570ca311b9f1919756de5165475b9a160593da84ec3e362"
+    },
+    {
+      "bytes": 614,
+      "path": "internal/planning/testdata/corpus/context-policy.json",
+      "sha256": "fa94512c247b8180befcec0ad2055bf5d956f25c4f1d81ec90407d58c5bf2eff"
+    },
+    {
+      "bytes": 858,
+      "path": "internal/planning/testdata/corpus/environment-profile.json",
+      "sha256": "4ade2a206aa876c0714194127158cf131535133d4aece9f3c22ad21efe1cf8c2"
+    },
+    {
+      "bytes": 1377,
+      "path": "internal/planning/testdata/corpus/evaluation-contract.json",
+      "sha256": "7ade707c6926e0f2d46afebd1d1818aeb7cd12b14e12d071069cc7ff0b1fa560"
+    },
+    {
+      "bytes": 1032,
+      "path": "internal/planning/testdata/corpus/evidence.json",
+      "sha256": "a7ab075aeb4ef904a1f45dbbaf85f5c512f675109df9c8907f2a2088116e3da9"
+    },
+    {
+      "bytes": 708,
+      "path": "internal/planning/testdata/corpus/execution-profile.json",
+      "sha256": "889ec6fc381f84055f999e829b36d4c8902f0565d7370c0e86e0186261417492"
+    },
+    {
+      "bytes": 1251,
+      "path": "internal/planning/testdata/corpus/goal.json",
+      "sha256": "598bbccf7e43481430b34c90d51282136481d684ae9a7ff2959af7c5d79da775"
+    },
+    {
+      "bytes": 975,
+      "path": "internal/planning/testdata/corpus/invocation-contract.json",
+      "sha256": "9c0d7f4c390cd39ff4922f8a095d993e1f38ad61a0645c87a905d4984a28a2ab"
+    },
+    {
+      "bytes": 2336,
+      "path": "internal/planning/testdata/corpus/lifecycle-policy.json",
+      "sha256": "291d94287ebc84b2d10995e82d1371c77a6f0163d0daac73707486f15b1b4322"
+    },
+    {
+      "bytes": 744,
+      "path": "internal/planning/testdata/corpus/migration-contract.json",
+      "sha256": "4fb159a07718da96461d35804033e3b32ed05d58e29f66dfab54ea3adc160d60"
+    },
+    {
+      "bytes": 1034,
+      "path": "internal/planning/testdata/corpus/output-contract.json",
+      "sha256": "3e9a4c4083a9a875471d3a1d5d6be0f696484a3c0b93c0bb82014dbed587c301"
+    },
+    {
+      "bytes": 2622,
+      "path": "internal/planning/testdata/corpus/plan.json",
+      "sha256": "c911e501310afefe55d18e91f771a30d85b14da4a3dbccb4ac10f8e58ecba481"
+    }
+  ],
+  "kind": "aok-native-adapter-completion-audit/v1",
+  "modelExecution": "not-run",
+  "nativeClientsRerun": false,
+  "nativeScopeVerdict": "qualified with documented limits; no claim for every parsing scope",
+  "originalContract": "docs/implementation/agent-foundations/README.md",
+  "regression": {
+    "distribution": "Go 1.22 and six cross-platform builds required on final reviewed PR head; results stored by GitHub Actions",
+    "go": "go test -count=1 ./...: pass",
+    "otherCommands": [
+      {
+        "command": [
+          "go",
+          "version"
+        ],
+        "exitCode": 0
+      },
+      {
+        "command": [
+          "python3",
+          "--version"
+        ],
+        "exitCode": 0
+      },
+      {
+        "command": [
+          "python3",
+          "-m",
+          "py_compile",
+          "scripts/aok"
+        ],
+        "exitCode": 0
+      },
+      {
+        "command": [
+          "bash",
+          "-n",
+          "scripts/release/build.sh",
+          "scripts/packaging/generate-from-release.sh"
+        ],
+        "exitCode": 0
+      },
+      {
+        "command": [
+          "./scripts/aok",
+          "validate"
+        ],
+        "exitCode": 0
+      },
+      {
+        "command": [
+          "python3",
+          "docs/proposals/agent-spec/validate_examples.py"
+        ],
+        "exitCode": 0
+      },
+      {
+        "command": [
+          "python3",
+          "docs/proposals/planning-decisions-optimization/validate_examples.py"
+        ],
+        "exitCode": 0
+      },
+      {
+        "command": [
+          "./scripts/aok",
+          "render",
+          "all",
+          "--target",
+          "all",
+          "--out",
+          "/private/tmp/aok-completion-validation-t5i0e2as/renders"
+        ],
+        "exitCode": 0
+      },
+      {
+        "command": [
+          "./scripts/aok",
+          "render",
+          "bundles",
+          "--target",
+          "all",
+          "--out",
+          "/private/tmp/aok-completion-validation-t5i0e2as/bundles"
+        ],
+        "exitCode": 0
+      }
+    ],
+    "python": {
+      "command": "python3 -m unittest discover -s tests",
+      "result": "pass",
+      "skips": 2,
+      "tests": 260
+    }
+  },
+  "releasePublished": false,
+  "runtimeEnforcement": "unverified",
+  "scope": "original minimum one bounded native loading scope per target plus static projection conformance",
+  "sourceBindings": [
+    {
+      "bytes": 1900,
+      "path": ".github/workflows/ci.yml",
+      "sha256": "fed4134878d740091e3399037b3e578e48dc3e51b1f7f287979ede5abe2fcdc0"
+    },
+    {
+      "bytes": 14934,
+      "path": "cmd/aok/foundations_test.go",
+      "sha256": "5f82de77b248ce43a785ce199917c59595faf1a07136442646a1a381769eda24"
+    },
+    {
+      "bytes": 164,
+      "path": "cmd/aok/main.go",
+      "sha256": "5aa237e5ded1ebb0be7d607dfdca0230823b5dfade09186e03d993479d561d41"
+    },
+    {
+      "bytes": 799,
+      "path": "cmd/aok/main_test.go",
+      "sha256": "53bf72c542b66e19159913d49cba7ced9bc90e66f1200abc6c4018dd99ded506"
+    },
+    {
+      "bytes": 12721,
+      "path": "docs/native-adapter-completion-audit.md",
+      "sha256": "c3172efe24f8f98b34bb48b3e56ce6a3d953bb72855ca0b08da95c90bca0c039"
+    },
+    {
+      "bytes": 236,
+      "path": "go.mod",
+      "sha256": "8d5a87d5831dab294bc0711a0c550219b56ac1e45aa8bbbd893e1d9889a3f8f7"
+    },
+    {
+      "bytes": 1589,
+      "path": "go.sum",
+      "sha256": "e852f44f6fd5f11d7920adeb1dea5c7478902a8fe00a58976aee8dbfcde1dc5c"
+    },
+    {
+      "bytes": 1784,
+      "path": "internal/cli/agent.go",
+      "sha256": "555fcf4afad67d0e75e5bd4a9224588015d7496e586fff4c2bc52372b6c04f8d"
+    },
+    {
+      "bytes": 2118,
+      "path": "internal/cli/agent_resolve.go",
+      "sha256": "864cc9a52a02ec76917bb385dca5b0fd69d0650d3c53a278460acae11f2f36b8"
+    },
+    {
+      "bytes": 2781,
+      "path": "internal/cli/agent_resolve_test.go",
+      "sha256": "00d6907934465430c70364a28f86cbf84939effdc69e7b141753d1792061c910"
+    },
+    {
+      "bytes": 2457,
+      "path": "internal/cli/agent_test.go",
+      "sha256": "e34f9103e3be3314f70814fc171e5ef06e03a9ddd0a5703f58d5060f09019109"
+    },
+    {
+      "bytes": 2954,
+      "path": "internal/cli/cli.go",
+      "sha256": "5c7546265638d732f7d5d5ece2e009e7e502d1aa4e477d94ee698e1fb944e595"
+    },
+    {
+      "bytes": 3311,
+      "path": "internal/cli/contributor.go",
+      "sha256": "c3f9a9559b02da4a30c05379e725432dbc714752b8f3cd2958ff2d12460e9057"
+    },
+    {
+      "bytes": 2405,
+      "path": "internal/cli/contributor_test.go",
+      "sha256": "7d8a0f3da750cf57553ec579538c72303ff9bcda6bd903382e65a76ce5ef9da5"
+    },
+    {
+      "bytes": 1598,
+      "path": "internal/cli/doctor.go",
+      "sha256": "3a728bd9000954fa86f189cd85c751cde54b37b726bd62d42cc7f04896fc8774"
+    },
+    {
+      "bytes": 1083,
+      "path": "internal/cli/install.go",
+      "sha256": "92f67c72bf620e500c68efde5391208e3724fa67390d514682fccc1fa3d5a49f"
+    },
+    {
+      "bytes": 8001,
+      "path": "internal/cli/native.go",
+      "sha256": "ad82b9973367e5395465a19a433838e6655d8ac06a2c48315b0e71c18f014570"
+    },
+    {
+      "bytes": 762,
+      "path": "internal/cli/native_registry_test.go",
+      "sha256": "ada45384d3fb4b87e210878cc2cf23dd0b765cd0d62eda051be79786ed5ce3e1"
+    },
+    {
+      "bytes": 9036,
+      "path": "internal/cli/native_test.go",
+      "sha256": "7f62fd72e8711aa421b6c98b2187267459f9ed7232d0f47541883981753cee12"
+    },
+    {
+      "bytes": 3020,
+      "path": "internal/cli/planning.go",
+      "sha256": "28d414d7afe216a79e24752e967be97b0a9245fd533fb462908d9aab011a70a0"
+    },
+    {
+      "bytes": 1482,
+      "path": "internal/cli/planning_test.go",
+      "sha256": "d944f67378c998826839822b170b08bd23a5141791ae5d7bd452717e93f7c59b"
+    },
+    {
+      "bytes": 3654,
+      "path": "internal/cli/render.go",
+      "sha256": "310cb76d70e363e418fc2c568badbba787d4b466b899bafb5bdf8dfd5d9d6c1b"
+    },
+    {
+      "bytes": 10986,
+      "path": "internal/cli/setup_cmds.go",
+      "sha256": "c6d0d66676f3f1677391b7cb76bf94d50b1fcbf91687e0a7b57a66fa60a69173"
+    },
+    {
+      "bytes": 661,
+      "path": "internal/cli/validate.go",
+      "sha256": "95b0a362e92951620c41e5e258894a9ee6d98c9bc73a4f1e5967de7ca0dee0e2"
+    },
+    {
+      "bytes": 488,
+      "path": "internal/cli/version.go",
+      "sha256": "c1bb8091d6582ce512befb1ddc00ceed4252c6cfaa8c145949d11db3d45e1622"
+    },
+    {
+      "bytes": 27691,
+      "path": "internal/nativeadapter/engine.go",
+      "sha256": "9d815a58fc2eb073dcff743ed8da0aad9517e48d4ff805f8c56e580144fdba12"
+    },
+    {
+      "bytes": 16512,
+      "path": "internal/nativeadapter/engine_test.go",
+      "sha256": "7847ec7f1cf6277f413fca8bf9fb0430638e5ef2ac7c5e480871ad4a8a726b38"
+    },
+    {
+      "bytes": 7996,
+      "path": "internal/nativeadapter/provenance.go",
+      "sha256": "d5f3c03f501f32ae7f10e405399e0486a39b4d8813db36363a2227905ae6ca7d"
+    },
+    {
+      "bytes": 2433,
+      "path": "internal/nativeadapter/render.go",
+      "sha256": "be71b84f1de3fd407348e916bcccc1c517f47c176a8aab6fd40257959411a8fb"
+    },
+    {
+      "bytes": 4991,
+      "path": "internal/nativeadapter/types.go",
+      "sha256": "92a2a01e881235a80a39fe13c01019fc416e9443d3f152a8dc64d023a1997102"
+    },
+    {
+      "bytes": 10636,
+      "path": "internal/nativeadapters/agy/adapter.go",
+      "sha256": "ca2e7f27e023b5a48b1497b6080e82cd0d2066097e205a2527c443a4d2c4d047"
+    },
+    {
+      "bytes": 7310,
+      "path": "internal/nativeadapters/agy/adapter_test.go",
+      "sha256": "e83323aab5725837d5da53dd84ea4cbd232f02e0adc259dcfa00e42607ca2bd0"
+    },
+    {
+      "bytes": 9814,
+      "path": "internal/nativeadapters/claude/adapter.go",
+      "sha256": "d8928b5e18ddbbcf5c62b1c9c7dfb74f454766208219c4d7b9c90d21ac01f23b"
+    },
+    {
+      "bytes": 8221,
+      "path": "internal/nativeadapters/claude/adapter_test.go",
+      "sha256": "e3adc51a710cc76159ad0decc5ad4d180c63ce71dc88fc7e346e112021e0a598"
+    },
+    {
+      "bytes": 24708,
+      "path": "internal/nativeadapters/codex/adapter.go",
+      "sha256": "9e719540bf76d12d2c58fb0d421753c64211e581f4e8c2d5b720b750756ca0d4"
+    },
+    {
+      "bytes": 24590,
+      "path": "internal/nativeadapters/codex/adapter_test.go",
+      "sha256": "996bfe2ec4ea5b449d49d29d99af134868c23469916bd6c4696c0796a0be7013"
+    },
+    {
+      "bytes": 9313,
+      "path": "internal/nativeadapters/conformance_test.go",
+      "sha256": "b5b41b110bc87f6f396a63dc8b5c1c02e22df56b1c85889dc053ecb27221fa3c"
+    },
+    {
+      "bytes": 11108,
+      "path": "internal/nativeadapters/cursor/adapter.go",
+      "sha256": "1a36f3498fa6d65a5758bfcd0761e1db3e857bd81213d3bf7b85da8afb500dd5"
+    },
+    {
+      "bytes": 14765,
+      "path": "internal/nativeadapters/cursor/adapter_test.go",
+      "sha256": "d8bf169cc613dafb4efe7725efcf22244fd606e3f20d8df5638d226e5ddcbd44"
+    },
+    {
+      "bytes": 8365,
+      "path": "internal/nativeadapters/gemini/adapter.go",
+      "sha256": "fcaf99c11cca68d53b636b9938be90f252de51b8a243d712f330074ce311c70f"
+    },
+    {
+      "bytes": 8869,
+      "path": "internal/nativeadapters/gemini/adapter_test.go",
+      "sha256": "7c1f484cca657cc1e9bc9bcdab1142091d161e51a77bde379379f66ce45f23cb"
+    },
+    {
+      "bytes": 14685,
+      "path": "internal/nativeadapters/hermes/adapter.go",
+      "sha256": "dd9637967a11c7da95de682624552b29a70e45491c2b17c93de395a5308cdfe2"
+    },
+    {
+      "bytes": 13618,
+      "path": "internal/nativeadapters/hermes/adapter_test.go",
+      "sha256": "8cfffa6ee9ef29e7090b9073b3b5cc19f16286deeef9ae9e926779038d02914a"
+    },
+    {
+      "bytes": 11930,
+      "path": "internal/nativeadapters/openclaw/adapter.go",
+      "sha256": "dbe4347eaa127f07bdabefeb0ef52c5eed0a4628904df2ba17eafe76b94bbe72"
+    },
+    {
+      "bytes": 8379,
+      "path": "internal/nativeadapters/openclaw/adapter_test.go",
+      "sha256": "db5ce1fae822a8e7f758da6bc9c74b7e04682efaa17692039d4cf2a9d680ef70"
+    },
+    {
+      "bytes": 11070,
+      "path": "internal/nativeadapters/opencode/adapter.go",
+      "sha256": "1a12548af25548a0abe267e2cd0ddf1145009ee7b309acee56e934803fb6002d"
+    },
+    {
+      "bytes": 8087,
+      "path": "internal/nativeadapters/opencode/adapter_test.go",
+      "sha256": "d68fa0b95a54beaafafc85e1b7c1f39333deaffdf95c33bbfbc99dc526085bc0"
+    },
+    {
+      "bytes": 4190,
+      "path": "internal/nativeio/read.go",
+      "sha256": "f0f77a034630890486d762234083a69ef8479f9fbea9bae9d648abebde425b29"
+    },
+    {
+      "bytes": 2752,
+      "path": "internal/nativeio/read_test.go",
+      "sha256": "aa6347f8476766f31f22be72455114c3a3aaff2b03c54c3ad6ad3a70a58a896e"
+    },
+    {
+      "bytes": 1344,
+      "path": "internal/nativeparse/doc.go",
+      "sha256": "91dd9d14bc39a8133d171f9c9cfa33ccf2ba5ab088cdb1fee015205c47719a41"
+    },
+    {
+      "bytes": 2522,
+      "path": "internal/nativeparse/jsonc.go",
+      "sha256": "e7eb9a65e9c4673a951cc904ce07176f8bd5ae7a46a24d55d52ec8c56400f059"
+    },
+    {
+      "bytes": 13403,
+      "path": "internal/nativeparse/nativeparse.go",
+      "sha256": "31a02f6baa8d975757f4842ae9adca3f8d2b87277abedd4a4ef8ec68e55ead10"
+    },
+    {
+      "bytes": 5639,
+      "path": "internal/nativeparse/nativeparse_test.go",
+      "sha256": "1710029a17f522317b29d328ed8a0f7d73123c1d7fb0e3f413a8d68c7ca5df51"
+    }
+  ],
+  "validationFiles": [
+    {
+      "bytes": 1238,
+      "path": "docs/evidence/native-adapters/completion-audit-2026-10-18/commands.json",
+      "sha256": "4ba65ffbdbd2b8843c2250b4771478b7fd0746a3059a9fe736a3ff4dca55512d"
+    },
+    {
+      "bytes": 37043,
+      "path": "docs/evidence/native-adapters/completion-audit-2026-10-18/end-to-end.jsonl",
+      "sha256": "b0a613328091a799c8ce8e3e09ffa09579955775c82f6c1de70fbf44ee671b2c"
+    },
+    {
+      "bytes": 2714,
+      "path": "docs/evidence/native-adapters/completion-audit-2026-10-18/go-tests.log",
+      "sha256": "156048aeeaa8f3b94b5b40525029132855c0e1734e119636c9eb8d0461776a47"
+    },
+    {
+      "bytes": 2569,
+      "path": "docs/evidence/native-adapters/completion-audit-2026-10-18/python-tests.log",
+      "sha256": "108229c11226e5ce6ae53e2e66fc1e351febb6a62f18ea37f454d63ba5c602d0"
+    },
+    {
+      "bytes": 7037,
+      "path": "docs/evidence/native-adapters/completion-audit-2026-10-18/validation.log",
+      "sha256": "88839121e2376e48448b34c7cf0f2c93eb671e4660621f27b13fa56707e9b313"
+    }
+  ]
+}

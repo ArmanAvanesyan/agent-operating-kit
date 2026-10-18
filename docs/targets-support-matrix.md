@@ -13,6 +13,15 @@ log template.
 bundle for codex, claude-code, cursor) passed. No host AI CLIs were present on
 the smoke runner, so all **Tested** cells below remain `Untracked`.
 
+## Scope of this matrix
+
+This matrix records the **pack renderer and installation** surface. Its `Tested`
+cells are pack/install smoke results, not native agent-definition loading results.
+The Go CLI has a separate eight-target native-agent surface, including agy;
+see the [native completion audit](native-adapter-completion-audit.md) and
+[scope/version evidence table](native-adapter-operations.md#supported-scopes-and-host-evidence).
+Native agent discovery does not validate a pack marketplace installer or runtime hooks.
+
 ## Target Matrix
 
 | Target | Status | Support level | Min | Tested | Import / bundle path | Known gaps |

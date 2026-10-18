@@ -1,8 +1,9 @@
 # Agent foundations delivery contract
 
 Status: static foundations and all eight native adapter projections are implemented
-in the Go CLI. The native-only release remains incomplete: two host-loading gates
-are open and runtime enforcement is unverified. See the
+in the Go CLI. Each target now has at least one bounded native-loading scope;
+this does not establish runtime enforcement or complete every supported scope.
+See the [completion audit](../../native-adapter-completion-audit.md) and the
 [operator guide](../../native-adapter-operations.md) for commands and limits.
 The historical [agent specification](../../proposals/agent-spec/README.md) and
 [planning proposal](../../proposals/planning-decisions-optimization/README.md)

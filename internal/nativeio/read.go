@@ -127,7 +127,7 @@ func Load(input string) ([]nativeadapter.File, error) {
 }
 func format(name string) string {
 	switch strings.ToLower(filepath.Ext(name)) {
-	case ".md":
+	case ".md", ".mdc", ".markdown":
 		return "markdown"
 	case ".json":
 		return "json"

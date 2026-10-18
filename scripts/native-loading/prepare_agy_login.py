@@ -957,7 +957,7 @@ def _preflight(root, audit_path, sbpl):
 
 def run_login(root, audit_path, cli, timeout=MAX_LOGIN_SECONDS, *, authorization_code_fd=None,
               authorization_code_file=None, retain_onboarding=False,
-              resume_onboarding=False, resume_phase=None, restart_visual_setup=False):
+              resume_onboarding=False, resume_phase=None, restart_visual_setup=False, parser_log=False):
     """Start the copied CLI behind a persisted process-identity gate."""
     if authorization_code_fd is not None and authorization_code_file is not None:
         raise RuntimeError("choose one authorization-code input method")
@@ -981,11 +981,13 @@ def run_login(root, audit_path, cli, timeout=MAX_LOGIN_SECONDS, *, authorization
         "mark(started,'runner-started')\n"
         "while not gate.exists(): time.sleep(0.025)\n"
         "mark(attempted,'native-exec-attempted')\n"
-        "os.execv(exe,[exe])"
+        "os.execv(exe,[exe,*sys.argv[5:]])"
     )
     interpreter = str(Path(sys.executable).resolve(strict=True))
     command = ["/usr/bin/sandbox-exec", "-p", profile, interpreter, "-B", "-c", runner,
                str(gate), str(runner_started), str(exec_attempted), str(cli)]
+    if parser_log:
+        command.extend(["--log-file", str(root / "native-parser.log")])
     proc = None
     pgid = None
     close_result = {"masterClosed": False, "slaveClosed": False}
@@ -1101,7 +1103,7 @@ def invalidate_and_remove_private_home(root, marker):
 
 def _prepare(binary=PINNED_BINARY, *, timeout=MAX_LOGIN_SECONDS, authorization_code_stdin=False,
              authorization_code_file=None, retain_onboarding=False, resume_login_root=None,
-             restart_visual_setup=False):
+             restart_visual_setup=False, parser_log=False):
     """Run one bounded native-login preparation; returns sanitized status only."""
     if sys.platform != "darwin" or os.uname().machine not in ("x86_64", "i386"):
         raise RuntimeError("AGY login preparation is pinned for Darwin x64")
@@ -1165,6 +1167,7 @@ def _prepare(binary=PINNED_BINARY, *, timeout=MAX_LOGIN_SECONDS, authorization_c
             resume_onboarding=checkpoint is not None,
             resume_phase=checkpoint["marker"].get("phase") if checkpoint is not None else None,
             restart_visual_setup=restart_visual_setup,
+            **({"parser_log": True} if parser_log else {}),
         )
         result["observation"] = observation
         log_link_removed = remove_native_log_link(root / "home")
@@ -1238,7 +1241,7 @@ def _prepare(binary=PINNED_BINARY, *, timeout=MAX_LOGIN_SECONDS, authorization_c
 
 def prepare(binary=PINNED_BINARY, *, timeout=MAX_LOGIN_SECONDS, authorization_code_stdin=False,
             authorization_code_file=None, retain_onboarding=False, resume_login_root=None,
-            restart_visual_setup=False):
+            restart_visual_setup=False, parser_log=False):
     """Validate and always clean a private authorization-code file path."""
     if authorization_code_stdin and authorization_code_file is not None:
         raise RuntimeError("choose one authorization-code input method")
@@ -1270,6 +1273,7 @@ def prepare(binary=PINNED_BINARY, *, timeout=MAX_LOGIN_SECONDS, authorization_co
             binary, timeout=timeout, authorization_code_stdin=authorization_code_stdin,
             authorization_code_file=validated_file, retain_onboarding=retain_onboarding,
             resume_login_root=resume_login_root, restart_visual_setup=restart_visual_setup,
+            **({"parser_log": True} if parser_log else {}),
         )
     finally:
         remove_authorization_code_file(validated_file)

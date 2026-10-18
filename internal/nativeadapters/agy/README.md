@@ -178,3 +178,15 @@ still requires explicit native malformed-file rejection, which was not visible.
 `HostLoading.Status` therefore remains `not-run`; selection, inference, backend
 authentication, and runtime enforcement remain unverified. No speculative native
 format change was made. The original temporary profile and all copies were removed.
+
+
+## Malformed-YAML diagnostic follow-up — 2026-10-18
+
+The [follow-up investigation](../../../docs/agy-malformed-verification.md) verified
+the native `--log-file` flag and repeated all three account-mode controls with
+a bounded owned-log reader. The log was nonempty and untruncated; no recognized
+YAML/frontmatter rejection was observed for the malformed fixture. Positive
+discovery still passes. The full gate and `HostLoading.Status: not-run` remain
+unchanged. An opt-in probe can now qualify an explicit native-log error only
+when a recognized parser phrase and the exact fixture path occur on the same
+row; unavailable, truncated or unrelated diagnostics cannot qualify it.

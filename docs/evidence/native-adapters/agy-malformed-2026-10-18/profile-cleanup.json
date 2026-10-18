@@ -1,0 +1,7 @@
+{
+  "kind": "aok-agy-isolated-profile-cleanup/v1",
+  "originalExpiry": "2026-10-18T08:30:21.001380Z",
+  "privateRootRemoved": true,
+  "credentialContentsRead": false,
+  "nativeInference": "not-run"
+}

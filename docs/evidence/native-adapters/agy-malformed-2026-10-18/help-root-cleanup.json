@@ -1,0 +1,8 @@
+{
+  "kind": "aok-agy-help-root-cleanup/v1",
+  "rootsRemoved": true,
+  "credentialInput": "none",
+  "nativeArgs": [
+    "--help"
+  ]
+}

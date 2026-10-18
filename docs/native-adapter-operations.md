@@ -261,3 +261,12 @@ parse-error message was observed for malformed YAML, so the established full
 three-control gate remains open and the descriptor stays `not-run`. This result
 supersedes the earlier lack of positive discovery without claiming invocation,
 backend authentication, or runtime enforcement. Temporary credentials were removed.
+
+
+The [malformed-YAML investigation](agy-malformed-verification.md) adds explicit
+`--parser-diagnostics` to the isolated account manager helper. It uses the
+verified native `--log-file` option, reads only the bounded owned log after
+process cleanup, and retains fixed labels/counts without log text. Account-mode
+logs were readable, nonempty and untruncated, but supplied no recognized
+frontmatter/YAML rejection. The agy gate remains open; no omission-only or
+generic error evidence promotes the descriptor.

@@ -1,5 +1,10 @@
 # agy account-mode project discovery — 2026-10-18
 
+The later [malformed-YAML investigation](agy-malformed-verification.md) adds opt-in,
+bounded native-log diagnostics. It confirms readable nonempty account-mode logs
+without a recognized rejection; the full gate remains open. The log-free
+observations below retain their original scope.
+
 Fresh isolated OAuth account mode discovers the AOK-rendered project agent in
 agy 1.4.2 Darwin x64. Its name and description appear in `/agents`; absent and
 malformed controls omit it. The full native-loading gate remains open because

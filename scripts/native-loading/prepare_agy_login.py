@@ -62,6 +62,7 @@ AUTHORIZATION_CODE_PROMPT = re.compile(
     r"(?:authorization\s+)?code)\s*[:>]\s*$"
 )
 AUTHORIZATION_CODE_TITLE = re.compile(r"(?im)^[^\w\r\n]{0,8}authorization\s+code[^\w\r\n]{0,12}$")
+NATIVE_FORM_FOOTER = re.compile(r"^\s*shift\+up/down\s+navigate\s*$", re.I)
 AUTHORIZATION_CODE_BYTES = frozenset(b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789._~+/-")
 MAX_AUTHORIZATION_CODE_BYTES = 1024
 CLEAR_SCREEN = re.compile(rb"\x1b\[(?:2|3)J")
@@ -168,6 +169,191 @@ def session_marker(session_id, created):
     }
 
 
+def _private_regular(path, *, mode=None, max_size=None):
+    path = Path(path)
+    info = path.lstat()
+    if (not stat.S_ISREG(info.st_mode) or stat.S_ISLNK(info.st_mode) or
+            info.st_uid != os.getuid() or info.st_nlink != 1 or
+            (mode is not None and stat.S_IMODE(info.st_mode) != mode) or
+            (max_size is not None and info.st_size > max_size)):
+        raise RuntimeError("checkpoint contains an unsafe file")
+    return info
+
+
+def _strict_json_object(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate checkpoint marker field")
+        result[key] = value
+    return result
+
+
+def _private_file_sha(path, *, mode=None):
+    path = Path(path)
+    flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0)
+    descriptor = os.open(path, flags)
+    try:
+        info = os.fstat(descriptor)
+        if (not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or
+                info.st_nlink != 1 or
+                (mode is not None and stat.S_IMODE(info.st_mode) != mode)):
+            raise RuntimeError("checkpoint contains an unsafe file")
+        digest = hashlib.sha256()
+        while True:
+            block = os.read(descriptor, 1024 * 1024)
+            if not block:
+                break
+            digest.update(block)
+        return digest.hexdigest()
+    finally:
+        os.close(descriptor)
+
+
+def validate_onboarding_checkpoint(path, *, now=None, private_temp_root=None,
+                                   expected_binary_sha256=PINNED_BINARY_SHA256,
+                                   cleanup_native_log=False):
+    """Validate a private, invalid readiness marker for color-screen diagnosis."""
+    root = Path(path).absolute()
+    temp_root = Path(private_temp_root or PRIVATE_TEMP_ROOT).resolve(strict=True)
+    if root.parent.resolve(strict=True) != temp_root or root.resolve(strict=True) != root:
+        raise RuntimeError("checkpoint root must be canonical private temporary storage")
+    root_info = root.lstat()
+    if (not stat.S_ISDIR(root_info.st_mode) or stat.S_ISLNK(root_info.st_mode) or
+            root_info.st_uid != os.getuid() or stat.S_IMODE(root_info.st_mode) != 0o700):
+        raise RuntimeError("checkpoint root ownership or permissions are unsafe")
+    marker_path = root / "owned-session.json"
+    _private_regular(marker_path, mode=0o600, max_size=16 * 1024)
+    try:
+        marker = json.loads(marker_path.read_text(encoding="utf-8"),
+                            object_pairs_hook=_strict_json_object)
+        session_id = uuid.UUID(marker.get("id", ""))
+        created = datetime.fromisoformat(marker.get("createdAt", "").replace("Z", "+00:00"))
+        expires = datetime.fromisoformat(marker.get("expiresAt", "").replace("Z", "+00:00"))
+    except (ValueError, TypeError, AttributeError, json.JSONDecodeError) as error:
+        raise RuntimeError("checkpoint marker is invalid") from error
+    current = now or datetime.now(timezone.utc)
+    if (set(marker) != {"kind", "id", "createdAt", "expiresAt", "valid",
+                       "backendAuthentication", "readyPromptObserved", "phase",
+                       "binarySHA256"} or
+            marker.get("kind") != "aok-agy-native-login/v1" or session_id.version != 4 or
+            str(session_id) != marker.get("id") or marker.get("valid") is not False or
+            marker.get("readyPromptObserved") is not False or
+            marker.get("phase") not in ("color-scheme", "after-color-scheme") or
+            marker.get("backendAuthentication") != "not-independently-verified" or
+            marker.get("binarySHA256") != expected_binary_sha256 or
+            created.tzinfo is None or expires.tzinfo is None or current.tzinfo is None or
+            expires <= current or created > current or expires <= created or
+            expires - created > SESSION_TTL):
+        raise RuntimeError("checkpoint is not a current onboarding diagnosis checkpoint")
+    home = root / "home"
+    home_info = home.lstat()
+    if (not stat.S_ISDIR(home_info.st_mode) or stat.S_ISLNK(home_info.st_mode) or
+            home_info.st_uid != os.getuid() or stat.S_IMODE(home_info.st_mode) != 0o700):
+        raise RuntimeError("checkpoint private HOME is unsafe")
+    if cleanup_native_log:
+        remove_native_log_link(home)
+    file_count = 0
+    byte_count = 0
+    directory_count = 0
+    for current_dir, directories, filenames in os.walk(home, topdown=True, followlinks=False):
+        current_path = Path(current_dir)
+        relative_depth = len(current_path.relative_to(home).parts)
+        if relative_depth > 32:
+            raise RuntimeError("checkpoint private HOME exceeds limits")
+        for name in directories:
+            info = (current_path / name).lstat()
+            if (not stat.S_ISDIR(info.st_mode) or stat.S_ISLNK(info.st_mode) or
+                    info.st_uid != os.getuid()):
+                raise RuntimeError("checkpoint private HOME contains an unsafe directory")
+            directory_count += 1
+            if directory_count > 512:
+                raise RuntimeError("checkpoint private HOME exceeds limits")
+        for name in filenames:
+            info = _private_regular(current_path / name)
+            file_count += 1
+            byte_count += info.st_size
+            if file_count > 512 or byte_count > 64 * 1024 * 1024:
+                raise RuntimeError("checkpoint private HOME exceeds limits")
+    cli = root / "antigravity"
+    _private_regular(cli, mode=0o500)
+    if _private_file_sha(cli, mode=0o500) != expected_binary_sha256:
+        raise RuntimeError("checkpoint native binary does not match the pinned source")
+    return {"root": root, "home": home, "marker": marker, "cli": cli}
+
+
+def remove_native_log_link(home):
+    """Unlink only AGY's known log symlink, without resolving or reading target."""
+    home = Path(home).absolute()
+    root = home.parent
+    if home.name != "home" or root.resolve(strict=True) != root:
+        raise RuntimeError("private HOME path is not canonical")
+    for directory, expected_mode in ((root, 0o700), (home, 0o700)):
+        info = directory.lstat()
+        if (not stat.S_ISDIR(info.st_mode) or stat.S_ISLNK(info.st_mode) or
+                info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) != expected_mode or
+                directory.resolve(strict=True) != directory):
+            raise RuntimeError("private HOME parent chain is unsafe")
+    marker_path = root / "owned-session.json"
+    _private_regular(marker_path, mode=0o600, max_size=16 * 1024)
+    try:
+        marker = json.loads(marker_path.read_text(encoding="utf-8"),
+                            object_pairs_hook=_strict_json_object)
+    except (OSError, ValueError, UnicodeError) as error:
+        raise RuntimeError("private HOME session marker is invalid") from error
+    if (not isinstance(marker, dict) or marker.get("kind") != "aok-agy-native-login/v1" or
+            marker.get("valid") is not False):
+        raise RuntimeError("native log cleanup requires an invalid private session")
+    parent = home
+    for part in (".gemini", "antigravity-cli"):
+        parent = parent / part
+        try:
+            info = parent.lstat()
+        except FileNotFoundError:
+            return False
+        if (not stat.S_ISDIR(info.st_mode) or stat.S_ISLNK(info.st_mode) or
+                info.st_uid != os.getuid() or parent.resolve(strict=True) != parent):
+            raise RuntimeError("native log parent chain is unsafe")
+    log_link = parent / "cli.log"
+    try:
+        info = log_link.lstat()
+    except FileNotFoundError:
+        return False
+    if not stat.S_ISLNK(info.st_mode):
+        return False
+    if info.st_uid != os.getuid() or info.st_nlink != 1:
+        raise RuntimeError("native log symlink ownership is unsafe")
+    log_link.unlink()
+    return True
+
+
+def reset_resume_sentinels(root):
+    """Remove only known single-link launch sentinels owned by this session."""
+    for name in ("native-start.gate", "runner-started", "native-exec-attempted"):
+        path = Path(root) / name
+        try:
+            info = path.lstat()
+        except FileNotFoundError:
+            continue
+        if (not stat.S_ISREG(info.st_mode) or stat.S_ISLNK(info.st_mode) or
+                info.st_uid != os.getuid() or info.st_nlink != 1 or
+                stat.S_IMODE(info.st_mode) not in (0o600, 0o644)):
+            raise RuntimeError("checkpoint launch sentinel is unsafe")
+        path.unlink()
+
+
+def public_form_footer(row):
+    """Retain only a bounded navigation label made entirely of public tokens."""
+    if len(row) > 120:
+        return None
+    remainder = re.sub(r"\b(?:shift|up|down|tab|enter|submit|next|previous|esc|back|ctrl|confirm|send|cancel|navigate)\b", "", row, flags=re.I)
+    if any(glyph not in " \t+↑↓←→⇧↵⏎•·/-,:()[]" for glyph in remainder):
+        return None
+    if not all(re.search(r"\b" + word + r"\b", row, re.I) for word in ("shift", "up", "down")):
+        return None
+    return " ".join(row.split())
+
+
 def active_authorization_code_field(screen, text):
     """A title authorizes input only with instructions and the cursor in its box."""
     rows = text.splitlines()
@@ -176,14 +362,52 @@ def active_authorization_code_field(screen, text):
     for index, row in enumerate(rows):
         if not AUTHORIZATION_CODE_TITLE.fullmatch(row):
             continue
-        if not index < screen.row <= index + 4 or screen.row >= len(rows):
-            continue
-        field = rows[screen.row]
-        left = field.find("│")
-        right = field.rfind("│")
-        if 0 <= left < screen.col < right:
+        if index < screen.row <= index + 4 and screen.row < len(rows):
+            field = rows[screen.row]
+            left = field.find("│")
+            right = field.rfind("│")
+            if 0 <= left < screen.col < right:
+                return True
+        footer = index + 3
+        if (row.strip().casefold() in ("authorization code", "authorization code...") and footer < len(rows) and
+                not rows[index + 1].strip() and not rows[index + 2].strip() and
+                NATIVE_FORM_FOOTER.fullmatch(rows[footer]) and
+                screen.row == footer and screen.col == len(rows[footer])):
             return True
     return False
+
+
+def color_preview_sample_rows(text):
+    """Recognize only the pinned host's boxed Go/error/warning/link showcase."""
+    rows = text.splitlines()
+    headers = [i for i, row in enumerate(rows) if "choose your color scheme:" in row.lower()]
+    if len(headers) != 1:
+        return set()
+    header = headers[0]
+    box = re.compile(r"^(\s*)│([^│]*)│\s*$")
+    for index in range(header + 1, min(len(rows) - 2, header + 35)):
+        error = box.fullmatch(rows[index])
+        warning = box.fullmatch(rows[index + 1])
+        link = box.fullmatch(rows[index + 2])
+        if not all((error, warning, link)):
+            continue
+        if not re.fullmatch(r"\s*✗ error: compilation failed\s*", error.group(2)):
+            continue
+        if not re.fullmatch(r"\s*⚠\ufe0f? warning: deprecation warning\s*", warning.group(2)):
+            continue
+        bounds = (rows[index].find("│"), rows[index].rfind("│"))
+        if any((row.find("│"), row.rfind("│")) != bounds for row in rows[index + 1:index + 3]):
+            continue
+        if "file://" not in link.group(2) or "main.go" not in link.group(2):
+            continue
+        main_seen = any("func main()" in row[bounds[0]:bounds[1]] and
+                        row.find("│") == bounds[0] and row.rfind("│") == bounds[1]
+                        for row in rows[header + 1:index])
+        dim_seen = any("press enter to continue" in row.lower()
+                       for row in rows[index + 3:index + 8])
+        if main_seen and dim_seen:
+            return {index}
+    return set()
 
 
 def state_from_bytes(data):
@@ -216,6 +440,12 @@ def state_from_bytes(data):
             "authorizationCodePromptObserved": False,
         }
     state = AGY.state_from_bytes(data, width=LOGIN_WIDTH, height=LOGIN_HEIGHT)
+    preview_rows = color_preview_sample_rows(text)
+    state["rawGenericErrorObserved"] = state["errorObserved"]
+    state["previewSampleErrorRows"] = sorted(preview_rows)
+    blocking_text = "\n".join(row for index, row in enumerate(text.splitlines()) if index not in preview_rows)
+    state["errorObserved"] = bool(AGY.ERROR.search(blocking_text))
+    state["errorCategories"] = [name for name, pattern in AGY.ERROR_CATEGORIES if pattern.search(blocking_text)]
     fixed = {"login", "log", "in", "sign", "google", "antigravity", "to", "with", "browser", "continue", "recommended", "workspace", "skip", "cancel", "exit", "quit", "or", "up", "get", "started", "your", "using", "new", "existing", "not", "logged", "connected", "open", "opens", "free", "oauth", "for", "cli", "web", "authenticate", "authentication", "enter", "select", "return", "press", "hit", "action", "option", "an", "type", "choose"}
     state["loginRowDiagnostics"] = []
     for row in text.splitlines():
@@ -229,20 +459,81 @@ def state_from_bytes(data):
     state["authorizationCodePromptObserved"] = bool(
         AUTHORIZATION_CODE_PROMPT.search(text) or active_authorization_code_field(screen, text)
     )
+    consent_text = " ".join(text.split())
+    state["trustPromptObserved"] = bool(re.search(r"\btrust\b[^\n]{0,160}\b(?:directory|folder|workspace|project|files)\b", consent_text, re.I))
+    state["termsAcceptancePromptObserved"] = bool(re.search(r"(?:\b(?:accept|agree)\b[^\n]{0,100}\b(?:terms|privacy)\b|\b(?:terms|privacy)\b[^\n]{0,100}\b(?:accept|agree)\b)", consent_text, re.I))
+    state["colorSchemeScreenObserved"] = "choose your color scheme:" in text.lower()
+    state["colorSchemeContinueObserved"] = bool(re.search(r"press\s+enter\s+to\s+continue", text, re.I))
+    state["previewLabelMatches"] = []
+    for row_index, row_text in enumerate(text.splitlines()):
+        error_sample = re.search(r"\berror[^\w]{1,6}(compilation|request|command|operation|build|connection|deployment|action|execution|task|test|upload|download|something)[ ]+failed\b", row_text, re.I)
+        warning_sample = re.search(r"\bwarning[^\w]{1,6}(?:(deprecation|sample|test|example|another|some|this|a|text)[ ]+warning|warning[ ]+(sample|test|example|text))\b", row_text, re.I)
+        if error_sample:
+            state["previewLabelMatches"].append({"row": row_index, "kind": "error-sample", "label": error_sample.group(1).lower() + "-failed", "column": len(row_text) - len(row_text.lstrip())})
+        if warning_sample:
+            state["previewLabelMatches"].append({"row": row_index, "kind": "warning-sample", "label": (warning_sample.group(1) or warning_sample.group(2)).lower() + "-warning", "column": len(row_text) - len(row_text.lstrip())})
+    state["errorRowDiagnostics"] = []
+    state["codeFieldGeometry"] = []
+    for index, row in enumerate(text.splitlines()):
+        if AUTHORIZATION_CODE_TITLE.fullmatch(row):
+            state["codeFieldGeometry"].append({"titleRow": index, "plainTitle": row.strip().casefold() == "authorization code", "titleDecorationCodepoints": [ord(glyph) for glyph in row if not glyph.isalnum() and not glyph.isspace()], "cursorRow": screen.row, "cursorColumn": screen.col, "boxRows": [{"row": offset, "renderedLength": len(value), "blank": not value.strip(), "left": value.find("│"), "right": value.rfind("│"), "focusMarkerColumns": [column for column, glyph in enumerate(value) if glyph in ">❯›┃▏█▌_"], "punctuationCodepoints": sorted(set(ord(glyph) for glyph in value if not glyph.isalnum() and not glyph.isspace())), "unknownWordLengths": [len(word) for word in re.findall(r"[A-Za-z]+", value.lower()) if word not in {"up", "down", "tab", "shift", "enter", "submit", "next", "previous", "esc", "back", "ctrl", "confirm", "send", "cancel", "navigate"}], "publicNavigationLabel": public_form_footer(value), "recognizedUnboxedFooter": bool(NATIVE_FORM_FOOTER.fullmatch(value)), "fixedControlWords": [word for word in re.findall(r"[A-Za-z]+", value.lower()) if word in {"up", "down", "tab", "shift", "enter", "submit", "next", "previous", "esc", "back", "ctrl", "confirm", "send", "cancel", "navigate"}]} for offset, value in enumerate(text.splitlines()[index + 1:index + 5], index + 1)]})
     state["codeFieldDiagnostics"] = []
     code_words = {"enter", "paste", "code", "authorization", "authentication", "oauth", "the", "your", "from", "browser", "here", "or", "url", "redirect", "link", "below", "and", "press", "return", "continue", "submit"}
     for index, row in enumerate(text.splitlines()):
         if re.search(r"\bcode\b", row, re.I):
             words = re.findall(r"[A-Za-z]+", row.lower())
             state["codeFieldDiagnostics"].append({"row": index, "fixedWords": [word for word in words if word in code_words], "otherWordCount": sum(word not in code_words for word in words), "endsWithColon": row.rstrip().endswith(":"), "promptMatched": bool(AUTHORIZATION_CODE_PROMPT.search(row))})
-    screen_words = code_words | fixed | {"input", "value", "response", "copy", "callback", "waiting", "complete", "done", "finish", "is", "this", "will", "automatically", "once", "signed", "a", "on", "the", "please", "received", "process", "completed"}
+    screen_words = code_words | fixed | {"input", "value", "response", "copy", "callback", "waiting", "complete", "done", "finish", "is", "this", "will", "automatically", "once", "signed", "a", "on", "the", "please", "received", "process", "completed", "color", "scheme", "preview", "syntax", "error", "warning", "failed", "fatal", "line", "func", "main", "log", "fmt", "err", "nil", "dark", "light", "terminal", "theme", "default", "terms", "privacy", "accept", "agree", "trust", "folder", "directory", "project", "allow", "yes", "no", "security", "permission", "ready", "message", "anything", "ask", "mode", "select", "link", "file", "loading", "save", "token", "credentials"}
     state["authScreenFixedRows"] = []
     for index, row in enumerate(text.splitlines()):
         row = re.sub(r"https?://\S+", "", row)
         words = re.findall(r"[A-Za-z]+", row.lower())
+        if AGY.ERROR.search(row):
+            state["errorRowDiagnostics"].append({"row": index, "fixedWords": [word for word in words if word in screen_words], "otherWordCount": sum(word not in screen_words for word in words), "punctuationCodepoints": sorted(set(ord(glyph) for glyph in row if not glyph.isalnum() and not glyph.isspace()))})
         if words:
             state["authScreenFixedRows"].append({"row": index, "fixedWords": [word for word in words if word in screen_words], "otherWordCount": sum(word not in screen_words for word in words)})
     return state
+
+
+def may_continue_color_scheme(state):
+    """Only the native visual-appearance step; no trust/terms or model input."""
+    return (state.get("colorSchemeScreenObserved") is True and
+            state.get("colorSchemeContinueObserved") is True and
+            state.get("welcomeLabelObserved") is True and
+            state.get("authBarrierObserved") is False and
+            state.get("localPromptObserved") is False and
+            state.get("errorObserved") is False and
+            state.get("trustPromptObserved") is False and
+            state.get("termsAcceptancePromptObserved") is False and
+            not state.get("terminalAmbiguityObserved"))
+
+
+def onboarding_checkpoint_phase(state):
+    if state.get("colorSchemeContinued") is True:
+        return "after-color-scheme"
+    if state.get("colorSchemeScreenObserved") is True:
+        return "color-scheme"
+    return None
+
+
+def may_retain_color_checkpoint(state, *, source_phase=None):
+    """Allow an invalid diagnostic checkpoint in recognized onboarding state.
+
+    The generic error matcher may classify sample preview content as an error;
+    retention is for diagnosis only and does not authorize any terminal input.
+    """
+    categories = state.get("errorCategories") or []
+    common = (state.get("authBarrierObserved") is False and
+              state.get("localPromptObserved") is False and
+              not state.get("terminalAmbiguityObserved") and
+              (not state.get("errorObserved") or categories == ["generic-error"]))
+    if not common:
+        return False
+    if state.get("colorSchemeScreenObserved") is True:
+        return state.get("welcomeLabelObserved") is True
+    if source_phase == "after-color-scheme":
+        return not is_ready(state)
+    return state.get("colorSchemeContinued") is True and not is_ready(state)
 
 
 def may_press_enter(state):
@@ -480,6 +771,8 @@ def terminal_query_replies(wire, answered):
 
 def _capture_login(master, deadline, *, enter_sent, audit_path, case_root,
                    authorization_code_fd=None, authorization_code_file=None,
+                   retain_onboarding=False, resume_onboarding=False,
+                   resume_phase=None, restart_visual_setup=False,
                    byte_limit=512 * 1024):
     """Capture in memory; optionally send one Enter at the explicit Google gate."""
     chunks = []
@@ -490,6 +783,11 @@ def _capture_login(master, deadline, *, enter_sent, audit_path, case_root,
     state = None
     code_buffer = bytearray()
     authorization_code_submitted = False
+    color_scheme_continued = (resume_phase == "after-color-scheme" and
+                              not restart_visual_setup)
+    if restart_visual_setup:
+        append_audit(audit_path, "visual-setup-restart-authorized",
+                     sourcePhase=resume_phase, inputBudget="one-guarded-color-enter")
     last_change = time.monotonic()
     try:
         while time.monotonic() < deadline and total < byte_limit:
@@ -510,6 +808,12 @@ def _capture_login(master, deadline, *, enter_sent, audit_path, case_root,
             if not ready:
                 if state and state.get("terminalAmbiguityObserved") and time.monotonic() - last_change >= 2:
                     append_audit(audit_path, "stable-terminal-ambiguity", state=_safe_state(state))
+                    return state, enter_sent
+                if ((retain_onboarding or resume_onboarding) and state is not None and
+                        time.monotonic() - last_change >= 2 and
+                        may_retain_color_checkpoint(state)):
+                    append_audit(audit_path, "stable-onboarding-checkpoint-observed",
+                                 phase=onboarding_checkpoint_phase(state), state=_safe_state(state))
                     return state, enter_sent
             if master in ready:
                 try:
@@ -533,12 +837,30 @@ def _capture_login(master, deadline, *, enter_sent, audit_path, case_root,
                         os.write(master, reply)
                         append_audit(audit_path, "terminal-query-answered", label=label)
                     state = state_from_bytes(wire)
+                    state["authorizationCodeSubmitted"] = authorization_code_submitted
+                    state["colorSchemeContinued"] = color_scheme_continued
                     safe_state = _safe_state(state)
                     signature = {key: value for key, value in safe_state.items() if key != "bytesObserved"}
                     if signature != last_state:
                         append_audit(audit_path, "terminal-state-change", state=safe_state)
                         last_state = signature
                         last_change = time.monotonic()
+                    if (retain_onboarding and authorization_code_submitted and
+                            may_retain_color_checkpoint(state)):
+                        append_audit(audit_path, "color-scheme-checkpoint-observed",
+                                     state=_safe_state(state))
+                        return state, enter_sent
+                    may_resume_color = (resume_onboarding and
+                                        (resume_phase != "after-color-scheme" or restart_visual_setup))
+                    if ((authorization_code_submitted or may_resume_color) and
+                            not color_scheme_continued and may_continue_color_scheme(state)):
+                        os.write(master, b"\r")
+                        color_scheme_continued = True
+                        state["colorSchemeContinued"] = True
+                        append_audit(audit_path, "native-color-scheme-continued", input="Enter",
+                                     purpose="visual-appearance-only",
+                                     explicitRestart=restart_visual_setup)
+                        continue
                     if is_ready(state) or state.get("errorObserved"):
                         return state, enter_sent
                     if not enter_sent and may_press_enter(state):
@@ -565,7 +887,12 @@ def _capture_login(master, deadline, *, enter_sent, audit_path, case_root,
                     master, code_buffer, code_chunk, audit_path, authorization_code_fd
                 ):
                     authorization_code_submitted = True
-            if authorization_code_file is not None and can_read_code:
+                    if state is not None:
+                        state["authorizationCodeSubmitted"] = True
+            if (authorization_code_file is not None and can_read_code and state is not None and
+                    state.get("authorizationCodePromptObserved") is True and
+                    state.get("terminalAmbiguityObserved") is False and
+                    state.get("localPromptObserved") is False):
                 code_data, identity = read_authorization_code_file(authorization_code_file)
                 if code_data is not None:
                     if _validate_and_submit_code(
@@ -575,7 +902,12 @@ def _capture_login(master, deadline, *, enter_sent, audit_path, case_root,
                         ),
                     ):
                         authorization_code_submitted = True
-        return state_from_bytes(b"".join(chunks)), enter_sent
+                        if state is not None:
+                            state["authorizationCodeSubmitted"] = True
+        final_state = state_from_bytes(b"".join(chunks))
+        final_state["authorizationCodeSubmitted"] = authorization_code_submitted
+        final_state["colorSchemeContinued"] = color_scheme_continued
+        return final_state, enter_sent
     finally:
         code_buffer[:] = b"\x00" * len(code_buffer)
 
@@ -624,7 +956,8 @@ def _preflight(root, audit_path, sbpl):
 
 
 def run_login(root, audit_path, cli, timeout=MAX_LOGIN_SECONDS, *, authorization_code_fd=None,
-              authorization_code_file=None):
+              authorization_code_file=None, retain_onboarding=False,
+              resume_onboarding=False, resume_phase=None, restart_visual_setup=False):
     """Start the copied CLI behind a persisted process-identity gate."""
     if authorization_code_fd is not None and authorization_code_file is not None:
         raise RuntimeError("choose one authorization-code input method")
@@ -679,7 +1012,11 @@ def run_login(root, audit_path, cli, timeout=MAX_LOGIN_SECONDS, *, authorization
         state, enter_sent = _capture_login(master, deadline, enter_sent=False,
                                            audit_path=audit_path, case_root=root,
                                            authorization_code_fd=authorization_code_fd,
-                                           authorization_code_file=authorization_code_file)
+                                           authorization_code_file=authorization_code_file,
+                                           retain_onboarding=retain_onboarding,
+                                           resume_onboarding=resume_onboarding,
+                                           resume_phase=resume_phase,
+                                           restart_visual_setup=restart_visual_setup)
         runner_seen = runner_started.is_file()
         exec_seen = exec_attempted.is_file()
         append_audit(audit_path, "native-login-observed", pid=proc.pid, pgid=pgid,
@@ -720,10 +1057,15 @@ def run_login(root, audit_path, cli, timeout=MAX_LOGIN_SECONDS, *, authorization
 def _safe_state(state):
     keys = ("authBarrierObserved", "localPromptObserved", "readyHintObserved",
             "welcomeLabelObserved", "workspaceLabelObserved", "modelSelectionLabelObserved",
+            "framedNativePromptObserved", "publicModelStatusExceptionObserved",
             "errorObserved", "errorCategories", "bytesObserved",
             "googleSignInOptionObserved", "nativeLoginChoiceObserved", "enterHintObserved",
             "authorizationCodePromptObserved", "codeFieldDiagnostics", "authScreenFixedRows", "terminalAmbiguityObserved", "terminalAmbiguitySite",
-            "loginRowDiagnostics", "startupDiagnostics")
+            "loginRowDiagnostics", "startupDiagnostics", "colorSchemeScreenObserved",
+            "colorSchemeContinueObserved", "errorRowDiagnostics", "trustPromptObserved",
+            "termsAcceptancePromptObserved", "codeFieldGeometry",
+            "authorizationCodeSubmitted", "colorSchemeContinued", "previewLabelMatches",
+            "rawGenericErrorObserved", "previewSampleErrorRows")
     return {key: state.get(key) for key in keys}
 
 
@@ -758,12 +1100,21 @@ def invalidate_and_remove_private_home(root, marker):
 
 
 def _prepare(binary=PINNED_BINARY, *, timeout=MAX_LOGIN_SECONDS, authorization_code_stdin=False,
-             authorization_code_file=None):
+             authorization_code_file=None, retain_onboarding=False, resume_login_root=None,
+             restart_visual_setup=False):
     """Run one bounded native-login preparation; returns sanitized status only."""
     if sys.platform != "darwin" or os.uname().machine not in ("x86_64", "i386"):
         raise RuntimeError("AGY login preparation is pinned for Darwin x64")
+    if restart_visual_setup and (resume_login_root is None or authorization_code_stdin or
+                                 authorization_code_file is not None):
+        raise RuntimeError("visual setup restart requires --resume-login-root and no code input")
+    checkpoint = None
+    if resume_login_root is not None:
+        checkpoint = validate_onboarding_checkpoint(resume_login_root, cleanup_native_log=True)
+        root = checkpoint["root"].resolve(strict=True)
+    else:
+        root = _owned_dir("aok-agy-session-").resolve(strict=True)
     audit_root = _owned_dir("aok-agy-login-audit-")
-    root = _owned_dir("aok-agy-login-")
     audit_path = audit_root / "audit.jsonl"
     global AUDIT_PATH
     AUDIT_PATH = audit_path
@@ -772,13 +1123,18 @@ def _prepare(binary=PINNED_BINARY, *, timeout=MAX_LOGIN_SECONDS, authorization_c
     created = datetime.now(timezone.utc)
     session_id = str(uuid.uuid4())
     marker = session_marker(session_id, created)
-    _atomic_json(root / "owned-session.json", marker)
+    if checkpoint is None:
+        _atomic_json(root / "owned-session.json", marker)
+    else:
+        marker = checkpoint["marker"]
+        session_id = marker["id"]
     dependencies = _record_dependencies(audit_root)
     source_hash = dependencies["prepare_agy_login.py"]
     append_audit(audit_path, "probe-prepared", sessionId=session_id,
                  sourceHashes=dependencies, sourceSHA256=source_hash,
                  binarySHA256=PINNED_BINARY_SHA256, terminalGeometry={"columns": LOGIN_WIDTH, "rows": LOGIN_HEIGHT}, authenticationMode="simulated-ssh" if MANUAL_OAUTH_MODE else "local", rootCreatedAt=marker["createdAt"],
-                 rootExpiresAt=marker["expiresAt"])
+                 rootExpiresAt=marker["expiresAt"],
+                 resumedCheckpoint=checkpoint is not None)
     result = {"status": "blocked", "root": str(root), "auditRoot": str(audit_root),
               "sessionId": session_id,
               "backendAuthentication": "not-independently-verified"}
@@ -789,10 +1145,15 @@ def _prepare(binary=PINNED_BINARY, *, timeout=MAX_LOGIN_SECONDS, authorization_c
         if file_sha(binary) != PINNED_BINARY_SHA256:
             raise RuntimeError("pinned AGY binary hash mismatch")
         cli = root / "antigravity"
-        shutil.copyfile(binary, cli)
-        cli.chmod(0o500)
-        if file_sha(cli) != PINNED_BINARY_SHA256:
-            raise RuntimeError("copied AGY binary hash mismatch")
+        if checkpoint is None:
+            shutil.copyfile(binary, cli)
+            cli.chmod(0o500)
+            if file_sha(cli) != PINNED_BINARY_SHA256:
+                raise RuntimeError("copied AGY binary hash mismatch")
+            marker["binarySHA256"] = PINNED_BINARY_SHA256
+            _atomic_json(root / "owned-session.json", marker)
+        else:
+            reset_resume_sentinels(root)
         profile = sandbox_profile(root, cli, "/dev/tty")
         preflight = _preflight(root, audit_path, profile)
         result["preflight"] = preflight
@@ -800,9 +1161,40 @@ def _prepare(binary=PINNED_BINARY, *, timeout=MAX_LOGIN_SECONDS, authorization_c
             root, audit_path, cli, timeout=timeout,
             authorization_code_fd=0 if authorization_code_stdin else None,
             authorization_code_file=authorization_code_file,
+            retain_onboarding=retain_onboarding,
+            resume_onboarding=checkpoint is not None,
+            resume_phase=checkpoint["marker"].get("phase") if checkpoint is not None else None,
+            restart_visual_setup=restart_visual_setup,
         )
         result["observation"] = observation
+        log_link_removed = remove_native_log_link(root / "home")
+        result["nativeLogLinkRemoved"] = log_link_removed
+        if log_link_removed:
+            append_audit(audit_path, "known-native-log-link-removed", removed=True)
         if not observation["promptReady"]:
+            observed_state = observation.get("state") or {}
+            can_checkpoint = retain_onboarding and (
+                observed_state.get("authorizationCodeSubmitted") is True or checkpoint is not None
+            ) and may_retain_color_checkpoint(
+                observed_state,
+                source_phase=checkpoint["marker"].get("phase") if checkpoint is not None else None,
+            )
+            if can_checkpoint:
+                retained_phase = onboarding_checkpoint_phase(observed_state)
+                if (restart_visual_setup and checkpoint is not None and
+                        checkpoint["marker"].get("phase") == "after-color-scheme" and
+                        observed_state.get("colorSchemeContinued") is not True):
+                    retained_phase = "after-color-scheme"
+                marker.update({"valid": False, "readyPromptObserved": False,
+                               "phase": retained_phase or
+                               (checkpoint["marker"].get("phase") if checkpoint else "color-scheme"),
+                               "binarySHA256": PINNED_BINARY_SHA256})
+                _atomic_json(root / "owned-session.json", marker)
+                append_audit(audit_path, "login-color-checkpoint-retained",
+                             sessionId=session_id, state=_safe_state(observed_state),
+                             expiresAt=marker["expiresAt"])
+                result["status"] = "checkpoint"
+                return result
             invalidate_and_remove_private_home(root, marker)
             try:
                 cli.unlink()
@@ -813,6 +1205,8 @@ def _prepare(binary=PINNED_BINARY, *, timeout=MAX_LOGIN_SECONDS, authorization_c
             return result
         marker["valid"] = True
         marker["readyPromptObserved"] = True
+        marker["binarySHA256"] = PINNED_BINARY_SHA256
+        marker.pop("phase", None)
         _atomic_json(root / "owned-session.json", marker)
         append_audit(audit_path, "login-preparation-prompt-ready", sessionId=session_id,
                      state=observation["state"], expiresAt=marker["expiresAt"])
@@ -825,7 +1219,8 @@ def _prepare(binary=PINNED_BINARY, *, timeout=MAX_LOGIN_SECONDS, authorization_c
         except Exception:
             cleanup_failed = True
         try:
-            (root / "antigravity").unlink()
+            if checkpoint is None:
+                (root / "antigravity").unlink()
         except OSError:
             pass
         try:
@@ -842,10 +1237,17 @@ def _prepare(binary=PINNED_BINARY, *, timeout=MAX_LOGIN_SECONDS, authorization_c
 
 
 def prepare(binary=PINNED_BINARY, *, timeout=MAX_LOGIN_SECONDS, authorization_code_stdin=False,
-            authorization_code_file=None):
+            authorization_code_file=None, retain_onboarding=False, resume_login_root=None,
+            restart_visual_setup=False):
     """Validate and always clean a private authorization-code file path."""
     if authorization_code_stdin and authorization_code_file is not None:
         raise RuntimeError("choose one authorization-code input method")
+    if resume_login_root is not None and (authorization_code_stdin or authorization_code_file is not None):
+        raise RuntimeError("resume uses the retained private profile; do not provide another code")
+    if restart_visual_setup and resume_login_root is None:
+        raise RuntimeError("visual setup restart requires --resume-login-root")
+    if restart_visual_setup and (authorization_code_stdin or authorization_code_file is not None):
+        raise RuntimeError("visual setup restart cannot be combined with authorization-code input")
     validated_file = None
     try:
         if authorization_code_file is not None:
@@ -866,7 +1268,8 @@ def prepare(binary=PINNED_BINARY, *, timeout=MAX_LOGIN_SECONDS, authorization_co
                 raise
         return _prepare(
             binary, timeout=timeout, authorization_code_stdin=authorization_code_stdin,
-            authorization_code_file=validated_file,
+            authorization_code_file=validated_file, retain_onboarding=retain_onboarding,
+            resume_login_root=resume_login_root, restart_visual_setup=restart_visual_setup,
         )
     finally:
         remove_authorization_code_file(validated_file)
@@ -881,15 +1284,33 @@ def main(argv=None):
                             help="read one code from a TTY after the native code-entry prompt")
     code_input.add_argument("--authorization-code-file", type=Path,
                             help="read one private temporary code file only after the native prompt")
+    parser.add_argument("--retain-onboarding-profile", action="store_true",
+                        help="retain a private, invalid readiness checkpoint at the recognized color-scheme screen")
+    parser.add_argument("--resume-login-root", type=Path,
+                        help="resume a current color-scheme checkpoint in its private HOME")
+    parser.add_argument("--restart-visual-setup", action="store_true",
+                        help="allow one guarded color-scheme Enter when resuming an after-color-scheme checkpoint")
     parser.add_argument("--manual-oauth", action="store_true", help="exercise the documented SSH code flow using synthetic SSH environment metadata")
     args = parser.parse_args(argv)
     global MANUAL_OAUTH_MODE
     MANUAL_OAUTH_MODE = args.manual_oauth
     if args.timeout < 1 or args.timeout > MAX_LOGIN_SECONDS:
         parser.error(f"--timeout must be 1..{MAX_LOGIN_SECONDS} seconds")
+    if args.retain_onboarding_profile and not (
+            args.authorization_code_stdin or args.authorization_code_file or args.resume_login_root):
+        parser.error("--retain-onboarding-profile requires authorization-code input or --resume-login-root")
+    if args.resume_login_root is not None and (args.authorization_code_stdin or args.authorization_code_file):
+        parser.error("--resume-login-root cannot be combined with authorization-code input")
+    if args.restart_visual_setup and args.resume_login_root is None:
+        parser.error("--restart-visual-setup requires --resume-login-root")
+    if args.restart_visual_setup and (args.authorization_code_stdin or args.authorization_code_file):
+        parser.error("--restart-visual-setup cannot be combined with authorization-code input")
     result = prepare(args.binary, timeout=args.timeout,
                      authorization_code_stdin=args.authorization_code_stdin,
-                     authorization_code_file=args.authorization_code_file)
+                     authorization_code_file=args.authorization_code_file,
+                     retain_onboarding=args.retain_onboarding_profile,
+                     resume_login_root=args.resume_login_root,
+                     restart_visual_setup=args.restart_visual_setup)
     print(json.dumps({"status": result["status"], "root": result["root"],
                       "auditRoot": result["auditRoot"]}, sort_keys=True))
     return 0 if result["status"] == "prompt-ready" else 1

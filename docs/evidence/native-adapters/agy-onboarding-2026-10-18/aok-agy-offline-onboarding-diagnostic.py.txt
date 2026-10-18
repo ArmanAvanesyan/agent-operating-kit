@@ -1,0 +1,23 @@
+from pathlib import Path
+import importlib.util,json,shutil
+spec=importlib.util.spec_from_file_location('private_agy_diag',Path.cwd()/'scripts/native-loading/prepare_agy_login.py')
+m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+original_env=m.env_for
+original_guard=m.sandbox_profile
+def env(root):
+ e=original_env(root)
+ p=Path(root)/'home/.gemini/antigravity-cli/settings.json';p.parent.mkdir(mode=0o700,parents=True,exist_ok=True)
+ p.write_text(json.dumps({'modelProvider':'gemini'}));p.chmod(0o600)
+ e['GEMINI_API_KEY']='aok-offline-synthetic-not-a-credential'
+ return e
+def guard(*args):return original_guard(*args)+'(deny network*)'
+m.env_for=env;m.sandbox_profile=guard;m.may_press_enter=lambda state:False
+result=m.prepare(timeout=30)
+root=Path(result['root'])
+try:
+ marker=root/'owned-session.json'
+ if marker.exists():
+  value=json.loads(marker.read_text());value['valid']=False;value['kind']='aok-agy-offline-diagnostic/v1';marker.write_text(json.dumps(value))
+ print(json.dumps({'auditRoot':result['auditRoot'],'purpose':'offline onboarding diagnosis only','backendAuthentication':'not-verified','nativeLoading':'not-verified','syntheticCredential':True,'network':'denied','status':result['status']}))
+finally:
+ if root.exists():shutil.rmtree(root)

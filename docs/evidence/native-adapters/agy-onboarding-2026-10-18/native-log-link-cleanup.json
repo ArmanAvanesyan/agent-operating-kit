@@ -1,0 +1,11 @@
+{
+  "kind": "aok-agy-native-log-link-cleanup/v1",
+  "at": "2026-10-18T06:15:44.484575+00:00",
+  "relativePath": ".gemini/antigravity-cli/cli.log",
+  "type": "owned symlink",
+  "operation": "unlink exact entry through no-follow parent descriptor",
+  "targetRead": false,
+  "targetModified": false,
+  "credentialContentRead": false,
+  "nativeProcessStarted": false
+}

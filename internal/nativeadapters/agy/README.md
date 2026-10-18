@@ -147,3 +147,21 @@ a ready prompt, backend authentication, or `/agents` discovery. The private HOME
 was removed. The error's cause remains unresolved, so the native-loading gate
 stays open. Current helper fixes and tests do not retroactively establish native
 loading or runtime enforcement.
+
+
+### Post-code onboarding and manager follow-up — 2026-10-18
+
+The [onboarding investigation](../../../docs/agy-onboarding-verification.md)
+resolves the verifier's preview-text false positive and terminal-control gaps.
+The isolated native terms screen was submitted with optional sharing disabled.
+A synthetic-only provider configuration then established a local prompt and
+opened `/agents` safely, without selecting an agent or submitting model input.
+
+The [three-case evidence](../../../docs/evidence/native-adapters/agy-onboarding-2026-10-18/local-manager-three-case-settled.json)
+shows the same default-only list for AOK-rendered positive, absent and malformed
+project files. Minimal definitions, explicit `mainAgent: true` and flat-file
+layout diagnostics also failed to expose the custom fixture. These observations
+do not identify an individual field or layout as the cause and do not justify
+changing the adapter's rendering speculatively. The status stays `not-run`
+(no qualifying native-loading evidence); backend auth and runtime enforcement
+remain unverified. An authenticated account-mode comparison remains open.

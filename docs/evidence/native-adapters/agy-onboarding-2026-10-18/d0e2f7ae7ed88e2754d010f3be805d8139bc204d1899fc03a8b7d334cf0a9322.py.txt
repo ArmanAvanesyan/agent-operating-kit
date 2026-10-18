@@ -1,0 +1,43 @@
+from pathlib import Path
+import hashlib,json,re,subprocess
+repo=Path.cwd().resolve();base=repo/'docs/evidence/native-adapters/agy-onboarding-2026-10-18'
+verifier_data=Path(__file__).read_bytes();verifier_digest=hashlib.sha256(verifier_data).hexdigest()
+verifier_archive=base/(verifier_digest+'.py.txt');verifier_archive.write_bytes(verifier_data)
+verified=set();reports=0;observations=0;credentials=[]
+def check(path,digest):
+ path=Path(path);path=path if path.is_absolute() else repo/path
+ path.resolve().relative_to(repo)
+ assert hashlib.sha256(path.read_bytes()).hexdigest()==digest, str(path)
+ verified.add(str(path.relative_to(repo)))
+for p in sorted(base.glob('*.json')):
+ if p.name in ('source-validation.json','validation.json'):continue
+ r=json.loads(p.read_text());reports+=1
+ if r.get('kind')=='aok-agy-onboarding-observation/v1':
+  observations+=1
+  assert any(e['event']=='native-login-cleanup' and e.get('cleaned') is True for e in r['processAudit']),p.name
+  for s in r['sources'].values():
+   if 'archive' in s:check(s['archive'],s['sha256'])
+   else:
+    assert re.fullmatch('[0-9a-f]{40}',s['gitRevision'])
+    assert s['path'].startswith('scripts/native-loading/') and '..' not in Path(s['path']).parts
+    data=subprocess.check_output(['git','show',s['gitRevision']+':'+s['path']])
+    assert hashlib.sha256(data).hexdigest()==s['sha256'],p.name
+  driver=r.get('driver')
+  if isinstance(driver,dict):check(driver['archive'],driver['sha256'])
+  elif isinstance(driver,str):check(driver,r['driverSHA256'])
+ if r.get('kind')=='aok-agy-local-manager/v1':
+  check(base/(r['sourceSHA256']+'.py.txt'),r['sourceSHA256'])
+  assert all(c['cleanupVerified'] and c['privateRootRemoved'] for c in r['cases'].values()),p.name
+  if 'renderedFixtureUTF8' in r:assert hashlib.sha256(r['renderedFixtureUTF8'].encode()).hexdigest()==r['fixtureSHA256']
+for p in base.glob('*.py.txt'):
+ if re.fullmatch('[0-9a-f]{64}',p.name[:-7]):check(p,p.name[:-7])
+for p in base.iterdir():
+ if p.is_file() and re.search(rb'4/0AX[A-Za-z0-9_-]{12}|ya29\.[A-Za-z0-9_-]{12}|1//[A-Za-z0-9_-]{12}',p.read_bytes()):credentials.append(p.name)
+assert not credentials, 'credential pattern detected; values withheld'
+final=json.loads((base/'local-manager-final.json').read_text())
+assert hashlib.sha256(Path('/private/tmp/aok-agy-onboarding-final').read_bytes()).hexdigest()==final['aokSHA256']
+original=hashlib.sha256(Path('/Users/armanavanesyan/.local/bin/agy').read_bytes()).hexdigest()
+assert original=='2a6bd844ae3431d35203af44f31bdd5e26f5ffe287d47c62a46862bf44099fc2'
+result={'kind':'aok-agy-evidence-source-validation/v1','status':'passed','jsonReportsChecked':reports,'nativeObservationsWithCleanup':observations,'archiveFilesVerified':len(verified),'credentialPatternScan':'passed; no values retained','originalInstalledAGYSHA256':original,'originalInstalledAGYUnchanged':True,'finalAOKBinaryHashVerified':True,'verifierSHA256':verifier_digest,'verifierArchive':str(verifier_archive.relative_to(repo))}
+(base/'source-validation.json').write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps(result))

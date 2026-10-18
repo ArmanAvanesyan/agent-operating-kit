@@ -105,6 +105,24 @@ class NativeTerminalTests(unittest.TestCase):
             with self.subTest(raw=raw):
                 self.assertEqual(terminal.render_screen(b"Ready" + raw), "Ready")
 
+    def test_exact_kitty_pop_default_is_a_noop_but_other_values_fail_closed(self):
+        baseline = terminal.Screen(width=24, height=4).feed(b"Ready\x1b[2;3H!")
+        popped = terminal.Screen(width=24, height=4).feed(b"Ready\x1b[<1u\x1b[2;3H!")
+        self.assertEqual(popped.render(), baseline.render())
+        self.assertEqual((popped.row, popped.col), (baseline.row, baseline.col))
+        for raw in (b"\x1b[<2u", b"\x1b[<1;1u", b"\x1b[?1u"):
+            with self.subTest(raw=raw), self.assertRaises(terminal.TerminalAmbiguity):
+                terminal.render_screen(b"Ready" + raw)
+
+    def test_exact_zero_cursor_style_is_ignored_without_ignoring_other_q_controls(self):
+        baseline = terminal.Screen(width=24, height=4).feed(b"Ready\x1b[2;3H!")
+        styled = terminal.Screen(width=24, height=4).feed(b"Ready\x1b[0 q\x1b[2;3H!")
+        self.assertEqual(styled.render(), baseline.render())
+        self.assertEqual((styled.row, styled.col), (baseline.row, baseline.col))
+        for raw in (b"\x1b[8 q", b"\x1b[0;q", b"\x1b[0\"q"):
+            with self.subTest(raw=raw), self.assertRaises(terminal.TerminalAmbiguity):
+                terminal.render_screen(b"Ready" + raw)
+
     def test_ambiguity_metadata_retains_numeric_control_only(self):
         for raw, expected in ((b"\x1b[?9W", "?9W"), (b"\x1b[99999999H", None)):
             with self.subTest(raw=raw):
@@ -117,6 +135,55 @@ class NativeTerminalTests(unittest.TestCase):
                     self.assertNotIn("text", result)
                 else:
                     self.fail("expected unsupported control")
+
+    def test_ambiguity_metadata_is_bounded_ascii_control_metadata_only(self):
+        try:
+            terminal.render_screen(b"\x1b[?12;34W")
+        except terminal.TerminalAmbiguity as error:
+            result = terminal.ambiguity_site(error)
+        else:
+            self.fail("expected unsupported control")
+        self.assertEqual(result["csiParameterCodepoints"], [63, 49, 50, 59, 51, 52])
+        self.assertEqual(result["csiFinalCodepoint"], ord("W"))
+        self.assertEqual(result["csiNumericValues"], [12, 34])
+
+        # A malformed/non-CSI local is not copied even if a future caller
+        # raises while a frame happens to use the familiar local names.
+        def _numbers():
+            params = "private-token"
+            final = "H"
+            raise terminal.TerminalAmbiguity()
+
+        try:
+            _numbers()
+        except terminal.TerminalAmbiguity as error:
+            invalid = terminal.ambiguity_site(error)
+        else:
+            self.fail("expected malformed control")
+        self.assertNotIn("csiParameterCodepoints", invalid)
+        self.assertNotIn("numericCSIControl", invalid)
+        self.assertNotIn("private-token", repr(invalid))
+        self.assertNotIn("params", invalid)
+        self.assertNotIn("text", invalid)
+
+    def test_ambiguity_metadata_ignores_untrusted_nonterminal_locals(self):
+        private_value = "account-secret.example/token-value"
+
+        def unrelated_failure():
+            params = private_value
+            final = private_value
+            raise terminal.TerminalAmbiguity()
+
+        try:
+            unrelated_failure()
+        except terminal.TerminalAmbiguity as error:
+            metadata = terminal.ambiguity_site(error)
+        else:
+            self.fail("expected terminal ambiguity")
+        encoded = repr(metadata)
+        self.assertNotIn(private_value, encoded)
+        self.assertNotIn("params", metadata)
+        self.assertNotIn("final", metadata)
 
     def test_empty_sgr_and_terminal_reset_restore_default_visibility(self):
         self.assertEqual(terminal.render_screen(b"\x1b[30mhidden\x1b[mVisible"), "      Visible")

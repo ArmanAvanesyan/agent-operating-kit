@@ -1,0 +1,411 @@
+{
+  "kind": "aok-agy-onboarding-observation/v1",
+  "purpose": "offline-synthetic-diagnostic",
+  "nativeLoading": "not-verified",
+  "backendAuthentication": "not-independently-verified",
+  "codeSubmissionCount": 0,
+  "observation": {
+    "at": "2026-10-18T05:52:42.503792+00:00",
+    "durationSeconds": 2.89,
+    "enterSent": false,
+    "event": "native-login-observed",
+    "nativeExecAttempted": true,
+    "pgid": 35741,
+    "pid": 35741,
+    "runnerStarted": true,
+    "state": {
+      "authBarrierObserved": false,
+      "authScreenFixedRows": [
+        {
+          "fixedWords": [
+            "failed",
+            "to",
+            "not"
+          ],
+          "otherWordCount": 6,
+          "row": 0
+        }
+      ],
+      "authorizationCodePromptObserved": false,
+      "bytesObserved": 72,
+      "codeFieldDiagnostics": [],
+      "colorSchemeContinueObserved": false,
+      "colorSchemeScreenObserved": false,
+      "enterHintObserved": false,
+      "errorCategories": [
+        "sandbox",
+        "generic-error"
+      ],
+      "errorObserved": true,
+      "errorRowDiagnostics": [
+        {
+          "fixedWords": [
+            "failed",
+            "to",
+            "not"
+          ],
+          "otherWordCount": 6,
+          "row": 0
+        }
+      ],
+      "googleSignInOptionObserved": false,
+      "localPromptObserved": false,
+      "loginRowDiagnostics": [],
+      "modelSelectionLabelObserved": false,
+      "nativeLoginChoiceObserved": false,
+      "readyHintObserved": false,
+      "startupDiagnostics": {
+        "fixedWordsObserved": [
+          "failed",
+          "operation",
+          "permitted",
+          "bind",
+          "not"
+        ],
+        "rawTextRetained": false,
+        "terminalQueryLabels": []
+      },
+      "terminalAmbiguityObserved": false,
+      "terminalAmbiguitySite": null,
+      "welcomeLabelObserved": false,
+      "workspaceLabelObserved": false
+    }
+  },
+  "sources": {
+    "native_startup_diagnostics.py": {
+      "gitRevision": "a7cb3ee14c2a512f28db95621e2ec4365a177c81",
+      "path": "scripts/native-loading/native_startup_diagnostics.py",
+      "sha256": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f"
+    },
+    "native_terminal.py": {
+      "gitRevision": "a7cb3ee14c2a512f28db95621e2ec4365a177c81",
+      "path": "scripts/native-loading/native_terminal.py",
+      "sha256": "62c2473e4139d5cc9027ba5a34d7cf0a044f4e34ddb3e40f3b7e331419107639"
+    },
+    "prepare_agy_login.py": {
+      "archive": "docs/evidence/native-adapters/agy-onboarding-2026-10-18/1fc780bffad19598d455bb9f1aecc40e69b26bc4915ac71658b925b143f4fabf.py.txt",
+      "sha256": "1fc780bffad19598d455bb9f1aecc40e69b26bc4915ac71658b925b143f4fabf"
+    },
+    "probe-agy-interactive-manager.py": {
+      "gitRevision": "a7cb3ee14c2a512f28db95621e2ec4365a177c81",
+      "path": "scripts/native-loading/probe-agy-interactive-manager.py",
+      "sha256": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc"
+    },
+    "probe-agy-linux-container.py": {
+      "gitRevision": "a7cb3ee14c2a512f28db95621e2ec4365a177c81",
+      "path": "scripts/native-loading/probe-agy-linux-container.py",
+      "sha256": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014"
+    },
+    "probe-agy-macos-interactive-manager.py": {
+      "gitRevision": "a7cb3ee14c2a512f28db95621e2ec4365a177c81",
+      "path": "scripts/native-loading/probe-agy-macos-interactive-manager.py",
+      "sha256": "88733f17ff7e864e9d863c1b4c4143265a95f37bc3827c8c9254c4c7d4644684"
+    },
+    "probe_cursor_fresh_cli.py": {
+      "gitRevision": "a7cb3ee14c2a512f28db95621e2ec4365a177c81",
+      "path": "scripts/native-loading/probe_cursor_fresh_cli.py",
+      "sha256": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+    }
+  },
+  "processAudit": [
+    {
+      "at": "2026-10-18T05:52:38.336111+00:00",
+      "authenticationMode": "local",
+      "binarySHA256": "fa85a90abded17bcd1b185bbd1d6b1b82065f093ad4700d4dbacd3be2433294c",
+      "event": "probe-prepared",
+      "rootCreatedAt": "2026-10-18T05:52:38.330688Z",
+      "rootExpiresAt": "2026-10-18T06:07:38.330688Z",
+      "sessionId": "b3a49346-0c21-4dd3-92d8-79748b82fbfd",
+      "sourceHashes": {
+        "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+        "native_terminal.py": "62c2473e4139d5cc9027ba5a34d7cf0a044f4e34ddb3e40f3b7e331419107639",
+        "prepare_agy_login.py": "1fc780bffad19598d455bb9f1aecc40e69b26bc4915ac71658b925b143f4fabf",
+        "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+        "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+        "probe-agy-macos-interactive-manager.py": "88733f17ff7e864e9d863c1b4c4143265a95f37bc3827c8c9254c4c7d4644684",
+        "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+      },
+      "sourceSHA256": "1fc780bffad19598d455bb9f1aecc40e69b26bc4915ac71658b925b143f4fabf",
+      "terminalGeometry": {
+        "columns": 160,
+        "rows": 80
+      }
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 35736,
+      "pid": 35736,
+      "purpose": "agy-login-signal-preflight"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 35736,
+      "pgid": 35736,
+      "pid": 35736,
+      "purpose": "agy-login-signal-preflight"
+    },
+    {
+      "at": "2026-10-18T05:52:39.563345+00:00",
+      "event": "preflight-owned",
+      "pgid": 35736,
+      "pid": 35736
+    },
+    {
+      "at": "2026-10-18T05:52:39.612023+00:00",
+      "directChildFallback": false,
+      "event": "owned-group-cleanup",
+      "groupAbsentVerified": true,
+      "groupCleanupFailed": false,
+      "pgid": 35736,
+      "pid": 35736,
+      "priorSignalErrors": [],
+      "purpose": "agy-login-signal-preflight"
+    },
+    {
+      "at": "2026-10-18T05:52:39.612448+00:00",
+      "event": "preflight-clean",
+      "pgid": 35736,
+      "pid": 35736,
+      "returnCode": -15
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 35741,
+      "pid": 35741,
+      "purpose": "agy-private-login"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 35741,
+      "pgid": 35741,
+      "pid": 35741,
+      "purpose": "agy-private-login"
+    },
+    {
+      "at": "2026-10-18T05:52:39.624466+00:00",
+      "command": "antigravity",
+      "event": "native-start-gated",
+      "pgid": 35741,
+      "pid": 35741,
+      "timeoutSeconds": 30
+    },
+    {
+      "at": "2026-10-18T05:52:42.503027+00:00",
+      "event": "terminal-state-change",
+      "state": {
+        "authBarrierObserved": false,
+        "authScreenFixedRows": [
+          {
+            "fixedWords": [
+              "failed",
+              "to",
+              "not"
+            ],
+            "otherWordCount": 6,
+            "row": 0
+          }
+        ],
+        "authorizationCodePromptObserved": false,
+        "bytesObserved": 72,
+        "codeFieldDiagnostics": [],
+        "colorSchemeContinueObserved": false,
+        "colorSchemeScreenObserved": false,
+        "enterHintObserved": false,
+        "errorCategories": [
+          "sandbox",
+          "generic-error"
+        ],
+        "errorObserved": true,
+        "errorRowDiagnostics": [
+          {
+            "fixedWords": [
+              "failed",
+              "to",
+              "not"
+            ],
+            "otherWordCount": 6,
+            "row": 0
+          }
+        ],
+        "googleSignInOptionObserved": false,
+        "localPromptObserved": false,
+        "loginRowDiagnostics": [],
+        "modelSelectionLabelObserved": false,
+        "nativeLoginChoiceObserved": false,
+        "readyHintObserved": false,
+        "startupDiagnostics": {
+          "fixedWordsObserved": [
+            "failed",
+            "operation",
+            "permitted",
+            "bind",
+            "not"
+          ],
+          "rawTextRetained": false,
+          "terminalQueryLabels": []
+        },
+        "terminalAmbiguityObserved": false,
+        "terminalAmbiguitySite": null,
+        "welcomeLabelObserved": false,
+        "workspaceLabelObserved": false
+      }
+    },
+    {
+      "at": "2026-10-18T05:52:42.503792+00:00",
+      "durationSeconds": 2.89,
+      "enterSent": false,
+      "event": "native-login-observed",
+      "nativeExecAttempted": true,
+      "pgid": 35741,
+      "pid": 35741,
+      "runnerStarted": true,
+      "state": {
+        "authBarrierObserved": false,
+        "authScreenFixedRows": [
+          {
+            "fixedWords": [
+              "failed",
+              "to",
+              "not"
+            ],
+            "otherWordCount": 6,
+            "row": 0
+          }
+        ],
+        "authorizationCodePromptObserved": false,
+        "bytesObserved": 72,
+        "codeFieldDiagnostics": [],
+        "colorSchemeContinueObserved": false,
+        "colorSchemeScreenObserved": false,
+        "enterHintObserved": false,
+        "errorCategories": [
+          "sandbox",
+          "generic-error"
+        ],
+        "errorObserved": true,
+        "errorRowDiagnostics": [
+          {
+            "fixedWords": [
+              "failed",
+              "to",
+              "not"
+            ],
+            "otherWordCount": 6,
+            "row": 0
+          }
+        ],
+        "googleSignInOptionObserved": false,
+        "localPromptObserved": false,
+        "loginRowDiagnostics": [],
+        "modelSelectionLabelObserved": false,
+        "nativeLoginChoiceObserved": false,
+        "readyHintObserved": false,
+        "startupDiagnostics": {
+          "fixedWordsObserved": [
+            "failed",
+            "operation",
+            "permitted",
+            "bind",
+            "not"
+          ],
+          "rawTextRetained": false,
+          "terminalQueryLabels": []
+        },
+        "terminalAmbiguityObserved": false,
+        "terminalAmbiguitySite": null,
+        "welcomeLabelObserved": false,
+        "workspaceLabelObserved": false
+      }
+    },
+    {
+      "at": "2026-10-18T05:52:42.544541+00:00",
+      "directChildFallback": false,
+      "event": "owned-group-cleanup",
+      "groupAbsentVerified": true,
+      "groupCleanupFailed": false,
+      "pgid": 35741,
+      "pid": 35741,
+      "priorSignalErrors": [
+        "ProcessLookupError"
+      ],
+      "purpose": "agy-private-login"
+    },
+    {
+      "at": "2026-10-18T05:52:42.544959+00:00",
+      "cleaned": true,
+      "closeResult": {
+        "masterClosed": true,
+        "slaveClosed": true
+      },
+      "event": "native-login-cleanup",
+      "pgid": 35741,
+      "pid": 35741
+    },
+    {
+      "at": "2026-10-18T05:52:42.560834+00:00",
+      "event": "login-preparation-failed",
+      "reason": "ready-prompt-not-observed",
+      "sessionId": "b3a49346-0c21-4dd3-92d8-79748b82fbfd",
+      "state": {
+        "authBarrierObserved": false,
+        "authScreenFixedRows": [
+          {
+            "fixedWords": [
+              "failed",
+              "to",
+              "not"
+            ],
+            "otherWordCount": 6,
+            "row": 0
+          }
+        ],
+        "authorizationCodePromptObserved": false,
+        "bytesObserved": 72,
+        "codeFieldDiagnostics": [],
+        "colorSchemeContinueObserved": false,
+        "colorSchemeScreenObserved": false,
+        "enterHintObserved": false,
+        "errorCategories": [
+          "sandbox",
+          "generic-error"
+        ],
+        "errorObserved": true,
+        "errorRowDiagnostics": [
+          {
+            "fixedWords": [
+              "failed",
+              "to",
+              "not"
+            ],
+            "otherWordCount": 6,
+            "row": 0
+          }
+        ],
+        "googleSignInOptionObserved": false,
+        "localPromptObserved": false,
+        "loginRowDiagnostics": [],
+        "modelSelectionLabelObserved": false,
+        "nativeLoginChoiceObserved": false,
+        "readyHintObserved": false,
+        "startupDiagnostics": {
+          "fixedWordsObserved": [
+            "failed",
+            "operation",
+            "permitted",
+            "bind",
+            "not"
+          ],
+          "rawTextRetained": false,
+          "terminalQueryLabels": []
+        },
+        "terminalAmbiguityObserved": false,
+        "terminalAmbiguitySite": null,
+        "welcomeLabelObserved": false,
+        "workspaceLabelObserved": false
+      }
+    }
+  ],
+  "driver": "docs/evidence/native-adapters/agy-onboarding-2026-10-18/aok-agy-offline-onboarding-diagnostic.py.txt",
+  "driverSHA256": "1cae756f703d2d791213c811f9b565d22b5918253fb4c4f82e527f0b55ff907e",
+  "overrides": "synthetic noncredential provider; network denied; no login input"
+}

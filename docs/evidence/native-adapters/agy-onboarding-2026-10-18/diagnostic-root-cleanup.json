@@ -1,0 +1,16 @@
+{
+  "kind": "aok-agy-diagnostic-cleanup/v1",
+  "credentialContentsRead": false,
+  "roots": [
+    {
+      "root": "/private/tmp/aok-agy-login-5g9h_oqe",
+      "privateHomeAlreadyAbsent": true,
+      "rootRemoved": true
+    },
+    {
+      "root": "/private/tmp/aok-agy-login-2yemyt4m",
+      "privateHomeAlreadyAbsent": true,
+      "rootRemoved": true
+    }
+  ]
+}

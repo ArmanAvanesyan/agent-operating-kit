@@ -1,0 +1,23 @@
+from pathlib import Path
+import importlib.util,json,re
+spec=importlib.util.spec_from_file_location('private_agy_preview_diag',Path.cwd()/'scripts/native-loading/prepare_agy_login.py')
+m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+original=m.state_from_bytes
+seen=set()
+def state(data):
+ s=original(data)
+ if s.get('colorSchemeScreenObserved') and not s.get('terminalAmbiguityObserved'):
+  text=m.AGY.terminal_text(data,width=m.LOGIN_WIDTH,height=m.LOGIN_HEIGHT)
+  for row in text.splitlines():
+   words=re.findall(r'[A-Za-z]+',row)
+   allowed=all(ch.isascii() and ch.isalpha() or ch.isspace() or ch in ':✗⚠│.!\ufe0f' for ch in row)
+   if len(words)==3 and all(len(word)<=24 for word in words) and allowed and any(word.lower()=='error' for word in words) and any(word.lower()=='failed' for word in words):
+    label=' '.join(words)
+    if {word.lower() for word in words} == {'error','compilation','failed'}:print(json.dumps({'publicKnownErrorLayout':row}),flush=True)
+    if label not in seen:print(json.dumps({'publicPreviewErrorWords':label}),flush=True);seen.add(label)
+   if len(words)==3 and all(len(word)<=24 for word in words) and sum(word.lower()=='warning' for word in words)==2:
+    print(json.dumps({'publicWarningExampleWords':' '.join(words),'punctuationCodepoints':sorted(set(ord(ch) for ch in row if not ch.isalnum() and not ch.isspace()))}),flush=True)
+ return s
+m.state_from_bytes=state
+r=m.prepare(timeout=15,retain_onboarding=True,resume_login_root=Path('/private/tmp/aok-agy-login-5g9h_oqe'))
+print(json.dumps({'status':r['status'],'auditRoot':r['auditRoot'],'purpose':'only three short alphabetic preview-error words; no URL/code/account output'}))

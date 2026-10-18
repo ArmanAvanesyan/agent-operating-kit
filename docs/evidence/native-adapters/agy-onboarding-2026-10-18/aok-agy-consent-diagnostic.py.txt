@@ -1,0 +1,22 @@
+from pathlib import Path
+import importlib.util,json,re
+spec=importlib.util.spec_from_file_location('private_agy_consent_diag',Path.cwd()/'scripts/native-loading/prepare_agy_login.py')
+m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+original=m.state_from_bytes;seen=False
+def state(data):
+ global seen
+ s=original(data)
+ if not seen and not s.get('terminalAmbiguityObserved') and not s.get('authBarrierObserved'):
+  text=m.AGY.terminal_text(data,width=m.LOGIN_WIDTH,height=m.LOGIN_HEIGHT)
+  if 'terms' in text.lower() and 'agree' in text.lower() and not s.get('colorSchemeScreenObserved'):
+   safe=[]
+   for row in text.splitlines()[7:27]:
+    row=re.sub(r'https?://\S+','[link]',row)
+    row=re.sub(r'\b[^\s@]+@[^\s@]+\.[^\s@]+','[account]',row)
+    row=re.sub(r'4/0[A-Za-z0-9_-]+|ya29\.[A-Za-z0-9_-]+','[redacted]',row)
+    safe.append(row)
+   print(json.dumps({'publicConsentScreen':safe}),flush=True);seen=True
+ return s
+m.state_from_bytes=state
+r=m.prepare(timeout=10,retain_onboarding=True,resume_login_root=Path('/private/tmp/aok-agy-login-5g9h_oqe'))
+print(json.dumps({'status':r['status'],'auditRoot':r['auditRoot'],'purpose':'redacted native consent text only; no consent action'}))

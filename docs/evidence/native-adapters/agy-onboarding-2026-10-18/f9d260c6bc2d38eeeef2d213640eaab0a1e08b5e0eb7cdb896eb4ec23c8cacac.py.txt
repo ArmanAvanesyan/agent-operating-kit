@@ -1,0 +1,540 @@
+"""Small bounded ANSI terminal screen renderer for native startup probes.
+
+This module is deliberately inert: it never answers terminal queries, evaluates
+control strings, or performs I/O. Callers concatenate their captured wire bytes
+and pass the bounded result to :func:`render_screen`.
+"""
+import unicodedata
+import re
+
+
+MAX_BYTES = 1024 * 1024
+MAX_WIDTH = 240
+MAX_HEIGHT = 100
+MAX_CSI_BYTES = 64
+
+
+class TerminalAmbiguity(ValueError):
+    """The captured stream contains an unsupported terminal control."""
+
+    def __init__(self):
+        super().__init__("terminal stream contains unsupported control operation")
+
+
+class Screen:
+    def __init__(self, width=120, height=40):
+        if (not isinstance(width, int) or isinstance(width, bool) or
+                not isinstance(height, int) or isinstance(height, bool) or
+                width < 1 or width > MAX_WIDTH or height < 1 or height > MAX_HEIGHT):
+            raise ValueError("terminal dimensions exceed renderer limits")
+        self.width = width
+        self.height = height
+        self.cells = self._blank()
+        self.row = 0
+        self.col = 0
+        self.wrap_pending = False
+        self.saved = (0, 0)
+        self._main_state = None
+        self.scroll_top = 0
+        self.scroll_bottom = height - 1
+        self.foreground = (255, 255, 255)
+        self.background = (0, 0, 0)
+        self.reverse_video = False
+        self.synchronized_output = False
+
+    def _blank(self):
+        return [[" "] * self.width for _ in range(self.height)]
+
+    def feed(self, data):
+        if not isinstance(data, bytes):
+            raise TypeError("terminal input must be bytes")
+        if len(data) > MAX_BYTES:
+            raise ValueError("terminal input exceeds renderer limit")
+        text = data.decode("utf-8", "replace")
+        i = 0
+        while i < len(text):
+            char = text[i]
+            code = ord(char)
+            if char != "\x1b":
+                self._character(char)
+                i += 1
+                continue
+            if i + 1 >= len(text):
+                raise TerminalAmbiguity()
+            kind = text[i + 1]
+            if kind == "[":
+                params, final, after = self._csi(text, i + 2)
+                if final is not None:
+                    self._handle_csi(params, final)
+                i = after
+            elif kind == "]":
+                i = self._skip_osc(text, i + 2)
+            elif kind in ("P", "_", "^", "X"):
+                i = self._skip_st(text, i + 2)
+            elif kind == "7":
+                self.saved = (self.row, self.col)
+                i += 2
+            elif kind == "8":
+                self.row, self.col = self.saved
+                i += 2
+            elif kind == "c":
+                self.cells = self._blank()
+                self.row = self.col = 0
+                self.wrap_pending = False
+                self.saved = (0, 0)
+                self._main_state = None
+                self.scroll_top, self.scroll_bottom = 0, self.height - 1
+                self.foreground, self.background, self.reverse_video = (
+                    (255, 255, 255), (0, 0, 0), False)
+                self.synchronized_output = False
+                self.foreground, self.background, self.reverse_video = (
+                    (255, 255, 255), (0, 0, 0), False)
+                i += 2
+            elif kind in ("(", ")", "*", "+", "%"):
+                if i + 2 >= len(text):
+                    raise TerminalAmbiguity()
+                i += 3
+            elif kind in ("D", "E"):
+                if kind == "E":
+                    self.col = 0
+                self._line_feed()
+                i += 2
+            elif kind == "M":
+                self._reverse_index()
+                i += 2
+            elif kind in ("=", ">"):
+                i += 2
+            else:
+                raise TerminalAmbiguity()
+        return self
+
+    @staticmethod
+    def _csi(text, start):
+        end_limit = min(len(text), start + MAX_CSI_BYTES)
+        j = start
+        while j < end_limit:
+            code = ord(text[j])
+            if 0x40 <= code <= 0x7E:
+                return text[start:j], text[j], j + 1
+            j += 1
+        # Oversized or incomplete controls could leave a stale screen behind.
+        while j < len(text) and not (0x40 <= ord(text[j]) <= 0x7E):
+            j += 1
+        raise TerminalAmbiguity()
+
+    @staticmethod
+    def _skip_osc(text, start):
+        i = start
+        while i < len(text):
+            if text[i] == "\x07":
+                Screen._validate_osc(text[start:i])
+                return i + 1
+            if text[i] == "\x1b" and i + 1 < len(text) and text[i + 1] == "\\":
+                Screen._validate_osc(text[start:i])
+                return i + 2
+            i += 1
+        raise TerminalAmbiguity()
+
+    @staticmethod
+    def _validate_osc(payload):
+        command, _, argument = payload.partition(";")
+        is_default_color_query = command in {"10", "11"} and argument == "?"
+        if command in {"4", "10", "11", "104", "110", "111"} and not is_default_color_query:
+            # Palette and default-color changes invalidate our deterministic
+            # color comparisons.
+            raise TerminalAmbiguity()
+
+    @staticmethod
+    def _skip_st(text, start):
+        i = start
+        while i + 1 < len(text):
+            if text[i] == "\x1b" and text[i + 1] == "\\":
+                return i + 2
+            i += 1
+        raise TerminalAmbiguity()
+
+    @staticmethod
+    def _numbers(params):
+        # Accept only the parameter grammar needed by the modeled controls.
+        # Intermediates and malformed punctuation can change CSI semantics.
+        private = params[0] if params.startswith(("?", ">", "!")) else ""
+        if private:
+            params = params[1:]
+        if any(ch != ";" and not ("0" <= ch <= "9") for ch in params):
+            raise TerminalAmbiguity()
+        values = []
+        for part in params.split(";") if params else []:
+            if len(part) > 6:
+                raise TerminalAmbiguity()
+            values.append(int(part) if part else 0)
+        return private, values
+
+    @staticmethod
+    def _parameter(values, index, default=1, zero_is_default=True):
+        value = values[index] if index < len(values) else 0
+        return default if value == 0 and zero_is_default else value
+
+    def _clamp(self):
+        self.row = min(max(self.row, 0), self.height - 1)
+        self.col = min(max(self.col, 0), self.width - 1)
+        self.wrap_pending = False
+
+    def _line_feed(self):
+        if self.scroll_top <= self.row <= self.scroll_bottom and self.row == self.scroll_bottom:
+            self._scroll_up(1)
+        elif self.row < self.height - 1:
+            self.row += 1
+
+    def _scroll_up(self, amount):
+        amount = min(max(amount, 1), self.scroll_bottom - self.scroll_top + 1)
+        for _ in range(amount):
+            self.cells.pop(self.scroll_top)
+            self.cells.insert(self.scroll_bottom, [" "] * self.width)
+
+    def _scroll_down(self, amount):
+        amount = min(max(amount, 1), self.scroll_bottom - self.scroll_top + 1)
+        for _ in range(amount):
+            self.cells.pop(self.scroll_bottom)
+            self.cells.insert(self.scroll_top, [" "] * self.width)
+
+    def _reverse_index(self):
+        if self.scroll_top <= self.row <= self.scroll_bottom and self.row == self.scroll_top:
+            self._scroll_down(1)
+        elif self.row > 0:
+            self.row -= 1
+
+    def _clear_line(self, mode):
+        if mode == 0:
+            start, end = self.col, self.width
+        elif mode == 1:
+            start, end = 0, self.col + 1
+        elif mode == 2:
+            start, end = 0, self.width
+        else:
+            raise TerminalAmbiguity()
+        self.cells[self.row][start:end] = [" "] * (end - start)
+
+    def _clear_display(self, mode):
+        if mode == 3:
+            return  # Scrollback is outside this bounded visible screen.
+        if mode == 2:
+            self.cells = self._blank()
+        elif mode == 0:
+            self._clear_line(0)
+            for row in range(self.row + 1, self.height):
+                self.cells[row] = [" "] * self.width
+        elif mode == 1:
+            for row in range(self.row):
+                self.cells[row] = [" "] * self.width
+            self._clear_line(1)
+        else:
+            raise TerminalAmbiguity()
+
+    def _handle_csi(self, params, final):
+        # SGR affects visibility even though it does not move cells. Concealed
+        # text could otherwise look like a clean prompt after styling is
+        # discarded, so reject conceal and any SGR syntax we do not model.
+        if final == "m" and params in (">4;2", ">4"):
+            # XTerm modifyOtherKeys controls affect keyboard encoding only.
+            return
+        if final == "m":
+            self._handle_sgr(params)
+            return
+        # Check exact query encodings before parameter parsing, because a few
+        # standard requests use intermediate bytes such as '$'.
+        if (params, final) in {
+            ("", "c"), ("0", "c"), (">", "c"), (">0", "c"),
+            ("6", "n"), (">", "q"), ("?2026$", "p"), ("?1004$", "p"), ("?2027$", "p"), ("?", "u"),
+        }:
+            return
+        if (params, final) in {("?5", "W"), (">1", "u"), ("<", "u"), ("<1", "u")}:
+            # Default eight-column tabs and Kitty key disambiguation only.
+            return
+        private, values = self._numbers(params)
+        if private == "?" and final in ("h", "l"):
+            if not values or any(value not in (25, 1004, 1049, 2004, 2026, 2031) for value in values):
+                raise TerminalAmbiguity()
+            if 1049 in values:
+                if final == "h" and self._main_state is None:
+                    self._main_state = (self.cells, self.row, self.col, self.saved, self.wrap_pending)
+                    self.cells = self._blank()
+                    self.row = self.col = 0
+                    self.wrap_pending = False
+                    self.saved = (0, 0)
+                elif final == "l" and self._main_state is not None:
+                    self.cells, self.row, self.col, self.saved, self.wrap_pending = self._main_state
+                    self._main_state = None
+            if 2026 in values:
+                self.synchronized_output = final == "h"
+            return
+        # Ignore only exact, known terminal queries observed/handled by the
+        # native probes. Other controls with query-like finals may mutate the
+        # screen (for example CSI ! p / DECSTR).
+        if private:
+            raise TerminalAmbiguity()
+        if final in ("H", "f", "r") and len(values) > 2:
+            raise TerminalAmbiguity()
+        if final in ("s", "u") and values:
+            raise TerminalAmbiguity()
+        if final not in ("H", "f", "r", "s", "u") and len(values) > 1:
+            raise TerminalAmbiguity()
+        amount = self._parameter(values, 0)
+        if final == "A":
+            self.row -= amount
+        elif final == "B":
+            self.row += amount
+        elif final == "C":
+            self.col += amount
+        elif final == "D":
+            self.col -= amount
+        elif final == "E":
+            self.row += amount
+            self.col = 0
+        elif final == "F":
+            self.row -= amount
+            self.col = 0
+        elif final == "G":
+            self.col = self._parameter(values, 0) - 1
+        elif final == "d":
+            self.row = self._parameter(values, 0) - 1
+        elif final in ("H", "f"):
+            self.row = self._parameter(values, 0) - 1
+            self.col = self._parameter(values, 1) - 1
+        elif final == "J":
+            self._clear_display(values[0] if values else 0)
+        elif final == "K":
+            self._clear_line(values[0] if values else 0)
+        elif final == "@":
+            amount = min(amount, self.width - self.col)
+            line = self.cells[self.row]
+            line[self.col + amount:] = line[self.col:self.width - amount]
+            line[self.col:self.col + amount] = [" "] * amount
+        elif final == "P":
+            amount = min(amount, self.width - self.col)
+            line = self.cells[self.row]
+            line[self.col:self.width - amount] = line[self.col + amount:]
+            line[self.width - amount:] = [" "] * amount
+        elif final == "X":
+            amount = min(amount, self.width - self.col)
+            self.cells[self.row][self.col:self.col + amount] = [" "] * amount
+        elif final == "L":
+            if self.scroll_top <= self.row <= self.scroll_bottom:
+                amount = min(amount, self.scroll_bottom - self.row + 1)
+                for _ in range(amount):
+                    self.cells.pop(self.scroll_bottom)
+                    self.cells.insert(self.row, [" "] * self.width)
+        elif final == "M":
+            if self.scroll_top <= self.row <= self.scroll_bottom:
+                amount = min(amount, self.scroll_bottom - self.row + 1)
+                for _ in range(amount):
+                    self.cells.pop(self.row)
+                    self.cells.insert(self.scroll_bottom, [" "] * self.width)
+        elif final == "S":
+            self._scroll_up(amount)
+        elif final == "T":
+            self._scroll_down(amount)
+        elif final == "r":
+            top = self._parameter(values, 0) - 1
+            bottom = self._parameter(values, 1, default=self.height) - 1
+            if top < 0 or bottom >= self.height or top >= bottom:
+                raise TerminalAmbiguity()
+            self.scroll_top, self.scroll_bottom = top, bottom
+            self.row = self.col = 0
+        elif final == "s":
+            self.saved = (self.row, self.col)
+        elif final == "u":
+            self.row, self.col = self.saved
+        else:
+            raise TerminalAmbiguity()
+        self._clamp()
+
+    @staticmethod
+    def _indexed_color(index):
+        if index < 16:
+            basic = (
+                (0, 0, 0), (128, 0, 0), (0, 128, 0), (128, 128, 0),
+                (0, 0, 128), (128, 0, 128), (0, 128, 128), (192, 192, 192),
+                (128, 128, 128), (255, 0, 0), (0, 255, 0), (255, 255, 0),
+                (0, 0, 255), (255, 0, 255), (0, 255, 255), (255, 255, 255),
+            )
+            return basic[index]
+        if index < 232:
+            value = index - 16
+            levels = (0, 95, 135, 175, 215, 255)
+            return levels[value // 36], levels[(value // 6) % 6], levels[value % 6]
+        gray = 8 + (index - 232) * 10
+        return gray, gray, gray
+
+    def _visible_colors(self):
+        if self.reverse_video:
+            return self.background, self.foreground
+        return self.foreground, self.background
+
+    def _handle_sgr(self, params):
+        if not params:
+            self.foreground, self.background, self.reverse_video = (
+                (255, 255, 255), (0, 0, 0), False)
+            return
+        # Colon-form SGR is intentionally unsupported. This rejects concealed
+        # text expressed through alternate parameter forms as well as unknown
+        # extended styling forms that could affect visibility.
+        if ":" in params or any(not (part == "" or part.isascii() and part.isdigit())
+                                for part in params.split(";")):
+            raise TerminalAmbiguity()
+        values = [int(part) if part else 0 for part in params.split(";")]
+        index = 0
+        while index < len(values):
+            code = values[index]
+            if code in (8, 28):  # conceal / reveal; visibility is not rendered
+                raise TerminalAmbiguity()
+            if code in (38, 48):
+                # Support only the standard indexed and RGB color forms.
+                if index + 1 >= len(values):
+                    raise TerminalAmbiguity()
+                mode = values[index + 1]
+                extra = 2 if mode == 5 else 4 if mode == 2 else 0
+                if not extra or index + extra >= len(values):
+                    raise TerminalAmbiguity()
+                color_values = values[index + 2:index + extra + 1]
+                if any(value > 255 for value in color_values):
+                    raise TerminalAmbiguity()
+                color = self._indexed_color(color_values[0]) if mode == 5 else tuple(color_values)
+                if mode == 5 and color_values[0] > 255:
+                    raise TerminalAmbiguity()
+                if code == 38:
+                    self.foreground = color
+                else:
+                    self.background = color
+                index += extra + 1
+                continue
+            if code == 0:
+                self.foreground, self.background, self.reverse_video = (
+                    (255, 255, 255), (0, 0, 0), False)
+            elif code == 7:
+                self.reverse_video = True
+            elif code == 27:
+                self.reverse_video = False
+            elif 30 <= code <= 37:
+                self.foreground = self._indexed_color(code - 30)
+            elif 90 <= code <= 97:
+                self.foreground = self._indexed_color(code - 90 + 8)
+            elif 40 <= code <= 47:
+                self.background = self._indexed_color(code - 40)
+            elif 100 <= code <= 107:
+                self.background = self._indexed_color(code - 100 + 8)
+            elif code == 39:
+                self.foreground = (255, 255, 255)
+            elif code == 49:
+                self.background = (0, 0, 0)
+            allowed = (
+                code == 0 or 1 <= code <= 7 or code == 9 or 21 <= code <= 27 or
+                30 <= code <= 37 or code == 39 or 40 <= code <= 47 or code == 49 or
+                90 <= code <= 97 or 100 <= code <= 107
+            )
+            if not allowed:
+                raise TerminalAmbiguity()
+            index += 1
+
+    @staticmethod
+    def _char_width(char):
+        category = unicodedata.category(char)
+        if unicodedata.combining(char) or category in ("Mn", "Me", "Cf"):
+            return 0
+        return 2 if unicodedata.east_asian_width(char) in ("W", "F") else 1
+
+    def _character(self, char):
+        if char == "\r":
+            self.col = 0
+            self.wrap_pending = False
+            return
+        if char == "\n":
+            self._line_feed()
+            self.wrap_pending = False
+            return
+        if char == "\b":
+            self.col = max(0, self.col - 1)
+            self.wrap_pending = False
+            return
+        if char == "\t":
+            self.col = min(self.width - 1, ((self.col // 8) + 1) * 8)
+            self.wrap_pending = False
+            return
+        if ord(char) < 0x20 or 0x7F <= ord(char) < 0xA0:
+            if char in ("\x00", "\x07", "\x0e", "\x0f"):
+                return
+            if char in ("\x0b", "\x0c"):
+                self._line_feed()
+                return
+            raise TerminalAmbiguity()
+        foreground, background = self._visible_colors()
+        hidden = char != " " and foreground == background
+        width = self._char_width(char)
+        if width == 0:
+            if hidden:
+                return
+            previous = self.col - 1
+            if previous >= 0 and not self.cells[self.row][previous] and previous > 0:
+                previous -= 1
+            if previous >= 0:
+                self.cells[self.row][previous] += char
+            return
+        if self.wrap_pending or self.col + width > self.width:
+            self.col = 0
+            self._line_feed()
+            self.wrap_pending = False
+        line = self.cells[self.row]
+        for column in range(self.col, min(self.width, self.col + width)):
+            if line[column] == "" and column > 0:
+                line[column - 1] = " "
+            if column + 1 < self.width and line[column + 1] == "":
+                line[column + 1] = " "
+        line[self.col] = " " if hidden else char
+        if width == 2:
+            line[self.col + 1] = " " if hidden else ""
+        self.col += width
+        if self.col >= self.width:
+            self.col = self.width - 1
+            self.wrap_pending = True
+
+    def render(self):
+        if self.synchronized_output:
+            raise TerminalAmbiguity()
+        return "\n".join("".join(row).rstrip() for row in self.cells).rstrip("\n")
+
+
+def render_screen(data, width=120, height=40):
+    """Render a bounded captured byte stream into plain current-screen text."""
+    return Screen(width=width, height=height).feed(data).render()
+
+
+def ambiguity_site(error):
+    """Source coordinates and sanitized bounded CSI metadata; no screen text."""
+    trace = error.__traceback__
+    csi_params = None
+    csi_final = None
+    while trace is not None:
+        frame_name = trace.tb_frame.f_code.co_name
+        local = trace.tb_frame.f_locals
+        if frame_name in ("_handle_csi", "_numbers"):
+            params = local.get("params")
+            if isinstance(params, str):
+                csi_params = params
+            final = local.get("final")
+            if isinstance(final, str):
+                csi_final = final
+        last_trace = trace
+        trace = trace.tb_next
+    result = {"function": last_trace.tb_frame.f_code.co_name, "line": last_trace.tb_lineno}
+    if (isinstance(csi_params, str) and len(csi_params) <= MAX_CSI_BYTES and
+            all(0x20 <= ord(char) <= 0x3F for char in csi_params) and
+            isinstance(csi_final, str) and len(csi_final) == 1 and
+            0x40 <= ord(csi_final) <= 0x7E):
+        result["csiParameterCodepoints"] = [ord(char) for char in csi_params]
+        result["csiFinalCodepoint"] = ord(csi_final)
+        numbers = re.findall(r"[0-9]+", csi_params)
+        if all(len(number) <= 6 for number in numbers):
+            result["csiNumericValues"] = [int(number) for number in numbers]
+            # Keep the pre-existing compact field only for bounded numeric
+            # parameters and the permitted CSI parameter-byte grammar.
+            result["numericCSIControl"] = csi_params + csi_final
+    return result

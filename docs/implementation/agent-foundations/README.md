@@ -92,8 +92,8 @@ workers and one reviewer, with isolated worktrees for concurrent edits.
 | 6 | Shared native interface, provenance/sidecars, semantic comparison | Merged: [PR #53](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/53) |
 | 7 | OpenCode native adapter | Merged: [PR #54](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/54); project loading verified on 1.18.35 |
 | 8 | Claude Code native adapter | Merged: [PR #55](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/55); project discovery verified |
-| 9 | Codex native adapter | In progress; startup parser evidence collected |
-| 10 | Cursor native adapter | Pending |
+| 9 | Codex native adapter | Merged: [PR #56](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/56); full loading gate open |
+| 10 | Cursor native adapter | In progress; host discovery gate open |
 | 11 | Gemini native adapter | Pending; host unavailable |
 | 12 | OpenClaw native adapter | Pending; host unavailable |
 | 13 | Hermes native adapter | Pending; scope feasibility gate |

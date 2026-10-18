@@ -1,0 +1,22 @@
+{
+  "target": "cursor",
+  "scope": "project",
+  "hostVersion": "2026.04.17-787b533",
+  "observedAt": "2026-10-15T22:07:58.920221+00:00",
+  "commands": [
+    [
+      "cursor-agent",
+      "--version"
+    ],
+    [
+      "cursor-agent",
+      "--help"
+    ]
+  ],
+  "helpSHA256": "60663340b7f8194b32274679be073b21659b4eff82dc465774aef89def8a8251",
+  "nativeLoading": "not-run",
+  "runtimeEnforcement": "not-tested",
+  "modelExecution": "not-run",
+  "blocker": "Installed CLI help exposes no read-only custom-subagent discovery or configuration-loading command. No model prompt was sent to manufacture loading evidence.",
+  "nextGate": "Load an AOK-generated fixture through a supported no-inference host discovery interface or an isolated supported host UI; capture the exact version, fixture hash and result."
+}

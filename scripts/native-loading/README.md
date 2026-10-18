@@ -47,3 +47,30 @@ changes only the bundled startup entry in memory to expose the shipped loader
 module. It preserves module factories and reports component discovery separately
 from full CLI loading. Its additional Node API guards cover TCP connect, HTTP(S)
 request and fetch; they are not a claim of a complete network sandbox.
+
+## OpenClaw container check
+
+OpenClaw 2026.9.4 hardcodes its coordination locks under `/tmp` on non-Windows.
+A strict Darwin temporary-root write boundary therefore blocks a successful CLI
+roster query. Do not grant access to the shared host lock namespace.
+
+With an already-running Docker engine, explicitly pull
+`node:26.7.0-bookworm-slim` at digest
+`sha256:4db36457f406501e6f608802e5da617e5fbd0e80b75901b6a09de1ae5a667d32`,
+then run `python3 scripts/native-loading/verify_openclaw_container.py --aok
+/absolute/path/to/aok`. The script requires that exact local image digest and
+checks the official OpenClaw package integrity. Network access and official npm
+lifecycle scripts are allowed only in the disposable install container; the
+package must finish its lifecycle, since `--ignore-scripts` makes the CLI reject
+an incomplete installation. No package code is patched and no lifecycle marker
+is forged.
+
+Runtime probes use an unprivileged user, no network, read-only root/package,
+private tmpfs home and `/tmp`, resource limits and bounded Docker calls. Only
+two synthetic fixture files enter over a tar stream; no host directories,
+credentials or Docker socket are mounted. Full UUID names and ownership labels
+limit teardown to this run's containers and volume. The script verifies the
+native roster, absent/malformed controls and exact workspace bytes, prints JSON,
+and removes its owned containers/volume. The explicit base-image cache remains.
+This proves the recorded Linux scope/version, not Darwin loading or runtime
+permission enforcement.

@@ -13,8 +13,8 @@ newer than installed hosts; each adapter must pin its tested format and host.
 | OpenCode | Project `.opencode/agents/*.md` or `opencode.json` agent entries | `1.18.35` | Project loading and round trip verified; [evidence](../../evidence/native-adapters/opencode-1.18.35.json); runtime enforcement unverified |
 | Cursor | Project `.cursor/agents/*.md`, YAML frontmatter and prompt body | `cursor-agent 2026.04.17-787b533` | [Loading blocker](../../evidence/native-adapters/cursor-loading-blocker.json): no safe discovery command identified; parser round trips do not close gate |
 | Gemini | Project `.gemini/agents/*.md`; personal `~/.gemini/agents/*.md` | Temporary npm CLI 0.61.0 | Guarded project discovery verified before auth; [evidence](../../evidence/native-adapters/gemini-cli-0.61.0.json); invocation/runtime enforcement unverified |
-| OpenClaw | Config roster plus workspace bootstrap files; isolated configuration-home scope | Not installed | Single-entry roster/workspace projection implemented; native host unavailable, full dependencies unverified |
-| Hermes Agent | Candidate isolated profile/home, with config and persona files; broader than specialist definition | `v0.21.6+636.gd4d2ab7 (2026.9.24)` | Bounded config/SOUL/profile projection implemented; full profile sufficiency and safe native loader unverified |
+| OpenClaw | Config roster plus workspace bootstrap files; isolated configuration-home scope | Temporary npm 2026.9.4 / Linux Node 26.7.0 | Isolated roster/workspace discovery verified; [container evidence](../../evidence/native-adapters/openclaw-container-2026.9.4.json); Darwin CLI and runtime enforcement unverified |
+| Hermes Agent | Candidate isolated profile/home, with config and persona files; broader than specialist definition | Source `v0.21.6+canary.20261010T070026Z-249-gd4d2ab7b5d` | [Config/SOUL/profile source-component loading verified](../../evidence/native-adapters/hermes-profile-loader.json); source-to-CLI equivalence and full profile sufficiency unverified |
 | agy | Workspace `.agents/agents/<name>.md` or `<name>/agent.md`, YAML frontmatter | `1.3.6` | Native projection implemented; isolated probes gave no discovery evidence |
 
 ## Official sources and limits
@@ -59,10 +59,12 @@ newer than installed hosts; each adapter must pin its tested format and host.
 ## Evidence classification
 
 `command -v` located Codex, Claude, OpenCode, Cursor, Hermes and agy. It did not
-locate Gemini or OpenClaw. Versions above came from each host's `--version`.
+locate Gemini or OpenClaw initially. Installed CLI versions came from `--version`;
+subsequent temporary package versions and source-only Hermes identity are
+recorded with their distinct provenance above.
 The earlier Hermes/agy help and listing probes were intended to be read-only;
-the subsequent bootstrap/update side effects and audit are recorded below. OpenCode, Claude and Gemini project adapters have isolated generated-file discovery
-evidence linked above. The other five native gates remain open. Gemini verification
+the subsequent bootstrap/update side effects and audit are recorded below. OpenCode, Claude and Gemini project adapters plus the OpenClaw isolated-home Linux adapter have generated-file discovery
+evidence linked above. The other four native gates remain open. Gemini verification
 used a temporary install; its earlier unintended global updater install was attributed
 and removed, and agy was restored from its verified pre-update backup. See the
 [follow-up audit](../../evidence/native-adapters/loading-followup.md). Future evidence must record

@@ -26,10 +26,18 @@ The projection is intentionally partial:
   keys, credential assignments in text, and unrecognized paths are rejected.
 
 The shared engine still marks these imports as incomplete drafts and runtime
-enforcement as unverified. The descriptor reports host loading as unavailable:
-the installed Hermes launcher was not invoked because it may install
-dependencies, and no safe direct native loader was verified. This package
-does not claim a Gemini/Claude-style Markdown-agent readiness gate.
+enforcement as unverified. The reproducible loader probe uses a clean
+environment, a Darwin write sandbox rooted at a unique temporary directory,
+and process-group timeouts. The installed source's direct config loader,
+profile-metadata reader, and SOUL prompt loader were exercised against AOK-
+rendered files in a disposable `HERMES_HOME`; malformed config and missing
+profile controls were also checked. This verifies those component loaders, but
+does not establish full Hermes CLI profile discovery/selection. The Hermes
+launcher is avoided by this final probe after an earlier invocation entered
+dependency preparation and was stopped; the descriptor
+continues to report host loading as unavailable and this package does not claim
+a full profile loading or readiness gate. See
+`docs/evidence/native-adapters/hermes-profile-loader.json`.
 
 The selected inventory does not prove that a full Hermes home is complete.
 Hermes profiles may also depend on `.env`, auth stores, skills, MCP data, and
@@ -46,11 +54,12 @@ Format facts were checked against the official [Profiles](https://hermesagent.no
 and [Personality & SOUL.md](https://hermesagent.nousresearch.com/docs/user-guide/features/personality/)
 documentation, plus installed source under
 `~/.hermes/hermes-agent/hermes_cli/profiles.py`, `config.py`, and
-`hermes_constants.py`. The task environment reported Hermes
-`0.21.6+636.gd4d2ab7`; the source checkout's `pyproject.toml` has a placeholder
-version (`0.0.0`), so exact source-to-binary equivalence was not established.
-`adapterVersion` is the local mapping revision, not a verified Hermes runtime
-version.
+`hermes_constants.py`. The inspected source checkout identifies as
+`v0.21.6+canary.20261010T070026Z-249-gd4d2ab7b5` at commit
+`d4d2ab7b5d104166e7e22a02cafd12f1fe456a31`; its `pyproject.toml` reports a
+placeholder version (`0.0.0`), so source-to-installed-CLI equivalence was not
+established. `adapterVersion` is the local mapping revision, not a verified
+Hermes runtime version.
 
 The YAML parser rejects duplicate keys, tags, anchors, aliases, merge keys,
 date/time values, invalid UTF-8/BOM, non-finite numbers, and documents beyond

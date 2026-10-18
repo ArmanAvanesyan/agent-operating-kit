@@ -7,7 +7,7 @@ CLI discovery, invocation and runtime enforcement are separate observations.
 | Target | Follow-up result | Overall loading gate |
 |---|---|---|
 | Codex 0.162.1 | New explicit project registration loads the AOK-exported role; absent registration, malformed config, malformed referenced role and missing-file controls distinguish actual loading | Verified for `project-registered` loading only; standalone discovery and child-agent invocation unverified |
-| Cursor 2026.04.17 | Shipped loader component discovers generated file; absent/malformed controls discover none; scalar/control/blank-prompt incompatibilities fixed; guarded ACP initializes but session creation errors and the probe times out | Open; full CLI discovery/selection not established |
+| Cursor 2026.04.17 / temporary 2026.10.16 | Older shipped-component discovery remains version-bound; fresh official CLI reaches login before any role inventory. Source-confirmed filename extensions are now preserved by the adapter | Open; full CLI discovery/selection not established |
 | Gemini CLI 0.61.0 | Actual guarded TUI discovers generated name/description before auth; empty-project control does not | Verified for project discovery only |
 | OpenClaw 2026.9.4 | Actual Linux CLI roster loads id/model; absent/malformed controls and exact workspace/missing-file loader controls pass | Verified for Linux isolated-home loading only; Darwin CLI unverified |
 | Hermes Agent, direct installed entrypoint | Actual installed CLI lists exported profile/model; separate installed metadata/SOUL loaders pass expected-content and missing controls | Verified for the explicitly selected installed profile entrypoint; normal launcher selection unverified |
@@ -184,3 +184,29 @@ PR [69](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/69) was clear
 by independent gpt-6-luna review at
 `8ccec2127d0fb19042e7e83fd0d7f6fd7be83a45` and passed all eight CI checks before
 squash merge. Agent review is not human approval.
+
+
+## Fresh Cursor package and filename compatibility
+
+The [fresh Cursor CLI audit](cursor-loading-2026.10.16.json) uses the official
+2026.10.16-e3cb207 darwin-x64 package, obtained from the URL in the official
+[installer source](https://cursor.com/install). The installer was inspected as
+data, not executed. No user installation was upgraded or launched.
+
+The new package's scanner recognizes `.md`, `.mdc`, and `.markdown` without
+case sensitivity. AOK's `cursor-subagents-v3` mapping retains these file paths,
+rejects empty filename stems, and requires reimporting older sidecars. Native
+input still requires an explicit inventory with `format: markdown`; these
+filename checks do not establish host loading or permission enforcement.
+
+The copied CLI's help/version and no-input startup were inspected in isolation.
+Startup stopped at the login banner before a role inventory appeared. Source
+inspection of its ACP handler also identifies an authentication check before
+session creation. No login, prompt or model turn was sent. Absent/malformed
+host controls were not claimed to pass after this blocked positive attempt.
+The [bounded reproducer](../../../scripts/native-loading/probe_cursor_fresh_cli.py)
+and exact fixture/package/source hashes accompany the evidence.
+
+The older April shipped-component result is not attributed to October's full
+CLI. Both Cursor and agy loading gates remain open; no runtime-enforcement
+claim follows from the extension compatibility fix.

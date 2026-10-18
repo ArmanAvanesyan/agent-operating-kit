@@ -176,7 +176,7 @@ is narrower than field parsing and remains separate from runtime enforcement.
 | `opencode` | `project` | Verified discovery only for OpenCode 1.18.35 | Isolated project file discovery only; no model or tool execution, and no permission-enforcement claim. |
 | `claude-code` | `project`, `plugin` | Verified project discovery only for Claude Code 2.1.281 | Evidence applies to project scope only; plugin parsing is not a discovery check. No model execution or permission-enforcement claim. |
 | `codex` | `project`, `project-registered` | Verified registered project loading for Codex CLI 0.162.1 | Registration plus referenced role-file loading; standalone `project` remains `not-run`. No child-agent invocation or runtime-enforcement claim. |
-| `cursor` | `project` | `not-run` | Shipped-component discovery is separate; guarded full-CLI ACP session creation errors/timeouts provide no discovery evidence. |
+| `cursor` | `project` | `not-run`, fresh host identity/evidence linked | Official 2026.10.16 CLI reaches login before inventory; older shipped-component discovery remains separate. |
 | `agy` | `project` | `not-run` | Copied CLI listings are identically empty for valid/absent/malformed files; native loading remains unverified. |
 | `gemini` | `project` | Verified project discovery for temporary Gemini CLI 0.61.0 | Guarded positive/empty TUI checks before authentication; no invocation or runtime-enforcement claim. |
 | `openclaw` | `isolated-home` | Verified Linux loading for OpenClaw 2026.9.4 / Node 26.7.0 | Network-disabled container roster and workspace controls; Darwin CLI remains unverified. |
@@ -211,3 +211,14 @@ A zero exit code means the requested static check passed. It does not imply
 host loading, model inference, optimization, permission enforcement, or
 authorization. Blocked imports/exports may still write candidate files and
 reports for review.
+
+
+## Cursor filename compatibility
+
+Cursor project inventories accept case-insensitive `.md`, `.mdc`, and
+`.markdown` filenames under `.cursor/agents/`, including nested paths.
+Declare `format: markdown` in `aok-native-input.json`. Export preserves a
+retained native path and extension; a canonical export still defaults to `.md`.
+Empty filename stems are rejected. Standalone basenames do not establish a
+Cursor project scope. The `cursor-subagents-v3` mapping requires reimporting
+older sidecars; host loading and runtime enforcement remain unverified.

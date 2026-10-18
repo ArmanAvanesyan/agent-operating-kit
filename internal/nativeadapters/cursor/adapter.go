@@ -15,7 +15,7 @@ import (
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeparse"
 )
 
-const adapterVersion = "cursor-subagents-v2"
+const adapterVersion = "cursor-subagents-v3"
 
 // New returns the inert project-scoped Cursor subagent Markdown adapter.
 func New() nativeadapter.Adapter { return adapter{} }
@@ -25,7 +25,10 @@ type adapter struct{}
 func (adapter) Descriptor() nativeadapter.Descriptor {
 	return nativeadapter.Descriptor{
 		Target: "cursor", AdapterVersion: adapterVersion, Scopes: []string{"project"},
-		HostLoading: nativeadapter.HostLoadingEvidence{Status: "not-run"},
+		HostLoading: nativeadapter.HostLoadingEvidence{
+			Status: "not-run", HostVersion: "2026.10.16-e3cb207",
+			Evidence: []string{"docs/evidence/native-adapters/cursor-loading-2026.10.16.json"},
+		},
 		Fields: []nativeadapter.FieldCapability{
 			{NeutralPath: "agent.metadata.id", NativePath: "frontmatter.name", Support: "native", EnforcementOwner: "native"},
 			{NeutralPath: "agent.identity.purpose", NativePath: "frontmatter.description", Support: "native", EnforcementOwner: "native"},
@@ -176,10 +179,24 @@ func (adapter) Encode(scope string, doc nativeadapter.Document) ([]nativeadapter
 func defaultPath(name string) string { return ".cursor/agents/" + name + ".md" }
 
 func validLocation(file string) bool {
-	if path.Clean(file) != file || strings.Contains(file, "\\") || path.IsAbs(file) || !strings.HasPrefix(file, ".cursor/agents/") || !strings.HasSuffix(file, ".md") {
+	ext := path.Ext(file)
+	base := path.Base(file)
+	if path.Clean(file) != file || strings.Contains(file, "\\") || path.IsAbs(file) || !strings.HasPrefix(file, ".cursor/agents/") || !supportedAgentExtension(ext) || strings.TrimSuffix(base, ext) == "" {
 		return false
 	}
-	return len(strings.TrimPrefix(file, ".cursor/agents/")) > 3
+	return true
+}
+
+// Cursor's shipped 2026.10.16 CLI workspace scanner includes all three
+// Markdown extensions under .cursor/agents. Keep the documented .md format
+// and preserve the scanner's case-insensitive matching behavior.
+func supportedAgentExtension(ext string) bool {
+	switch strings.ToLower(ext) {
+	case ".md", ".mdc", ".markdown":
+		return true
+	default:
+		return false
+	}
 }
 
 func markdownFormat(format string) bool {

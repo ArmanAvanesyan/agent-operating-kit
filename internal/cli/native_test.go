@@ -159,3 +159,45 @@ func TestCodexRegisteredInventoryCLI(t *testing.T) {
 	run("export", 1, "--input", filepath.Join(draft, "aok-native.json"), "--source", input, "--out", candidate)
 	run("compare", 0, "--input", candidate, "--against", filepath.Join(candidate, "aok-native.json"))
 }
+
+func TestCursorExtendedFormatInventoryRoundTrip(t *testing.T) {
+	root, err := filepath.EvalSymlinks(t.TempDir())
+	if err != nil {
+		t.Fatal(err)
+	}
+	input := filepath.Join(root, "input")
+	if err := os.MkdirAll(filepath.Join(input, ".cursor", "agents", "nested"), 0700); err != nil {
+		t.Fatal(err)
+	}
+	for name, content := range map[string]string{
+		"aok-native-input.json":                  `{"version":"aok-native-input/v1","files":[{"path":".cursor/agents/nested/native-probe.MDC","format":"markdown"}]}`,
+		".cursor/agents/nested/native-probe.MDC": "---\nname: native-probe\ndescription: Synthetic extension check\n---\nReview only synthetic content.\n",
+	} {
+		if err := os.WriteFile(filepath.Join(input, name), []byte(content), 0600); err != nil {
+			t.Fatal(err)
+		}
+	}
+	run := func(op string, want int, extra ...string) {
+		t.Helper()
+		args := append([]string{op, "--target", "cursor", "--scope", "project"}, extra...)
+		var out, errout bytes.Buffer
+		code, err := runNative(args, &out, &errout)
+		if err != nil || code != want {
+			t.Fatalf("%s: code=%d err=%v report=%s stderr=%s", op, code, err, out.String(), errout.String())
+		}
+		var report nativeadapter.Report
+		if err := json.Unmarshal(out.Bytes(), &report); err != nil {
+			t.Fatal(err)
+		}
+		if report.HostLoading.Status != "not-run" || report.RuntimeEnforcement != "unverified" {
+			t.Fatalf("extended syntax must not promote host or runtime evidence: %+v", report)
+		}
+	}
+	draft, candidate := filepath.Join(root, "draft"), filepath.Join(root, "candidate")
+	run("import", 1, "--input", input, "--out", draft)
+	run("export", 1, "--input", filepath.Join(draft, "aok-native.json"), "--source", input, "--out", candidate)
+	run("compare", 0, "--input", candidate, "--against", filepath.Join(candidate, "aok-native.json"))
+	if _, err := os.Stat(filepath.Join(candidate, ".cursor", "agents", "nested", "native-probe.MDC")); err != nil {
+		t.Fatalf("native extension/case/path was lost: %v", err)
+	}
+}

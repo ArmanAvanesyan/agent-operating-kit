@@ -40,6 +40,13 @@ func TestProjectSubagentRoundTripsMappedFieldsUnknownAndBody(t *testing.T) {
 	}
 }
 
+func TestFreshHostEvidenceRemainsBlockedAndLinked(t *testing.T) {
+	loading := New().Descriptor().HostLoading
+	if loading.Status != "not-run" || loading.HostVersion != "2026.10.16-e3cb207" || len(loading.Evidence) != 1 || loading.Evidence[0] != "docs/evidence/native-adapters/cursor-loading-2026.10.16.json" {
+		t.Fatalf("fresh CLI blocker evidence is not linked accurately: %+v", loading)
+	}
+}
+
 func TestOptionalFrontmatterAndNameDerivedFromFilename(t *testing.T) {
 	file := nativeadapter.File{Path: ".cursor/agents/from-file.md", Format: "md", Data: []byte("---\ndescription: Filename supplies identifier.\n---\nPrompt body\n")}
 	doc, _, err := New().Decode("project", []nativeadapter.File{file})
@@ -56,6 +63,37 @@ func TestOptionalFrontmatterAndNameDerivedFromFilename(t *testing.T) {
 	roundtrip, _, err := New().Decode("project", files)
 	if err != nil || !sameDocument(doc, roundtrip) {
 		t.Fatalf("optional roundtrip mismatch: %v %+v", err, roundtrip)
+	}
+}
+
+func TestCursorScannerAcceptedMarkdownExtensionsArePreserved(t *testing.T) {
+	for _, ext := range []string{".mdc", ".markdown", ".MD"} {
+		t.Run(ext, func(t *testing.T) {
+			path := ".cursor/agents/extension-check" + ext
+			file := nativeadapter.File{Path: path, Format: "markdown", Data: []byte("---\nname: extension-check\ndescription: Check extension support.\n---\nInstructions\n")}
+			doc, _, err := New().Decode("project", []nativeadapter.File{file})
+			if err != nil {
+				t.Fatal(err)
+			}
+			outputs, _, err := New().Encode("project", doc)
+			if err != nil || len(outputs) != 1 || outputs[0].Path != path {
+				t.Fatalf("extension path was not preserved: %+v, %v", outputs, err)
+			}
+			roundtrip, _, err := New().Decode("project", outputs)
+			if err != nil || !sameDocument(doc, roundtrip) {
+				t.Fatalf("extension semantic roundtrip failed: %v", err)
+			}
+		})
+	}
+	for _, unsupported := range []string{".txt"} {
+		if _, _, err := New().Decode("project", []nativeadapter.File{{Path: ".cursor/agents/unsupported" + unsupported, Format: "markdown", Data: []byte("---\nname: unsupported\n---\nbody")}}); err == nil {
+			t.Fatalf("unsupported extension %s was accepted", unsupported)
+		}
+	}
+	for _, emptyStem := range []string{".cursor/agents/nested/.mdc", ".cursor/agents/nested/.markdown"} {
+		if _, _, err := New().Decode("project", []nativeadapter.File{{Path: emptyStem, Format: "markdown", Data: []byte("---\nname: explicit-name\n---\nbody")}}); err == nil {
+			t.Fatalf("empty filename stem was accepted: %s", emptyStem)
+		}
 	}
 }
 

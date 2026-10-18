@@ -118,6 +118,23 @@ and runtime enforcement remain unverified.
 
 ## Cursor and agy offline recheck
 
+### Fresh Cursor archive check
+
+`probe_cursor_fresh_cli.py --aok /absolute/path/to/newly-built/aok --package
+/absolute/path/to/agent-cli-package.tar.gz` checks the pinned official
+Darwin x64 archive for Cursor Agent `2026.10.16-e3cb207`. Download that archive
+separately using the URL in `cursor-loading-2026.10.16.json`; the probe neither
+downloads nor installs it. The archive is verified and safely extracted into
+the private runtime root. AOK is copied there too, with its actual hash recorded.
+
+The probe denies networking, real-user-home reads and keychain service lookup.
+A harmless process-group signaling preflight runs under the same guard before
+any AOK or Cursor command. Each child PID/PGID is audited before communication;
+failures retain that audit outside the disposable runtime. A no-input startup
+is bounded and sends no keys or prompts. The observed login screen does not
+verify agent discovery. Source inspection and adapter filename tests are
+reported separately from native loading, which remains open.
+
 `probe-cursor-agy-offline.py --aok /absolute/path/to/aok --cursor-host-dir
 /absolute/path/to/cursor-agent/version --agy-binary /absolute/path/to/agy`
 requires the exact installed source hashes recorded in the saved evidence.

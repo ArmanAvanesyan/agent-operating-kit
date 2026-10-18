@@ -87,7 +87,7 @@ is retained separately and is not native-loading evidence. Independent review
 also found that exceptions while parsing post-run audit data could bypass copy
 cleanup. The current helper removes the tracked copy in `finally` and attempts
 marker invalidation without following links; tests cover invalidation failure
-and marker symlinks. This cleanup refactor followed the live observation; source
+marker symlinks, and a FIFO marker. Marker open is nonblocking so a native-written FIFO cannot prevent removal. This cleanup refactor followed the live observation; source
 hashes distinguish the observed driver from the final tested implementation.
 
 ## Operator reproduction
@@ -131,4 +131,4 @@ not close a loading or runtime-enforcement gate.
 The evidence index binds original attempt sources, current helper sources,
 cleanup records and validation. Validation results are recorded alongside it.
 
-[Validation](evidence/native-adapters/agy-account-2026-10-18/validation.json): 238 Python tests passed (two skipped), Go tests passed, kit validation, Python compilation, both proposal checkers, and Codex render smoke passed. The initial restricted test invocation failed existing OS-permission checks; the full rerun with PTY and nested-sandbox access passed. The installed agy SHA-256 is unchanged.
+[Validation](evidence/native-adapters/agy-account-2026-10-18/validation.json): 239 Python tests passed (two skipped), Go tests passed, kit validation, Python compilation, both proposal checkers, and Codex render smoke passed. The initial restricted test invocation failed existing OS-permission checks; the full rerun with PTY and nested-sandbox access passed. The installed agy SHA-256 is unchanged.

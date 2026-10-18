@@ -33,6 +33,17 @@ class AccountManagerTests(unittest.TestCase):
                 probe.cleanup_owned_case(root)
             self.assertFalse(root.exists())
 
+    @unittest.skipUnless(hasattr(os, 'mkfifo'), 'FIFO creation unavailable')
+    def test_cleanup_marker_fifo_cannot_block_removal(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp).resolve() / 'owned'
+            root.mkdir(mode=0o700)
+            (root / 'home').mkdir()
+            os.mkfifo(root / 'owned-session.json', 0o600)
+            with self.assertRaises(OSError):
+                probe.cleanup_owned_case(root)
+            self.assertFalse(root.exists())
+
     def test_cleanup_never_follows_marker_symlink(self):
         with tempfile.TemporaryDirectory() as temp:
             parent = Path(temp).resolve()

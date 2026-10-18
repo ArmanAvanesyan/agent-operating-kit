@@ -43,7 +43,7 @@ def cleanup_owned_case(root):
             info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) != 0o700):
         raise RuntimeError('case cleanup root ownership changed')
     try:
-        fd = os.open(root / 'owned-session.json', os.O_WRONLY | os.O_NOFOLLOW)
+        fd = os.open(root / 'owned-session.json', os.O_WRONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
         try:
             marker = os.fstat(fd)
             if not stat.S_ISREG(marker.st_mode) or marker.st_uid != os.getuid() or marker.st_nlink != 1:

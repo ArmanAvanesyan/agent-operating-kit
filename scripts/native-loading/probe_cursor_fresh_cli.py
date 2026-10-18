@@ -31,6 +31,7 @@ import tarfile
 sys.dont_write_bytecode = True
 
 VERSION = "2026.10.16-e3cb207"
+PRIVATE_TEMP_ROOT = "/private/tmp"
 PACKAGE_SHA256 = "93372e384e9397b54b1e4fdb1812662f68e7b61c0c60cb3f2f4b788c9e0779c4"
 CLI_SHA256 = "9c9673dc34c8aac856a3206519d8b595586b77ff62d1a18e0cd73a126d0e8d1b"
 INDEX_SHA256 = "c3295e7743ad8c39f967bcfd0acc6c20d47e983a4d7b94254282ef74b27e5033"
@@ -130,6 +131,79 @@ def audit_group(root, proc, purpose):
     return pgid
 
 
+def append_audit(record, audit_file=None):
+    audit_file = audit_file or AUDIT_PATH
+    if audit_file is None:
+        return
+    with audit_file.open("a", encoding="utf-8") as stream:
+        stream.write(json.dumps(record, sort_keys=True) + "\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+
+
+def direct_child_cleanup(proc, grace=0.5):
+    """Best-effort bounded fallback; it cannot guarantee descendant cleanup."""
+    try:
+        proc.send_signal(signal.SIGTERM)
+    except ProcessLookupError:
+        pass
+    except OSError:
+        # Still attempt a bounded wait and SIGKILL below; preserve the group
+        # cleanup failure in the caller's audit record.
+        pass
+    try:
+        proc.wait(timeout=grace)
+    except subprocess.TimeoutExpired:
+        pass
+    except OSError:
+        pass
+    if proc.poll() is None:
+        try:
+            proc.send_signal(signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+        except OSError:
+            pass
+        try:
+            proc.wait(timeout=grace)
+        except subprocess.TimeoutExpired:
+            return False
+        except OSError:
+            return False
+    return proc.poll() is not None
+
+
+def terminate_owned_group(proc, pgid, purpose, grace=1.0, audit_file=None):
+    try:
+        terminate_group(proc, pgid, grace)
+        append_audit({"event": "owned_group_cleanup", "purpose": purpose, "pid": proc.pid,
+                      "pgid": pgid, "groupCleanupFailed": False, "directChildFallback": False}, audit_file)
+        return
+    except Exception as error:
+        fallback_error = None
+        try:
+            child_reaped = direct_child_cleanup(proc)
+        except Exception as child_error:
+            child_reaped = False
+            fallback_error = type(child_error).__name__
+        append_audit({"event": "owned_group_cleanup", "purpose": purpose, "pid": proc.pid,
+                      "pgid": pgid, "groupCleanupFailed": True, "directChildFallback": True,
+                      "directChildReaped": child_reaped, "descendantsMayRemain": True,
+                      "errorType": type(error).__name__, "fallbackErrorType": fallback_error}, audit_file)
+        raise RuntimeError(f"owned process-group cleanup failed: purpose={purpose} pid={proc.pid} pgid={pgid}; direct-child fallback reaped={child_reaped}; descendants may remain") from error
+
+
+def audit_spawned_child(root, proc, purpose):
+    try:
+        return audit_group(root, proc, purpose)
+    except Exception as error:
+        try:
+            terminate_owned_group(proc, proc.pid, f"audit-failure:{purpose}", audit_file=AUDIT_PATH or (root / "process-audit.jsonl"))
+        except Exception as cleanup_error:
+            raise RuntimeError(f"process audit failed for pid={proc.pid}; cleanup also failed: {type(cleanup_error).__name__}") from error
+        raise RuntimeError(f"process audit failed for pid={proc.pid}; child was stopped and no command result is accepted") from error
+
+
 def terminate_group(proc, pgid, grace=1.0):
     if pgid != proc.pid:
         raise RuntimeError("refusing process-group signal: group is not owned by child")
@@ -153,8 +227,11 @@ def signal_preflight(root):
     proc = subprocess.Popen(sandbox_prefix(root) + env_for(root) + ["/bin/sleep", "30"],
                             cwd=root, start_new_session=True, stdin=subprocess.DEVNULL,
                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, close_fds=True)
-    pgid = audit_group(root, proc, "signal-preflight")
-    terminate_group(proc, pgid)
+    pgid = audit_spawned_child(root, proc, "signal-preflight")
+    try:
+        terminate_owned_group(proc, pgid, "signal-preflight", audit_file=AUDIT_PATH or (root / "process-audit.jsonl"))
+    except Exception as error:
+        raise RuntimeError(f"process-group signal preflight failed: pid={proc.pid} pgid={pgid}") from error
     if proc.poll() is None:
         raise RuntimeError(f"process-group preflight failed to terminate pid={proc.pid} pgid={pgid}")
     return {"pid": proc.pid, "pgid": pgid, "terminated": True}
@@ -166,12 +243,19 @@ def run_bounded(command, root, timeout=15, purpose="command"):
         cwd=root, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT, start_new_session=True, close_fds=True,
     )
-    pgid = audit_group(root, proc, purpose)
+    pgid = audit_spawned_child(root, proc, purpose)
     try:
         output, _ = proc.communicate(timeout=timeout)
+        # The leader may exit while a descendant remains in its process group.
+        terminate_owned_group(proc, pgid, purpose, audit_file=AUDIT_PATH or (root / "process-audit.jsonl"))
         return proc.returncode, output
     except subprocess.TimeoutExpired:
-        terminate_group(proc, pgid)
+        try:
+            terminate_owned_group(proc, pgid, purpose, audit_file=AUDIT_PATH or (root / "process-audit.jsonl"))
+        except Exception:
+            if proc.stdout:
+                proc.stdout.close()
+            raise
         try:
             output, _ = proc.communicate(timeout=1.0)
         except subprocess.TimeoutExpired as detached_pipe:
@@ -185,13 +269,22 @@ def run_bounded(command, root, timeout=15, purpose="command"):
 def read_no_input(command, root, timeout=8, byte_limit=65536):
     master, slave = pty.openpty()
     fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack("HHHH", 24, 80, 0, 0))
-    process = subprocess.Popen(
-        sandbox_prefix(root) + env_for(root) + command,
-        cwd=root, stdin=slave, stdout=slave, stderr=slave,
-        start_new_session=True, close_fds=True,
-    )
+    try:
+        process = subprocess.Popen(
+            sandbox_prefix(root) + env_for(root) + command,
+            cwd=root, stdin=slave, stdout=slave, stderr=slave,
+            start_new_session=True, close_fds=True,
+        )
+    except Exception:
+        os.close(master)
+        os.close(slave)
+        raise
     os.close(slave)
-    pgid = audit_group(root, process, "no-input-cursor-startup")
+    try:
+        pgid = audit_spawned_child(root, process, "no-input-cursor-startup")
+    except Exception:
+        os.close(master)
+        raise
     chunks = []
     total = 0
     started = time.monotonic()
@@ -210,8 +303,10 @@ def read_no_input(command, root, timeout=8, byte_limit=65536):
             chunks.append(chunk)
             total += len(chunk)
     finally:
-        terminate_group(process, pgid)
-        os.close(master)
+        try:
+            terminate_owned_group(process, pgid, "no-input-cursor-startup", audit_file=AUDIT_PATH or (root / "process-audit.jsonl"))
+        finally:
+            os.close(master)
     output = b"".join(chunks).decode("utf-8", "replace")
     output = re.sub(r"\x1b\[[0-?]*[ -/]*[@-~]", "", output)
     return process.returncode, output, total, round(time.monotonic() - started, 2)
@@ -235,9 +330,9 @@ def main():
     require_sha(fixture, FIXTURE_SHA256, "AOK Cursor fixture")
 
     global ACTIVE_ROOT, AUDIT_DIR, AUDIT_PATH
-    AUDIT_DIR = Path(tempfile.mkdtemp(prefix="aok-cursor-owned-audit-", dir="/private/tmp"))
+    AUDIT_DIR = Path(tempfile.mkdtemp(prefix="aok-cursor-owned-audit-", dir=PRIVATE_TEMP_ROOT))
     AUDIT_PATH = AUDIT_DIR / "process-audit.jsonl"
-    with tempfile.TemporaryDirectory(prefix="acf-", dir="/private/tmp") as temporary:
+    with tempfile.TemporaryDirectory(prefix="acf-", dir=PRIVATE_TEMP_ROOT) as temporary:
         root = Path(temporary).resolve()
         ACTIVE_ROOT = root
         owned = root / "owned"
@@ -363,7 +458,7 @@ if __name__ == "__main__":
     except Exception as error:
         audit = AUDIT_PATH
         if audit and audit.is_file():
-            preserved = Path(tempfile.mkdtemp(prefix="aok-cursor-failure-audit-", dir="/private/tmp")) / "process-audit.jsonl"
+            preserved = Path(tempfile.mkdtemp(prefix="aok-cursor-failure-audit-", dir=PRIVATE_TEMP_ROOT)) / "process-audit.jsonl"
             shutil.copyfile(audit, preserved)
             print(json.dumps({"status": "failed", "errorType": type(error).__name__,
                               "processAuditPath": str(preserved)}, sort_keys=True), file=sys.stderr)

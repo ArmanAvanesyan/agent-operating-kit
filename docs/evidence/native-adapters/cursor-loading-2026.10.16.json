@@ -1,7 +1,7 @@
 {
   "target": "cursor",
   "scope": "project",
-  "observedAt": "2026-10-18T02:49:05.617628Z",
+  "observedAt": "2026-10-18T02:55:49.404283Z",
   "hostVersion": "2026.10.16-e3cb207",
   "architecture": "darwin-x64",
   "officialPackage": {
@@ -40,8 +40,8 @@
     "realUserHomeRead": "denied",
     "processGroupSignalPreflight": "passed under the same network-denied, home-read-denied, temporary-write sandbox profile used for AOK and Cursor commands",
     "sources": "official archive and supplied AOK binary copied under private temporary root; archive hash verified and safely extracted there",
-    "processManagement": "new session per command; owned PID/PGID audited before communicate; TERM then bounded KILL escalation targets the verified process group; detached output pipes close after bounded drain",
-    "failureAudit": "owned process-group audit is stored separately from the temporary runtime and retained when a run fails; removed after success"
+    "processManagement": "new session per command; owned PID/PGID audited before communication; bounded TERM then KILL escalation; direct-child fallback on group-signal failure is audited and always leaves the run failed; detached output pipes close after bounded drain",
+    "failureAudit": "owned process-group audit is stored outside the temporary runtime and retained when a run fails; removed after success"
   },
   "aokFixture": {
     "aokBinarySHA256": "a89c28b2884995895d2a78f2a1c7841e72648446354f7baa1683fdb9c72f725f",
@@ -80,7 +80,7 @@
   "blocker": "The fresh CLI exposes no read-only local subagent-list command. Its no-input startup stops at login, and ACP session creation is authentication-gated. The package source confirms workspace scan patterns but is not proof that this CLI run loaded the exported role.",
   "reproducer": {
     "path": "scripts/native-loading/probe_cursor_fresh_cli.py",
-    "sha256": "4825405030ad695db3787d928d87e398e7511278b9a388627b76362edd71a92c",
+    "sha256": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507",
     "downloadsOrInstallsAtRuntime": false
   },
   "historicalEvidence": "cursor-component-2026.04.17.json is a separate older component-only result; its positive/absent/malformed observations are not attributed to this 2026.10.16 CLI."

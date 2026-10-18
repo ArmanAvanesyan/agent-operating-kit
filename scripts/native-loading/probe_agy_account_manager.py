@@ -76,7 +76,7 @@ def main(argv=None):
     original_capture, original_enter = login._capture_login, login.may_press_enter
     cases = {}
     try:
-        with tempfile.TemporaryDirectory(prefix='aok-agy-account-fixture-', dir='/private/tmp') as td:
+        with tempfile.TemporaryDirectory(prefix='aok-agy-account-fixture-', dir=login.PRIVATE_TEMP_ROOT) as td:
             owned_aok, rendered, fixture_hash, description = login.AGY.agy.base.prepare_aok(args.aok, login.REPO, Path(td))
             aok_hash = hashlib.sha256(owned_aok.read_bytes()).hexdigest()
             for case in ('positive', 'absent', 'malformed'):

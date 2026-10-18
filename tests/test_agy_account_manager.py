@@ -85,7 +85,8 @@ class AccountManagerTests(unittest.TestCase):
                                    'parseErrorObserved': len(copied) == 3,
                                    'authBarrierObserved': False, 'errorObserved': False}
                 return {'root': str(case_root), 'auditRoot': str(audit)}
-            with mock.patch.object(probe.login.AGY, 'validate_isolated_login_root', return_value={'root': source}), \
+            with mock.patch.object(probe.login, 'PRIVATE_TEMP_ROOT', root), \
+                 mock.patch.object(probe.login.AGY, 'validate_isolated_login_root', return_value={'root': source}), \
                  mock.patch.object(probe.login.AGY, 'copy_isolated_login_home', side_effect=copy), \
                  mock.patch.object(probe.local, 'open_evidence_output', return_value=fd) as output, \
                  mock.patch.object(probe.login.AGY.agy.base, 'prepare_aok', return_value=(aok, b'fixture', 'hash', 'description')), \

@@ -19,9 +19,12 @@ concurrency, and runtime settings) are rejected as role identities in this
 scope. To avoid cross-platform identity aliases, this registered scope accepts
 only lowercase ASCII canonical-slug role names and ASCII sibling names and
 references. Sibling paths with trailing-dot or trailing-space components,
-colons, or NULs are rejected. Exact `.` and `..` components are normalized for
-alias checks. The older standalone `project` scope retains its prior name
-behavior.
+parent-directory segments anywhere, absolute or UNC paths, colons, or NULs are
+rejected. Tilde-based DOS short-name references are unsupported. Exact `.`
+components are normalized for alias checks. This keeps accepted references in
+a conservative portable subset relative to the declaring `.codex/config.toml`,
+without claiming complete filesystem equivalence or resolving paths. The older
+standalone `project` scope retains its prior name behavior.
 
 The selected `description` maps to `agent.identity.purpose`; the TOML role
 fields map as follows:

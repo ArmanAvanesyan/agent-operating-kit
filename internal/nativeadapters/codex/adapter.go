@@ -483,16 +483,23 @@ func isASCII(s string) bool {
 	return true
 }
 
-// portableRegistrationRef accepts ordinary ASCII relative paths. Dot and
-// dot-dot components are retained for lexical alias checks; trailing dots or
-// spaces, ADS separators and NULs are rejected instead of emulating Windows.
+// portableRegistrationRef accepts ordinary ASCII relative paths. Dot
+// components are retained for lexical alias checks; parent segments, absolute
+// paths, trailing dots or spaces, ADS separators and NULs are rejected instead
+// of resolving paths or emulating platform-specific filesystem behavior.
 func portableRegistrationRef(s string) bool {
-	if strings.ContainsAny(s, ":\x00") {
+	if strings.ContainsAny(s, ":\x00~") {
 		return false
 	}
 	normalized := strings.ReplaceAll(s, "\\", "/")
+	if strings.HasPrefix(normalized, "/") {
+		return false
+	}
 	for _, component := range strings.Split(normalized, "/") {
-		if component == "." || component == ".." {
+		if component == ".." {
+			return false
+		}
+		if component == "." {
 			continue
 		}
 		if strings.HasSuffix(component, ".") || strings.HasSuffix(component, " ") {

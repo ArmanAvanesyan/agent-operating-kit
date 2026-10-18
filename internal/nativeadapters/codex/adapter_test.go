@@ -455,6 +455,10 @@ func TestProjectRegisteredRejectsSiblingPathAliasesAndCaseFoldCollisions(t *test
 		{"backslash-path", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = 'agents\\\\aok-probe.toml'\n"},
 		{"windows-trailing-dots", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = 'agents./aok-probe.toml.'\n"},
 		{"windows-trailing-space", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = 'agents/aok-probe.toml '\n"},
+		{"escape-reenter", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = '../.codex/agents/aok-probe.toml'\n"},
+		{"absolute", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = '/.codex/agents/aok-probe.toml'\n"},
+		{"unc", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = '\\\\\\\\server\\share\\aok-probe.toml'\n"},
+		{"dos-short-name", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = 'agents/AOK-PR~1.TOM'\n"},
 		{"case-folded-name", "[agents.AOK-PROBE]\ndescription = 'Shadow'\nconfig_file = 'agents/other.toml'\n"},
 	}
 	for _, tc := range aliasConfigs {
@@ -524,7 +528,7 @@ func TestProjectRegisteredRejectsUnicodeNamesAndSiblingReferences(t *testing.T) 
 			}
 		})
 	}
-	for _, ref := range []string{"agents./aok-probe.toml.", "agents/aok-probe.toml "} {
+	for _, ref := range []string{"agents./aok-probe.toml.", "agents/aok-probe.toml ", "../.codex/agents/aok-probe.toml", "/.codex/agents/aok-probe.toml", "\\\\server\\share\\aok-probe.toml", "agents/AOK-PR~1.TOM"} {
 		doc := minimalDoc()
 		doc.Fields["agent.metadata.id"] = json.RawMessage(`"aok-probe"`)
 		doc.Assets["instructions.md"] = []byte("Synthetic")

@@ -6,8 +6,8 @@ CLI discovery, invocation and runtime enforcement are separate observations.
 
 | Target | Follow-up result | Overall loading gate |
 |---|---|---|
-| Codex 0.162.1 | Both installed tool protocols inspected through a loopback-only HTTP sink; no generated role identity exposed | Open; parser acceptance only |
-| Cursor 2026.04.17 | Shipped loader component discovers generated file; absent/malformed controls discover none; scalar/control/blank-prompt incompatibilities fixed | Open; full CLI discovery/selection not established |
+| Codex 0.162.1 / temporary 0.163.0 | Trusted positive/empty config/read controls and generated app-server schemas expose no custom-role discovery/selection interface; earlier loopback request audit also exposed no role identity | Open; no-turn loading proof unavailable |
+| Cursor 2026.04.17 | Shipped loader component discovers generated file; absent/malformed controls discover none; scalar/control/blank-prompt incompatibilities fixed; new copied ACP startup fails under keychain-denying privacy boundary | Open; full CLI discovery/selection not established |
 | Gemini CLI 0.61.0 | Actual guarded TUI discovers generated name/description before auth; empty-project control does not | Verified for project discovery only |
 | OpenClaw 2026.9.4 | Actual Linux CLI roster loads id/model; absent/malformed controls and exact workspace/missing-file loader controls pass | Verified for Linux isolated-home loading only; Darwin CLI unverified |
 | Hermes Agent | Installed source components load model, metadata and SOUL; malformed config falls back with a recorded parse failure | Open; full CLI/profile sufficiency and source-to-CLI equivalence unverified |
@@ -70,3 +70,15 @@ not removed or changed during cleanup. Final OpenClaw CLI verification uses
 private container `/tmp`, read-only packages/root and no network or host mounts.
 The task-owned update quarantines were removed after rechecking the restored
 agy hash and absence of the task-created global Gemini launcher.
+
+## No-turn interface recheck
+
+The [Codex/Cursor audit](codex-cursor-discovery-2026.10.18.json) records the
+copied CLI identities, fixture hashes, version-specific protocol observations,
+configuration/JSON-RPC parameters and isolation boundaries. Codex 0.163.0 was
+installed only in a temporary private npm prefix with package lifecycle scripts
+disabled. The installed user CLI was not upgraded. Cursor's keychain-denied
+startup failure is recorded separately from its documented authentication flow;
+it is not evidence of a parser failure or a successful discovery attempt.
+Both gates remain open. No credentials, model turns or remote network requests
+were used in these host probes.

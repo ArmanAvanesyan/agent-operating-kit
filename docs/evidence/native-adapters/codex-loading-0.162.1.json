@@ -1,0 +1,142 @@
+{
+  "observedAt": "2026-10-18T00:46:51.093112+00:00",
+  "aokBinarySHA256": "d66430072fbd03c7f78e18dd34602e8e25fedfd106d4bfe49f1dcc4c5b9b6936",
+  "target": "codex",
+  "scope": "project",
+  "hostVersion": "codex-cli 0.162.1",
+  "binarySHA256": "f86b8cfd3de94dc70763d251da3ff292e94f4a53ad41b81faab3619a7bcb626c",
+  "fixture": "internal/nativeadapters/codex/testdata/probe.toml",
+  "sourceSHA256": "ccf2bd30d60b70b6276f1a4749f663a586ebecd8033699f6f2b6c739784514f1",
+  "renderedSHA256": "f61f9ce71cac446817f42e4955befdf10f7c4c403e29308c77cadec16c9e3de8",
+  "cliResults": {
+    "import": "blocked",
+    "export": "blocked",
+    "compare": "valid"
+  },
+  "observations": {
+    "multi_agent:positive": {
+      "exitCode": 1,
+      "requestCount": 1,
+      "tools": [
+        "exec_command",
+        "write_stdin",
+        "request_user_input",
+        "view_image",
+        "multi_agent_v1",
+        "get_goal",
+        "create_goal",
+        "update_goal",
+        "web_search"
+      ],
+      "generatedAgentIdentityVisible": false,
+      "generatedAgentDescriptionVisible": false,
+      "malformedWarning": false,
+      "requestSHA256": "b7acd85b2ce68f9de04bfe8ebbee83b94faa2e22ef3a8c847fa785fc9b2bcc6d"
+    },
+    "multi_agent:absent": {
+      "exitCode": 1,
+      "requestCount": 1,
+      "tools": [
+        "exec_command",
+        "write_stdin",
+        "request_user_input",
+        "view_image",
+        "multi_agent_v1",
+        "get_goal",
+        "create_goal",
+        "update_goal",
+        "web_search"
+      ],
+      "generatedAgentIdentityVisible": false,
+      "generatedAgentDescriptionVisible": false,
+      "malformedWarning": false,
+      "requestSHA256": "dd4efa818237a03b0f91186dcb7f005bc6d317c25e5974b439bb9f8900058824"
+    },
+    "multi_agent:malformed": {
+      "exitCode": 1,
+      "requestCount": 1,
+      "tools": [
+        "exec_command",
+        "write_stdin",
+        "request_user_input",
+        "view_image",
+        "multi_agent_v1",
+        "get_goal",
+        "create_goal",
+        "update_goal",
+        "web_search"
+      ],
+      "generatedAgentIdentityVisible": false,
+      "generatedAgentDescriptionVisible": false,
+      "malformedWarning": false,
+      "requestSHA256": "8a8f2c09932bfd1ffba64e31f7667d4d65aa8be2d5d2841c2a60dba62d3a333d"
+    },
+    "multi_agent_v2:positive": {
+      "exitCode": 1,
+      "requestCount": 1,
+      "tools": [
+        "exec_command",
+        "write_stdin",
+        "request_user_input",
+        "view_image",
+        "collaboration",
+        "get_goal",
+        "create_goal",
+        "update_goal",
+        "web_search"
+      ],
+      "generatedAgentIdentityVisible": false,
+      "generatedAgentDescriptionVisible": false,
+      "malformedWarning": false,
+      "requestSHA256": "7b0440d60d1c8648ee0ebaea5e62f350c978c8c82018c9f7ccca948880a76979"
+    },
+    "multi_agent_v2:absent": {
+      "exitCode": 1,
+      "requestCount": 1,
+      "tools": [
+        "exec_command",
+        "write_stdin",
+        "request_user_input",
+        "view_image",
+        "collaboration",
+        "get_goal",
+        "create_goal",
+        "update_goal",
+        "web_search"
+      ],
+      "generatedAgentIdentityVisible": false,
+      "generatedAgentDescriptionVisible": false,
+      "malformedWarning": false,
+      "requestSHA256": "df738a9fb3dfae69ad7e2c021ce7ba2be6582064a012996ed8e444ca65c929b9"
+    },
+    "multi_agent_v2:malformed": {
+      "exitCode": 1,
+      "requestCount": 1,
+      "tools": [
+        "exec_command",
+        "write_stdin",
+        "request_user_input",
+        "view_image",
+        "collaboration",
+        "get_goal",
+        "create_goal",
+        "update_goal",
+        "web_search"
+      ],
+      "generatedAgentIdentityVisible": false,
+      "generatedAgentDescriptionVisible": false,
+      "malformedWarning": false,
+      "requestSHA256": "36a0109f4ea1d300db21b3e821eb5891f5fb8d05d84cc29c96106101ce4cda3c"
+    }
+  },
+  "isolation": "Temporary HOME/CODEX_HOME/cwd; allow-listed environment without credentials; analytics/feedback disabled",
+  "provider": "Ephemeral loopback HTTP sink; always returns HTTP 400; no model implementation or output",
+  "nativeLoading": "not-run",
+  "nativeParsing": "see prior app-server parser evidence",
+  "modelExecution": "not-run",
+  "priorParserEvidence": "docs/evidence/native-adapters/codex-0.162.1.json",
+  "runtimeEnforcement": "unverified",
+  "blocker": "Neither captured tool protocol exposed the generated role identity/description. Parser acceptance alone does not prove registration or selection.",
+  "nextGate": "Use a supported no-inference custom-role discovery/selection interface that returns the generated identity; preserve version/scope evidence.",
+  "source": "https://learn.chatgpt.com/docs/agent-configuration/subagents"
+}

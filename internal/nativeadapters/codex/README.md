@@ -56,3 +56,23 @@ child-agent selection and instruction use are not. The descriptor conservatively
 retains `not-run` for the full loading gate. To repeat, import the fixture with
 an explicit native inventory, export it, compare the sidecar, then start the
 isolated app server and inspect `configWarning` notifications for each control.
+
+## Follow-up isolated visibility investigation
+
+The [loopback request-construction probe](../../../docs/evidence/native-adapters/codex-loading-0.162.1.json)
+checks both installed `multi_agent` and `multi_agent_v2` tool protocols against
+positive, absent and malformed generated-file controls. A custom provider points
+only to an ephemeral loopback sink that returns HTTP 400 without a model
+implementation. HOME/CODEX_HOME/cwd are disposable, credentials are not inherited,
+and analytics/feedback are disabled. No inference or generated tool call runs.
+Neither protocol exposes the generated agent identity or description, so this
+does not demonstrate custom-role discovery or selection. The earlier app-server
+parser evidence remains the narrower positive result; the loading gate is open.
+
+```sh
+python3 scripts/native-loading/verify_codex.py --aok /absolute/path/to/aok \
+  --codex /absolute/path/to/codex
+```
+
+The harness saves structural observations and request hashes rather than whole
+model-visible payloads. Request hashes vary with ephemeral session identifiers.

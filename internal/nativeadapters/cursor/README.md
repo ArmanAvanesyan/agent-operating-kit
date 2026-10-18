@@ -48,3 +48,38 @@ AOK tests verify native-format parsing, supported-field round trips and unknown
 preservation, but the native gate remains open until a host actually loads the
 generated file. Native input uses an explicit inventory with `.cursor/agents/`
 paths; a standalone basename does not establish that scope.
+
+## Installed loader verification and scalar compatibility
+
+The [2026.04.17 component probe](../../../docs/evidence/native-adapters/cursor-component-2026.04.17.json)
+invokes the shipped `LocalSubagentsService` against an AOK-generated file.
+Only the bundle startup entry is replaced in memory to expose its existing
+module export; the loader module/factories remain unchanged. HOME/project are
+temporary; Node TCP connect, HTTP(S) request and fetch are guarded. The positive fixture is discovered
+with its name, description, model and prompt; absent and malformed controls return
+no agents. This is component discovery, not full CLI startup, selection or
+inference. `HostLoading` stays `not-run` for the overall CLI gate.
+
+This installed loader splits frontmatter lines at their first colon and does
+not decode YAML quoting, block scalars or nesting. A quoted YAML description
+is returned with literal quotation marks. AOK now rejects mapped name,
+description or model scalars, plus recognized native `readonly`, `background`,
+`is_background` and `tools` controls, when the strict YAML parser and installed host
+would interpret them differently, including shadowing by nested/case-folded
+keys. Empty or whitespace-only prompts are rejected because this loader silently
+drops them. Export also rejects values requiring incompatible YAML quoting rather
+than silently changing their host meaning. This is a conservative subset pinned
+to the inspected CLI version; it does not assert that every Cursor version uses
+this parser. Other unknown frontmatter is retained without execution guarantees.
+The host trims the prompt body for its own descriptor; AOK retains original body
+bytes in its sidecar.
+
+Repeat with a built binary and an explicit installed host directory:
+
+```sh
+python3 scripts/native-loading/verify_cursor.py --aok /absolute/path/to/aok \
+  --host-dir /absolute/path/to/cursor-agent/versions/2026.04.17-787b533
+```
+
+The mapping revision is `cursor-subagents-v2`; older sidecars require re-import
+under the new compatibility checks rather than silently reusing old assumptions.

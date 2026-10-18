@@ -8,13 +8,14 @@ import (
 	"fmt"
 	"path"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/contracts"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapter"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeparse"
 )
 
-const adapterVersion = "cursor-subagents-v1"
+const adapterVersion = "cursor-subagents-v2"
 
 // New returns the inert project-scoped Cursor subagent Markdown adapter.
 func New() nativeadapter.Adapter { return adapter{} }
@@ -45,6 +46,12 @@ func (adapter) Decode(scope string, files []nativeadapter.File) (nativeadapter.D
 	meta, body, err := nativeparse.Frontmatter(f.Data)
 	if err != nil {
 		return nativeadapter.Document{}, nil, errors.New("Cursor subagent frontmatter is invalid")
+	}
+	if blankHostPrompt(body) {
+		return nativeadapter.Document{}, nil, errors.New("Cursor host requires nonblank instructions")
+	}
+	if err := compatibleHostScalars(f.Data[:len(f.Data)-len(body)], meta); err != nil {
+		return nativeadapter.Document{}, nil, err
 	}
 	name, hasName := metaString(meta, "name")
 	if !hasName {
@@ -140,12 +147,15 @@ func (adapter) Encode(scope string, doc nativeadapter.Document) ([]nativeadapter
 		front[frontKey] = value
 	}
 	body, ok := doc.Assets["instructions.md"]
-	if !ok || len(doc.Assets) != 1 {
+	if !ok || len(doc.Assets) != 1 || blankHostPrompt(body) {
 		return nil, nil, errors.New("Cursor export requires exactly one instructions.md asset")
 	}
 	metadata, err := nativeparse.Encode("yaml", front)
 	if err != nil {
 		return nil, nil, errors.New("Cursor frontmatter cannot be encoded")
+	}
+	if err := compatibleHostScalars(metadata, front); err != nil {
+		return nil, nil, err
 	}
 	data := make([]byte, 0, len(metadata)+len(body)+8)
 	data = append(data, []byte("---\n")...)
@@ -202,4 +212,59 @@ func validInstructionSource(raw json.RawMessage) bool {
 func mustJSON(value any) json.RawMessage {
 	b, _ := json.Marshal(value)
 	return b
+}
+
+// The installed Cursor CLI 2026.04.17 loader splits each header line at its
+// first colon; it does not decode YAML quotes, block scalars, or nesting.
+// Require mapped fields to mean the same thing to both parsers. Unknown data
+// remains inert, but cannot shadow mapped fields through nested/case-folded keys.
+func compatibleHostScalars(header []byte, meta map[string]any) error {
+	native := map[string]string{}
+	for _, line := range strings.Split(string(header), "\n") {
+		line = trimHostSpace(line)
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+		key, value, found := strings.Cut(line, ":")
+		if found {
+			native[strings.ToLower(trimHostSpace(key))] = trimHostSpace(value)
+		}
+	}
+	for _, key := range []string{"name", "description", "model", "readonly", "background", "is_background", "tools"} {
+		expected, exists := meta[key]
+		actual, found := native[key]
+		if exists != found {
+			return errors.New("Cursor CLI mapped scalar differs from YAML semantics")
+		}
+		if exists {
+			text, ok := expected.(string)
+			if key == "readonly" || key == "background" || key == "is_background" {
+				flag, isBool := expected.(bool)
+				if !isBool || flag != (strings.ToLower(actual) == "true") {
+					return errors.New("Cursor CLI native control differs from YAML semantics")
+				}
+				continue
+			}
+			if !ok || text != actual {
+				return errors.New("Cursor CLI mapped scalar differs from YAML semantics")
+			}
+		}
+	}
+	return nil
+}
+
+func blankHostPrompt(body []byte) bool {
+	return !utf8.Valid(body) || trimHostSpace(string(body)) == ""
+}
+
+// ECMAScript String.trim uses WhiteSpace and LineTerminator code points;
+// unlike unicode.IsSpace it excludes U+0085 and includes U+FEFF.
+func trimHostSpace(text string) string {
+	return strings.TrimFunc(text, func(r rune) bool {
+		switch r {
+		case '\t', '\n', '\v', '\f', '\r', ' ', '\u00a0', '\u1680', '\u2028', '\u2029', '\u202f', '\u205f', '\u3000', '\ufeff':
+			return true
+		}
+		return r >= '\u2000' && r <= '\u200a'
+	})
 }

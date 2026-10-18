@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/contracts"
@@ -187,4 +188,92 @@ func cloneDocument(doc nativeadapter.Document) nativeadapter.Document {
 		out.Assets[key] = append([]byte(nil), value...)
 	}
 	return out
+}
+
+func TestHostScalarMismatchRejected(t *testing.T) {
+	for _, header := range []string{
+		"name: reviewer\ndescription: \"Review: exact scalar\"\n",
+		"name: reviewer\ndescription: >\n  Review changes\n",
+		"Name: other\n",
+		"name: reviewer\n\ufeffname: other\n",
+		"name: reviewer\ncustom:\n  name: other\n",
+		"name: reviewer\nmodel: inherit # comment\n",
+		"name: reviewer\nreadonly: \"true\"\n",
+		"name: reviewer\nreadonly: true # comment\n",
+		"name: reviewer\nis_background: \"true\"\n",
+		"name: reviewer\nbackground: \"true\"\n",
+		"name: reviewer\ntools: [Read, Edit]\n",
+		"name: reviewer\ncustom:\n  readonly: true\n",
+	} {
+		files := []nativeadapter.File{{Path: ".cursor/agents/reviewer.md", Format: "markdown", Data: []byte("---\n" + header + "---\nPrompt")}}
+		if _, _, err := New().Decode("project", files); err == nil {
+			t.Fatalf("accepted scalar mismatch: %s", header)
+		}
+	}
+}
+func TestExportRejectsUnrepresentableHostScalar(t *testing.T) {
+	files := []nativeadapter.File{{Path: ".cursor/agents/reviewer.md", Format: "markdown", Data: []byte("---\nname: reviewer\ndescription: Review changes\n---\nPrompt")}}
+	doc, _, err := New().Decode("project", files)
+	if err != nil {
+		t.Fatal(err)
+	}
+	doc.Fields["agent.identity.purpose"] = json.RawMessage(`"Review: exact scalar"`)
+	if _, _, err := New().Encode("project", doc); err == nil {
+		t.Fatal("export silently changed description in native loader")
+	}
+}
+
+func TestBlankHostInstructionsRejected(t *testing.T) {
+	for _, body := range []string{"", " \n\t\r\n", " \uFEFF \n", string([]byte{0xff})} {
+		file := nativeadapter.File{Path: ".cursor/agents/reviewer.md", Format: "markdown", Data: []byte("---\nname: reviewer\n---\n" + body)}
+		if _, _, err := New().Decode("project", []nativeadapter.File{file}); err == nil {
+			t.Fatal("blank host prompt accepted")
+		}
+		file.Data = []byte("---\nname: reviewer\n---\nPrompt")
+		doc, _, err := New().Decode("project", []nativeadapter.File{file})
+		if err != nil {
+			t.Fatal(err)
+		}
+		doc.Assets["instructions.md"] = []byte(body)
+		if _, _, err := New().Encode("project", doc); err == nil {
+			t.Fatal("blank host prompt exported")
+		}
+	}
+}
+func TestExportRejectsIncompatibleNativeControls(t *testing.T) {
+	file := nativeadapter.File{Path: ".cursor/agents/reviewer.md", Format: "markdown", Data: []byte("---\nname: reviewer\nreadonly: true\ntools: Read, Edit\n---\nPrompt")}
+	doc, _, err := New().Decode("project", []nativeadapter.File{file})
+	if err != nil {
+		t.Fatal(err)
+	}
+	out, _, err := New().Encode("project", doc)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(out[0].Data), "readonly: true") {
+		t.Fatal("readonly changed")
+	}
+	for key, value := range map[string]json.RawMessage{"readonly": json.RawMessage(`"true"`), "is_background": json.RawMessage(`"true"`), "tools": json.RawMessage(`["Read","Edit"]`)} {
+		doc.Unknown["frontmatter."+key] = value
+		if _, _, err := New().Encode("project", doc); err == nil {
+			t.Fatalf("incompatible %s exported", key)
+		}
+		delete(doc.Unknown, "frontmatter."+key)
+	}
+}
+
+func TestECMAScriptTrimPreservesNextLine(t *testing.T) {
+	body := []byte("\u0085")
+	file := nativeadapter.File{Path: ".cursor/agents/reviewer.md", Format: "markdown", Data: append([]byte("---\nname: reviewer\n---\n"), body...)}
+	doc, _, err := New().Decode("project", []nativeadapter.File{file})
+	if err != nil {
+		t.Fatal(err)
+	}
+	out, _, err := New().Encode("project", doc)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(out[0].Data[len(out[0].Data)-len(body):]) != string(body) {
+		t.Fatal("host nonblank instruction changed")
+	}
 }

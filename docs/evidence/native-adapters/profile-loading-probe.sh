@@ -29,7 +29,25 @@ done
 
 tmp_base="$(mktemp -d "${TMPDIR:-/tmp}/aok-profile-load.XXXXXX")"
 tmp_root="$(cd "$tmp_base" && pwd -P)"
-trap 'rm -rf "$tmp_base"' EXIT
+cleanup_probe_root() {
+	"$python_bin" -B - "$tmp_base" "$tmp_root" <<'CLEANUP_PY'
+import os
+from pathlib import Path
+import shutil
+import stat
+import sys
+candidate = Path(sys.argv[1])
+root = Path(sys.argv[2])
+if candidate.is_symlink() or candidate.resolve(strict=True) != root or not root.name.startswith("aok-profile-load."):
+    raise SystemExit("refusing to remove an unexpected probe root")
+# Go module-cache directories may be read-only. Chmod only walked directories;
+# os.walk does not follow directory links, and file-link targets are untouched.
+for base, _, _ in os.walk(root, followlinks=False):
+    os.chmod(base, stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR)
+shutil.rmtree(root)
+CLEANUP_PY
+}
+trap cleanup_probe_root EXIT
 mkdir -p "$tmp_root/build" "$tmp_root/npm-home" "$tmp_root/npm-cache" "$tmp_root/npm-config"
 sandbox_profile="(version 1)(allow default)(deny file-write*)(allow file-write* (subpath \"$tmp_root\") (literal \"/dev/null\") (literal \"/dev/tty\"))"
 bounded_runner="$tmp_root/bounded-run.py"

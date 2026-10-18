@@ -1,6 +1,7 @@
 package gemini
 
 import (
+	"bytes"
 	"encoding/json"
 	"os"
 	"reflect"
@@ -182,4 +183,20 @@ func cloneDocument(doc nativeadapter.Document) nativeadapter.Document {
 		out.Assets[key] = append([]byte(nil), value...)
 	}
 	return out
+}
+
+func TestNestedMCPSecretCannotBeBundled(t *testing.T) {
+	registry := nativeadapter.NewRegistry()
+	if err := registry.Register(New()); err != nil {
+		t.Fatal(err)
+	}
+	files := []nativeadapter.File{{Path: ".gemini/agents/probe.md", Format: "markdown", Data: []byte("---\nname: probe\ndescription: Probe\nmcpServers:\n  local:\n    env:\n      MCP_ACCESS_SECRET: private-fixture-value\n---\nPrompt\n")}}
+	bundle, report := nativeadapter.NewEngine(registry).Import("gemini", "project", files, nil, nil)
+	if bundle.Version != "" || report.Status != "blocked" {
+		t.Fatalf("credential accepted: %+v", report)
+	}
+	data, _ := json.Marshal(report)
+	if bytes.Contains(data, []byte("private-fixture-value")) {
+		t.Fatal("secret echoed")
+	}
 }

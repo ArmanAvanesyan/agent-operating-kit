@@ -76,3 +76,21 @@ python3 scripts/native-loading/verify_codex.py --aok /absolute/path/to/aok \
 
 The harness saves structural observations and request hashes rather than whole
 model-visible payloads. Request hashes vary with ephemeral session identifiers.
+
+## Interface audit without model turns (2026-10-18)
+
+The [versioned app-server audit](../../../docs/evidence/native-adapters/codex-cursor-discovery-2026.10.18.json)
+rechecked the copied installed 0.162.1 CLI and an official temporary npm install
+of 0.163.0. Both used disposable trusted project roots and isolated CODEX_HOME,
+with remote networking and outside-root writes denied. `config/read` returned
+`agents: null` with a native fixture and with an empty project (the 0.163.0
+repeat used actual AOK-exported bytes);
+this configuration response does not enumerate standalone custom-agent files.
+
+The generated experimental request schemas have no custom-agent listing method,
+and the inspected `thread/start` fields and `exec --help` expose no direct
+custom-role selector. `codex agents` help describes browsing sessions on a
+shared daemon; that session browser was not run. No turn, authentication,
+model request or inferred agent selection was performed. The loading gate
+remains open; this is a version-bound interface audit, not proof that the
+host cannot load custom agents during an actual delegated turn.

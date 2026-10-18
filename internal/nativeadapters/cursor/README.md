@@ -83,3 +83,19 @@ python3 scripts/native-loading/verify_cursor.py --aok /absolute/path/to/aok \
 
 The mapping revision is `cursor-subagents-v2`; older sidecars require re-import
 under the new compatibility checks rather than silently reusing old assumptions.
+
+## Isolated ACP startup audit (2026-10-18)
+
+The [ACP audit](../../../docs/evidence/native-adapters/codex-cursor-discovery-2026.10.18.json)
+inspected the installed version's documented ACP flow and copied CLI. The CLI
+started with a disposable home/project, no credentials, denied network access,
+and denied Mach service lookups to protect the user's keychain. Under that
+privacy boundary it failed before ACP initialization with
+`SecItemCopyMatching failed -50`. This is a startup failure under the chosen
+boundary, not a successful agent-discovery result or proof of a native parser
+failure. No authentication or prompt completed, and the boundary was retained.
+
+The documented ACP flow includes authentication before session creation;
+`session/prompt` would begin an agent turn. No unauthenticated custom-subagent
+listing interface was identified. The earlier shipped-component result remains
+valid but does not close the full CLI gate. Runtime enforcement remains unverified.

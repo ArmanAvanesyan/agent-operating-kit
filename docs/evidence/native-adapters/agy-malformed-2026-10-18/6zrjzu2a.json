@@ -1,0 +1,225 @@
+{
+  "events": [
+    {
+      "at": "2026-10-18T08:10:32.237228+00:00",
+      "authenticationMode": "local",
+      "binarySHA256": "fa85a90abded17bcd1b185bbd1d6b1b82065f093ad4700d4dbacd3be2433294c",
+      "event": "probe-prepared",
+      "resumedCheckpoint": false,
+      "rootCreatedAt": "2026-10-18T08:10:32.229803Z",
+      "rootExpiresAt": "2026-10-18T08:25:32.229803Z",
+      "sessionId": "0a6515f0-7dd0-4682-a2d4-d43d381aaa50",
+      "sourceHashes": {
+        "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+        "native_terminal.py": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5",
+        "prepare_agy_login.py": "a37628a4ce4a34108e6f8d9dc2c20570d222d6e8b8e0651bd321c6ae80143bdd",
+        "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+        "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+        "probe-agy-macos-interactive-manager.py": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f",
+        "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+      },
+      "sourceSHA256": "a37628a4ce4a34108e6f8d9dc2c20570d222d6e8b8e0651bd321c6ae80143bdd",
+      "terminalGeometry": {
+        "columns": 160,
+        "rows": 80
+      }
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 29622,
+      "pid": 29622,
+      "purpose": "agy-login-signal-preflight"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 29622,
+      "pgid": 29622,
+      "pid": 29622,
+      "purpose": "agy-login-signal-preflight"
+    },
+    {
+      "at": "2026-10-18T08:10:33.272778+00:00",
+      "event": "preflight-owned",
+      "pgid": 29622,
+      "pid": 29622
+    },
+    {
+      "at": "2026-10-18T08:10:33.314056+00:00",
+      "directChildFallback": false,
+      "event": "owned-group-cleanup",
+      "groupAbsentVerified": true,
+      "groupCleanupFailed": false,
+      "pgid": 29622,
+      "pid": 29622,
+      "priorSignalErrors": [],
+      "purpose": "agy-login-signal-preflight"
+    },
+    {
+      "at": "2026-10-18T08:10:33.314614+00:00",
+      "event": "preflight-clean",
+      "pgid": 29622,
+      "pid": 29622,
+      "returnCode": -15
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 29624,
+      "pid": 29624,
+      "purpose": "agy-private-login"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 29624,
+      "pgid": 29624,
+      "pid": 29624,
+      "purpose": "agy-private-login"
+    },
+    {
+      "at": "2026-10-18T08:10:33.321640+00:00",
+      "command": "antigravity",
+      "event": "native-start-gated",
+      "pgid": 29624,
+      "pid": 29624,
+      "timeoutSeconds": 12
+    },
+    {
+      "at": "2026-10-18T08:10:35.851277+00:00",
+      "durationSeconds": 2.53,
+      "enterSent": false,
+      "event": "native-login-observed",
+      "nativeExecAttempted": true,
+      "pgid": 29624,
+      "pid": 29624,
+      "runnerStarted": true,
+      "state": {
+        "authBarrierObserved": null,
+        "authScreenFixedRows": null,
+        "authorizationCodePromptObserved": null,
+        "authorizationCodeSubmitted": null,
+        "bytesObserved": null,
+        "codeFieldDiagnostics": null,
+        "codeFieldGeometry": null,
+        "colorSchemeContinueObserved": null,
+        "colorSchemeContinued": null,
+        "colorSchemeScreenObserved": null,
+        "enterHintObserved": null,
+        "errorCategories": null,
+        "errorObserved": null,
+        "errorRowDiagnostics": null,
+        "framedNativePromptObserved": null,
+        "googleSignInOptionObserved": null,
+        "localPromptObserved": null,
+        "loginRowDiagnostics": null,
+        "modelSelectionLabelObserved": null,
+        "nativeLoginChoiceObserved": null,
+        "previewLabelMatches": null,
+        "previewSampleErrorRows": null,
+        "publicModelStatusExceptionObserved": null,
+        "rawGenericErrorObserved": null,
+        "readyHintObserved": null,
+        "startupDiagnostics": null,
+        "terminalAmbiguityObserved": null,
+        "terminalAmbiguitySite": null,
+        "termsAcceptancePromptObserved": null,
+        "trustPromptObserved": null,
+        "welcomeLabelObserved": null,
+        "workspaceLabelObserved": null
+      }
+    },
+    {
+      "at": "2026-10-18T08:10:35.889730+00:00",
+      "directChildFallback": false,
+      "event": "owned-group-cleanup",
+      "groupAbsentVerified": true,
+      "groupCleanupFailed": false,
+      "pgid": 29624,
+      "pid": 29624,
+      "priorSignalErrors": [
+        "ProcessLookupError"
+      ],
+      "purpose": "agy-private-login"
+    },
+    {
+      "at": "2026-10-18T08:10:35.890275+00:00",
+      "cleaned": true,
+      "closeResult": {
+        "masterClosed": true,
+        "slaveClosed": true
+      },
+      "event": "native-login-cleanup",
+      "pgid": 29624,
+      "pid": 29624
+    },
+    {
+      "at": "2026-10-18T08:10:35.905807+00:00",
+      "event": "login-preparation-failed",
+      "reason": "ready-prompt-not-observed",
+      "sessionId": "0a6515f0-7dd0-4682-a2d4-d43d381aaa50",
+      "state": {
+        "authBarrierObserved": null,
+        "authScreenFixedRows": null,
+        "authorizationCodePromptObserved": null,
+        "authorizationCodeSubmitted": null,
+        "bytesObserved": null,
+        "codeFieldDiagnostics": null,
+        "codeFieldGeometry": null,
+        "colorSchemeContinueObserved": null,
+        "colorSchemeContinued": null,
+        "colorSchemeScreenObserved": null,
+        "enterHintObserved": null,
+        "errorCategories": null,
+        "errorObserved": null,
+        "errorRowDiagnostics": null,
+        "framedNativePromptObserved": null,
+        "googleSignInOptionObserved": null,
+        "localPromptObserved": null,
+        "loginRowDiagnostics": null,
+        "modelSelectionLabelObserved": null,
+        "nativeLoginChoiceObserved": null,
+        "previewLabelMatches": null,
+        "previewSampleErrorRows": null,
+        "publicModelStatusExceptionObserved": null,
+        "rawGenericErrorObserved": null,
+        "readyHintObserved": null,
+        "startupDiagnostics": null,
+        "terminalAmbiguityObserved": null,
+        "terminalAmbiguitySite": null,
+        "termsAcceptancePromptObserved": null,
+        "trustPromptObserved": null,
+        "welcomeLabelObserved": null,
+        "workspaceLabelObserved": null
+      }
+    }
+  ],
+  "kind": "aok-agy-malformed-audit/v1",
+  "sources": [
+    {
+      "path": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f.py.txt",
+      "sha256": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f"
+    },
+    {
+      "path": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5.py.txt",
+      "sha256": "fded6640d5f720b765970d314c565c4a33f315a3c27844510d30a5ea66e487a5"
+    },
+    {
+      "path": "a37628a4ce4a34108e6f8d9dc2c20570d222d6e8b8e0651bd321c6ae80143bdd.py.txt",
+      "sha256": "a37628a4ce4a34108e6f8d9dc2c20570d222d6e8b8e0651bd321c6ae80143bdd"
+    },
+    {
+      "path": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc.py.txt",
+      "sha256": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc"
+    },
+    {
+      "path": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014.py.txt",
+      "sha256": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014"
+    },
+    {
+      "path": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f.py.txt",
+      "sha256": "eb4f31e97d2012fc4bdf1aa1a194437e25848737ee6b4d6e84e9f230677d527f"
+    },
+    {
+      "path": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507.py.txt",
+      "sha256": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+    }
+  ]
+}

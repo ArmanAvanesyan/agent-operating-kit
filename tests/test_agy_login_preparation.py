@@ -1349,8 +1349,9 @@ class AgyLoginPreparationTests(unittest.TestCase):
                  mock.patch.object(probe, "_disable_terminal_echo", return_value=["original-tty-state"]), \
                  mock.patch.object(probe, "_restore_terminal") as restore_terminal, \
                  mock.patch.object(probe.os, "close", side_effect=close):
-                result = probe.run_login(root, audit, cli, timeout=20, authorization_code_fd=0)
+                result = probe.run_login(root, audit, cli, timeout=20, authorization_code_fd=0, parser_log=True)
             self.assertTrue(result["promptReady"])
+            self.assertEqual(popen.call_args.args[0][-2:], ["--log-file", str(root / "native-parser.log")])
             self.assertEqual(popen.call_args.kwargs["preexec_fn"], probe.AGY.claim_controlling_tty)
             self.assertTrue(popen.call_args.kwargs["start_new_session"])
             self.assertLess(order.index("close-80"), order.index("cleanup"))

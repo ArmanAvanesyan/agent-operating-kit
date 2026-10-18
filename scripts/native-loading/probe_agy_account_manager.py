@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Compare three native /agents controls using a fresh private account profile.
 
-No native logs, account rows, agent selection or model prompt are retained/sent.
+Account rows, log text, agent selection and model prompts are never retained/sent.
+Opt-in parser diagnostics classify only a fixed owned log into safe labels.
 The input profile must be AOK-owned, unexpired and prompt-ready. Copies are
 removed per case; the original remains under its unchanged expiry for cleanup.
 """
@@ -21,6 +22,10 @@ SPEC = importlib.util.spec_from_file_location(
 local = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(local)
 login = local.login
+DIAG_SPEC = importlib.util.spec_from_file_location(
+    "agy_account_parser_diagnostics", Path(__file__).with_name("agy_parser_diagnostics.py"))
+parser_diagnostics = importlib.util.module_from_spec(DIAG_SPEC)
+DIAG_SPEC.loader.exec_module(parser_diagnostics)
 
 
 class AccountCapture(local.CaseCapture):
@@ -31,6 +36,18 @@ class AccountCapture(local.CaseCapture):
     def diagnostics(self, root):
         # Synthetic log inspection is expressly forbidden for account mode.
         return []
+
+
+def merge_parser_evidence(state, diagnostic):
+    """Promote only an available, complete, exact-fixture native diagnostic."""
+    state = dict(state)
+    terminal_error = state.get('parseErrorObserved') is True
+    attributed = (diagnostic.get('status') == 'available' and
+                  diagnostic.get('truncated') is False and diagnostic.get('fixtureAttributed') is True)
+    state['terminalParseErrorObserved'] = terminal_error
+    state['parseErrorObserved'] = terminal_error or attributed
+    state['fixtureParserLogRejectionObserved'] = bool(attributed)
+    return state
 
 
 def cleanup_owned_case(root):
@@ -66,6 +83,8 @@ def main(argv=None):
     parser.add_argument('--accept-required-terms', required=True, action='store_true')
     parser.add_argument('--disable-optional-sharing', required=True, action='store_true')
     parser.add_argument('--trust-owned-fixtures', required=True, action='store_true')
+    parser.add_argument('--parser-diagnostics', action='store_true',
+                        help='classify a bounded owned native log; never retain log text')
     args = parser.parse_args(argv)
     source = login.AGY.validate_isolated_login_root(args.isolated_login_root)['root']
     try:
@@ -112,11 +131,14 @@ def main(argv=None):
                 login._capture_login = capture.capture
                 login.may_press_enter = lambda state: False
                 try:
-                    result = login.prepare(timeout=35)
+                    result = login.prepare(timeout=35, **({"parser_log": True} if args.parser_diagnostics else {}))
                     events = [json.loads(row) for row in (Path(result['auditRoot']) / 'audit.jsonl').read_text().splitlines()]
                     cleaned = any(e['event'] == 'native-login-cleanup' and e.get('cleaned') is True for e in events)
                     state = dict(capture.manager or result.get('observation', {}).get('state', {}))
                     state['commandSent'] = capture.command_sent
+                    diagnostic = parser_diagnostics.classify(Path(result['root'])) if args.parser_diagnostics else None
+                    if diagnostic is not None:
+                        state = merge_parser_evidence(state, diagnostic)
                 finally:
                     if copied_root is not None:
                         cleanup_owned_case(copied_root)
@@ -124,7 +146,9 @@ def main(argv=None):
                 cases[case] = {'state': state, 'prompt': capture.prompt, 'actions': capture.actions,
                                'cleanupVerified': cleaned, 'privateRootRemoved': not root.exists(),
                                'profileCopy': copy_metadata, 'auditRoot': result['auditRoot'],
-                               'accountRowsRetained': False, 'nativeLogsRead': False}
+                               'accountRowsRetained': False,
+                               'parserDiagnosticEvidence': diagnostic,
+                               'nativeLogsRead': bool(diagnostic and diagnostic['status'] in ('available', 'truncated'))}
                 print(json.dumps({'case': case, 'commandSent': capture.command_sent,
                                   'managerObserved': state.get('managerSectionObserved'),
                                   'nameObserved': state.get('nameObserved')}), flush=True)
@@ -137,7 +161,10 @@ def main(argv=None):
                   'provider': 'fresh isolated OAuth account profile; not synthetic API key',
                   'network': 'allowed for native metadata and refresh; original home/keychain denied',
                   'backendAuthentication': 'not-independently-verified', 'inference': 'not-run',
-                  'nativeLogsRead': False, 'accountRowsRetained': False,
+                  'nativeLogsRead': any(v['nativeLogsRead'] for v in cases.values()),
+                  'nativeLogDiagnosticsRequested': args.parser_diagnostics,
+                  'parserDiagnosticsSourceSHA256': hashlib.sha256(Path(parser_diagnostics.__file__).read_bytes()).hexdigest(),
+                  'logContentRetained': False, 'accountRowsRetained': False,
                   'minimumManagerObservationSeconds': 5, 'candidateNativeLoadingEvidence': qualified}
         with os.fdopen(fd, 'w') as out:
             fd = None

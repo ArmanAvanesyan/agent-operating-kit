@@ -1,0 +1,163 @@
+{
+  "approvedActions": [
+    "accept-terms-sharing-disabled",
+    "disable-optional-sharing",
+    "navigate-to-done",
+    "navigate-to-previous",
+    "trust-owned-synthetic-root"
+  ],
+  "auditRoot": "/private/tmp/aok-agy-login-audit-svgz9os5",
+  "backendAuthentication": "not-independently-verified",
+  "kind": "aok-agy-account-login-observation/v1",
+  "modelInvocation": "not-run",
+  "nativeLoading": "not-verified",
+  "nativeLogLinkRemoved": true,
+  "observation": {
+    "durationSeconds": 39.22,
+    "enterSent": true,
+    "exitCode": null,
+    "nativeExecAttempted": true,
+    "promptReady": true,
+    "runnerStarted": true,
+    "state": {
+      "authBarrierObserved": false,
+      "authScreenFixedRows": [
+        {
+          "fixedWords": [
+            "antigravity",
+            "cli"
+          ],
+          "otherWordCount": 0,
+          "row": 1
+        },
+        {
+          "fixedWords": [
+            "antigravity"
+          ],
+          "otherWordCount": 6,
+          "row": 2
+        },
+        {
+          "fixedWords": [],
+          "otherWordCount": 3,
+          "row": 3
+        },
+        {
+          "fixedWords": [],
+          "otherWordCount": 8,
+          "row": 4
+        },
+        {
+          "fixedWords": [
+            "to"
+          ],
+          "otherWordCount": 4,
+          "row": 8
+        },
+        {
+          "fixedWords": [
+            "is",
+            "default",
+            "and",
+            "up",
+            "your",
+            "in"
+          ],
+          "otherWordCount": 18,
+          "row": 9
+        },
+        {
+          "fixedWords": [],
+          "otherWordCount": 1,
+          "row": 10
+        },
+        {
+          "fixedWords": [
+            "to"
+          ],
+          "otherWordCount": 2,
+          "row": 11
+        },
+        {
+          "fixedWords": [
+            "for"
+          ],
+          "otherWordCount": 4,
+          "row": 15
+        }
+      ],
+      "authorizationCodePromptObserved": false,
+      "authorizationCodeSubmitted": true,
+      "bytesObserved": 15091,
+      "codeFieldDiagnostics": [],
+      "codeFieldGeometry": [],
+      "colorSchemeContinueObserved": false,
+      "colorSchemeContinued": true,
+      "colorSchemeScreenObserved": false,
+      "enterHintObserved": false,
+      "errorCategories": [],
+      "errorObserved": false,
+      "errorRowDiagnostics": [],
+      "framedNativePromptObserved": true,
+      "googleSignInOptionObserved": false,
+      "localPromptObserved": true,
+      "loginRowDiagnostics": [],
+      "modelSelectionLabelObserved": false,
+      "nativeLoginChoiceObserved": false,
+      "previewLabelMatches": [],
+      "previewSampleErrorRows": [],
+      "publicModelStatusExceptionObserved": true,
+      "rawGenericErrorObserved": false,
+      "readyHintObserved": true,
+      "startupDiagnostics": {
+        "fixedWordsObserved": [
+          "error",
+          "warning",
+          "failed",
+          "trust",
+          "workspace",
+          "permission",
+          "config",
+          "read",
+          "terminal",
+          "login",
+          "agent",
+          "not",
+          "file",
+          "press",
+          "enter",
+          "esc",
+          "continue",
+          "security",
+          "welcome",
+          "dark",
+          "light",
+          "select",
+          "choose"
+        ],
+        "rawTextRetained": false,
+        "terminalQueryLabels": [
+          "modify-other-keys-2",
+          "modify-other-keys-reset",
+          "kitty-keyboard",
+          "terminal-version"
+        ]
+      },
+      "terminalAmbiguityObserved": false,
+      "terminalAmbiguitySite": null,
+      "termsAcceptancePromptObserved": false,
+      "trustPromptObserved": false,
+      "welcomeLabelObserved": true,
+      "workspaceLabelObserved": false
+    }
+  },
+  "operatorSourceSHA256": "005e408df16b776e8cae6e0c4dfbb7fbcee975f7390b79cbdef3859272580a96",
+  "preflight": {
+    "pgid": 30174,
+    "pid": 30174,
+    "terminated": true
+  },
+  "root": "/private/tmp/aok-agy-session-m0hu79t9",
+  "sessionId": "42935d99-d902-43e9-91a2-e9843aa1eaa2",
+  "status": "prompt-ready"
+}

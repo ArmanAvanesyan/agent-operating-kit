@@ -1,0 +1,38 @@
+{
+  "kind": "aok-agy-malformed-validation/v1",
+  "python": {
+    "command": "python3 -m unittest discover -s tests",
+    "tests": 252,
+    "skipped": 2,
+    "status": "passed",
+    "osAccess": "PTY and nested macOS sandbox enabled"
+  },
+  "targetedPython": {
+    "tests": 81,
+    "status": "passed"
+  },
+  "go": "passed: go test ./...; affected agy/CLI packages rerun after evidence link",
+  "goBuild": "passed: native controls used built Go binary",
+  "kitValidation": "passed",
+  "pythonCompilation": "passed",
+  "agentProposalChecker": "passed:17 schemas,17 examples,39 negative cases",
+  "planningProposalChecker": "passed:8 schemas,7 examples,20 negative cases",
+  "codexRenderSmoke": "passed",
+  "sourceHashes": {
+    "scripts/native-loading/agy_parser_diagnostics.py": "fda704cf37d552fc1e7b99f99ff67c515cbc18e275f9196e737c899bef45601e",
+    "scripts/native-loading/prepare_agy_login.py": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005",
+    "scripts/native-loading/probe_agy_account_manager.py": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c",
+    "internal/nativeadapters/agy/adapter.go": "4534b945c3d739ef96b39c19c62fb4d5fabeba99d6ef205180e65c2e506a827c",
+    "tests/test_agy_parser_diagnostics.py": "252d65cdfeddc40591fa3ef20f6cab72a4832283896d1b88e54af450202768b9",
+    "tests/test_agy_account_manager.py": "61bda860eccc7d4bc1ba96e91e252ad3ac7fbd6b8adc84219b2c2c6bc2994521",
+    "tests/test_agy_login_preparation.py": "57500ca84969f388bc48e8c1346029b52c16ffe1ef5f6af3240b4683140def98",
+    "tests/test_native_startup_diagnostics.py": "e9e331069e68f56707979390794072cff9a70658f557e16d95d94a07ba8c9ffe"
+  },
+  "originalInstalledBinarySHA256": "2a6bd844ae3431d35203af44f31bdd5e26f5ffe287d47c62a46862bf44099fc2",
+  "originalInstalledBinaryUnchanged": true,
+  "credentialPatternScan": "passed",
+  "nativeGate": "open: no recognized explicit malformed-YAML rejection in panel, bounded native log, or recognized whole-stream failure words",
+  "nativeInference": "not-run",
+  "runtimeEnforcement": "unverified",
+  "sourceProfileRemoved": true
+}

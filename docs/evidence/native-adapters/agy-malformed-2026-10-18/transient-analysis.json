@@ -1,0 +1,17 @@
+{
+  "kind": "aok-agy-transient-parser-analysis/v1",
+  "sourceReport": "account-parser-coverage.json",
+  "sourceField": "cases.malformed.state.startupDiagnostics.fixedWordsObserved",
+  "classifierSourceSHA256": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+  "failureWords": {
+    "error": false,
+    "warning": false,
+    "failed": false,
+    "fatal": false,
+    "invalid": false
+  },
+  "classifierScope": "whole accumulated bounded wire stream with ANSI stripped; no raw text retained",
+  "recognizedTransientFailureWordObserved": false,
+  "limitation": "Fixed vocabulary only; does not rule out every possible diagnostic or alternate channel.",
+  "gatePromoted": false
+}

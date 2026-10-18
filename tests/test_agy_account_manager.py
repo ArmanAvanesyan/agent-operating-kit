@@ -23,6 +23,19 @@ class AccountManagerTests(unittest.TestCase):
             logs.assert_not_called()
             rows.assert_not_called()
 
+    def test_log_rejection_requires_available_complete_exact_fixture_evidence(self):
+        good = {'status': 'available', 'truncated': False, 'fixtureAttributed': True}
+        state = {'parseErrorObserved': False, 'authBarrierObserved': True}
+        combined = probe.merge_parser_evidence(state, good)
+        self.assertTrue(combined['parseErrorObserved'])
+        self.assertTrue(combined['fixtureParserLogRejectionObserved'])
+        self.assertFalse(combined['terminalParseErrorObserved'])
+        self.assertTrue(combined['authBarrierObserved'])
+        self.assertFalse(state['parseErrorObserved'])
+        for diagnostic in ({**good, 'truncated': True}, {**good, 'status': 'unavailable'},
+                           {**good, 'fixtureAttributed': False}, {}):
+            self.assertFalse(probe.merge_parser_evidence(state, diagnostic)['parseErrorObserved'])
+
     def test_cleanup_runs_even_if_marker_invalidation_fails(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp).resolve() / 'owned'

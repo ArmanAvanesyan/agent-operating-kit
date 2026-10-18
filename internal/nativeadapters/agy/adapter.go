@@ -40,6 +40,7 @@ func (Adapter) Descriptor() nativeadapter.Descriptor {
 				"docs/evidence/native-adapters/agy-linux-container-2026-10-18.json",
 				"docs/evidence/native-adapters/agy-onboarding-2026-10-18/local-manager-final.json",
 				"docs/evidence/native-adapters/agy-account-2026-10-18/account-manager-final.json",
+				"docs/evidence/native-adapters/agy-malformed-2026-10-18/account-parser-coverage.json",
 			},
 		},
 		Fields: []nativeadapter.FieldCapability{

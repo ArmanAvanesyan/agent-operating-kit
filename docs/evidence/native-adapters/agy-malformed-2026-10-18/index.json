@@ -1,0 +1,82 @@
+{
+  "kind": "aok-agy-malformed-evidence-index/v1",
+  "reports": [
+    "25f2qg7u.json",
+    "6zrjzu2a.json",
+    "8ny7dk4c.json",
+    "8sn6kehm.json",
+    "account-parser-controls.json",
+    "account-parser-coverage.json",
+    "g0_l9w5s.json",
+    "help-root-cleanup.json",
+    "index.json",
+    "jnue2q8x.json",
+    "lc209u16.json",
+    "lo2a9r_7.json",
+    "login.json",
+    "ng87p3ds.json",
+    "npnftcgb.json",
+    "nyevzgy2.json",
+    "olpyjwk3.json",
+    "owned-log-synthetic.json",
+    "profile-cleanup.json",
+    "sources.json",
+    "svgz9os5.json",
+    "synthetic-diagnostic.json",
+    "transient-analysis.json",
+    "validation.json",
+    "w4ll2oow.json",
+    "zfnovp4n.json"
+  ],
+  "currentHelperSources": {
+    "scripts/native-loading/agy_parser_diagnostics.py": {
+      "path": "fda704cf37d552fc1e7b99f99ff67c515cbc18e275f9196e737c899bef45601e.py.txt",
+      "sha256": "fda704cf37d552fc1e7b99f99ff67c515cbc18e275f9196e737c899bef45601e"
+    },
+    "scripts/native-loading/probe_agy_account_manager.py": {
+      "path": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c.py.txt",
+      "sha256": "09aeea8b89ce8f7aac539eac9c970c07e0405ecca19258ee98e587c7309e480c"
+    },
+    "scripts/native-loading/prepare_agy_login.py": {
+      "path": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005.py.txt",
+      "sha256": "122a7fe504dadfdf5b694662ecd5aa8968ab52c47303fc8dfbc081d57c824005"
+    },
+    "scripts/native-loading/prepare_agy_account_login.py": {
+      "path": "005e408df16b776e8cae6e0c4dfbb7fbcee975f7390b79cbdef3859272580a96.py.txt",
+      "sha256": "005e408df16b776e8cae6e0c4dfbb7fbcee975f7390b79cbdef3859272580a96"
+    },
+    "scripts/native-loading/probe_agy_local_manager.py": {
+      "path": "c3344f15578ad97db96a4de015589de157930d39ee0d70efad5dcfc374cc3bfa.py.txt",
+      "sha256": "c3344f15578ad97db96a4de015589de157930d39ee0d70efad5dcfc374cc3bfa"
+    }
+  },
+  "diagnosticWrappers": {
+    "aok-agy-diagnose-malformed-synthetic.py": {
+      "path": "900a101823545f8fb9c1ca2ffda465d578485f4e3634bbfc7b2a8a7a9fcdc79f.py.txt",
+      "sha256": "900a101823545f8fb9c1ca2ffda465d578485f4e3634bbfc7b2a8a7a9fcdc79f"
+    },
+    "aok-agy-owned-log-synthetic.py": {
+      "path": "cfea038eb6175d8146e30459bcda649ad199b0821bebf6596244ec619febfe6b.py.txt",
+      "sha256": "cfea038eb6175d8146e30459bcda649ad199b0821bebf6596244ec619febfe6b"
+    },
+    "aok-agy-log-flag-probe.py": {
+      "path": "abfc3373ccfadb4652b1c9c3b0b1340e4220ec5323f84d127788feaad6915b39.py.txt",
+      "sha256": "abfc3373ccfadb4652b1c9c3b0b1340e4220ec5323f84d127788feaad6915b39"
+    },
+    "aok-agy-log-verbosity-probe.py": {
+      "path": "d8345683f3a0f4f3864908ad7cfbe69e4a47ae47022ba9eaa7b5965176025b30.py.txt",
+      "sha256": "d8345683f3a0f4f3864908ad7cfbe69e4a47ae47022ba9eaa7b5965176025b30"
+    }
+  },
+  "syntheticOwnedLogDiagnosticHelper": {
+    "path": "ae8a0eced22bc0fb7a76f079108222c8b45efb905e800b55436ee7cc04b6f54c.py.txt",
+    "sha256": "ae8a0eced22bc0fb7a76f079108222c8b45efb905e800b55436ee7cc04b6f54c"
+  },
+  "syntheticHelperAssociation": "Operator-associated loaded revision; synthetic wrapper report does not itself emit a diagnostic helper hash. No synthetic run qualifies host loading.",
+  "coverageHelperRevision": "Native coverage run hash binds observed helper before final offline snapshot-stability guard; current helper is separately archived.",
+  "sourceEpochLimit": "Observed sources keep their original digest; later test hardening is not retroactively represented as natively exercised.",
+  "finalNativeGate": "open: explicit malformed-YAML rejection unobserved in settled panel and bounded owned native log",
+  "fullComparatorChanged": false,
+  "runtimeEnforcement": "unverified",
+  "modelInference": "not-run"
+}

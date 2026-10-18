@@ -1,0 +1,9 @@
+"""Owned --log-file check under no-account externally denied synthetic mode."""
+from pathlib import Path
+import importlib.util
+s=importlib.util.spec_from_file_location('ownedlog_local',Path.cwd()/'scripts/native-loading/probe_agy_local_manager.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
+s=importlib.util.spec_from_file_location('ownedlog_diagnostics',Path.cwd()/'scripts/native-loading/agy_parser_diagnostics.py');d=importlib.util.module_from_spec(s);s.loader.exec_module(d)
+original=m.login.prepare
+m.login.prepare=lambda **kwargs:original(parser_log=True,**kwargs)
+m.synthetic_load_diagnostics=d.classify
+raise SystemExit(m.main(['--aok','/private/tmp/aok-agy-malformed-aok','--evidence-out','docs/evidence/native-adapters/agy-malformed-2026-10-18/owned-log-synthetic.json','--accept-required-terms','--disable-optional-sharing','--trust-owned-fixtures']))

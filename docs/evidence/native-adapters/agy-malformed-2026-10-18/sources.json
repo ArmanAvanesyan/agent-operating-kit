@@ -1,0 +1,68 @@
+{
+  "kind": "aok-agy-malformed-sources/v1",
+  "checkedDate": "2026-10-18",
+  "officialSources": [
+    {
+      "url": "https://www.antigravity.google/docs/cli/commands/agents",
+      "supports": "Native panel and project agent location; does not promise a parse-error message."
+    },
+    {
+      "url": "https://antigravity.google/docs/subagents?tab=cli",
+      "supports": "YAML frontmatter and project agent discovery; does not establish actual host rejection."
+    },
+    {
+      "url": "https://www.antigravity.google/docs/cli/troubleshooting/",
+      "supports": "General CLI troubleshooting; no standalone agent-definition validation path established in inspected page."
+    }
+  ],
+  "nativeBinarySHA256": "fa85a90abded17bcd1b185bbd1d6b1b82065f093ad4700d4dbacd3be2433294c",
+  "staticParserLabels": [
+    {
+      "label": "failed to unmarshal frontmatter YAML",
+      "fileOffset": "0x3a138d3",
+      "staticOnly": true
+    },
+    {
+      "label": "failed to parse frontmatter yaml",
+      "fileOffset": "0x39f464d",
+      "staticOnly": true
+    },
+    {
+      "label": "failed to decode frontmatter",
+      "fileOffset": "0x39ce5c9",
+      "staticOnly": true
+    },
+    {
+      "label": "invalid frontmatter format",
+      "fileOffset": "0x39b717d",
+      "staticOnly": true
+    }
+  ],
+  "staticLimit": "Strings and stripped-symbol inspection do not prove execution of a parser path.",
+  "publicHelp": {
+    "observedNativeFlag": "--log-file",
+    "description": "Override CLI log file path",
+    "auditReports": [
+      "6zrjzu2a.json",
+      "lc209u16.json"
+    ],
+    "wrapperSources": {
+      "aok-agy-diagnose-malformed-synthetic.py": {
+        "path": "900a101823545f8fb9c1ca2ffda465d578485f4e3634bbfc7b2a8a7a9fcdc79f.py.txt",
+        "sha256": "900a101823545f8fb9c1ca2ffda465d578485f4e3634bbfc7b2a8a7a9fcdc79f"
+      },
+      "aok-agy-owned-log-synthetic.py": {
+        "path": "cfea038eb6175d8146e30459bcda649ad199b0821bebf6596244ec619febfe6b.py.txt",
+        "sha256": "cfea038eb6175d8146e30459bcda649ad199b0821bebf6596244ec619febfe6b"
+      },
+      "aok-agy-log-flag-probe.py": {
+        "path": "abfc3373ccfadb4652b1c9c3b0b1340e4220ec5323f84d127788feaad6915b39.py.txt",
+        "sha256": "abfc3373ccfadb4652b1c9c3b0b1340e4220ec5323f84d127788feaad6915b39"
+      },
+      "aok-agy-log-verbosity-probe.py": {
+        "path": "d8345683f3a0f4f3864908ad7cfbe69e4a47ae47022ba9eaa7b5965176025b30.py.txt",
+        "sha256": "d8345683f3a0f4f3864908ad7cfbe69e4a47ae47022ba9eaa7b5965176025b30"
+      }
+    }
+  }
+}

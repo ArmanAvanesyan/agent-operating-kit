@@ -1,0 +1,23 @@
+from pathlib import Path
+import importlib.util,json,os,select,time
+s=importlib.util.spec_from_file_location('flag_login',Path.cwd()/'scripts/native-loading/prepare_agy_login.py');m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
+original=m.subprocess.Popen; rows=[]
+def popen(command,*args,**kwargs):
+ if isinstance(command,list) and '-c' in command:
+  command=list(command);i=command.index('-c')+1
+  if 'os.execv(exe,[exe,*sys.argv[5:]])' in command[i]:command[i]=command[i].replace('os.execv(exe,[exe,*sys.argv[5:]])',"os.execv(exe,[exe,'--help'])")
+ return original(command,*args,**kwargs)
+def capture(master,deadline,**kwargs):
+ wire=bytearray()
+ while time.monotonic()<deadline and len(wire)<65536:
+  if not select.select([master],[],[],.2)[0]:continue
+  try:b=os.read(master,8192)
+  except OSError:break
+  if not b:break
+  wire.extend(b)
+ for line in wire.decode('utf-8','replace').splitlines():
+  if any(x in line for x in ('--log-file','--verbose','--debug','--log-level')):rows.append(line.strip()[:300])
+ return {},False
+m.subprocess.Popen=popen;m._capture_login=capture
+result=m.prepare(timeout=12)
+print(json.dumps({'status':result['status'],'root':result['root'],'auditRoot':result['auditRoot'],'publicLogFlagRows':rows}))

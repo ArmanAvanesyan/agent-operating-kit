@@ -1,0 +1,31 @@
+"""No-account synthetic provider diagnostic; no model or agent selection."""
+from pathlib import Path
+import importlib.util,json,os,re,stat,hashlib
+spec=importlib.util.spec_from_file_location('malformed_local',Path.cwd()/'scripts/native-loading/probe_agy_local_manager.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+original=m.login.state_from_bytes;last=None
+labels=('failed to parse frontmatter','failed to unmarshal frontmatter YAML','failed to decode frontmatter','invalid frontmatter format','yaml: unmarshal errors:','failed to load customization')
+def observe(wire):
+ global last
+ state=original(wire)
+ flags={label:label.lower() in wire.decode('utf-8','replace').lower() for label in labels}
+ signature=json.dumps(flags,sort_keys=True)
+ if signature!=last:
+  last=signature;m.login.append_audit(m.login.AUDIT_PATH,'synthetic-wire-parser-markers',markers=flags)
+ return state
+m.login.state_from_bytes=observe
+
+def diagnostics(root):
+ link=root/'home/.gemini/antigravity-cli/cli.log'
+ try:
+  target=link.resolve(strict=True);target.relative_to(root.resolve(strict=True));info=target.lstat()
+  if not stat.S_ISREG(info.st_mode) or info.st_uid!=os.getuid() or info.st_nlink!=1:return []
+  fd=os.open(target,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
+  try:
+   if os.fstat(fd).st_ino!=info.st_ino:return []
+   data=os.read(fd,1024*1024).decode('utf-8','replace')
+  finally:os.close(fd)
+ except (OSError,ValueError):return []
+ rows=[row for row in data.splitlines() if re.search(r'frontmatter|unmarshal|yaml|aok-probe|custom.?agent|agent\.md',row,re.I)]
+ return [str(x) for x in m.public_synthetic_rows('\n'.join(rows[:16]),root)]
+m.synthetic_load_diagnostics=diagnostics
+raise SystemExit(m.main(['--aok','/private/tmp/aok-agy-malformed-aok','--evidence-out','docs/evidence/native-adapters/agy-malformed-2026-10-18/synthetic-diagnostic.json','--accept-required-terms','--disable-optional-sharing','--trust-owned-fixtures']))

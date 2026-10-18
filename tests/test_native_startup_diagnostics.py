@@ -20,6 +20,13 @@ class StartupDiagnosticsTests(unittest.TestCase):
         self.assertEqual(result, {'fixedWordsObserved': ['failed', 'xcodebuild'], 'terminalQueryLabels': [], 'rawTextRetained': False})
         self.assertNotIn('secret', json.dumps(result))
 
+    def test_redraw_does_not_erase_transient_failure_labels(self):
+        wire = (b'failed to parse frontmatter YAML\r\n'
+                b'\x1b[2J\x1b[HAvailable Agents\r\n> default')
+        result = diagnostics.classify(wire)
+        self.assertIn('failed', result['fixedWordsObserved'])
+        self.assertFalse(result['rawTextRetained'])
+
     @unittest.skipUnless(shutil.which('node'), 'Node required for harmless observer fixture')
     def test_observer_excludes_unrecognized_marks_and_values(self):
         with tempfile.TemporaryDirectory() as temp:

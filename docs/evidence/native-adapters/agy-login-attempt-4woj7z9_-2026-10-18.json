@@ -1,0 +1,1151 @@
+{
+  "target": "agy",
+  "purpose": "approved isolated OAuth preparation",
+  "userApproved": true,
+  "nativeLoading": "not-verified",
+  "backendAuthentication": "not-independently-verified",
+  "outcome": "bounded login attempt did not establish a ready prompt; no authorization code submitted",
+  "authorizationCodeSubmitted": false,
+  "observation": {
+    "at": "2026-10-18T05:33:12.377111+00:00",
+    "durationSeconds": 180.02,
+    "enterSent": true,
+    "event": "native-login-observed",
+    "nativeExecAttempted": true,
+    "pgid": 28697,
+    "pid": 28697,
+    "runnerStarted": true,
+    "state": {
+      "authBarrierObserved": true,
+      "authScreenFixedRows": [
+        {
+          "fixedWords": [
+            "open",
+            "the",
+            "url",
+            "below",
+            "in",
+            "your",
+            "browser"
+          ],
+          "otherWordCount": 0,
+          "row": 7
+        },
+        {
+          "fixedWords": [
+            "code"
+          ],
+          "otherWordCount": 10,
+          "row": 10
+        },
+        {
+          "fixedWords": [
+            "code"
+          ],
+          "otherWordCount": 10,
+          "row": 11
+        },
+        {
+          "fixedWords": [
+            "redirect",
+            "a",
+            "google",
+            "callback"
+          ],
+          "otherWordCount": 8,
+          "row": 12
+        },
+        {
+          "fixedWords": [
+            "type",
+            "code",
+            "a"
+          ],
+          "otherWordCount": 10,
+          "row": 13
+        },
+        {
+          "fixedWords": [
+            "a",
+            "a"
+          ],
+          "otherWordCount": 13,
+          "row": 14
+        },
+        {
+          "fixedWords": [
+            "a"
+          ],
+          "otherWordCount": 11,
+          "row": 15
+        },
+        {
+          "fixedWords": [
+            "a"
+          ],
+          "otherWordCount": 10,
+          "row": 16
+        },
+        {
+          "fixedWords": [
+            "a"
+          ],
+          "otherWordCount": 14,
+          "row": 17
+        },
+        {
+          "fixedWords": [],
+          "otherWordCount": 1,
+          "row": 18
+        },
+        {
+          "fixedWords": [],
+          "otherWordCount": 2,
+          "row": 20
+        },
+        {
+          "fixedWords": [
+            "up"
+          ],
+          "otherWordCount": 3,
+          "row": 22
+        }
+      ],
+      "authorizationCodePromptObserved": false,
+      "bytesObserved": 9781,
+      "codeFieldDiagnostics": [
+        {
+          "endsWithColon": false,
+          "fixedWords": [
+            "code"
+          ],
+          "otherWordCount": 12,
+          "promptMatched": false,
+          "row": 13
+        }
+      ],
+      "enterHintObserved": false,
+      "errorCategories": [],
+      "errorObserved": false,
+      "googleSignInOptionObserved": false,
+      "localPromptObserved": false,
+      "loginRowDiagnostics": [
+        {
+          "fixedWords": [
+            "open",
+            "in",
+            "your",
+            "browser"
+          ],
+          "leadingSpaces": 1,
+          "numbered": false,
+          "otherWordCount": 3
+        },
+        {
+          "fixedWords": [
+            "google",
+            "oauth",
+            "type"
+          ],
+          "leadingSpaces": 1,
+          "numbered": false,
+          "otherWordCount": 9
+        },
+        {
+          "fixedWords": [
+            "google"
+          ],
+          "leadingSpaces": 1,
+          "numbered": false,
+          "otherWordCount": 11
+        }
+      ],
+      "modelSelectionLabelObserved": false,
+      "nativeLoginChoiceObserved": false,
+      "readyHintObserved": false,
+      "startupDiagnostics": {
+        "fixedWordsObserved": [
+          "login",
+          "not",
+          "enter",
+          "welcome",
+          "select"
+        ],
+        "rawTextRetained": false,
+        "terminalQueryLabels": [
+          "modify-other-keys-2",
+          "modify-other-keys-reset",
+          "kitty-keyboard",
+          "terminal-version"
+        ]
+      },
+      "terminalAmbiguityObserved": false,
+      "terminalAmbiguitySite": null,
+      "welcomeLabelObserved": false,
+      "workspaceLabelObserved": false
+    }
+  },
+  "sources": {
+    "native_startup_diagnostics.py": {
+      "archive": "docs/evidence/native-adapters/agy-login-dependency-0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f.py.txt",
+      "sha256": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f"
+    },
+    "native_terminal.py": {
+      "archive": "docs/evidence/native-adapters/agy-login-dependency-d131a559051600304ac825d93f83224616ce7c2153d8b78b546f05c8e57cf4b4.py.txt",
+      "sha256": "d131a559051600304ac825d93f83224616ce7c2153d8b78b546f05c8e57cf4b4"
+    },
+    "prepare_agy_login.py": {
+      "archive": "docs/evidence/native-adapters/agy-login-dependency-34967f845e5c70a347b439caf3f150b92fbdabd2e950ba84114d5f4bcd780a05.py.txt",
+      "sha256": "34967f845e5c70a347b439caf3f150b92fbdabd2e950ba84114d5f4bcd780a05"
+    },
+    "probe-agy-interactive-manager.py": {
+      "gitRevision": "892398550accd0538a188ab984dbdb2ae99f3cae",
+      "path": "scripts/native-loading/probe-agy-interactive-manager.py",
+      "sha256": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc"
+    },
+    "probe-agy-linux-container.py": {
+      "gitRevision": "892398550accd0538a188ab984dbdb2ae99f3cae",
+      "path": "scripts/native-loading/probe-agy-linux-container.py",
+      "sha256": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014"
+    },
+    "probe-agy-macos-interactive-manager.py": {
+      "archive": "docs/evidence/native-adapters/agy-login-dependency-b89247be3b8053a3dd825c52a5808b45ff65f995ff1c1ca47a8afb502f61cf46.py.txt",
+      "sha256": "b89247be3b8053a3dd825c52a5808b45ff65f995ff1c1ca47a8afb502f61cf46"
+    },
+    "probe_cursor_fresh_cli.py": {
+      "gitRevision": "892398550accd0538a188ab984dbdb2ae99f3cae",
+      "path": "scripts/native-loading/probe_cursor_fresh_cli.py",
+      "sha256": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+    }
+  },
+  "processAudit": [
+    {
+      "at": "2026-10-18T05:30:11.327771+00:00",
+      "authenticationMode": "simulated-ssh",
+      "binarySHA256": "fa85a90abded17bcd1b185bbd1d6b1b82065f093ad4700d4dbacd3be2433294c",
+      "event": "probe-prepared",
+      "rootCreatedAt": "2026-10-18T05:30:11.322471Z",
+      "rootExpiresAt": "2026-10-18T05:45:11.322471Z",
+      "sessionId": "af479868-f7fe-4188-bbe0-666c44c69e0c",
+      "sourceHashes": {
+        "native_startup_diagnostics.py": "0efc3175a165cdf84449eb84b001f63649a7bc4b8c58aa7756fb3927d1ae6e8f",
+        "native_terminal.py": "d131a559051600304ac825d93f83224616ce7c2153d8b78b546f05c8e57cf4b4",
+        "prepare_agy_login.py": "34967f845e5c70a347b439caf3f150b92fbdabd2e950ba84114d5f4bcd780a05",
+        "probe-agy-interactive-manager.py": "497e6fa309c6437cf94ec47e9b3bee7f2703cb0b3d1fe045c5c73eae06e26afc",
+        "probe-agy-linux-container.py": "ebd989024508507a290a94bba80d4104735ec587c1aaff6e70b9cc34c5f2d014",
+        "probe-agy-macos-interactive-manager.py": "b89247be3b8053a3dd825c52a5808b45ff65f995ff1c1ca47a8afb502f61cf46",
+        "probe_cursor_fresh_cli.py": "0e1c912c4fd9939163cf425cde8ee29c0befede0492ea31b8c63e431c2f0f507"
+      },
+      "sourceSHA256": "34967f845e5c70a347b439caf3f150b92fbdabd2e950ba84114d5f4bcd780a05"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 28695,
+      "pid": 28695,
+      "purpose": "agy-login-signal-preflight"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 28695,
+      "pgid": 28695,
+      "pid": 28695,
+      "purpose": "agy-login-signal-preflight"
+    },
+    {
+      "at": "2026-10-18T05:30:12.310872+00:00",
+      "event": "preflight-owned",
+      "pgid": 28695,
+      "pid": 28695
+    },
+    {
+      "at": "2026-10-18T05:30:12.352985+00:00",
+      "directChildFallback": false,
+      "event": "owned-group-cleanup",
+      "groupAbsentVerified": true,
+      "groupCleanupFailed": false,
+      "pgid": 28695,
+      "pid": 28695,
+      "priorSignalErrors": [],
+      "purpose": "agy-login-signal-preflight"
+    },
+    {
+      "at": "2026-10-18T05:30:12.353439+00:00",
+      "event": "preflight-clean",
+      "pgid": 28695,
+      "pid": 28695,
+      "returnCode": -15
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 28697,
+      "pid": 28697,
+      "purpose": "agy-private-login"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 28697,
+      "pgid": 28697,
+      "pid": 28697,
+      "purpose": "agy-private-login"
+    },
+    {
+      "at": "2026-10-18T05:30:12.360711+00:00",
+      "command": "antigravity",
+      "event": "native-start-gated",
+      "pgid": 28697,
+      "pid": 28697,
+      "timeoutSeconds": 180
+    },
+    {
+      "at": "2026-10-18T05:30:15.145724+00:00",
+      "event": "terminal-query-answered",
+      "label": "secondary-attributes"
+    },
+    {
+      "at": "2026-10-18T05:30:15.149873+00:00",
+      "event": "terminal-state-change",
+      "state": {
+        "authBarrierObserved": false,
+        "authScreenFixedRows": [],
+        "authorizationCodePromptObserved": false,
+        "bytesObserved": 4,
+        "codeFieldDiagnostics": [],
+        "enterHintObserved": false,
+        "errorCategories": [],
+        "errorObserved": false,
+        "googleSignInOptionObserved": false,
+        "localPromptObserved": false,
+        "loginRowDiagnostics": [],
+        "modelSelectionLabelObserved": false,
+        "nativeLoginChoiceObserved": false,
+        "readyHintObserved": false,
+        "startupDiagnostics": {
+          "fixedWordsObserved": [],
+          "rawTextRetained": false,
+          "terminalQueryLabels": []
+        },
+        "terminalAmbiguityObserved": false,
+        "terminalAmbiguitySite": null,
+        "welcomeLabelObserved": false,
+        "workspaceLabelObserved": false
+      }
+    },
+    {
+      "at": "2026-10-18T05:30:15.154781+00:00",
+      "event": "terminal-query-answered",
+      "label": "primary-attributes"
+    },
+    {
+      "at": "2026-10-18T05:30:15.155079+00:00",
+      "event": "terminal-query-answered",
+      "label": "terminal-version"
+    },
+    {
+      "at": "2026-10-18T05:30:15.155614+00:00",
+      "event": "terminal-state-change",
+      "state": {
+        "authBarrierObserved": false,
+        "authScreenFixedRows": [],
+        "authorizationCodePromptObserved": false,
+        "bytesObserved": 11,
+        "codeFieldDiagnostics": [],
+        "enterHintObserved": false,
+        "errorCategories": [],
+        "errorObserved": false,
+        "googleSignInOptionObserved": false,
+        "localPromptObserved": false,
+        "loginRowDiagnostics": [],
+        "modelSelectionLabelObserved": false,
+        "nativeLoginChoiceObserved": false,
+        "readyHintObserved": false,
+        "startupDiagnostics": {
+          "fixedWordsObserved": [],
+          "rawTextRetained": false,
+          "terminalQueryLabels": [
+            "terminal-version"
+          ]
+        },
+        "terminalAmbiguityObserved": false,
+        "terminalAmbiguitySite": null,
+        "welcomeLabelObserved": false,
+        "workspaceLabelObserved": false
+      }
+    },
+    {
+      "at": "2026-10-18T05:30:15.156514+00:00",
+      "event": "terminal-state-change",
+      "state": {
+        "authBarrierObserved": false,
+        "authScreenFixedRows": [
+          {
+            "fixedWords": [],
+            "otherWordCount": 4,
+            "row": 0
+          }
+        ],
+        "authorizationCodePromptObserved": false,
+        "bytesObserved": 36,
+        "codeFieldDiagnostics": [],
+        "enterHintObserved": false,
+        "errorCategories": [],
+        "errorObserved": false,
+        "googleSignInOptionObserved": false,
+        "localPromptObserved": false,
+        "loginRowDiagnostics": [],
+        "modelSelectionLabelObserved": false,
+        "nativeLoginChoiceObserved": false,
+        "readyHintObserved": false,
+        "startupDiagnostics": {
+          "fixedWordsObserved": [],
+          "rawTextRetained": false,
+          "terminalQueryLabels": [
+            "terminal-version"
+          ]
+        },
+        "terminalAmbiguityObserved": false,
+        "terminalAmbiguitySite": null,
+        "welcomeLabelObserved": false,
+        "workspaceLabelObserved": false
+      }
+    },
+    {
+      "at": "2026-10-18T05:30:15.175415+00:00",
+      "event": "terminal-query-answered",
+      "label": "background-color"
+    },
+    {
+      "at": "2026-10-18T05:30:15.178780+00:00",
+      "event": "terminal-query-answered",
+      "label": "keyboard-unsupported"
+    },
+    {
+      "at": "2026-10-18T05:30:15.181651+00:00",
+      "event": "terminal-state-change",
+      "state": {
+        "authBarrierObserved": true,
+        "authScreenFixedRows": [
+          {
+            "fixedWords": [
+              "to",
+              "the",
+              "antigravity",
+              "cli",
+              "not",
+              "signed",
+              "in"
+            ],
+            "otherWordCount": 4,
+            "row": 7
+          },
+          {
+            "fixedWords": [
+              "select",
+              "login"
+            ],
+            "otherWordCount": 1,
+            "row": 9
+          },
+          {
+            "fixedWords": [
+              "google",
+              "oauth"
+            ],
+            "otherWordCount": 0,
+            "row": 10
+          },
+          {
+            "fixedWords": [
+              "a",
+              "google"
+            ],
+            "otherWordCount": 3,
+            "row": 11
+          },
+          {
+            "fixedWords": [
+              "enter",
+              "select"
+            ],
+            "otherWordCount": 1,
+            "row": 13
+          }
+        ],
+        "authorizationCodePromptObserved": false,
+        "bytesObserved": 890,
+        "codeFieldDiagnostics": [],
+        "enterHintObserved": true,
+        "errorCategories": [],
+        "errorObserved": false,
+        "googleSignInOptionObserved": true,
+        "localPromptObserved": false,
+        "loginRowDiagnostics": [
+          {
+            "fixedWords": [
+              "select",
+              "login"
+            ],
+            "leadingSpaces": 1,
+            "numbered": false,
+            "otherWordCount": 1
+          },
+          {
+            "fixedWords": [
+              "google",
+              "oauth"
+            ],
+            "leadingSpaces": 1,
+            "numbered": false,
+            "otherWordCount": 0
+          },
+          {
+            "fixedWords": [
+              "google"
+            ],
+            "leadingSpaces": 3,
+            "numbered": true,
+            "otherWordCount": 4
+          }
+        ],
+        "modelSelectionLabelObserved": false,
+        "nativeLoginChoiceObserved": false,
+        "readyHintObserved": false,
+        "startupDiagnostics": {
+          "fixedWordsObserved": [
+            "login",
+            "not",
+            "enter",
+            "welcome",
+            "select"
+          ],
+          "rawTextRetained": false,
+          "terminalQueryLabels": [
+            "modify-other-keys-2",
+            "modify-other-keys-reset",
+            "kitty-keyboard",
+            "terminal-version"
+          ]
+        },
+        "terminalAmbiguityObserved": false,
+        "terminalAmbiguitySite": null,
+        "welcomeLabelObserved": true,
+        "workspaceLabelObserved": true
+      }
+    },
+    {
+      "at": "2026-10-18T05:30:15.181998+00:00",
+      "caseRoot": "/private/tmp/aok-agy-login-2cg37f1r",
+      "event": "explicit-native-login-enter-confirmed",
+      "input": "Enter"
+    },
+    {
+      "at": "2026-10-18T05:30:15.182286+00:00",
+      "event": "single-enter-sent",
+      "input": "Enter"
+    },
+    {
+      "at": "2026-10-18T05:30:15.196624+00:00",
+      "event": "terminal-state-change",
+      "state": {
+        "authBarrierObserved": false,
+        "authScreenFixedRows": null,
+        "authorizationCodePromptObserved": false,
+        "bytesObserved": 1914,
+        "codeFieldDiagnostics": null,
+        "enterHintObserved": false,
+        "errorCategories": [
+          "terminal-ambiguity"
+        ],
+        "errorObserved": false,
+        "googleSignInOptionObserved": false,
+        "localPromptObserved": false,
+        "loginRowDiagnostics": null,
+        "modelSelectionLabelObserved": false,
+        "nativeLoginChoiceObserved": false,
+        "readyHintObserved": false,
+        "startupDiagnostics": {
+          "fixedWordsObserved": [
+            "login",
+            "not",
+            "enter",
+            "welcome",
+            "select"
+          ],
+          "rawTextRetained": false,
+          "terminalQueryLabels": [
+            "modify-other-keys-2",
+            "modify-other-keys-reset",
+            "kitty-keyboard",
+            "terminal-version"
+          ]
+        },
+        "terminalAmbiguityObserved": true,
+        "terminalAmbiguitySite": {
+          "function": "_skip_osc",
+          "line": 136
+        },
+        "welcomeLabelObserved": false,
+        "workspaceLabelObserved": false
+      }
+    },
+    {
+      "at": "2026-10-18T05:30:15.323158+00:00",
+      "event": "manual-oauth-browser-launch",
+      "success": true
+    },
+    {
+      "at": "2026-10-18T05:30:15.373355+00:00",
+      "event": "terminal-state-change",
+      "state": {
+        "authBarrierObserved": true,
+        "authScreenFixedRows": [
+          {
+            "fixedWords": [
+              "open",
+              "the",
+              "url",
+              "below",
+              "in",
+              "your",
+              "browser"
+            ],
+            "otherWordCount": 0,
+            "row": 7
+          },
+          {
+            "fixedWords": [
+              "code"
+            ],
+            "otherWordCount": 10,
+            "row": 10
+          },
+          {
+            "fixedWords": [
+              "code"
+            ],
+            "otherWordCount": 10,
+            "row": 11
+          },
+          {
+            "fixedWords": [
+              "redirect",
+              "a",
+              "google",
+              "callback"
+            ],
+            "otherWordCount": 8,
+            "row": 12
+          },
+          {
+            "fixedWords": [
+              "type",
+              "code",
+              "a"
+            ],
+            "otherWordCount": 10,
+            "row": 13
+          },
+          {
+            "fixedWords": [
+              "a",
+              "a"
+            ],
+            "otherWordCount": 13,
+            "row": 14
+          },
+          {
+            "fixedWords": [
+              "a"
+            ],
+            "otherWordCount": 11,
+            "row": 15
+          },
+          {
+            "fixedWords": [
+              "a"
+            ],
+            "otherWordCount": 10,
+            "row": 16
+          },
+          {
+            "fixedWords": [
+              "a"
+            ],
+            "otherWordCount": 14,
+            "row": 17
+          },
+          {
+            "fixedWords": [],
+            "otherWordCount": 1,
+            "row": 18
+          },
+          {
+            "fixedWords": [],
+            "otherWordCount": 2,
+            "row": 20
+          },
+          {
+            "fixedWords": [
+              "up"
+            ],
+            "otherWordCount": 3,
+            "row": 22
+          }
+        ],
+        "authorizationCodePromptObserved": false,
+        "bytesObserved": 9781,
+        "codeFieldDiagnostics": [
+          {
+            "endsWithColon": false,
+            "fixedWords": [
+              "code"
+            ],
+            "otherWordCount": 12,
+            "promptMatched": false,
+            "row": 13
+          }
+        ],
+        "enterHintObserved": false,
+        "errorCategories": [],
+        "errorObserved": false,
+        "googleSignInOptionObserved": false,
+        "localPromptObserved": false,
+        "loginRowDiagnostics": [
+          {
+            "fixedWords": [
+              "open",
+              "in",
+              "your",
+              "browser"
+            ],
+            "leadingSpaces": 1,
+            "numbered": false,
+            "otherWordCount": 3
+          },
+          {
+            "fixedWords": [
+              "google",
+              "oauth",
+              "type"
+            ],
+            "leadingSpaces": 1,
+            "numbered": false,
+            "otherWordCount": 9
+          },
+          {
+            "fixedWords": [
+              "google"
+            ],
+            "leadingSpaces": 1,
+            "numbered": false,
+            "otherWordCount": 11
+          }
+        ],
+        "modelSelectionLabelObserved": false,
+        "nativeLoginChoiceObserved": false,
+        "readyHintObserved": false,
+        "startupDiagnostics": {
+          "fixedWordsObserved": [
+            "login",
+            "not",
+            "enter",
+            "welcome",
+            "select"
+          ],
+          "rawTextRetained": false,
+          "terminalQueryLabels": [
+            "modify-other-keys-2",
+            "modify-other-keys-reset",
+            "kitty-keyboard",
+            "terminal-version"
+          ]
+        },
+        "terminalAmbiguityObserved": false,
+        "terminalAmbiguitySite": null,
+        "welcomeLabelObserved": false,
+        "workspaceLabelObserved": false
+      }
+    },
+    {
+      "at": "2026-10-18T05:33:12.377111+00:00",
+      "durationSeconds": 180.02,
+      "enterSent": true,
+      "event": "native-login-observed",
+      "nativeExecAttempted": true,
+      "pgid": 28697,
+      "pid": 28697,
+      "runnerStarted": true,
+      "state": {
+        "authBarrierObserved": true,
+        "authScreenFixedRows": [
+          {
+            "fixedWords": [
+              "open",
+              "the",
+              "url",
+              "below",
+              "in",
+              "your",
+              "browser"
+            ],
+            "otherWordCount": 0,
+            "row": 7
+          },
+          {
+            "fixedWords": [
+              "code"
+            ],
+            "otherWordCount": 10,
+            "row": 10
+          },
+          {
+            "fixedWords": [
+              "code"
+            ],
+            "otherWordCount": 10,
+            "row": 11
+          },
+          {
+            "fixedWords": [
+              "redirect",
+              "a",
+              "google",
+              "callback"
+            ],
+            "otherWordCount": 8,
+            "row": 12
+          },
+          {
+            "fixedWords": [
+              "type",
+              "code",
+              "a"
+            ],
+            "otherWordCount": 10,
+            "row": 13
+          },
+          {
+            "fixedWords": [
+              "a",
+              "a"
+            ],
+            "otherWordCount": 13,
+            "row": 14
+          },
+          {
+            "fixedWords": [
+              "a"
+            ],
+            "otherWordCount": 11,
+            "row": 15
+          },
+          {
+            "fixedWords": [
+              "a"
+            ],
+            "otherWordCount": 10,
+            "row": 16
+          },
+          {
+            "fixedWords": [
+              "a"
+            ],
+            "otherWordCount": 14,
+            "row": 17
+          },
+          {
+            "fixedWords": [],
+            "otherWordCount": 1,
+            "row": 18
+          },
+          {
+            "fixedWords": [],
+            "otherWordCount": 2,
+            "row": 20
+          },
+          {
+            "fixedWords": [
+              "up"
+            ],
+            "otherWordCount": 3,
+            "row": 22
+          }
+        ],
+        "authorizationCodePromptObserved": false,
+        "bytesObserved": 9781,
+        "codeFieldDiagnostics": [
+          {
+            "endsWithColon": false,
+            "fixedWords": [
+              "code"
+            ],
+            "otherWordCount": 12,
+            "promptMatched": false,
+            "row": 13
+          }
+        ],
+        "enterHintObserved": false,
+        "errorCategories": [],
+        "errorObserved": false,
+        "googleSignInOptionObserved": false,
+        "localPromptObserved": false,
+        "loginRowDiagnostics": [
+          {
+            "fixedWords": [
+              "open",
+              "in",
+              "your",
+              "browser"
+            ],
+            "leadingSpaces": 1,
+            "numbered": false,
+            "otherWordCount": 3
+          },
+          {
+            "fixedWords": [
+              "google",
+              "oauth",
+              "type"
+            ],
+            "leadingSpaces": 1,
+            "numbered": false,
+            "otherWordCount": 9
+          },
+          {
+            "fixedWords": [
+              "google"
+            ],
+            "leadingSpaces": 1,
+            "numbered": false,
+            "otherWordCount": 11
+          }
+        ],
+        "modelSelectionLabelObserved": false,
+        "nativeLoginChoiceObserved": false,
+        "readyHintObserved": false,
+        "startupDiagnostics": {
+          "fixedWordsObserved": [
+            "login",
+            "not",
+            "enter",
+            "welcome",
+            "select"
+          ],
+          "rawTextRetained": false,
+          "terminalQueryLabels": [
+            "modify-other-keys-2",
+            "modify-other-keys-reset",
+            "kitty-keyboard",
+            "terminal-version"
+          ]
+        },
+        "terminalAmbiguityObserved": false,
+        "terminalAmbiguitySite": null,
+        "welcomeLabelObserved": false,
+        "workspaceLabelObserved": false
+      }
+    },
+    {
+      "at": "2026-10-18T05:33:12.698733+00:00",
+      "directChildFallback": false,
+      "event": "owned-group-cleanup",
+      "groupAbsentVerified": true,
+      "groupCleanupFailed": false,
+      "pgid": 28697,
+      "pid": 28697,
+      "priorSignalErrors": [],
+      "purpose": "agy-private-login"
+    },
+    {
+      "at": "2026-10-18T05:33:12.699316+00:00",
+      "cleaned": true,
+      "closeResult": {
+        "masterClosed": true,
+        "slaveClosed": true
+      },
+      "event": "native-login-cleanup",
+      "pgid": 28697,
+      "pid": 28697
+    },
+    {
+      "at": "2026-10-18T05:33:12.755081+00:00",
+      "event": "login-preparation-failed",
+      "reason": "ready-prompt-not-observed",
+      "sessionId": "af479868-f7fe-4188-bbe0-666c44c69e0c",
+      "state": {
+        "authBarrierObserved": true,
+        "authScreenFixedRows": [
+          {
+            "fixedWords": [
+              "open",
+              "the",
+              "url",
+              "below",
+              "in",
+              "your",
+              "browser"
+            ],
+            "otherWordCount": 0,
+            "row": 7
+          },
+          {
+            "fixedWords": [
+              "code"
+            ],
+            "otherWordCount": 10,
+            "row": 10
+          },
+          {
+            "fixedWords": [
+              "code"
+            ],
+            "otherWordCount": 10,
+            "row": 11
+          },
+          {
+            "fixedWords": [
+              "redirect",
+              "a",
+              "google",
+              "callback"
+            ],
+            "otherWordCount": 8,
+            "row": 12
+          },
+          {
+            "fixedWords": [
+              "type",
+              "code",
+              "a"
+            ],
+            "otherWordCount": 10,
+            "row": 13
+          },
+          {
+            "fixedWords": [
+              "a",
+              "a"
+            ],
+            "otherWordCount": 13,
+            "row": 14
+          },
+          {
+            "fixedWords": [
+              "a"
+            ],
+            "otherWordCount": 11,
+            "row": 15
+          },
+          {
+            "fixedWords": [
+              "a"
+            ],
+            "otherWordCount": 10,
+            "row": 16
+          },
+          {
+            "fixedWords": [
+              "a"
+            ],
+            "otherWordCount": 14,
+            "row": 17
+          },
+          {
+            "fixedWords": [],
+            "otherWordCount": 1,
+            "row": 18
+          },
+          {
+            "fixedWords": [],
+            "otherWordCount": 2,
+            "row": 20
+          },
+          {
+            "fixedWords": [
+              "up"
+            ],
+            "otherWordCount": 3,
+            "row": 22
+          }
+        ],
+        "authorizationCodePromptObserved": false,
+        "bytesObserved": 9781,
+        "codeFieldDiagnostics": [
+          {
+            "endsWithColon": false,
+            "fixedWords": [
+              "code"
+            ],
+            "otherWordCount": 12,
+            "promptMatched": false,
+            "row": 13
+          }
+        ],
+        "enterHintObserved": false,
+        "errorCategories": [],
+        "errorObserved": false,
+        "googleSignInOptionObserved": false,
+        "localPromptObserved": false,
+        "loginRowDiagnostics": [
+          {
+            "fixedWords": [
+              "open",
+              "in",
+              "your",
+              "browser"
+            ],
+            "leadingSpaces": 1,
+            "numbered": false,
+            "otherWordCount": 3
+          },
+          {
+            "fixedWords": [
+              "google",
+              "oauth",
+              "type"
+            ],
+            "leadingSpaces": 1,
+            "numbered": false,
+            "otherWordCount": 9
+          },
+          {
+            "fixedWords": [
+              "google"
+            ],
+            "leadingSpaces": 1,
+            "numbered": false,
+            "otherWordCount": 11
+          }
+        ],
+        "modelSelectionLabelObserved": false,
+        "nativeLoginChoiceObserved": false,
+        "readyHintObserved": false,
+        "startupDiagnostics": {
+          "fixedWordsObserved": [
+            "login",
+            "not",
+            "enter",
+            "welcome",
+            "select"
+          ],
+          "rawTextRetained": false,
+          "terminalQueryLabels": [
+            "modify-other-keys-2",
+            "modify-other-keys-reset",
+            "kitty-keyboard",
+            "terminal-version"
+          ]
+        },
+        "terminalAmbiguityObserved": false,
+        "terminalAmbiguitySite": null,
+        "welcomeLabelObserved": false,
+        "workspaceLabelObserved": false
+      }
+    }
+  ],
+  "isolation": {
+    "realHomeReads": "denied",
+    "keychain": "securityd denied",
+    "credentialsInEvidence": false
+  },
+  "privateHomeRemoved": true
+}

@@ -5,10 +5,12 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"reflect"
 	"testing"
 
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/contracts"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapter"
+	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapters/cursor"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeparse"
 )
 
@@ -189,8 +191,8 @@ func TestCursorExtendedFormatInventoryRoundTrip(t *testing.T) {
 		if err := json.Unmarshal(out.Bytes(), &report); err != nil {
 			t.Fatal(err)
 		}
-		if report.HostLoading.Status != "not-run" || report.RuntimeEnforcement != "unverified" {
-			t.Fatalf("extended syntax must not promote host or runtime evidence: %+v", report)
+		if !reflect.DeepEqual(report.HostLoading, cursor.New().Descriptor().HostLoading) || report.RuntimeEnforcement != "unverified" {
+			t.Fatalf("extended syntax must preserve version-bound host evidence and unverified runtime: %+v", report)
 		}
 	}
 	draft, candidate := filepath.Join(root, "draft"), filepath.Join(root, "candidate")

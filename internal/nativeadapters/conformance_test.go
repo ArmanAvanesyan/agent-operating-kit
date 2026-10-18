@@ -32,7 +32,7 @@ func TestAllNativeAdaptersConformToEngineBoundaries(t *testing.T) {
 			{Path: ".codex/config.toml", Format: "toml", Data: []byte("[agents.aok-probe]\ndescription = \"Synthetic read-only discovery fixture\"\nconfig_file = \"agents/aok-probe.toml\"\n")},
 			readNative(t, "codex/testdata/probe.toml", ".codex/agents/aok-probe.toml", "toml"),
 		}},
-		{name: "cursor", target: "cursor", scope: "project", hostStatus: "not-run", adapter: cursor.New(), files: []nativeadapter.File{readNative(t, "cursor/testdata/reviewer.md", ".cursor/agents/reviewer.md", "markdown")}},
+		{name: "cursor", target: "cursor", scope: "project", hostStatus: "verified", adapter: cursor.New(), files: []nativeadapter.File{readNative(t, "cursor/testdata/reviewer.md", ".cursor/agents/reviewer.md", "markdown")}},
 		{name: "gemini", target: "gemini", scope: "project", hostStatus: "verified", adapter: gemini.New(), files: []nativeadapter.File{readNative(t, "gemini/testdata/security-auditor.md", ".gemini/agents/security-auditor.md", "markdown")}},
 		{name: "hermes-agent", target: "hermes-agent", scope: "profile", hostStatus: "verified", adapter: hermes.New(), files: []nativeadapter.File{
 			readNative(t, "hermes/testdata/config.yaml", "config.yaml", "yaml"),

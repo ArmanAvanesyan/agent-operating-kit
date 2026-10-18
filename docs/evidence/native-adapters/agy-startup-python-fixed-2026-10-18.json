@@ -1,0 +1,119 @@
+{
+  "aokSha256": "0a11f21ca7865e88d848cc5ae298daa711fdf0eb39a6bb0cacffa415bb696e48",
+  "auditPath": "docs/evidence/native-adapters/agy-startup-python-fixed-run-2026-10-18.jsonl",
+  "authScope": "existing native account use through AGY CLI keychain lookup only; no credential read/copy",
+  "authentication": "existing-keyring-only; no fresh OAuth attempted",
+  "binarySha256": "fa85a90abded17bcd1b185bbd1d6b1b82065f093ad4700d4dbacd3be2433294c",
+  "candidateManagerEvidence": false,
+  "cases": {
+    "absent": {
+      "authBarrierObserved": true,
+      "bytesObserved": 754,
+      "commandSent": false,
+      "descriptionObserved": false,
+      "durationSeconds": 0.37,
+      "errorCategories": [],
+      "errorObserved": false,
+      "localPromptObserved": false,
+      "managerSectionObserved": false,
+      "modelSelectionLabelObserved": false,
+      "nameObserved": false,
+      "nativeExecAttempted": true,
+      "noAgentsLabelObserved": false,
+      "parseErrorObserved": false,
+      "readyHintObserved": false,
+      "runnerStarted": true,
+      "startupDiagnostics": {
+        "fixedWordsObserved": [
+          "not"
+        ],
+        "rawTextRetained": false
+      },
+      "welcomeLabelObserved": true,
+      "workspaceLabelObserved": false
+    },
+    "malformed": {
+      "authBarrierObserved": true,
+      "bytesObserved": 754,
+      "commandSent": false,
+      "descriptionObserved": false,
+      "durationSeconds": 0.37,
+      "errorCategories": [],
+      "errorObserved": false,
+      "localPromptObserved": false,
+      "managerSectionObserved": false,
+      "modelSelectionLabelObserved": false,
+      "nameObserved": false,
+      "nativeExecAttempted": true,
+      "noAgentsLabelObserved": false,
+      "parseErrorObserved": false,
+      "readyHintObserved": false,
+      "runnerStarted": true,
+      "startupDiagnostics": {
+        "fixedWordsObserved": [
+          "not"
+        ],
+        "rawTextRetained": false
+      },
+      "welcomeLabelObserved": true,
+      "workspaceLabelObserved": false
+    },
+    "positive": {
+      "authBarrierObserved": true,
+      "bytesObserved": 738,
+      "commandSent": false,
+      "descriptionObserved": false,
+      "durationSeconds": 2.86,
+      "errorCategories": [],
+      "errorObserved": false,
+      "localPromptObserved": false,
+      "managerSectionObserved": false,
+      "modelSelectionLabelObserved": false,
+      "nameObserved": false,
+      "nativeExecAttempted": true,
+      "noAgentsLabelObserved": false,
+      "parseErrorObserved": false,
+      "readyHintObserved": false,
+      "runnerStarted": true,
+      "startupDiagnostics": {
+        "fixedWordsObserved": [
+          "not"
+        ],
+        "rawTextRetained": false
+      },
+      "welcomeLabelObserved": true,
+      "workspaceLabelObserved": false
+    }
+  },
+  "diagnosticsHelperSHA256": "740954508dc7393b083da3391704ea4f5974df622f82ed7f3d9d700516498966",
+  "expectedDescription": "Synthetic AGY adapter discovery fixture",
+  "expectedName": "aok-probe",
+  "fixtureSha256": "5c3d843a03dc2adea309b2563cb5a2ce10065b7d6506f1ff742bca6e5db49b76",
+  "launcherInterpreter": "resolved current Python executable; Apple developer-tools shim bypassed",
+  "launcherInterpreterSHA256": "d6f3683809276d588017f334c0def9bf19bccab6b5e6ffeb85c61a918b108dab",
+  "modelInvocation": "not-run",
+  "nativeLoading": "not-verified",
+  "observedAt": "2026-10-18T04:14:52.685271+00:00",
+  "ownedBinarySha256": "fa85a90abded17bcd1b185bbd1d6b1b82065f093ad4700d4dbacd3be2433294c",
+  "probeSource": "docs/evidence/native-adapters/agy-macos-interactive-source-ec43e12f1bed1d05b79a25af00d48832bff8286e8fea74e96bb9844cb5ecb1a9.py",
+  "probeSourceSha256": "ec43e12f1bed1d05b79a25af00d48832bff8286e8fea74e96bb9844cb5ecb1a9",
+  "runtimeEnforcement": "unverified",
+  "sandbox": {
+    "agentSelection": "not performed",
+    "browserLaunch": "blocked",
+    "keychainMachLookup": "com.apple.securityd only",
+    "network": "allowed for native account refresh and /agents manager metadata",
+    "ordinaryPrompt": "not sent",
+    "originalHomeReads": "denied",
+    "writesOutsideOwnedTemporaryRoot": "denied"
+  },
+  "scope": "project",
+  "signalPreflight": {
+    "pgid": 1989,
+    "pid": 1989,
+    "terminated": true
+  },
+  "target": "antigravity",
+  "version": "1.4.2",
+  "diagnosticsHelperSourceArchive": "docs/evidence/native-adapters/native-startup-diagnostics-740954508dc7393b083da3391704ea4f5974df622f82ed7f3d9d700516498966.py.txt"
+}

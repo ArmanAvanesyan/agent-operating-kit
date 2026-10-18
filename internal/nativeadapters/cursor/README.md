@@ -3,10 +3,11 @@
 This adapter handles one explicitly supplied Markdown subagent under
 `.cursor/agents/`. It accepts `.md`, `.mdc`, and `.markdown`, the three
 extensions included by the 2026.10.16 Cursor Agent workspace scanner, with
-case-insensitive extension matching as in the shipped scanner. It does
-not scan a project, run Cursor, or prove that Cursor
-loads a given file. `HostLoading` is `not-run` and the shared engine reports
-runtime enforcement as unverified.
+case-insensitive extension matching as in the shipped scanner. Import/export
+does not scan a project or run Cursor. Separate, version-bound native evidence
+verifies project command-picker discovery for the exported fixture on the
+pinned 2026.10.16 CLI. Selected-agent startup and prompt-body use are unverified;
+the shared engine also reports runtime enforcement as unverified.
 
 The mapping is intentionally limited:
 
@@ -43,13 +44,14 @@ projection treatment here; `readonly` is not treated as an AOK permission
 enforcement guarantee. The local `adapterVersion` tracks this mapping and is
 not the installed Cursor Agent version.
 
-## Native loading blocker
+## Historical native loading blocker (superseded)
 
 The installed Cursor Agent help/version [evidence](../../../docs/evidence/native-adapters/cursor-loading-blocker.json)
 does not expose a read-only subagent discovery operation. No prompt was sent.
 AOK tests verify native-format parsing, supported-field round trips and unknown
-preservation, but the native gate remains open until a host actually loads the
-generated file. Native input uses an explicit inventory with `.cursor/agents/`
+preservation. At that stage, the native gate was open pending host loading.
+The reviewed command-picker evidence below now verifies bounded project
+discovery for the pinned 2026.10.16 host. Native input uses an explicit inventory with `.cursor/agents/`
 paths; a standalone basename does not establish that scope.
 
 ## Earlier component verification and scalar compatibility
@@ -61,7 +63,8 @@ module export; the loader module/factories remain unchanged. HOME/project are
 temporary; Node TCP connect, HTTP(S) request and fetch are guarded. The positive fixture is discovered
 with its name, description, model and prompt; absent and malformed controls return
 no agents. This is component discovery, not full CLI startup, selection or
-inference. `HostLoading` stays `not-run` for the overall CLI gate.
+inference. This historical result alone left `HostLoading` at `not-run`; the
+subsequent full-CLI command-picker evidence below supersedes that status.
 
 That installed loader split frontmatter lines at their first colon and did
 not decode YAML quoting, block scalars or nesting. A quoted YAML description
@@ -87,7 +90,7 @@ python3 scripts/native-loading/verify_cursor.py --aok /absolute/path/to/aok \
 The mapping revision is `cursor-subagents-v3`; older sidecars require re-import
 under the new compatibility checks rather than silently reusing old assumptions.
 
-## Fresh Cursor Agent CLI audit (2026-10-18)
+## Initial unauthenticated CLI audit (2026-10-18, historical)
 
 The [2026.10.16 CLI audit](../../../docs/evidence/native-adapters/cursor-loading-2026.10.16.json)
 used the official x86_64 package in a private temporary directory; it did not
@@ -101,11 +104,11 @@ The official ACP handler source similarly makes unauthenticated `session/new`
 return an authentication-required error; `initialize` reports capabilities,
 not discovered project roles. No authentication or prompt was attempted.
 
-The new release therefore supplies a filename-extension compatibility update,
-but no fresh full-CLI discovery evidence. Its project `HostLoading` status
-remains `not-run`; the older component result is limited to the exact earlier
-component version and does not prove current CLI discovery, role selection, or
-runtime enforcement.
+This initial audit supplied a filename-extension compatibility update but no
+full-CLI discovery evidence. It left project `HostLoading` at `not-run`. The
+older component result remains limited to its exact earlier version. The later
+reviewed command-picker result below supplies the current project discovery
+evidence; role selection and runtime enforcement remain unverified.
 
 The bounded audit is reproducible with the pinned official package archive
 and a locally built AOK binary (the script does not download or install Cursor):
@@ -202,5 +205,24 @@ backend authentication, and removes copies in `finally`. It does not refresh or
 alter the original store. For a separately authorized fresh browser OAuth flow,
 `prepare_cursor_login.py` creates a private, short-lived session; pass its root
 with `--isolated-login-root` instead. Remove that owned root after use. Evidence
-keeps exact executed sources, hashes and process identities. `HostLoading`
-remains `not-run` and runtime enforcement remains unverified.
+keeps exact executed sources, hashes and process identities. These earlier
+authentication-only attempts left `HostLoading` at `not-run`; the reviewed
+project discovery below supersedes that status. Runtime enforcement is unverified.
+
+
+## Verified project command-picker discovery — 2026-10-18
+
+The [reviewed gate decision](../../../docs/evidence/native-adapters/cursor-project-discovery-decision-2026-10-18.json)
+binds the [native TUI observation](../../../docs/evidence/native-adapters/cursor-command-picker-2026-10-18.json)
+and its executed source. The full adapter-exported description appears in the
+positive project's current command-picker screen and is absent from both the
+missing-file and same-frontmatter/blank-body controls. Every case authenticated
+against the backend, searched `/reviewer`, and sent no Enter. The echoed name is
+not discovery evidence; the older literal menu-marker string did not match.
+
+This supersedes earlier `not-run` discovery conclusions for the exact pinned
+2026.10.16-e3cb207 package and project scope. It establishes discovery/registration,
+not selected-agent startup, prompt-body use, model selection, inference or runtime
+policy enforcement. Networking was allowed; an immutable PATH shim refused named
+Git retrieval verbs. This is a qualified isolated loading result, not a global
+network restriction or a default-environment startup claim.

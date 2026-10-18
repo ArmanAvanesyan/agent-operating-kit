@@ -92,6 +92,7 @@ class MenuBoundaryTests(unittest.TestCase):
                  mock.patch.object(probe.safe, "terminate_owned_group") as cleanup, \
                  mock.patch.object(probe.select, "select", return_value=([90], [], [])), \
                  mock.patch.object(probe.os, "read", side_effect=chunks), \
+                 mock.patch.object(probe.os, "set_blocking"), \
                  mock.patch.object(probe.os, "ttyname", return_value="/dev/ttys-owned-fixture"), \
                  mock.patch.object(probe.os, "write") as write, \
                  mock.patch.object(probe.os, "close"):
@@ -111,6 +112,18 @@ class MenuBoundaryTests(unittest.TestCase):
         self.assertFalse(result["enterSent"])
         self.assertTrue(result["expectedDescriptionObserved"])
 
+    def test_header_only_slash_does_not_claim_ready_without_menu_response(self):
+        result, write = self.inspect([b"Cursor Agent Auto", b""])
+        self.assertEqual([call.args[1] for call in write.call_args_list], [b"/"])
+        self.assertFalse(result["readyPromptObserved"])
+        self.assertFalse(result["enterSent"])
+
+    def test_header_slash_filters_only_after_native_menu_response(self):
+        result, write = self.inspect([b"Cursor Agent Auto", b"\r\nmodels help", b""])
+        self.assertEqual([call.args[1] for call in write.call_args_list], [b"/", b"reviewer"])
+        self.assertTrue(result["readyPromptObserved"])
+        self.assertFalse(result["enterSent"])
+
     def test_audit_failure_still_closes_terminal_and_stops_child(self):
         with mock.patch.object(probe.safe, "append_audit", side_effect=OSError("audit failed")):
             with self.assertRaisesRegex(OSError, "audit failed"):
@@ -120,6 +133,54 @@ class MenuBoundaryTests(unittest.TestCase):
         result, write = self.inspect([b"Press any key to log in..."])
         write.assert_not_called()
         self.assertTrue(result["loginBarrierObserved"])
+
+    def test_ambiguous_terminal_stream_blocks_native_menu_input(self):
+        result, write = self.inspect([
+            b"cursor auto ask anything\r\n" + "❯ ".encode() + b"\x1b[?1047h",
+            b"",
+        ])
+        write.assert_not_called()
+        self.assertFalse(result["readyPromptObserved"])
+        self.assertTrue(result["terminalAmbiguityObserved"])
+        self.assertTrue(result["cleanupCompleted"])
+
+    def test_concealed_prompt_cannot_authorize_native_menu_input(self):
+        result, write = self.inspect([
+            b"cursor auto ask anything\r\n\x1b[8m\xe2\x9d\xaf /reviewer\x1b[28m",
+            b"",
+        ])
+        write.assert_not_called()
+        self.assertFalse(result["readyPromptObserved"])
+        self.assertTrue(result["terminalAmbiguityObserved"])
+
+
+class GitPolicyBoundaryTests(unittest.TestCase):
+    def test_existing_shim_directory_is_refused_without_mutation(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            tools = probe.prepare_git_policy(root)
+            shim = tools / "git"
+            original = shim.read_bytes()
+            mode = shim.stat().st_mode & 0o777
+            with self.assertRaises(FileExistsError):
+                probe.prepare_git_policy(root)
+            self.assertEqual(shim.read_bytes(), original)
+            self.assertEqual(shim.stat().st_mode & 0o777, mode)
+            self.assertEqual(mode, 0o500)
+            self.assertNotIn("https://", original.decode())
+
+    def test_startup_diagnostics_never_retain_tokens_or_urls(self):
+        token_value = "aok-private-token-value-123"
+        url_value = "https://private.example/path?access_token=hidden-value"
+        captured = (f"warning: model unavailable {url_value} {token_value}\n".encode() +
+                    b"\x1b[31mpermission denied\x1b[0m")
+        result = probe.classify(captured)
+        encoded = json.dumps(result)
+        self.assertTrue(result["fixedWordsObserved"])
+        self.assertFalse(result["rawTextRetained"])
+        self.assertNotIn(token_value, encoded)
+        self.assertNotIn(url_value, encoded)
+        self.assertNotIn("hidden-value", encoded)
 
 
 class PreparedLoginTests(unittest.TestCase):

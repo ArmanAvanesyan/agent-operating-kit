@@ -1,0 +1,23 @@
+"""Privacy-preserving startup classification: fixed public labels only."""
+import re
+
+WORDS = (
+    'error', 'warning', 'failed', 'fatal', 'unknown', 'unrecognized', 'option',
+    'flag', 'argument', 'usage', 'trust', 'workspace', 'permission', 'denied',
+    'operation', 'permitted', 'directory', 'current', 'working', 'home', 'config',
+    'read', 'write', 'open', 'keychain', 'secitem', 'securityd', 'database',
+    'sqlite', 'socket', 'server', 'connection', 'network', 'certificate',
+    'download', 'update', 'version', 'terminal', 'tty', 'stdin', 'stdout',
+    'python', 'traceback', 'xcrun', 'developer', 'xcodebuild', 'sandbox',
+    'login', 'credentials', 'authentication', 'account', 'expired', 'invalid',
+    'agent', 'subagent', 'initialize', 'initialization', 'lock', 'cache', 'port',
+    'bind', 'ipc', 'not', 'found', 'supported', 'shell', 'bash', 'zsh', 'command',
+    'launch', 'resource', 'limit', 'file', 'missing', 'required', 'input',
+)
+ANSI = re.compile(rb'\x1b(?:\[[0-?]*[ -/]*[@-~]|\][^\x07]*(?:\x07|\x1b\\))')
+
+
+def classify(data):
+    text = ANSI.sub(b'', data).decode('utf-8', 'replace').lower()
+    return {'fixedWordsObserved': [word for word in WORDS if re.search(r'\b' + word + r'\b', text)],
+            'rawTextRetained': False}

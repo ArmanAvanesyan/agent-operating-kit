@@ -1,0 +1,755 @@
+{
+  "target": "cursor",
+  "scope": "project",
+  "hostVersion": "2026.10.16-e3cb207",
+  "observedAt": "2026-10-18T04:18:40.497954+00:00",
+  "nativeLoading": "not-verified",
+  "runtimeEnforcement": "unverified",
+  "invalidControl": "same frontmatter identity and description; blank prompt body",
+  "modelInvocation": "not-run",
+  "diagnosticPreload": true,
+  "nativeGitSHA256": "74b90b9f97ec79bfe7886a4fc6132533b3e1014ef4195d28abd1ca9bf321f34a",
+  "observerSHA256": "f9b152d0a5f3610a418543bd557ac124e76f35a802f61904215d96f4319578e6",
+  "cases": {
+    "positive": {
+      "startupDiagnostics": {
+        "fixedWordsObserved": [
+          "agent"
+        ],
+        "rawTextRetained": false
+      },
+      "capturedBytes": 83,
+      "readyPromptObserved": false,
+      "nativeExitBeforeCleanup": null,
+      "controllingTerminalConfigured": true,
+      "terminalQueriesAnswered": [],
+      "typedWithoutEnter": null,
+      "enterSent": false,
+      "loginBarrierObserved": false,
+      "expectedDescriptionObserved": false,
+      "expectedNameObserved": false,
+      "nativeMenuMarkerObserved": false,
+      "errorMarkerObserved": false,
+      "cleanupCompleted": true,
+      "diagnosticOnlyStartupTrace": [
+        {
+          "mark": "cli/willSetupCLI",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/willLoadConfig",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/didLoadConfig",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/willImportChat",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/didImportChat",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/willResolveWorkspace",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/didResolveWorkspace",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/willInitTracing",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/didInitTracing",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/willInitAnalytics",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/didInitAnalytics",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/willAuth",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/didAuth",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/willPrepareStatsig",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/didPrepareStatsig",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/willOpenAgentStore",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/didOpenAgentStore",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/willFetchServerConfig",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/didFetchServerConfig",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/willLoadHooksConfig",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/didLoadHooksConfig",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/willStartAskpassServer",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/didStartAskpassServer",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/willBuildResources",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/didBuildResourcesPrelude",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/willLoadPermissionsFile",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/didLoadPermissionsFile",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/willFindGitRoot",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/didFindGitRoot",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/willLoadClaudePermissions",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/didLoadClaudePermissions",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/willLoadSandboxPolicy",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/didLoadSandboxPolicy",
+          "pid": 2461
+        },
+        {
+          "mark": "cli/willRunWorkspaceOpenHook",
+          "pid": 2461
+        }
+      ]
+    },
+    "absent": {
+      "startupDiagnostics": {
+        "fixedWordsObserved": [
+          "agent"
+        ],
+        "rawTextRetained": false
+      },
+      "capturedBytes": 83,
+      "readyPromptObserved": false,
+      "nativeExitBeforeCleanup": null,
+      "controllingTerminalConfigured": true,
+      "terminalQueriesAnswered": [],
+      "typedWithoutEnter": null,
+      "enterSent": false,
+      "loginBarrierObserved": false,
+      "expectedDescriptionObserved": false,
+      "expectedNameObserved": false,
+      "nativeMenuMarkerObserved": false,
+      "errorMarkerObserved": false,
+      "cleanupCompleted": true,
+      "diagnosticOnlyStartupTrace": [
+        {
+          "mark": "cli/willSetupCLI",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/willLoadConfig",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/didLoadConfig",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/willImportChat",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/didImportChat",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/willResolveWorkspace",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/didResolveWorkspace",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/willInitTracing",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/didInitTracing",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/willInitAnalytics",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/didInitAnalytics",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/willAuth",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/didAuth",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/willPrepareStatsig",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/didPrepareStatsig",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/willOpenAgentStore",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/didOpenAgentStore",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/willFetchServerConfig",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/didFetchServerConfig",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/willLoadHooksConfig",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/didLoadHooksConfig",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/willStartAskpassServer",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/didStartAskpassServer",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/willBuildResources",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/didBuildResourcesPrelude",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/willLoadPermissionsFile",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/didLoadPermissionsFile",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/willFindGitRoot",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/didFindGitRoot",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/willLoadClaudePermissions",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/didLoadClaudePermissions",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/willLoadSandboxPolicy",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/didLoadSandboxPolicy",
+          "pid": 2571
+        },
+        {
+          "mark": "cli/willRunWorkspaceOpenHook",
+          "pid": 2571
+        }
+      ]
+    },
+    "malformed": {
+      "startupDiagnostics": {
+        "fixedWordsObserved": [
+          "agent"
+        ],
+        "rawTextRetained": false
+      },
+      "capturedBytes": 83,
+      "readyPromptObserved": false,
+      "nativeExitBeforeCleanup": null,
+      "controllingTerminalConfigured": true,
+      "terminalQueriesAnswered": [],
+      "typedWithoutEnter": null,
+      "enterSent": false,
+      "loginBarrierObserved": false,
+      "expectedDescriptionObserved": false,
+      "expectedNameObserved": false,
+      "nativeMenuMarkerObserved": false,
+      "errorMarkerObserved": false,
+      "cleanupCompleted": true,
+      "diagnosticOnlyStartupTrace": [
+        {
+          "mark": "cli/willSetupCLI",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/willLoadConfig",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/didLoadConfig",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/willImportChat",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/didImportChat",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/willResolveWorkspace",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/didResolveWorkspace",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/willInitTracing",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/didInitTracing",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/willInitAnalytics",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/didInitAnalytics",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/willAuth",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/didAuth",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/willPrepareStatsig",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/didPrepareStatsig",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/willOpenAgentStore",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/didOpenAgentStore",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/willFetchServerConfig",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/didFetchServerConfig",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/willLoadHooksConfig",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/didLoadHooksConfig",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/willStartAskpassServer",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/didStartAskpassServer",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/willBuildResources",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/didBuildResourcesPrelude",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/willLoadPermissionsFile",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/didLoadPermissionsFile",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/willFindGitRoot",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/didFindGitRoot",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/willLoadClaudePermissions",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/didLoadClaudePermissions",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/willLoadSandboxPolicy",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/didLoadSandboxPolicy",
+          "pid": 2688
+        },
+        {
+          "mark": "cli/willRunWorkspaceOpenHook",
+          "pid": 2688
+        }
+      ]
+    }
+  },
+  "authentication": {
+    "positive": {
+      "exitCode": 0,
+      "status": "authenticated",
+      "backendUserDetailsReceived": true,
+      "personalFieldsRetained": false
+    },
+    "absent": {
+      "exitCode": 0,
+      "status": "authenticated",
+      "backendUserDetailsReceived": true,
+      "personalFieldsRetained": false
+    },
+    "malformed": {
+      "exitCode": 0,
+      "status": "authenticated",
+      "backendUserDetailsReceived": true,
+      "personalFieldsRetained": false
+    }
+  },
+  "source": {
+    "packageSHA256": "93372e384e9397b54b1e4fdb1812662f68e7b61c0c60cb3f2f4b788c9e0779c4",
+    "cliSHA256": "2ccc9a8e167797641448b5e5c936f006ba137a2555f117f38c5eb76a5238a233",
+    "entrypoint": "official cursor-agent wrapper",
+    "renderedSHA256": "d64ff08526ad4d1354a5f72eea9370b1a9d771abf7392b00aa876f9a1faa5acf",
+    "aokSHA256": "0a11f21ca7865e88d848cc5ae298daa711fdf0eb39a6bb0cacffa415bb696e48",
+    "probeSHA256": "752fb674ba0e442f97466b4df77552c51184236ba42c401988c8aa4cdc84d520",
+    "diagnosticsHelperSHA256": "6b47f37994237cd190b38db7cd8b08dfa35df58ed3e676fd5cf5761e6e314611",
+    "probeArchive": "docs/evidence/native-adapters/cursor-startup-toolchain-2026-10-18-source.py.txt",
+    "diagnosticsHelperSHA256Archive": "docs/evidence/native-adapters/native-startup-diagnostics-6b47f37994237cd190b38db7cd8b08dfa35df58ed3e676fd5cf5761e6e314611.py.txt",
+    "observerSHA256Archive": "docs/evidence/native-adapters/cursor_startup_observer.cjs-f9b152d0a5f3610a418543bd557ac124e76f35a802f61904215d96f4319578e6.txt"
+  },
+  "isolation": {
+    "writes": "owned temporary root plus null, tty and exact allocated PTY slave",
+    "realHomeRead": "denied for native children",
+    "keychainLookup": "denied for native children",
+    "credentialSource": "two explicit Cursor CLI Keychain items copied by parent",
+    "credentialStore": "private file; originals not written; copies removed",
+    "network": "allowed for real backend authentication and native initialization",
+    "rawOutputRetained": false,
+    "preflight": {
+      "pid": 2449,
+      "pgid": 2449,
+      "terminated": true
+    }
+  },
+  "probeSourceArchive": "docs/evidence/native-adapters/cursor-startup-toolchain-2026-10-18-source.py.txt",
+  "processAudit": [
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 2449,
+      "pid": 2449,
+      "purpose": "authenticated-signal-preflight"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 2449,
+      "pgid": 2449,
+      "pid": 2449,
+      "purpose": "authenticated-signal-preflight"
+    },
+    {
+      "directChildFallback": false,
+      "event": "owned_group_cleanup",
+      "groupCleanupFailed": false,
+      "pgid": 2449,
+      "pid": 2449,
+      "purpose": "authenticated-signal-preflight"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 2450,
+      "pid": 2450,
+      "purpose": "aok-import"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 2450,
+      "pgid": 2450,
+      "pid": 2450,
+      "purpose": "aok-import"
+    },
+    {
+      "directChildFallback": false,
+      "event": "owned_group_cleanup",
+      "groupCleanupFailed": false,
+      "pgid": 2450,
+      "pid": 2450,
+      "purpose": "aok-import"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 2451,
+      "pid": 2451,
+      "purpose": "aok-export"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 2451,
+      "pgid": 2451,
+      "pid": 2451,
+      "purpose": "aok-export"
+    },
+    {
+      "directChildFallback": false,
+      "event": "owned_group_cleanup",
+      "groupCleanupFailed": false,
+      "pgid": 2451,
+      "pid": 2451,
+      "purpose": "aok-export"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 2454,
+      "pid": 2454,
+      "purpose": "authenticated-status"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 2454,
+      "pgid": 2454,
+      "pid": 2454,
+      "purpose": "authenticated-status"
+    },
+    {
+      "directChildFallback": false,
+      "event": "owned_group_cleanup",
+      "groupCleanupFailed": false,
+      "pgid": 2454,
+      "pid": 2454,
+      "purpose": "authenticated-status"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 2461,
+      "pid": 2461,
+      "purpose": "native-slash-menu"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 2461,
+      "pgid": 2461,
+      "pid": 2461,
+      "purpose": "native-slash-menu"
+    },
+    {
+      "capturedBytes": 83,
+      "event": "native-menu-observed",
+      "expectedDescriptionObserved": false,
+      "pgid": 2461,
+      "pid": 2461,
+      "typedWithoutEnter": false
+    },
+    {
+      "directChildFallback": false,
+      "event": "owned_group_cleanup",
+      "groupCleanupFailed": false,
+      "pgid": 2461,
+      "pid": 2461,
+      "purpose": "native-slash-menu"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 2564,
+      "pid": 2564,
+      "purpose": "authenticated-status"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 2564,
+      "pgid": 2564,
+      "pid": 2564,
+      "purpose": "authenticated-status"
+    },
+    {
+      "directChildFallback": false,
+      "event": "owned_group_cleanup",
+      "groupCleanupFailed": false,
+      "pgid": 2564,
+      "pid": 2564,
+      "purpose": "authenticated-status"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 2571,
+      "pid": 2571,
+      "purpose": "native-slash-menu"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 2571,
+      "pgid": 2571,
+      "pid": 2571,
+      "purpose": "native-slash-menu"
+    },
+    {
+      "capturedBytes": 83,
+      "event": "native-menu-observed",
+      "expectedDescriptionObserved": false,
+      "pgid": 2571,
+      "pid": 2571,
+      "typedWithoutEnter": false
+    },
+    {
+      "directChildFallback": false,
+      "event": "owned_group_cleanup",
+      "groupCleanupFailed": false,
+      "pgid": 2571,
+      "pid": 2571,
+      "purpose": "native-slash-menu"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 2682,
+      "pid": 2682,
+      "purpose": "authenticated-status"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 2682,
+      "pgid": 2682,
+      "pid": 2682,
+      "purpose": "authenticated-status"
+    },
+    {
+      "directChildFallback": false,
+      "event": "owned_group_cleanup",
+      "groupCleanupFailed": false,
+      "pgid": 2682,
+      "pid": 2682,
+      "purpose": "authenticated-status"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 2688,
+      "pid": 2688,
+      "purpose": "native-slash-menu"
+    },
+    {
+      "event": "owned_process_group",
+      "expectedPGID": 2688,
+      "pgid": 2688,
+      "pid": 2688,
+      "purpose": "native-slash-menu"
+    },
+    {
+      "capturedBytes": 83,
+      "event": "native-menu-observed",
+      "expectedDescriptionObserved": false,
+      "pgid": 2688,
+      "pid": 2688,
+      "typedWithoutEnter": false
+    },
+    {
+      "directChildFallback": false,
+      "event": "owned_group_cleanup",
+      "groupCleanupFailed": false,
+      "pgid": 2688,
+      "pid": 2688,
+      "purpose": "native-slash-menu"
+    }
+  ],
+  "diagnosticsHelperSourceArchive": "docs/evidence/native-adapters/native-startup-diagnostics-6b47f37994237cd190b38db7cd8b08dfa35df58ed3e676fd5cf5761e6e314611.py.txt"
+}

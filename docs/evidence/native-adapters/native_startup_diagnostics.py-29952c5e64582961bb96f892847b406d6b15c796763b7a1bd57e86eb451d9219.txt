@@ -1,0 +1,35 @@
+"""Privacy-preserving startup classification: fixed public labels only."""
+import re
+
+WORDS = (
+    'error', 'warning', 'failed', 'fatal', 'unknown', 'unrecognized', 'option',
+    'flag', 'argument', 'usage', 'trust', 'workspace', 'permission', 'denied',
+    'operation', 'permitted', 'directory', 'current', 'working', 'home', 'config',
+    'read', 'write', 'open', 'keychain', 'secitem', 'securityd', 'database',
+    'sqlite', 'socket', 'server', 'connection', 'network', 'certificate',
+    'download', 'update', 'version', 'terminal', 'tty', 'stdin', 'stdout',
+    'python', 'traceback', 'xcrun', 'developer', 'xcodebuild', 'sandbox',
+    'login', 'credentials', 'authentication', 'expired', 'invalid',
+    'agent', 'subagent', 'initialize', 'initialization', 'lock', 'cache', 'port',
+    'bind', 'ipc', 'not', 'found', 'supported', 'shell', 'bash', 'zsh', 'command',
+    'launch', 'resource', 'limit', 'file', 'missing', 'required', 'input',
+    'loading', 'preparing', 'connecting', 'initializing', 'cursor', 'commands',
+    'send', 'press', 'enter', 'return', 'esc', 'continue', 'allow', 'deny',
+    'approve', 'plan', 'ask', 'reviewer', 'reviews', 'changes', 'correctness',
+    'security', 'welcome', 'theme', 'dark', 'light', 'select', 'choice', 'choose',
+    'model', 'auto', 'resume', 'chat', 'messages', 'plugins', 'plugin',
+    'fetching', 'installing', 'downloading', 'updating', 'thinking', 'context',
+    'tokens',
+)
+ANSI = re.compile(rb'\x1b(?:\[[0-?]*[ -/]*[@-~]|\][^\x07]*(?:\x07|\x1b\\))')
+
+
+def classify(data):
+    text = ANSI.sub(b'', data).decode('utf-8', 'replace').lower()
+    return {'fixedWordsObserved': [word for word in WORDS if re.search(r'\b' + word + r'\b', text)],
+            'terminalQueryLabels': [label for query, label in (
+                (b'\x1b[?u', 'kitty-keyboard'), (b'\x1b[?2027$p', 'unicode-width-status'), (b'\x1b[>0c', 'secondary-device-attributes-explicit'),
+                (b'\x1b[0c', 'primary-device-attributes-explicit'),
+                (b'\x1b[?2026$p', 'synchronized-output-status'),
+                (b'\x1b[?1004$p', 'focus-events-status'), (b'\x1b[>q', 'terminal-version')) if query in data],
+            'rawTextRetained': False}

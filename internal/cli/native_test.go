@@ -118,3 +118,44 @@ func TestNativeCLIExplicitDraftRoundTripAndNoOverwrite(t *testing.T) {
 		t.Fatal("existing output changed")
 	}
 }
+
+func TestCodexRegisteredInventoryCLI(t *testing.T) {
+	root, err := filepath.EvalSymlinks(t.TempDir())
+	if err != nil {
+		t.Fatal(err)
+	}
+	input := filepath.Join(root, "input")
+	if err := os.MkdirAll(filepath.Join(input, ".codex", "agents"), 0700); err != nil {
+		t.Fatal(err)
+	}
+	for name, content := range map[string]string{
+		"aok-native-input.json":       `{"version":"aok-native-input/v1","files":[{"path":".codex/config.toml","format":"toml"},{"path":".codex/agents/reviewer.toml","format":"toml"}]}`,
+		".codex/config.toml":          "[agents.reviewer]\ndescription = \"Synthetic review\"\nconfig_file = \"agents/reviewer.toml\"\n",
+		".codex/agents/reviewer.toml": "name = \"reviewer\"\ndescription = \"Synthetic review\"\ndeveloper_instructions = \"Review synthetic content.\"\n",
+	} {
+		if err := os.WriteFile(filepath.Join(input, name), []byte(content), 0600); err != nil {
+			t.Fatal(err)
+		}
+	}
+	run := func(op string, want int, extra ...string) {
+		t.Helper()
+		args := append([]string{op, "--target", "codex", "--scope", "project-registered"}, extra...)
+		var out, errout bytes.Buffer
+		code, err := runNative(args, &out, &errout)
+		if err != nil || code != want {
+			t.Fatalf("%s: code=%d err=%v stdout=%s stderr=%s", op, code, err, out.String(), errout.String())
+		}
+		var report nativeadapter.Report
+		if err := json.Unmarshal(out.Bytes(), &report); err != nil {
+			t.Fatal(err)
+		}
+		if report.HostLoading.Status != "verified" || report.RuntimeEnforcement != "unverified" {
+			t.Fatalf("scope evidence boundary: %+v", report)
+		}
+	}
+	draft, candidate := filepath.Join(root, "draft"), filepath.Join(root, "candidate")
+	run("inspect", 0, "--input", input)
+	run("import", 1, "--input", input, "--out", draft)
+	run("export", 1, "--input", filepath.Join(draft, "aok-native.json"), "--source", input, "--out", candidate)
+	run("compare", 0, "--input", candidate, "--against", filepath.Join(candidate, "aok-native.json"))
+}

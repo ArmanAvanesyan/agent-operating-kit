@@ -144,6 +144,28 @@ Sidecar-based export requires `--source`; compare requires `--against`; import
 may use `--sidecar`. Output destinations must be new, safe directories outside
 all explicit input paths. Existing output directories are not overwritten.
 
+### Codex registered project scope
+
+Use `--target codex --scope project-registered` with an inventory containing
+exactly `.codex/config.toml` and `.codex/agents/<name>.toml`. The selected
+`[agents.<name>]` registration must match the role file's name and description
+and use `config_file = "agents/<name>.toml"`, relative to `.codex/config.toml`.
+Selected names must be lowercase ASCII slugs; non-ASCII sibling names/references
+and sibling paths with parent segments, absolute/UNC roots, tildes, colon, NUL
+or trailing-dot/space components are rejected.
+Reserved `[agents]` setting names and collisions with preserved sibling names
+or role-file references are rejected, including case-insensitive path aliases.
+Import, export and compare use the same commands above with that target/scope.
+Canonical export generates both files. The older `project` scope still handles
+one standalone role file and has no verified loading claim.
+
+Root settings, sibling registrations and unknown role fields are preserved as
+inert projection data. AOK does not open sibling references or prove their
+dependencies are available. Review the whole generated config before applying
+it: preserved settings can affect the native host beyond the selected role.
+Exports create new directories; they do not merge into an installed config.
+Codex adapter version 0.2.0 requires reimporting older 0.1.0 sidecars.
+
 ## Supported scopes and host evidence
 
 Each adapter declares a scope and a separate host-loading state. Host evidence
@@ -153,7 +175,7 @@ is narrower than field parsing and remains separate from runtime enforcement.
 |---|---|---|---|
 | `opencode` | `project` | Verified discovery only for OpenCode 1.18.35 | Isolated project file discovery only; no model or tool execution, and no permission-enforcement claim. |
 | `claude-code` | `project`, `plugin` | Verified project discovery only for Claude Code 2.1.281 | Evidence applies to project scope only; plugin parsing is not a discovery check. No model execution or permission-enforcement claim. |
-| `codex` | `project` | `not-run` | Parser and round-trip checks only. |
+| `codex` | `project`, `project-registered` | Verified registered project loading for Codex CLI 0.162.1 | Registration plus referenced role-file loading; standalone `project` remains `not-run`. No child-agent invocation or runtime-enforcement claim. |
 | `cursor` | `project` | `not-run` | Parser and round-trip checks only. |
 | `agy` | `project` | `not-run` | Parser and round-trip checks only. |
 | `gemini` | `project` | Verified project discovery for temporary Gemini CLI 0.61.0 | Guarded positive/empty TUI checks before authentication; no invocation or runtime-enforcement claim. |

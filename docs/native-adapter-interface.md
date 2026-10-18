@@ -4,7 +4,7 @@ The shared interface and conformance harness support explicit native projections
 OpenCode and Claude Code project Markdown are registered; see its [mapping and host evidence](../internal/nativeadapters/opencode/README.md).
 Claude also supports plugin parsing/rendering, but its plugin loading gate remains
 unverified. See [Claude mappings and evidence](../internal/nativeadapters/claude/README.md).
-Codex project TOML is also registered; [its source mapping and parser evidence](../internal/nativeadapters/codex/README.md) do not yet establish child-agent loading.
+Codex supports standalone project TOML and the two-file `project-registered` scope; [versioned native role-file loading](../internal/nativeadapters/codex/README.md) is verified only for the registered scope. Child-agent invocation and runtime enforcement remain unverified.
 Cursor project Markdown is registered with an [open native-loading gate](../internal/nativeadapters/cursor/README.md).
 Gemini project Markdown has [versioned guarded CLI discovery evidence](../internal/nativeadapters/gemini/README.md); invocation and runtime enforcement remain unverified.
 OpenClaw has an [isolated-home JSON/JSONC roster and workspace projection](../internal/nativeadapters/openclaw/README.md); pinned Linux CLI roster/workspace loading is verified in a disposable container; runtime enforcement remains unverified.

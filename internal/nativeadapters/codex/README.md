@@ -1,96 +1,101 @@
 # Codex custom-agent adapter
 
-This adapter reads and writes one project-scoped custom agent at
-`.codex/agents/<name>.toml`. It uses the shared strict TOML parser and never
-discovers files, modifies Codex configuration, invokes a model, or executes
-commands from a document.
+The adapter has two explicit inventories:
+
+| Scope | Required input files | Host-loading status |
+|---|---|---|
+| `project` | One `.codex/agents/<name>.toml` | `not-run`; standalone files are not registered by this scope. |
+| `project-registered` | Exactly `.codex/config.toml` and one `.codex/agents/<name>.toml` | `verified` for project registration/loading checks on Codex CLI 0.162.1 only. |
+
+`project-registered` selects `[agents.<name>]` using the role filename stem.
+Its `description` must exactly match the role file, and its `config_file` must
+be exactly `agents/<name>.toml` relative to `.codex/config.toml`. The adapter
+does not resolve paths, access the filesystem, or open any other configured
+role. Absolute paths, traversal, backslashes, mismatched filenames, missing
+files from the explicit inventory, and selected description mismatches are
+rejected. Names reserved by Codex's `[agents]` settings (including `enabled`,
+`max_depth`, `max_threads`, and the default-subagent, interruption,
+concurrency, and runtime settings) are rejected as role identities in this
+scope. To avoid cross-platform identity aliases, this registered scope accepts
+only lowercase ASCII canonical-slug role names and ASCII sibling names and
+references. Sibling paths with trailing-dot or trailing-space components,
+parent-directory segments anywhere, absolute or UNC paths, colons, or NULs are
+rejected. Tilde-based DOS short-name references are unsupported. Exact `.`
+components are normalized for alias checks. This keeps accepted references in
+a conservative portable subset relative to the declaring `.codex/config.toml`,
+without claiming complete filesystem equivalence or resolving paths. The older
+standalone `project` scope retains its prior name behavior.
+
+The selected `description` maps to `agent.identity.purpose`; the TOML role
+fields map as follows:
 
 | AOK field | Codex TOML field | Handling |
 |---|---|---|
-| `agent.metadata.id` | `name` | Required nonempty string, maximum 128 bytes. Codex uses `name` as identity; filename is a conventional location. Export uses `<name>.toml`. |
-| `agent.identity.purpose` | `description` | Required nonempty role guidance string. |
-| `executionProfile.model.selector` | `model` | Optional string; omission remains omission so the model can inherit from the parent/defaults. |
-| `executionProfile.model.reasoning.mode` + `.effort` | `model_reasoning_effort` | `provider-default` omits the setting; `effort` writes the explicit effort. Other modes, including token budget and model variant, are rejected as unsupported. |
-| `agent.instructions.sources` | `developer_instructions` | Exactly one source with a matching `Document.Assets` entry; the instruction string is retained. |
+| `agent.metadata.id` | `name` | Required nonempty string, maximum 128 bytes; registered scope requires exact filename-stem equality. |
+| `agent.identity.purpose` | `description` | Required nonempty string; must match the project registration. |
+| `executionProfile.model.selector` | `model` | Optional string; omission remains omitted. |
+| `executionProfile.model.reasoning.mode` + `.effort` | `model_reasoning_effort` | `provider-default` omits the setting; `effort` writes the explicit value. Other reasoning modes are unsupported. |
+| `agent.instructions.sources` | `developer_instructions` | Exactly one materialized instruction source. |
 
-Unknown top-level TOML values are retained under `Unknown` and re-emitted.
+Standalone role TOML values remain under `Unknown` as `toml.*`. In the
+registered scope, unrelated root settings and sibling registrations are
+preserved under `Unknown.codex.config`; extension keys on the selected
+registration are preserved under `Unknown.codex.registered.role.*`. Encoding
+reconstructs the selected registration from mapped fields and rejects a
+renamed role that collides with a preserved sibling, including case-folded
+names. Global scalar settings such as `agents.enabled`, `agents.max_depth`,
+`agents.max_threads`, and default-subagent settings remain root config values;
+they are never interpreted as role tables. A selected identity also cannot
+collide with a preserved scalar `[agents]` key, including unknown future
+settings. Sibling `config_file` values that
+lexically alias the selected output path after slash normalization, path
+cleaning, and case folding are rejected without opening those paths. A warning identifies
+unmapped project config settings. Sibling `config_file` references receive a
+separate warning and are never opened. Unknown native settings can affect host
+behavior beyond this adapter's mapping; their preservation is not validation
+or enforcement.
+
 No equivalence is invented for AOK filesystem/network/action permissions,
 MCP/tool/skill/plugin pins, execution limits, environment controls, or other
-reasoning modes. Codex custom agents inherit parent permissions, provider,
-MCP servers, and sandbox/approval controls; the agent file cannot override
-those controls. Required AOK controls without a direct mapping block in the
-shared adapter engine. Capability inheritance does not establish that any
-particular AOK restriction is enforced.
+reasoning modes. Required unsupported controls remain blocked by the shared
+engine. `project-registered` loading evidence establishes project registration
+and startup loading/validation of the selected file for the tested host
+version; it does not establish agent selection, instruction use, model
+compatibility, or runtime enforcement. Import/export candidates remain
+`draft-incomplete`.
 
-The official [Codex subagent documentation](https://developers.openai.com/codex/subagents/)
-documents project files under `.codex/agents/`, required `name`, `description`,
-and `developer_instructions`, optional `model` and
-`model_reasoning_effort`, inheritance/default behavior, and the fact that
-`name` is authoritative even when the filename differs. Reasoning-effort
-values depend on the selected model. The installed 0.162.1 app-server JSON
-schema defines `ReasoningEffort` as a nonempty string, so this adapter retains
-provider-advertised spelling (including newer values) without asserting model
-compatibility.
+The official [Codex configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference)
+documents `[agents.<name>]`, `description`, and `config_file`, whose paths are
+relative to the config file containing the declaration. The official
+[subagent guide](https://developers.openai.com/codex/subagents/) documents
+`.codex/agents/` role files. The versioned isolated probe is recorded at
+[`codex-project-registered-0.162.1.json`](../../../docs/evidence/native-adapters/codex-project-registered-0.162.1.json).
+It uses only synthetic role data, a disposable trusted project and isolated
+`CODEX_HOME`; it sends app-server initialize/config/read and an ephemeral
+read-only thread/start, never a turn, prompt, login request, or model call.
+Positive, absent-registration, malformed-config, malformed-role, and missing-
+role controls are included. AOK output is rebuilt from this adapter before
+host checks. The recorded result applies only to the tested project-registered
+scope and Codex CLI version 0.162.1; standalone `project` remains `not-run`.
 
-The installed host was Codex CLI 0.162.1. A previous isolated
-`app-server initialize` plus `config/read` probe returned `agents: null`, which
-does not prove that a custom agent file loads. Accordingly, descriptor
-`hostLoading` remains `not-run`. No live host-loading or enforcement claim is
-made. A future safe loading probe should use a disposable project and isolated
-`CODEX_HOME`, request read-only configuration/agent discovery without sending
-a task or prompt to a model, capture the resulting registration evidence, and
-keep the evidence scoped to that exact CLI version and project layout.
-
-Imports and exports remain `draft-incomplete`. Canonical export validates the
-assignment corpus and maps explicit effort settings while preserving captured
-source hashes. Required unsupported controls remain blocked.
-Successful TOML parsing or semantic roundtrip does not indicate execution
-readiness or runtime enforcement.
-
-The [startup parser evidence](../../../docs/evidence/native-adapters/codex-0.162.1.json)
-compares AOK-generated TOML with malformed and invalid-effort controls in an
-isolated HOME/CODEX_HOME. It sends initialization and an ephemeral thread-start
-request, never a turn or model prompt. The malformed control warns, while invalid effort spelling does not warn at
-startup; AOK likewise validates only nonempty effort strings. Native parser acceptance is verified;
-child-agent selection and instruction use are not. The descriptor conservatively
-retains `not-run` for the full loading gate. To repeat, import the fixture with
-an explicit native inventory, export it, compare the sidecar, then start the
-isolated app server and inspect `configWarning` notifications for each control.
-
-## Follow-up isolated visibility investigation
-
-The [loopback request-construction probe](../../../docs/evidence/native-adapters/codex-loading-0.162.1.json)
-checks both installed `multi_agent` and `multi_agent_v2` tool protocols against
-positive, absent and malformed generated-file controls. A custom provider points
-only to an ephemeral loopback sink that returns HTTP 400 without a model
-implementation. HOME/CODEX_HOME/cwd are disposable, credentials are not inherited,
-and analytics/feedback are disabled. No inference or generated tool call runs.
-Neither protocol exposes the generated agent identity or description, so this
-does not demonstrate custom-role discovery or selection. The earlier app-server
-parser evidence remains the narrower positive result; the loading gate is open.
+To repeat with local binaries, first copy the installed 0.162.1 Codex executable
+into a disposable path, then pass that copy and a freshly built AOK binary:
 
 ```sh
-python3 scripts/native-loading/verify_codex.py --aok /absolute/path/to/aok \
-  --codex /absolute/path/to/codex
+python3 -B scripts/native-loading/verify_codex_project_registered.py \
+  --aok /absolute/path/to/aok \
+  --codex-copy /absolute/path/to/copied/codex
 ```
 
-The harness saves structural observations and request hashes rather than whole
-model-visible payloads. Request hashes vary with ephemeral session identifiers.
+The harness rebuilds a registered native export via `agent native import` and
+`agent native export`, runs both binaries with explicit environment allow-lists,
+and confines host writes to its temporary root while denying host network
+access. Its disposable `CODEX_HOME` uses file-based credential storage and
+inherits no credential variables. It prints sanitized JSON evidence and removes its
+temporary files on exit. The script source hash is stored in the evidence
+record.
 
-## Interface audit without model turns (2026-10-18)
-
-The [versioned app-server audit](../../../docs/evidence/native-adapters/codex-cursor-discovery-2026.10.18.json)
-rechecked the copied installed 0.162.1 CLI and an official temporary npm install
-of 0.163.0. Both used disposable trusted project roots and isolated CODEX_HOME,
-with remote networking and outside-root writes denied. `config/read` returned
-`agents: null` with a native fixture and with an empty project (the 0.163.0
-repeat used actual AOK-exported bytes);
-this configuration response does not enumerate standalone custom-agent files.
-
-The generated experimental request schemas have no custom-agent listing method,
-and the inspected `thread/start` fields and `exec --help` expose no direct
-custom-role selector. `codex agents` help describes browsing sessions on a
-shared daemon; that session browser was not run. No turn, authentication,
-model request or inferred agent selection was performed. The loading gate
-remains open; this is a version-bound interface audit, not proof that the
-host cannot load custom agents during an actual delegated turn.
+Adapter version 0.2.0 changes the registered-scope projection. Existing
+0.1.x sidecars should be re-imported from their explicit native inventory
+before exporting with the new scope; no automatic migration or filesystem
+discovery occurs.

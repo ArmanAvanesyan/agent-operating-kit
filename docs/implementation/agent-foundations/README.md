@@ -1,7 +1,7 @@
 # Agent foundations delivery contract
 
 Status: static foundations and all eight native adapter projections are implemented
-in the Go CLI. The native-only release remains incomplete: three host-loading gates
+in the Go CLI. The native-only release remains incomplete: two host-loading gates
 are open and runtime enforcement is unverified. See the
 [operator guide](../../native-adapter-operations.md) for commands and limits.
 The historical [agent specification](../../proposals/agent-spec/README.md) and
@@ -93,7 +93,7 @@ workers and one reviewer, with isolated worktrees for concurrent edits.
 | 6 | Shared native interface, provenance/sidecars, semantic comparison | Merged: [PR #53](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/53) |
 | 7 | OpenCode native adapter | Merged: [PR #54](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/54); project loading verified on 1.18.35 |
 | 8 | Claude Code native adapter | Merged: [PR #55](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/55); project discovery verified |
-| 9 | Codex native adapter | Merged: [PR #56](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/56); full loading gate open |
+| 9 | Codex native adapter | Merged: [PR #56](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/56); registered project loading verified, standalone discovery and invocation unverified |
 | 10 | Cursor native adapter | Merged: [PR #57](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/57); loading gate open |
 | 11 | Gemini native adapter | Merged: [PR #58](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/58); project discovery verified in the follow-up evidence |
 | 12 | OpenClaw native adapter | Merged: [PR #59](https://github.com/ArmanAvanesyan/agent-operating-kit/pull/59); isolated Linux loading verified in follow-up evidence |
@@ -144,12 +144,13 @@ native loading gates remain separate work.
 ## Remaining native-loading gates
 
 OpenCode 1.18.35, Claude Code 2.1.281 and Gemini CLI 0.61.0 have isolated project discovery evidence.
-Codex has parser-startup evidence but no verified generated-agent loading;
+Codex CLI 0.162.1 loads explicitly registered project role files, with malformed/missing-file
+negative controls; standalone discovery and child-agent invocation remain unverified.
 Cursor has shipped-component discovery but lacks verified full CLI discovery; agy probes returned no
 discovery evidence. OpenClaw 2026.9.4 has isolated Linux roster/workspace evidence, with Darwin CLI
 loading unverified. Hermes has direct installed CLI profile-list evidence plus separate metadata/SOUL
 component evidence; package-manager launcher selection remains unverified.
-The three open target gates require versioned isolated native
+The two open target gates require versioned isolated native
 loading evidence for generated fixtures before this release can be called complete.
 No runtime enforcement claim follows from either parsing or discovery. See the
 [compatibility inventory](native-inventory.md) and each adapter README for sources.

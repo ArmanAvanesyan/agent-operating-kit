@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"path"
 	"regexp"
+	"sort"
 	"strings"
 
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/contracts"
@@ -17,13 +18,29 @@ import (
 )
 
 const (
-	target         = "codex"
-	adapterVersion = "0.1.0"
-	projectScope   = "project"
-	agentDir       = ".codex/agents/"
+	target          = "codex"
+	adapterVersion  = "0.2.0"
+	projectScope    = "project"
+	registeredScope = "project-registered"
+	agentDir        = ".codex/agents/"
+	projectConfig   = ".codex/config.toml"
 )
 
 var canonicalID = regexp.MustCompile(`^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$`)
+
+// These names are project-level [agents] settings in Codex, not role names.
+// They must remain preserved as root configuration values and cannot be
+// selected or emitted as an AOK registered role.
+var reservedAgentSettings = map[string]struct{}{
+	"enabled":                            {},
+	"default_subagent_model":             {},
+	"default_subagent_reasoning_effort":  {},
+	"interrupt_message":                  {},
+	"job_max_runtime_seconds":            {},
+	"max_concurrent_threads_per_session": {},
+	"max_depth":                          {},
+	"max_threads":                        {},
+}
 
 type Adapter struct{}
 
@@ -51,10 +68,13 @@ func (Adapter) Descriptor() nativeadapter.Descriptor {
 		{NeutralPath: "agent.capabilities.mcps", NativePath: "unsupported.capabilities.mcps", Support: "unsupported", EnforcementOwner: "none"},
 		{NeutralPath: "agent.capabilities.plugins", NativePath: "unsupported.capabilities.plugins", Support: "unsupported", EnforcementOwner: "none"},
 	}
-	return nativeadapter.Descriptor{Target: target, AdapterVersion: adapterVersion, Scopes: []string{projectScope}, HostLoading: nativeadapter.HostLoadingEvidence{Status: "not-run"}, Fields: fields}
+	return nativeadapter.Descriptor{Target: target, AdapterVersion: adapterVersion, Scopes: []string{projectScope, registeredScope}, HostLoading: nativeadapter.HostLoadingEvidence{Status: "verified", HostVersion: "Codex CLI 0.162.1", Evidence: []string{"docs/evidence/native-adapters/codex-project-registered-0.162.1.json"}, Scopes: []string{registeredScope}}, Fields: fields}
 }
 
 func (Adapter) Decode(scope string, files []nativeadapter.File) (nativeadapter.Document, []contracts.Diagnostic, error) {
+	if scope == registeredScope {
+		return decodeRegistered(files)
+	}
 	if scope != projectScope || len(files) != 1 {
 		return nativeadapter.Document{}, nil, errors.New("expected one project-scoped Codex agent TOML file")
 	}
@@ -128,6 +148,9 @@ func (Adapter) Decode(scope string, files []nativeadapter.File) (nativeadapter.D
 }
 
 func (Adapter) Encode(scope string, doc nativeadapter.Document) ([]nativeadapter.File, []contracts.Diagnostic, error) {
+	if scope == registeredScope {
+		return encodeRegistered(doc)
+	}
 	if scope != projectScope {
 		return nil, nil, errors.New("unsupported scope")
 	}
@@ -217,6 +240,281 @@ func (Adapter) Encode(scope string, doc nativeadapter.Document) ([]nativeadapter
 		ds = append(ds, diag("codex.agent-id.slug", "", "agent.metadata.id", "warning", "canonical id is not a canonical slug; Codex name is preserved"))
 	}
 	return []nativeadapter.File{{Path: outputPath, Format: "toml", Data: tomlBytes}}, ds, nil
+}
+
+// decodeRegistered requires an explicit project config registration and the
+// selected role file. It never reads paths from either document.
+func decodeRegistered(files []nativeadapter.File) (nativeadapter.Document, []contracts.Diagnostic, error) {
+	if len(files) != 2 {
+		return nativeadapter.Document{}, nil, errors.New("project-registered Codex scope requires exactly .codex/config.toml and one .codex/agents/<name>.toml")
+	}
+	var configFile, roleFile *nativeadapter.File
+	for i := range files {
+		f := &files[i]
+		if f.Format != "toml" {
+			return nativeadapter.Document{}, nil, errors.New("project-registered Codex inputs must both be TOML")
+		}
+		switch f.Path {
+		case projectConfig:
+			if configFile != nil {
+				return nativeadapter.Document{}, nil, errors.New("duplicate Codex project config")
+			}
+			configFile = f
+		default:
+			if !validAgentPath(f.Path) || roleFile != nil {
+				return nativeadapter.Document{}, nil, errors.New("expected exactly one .codex/agents/<name>.toml role file")
+			}
+			roleFile = f
+		}
+	}
+	if configFile == nil || roleFile == nil {
+		return nativeadapter.Document{}, nil, errors.New("project-registered Codex scope requires .codex/config.toml and one role TOML")
+	}
+	role, diagnostics, err := (Adapter{}).Decode(projectScope, []nativeadapter.File{*roleFile})
+	if err != nil {
+		return nativeadapter.Document{}, nil, err
+	}
+	name, _ := rawString(role.Fields["agent.metadata.id"])
+	if isReservedAgentSetting(name) {
+		return nativeadapter.Document{}, nil, fmt.Errorf("Codex agent name %q is a reserved [agents] project setting", name)
+	}
+	if !canonicalID.MatchString(name) {
+		return nativeadapter.Document{}, nil, errors.New("project-registered Codex role name must be an ASCII canonical slug for portable identity")
+	}
+	filename := strings.TrimSuffix(path.Base(roleFile.Path), ".toml")
+	if name != filename {
+		return nativeadapter.Document{}, nil, errors.New("registered Codex role name must match its filename")
+	}
+	description, _ := rawString(role.Fields["agent.identity.purpose"])
+	config, err := nativeparse.Decode("toml", configFile.Data)
+	if err != nil {
+		return nativeadapter.Document{}, nil, fmt.Errorf("invalid Codex project config: %w", err)
+	}
+	agents, ok := config["agents"].(map[string]any)
+	if !ok {
+		return nativeadapter.Document{}, nil, errors.New("Codex project config must register the selected role under [agents.<name>]")
+	}
+	selected, ok := agents[name].(map[string]any)
+	if !ok {
+		return nativeadapter.Document{}, nil, fmt.Errorf("Codex project config is missing [agents.%s]", name)
+	}
+	configDescription, ok := selected["description"].(string)
+	if !ok || configDescription != description {
+		return nativeadapter.Document{}, nil, errors.New("registered role description must exactly match the role file description")
+	}
+	configFileRef, ok := selected["config_file"].(string)
+	wantRef := "agents/" + filename + ".toml"
+	if !ok || configFileRef != wantRef || !safeRegistrationPath(configFileRef) {
+		return nativeadapter.Document{}, nil, fmt.Errorf("registered config_file must be exactly %q relative to .codex/config.toml", wantRef)
+	}
+	delete(agents, name)
+	if len(agents) == 0 {
+		delete(config, "agents")
+	}
+	rootRaw, err := json.Marshal(config)
+	if err != nil {
+		return nativeadapter.Document{}, nil, errors.New("Codex project config cannot be preserved as JSON-compatible unknown data")
+	}
+	role.Unknown = cloneRawMap(role.Unknown)
+	role.Unknown["codex.config"] = rootRaw
+	if len(config) > 0 {
+		diagnostics = append(diagnostics, diag("codex.project-config.preserved", projectConfig, "codex.config", "warning", "unmapped project config settings are preserved as inert data and are not validated by this adapter"))
+	}
+	siblingNames := make([]string, 0, len(agents))
+	for sibling := range agents {
+		siblingNames = append(siblingNames, sibling)
+	}
+	sort.Strings(siblingNames)
+	for _, sibling := range siblingNames {
+		value := agents[sibling]
+		entry, ok := value.(map[string]any)
+		if !ok {
+			continue
+		}
+		if !isASCII(sibling) {
+			return nativeadapter.Document{}, nil, fmt.Errorf("unsupported portability: non-ASCII sibling registration name %q", sibling)
+		}
+		if strings.EqualFold(sibling, name) {
+			return nativeadapter.Document{}, nil, fmt.Errorf("sibling Codex role %q collides with selected role %q after case folding", sibling, name)
+		}
+		if ref, ok := entry["config_file"].(string); ok && ref != "" {
+			if !isASCII(ref) || !portableRegistrationRef(ref) {
+				return nativeadapter.Document{}, nil, fmt.Errorf("unsupported portability: sibling %q config_file contains a nonportable path", sibling)
+			}
+			if registrationPathAlias(ref, wantRef) {
+				return nativeadapter.Document{}, nil, fmt.Errorf("sibling Codex role %q config_file aliases selected role path %q", sibling, wantRef)
+			}
+			diagnostics = append(diagnostics, diag("codex.sibling-registration.uninspected", projectConfig, "agents."+sibling+".config_file", "warning", "sibling role registration is preserved but its referenced file is outside this explicit inventory and was not opened"))
+		}
+	}
+	for key, value := range selected {
+		if key == "description" || key == "config_file" {
+			continue
+		}
+		if strings.Contains(key, ".") {
+			return nativeadapter.Document{}, nil, errors.New("quoted dotted keys in selected Codex registration are unsupported")
+		}
+		raw, e := json.Marshal(value)
+		if e != nil {
+			return nativeadapter.Document{}, nil, errors.New("selected registration contains an unsupported value")
+		}
+		role.Unknown["codex.registered.role."+key] = raw
+	}
+	return role, diagnostics, nil
+}
+
+func encodeRegistered(doc nativeadapter.Document) ([]nativeadapter.File, []contracts.Diagnostic, error) {
+	name, err := requiredString(doc.Fields, "agent.metadata.id")
+	if err != nil {
+		return nil, nil, err
+	}
+	if isReservedAgentSetting(name) {
+		return nil, nil, fmt.Errorf("Codex agent name %q is a reserved [agents] project setting", name)
+	}
+	if !canonicalID.MatchString(name) {
+		return nil, nil, errors.New("project-registered Codex role name must be an ASCII canonical slug for portable identity")
+	}
+	if len(name) > 128 || strings.ContainsAny(name, `/\\`) || name == "." || name == ".." || evidence.CheckPath(agentDir+name+".toml") != nil {
+		return nil, nil, errors.New("agent name is not a valid Codex filename")
+	}
+	roleDoc := doc
+	roleDoc.Unknown = map[string]json.RawMessage{}
+	config := map[string]any{}
+	selectedExtras := map[string]any{}
+	for key, raw := range doc.Unknown {
+		switch {
+		case key == "codex.config":
+			v, e := contracts.DecodeJSON(raw)
+			if e != nil {
+				return nil, nil, errors.New("preserved Codex config is invalid JSON")
+			}
+			var ok bool
+			config, ok = v.(map[string]any)
+			if !ok {
+				return nil, nil, errors.New("preserved Codex config must be an object")
+			}
+		case strings.HasPrefix(key, "codex.registered.role."):
+			field := strings.TrimPrefix(key, "codex.registered.role.")
+			if field == "" || strings.Contains(field, ".") || field == "description" || field == "config_file" {
+				return nil, nil, fmt.Errorf("invalid preserved registration field %q", field)
+			}
+			v, e := contracts.DecodeJSON(raw)
+			if e != nil {
+				return nil, nil, errors.New("preserved registration value is invalid JSON")
+			}
+			selectedExtras[field] = v
+		default:
+			roleDoc.Unknown[key] = raw
+		}
+	}
+	if config == nil {
+		config = map[string]any{}
+	}
+	agents, ok := config["agents"].(map[string]any)
+	if !ok {
+		if _, exists := config["agents"]; exists {
+			return nil, nil, errors.New("preserved Codex agents config must be a table")
+		}
+		agents = map[string]any{}
+	}
+	for sibling, value := range agents {
+		if strings.EqualFold(sibling, name) {
+			return nil, nil, fmt.Errorf("registered Codex role %q collides with preserved [agents] key %q after case folding", name, sibling)
+		}
+		entry, isRole := value.(map[string]any)
+		if isRole {
+			if !isASCII(sibling) {
+				return nil, nil, fmt.Errorf("unsupported portability: non-ASCII sibling registration name %q", sibling)
+			}
+			if ref, ok := entry["config_file"].(string); ok && registrationPathAlias(ref, "agents/"+name+".toml") {
+				return nil, nil, fmt.Errorf("preserved sibling %q config_file aliases selected output path", sibling)
+			}
+			if ref, ok := entry["config_file"].(string); ok && ref != "" && (!isASCII(ref) || !portableRegistrationRef(ref)) {
+				return nil, nil, fmt.Errorf("unsupported portability: sibling %q config_file contains a nonportable path", sibling)
+			}
+		}
+	}
+	description, err := requiredString(doc.Fields, "agent.identity.purpose")
+	if err != nil {
+		return nil, nil, err
+	}
+	registration := map[string]any{"description": description, "config_file": "agents/" + name + ".toml"}
+	for k, v := range selectedExtras {
+		registration[k] = v
+	}
+	agents[name] = registration
+	config["agents"] = agents
+	roleFiles, diagnostics, err := (Adapter{}).Encode(projectScope, roleDoc)
+	if err != nil {
+		return nil, nil, err
+	}
+	configBytes, err := nativeparse.Encode("toml", config)
+	if err != nil {
+		return nil, nil, errors.New("preserved project config cannot be represented in Codex TOML")
+	}
+	return []nativeadapter.File{
+		{Path: projectConfig, Format: "toml", Data: configBytes},
+		roleFiles[0],
+	}, diagnostics, nil
+}
+
+func isReservedAgentSetting(name string) bool {
+	_, reserved := reservedAgentSettings[name]
+	return reserved
+}
+
+func safeRegistrationPath(s string) bool {
+	return s != "" && !strings.ContainsAny(s, "\\:\x00") && !strings.HasPrefix(s, "/") && path.Clean(s) == s && !strings.HasPrefix(s, "../")
+}
+
+func registrationPathAlias(left, right string) bool {
+	key := func(s string) string {
+		return strings.ToLower(path.Clean(strings.ReplaceAll(s, "\\", "/")))
+	}
+	return key(left) == key(right)
+}
+
+func isASCII(s string) bool {
+	for i := 0; i < len(s); i++ {
+		if s[i] >= 0x80 {
+			return false
+		}
+	}
+	return true
+}
+
+// portableRegistrationRef accepts ordinary ASCII relative paths. Dot
+// components are retained for lexical alias checks; parent segments, absolute
+// paths, trailing dots or spaces, ADS separators and NULs are rejected instead
+// of resolving paths or emulating platform-specific filesystem behavior.
+func portableRegistrationRef(s string) bool {
+	if strings.ContainsAny(s, ":\x00~") {
+		return false
+	}
+	normalized := strings.ReplaceAll(s, "\\", "/")
+	if strings.HasPrefix(normalized, "/") {
+		return false
+	}
+	for _, component := range strings.Split(normalized, "/") {
+		if component == ".." {
+			return false
+		}
+		if component == "." {
+			continue
+		}
+		if strings.HasSuffix(component, ".") || strings.HasSuffix(component, " ") {
+			return false
+		}
+	}
+	return true
+}
+
+func cloneRawMap(in map[string]json.RawMessage) map[string]json.RawMessage {
+	out := make(map[string]json.RawMessage, len(in))
+	for k, v := range in {
+		out[k] = append(json.RawMessage(nil), v...)
+	}
+	return out
 }
 
 func validAgentPath(p string) bool {

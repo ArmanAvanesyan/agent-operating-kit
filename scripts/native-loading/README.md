@@ -97,3 +97,21 @@ network access and outside-root write denial. No credentials or profile-provided
 commands run. This verifies the explicitly selected entrypoint's profile scope;
 normal launcher selection, complete profile readiness and runtime enforcement
 remain unverified.
+
+## Codex registered project check
+
+`verify_codex_project_registered.py --aok /absolute/path/to/newly-built/aok
+--codex-copy /absolute/path/to/copied/codex` requires Codex CLI 0.162.1 and
+Darwin `sandbox-exec`. It copies the supplied host again, generates both native
+files through AOK's `project-registered` import/export, and records their bytes
+and hashes. Use a fresh binary built from the adapter version being tested.
+
+The host receives only initialize, config/read and ephemeral read-only
+thread/start requests. No turn is sent. Disposable trusted projects and isolated
+`CODEX_HOME` directories distinguish the positive, absent-registration,
+malformed-config, malformed-role and missing-role cases. Network access,
+writes outside the temporary root are denied. Credential storage is explicitly
+set to `file` under the isolated `CODEX_HOME`, with no credentials supplied.
+Requests have bounded reads and owned process groups are terminated on exit.
+This establishes referenced-role loading only; invocation, model compatibility
+and runtime enforcement remain unverified.

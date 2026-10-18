@@ -3,9 +3,11 @@ package codex
 import (
 	"encoding/json"
 	"os"
+	"strconv"
 	"strings"
 	"testing"
 
+	"github.com/ArmanAvanesyan/agent-operating-kit/internal/contracts"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/nativeadapter"
 )
 
@@ -45,8 +47,8 @@ func TestDecodeMapsRequiredFieldsAndRetainsUnknownTOML(t *testing.T) {
 	if string(doc.Assets["instructions.md"]) != "Read-only synthetic discovery fixture." {
 		t.Fatalf("instruction bytes changed: %q", doc.Assets["instructions.md"])
 	}
-	if New().Descriptor().HostLoading.Status != "not-run" {
-		t.Fatal("app-server config/read with agents=null must not imply host loading")
+	if got := newEngine(t).Inspect(target, projectScope, fixture(t), nil).HostLoading.Status; got != "not-run" {
+		t.Fatalf("standalone-file scope must remain unverified, got %q", got)
 	}
 }
 
@@ -243,5 +245,305 @@ func TestProviderAdvertisedEffortIsPreserved(t *testing.T) {
 	out, _, r := engine.Export("codex", "project", files, b, nil)
 	if len(out) != 1 || r.Status != "blocked" {
 		t.Fatalf("roundtrip: %+v", r)
+	}
+}
+
+func registeredFixture(t *testing.T) []nativeadapter.File {
+	t.Helper()
+	role := fixture(t)[0]
+	config := []byte(`project_doc = "retain me"
+[agents]
+enabled = true
+default_subagent_model = "gpt-6-luna"
+default_subagent_reasoning_effort = "medium"
+max_depth = 3
+max_threads = 2
+[agents.aok-probe]
+description = "Synthetic read-only discovery fixture"
+config_file = "agents/aok-probe.toml"
+future_registration_flag = true
+[agents.sibling]
+description = "Do not inspect"
+config_file = "outside/sibling.toml"
+future_sibling_setting = 7
+[profiles.future]
+model = "untouched"
+`)
+	return []nativeadapter.File{{Path: projectConfig, Format: "toml", Data: config}, role}
+}
+
+func TestProjectRegisteredRoundTripPreservesRootSiblingsAndSelectedExtras(t *testing.T) {
+	input := registeredFixture(t)
+	doc, ds, err := New().Decode(registeredScope, input)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(ds) != 2 || ds[0].Code != "codex.project-config.preserved" || ds[1].Code != "codex.sibling-registration.uninspected" {
+		t.Fatalf("expected stable preservation and unopened-sibling warnings: %+v", ds)
+	}
+	assertRaw(t, doc.Fields, "agent.metadata.id", `"aok-probe"`)
+	assertRaw(t, doc.Unknown, "codex.registered.role.future_registration_flag", "true")
+	root, err := contracts.DecodeJSON(doc.Unknown["codex.config"])
+	if err != nil {
+		t.Fatal(err)
+	}
+	rootMap := root.(map[string]any)
+	if rootMap["project_doc"] != "retain me" {
+		t.Fatalf("root config lost: %#v", rootMap)
+	}
+	agents := rootMap["agents"].(map[string]any)
+	if agents["enabled"] != true || agents["max_depth"].(json.Number).String() != "3" || agents["max_threads"].(json.Number).String() != "2" {
+		t.Fatalf("global [agents] settings were not preserved as root values: %#v", agents)
+	}
+	if _, exists := agents["aok-probe"]; exists {
+		t.Fatal("selected registration was not stripped from preserved root")
+	}
+	if _, exists := agents["sibling"]; !exists {
+		t.Fatal("sibling registration was not preserved")
+	}
+	files, _, err := New().Encode(registeredScope, doc)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(files) != 2 || files[0].Path != projectConfig || files[1].Path != ".codex/agents/aok-probe.toml" {
+		t.Fatalf("unexpected output set: %+v", files)
+	}
+	roundTrip, _, err := New().Decode(registeredScope, files)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !documentsEquivalent(doc, roundTrip) {
+		t.Fatalf("registered roundtrip changed semantics\nwant=%s\ngot=%s", mustJSON(t, doc), mustJSON(t, roundTrip))
+	}
+	configText := string(files[0].Data)
+	for _, fragment := range []string{"[agents]", "enabled = true", "max_depth = 3", "[agents.aok-probe]", `config_file = 'agents/aok-probe.toml'`, "[agents.sibling]", "[profiles.future]"} {
+		if !strings.Contains(configText, fragment) {
+			t.Errorf("encoded config missing %q:\n%s", fragment, configText)
+		}
+	}
+}
+
+func TestProjectRegisteredScopeIsOnlyHostVerifiedScope(t *testing.T) {
+	descriptor := New().Descriptor()
+	if descriptor.HostLoading.Status != "verified" || descriptor.HostLoading.HostVersion != "Codex CLI 0.162.1" || len(descriptor.HostLoading.Scopes) != 1 || descriptor.HostLoading.Scopes[0] != registeredScope {
+		t.Fatalf("registration evidence is not scope-bound: %+v", descriptor.HostLoading)
+	}
+	e := newEngine(t)
+	if got := e.Inspect(target, projectScope, fixture(t), nil).HostLoading.Status; got != "not-run" {
+		t.Fatalf("standalone scope host status=%q", got)
+	}
+	if got := e.Inspect(target, registeredScope, registeredFixture(t), nil).HostLoading.Status; got != "verified" {
+		t.Fatalf("registered scope host status=%q", got)
+	}
+}
+
+func TestProjectRegisteredRejectsMismatchedOrUnsafeRegistration(t *testing.T) {
+	cases := []struct{ name, config, role string }{
+		{"missing", `project_doc="x"`, ""},
+		{"description", `[agents.aok-probe]\ndescription="wrong"\nconfig_file="agents/aok-probe.toml"`, ""},
+		{"absolute", `[agents.aok-probe]\ndescription="Synthetic read-only discovery fixture"\nconfig_file="/tmp/aok-probe.toml"`, ""},
+		{"traversal", `[agents.aok-probe]\ndescription="Synthetic read-only discovery fixture"\nconfig_file="../aok-probe.toml"`, ""},
+		{"backslash", `[agents.aok-probe]\ndescription="Synthetic read-only discovery fixture"\nconfig_file="agents\\aok-probe.toml"`, ""},
+		{"different-file", `[agents.aok-probe]\ndescription="Synthetic read-only discovery fixture"\nconfig_file="agents/other.toml"`, ""},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			role := fixture(t)[0]
+			config := []byte(tc.config)
+			if tc.name == "description" || tc.name == "absolute" || tc.name == "traversal" || tc.name == "backslash" || tc.name == "different-file" {
+				config = []byte(strings.ReplaceAll(tc.config, `\n`, "\n"))
+			}
+			_, _, err := New().Decode(registeredScope, []nativeadapter.File{{Path: projectConfig, Format: "toml", Data: config}, role})
+			if err == nil {
+				t.Fatal("invalid registration accepted")
+			}
+		})
+	}
+	for _, unsafe := range []string{"/absolute.toml", "../escape.toml", "agents\\aok-probe.toml", `C:\roles\aok-probe.toml`, "agents/aok-probe.toml\x00"} {
+		if safeRegistrationPath(unsafe) {
+			t.Errorf("unsafe reference accepted: %q", unsafe)
+		}
+	}
+}
+
+func TestProjectRegisteredRejectsInputShapeAndRenameSiblingCollision(t *testing.T) {
+	if _, _, err := New().Decode(registeredScope, registeredFixture(t)[:1]); err == nil {
+		t.Fatal("config-only input accepted")
+	}
+	doc, _, err := New().Decode(registeredScope, registeredFixture(t))
+	if err != nil {
+		t.Fatal(err)
+	}
+	doc.Fields["agent.metadata.id"] = json.RawMessage(`"sibling"`)
+	if _, _, err := New().Encode(registeredScope, doc); err == nil || !strings.Contains(err.Error(), "collides") {
+		t.Fatalf("rename collision was not rejected: %v", err)
+	}
+}
+
+func TestProjectRegisteredDoesNotOverwritePreservedScalarAgentSetting(t *testing.T) {
+	doc := minimalDoc()
+	doc.Fields["agent.metadata.id"] = json.RawMessage(`"future-setting"`)
+	doc.Assets["instructions.md"] = []byte("Synthetic")
+	doc.Unknown["codex.config"] = json.RawMessage(`{"agents":{"future-setting":true}}`)
+	if _, _, err := New().Encode(registeredScope, doc); err == nil || !strings.Contains(err.Error(), "collides") {
+		t.Fatalf("encoding overwrote a preserved scalar setting: %v", err)
+	}
+}
+
+func TestProjectRegisteredUnknownEmptyCreatesTwoFileConfig(t *testing.T) {
+	doc := minimalDoc()
+	doc.Fields["agent.metadata.id"] = json.RawMessage(`"aok-fresh"`)
+	doc.Fields["agent.identity.purpose"] = json.RawMessage(`"Fresh synthetic role"`)
+	doc.Assets["instructions.md"] = []byte("Fresh instructions")
+	files, _, err := New().Encode(registeredScope, doc)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(files) != 2 || files[0].Path != projectConfig || files[1].Path != ".codex/agents/aok-fresh.toml" {
+		t.Fatalf("expected exactly two output files: %+v", files)
+	}
+	decoded, _, err := New().Decode(registeredScope, files)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(decoded.Fields["agent.metadata.id"]) != `"aok-fresh"` || string(decoded.Fields["agent.identity.purpose"]) != `"Fresh synthetic role"` || string(decoded.Fields["executionProfile.model.reasoning.mode"]) != `"provider-default"` {
+		t.Fatalf("fresh registered output did not preserve mapped semantics: %s", mustJSON(t, decoded))
+	}
+	if string(decoded.Assets["instructions.md"]) != "Fresh instructions" {
+		t.Fatalf("fresh registered output changed instructions: %q", decoded.Assets["instructions.md"])
+	}
+}
+
+func TestProjectRegisteredRejectsUnsafeNativeNames(t *testing.T) {
+	for _, name := range []string{"../escape", "a/b", "a\\b", "bad\x00name", "bad\nname", strings.Repeat("x", 129)} {
+		doc := minimalDoc()
+		doc.Fields["agent.metadata.id"] = mustJSON(t, name)
+		doc.Assets["instructions.md"] = []byte("instructions")
+		if _, _, err := New().Encode(registeredScope, doc); err == nil {
+			t.Errorf("unsafe name %q was accepted", name)
+		}
+	}
+}
+
+func TestProjectRegisteredRejectsReservedAgentsSettingsAsRoleNames(t *testing.T) {
+	for name := range reservedAgentSettings {
+		t.Run(name, func(t *testing.T) {
+			role := []byte("name = " + strconv.Quote(name) + "\ndescription = 'Reserved name'\ndeveloper_instructions = 'Synthetic'\n")
+			files := []nativeadapter.File{
+				{Path: projectConfig, Format: "toml", Data: nil},
+				{Path: agentDir + name + ".toml", Format: "toml", Data: role},
+			}
+			if _, _, err := New().Decode(registeredScope, files); err == nil || !strings.Contains(err.Error(), "reserved") {
+				t.Fatalf("reserved role name should be rejected before registration lookup, got %v", err)
+			}
+			doc := minimalDoc()
+			doc.Fields["agent.metadata.id"] = mustJSON(t, name)
+			doc.Assets["instructions.md"] = []byte("Synthetic")
+			if _, _, err := New().Encode(registeredScope, doc); err == nil || !strings.Contains(err.Error(), "reserved") {
+				t.Fatalf("canonical Unknown-empty export accepted reserved role name: %v", err)
+			}
+		})
+	}
+}
+
+func TestProjectRegisteredRejectsSiblingPathAliasesAndCaseFoldCollisions(t *testing.T) {
+	base := registeredFixture(t)
+	aliasConfigs := []struct{ name, table string }{
+		{"same-path", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = 'agents/aok-probe.toml'\n"},
+		{"case-folded-path", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = 'AGENTS/AOK-PROBE.TOML'\n"},
+		{"normalized-path", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = './agents/../agents/aok-probe.toml'\n"},
+		{"backslash-path", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = 'agents\\\\aok-probe.toml'\n"},
+		{"windows-trailing-dots", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = 'agents./aok-probe.toml.'\n"},
+		{"windows-trailing-space", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = 'agents/aok-probe.toml '\n"},
+		{"escape-reenter", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = '../.codex/agents/aok-probe.toml'\n"},
+		{"absolute", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = '/.codex/agents/aok-probe.toml'\n"},
+		{"unc", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = '\\\\\\\\server\\share\\aok-probe.toml'\n"},
+		{"dos-short-name", "[agents.shadow]\ndescription = 'Shadow'\nconfig_file = 'agents/AOK-PR~1.TOM'\n"},
+		{"case-folded-name", "[agents.AOK-PROBE]\ndescription = 'Shadow'\nconfig_file = 'agents/other.toml'\n"},
+	}
+	for _, tc := range aliasConfigs {
+		t.Run(tc.name, func(t *testing.T) {
+			files := append([]nativeadapter.File(nil), base...)
+			files[0].Data = append(append([]byte(nil), files[0].Data...), []byte(tc.table)...)
+			if _, _, err := New().Decode(registeredScope, files); err == nil {
+				t.Fatal("sibling alias/case-fold collision was accepted")
+			}
+		})
+	}
+	files := append([]nativeadapter.File(nil), base...)
+	files[0].Data = append(append([]byte(nil), files[0].Data...), []byte("[agents.AOK-FRESH]\ndescription='Shadow'\nconfig_file='agents/other.toml'\n")...)
+	doc, _, err := New().Decode(registeredScope, files)
+	if err != nil {
+		t.Fatal(err)
+	}
+	doc.Fields["agent.metadata.id"] = json.RawMessage(`"aok-fresh"`)
+	if _, _, err := New().Encode(registeredScope, doc); err == nil || !strings.Contains(err.Error(), "case folding") {
+		t.Fatalf("canonical rename to case-fold colliding sibling was accepted: %v", err)
+	}
+}
+
+func TestProjectRegisteredRejectsUnicodeNamesAndSiblingReferences(t *testing.T) {
+	for _, name := range []string{"é", "e\u0301"} { // NFC and NFD spellings
+		t.Run(name, func(t *testing.T) {
+			role := []byte("name = " + strconv.Quote(name) + "\ndescription = 'Unicode role'\ndeveloper_instructions = 'Synthetic'\n")
+			files := []nativeadapter.File{{Path: projectConfig, Format: "toml", Data: []byte{}}, {Path: agentDir + name + ".toml", Format: "toml", Data: role}}
+			if _, _, err := New().Decode(registeredScope, files); err == nil || !strings.Contains(err.Error(), "ASCII canonical slug") {
+				t.Fatalf("Unicode selected role name was accepted: %v", err)
+			}
+			doc := minimalDoc()
+			doc.Fields["agent.metadata.id"] = mustJSON(t, name)
+			doc.Assets["instructions.md"] = []byte("Synthetic")
+			if _, _, err := New().Encode(registeredScope, doc); err == nil || !strings.Contains(err.Error(), "ASCII canonical slug") {
+				t.Fatalf("Unicode canonical role name was accepted: %v", err)
+			}
+		})
+	}
+	base := registeredFixture(t)
+	for _, tc := range []struct{ name, table string }{
+		{"unicode-sibling-name", "[agents.\"rôle\"]\ndescription='Unicode sibling'\nconfig_file='agents/role.toml'\n"},
+		{"unicode-sibling-path", "[agents.shadow]\ndescription='Shadow'\nconfig_file='agents/rôle.toml'\n"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			files := append([]nativeadapter.File(nil), base...)
+			files[0].Data = append(append([]byte(nil), files[0].Data...), []byte(tc.table)...)
+			if _, _, err := New().Decode(registeredScope, files); err == nil || !strings.Contains(err.Error(), "unsupported portability") {
+				t.Fatalf("Unicode sibling portability ambiguity was accepted: %v", err)
+			}
+		})
+	}
+	for _, tc := range []struct {
+		name, sibling, ref string
+	}{
+		{"encode-unicode-sibling", "rôle", "agents/role.toml"},
+		{"encode-unicode-reference", "shadow", "agents/rôle.toml"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			doc := minimalDoc()
+			doc.Assets["instructions.md"] = []byte("Synthetic")
+			doc.Unknown["codex.config"] = mustJSON(t, map[string]any{"agents": map[string]any{
+				tc.sibling: map[string]any{"description": "Sibling", "config_file": tc.ref},
+			}})
+			if _, _, err := New().Encode(registeredScope, doc); err == nil || !strings.Contains(err.Error(), "unsupported portability") {
+				t.Fatalf("encoding Unicode sibling portability ambiguity succeeded: %v", err)
+			}
+		})
+	}
+	for _, ref := range []string{"agents./aok-probe.toml.", "agents/aok-probe.toml ", "../.codex/agents/aok-probe.toml", "/.codex/agents/aok-probe.toml", "\\\\server\\share\\aok-probe.toml", "agents/AOK-PR~1.TOM"} {
+		doc := minimalDoc()
+		doc.Fields["agent.metadata.id"] = json.RawMessage(`"aok-probe"`)
+		doc.Assets["instructions.md"] = []byte("Synthetic")
+		doc.Unknown["codex.config"] = mustJSON(t, map[string]any{"agents": map[string]any{
+			"shadow": map[string]any{"description": "Sibling", "config_file": ref},
+		}})
+		if _, _, err := New().Encode(registeredScope, doc); err == nil || !strings.Contains(err.Error(), "unsupported portability") {
+			t.Errorf("encoding nonportable alias %q succeeded: %v", ref, err)
+		}
+	}
+}
+
+func TestRequiredFilesystemAndMCPControlsStillBlockRegisteredScope(t *testing.T) {
+	report := newEngine(t).Inspect(target, registeredScope, registeredFixture(t), []nativeadapter.Control{{Path: "agent.permissions.filesystem.write", Required: true}, {Path: "agent.capabilities.mcps", Required: true}})
+	if report.Status != "blocked" || report.HostLoading.Status != "verified" || report.RuntimeEnforcement != "unverified" {
+		t.Fatalf("registration incorrectly made controls executable: %+v", report)
 	}
 }

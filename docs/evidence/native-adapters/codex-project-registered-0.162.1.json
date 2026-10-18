@@ -1,0 +1,145 @@
+{
+  "aokBinarySHA256": "0d955d8394d3809c6080dace2b2946d053026ec49522faf66800d33d1938246f",
+  "aokExportStatus": "blocked",
+  "aokImportStatus": "blocked",
+  "cases": {
+    "absentRegistration": {
+      "agentsValue": null,
+      "configReadError": null,
+      "configWarningCount": 0,
+      "projectLayer": null,
+      "threadStartError": null,
+      "threadStartSucceeded": true,
+      "warningCodes": [],
+      "warningSummaries": []
+    },
+    "malformedConfig": {
+      "agentsValue": null,
+      "configReadError": {
+        "code": -32603,
+        "message": "failed to read configuration layers: Error parsing project config file <PROBE_ROOT>/malformed-config/.codex/config.toml: TOML parse error at line 1, column 18\n  |\n1 | [agents.aok-probe\n  |                  ^\nunclosed table, expected `]`\n"
+      },
+      "configWarningCount": 1,
+      "projectLayer": null,
+      "threadStartError": {
+        "code": -32600,
+        "message": "failed to load configuration: Error parsing project config file <PROBE_ROOT>/malformed-config/.codex/config.toml: TOML parse error at line 1, column 18\n  |\n1 | [agents.aok-probe\n  |                  ^\nunclosed table, expected `]`\n"
+      },
+      "threadStartSucceeded": false,
+      "warningCodes": [
+        "configWarning"
+      ],
+      "warningSummaries": [
+        "{\"emittedAtMs\": 1792289891802, \"method\": \"configWarning\", \"params\": {\"details\": \"Error parsing project config file <PROBE_ROOT>/malformed-config/.codex/config.toml: TOML parse error at line 1, column 18\\n  |\\n1 | [agents.aok-probe\\n  |                  ^\\nunclosed table, expected `]`\\n\", \"summary\": \"Invalid configuration; using defaults.\"}}"
+      ]
+    },
+    "malformedRole": {
+      "agentsValue": {
+        "aok-probe": {
+          "config_file": "<PROBE_ROOT>/malformed-role/.codex/agents/aok-probe.toml",
+          "description": "Synthetic read-only discovery fixture",
+          "nickname_candidates": null
+        },
+        "default_subagent_model": null,
+        "default_subagent_reasoning_effort": null,
+        "enabled": null,
+        "interrupt_message": null,
+        "job_max_runtime_seconds": null,
+        "max_concurrent_threads_per_session": null,
+        "max_depth": null
+      },
+      "configReadError": null,
+      "configWarningCount": 2,
+      "projectLayer": null,
+      "threadStartError": null,
+      "threadStartSucceeded": true,
+      "warningCodes": [
+        "configWarning"
+      ],
+      "warningSummaries": [
+        "{\"emittedAtMs\": 1792289891996, \"method\": \"configWarning\", \"params\": {\"details\": null, \"summary\": \"Ignoring malformed agent role definition: failed to parse agent role file at <PROBE_ROOT>/malformed-role/.codex/agents/aok-probe.toml: TOML parse error at line 1, column 9\\n  |\\n1 | name = [\\n  |         ^\\nunclosed array, expected `]`\\n\"}}",
+        "{\"emittedAtMs\": 1792289891996, \"method\": \"configWarning\", \"params\": {\"details\": null, \"summary\": \"Ignoring malformed agent role definition: failed to parse agent role file at <PROBE_ROOT>/malformed-role/.codex/agents/aok-probe.toml: TOML parse error at line 1, column 9\\n  |\\n1 | name = [\\n  |         ^\\nunclosed array, expected `]`\\n\"}}"
+      ]
+    },
+    "missingRole": {
+      "agentsValue": {
+        "aok-probe": {
+          "config_file": "<PROBE_ROOT>/missing-role/.codex/agents/missing.toml",
+          "description": "Synthetic read-only discovery fixture",
+          "nickname_candidates": null
+        },
+        "default_subagent_model": null,
+        "default_subagent_reasoning_effort": null,
+        "enabled": null,
+        "interrupt_message": null,
+        "job_max_runtime_seconds": null,
+        "max_concurrent_threads_per_session": null,
+        "max_depth": null
+      },
+      "configReadError": null,
+      "configWarningCount": 1,
+      "projectLayer": null,
+      "threadStartError": null,
+      "threadStartSucceeded": true,
+      "warningCodes": [
+        "configWarning"
+      ],
+      "warningSummaries": [
+        "{\"emittedAtMs\": 1792289892601, \"method\": \"configWarning\", \"params\": {\"details\": null, \"summary\": \"Ignoring malformed agent role definition: agents.aok-probe.config_file must point to an existing file at <PROBE_ROOT>/missing-role/.codex/agents/missing.toml: No such file or directory (os error 2)\"}}"
+      ]
+    },
+    "positive": {
+      "agentsValue": {
+        "aok-probe": {
+          "config_file": "<PROBE_ROOT>/positive/.codex/agents/aok-probe.toml",
+          "description": "Synthetic read-only discovery fixture",
+          "nickname_candidates": null
+        },
+        "default_subagent_model": null,
+        "default_subagent_reasoning_effort": null,
+        "enabled": null,
+        "interrupt_message": null,
+        "job_max_runtime_seconds": null,
+        "max_concurrent_threads_per_session": null,
+        "max_depth": null
+      },
+      "configReadError": null,
+      "configWarningCount": 0,
+      "projectLayer": null,
+      "threadStartError": null,
+      "threadStartSucceeded": true,
+      "warningCodes": [],
+      "warningSummaries": []
+    }
+  },
+  "codexBinarySHA256": "f86b8cfd3de94dc70763d251da3ff292e94f4a53ad41b81faab3619a7bcb626c",
+  "exportedConfig": "[agents]\n[agents.aok-probe]\nconfig_file = 'agents/aok-probe.toml'\ndescription = 'Synthetic read-only discovery fixture'\n",
+  "exportedConfigSHA256": "89f86c68c1cbd5eec2c09d44d4ac591c543e08d932d273d77b44f684c5fe97e1",
+  "exportedRole": "description = 'Synthetic read-only discovery fixture'\ndeveloper_instructions = 'Read-only synthetic discovery fixture.'\nmodel = 'gpt-6-luna'\nmodel_reasoning_effort = 'medium'\nname = 'aok-probe'\n\n[features]\nfuture_capability = true\nshell_tool = false\n",
+  "exportedRoleSHA256": "f61f9ce71cac446817f42e4955befdf10f7c4c403e29308c77cadec16c9e3de8",
+  "hostVersion": "codex-cli 0.162.1",
+  "modelExecution": "not-run",
+  "nativeLoading": "verified for project-registered config discovery and selected role startup validation",
+  "observedAt": "2026-10-18T02:18:12.978856+00:00",
+  "probeScript": "scripts/native-loading/verify_codex_project_registered.py",
+  "probeScriptSHA256": "e3a677131850a6377c2ec0057c854c1919a31a8f60fe76842386f1e0b1a80292",
+  "runtimeEnforcement": "unverified",
+  "safety": {
+    "authentication": "none",
+    "credentials": "isolated CODEX_HOME selects file-based storage; credential variables are not inherited",
+    "environment": "allow-list; no credential variables",
+    "homeAndProject": "disposable temporary root",
+    "hostNetwork": "sandbox-exec denied network*",
+    "inference": "none",
+    "requests": [
+      "app-server initialize",
+      "config/read",
+      "ephemeral read-only thread/start"
+    ],
+    "turns": "none",
+    "writes": "sandbox-exec denied writes outside temporary root"
+  },
+  "scope": "project-registered",
+  "sourceRoleSHA256": "ccf2bd30d60b70b6276f1a4749f663a586ebecd8033699f6f2b6c739784514f1",
+  "target": "codex"
+}

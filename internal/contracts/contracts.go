@@ -72,15 +72,15 @@ func Parse(data []byte) (any, []Diagnostic, error) {
 	if err := dec.Decode(&head); err != nil {
 		return fail("document.syntax", "", err.Error())
 	}
-	if head.APIVersion != "aok/v1alpha1" {
+	if head.APIVersion != "aok/v1alpha1" && !(head.APIVersion == "aok/v1alpha2" && connectorV2Kind(head.Kind)) {
 		return fail("document.api-version", "apiVersion", fmt.Sprintf("unsupported apiVersion %q", head.APIVersion))
 	}
 	switch head.Kind {
-	case "Agent", "ExecutionProfile", "AgentAssignment", "CapabilityRegistry", "InvocationContract", "ContextPolicy", "OutputContract", "EnvironmentProfile", "LifecyclePolicy", "EvaluationContract", "MigrationContract", "GoalContract", "PlanDefinition", "PlanRevision", "DecisionContract", "DecisionResult", "OptimizationExperiment", "SDLCTraceability", "PlanningEvidence":
+	case "Agent", "ExecutionProfile", "AgentAssignment", "CapabilityRegistry", "InvocationContract", "ContextPolicy", "OutputContract", "EnvironmentProfile", "LifecyclePolicy", "EvaluationContract", "MigrationContract", "GoalContract", "PlanDefinition", "PlanRevision", "DecisionContract", "DecisionResult", "OptimizationExperiment", "SDLCTraceability", "PlanningEvidence", "WorkItemBinding", "HostTaskBinding", "RunRecord", "ConnectorCapability", "SyncOperation", "SyncReceipt":
 	default:
 		return fail("document.kind", "kind", fmt.Sprintf("unsupported kind %q", head.Kind))
 	}
-	if err := validateSchema(head.Kind, data); err != nil {
+	if err := validateSchemaVersion(head.Kind, head.APIVersion, data); err != nil {
 		return fail("document.schema", "", err.Error())
 	}
 	var envelope Envelope
@@ -94,6 +94,21 @@ func fail(code, field, message string) (any, []Diagnostic, error) {
 	return nil, []Diagnostic{{Code: code, Field: field, Severity: "error", Message: message}}, e
 }
 func utf8Valid(b []byte) bool { return utf8.Valid(b) }
+
+// ValidateJSON checks the bounded canonical JSON syntax shared by independent
+// AOK formats, without requiring an operational resource kind or envelope.
+func ValidateJSON(data []byte) error {
+	if len(data) > MaxDocumentBytes {
+		return errors.New("document exceeds 4 MiB")
+	}
+	if !utf8Valid(data) {
+		return errors.New("document is not valid UTF-8")
+	}
+	if bytes.HasPrefix(data, []byte{0xef, 0xbb, 0xbf}) {
+		return errors.New("UTF-8 BOM is not permitted")
+	}
+	return scanJSON(data)
+}
 func scanJSON(b []byte) error {
 	dec := json.NewDecoder(bytes.NewReader(b))
 	dec.UseNumber()
@@ -160,4 +175,13 @@ func scanJSON(b []byte) error {
 		return errors.New("trailing JSON value or data")
 	}
 	return nil
+}
+
+// connectorV2Kind limits the deployment-distinction extension to workflow records.
+func connectorV2Kind(kind string) bool {
+	switch kind {
+	case "WorkItemBinding", "HostTaskBinding", "RunRecord", "ConnectorCapability", "SyncOperation", "SyncReceipt":
+		return true
+	}
+	return false
 }

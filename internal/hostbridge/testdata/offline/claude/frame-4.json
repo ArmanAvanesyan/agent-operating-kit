@@ -1,0 +1,1 @@
+{"type":"result","subtype":"success","session_id":"550e8400-e29b-41d4-a716-446655440000","structured_output":{"ok":true},"usage":{"input_tokens":12,"output_tokens":4,"total_cost_usd":0.1234567890123456789},"result":"SECRET_CANARY","account":"PRIVATE_ACCOUNT"}

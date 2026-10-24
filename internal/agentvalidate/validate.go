@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/contracts"
+	"github.com/ArmanAvanesyan/agent-operating-kit/internal/workflowcheck"
 	jsonschema "github.com/santhosh-tekuri/jsonschema/v6"
 )
 
@@ -79,6 +80,17 @@ func semanticChecks(c *Corpus) []contracts.Diagnostic {
 	}
 	delegationCycles(&r, c.Resources, byKey)
 	validateAssetSchemas(&r, c)
+	workflowDocs := make([]workflowcheck.Document, 0, len(c.Resources))
+	for _, doc := range c.Resources {
+		workflowDocs = append(workflowDocs, workflowcheck.Document{Resource: doc.Resource, Path: doc.Path})
+	}
+	r.Diagnostics = append(r.Diagnostics, workflowcheck.Check(workflowDocs, func(owner, ref string) ([]byte, error) {
+		path, err := c.ResolveFile(owner, ref)
+		if err != nil {
+			return nil, err
+		}
+		return readBounded(path)
+	})...)
 	sortDiagnostics(r.Diagnostics)
 	return r.Diagnostics
 }

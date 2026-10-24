@@ -1,0 +1,15 @@
+{
+  "version": "aok-usage/v1",
+  "configurationId": "opaque-config",
+  "profileSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "source": "fixture",
+  "validUntil": "2026-10-23T12:01:00Z",
+  "amounts": [
+    {
+      "constraintId": "95a273081a656d439e671ca27199a7d03df56aaa8fdaeb2f50a564880e3a9868",
+      "generation": "fixture-window",
+      "unit": "requests",
+      "amount": 1
+    }
+  ]
+}

@@ -66,6 +66,82 @@ func TestFoundationsCLI(t *testing.T) {
 
 	// Canonical validation succeeds; resolution emits a useful static snapshot
 	// but remains blocked because runtime enforcement has not been verified.
+	// Workflow records use the same shipped offline boundary and never grant
+	// authority or execution readiness, even when every declared check passes.
+	workflowSource := root("internal", "workflowcheck", "testdata", "corpus")
+	workflowCorpus := filepath.Join(work, "workflow-corpus")
+	copyTreeCLI(t, workflowSource, workflowCorpus)
+	wr := run(repo, 0, "workflow", "validate", workflowCorpus, "--json")
+	if wr["status"] != "valid" || wr["authorizationGranted"] != false || wr["executionReady"] != false {
+		t.Fatalf("workflow validation report=%v", wr)
+	}
+	// A workflow-domain semantic defect must reach all commands that accept
+	// these kinds, rather than passing as merely schema-valid JSON.
+	entries, err := os.ReadDir(workflowCorpus)
+	if err != nil {
+		t.Fatal(err)
+	}
+	corrupted := false
+	for _, entry := range entries {
+		if entry.IsDir() {
+			continue
+		}
+		p := filepath.Join(workflowCorpus, entry.Name())
+		b, err := os.ReadFile(p)
+		if err != nil {
+			t.Fatal(err)
+		}
+		var doc map[string]any
+		if json.Unmarshal(b, &doc) != nil || doc["kind"] != "RunRecord" {
+			continue
+		}
+		doc["attemptId"] = "foreign-attempt"
+		b, err = json.Marshal(doc)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err = os.WriteFile(p, b, 0600); err != nil {
+			t.Fatal(err)
+		}
+		corrupted = true
+		break
+	}
+	if !corrupted {
+		t.Fatal("workflow fixture missing run record")
+	}
+	for _, domain := range []string{"workflow", "agent", "planning"} {
+		if r := run(repo, 1, domain, "validate", workflowCorpus, "--json"); r["status"] != "invalid" {
+			t.Fatalf("%s skipped workflow semantics: %v", domain, r)
+		}
+	}
+	// Every catalog command is offline at the shipped executable boundary.
+	modelManifest := root("docs", "research", "model-catalog-manifest.json")
+	modelPolicy := root("docs", "research", "model-catalog-policy.json")
+	modelBundle := filepath.Join(work, "model-catalog")
+	if r := run(repo, 0, "models", "import", "--manifest", modelManifest, "--policy", modelPolicy, "--out", modelBundle, "--json"); r["status"] != "valid" {
+		t.Fatalf("catalog import report=%v", r)
+	}
+	run(repo, 0, "models", "validate", modelBundle, "--policy", modelPolicy, "--json")
+	if r := run(repo, 0, "models", "inspect", modelBundle, "--as-of", "2026-10-23T12:00:00Z", "--json"); r["authorizationGranted"] != false || r["executionReady"] != false || r["probeGate"] != "pending-p6" {
+		t.Fatalf("catalog promoted research evidence: %v", r)
+	}
+	if r := run(repo, 0, "models", "diff", modelBundle, modelBundle, "--as-of", "2026-10-23T12:00:00Z", "--json"); len(r["changes"].([]any)) != 0 {
+		t.Fatalf("catalog self diff: %v", r)
+	}
+	refreshedBundle := filepath.Join(work, "model-catalog-refreshed")
+	run(repo, 0, "models", "refresh", modelBundle, "--manifest", modelManifest, "--policy", modelPolicy, "--out", refreshedBundle, "--json")
+	run(repo, 0, "models", "validate", refreshedBundle, "--policy", modelPolicy, "--json")
+	run(repo, 0, "models", "check", "--catalog", modelBundle, "--policy", modelPolicy, "--profile", root("internal", "planning", "testdata", "corpus", "execution-profile.json"), "--as-of", "2026-10-23T12:00:00Z", "--json")
+	usageExport := root("internal", "usage", "testdata", "export.json")
+	usagePolicy := root("internal", "usage", "testdata", "policy.json")
+	if r := run(repo, 0, "usage", "validate", usageExport, "--policy", usagePolicy, "--json"); r["authorizationGranted"] != false || r["executionReady"] != false || r["runtimeGate"] != "pending-p6-p7" {
+		t.Fatalf("usage promoted runtime readiness: %v", r)
+	}
+	run(repo, 0, "usage", "summary", usageExport, "--policy", usagePolicy, "--as-of", "2026-10-23T12:00:30Z", "--json")
+	if r := run(repo, 0, "usage", "collectors", "--json"); len(r["collectors"].([]any)) != 8 {
+		t.Fatalf("collector support inventory: %v", r)
+	}
+	run(repo, 0, "usage", "capacity", usageExport, "--policy", usagePolicy, "--catalog", modelBundle, "--catalog-policy", modelPolicy, "--profile", root("internal", "planning", "testdata", "corpus", "execution-profile.json"), "--as-of", "2026-10-23T12:00:30Z", "--json")
 	agentCorpus := root("internal", "agentresolve", "testdata", "corpus")
 	if r := run(repo, 0, "agent", "validate", agentCorpus, "--json"); r["status"] != "valid" {
 		t.Fatalf("agent validate report=%v", r)
@@ -74,6 +150,10 @@ func TestFoundationsCLI(t *testing.T) {
 	r := run(repo, 1, "agent", "resolve", filepath.Join(agentCorpus, "assignment.json"), "--root", agentCorpus, "--out", resolveOut, "--json")
 	if r["status"] != "blocked" {
 		t.Fatalf("resolve report=%v", r)
+	}
+	catalogResolved := run(repo, 1, "agent", "resolve", filepath.Join(agentCorpus, "assignment.json"), "--root", agentCorpus, "--out", filepath.Join(work, "catalog-resolution"), "--catalog", modelBundle, "--catalog-policy", modelPolicy, "--as-of", "2026-10-23T12:00:00Z", "--json")
+	if catalogResolved["status"] != "blocked" || catalogResolved["snapshot"].(map[string]any)["catalogEvidence"] == nil {
+		t.Fatalf("catalog resolution missing blocked evidence: %v", catalogResolved)
 	}
 	assertJSONFile(t, filepath.Join(resolveOut, "resolution.json"), "blocked")
 

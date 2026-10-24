@@ -1,0 +1,33 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "assignmentRef": {
+    "id": "explore-aok-001",
+    "kind": "AgentAssignment",
+    "version": "0.1.0"
+  },
+  "assignmentSha256": "9669d03c1363c5964e83dc66d83e5cfd6659f34cf86bbf644845b47d73a39eee",
+  "attemptId": "attempt-2",
+  "host": "codex",
+  "hostVersion": "1",
+  "kind": "HostTaskBinding",
+  "metadata": {
+    "description": "workflowcheck fixture",
+    "id": "host-attempt-2",
+    "name": "host-attempt-2",
+    "version": "0.1.0"
+  },
+  "planStepRef": {
+    "planRef": {
+      "id": "explore-plan",
+      "kind": "PlanDefinition",
+      "version": "0.1.0"
+    },
+    "stepId": "inspect"
+  },
+  "sessionId": "sess-2",
+  "workItemRef": {
+    "id": "issue-17",
+    "kind": "WorkItemBinding",
+    "version": "0.1.0"
+  }
+}

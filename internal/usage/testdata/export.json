@@ -1,0 +1,65 @@
+{
+  "version": "aok-usage/v1",
+  "ledgerRevision": 0,
+  "policySha256": "969901cf6c59fb38a5d97b9cb1d3c00cd5c91fa95d23467a3a648412680d101e",
+  "bindings": [
+    {
+      "id": "fixture-binding",
+      "poolId": "fixture-pool",
+      "provider": "fixture-provider",
+      "service": "fixture-service",
+      "host": "codex",
+      "hostVersion": "test-v1",
+      "authMode": "test",
+      "sourceId": "fixture-source",
+      "streamId": "fixture-stream",
+      "configurationIds": [
+        "opaque-config"
+      ],
+      "constraintIds": [
+        "95a273081a656d439e671ca27199a7d03df56aaa8fdaeb2f50a564880e3a9868"
+      ],
+      "constraintsComplete": true
+    }
+  ],
+  "events": [],
+  "quotas": [
+    {
+      "id": "fixture-quota",
+      "origin": {
+        "sourceId": "fixture-source",
+        "host": "codex",
+        "hostVersion": "test-v1",
+        "adapterVersion": "1.0.0",
+        "authMode": "test",
+        "observedAt": "2026-10-23T12:00:00Z",
+        "receivedAt": "2026-10-23T12:00:00Z",
+        "freshnessKnown": true
+      },
+      "constraint": {
+        "id": "95a273081a656d439e671ca27199a7d03df56aaa8fdaeb2f50a564880e3a9868",
+        "poolId": "fixture-pool",
+        "provider": "fixture-provider",
+        "service": "fixture-service",
+        "limitId": "requests-primary",
+        "metric": "requests",
+        "unit": "requests",
+        "scope": "account",
+        "windowKind": "fixed"
+      },
+      "generation": "fixture-window",
+      "revision": 1,
+      "completeness": "full",
+      "remaining": 100,
+      "used": 0,
+      "limit": 100,
+      "resetAt": null,
+      "expiresAt": "2026-10-23T12:01:00Z",
+      "coveredChargeIds": [],
+      "precision": "exact"
+    }
+  ],
+  "charges": [],
+  "reservations": [],
+  "evidence": []
+}

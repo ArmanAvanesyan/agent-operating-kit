@@ -1,0 +1,29 @@
+{
+  "adapterId": "github",
+  "adapterVersion": "1",
+  "apiVersion": "aok/v1alpha1",
+  "kind": "ConnectorCapability",
+  "metadata": {
+    "description": "workflowcheck fixture",
+    "id": "github-adapter",
+    "name": "github-adapter",
+    "version": "0.1.0"
+  },
+  "operations": [
+    {
+      "concurrency": "conditional",
+      "conditionalWrite": true,
+      "idempotent": true,
+      "operation": "update-fields",
+      "supported": true
+    }
+  ],
+  "provider": "github",
+  "scope": {
+    "containerId": "repo",
+    "itemKind": "issue",
+    "provider": "github",
+    "remoteId": "issue-17",
+    "tenantId": "org"
+  }
+}

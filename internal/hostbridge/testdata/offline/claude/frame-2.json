@@ -1,0 +1,1 @@
+{"type":"assistant","uuid":"22222222-2222-4222-8222-222222222222","message":{"role":"assistant","content":[{"type":"text","text":"UNRELATED_SESSION_HISTORY"},{"type":"tool_use","id":"toolu_task_1","name":"TaskCreate","input":{"subject":"Do work","description":"SECRET_CANARY"}}]}}

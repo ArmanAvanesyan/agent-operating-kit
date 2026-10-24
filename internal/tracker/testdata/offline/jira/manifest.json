@@ -1,0 +1,67 @@
+{
+  "version": "aok-tracker/v1",
+  "source": {
+    "version": "aok-tracker/v1",
+    "provider": "jira",
+    "origin": "https://acme.atlassian.net",
+    "apiVersion": "3",
+    "nativeTenantId": "cloud-guid",
+    "containerId": "10001",
+    "containerKey": "ENG",
+    "principalPseudonym": "test-principal",
+    "auth": {
+      "mode": "bearer",
+      "tokenEnv": "AOK_TEST_TOKEN",
+      "usernameEnv": ""
+    },
+    "scope": {
+      "itemIds": [
+        "1"
+      ],
+      "query": "",
+      "comments": false,
+      "relations": false,
+      "projects": false
+    },
+    "mappingVersion": "map-v1"
+  },
+  "mode": "capture",
+  "pages": [
+    {
+      "request": {
+        "method": "GET",
+        "path": "/rest/api/3/issue/1?expand=names",
+        "body": null,
+        "kind": "jira-item",
+        "itemId": "1"
+      },
+      "status": 200,
+      "headers": {
+        "etag": "fixture-etag"
+      },
+      "asset": {
+        "path": "assets/0000.json",
+        "sha256": "7325c28302d5440298421c9ce70f302fab2d88a0aa735c70115e84d907ecbb87"
+      },
+      "observedAt": "2026-10-24T12:00:00Z"
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/rest/api/3/issue/1/transitions?expand=transitions.fields",
+        "body": null,
+        "kind": "jira-transitions",
+        "itemId": "1"
+      },
+      "status": 200,
+      "headers": {
+        "etag": "fixture-etag"
+      },
+      "asset": {
+        "path": "assets/0001.json",
+        "sha256": "69df1b88fe749b5a5c05e043a873f7e51088883e74cf9a51dd3fdb608a537956"
+      },
+      "observedAt": "2026-10-24T12:00:00Z"
+    }
+  ]
+}

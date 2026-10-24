@@ -1,0 +1,72 @@
+{
+  "mode": "capture",
+  "pages": [
+    {
+      "asset": {
+        "path": "assets/0000.json",
+        "sha256": "d6c62379b05bc93a2c8a3471accbcdf7d6df6171d48fce07fc1a8cacded88eb4"
+      },
+      "headers": {
+        "etag": "fixture-etag"
+      },
+      "observedAt": "2026-10-24T12:00:00Z",
+      "request": {
+        "body": null,
+        "itemId": "",
+        "kind": "azure-project",
+        "method": "GET",
+        "path": "/acme/_apis/projects/project?api-version=7.1"
+      },
+      "status": 200
+    },
+    {
+      "asset": {
+        "path": "assets/0001.json",
+        "sha256": "aca8e6a1f96470fad3c75469d52eebbe45c759b825aa3e3f7dc6f21dde27c59b"
+      },
+      "headers": {
+        "etag": "fixture-etag"
+      },
+      "observedAt": "2026-10-24T12:00:00Z",
+      "request": {
+        "body": {
+          "errorPolicy": "Omit",
+          "ids": [
+            1
+          ]
+        },
+        "itemId": "1",
+        "kind": "azure-items",
+        "method": "POST",
+        "path": "/acme/project/_apis/wit/workitemsbatch?api-version=7.1"
+      },
+      "status": 200
+    }
+  ],
+  "source": {
+    "apiVersion": "7.1",
+    "auth": {
+      "mode": "bearer",
+      "tokenEnv": "AOK_TEST_TOKEN",
+      "usernameEnv": ""
+    },
+    "containerId": "project-guid",
+    "containerKey": "acme/project",
+    "mappingVersion": "map-v1",
+    "nativeTenantId": "tenant-guid",
+    "origin": "https://dev.azure.com",
+    "principalPseudonym": "test-principal",
+    "provider": "azure-devops",
+    "scope": {
+      "comments": false,
+      "itemIds": [
+        "1"
+      ],
+      "projects": false,
+      "query": "",
+      "relations": false
+    },
+    "version": "aok-tracker/v1"
+  },
+  "version": "aok-tracker/v1"
+}

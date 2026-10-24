@@ -3,9 +3,11 @@
   "kind": "overlay",
   "displayName": "Agile Modeling",
   "description": "Just-enough collaborative modeling practices.",
-  "supportLevel": "planned",
+  "supportLevel": "active",
+  "guidanceStatus": "available",
+  "enforcementStatus": "not-applicable",
   "order": 30,
-  "fragment": null,
+  "fragment": "fragments/am.md",
   "requiredInputs": [
     "Modeling need"
   ],

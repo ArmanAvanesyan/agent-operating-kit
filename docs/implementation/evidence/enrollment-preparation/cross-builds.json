@@ -1,0 +1,38 @@
+[
+  {
+    "os": "darwin",
+    "arch": "amd64",
+    "sha256": "b97f9191b9d165a329cb940a4da7b165f02ecaf350608f5c06d9d9462b04e8bd",
+    "status": "passed"
+  },
+  {
+    "os": "darwin",
+    "arch": "arm64",
+    "sha256": "da6851c829f83edbd2e962a4c5eb05c3cdc74a114507a4dee12c02496a11ef46",
+    "status": "passed"
+  },
+  {
+    "os": "linux",
+    "arch": "amd64",
+    "sha256": "ab746bf11e26115df5b1dd53a81e47a1bf3897b40c4d00be2b2c3707f624595d",
+    "status": "passed"
+  },
+  {
+    "os": "linux",
+    "arch": "arm64",
+    "sha256": "07b180f0b2362e083ed81d0d585f0591ca2de36ab511286bcc2bd04feebaf412",
+    "status": "passed"
+  },
+  {
+    "os": "windows",
+    "arch": "amd64",
+    "sha256": "b9b280c106845203a0c320999c6751572c23f828bf68586380e33c5604d8c74d",
+    "status": "passed"
+  },
+  {
+    "os": "windows",
+    "arch": "arm64",
+    "sha256": "ae0f171d76984b5fe535e421e2c853e0213420a0d31e1978b7e44c10d5a1a525",
+    "status": "passed"
+  }
+]

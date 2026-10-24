@@ -1,0 +1,29 @@
+{
+  "host": "codex",
+  "hostVersion": "0.162.1",
+  "generator": "codex app-server generate-json-schema",
+  "source": "installed executable f86b8cfd3de94dc70763d251da3ff292e94f4a53ad41b81faab3619a7bcb626c",
+  "assets": [
+    {
+      "path": "ThreadStartParams.json",
+      "sha256": "e9c6d3cc18d049bfbc0249add3808fb8e5a27e1a0b5a423767aafbc3859a9428"
+    },
+    {
+      "path": "ThreadResumeParams.json",
+      "sha256": "948779cace55dda4384689a1627cd6675aa4782744bb5820cca16bfc0118586c"
+    },
+    {
+      "path": "TurnStartParams.json",
+      "sha256": "583aff13e7a2da43fbb0150e0edc3c73171f374f0aa745dddba256166988a005"
+    },
+    {
+      "path": "ThreadTokenUsageUpdatedNotification.json",
+      "sha256": "aba4f6c7e4a19b2b842c08ee793b57000c07dafd57b922ad0d8e7c76609108c2"
+    },
+    {
+      "path": "TurnCompletedNotification.json",
+      "sha256": "69413578ec3ecd02691424bdeb9d640c7244b4ca4c5c3ef26f69a2efe7c37db8"
+    }
+  ],
+  "note": "Protocol reference only; does not establish runtime enforcement or live model behavior."
+}

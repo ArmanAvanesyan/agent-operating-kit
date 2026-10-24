@@ -1,0 +1,19 @@
+{
+  "version": "aok-tracker/v1",
+  "identity": {
+    "provider": "github",
+    "tenantId": "f2e30474a1b6c860294fa61652139ac63c3ae2bb96d7846005da78f15ec977c8",
+    "containerId": "repo-node",
+    "remoteId": "issue-node-7",
+    "itemKind": "issue"
+  },
+  "expectedRevision": "2a1d4b3adbb5dde88c686725e762f2a856041593b35878cf4503cae5feb3d683",
+  "fields": {
+    "title": "Explicit operator-requested update"
+  },
+  "humanOwnedFields": [
+    "title"
+  ],
+  "transitionId": "",
+  "relations": null
+}

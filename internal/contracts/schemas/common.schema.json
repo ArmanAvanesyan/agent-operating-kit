@@ -320,6 +320,83 @@
         "timeoutSeconds"
       ],
       "additionalProperties": false
+    },
+    "remoteIdentity": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "enum": [
+            "github",
+            "azure-devops",
+            "linear",
+            "jira"
+          ]
+        },
+        "tenantId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "containerId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "remoteId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "itemKind": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "provider",
+        "tenantId",
+        "containerId",
+        "remoteId",
+        "itemKind"
+      ],
+      "additionalProperties": false
+    },
+    "assetRef": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "evidenceRef": {
+      "type": "object",
+      "properties": {
+        "asset": {
+          "$ref": "common.schema.json#/$defs/assetRef"
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "asset",
+        "purpose",
+        "observedAt"
+      ],
+      "additionalProperties": false
     }
   }
 }

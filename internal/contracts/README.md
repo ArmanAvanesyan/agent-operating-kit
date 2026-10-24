@@ -30,5 +30,12 @@ DecisionResult, SDLCTraceability, OptimizationExperiment and PlanningEvidence.
 Their cross-contract and evidence semantics are checked by `internal/planning`,
 `internal/decision` and `internal/experiment`.
 
+Workflow records add WorkItemBinding, HostTaskBinding, RunRecord,
+ConnectorCapability, SyncOperation and SyncReceipt. Their shared semantics are
+checked by `internal/workflowcheck`, delegated from agent validation so both
+agent and planning entrypoints enforce them. `aok workflow validate` composes
+these checks and reports static consistency without authority or runtime readiness.
+See [workflow contracts](../../docs/workflow-contracts.md).
+
 To bound schema-engine exact arithmetic, numeric lexemes are limited to 1024
 bytes and exponents to -10000 through 10000 before schema validation.

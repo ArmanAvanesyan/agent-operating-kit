@@ -1,0 +1,327 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.invalid/operational/SyncOperation.json",
+  "title": "SyncOperation",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "SyncOperation"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    },
+    "workItemBindingRef": {
+      "$ref": "common.schema.json#/$defs/pin"
+    },
+    "connectorCapabilityRef": {
+      "$ref": "common.schema.json#/$defs/pin"
+    },
+    "operationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "operationKind": {
+      "enum": [
+        "update-fields",
+        "transition",
+        "comment",
+        "link"
+      ]
+    },
+    "expectedRevision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "change": {
+      "type": "object",
+      "properties": {
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "providerFieldId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "value": {
+                "anyOf": [
+                  {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "type": "boolean"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "required": [
+              "providerFieldId",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "transitionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "comment": {
+          "$ref": "common.schema.json#/$defs/assetRef"
+        },
+        "relationType": {
+          "type": "string",
+          "minLength": 1
+        },
+        "relationIdentity": {
+          "$ref": "common.schema.json#/$defs/remoteIdentity"
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "authority": {
+      "type": "object",
+      "properties": {
+        "reference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "$ref": "common.schema.json#/$defs/remoteIdentity"
+        },
+        "operation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "operationDigest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "reference",
+        "scope",
+        "operation",
+        "operationDigest"
+      ],
+      "additionalProperties": false
+    },
+    "operationDigest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "workItemBindingRef",
+    "connectorCapabilityRef",
+    "operationId",
+    "operationKind",
+    "expectedRevision",
+    "change",
+    "authority",
+    "operationDigest"
+  ],
+  "additionalProperties": false,
+  "oneOf": [
+    {
+      "properties": {
+        "operationKind": {
+          "const": "update-fields"
+        },
+        "change": {
+          "type": "object",
+          "properties": {
+            "fields": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "providerFieldId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "value": {
+                    "anyOf": [
+                      {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "integer"
+                          },
+                          {
+                            "type": "boolean"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "integer"
+                            },
+                            {
+                              "type": "boolean"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "providerFieldId",
+                  "value"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "fields"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "operationKind",
+        "change"
+      ]
+    },
+    {
+      "properties": {
+        "operationKind": {
+          "const": "transition"
+        },
+        "change": {
+          "type": "object",
+          "properties": {
+            "transitionId": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "transitionId"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "operationKind",
+        "change"
+      ]
+    },
+    {
+      "properties": {
+        "operationKind": {
+          "const": "comment"
+        },
+        "change": {
+          "type": "object",
+          "properties": {
+            "comment": {
+              "$ref": "common.schema.json#/$defs/assetRef"
+            }
+          },
+          "required": [
+            "comment"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "operationKind",
+        "change"
+      ]
+    },
+    {
+      "properties": {
+        "operationKind": {
+          "const": "link"
+        },
+        "change": {
+          "type": "object",
+          "properties": {
+            "relationType": {
+              "type": "string",
+              "minLength": 1
+            },
+            "relationIdentity": {
+              "$ref": "common.schema.json#/$defs/remoteIdentity"
+            }
+          },
+          "required": [
+            "relationType",
+            "relationIdentity"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "operationKind",
+        "change"
+      ]
+    }
+  ]
+}

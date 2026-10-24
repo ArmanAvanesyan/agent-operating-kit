@@ -1,0 +1,21 @@
+{
+  "count": 1,
+  "value": [{
+    "id": 42,
+    "rev": 7,
+    "url": "https://dev.azure.com/org/project/_apis/wit/workItems/42",
+    "fields": {
+    "System.WorkItemType": "Task",
+    "System.TeamProject": "project",
+    "System.Title": "Import fixture",
+    "System.State": "Active",
+    "Custom.Exact": 900719925474099312345
+    },
+    "relations": [
+    {
+      "rel": "System.LinkTypes.Related",
+      "url": "https://dev.azure.com/org/project/_apis/wit/workItems/43"
+    }
+    ]
+  }]
+}

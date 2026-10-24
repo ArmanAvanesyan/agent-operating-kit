@@ -73,5 +73,13 @@ approval quorum is supplied. Test-only fixture producers are never distributed.
 The embedded engine implements deterministic local workflows and explicitly
 authorized external boundaries. Live orchestration, AOK runtime submission,
 Windows preservation certification and automatic dependency installation remain
-outside this delivery. See [integration design](implementation/repository-delivery.md)
+outside this delivery. The native probe protocol is available for Windows 11
+amd64 on a fixed NTFS volume: run
+`powershell -NoProfile -File scripts/testing/windows-preservation-probe.ps1 -Output windows-report.json`,
+then `aok delivery windows-preservation-evaluate --report windows-report.json
+--json`. The evaluator reports only fixture observations; it cannot certify the
+repository-delivery workflow, and this report remains pending until a trusted
+external witness binds the native run and the real workflow evidence. No native
+Windows result is claimed by this checkout. See the [Windows preservation
+probe protocol](windows-preservation-probes.md), [integration design](implementation/repository-delivery.md)
 and [validation evidence](evidence/repository-delivery-validation.md).

@@ -6,6 +6,7 @@ import (
 	"io"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/agentresolve"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/contracts"
@@ -14,9 +15,10 @@ import (
 
 func runAgentResolve(args []string, stdout, stderr io.Writer) (int, error) {
 	usage := func(w io.Writer) {
-		fmt.Fprintln(w, "Usage: aok agent resolve <assignment> --out <new-directory> [--root <corpus>] [--json]")
+		fmt.Fprintln(w, "Usage: aok agent resolve <assignment> --out <new-directory> [--root <corpus>] [--catalog <bundle> --catalog-policy <file> --as-of <RFC3339>] [--json]")
 	}
 	var assignment, root, out string
+	var catalog, catalogPolicy, asOf string
 	machine := false
 	seen := map[string]bool{}
 	for i := 0; i < len(args); i++ {
@@ -27,14 +29,20 @@ func runAgentResolve(args []string, stdout, stderr io.Writer) (int, error) {
 			return 0, nil
 		case "--json":
 			machine = true
-		case "--root", "--out":
+		case "--root", "--out", "--catalog", "--catalog-policy", "--as-of":
 			if seen[arg] || i+1 >= len(args) || strings.HasPrefix(args[i+1], "-") {
 				usage(stderr)
 				return 2, nil
 			}
 			seen[arg] = true
 			i++
-			if arg == "--root" {
+			if arg == "--catalog" {
+				catalog = args[i]
+			} else if arg == "--catalog-policy" {
+				catalogPolicy = args[i]
+			} else if arg == "--as-of" {
+				asOf = args[i]
+			} else if arg == "--root" {
 				root = args[i]
 			} else {
 				out = args[i]
@@ -51,7 +59,22 @@ func runAgentResolve(args []string, stdout, stderr io.Writer) (int, error) {
 		usage(stderr)
 		return 2, nil
 	}
-	report := agentresolve.Resolve(assignment, root)
+	withCatalog := catalog != "" || catalogPolicy != "" || asOf != ""
+	var at time.Time
+	if withCatalog {
+		var err error
+		at, err = time.Parse(time.RFC3339Nano, asOf)
+		if catalog == "" || catalogPolicy == "" || err != nil {
+			usage(stderr)
+			return 2, nil
+		}
+	}
+	var report agentresolve.Report
+	if withCatalog {
+		report = agentresolve.ResolveWithCatalog(assignment, root, catalog, catalogPolicy, at)
+	} else {
+		report = agentresolve.Resolve(assignment, root)
+	}
 	protected := root
 	if protected == "" {
 		absolute, err := filepath.Abs(assignment)
@@ -60,7 +83,11 @@ func runAgentResolve(args []string, stdout, stderr io.Writer) (int, error) {
 		}
 		protected = filepath.Dir(absolute)
 	}
-	if err := evidence.WriteJSON(out, "resolution.json", report, protected); err != nil {
+	protectedInputs := []string{protected}
+	if withCatalog {
+		protectedInputs = append(protectedInputs, catalog, catalogPolicy)
+	}
+	if err := evidence.WriteJSON(out, "resolution.json", report, protectedInputs...); err != nil {
 		report.Status = "invalid"
 		report.Diagnostics = append(report.Diagnostics, contracts.Diagnostic{Code: "resolution.output", Source: out, Field: "out", Severity: "error", Message: err.Error()})
 	}

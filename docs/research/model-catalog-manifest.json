@@ -1,0 +1,73 @@
+{
+  "version": "aok-model-manifest/v1",
+  "sources": [
+    {
+      "id": "codex",
+      "format": "codex",
+      "artifact": {
+        "path": "codex-model-selector.json",
+        "sha256": "a8d2fbbe16f75d6b5ede12eb186df36e9849dde052b001e70e7ab04d6e93bc09"
+      },
+      "evidence": [
+        {
+          "path": "codex-model-selector-raw.json",
+          "sha256": "1cf7074e1d09c3b4a48dd969d369225a077b28524e8e96363121f319a794aab5"
+        }
+      ]
+    },
+    {
+      "id": "claude",
+      "format": "claude",
+      "artifact": {
+        "path": "claude-model-selection.json",
+        "sha256": "9410d6030628329058bc0705e5e6575a37d7a4a73c263c49a495e163a8356aff"
+      },
+      "evidence": []
+    },
+    {
+      "id": "opencode",
+      "format": "opencode",
+      "artifact": {
+        "path": "opencode-model-selection.json",
+        "sha256": "f0b2a1349d68b7b6cab759924219c767b9482e8de9ecf2bae79cb157d884a84f"
+      },
+      "evidence": [
+        {
+          "path": "model-selection-evidence/2026-10-15/opencode-models.stdout.txt",
+          "sha256": "3c72d4c72624092bba437af2d8c3af6d6e342cf339bb8edd93dffaff04e87bac"
+        },
+        {
+          "path": "model-selection-evidence/2026-10-15/opencode-models.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "id": "agy",
+      "format": "agy",
+      "artifact": {
+        "path": "agy-model-selection.json",
+        "sha256": "3d91d04cfe35c83a1bf2c7f31d83ea8e8fa700b1859d02fcf9a43591d619326e"
+      },
+      "evidence": [
+        {
+          "path": "model-selection-evidence/2026-10-15/agy-models.stdout.txt",
+          "sha256": "85e245eeb6ee6aa8450b0a953be6bc93480da5086eaa233722cfd9057961fa32"
+        },
+        {
+          "path": "model-selection-evidence/2026-10-15/agy-models.stderr.txt",
+          "sha256": "53f588bc9a928f4a66908deacaca57dddc7e7ce177a0cc3586b5a501be26e1e8"
+        },
+        {
+          "path": "model-selection-evidence/2026-10-15/agy-help.stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "model-selection-evidence/2026-10-15/agy-help.stderr.txt",
+          "sha256": "a12355e8fc064b330eeb25ba52de596406582752442e293083bcda6388a63b78"
+        }
+      ]
+    }
+  ],
+  "mappings": []
+}

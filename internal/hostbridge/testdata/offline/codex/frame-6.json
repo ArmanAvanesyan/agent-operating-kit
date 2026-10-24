@@ -1,0 +1,1 @@
+{"method":"item/completed","params":{"threadId":"offline-thread-1","turnId":"offline-turn-1","item":{"id":"agent-message-1","type":"agentMessage","text":"{\"ok\":true}"}}}

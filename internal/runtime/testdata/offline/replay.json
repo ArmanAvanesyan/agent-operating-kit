@@ -1,0 +1,255 @@
+{
+  "version": "aok-runtime/v1",
+  "policy": {
+    "version": "aok-runtime/v1",
+    "authority": "replay-fixture",
+    "repositoryRoots": [
+      "/tmp/aok-replay-repositories"
+    ],
+    "stagingRoot": "/tmp/aok-replay-staging",
+    "accountingPath": "/tmp/aok-replay-accounting.sqlite",
+    "usagePolicy": {
+      "path": "synthetic://usage-policy",
+      "sha256": "0c64244c08d5fc64cc233b35d05bffc4ac7f9410ddaae927b7b75b637d213076"
+    },
+    "hosts": [],
+    "allowDispatch": false,
+    "maxConcurrent": 2,
+    "leaseSeconds": 10,
+    "heartbeatSeconds": 1,
+    "maxAttempts": 3
+  },
+  "manifest": {
+    "version": "aok-runtime/v1",
+    "id": "fixture-run",
+    "repository": "synthetic://repository",
+    "inputRevision": "fixture-revision",
+    "corpus": "corpus.json",
+    "plan": "plan.json",
+    "evidence": "evidence.json",
+    "steps": [
+      {
+        "id": "main",
+        "assignment": "assignment.json",
+        "host": "codex",
+        "selection": {
+          "task": "task.json",
+          "candidates": "candidates.json",
+          "catalog": "catalog.json",
+          "catalogPolicy": "catalog-policy.json",
+          "policy": "selection-policy.json",
+          "evidencePolicy": "evidence-policy.json"
+        }
+      },
+      {
+        "id": "recovery",
+        "assignment": "recovery-assignment.json",
+        "host": "codex",
+        "selection": {
+          "task": "",
+          "candidates": "",
+          "catalog": "",
+          "catalogPolicy": "",
+          "policy": "",
+          "evidencePolicy": ""
+        }
+      }
+    ],
+    "assets": [],
+    "repositoryAssets": [],
+    "allowedUntracked": []
+  },
+  "events": [
+    {
+      "operation": "ingest",
+      "stepId": "",
+      "at": "2026-10-23T12:00:00Z",
+      "payload": {
+        "export": {
+          "version": "aok-usage/v1",
+          "ledgerRevision": 0,
+          "policySha256": "0c64244c08d5fc64cc233b35d05bffc4ac7f9410ddaae927b7b75b637d213076",
+          "bindings": [
+            {
+              "id": "fixture-binding",
+              "poolId": "fixture-pool",
+              "provider": "fixture-provider",
+              "service": "fixture-service",
+              "host": "codex",
+              "hostVersion": "test-v1",
+              "authMode": "test",
+              "sourceId": "fixture-source",
+              "streamId": "fixture-stream",
+              "configurationIds": [
+                "opaque-config"
+              ],
+              "constraintIds": [
+                "95a273081a656d439e671ca27199a7d03df56aaa8fdaeb2f50a564880e3a9868"
+              ],
+              "constraintsComplete": true
+            }
+          ],
+          "events": [],
+          "quotas": [
+            {
+              "id": "fixture-quota",
+              "origin": {
+                "sourceId": "fixture-source",
+                "host": "codex",
+                "hostVersion": "test-v1",
+                "adapterVersion": "1.0.0",
+                "authMode": "test",
+                "observedAt": "2026-10-23T12:00:00Z",
+                "receivedAt": "2026-10-23T12:00:00Z",
+                "freshnessKnown": true
+              },
+              "constraint": {
+                "id": "95a273081a656d439e671ca27199a7d03df56aaa8fdaeb2f50a564880e3a9868",
+                "poolId": "fixture-pool",
+                "provider": "fixture-provider",
+                "service": "fixture-service",
+                "limitId": "requests-primary",
+                "metric": "requests",
+                "unit": "requests",
+                "scope": "account",
+                "windowKind": "fixed"
+              },
+              "generation": "fixture-window",
+              "revision": 1,
+              "completeness": "full",
+              "remaining": 100,
+              "used": 0,
+              "limit": 100,
+              "resetAt": null,
+              "expiresAt": "2026-10-23T12:01:00Z",
+              "coveredChargeIds": [],
+              "precision": "exact"
+            }
+          ],
+          "charges": [],
+          "reservations": [],
+          "evidence": []
+        },
+        "policy": {
+          "version": "aok-usage/v1",
+          "sources": [
+            {
+              "id": "fixture-source",
+              "host": "codex",
+              "hostVersion": "test-v1",
+              "adapterVersion": "1.0.0",
+              "authModes": [
+                "test"
+              ],
+              "metrics": [
+                "requests"
+              ],
+              "authority": "fixture-provider/fixture-service",
+              "maxAgeSeconds": 60,
+              "collectionAllowed": false
+            }
+          ],
+          "safetyMargins": {}
+        }
+      }
+    },
+    {
+      "operation": "claim",
+      "stepId": "recovery",
+      "at": "2026-10-23T12:00:01Z",
+      "payload": {
+        "owner": "fixture-recovery-worker",
+        "attemptId": "fixture-attempt-2"
+      }
+    },
+    {
+      "operation": "recover",
+      "stepId": "recovery",
+      "at": "2026-10-23T12:00:12Z",
+      "payload": {
+        "owner": "fixture-recovered-owner"
+      }
+    },
+    {
+      "operation": "claim",
+      "stepId": "main",
+      "at": "2026-10-23T12:00:13Z",
+      "payload": {
+        "owner": "fixture-worker",
+        "attemptId": "fixture-attempt-1"
+      }
+    },
+    {
+      "operation": "checkpoint",
+      "stepId": "main",
+      "at": "2026-10-23T12:00:14Z",
+      "payload": {
+        "workspace": "synthetic://workspace/fixture-attempt-1",
+        "checkpoint": {
+          "version": "aok-runtime/v1",
+          "id": "fixture-attempt-1-r1",
+          "attemptId": "fixture-attempt-1",
+          "inputRevision": "fixture-revision",
+          "workspace": "synthetic://workspace/fixture-attempt-1",
+          "repository": "synthetic://repository",
+          "baseRevision": "fixture-base-revision",
+          "snapshotRoot": "synthetic://snapshots/fixture-attempt-1",
+          "assets": [],
+          "observedAt": "2026-10-23T12:00:01Z",
+          "quiescent": true,
+          "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        }
+      }
+    },
+    {
+      "operation": "reserve",
+      "stepId": "main",
+      "at": "2026-10-23T12:00:15Z",
+      "payload": {
+        "reservationId": "fixture-reservation-1",
+        "leaseSeconds": 10,
+        "demand": {
+          "version": "aok-usage/v1",
+          "configurationId": "opaque-config",
+          "profileSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source": "fixture",
+          "validUntil": "2026-10-23T12:01:00Z",
+          "amounts": [
+            {
+              "constraintId": "95a273081a656d439e671ca27199a7d03df56aaa8fdaeb2f50a564880e3a9868",
+              "generation": "fixture-window",
+              "unit": "requests",
+              "amount": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operation": "confirm-launch",
+      "stepId": "main",
+      "at": "2026-10-23T12:00:16Z",
+      "payload": {}
+    },
+    {
+      "operation": "running",
+      "stepId": "main",
+      "at": "2026-10-23T12:00:17Z",
+      "payload": {}
+    },
+    {
+      "operation": "awaiting-verification",
+      "stepId": "main",
+      "at": "2026-10-23T12:00:18Z",
+      "payload": {}
+    },
+    {
+      "operation": "cancel",
+      "stepId": "",
+      "at": "2026-10-23T12:00:19Z",
+      "payload": {
+        "reason": "synthetic fixture complete"
+      }
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.invalid/operational/SyncReceipt.json",
+  "title": "SyncReceipt",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "SyncReceipt"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    },
+    "syncOperationRef": {
+      "$ref": "common.schema.json#/$defs/pin"
+    },
+    "operationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "operationDigest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "receiptId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "observedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "disposition": {
+      "enum": [
+        "applied",
+        "not-applied",
+        "conflict",
+        "rejected",
+        "unknown"
+      ]
+    },
+    "dispatchEvidence": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/evidenceRef"
+      }
+    },
+    "readbackEvidence": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/evidenceRef"
+      }
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "syncOperationRef",
+    "operationId",
+    "operationDigest",
+    "receiptId",
+    "observedAt",
+    "disposition",
+    "dispatchEvidence",
+    "readbackEvidence"
+  ],
+  "additionalProperties": false
+}

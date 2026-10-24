@@ -29,12 +29,49 @@ jobs:
         run: go build -o "$RUNNER_TEMP/aok" ./cmd/aok
       - name: Test Go packages
         run: go test ./...
+      - name: Build protected service host without a deployment trust root
+        run: go build -o "$RUNNER_TEMP/aok-enrolled" ./cmd/aok-enrolled
+      - name: Smoke-test inert enrolled service host without credentials
+        run: python3 scripts/testing/verify-enrolled-offline.py "$RUNNER_TEMP/aok-enrolled"
+      - name: Race-test usage accounting and local reservation conformance
+        run: go test -race ./internal/usage/... ./internal/selection ./internal/evaluation/... ./internal/tracker ./internal/hostbridge/... ./internal/hostdriver ./internal/hostprotocol ./internal/evidence ./internal/runtime/... ./internal/verification ./internal/writeback ./internal/connector/... ./internal/deliverybridge ./internal/readiness/... ./internal/pilot/... ./internal/operations ./internal/campaign ./internal/methodology ./internal/worksystem/... ./internal/windowscert ./internal/enrolled/...
+      - name: Phase 9 offline commands without credentials or executable discovery
+        run: python3 scripts/testing/verify-phase9-offline.py "$RUNNER_TEMP/aok"
+      - name: Phase 10 offline extension commands without credentials
+        run: python3 scripts/testing/verify-phase10-offline.py "$RUNNER_TEMP/aok"
+      - name: Existing-phase completion commands without credentials
+        run: python3 scripts/testing/verify-completion-offline.py "$RUNNER_TEMP/aok"
       - name: Run built CLI without Python on PATH
         shell: bash
         run: |
           mkdir -p "$RUNNER_TEMP/no-python"
           PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" agent validate internal/planning/testdata/corpus
           PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" planning validate internal/planning/testdata/corpus
+          PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" workflow validate internal/workflowcheck/testdata/corpus --json
+          PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" models import --manifest docs/research/model-catalog-manifest.json --policy docs/research/model-catalog-policy.json --out "$RUNNER_TEMP/model-catalog" --json
+          PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" models validate "$RUNNER_TEMP/model-catalog" --policy docs/research/model-catalog-policy.json --json
+          PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" models inspect "$RUNNER_TEMP/model-catalog" --as-of 2026-10-23T12:00:00Z --json
+          PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" usage validate internal/usage/testdata/export.json --policy internal/usage/testdata/policy.json --json
+          PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" usage summary internal/usage/testdata/export.json --policy internal/usage/testdata/policy.json --as-of 2026-10-23T12:00:30Z --json
+          PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" usage collectors --json
+          PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" evaluation replay --dataset internal/evaluation/replay/testdata/recorded.json --partition locked-test --json
+          PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" models select --help
+          PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" verify import --manifest internal/verification/testdata/offline/manifest.json --policy internal/verification/testdata/offline/policy.json --out "$RUNNER_TEMP/verified-candidate" --json
+          PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" verify check "$RUNNER_TEMP/verified-candidate" --policy internal/verification/testdata/offline/policy.json --as-of 2026-10-24T12:00:00Z --json
+          PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" writeback replay --scenario internal/writeback/testdata/replay.json --as-of 2026-10-24T12:00:00Z --out "$RUNNER_TEMP/writeback-replay" --json
+          PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" runtime replay --scenario internal/runtime/testdata/offline/replay.json --as-of 2026-10-23T12:00:19Z --out "$RUNNER_TEMP/runtime-replay" --json
+          for host in codex claude; do
+            PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" host replay --manifest "internal/hostbridge/testdata/offline/$host/replay.json" --out "$RUNNER_TEMP/host-$host" --json
+            PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" host validate "$RUNNER_TEMP/host-$host" --json
+          done
+          for provider in github azure-devops linear jira; do
+            fixture="internal/tracker/testdata/offline/$provider"
+            bundle="$RUNNER_TEMP/tracker-$provider"
+            PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" tracker import --manifest "$fixture/manifest.json" --out "$bundle" --json
+            PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" tracker validate "$bundle" --json
+            PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" tracker packet --snapshot "$bundle" --mapping "$fixture/mapping.json" --out "$bundle-packet" --json
+            PATH="$RUNNER_TEMP/no-python" "$RUNNER_TEMP/aok" tracker plan-update --snapshot "$bundle" --mapping "$fixture/mapping.json" --desired "$fixture/desired.json" --as-of 2026-10-24T12:01:00Z --out "$bundle-plan" --json
+          done
 
   go-cross-compile:
     runs-on: ubuntu-latest
@@ -64,4 +101,42 @@ jobs:
           GOOS: ${{ matrix.goos }}
           GOARCH: ${{ matrix.goarch }}
           CGO_ENABLED: "0"
-        run: go build -o "$RUNNER_TEMP/aok-${{ matrix.goos }}-${{ matrix.goarch }}" ./cmd/aok
+        run: |
+          go build -o "$RUNNER_TEMP/aok-${{ matrix.goos }}-${{ matrix.goarch }}" ./cmd/aok
+          go build -o "$RUNNER_TEMP/aok-enrolled-${{ matrix.goos }}-${{ matrix.goarch }}" ./cmd/aok-enrolled
+      - name: Compile accounting store with CGO disabled
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: "0"
+        run: go test -c -o "$RUNNER_TEMP/aok-store-${{ matrix.goos }}-${{ matrix.goarch }}" ./internal/usage/store
+
+      - name: Compile tracker fixture tests with CGO disabled
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: "0"
+        run: go test -c -o "$RUNNER_TEMP/aok-tracker-${{ matrix.goos }}-${{ matrix.goarch }}" ./internal/tracker
+
+      - name: Compile host bridge tests with CGO disabled
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: "0"
+        run: go test -c -o "$RUNNER_TEMP/aok-host-${{ matrix.goos }}-${{ matrix.goarch }}" ./internal/hostbridge
+
+      - name: Compile runtime tests with CGO disabled
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: "0"
+        run: go test -c -o "$RUNNER_TEMP/aok-runtime-${{ matrix.goos }}-${{ matrix.goarch }}" ./internal/runtime/store
+
+      - name: Compile verification and writeback tests with CGO disabled
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: "0"
+        run: |
+          go test -c -o "$RUNNER_TEMP/aok-writeback-${{ matrix.goos }}-${{ matrix.goarch }}" ./internal/writeback
+          go test -c -o "$RUNNER_TEMP/aok-verification-${{ matrix.goos }}-${{ matrix.goarch }}" ./internal/verification

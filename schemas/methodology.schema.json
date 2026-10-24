@@ -34,6 +34,8 @@
       "type": "string",
       "enum": ["active", "scaffolded", "planned"]
     },
+    "guidanceStatus": { "type": "string", "enum": ["available", "planned"] },
+    "enforcementStatus": { "type": "string", "enum": ["not-applicable", "pending", "qualified"] },
     "order": { "type": "integer", "minimum": 0 },
     "default": { "type": "boolean" },
     "fragment": { "type": ["string", "null"] },

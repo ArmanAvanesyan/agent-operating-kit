@@ -4,6 +4,7 @@
   "displayName": "DSDM",
   "description": "MoSCoW-prioritized delivery in fixed timeboxes with governance checkpoints.",
   "supportLevel": "scaffolded",
+  "enforcementStatus": "pending",
   "order": 30,
   "fragment": null,
   "requiredInputs": [

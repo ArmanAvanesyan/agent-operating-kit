@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.invalid/operational/HostTaskBinding.json",
+  "title": "HostTaskBinding",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "HostTaskBinding"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    },
+    "workItemRef": {
+      "$ref": "common.schema.json#/$defs/pin"
+    },
+    "assignmentRef": {
+      "$ref": "common.schema.json#/$defs/pin"
+    },
+    "host": {
+      "type": "string",
+      "minLength": 1
+    },
+    "hostVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sessionId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "threadId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nativeTaskId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "attemptId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assignmentSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "planStepRef": {
+      "type": "object",
+      "properties": {
+        "planRef": {
+          "$ref": "common.schema.json#/$defs/pin"
+        },
+        "stepId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "planRef",
+        "stepId"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "workItemRef",
+    "assignmentRef",
+    "host",
+    "hostVersion",
+    "sessionId",
+    "attemptId",
+    "assignmentSha256"
+  ],
+  "additionalProperties": false
+}

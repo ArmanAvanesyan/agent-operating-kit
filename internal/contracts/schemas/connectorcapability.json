@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.invalid/operational/ConnectorCapability.json",
+  "title": "ConnectorCapability",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "ConnectorCapability"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    },
+    "provider": {
+      "enum": [
+        "github",
+        "azure-devops",
+        "linear",
+        "jira"
+      ]
+    },
+    "adapterId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "adapterVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "$ref": "common.schema.json#/$defs/remoteIdentity"
+    },
+    "operations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "enum": [
+              "update-fields",
+              "transition",
+              "comment",
+              "link"
+            ]
+          },
+          "supported": {
+            "type": "boolean"
+          },
+          "conditionalWrite": {
+            "type": "boolean"
+          },
+          "idempotent": {
+            "type": "boolean"
+          },
+          "concurrency": {
+            "enum": [
+              "none",
+              "conditional",
+              "serialized"
+            ]
+          }
+        },
+        "required": [
+          "operation",
+          "supported",
+          "conditionalWrite",
+          "idempotent",
+          "concurrency"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "provider",
+    "adapterId",
+    "adapterVersion",
+    "scope",
+    "operations"
+  ],
+  "additionalProperties": false
+}

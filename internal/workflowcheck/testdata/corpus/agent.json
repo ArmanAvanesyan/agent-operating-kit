@@ -1,0 +1,208 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "capabilities": {
+    "mcps": [
+      {
+        "id": "project-knowledge",
+        "kind": "MCP",
+        "required": false,
+        "tools": [
+          "search",
+          "read"
+        ],
+        "version": "0.1.0"
+      }
+    ],
+    "plugins": [],
+    "skills": [
+      {
+        "id": "project-exploration",
+        "kind": "Skill",
+        "required": true,
+        "version": "0.1.0"
+      },
+      {
+        "id": "environment-readiness",
+        "kind": "Skill",
+        "required": false,
+        "version": "0.1.0"
+      }
+    ],
+    "tools": [
+      {
+        "id": "filesystem.read",
+        "kind": "Tool",
+        "required": true,
+        "version": "0.1.0"
+      },
+      {
+        "id": "repository.search",
+        "kind": "Tool",
+        "required": true,
+        "version": "0.1.0"
+      },
+      {
+        "id": "source.structure",
+        "kind": "Tool",
+        "required": false,
+        "version": "0.1.0"
+      }
+    ]
+  },
+  "contextPolicy": {
+    "id": "repository-context",
+    "kind": "ContextPolicy",
+    "version": "0.1.0"
+  },
+  "delegation": {
+    "allowedAgents": [],
+    "enabled": false,
+    "maxDepth": 0
+  },
+  "environment": {
+    "profile": {
+      "id": "repository-analysis",
+      "kind": "EnvironmentProfile",
+      "version": "0.1.0"
+    },
+    "readinessRequired": true
+  },
+  "evaluationContract": {
+    "id": "exploration-evaluation",
+    "kind": "EvaluationContract",
+    "version": "0.1.0"
+  },
+  "execution": {
+    "allowedProfiles": [
+      {
+        "id": "opencode-exploration",
+        "kind": "ExecutionProfile",
+        "version": "0.1.0"
+      }
+    ],
+    "defaultProfile": {
+      "id": "opencode-exploration",
+      "kind": "ExecutionProfile",
+      "version": "0.1.0"
+    },
+    "fallbackPolicy": "explicit-only",
+    "fallbackProfiles": []
+  },
+  "identity": {
+    "boundaries": [
+      "Separate implementation from proposals.",
+      "Record unknowns and incomplete coverage."
+    ],
+    "communication": {
+      "evidence": "file-references",
+      "style": "concise"
+    },
+    "purpose": "Explain repository structure and readiness."
+  },
+  "instructions": {
+    "parameters": {
+      "depth": {
+        "default": "standard",
+        "enum": [
+          "overview",
+          "standard",
+          "deep"
+        ],
+        "type": "string"
+      }
+    },
+    "sources": [
+      {
+        "path": "assets/instructions.md"
+      }
+    ]
+  },
+  "invocationContract": {
+    "id": "repository-exploration-invocation",
+    "kind": "InvocationContract",
+    "version": "0.1.0"
+  },
+  "kind": "Agent",
+  "lifecyclePolicy": {
+    "id": "bounded-analysis",
+    "kind": "LifecyclePolicy",
+    "version": "0.1.0"
+  },
+  "metadata": {
+    "description": "Source-grounded project exploration.",
+    "id": "repository-explorer",
+    "name": "Repository Explorer",
+    "version": "0.1.0"
+  },
+  "migrationContract": {
+    "id": "agent-contract-versioning",
+    "kind": "MigrationContract",
+    "version": "0.1.0"
+  },
+  "outputs": {
+    "allowedContracts": [
+      {
+        "id": "repository-exploration-report",
+        "kind": "OutputContract",
+        "version": "0.1.0"
+      }
+    ],
+    "contract": {
+      "id": "repository-exploration-report",
+      "kind": "OutputContract",
+      "version": "0.1.0"
+    },
+    "parameters": {
+      "includeEvidence": true
+    }
+  },
+  "permissions": {
+    "actions": {
+      "default": "deny",
+      "rules": [
+        {
+          "action": "repository.read",
+          "decision": "allow",
+          "enforcementOwner": "executor",
+          "resource": "workspace"
+        },
+        {
+          "action": "artifact.write",
+          "decision": "allow",
+          "enforcementOwner": "executor",
+          "resource": "reports"
+        }
+      ]
+    },
+    "externalMutations": {
+      "mode": "denied"
+    },
+    "filesystem": {
+      "read": [
+        "workspace"
+      ],
+      "write": [
+        "reports"
+      ]
+    },
+    "network": {
+      "mode": "denied"
+    },
+    "secrets": {
+      "mode": "references-only"
+    }
+  },
+  "roles": {
+    "primary": "explorer",
+    "supporting": [
+      "architecture-analyst"
+    ]
+  },
+  "verification": {
+    "required": [
+      "output-schema-valid",
+      "evidence-references-resolve",
+      "coverage-and-limitations-present"
+    ]
+  }
+}

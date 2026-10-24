@@ -4565,6 +4565,8 @@ def validate_methodologies(errors: list[str]) -> None:
             "displayName",
             "description",
             "supportLevel",
+            "guidanceStatus",
+            "enforcementStatus",
             "order",
             "default",
             "fragment",
@@ -4625,6 +4627,10 @@ def validate_methodologies(errors: list[str]) -> None:
             errors.append(f"{path.relative_to(KIT_ROOT)}: invalid kind {kind}")
         if support not in ("active", "scaffolded", "planned"):
             errors.append(f"{path.relative_to(KIT_ROOT)}: invalid supportLevel {support}")
+        if "guidanceStatus" in data and data["guidanceStatus"] not in ("available", "planned"):
+            errors.append(f"{path.relative_to(KIT_ROOT)}: invalid guidanceStatus")
+        if "enforcementStatus" in data and data["enforcementStatus"] not in ("not-applicable", "pending", "qualified"):
+            errors.append(f"{path.relative_to(KIT_ROOT)}: invalid enforcementStatus")
         fragment = data.get("fragment")
         if support == "active":
             if not isinstance(fragment, str) or not fragment:

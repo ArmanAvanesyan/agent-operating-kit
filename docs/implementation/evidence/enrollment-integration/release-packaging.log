@@ -1,0 +1,51 @@
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/codex/batch-resolve-conflicts
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/claude-code/batch-resolve-conflicts
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/cursor/batch-resolve-conflicts
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/opencode/batch-resolve-conflicts
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/gemini/batch-resolve-conflicts
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/openclaw/batch-resolve-conflicts
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/hermes-agent/batch-resolve-conflicts
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/codex/engineering-guardrails
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/claude-code/engineering-guardrails
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/cursor/engineering-guardrails
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/opencode/engineering-guardrails
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/gemini/engineering-guardrails
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/openclaw/engineering-guardrails
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/hermes-agent/engineering-guardrails
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/codex/phased-rollout-template
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/claude-code/phased-rollout-template
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/cursor/phased-rollout-template
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/opencode/phased-rollout-template
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/gemini/phased-rollout-template
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/openclaw/phased-rollout-template
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/hermes-agent/phased-rollout-template
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/codex/repository-delivery
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/claude-code/repository-delivery
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/cursor/repository-delivery
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/opencode/repository-delivery
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/gemini/repository-delivery
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/openclaw/repository-delivery
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/hermes-agent/repository-delivery
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/codex/ship-pipeline
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/claude-code/ship-pipeline
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/cursor/ship-pipeline
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/opencode/ship-pipeline
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/gemini/ship-pipeline
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/openclaw/ship-pipeline
+Wrote bundle: /private/tmp/aok-integration-release-final/_bundles/hermes-agent/ship-pipeline
+Wrote bundle index: /private/tmp/aok-integration-release-final/_bundles/index.json
+15ddeacd12ff549c365003313097008d40d53be705c2929771d0c6bb6dcfec9b  agent-operating-kit-0.6.1-kit.zip
+419cbe1326c88dc254edbf5961447e7a4af4c4de583d597d127fda40d2a3ffd9  agent-operating-kit-0.6.1-codex-plugin.zip
+47de49dc263ca7a9f08fbf4a664064c08e2551ab81359c55717cea08941a5868  agent-operating-kit-0.6.1-packs.zip
+dbe6222cd45d5ea9eb053b8fe0d8151ab7ce7e8d3ec21ff189ce3091e9d3a2b3  aok-0.6.1-darwin-arm64
+5f04ddf69296cdb2d080855f8bd306c5cfbea90734e719eac4273235badfe154  aok-0.6.1-darwin-amd64
+620c3073479e315ef6c51ce3536b234e124827f4ba04e8ef4debf4a1b8d072ca  aok-0.6.1-linux-amd64
+e8a6ac9a4cb55a7472cbbdc75bf8abd42624719fcdc18880cf64e6f86d713a6e  aok-0.6.1-linux-arm64
+7ce5f56b7f9482a36f313da93d6e5a6a73db8d8b89f947ee2f475919738e4d7f  aok-0.6.1-windows-amd64.exe
+765d5e8cecffdadf25c116b9fbe97dfbd54d86bc5523b0d5adea104e8ed2e5be  agent-operating-kit-0.6.1-macos-apple-silicon-installer.zip
+43c107604f5b6cda65052ccb90f06633262e31a926b469b3cd6b152860a2638c  agent-operating-kit-0.6.1-macos-intel-installer.zip
+2449cace86d5678217d1343d61ce582d2357de6fffe7064de3bcbee0ec3f012c  agent-operating-kit-0.6.1-windows-installer.zip
+b5d7e2b2ecba32eba92905980fc9828b93c16a5f8c3e8a43bcdbeab376e734e0  agent-operating-kit-0.6.1-linux-user-installer.tar.gz
+7ce34258fb1a94f66a43cb4f0304ed3427b63cc3782648dc154a1ed9999930d2  agent-operating-kit-0.6.1-linux-system-installer.tar.gz
+ea9384a5c25867517dcf6afdd9cd83e898ff94231ba455b96f714a53c60002cb  agent-operating-kit-0.6.1-bundles.zip
+dd477b5265a61acc296917b8837c25c55f0d476fcb29e4095f6102e2f6e1a32a  SHA256SUMS

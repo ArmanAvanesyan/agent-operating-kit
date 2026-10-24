@@ -1,0 +1,51 @@
+{
+  "version": "aok-evaluation/v1",
+  "kind": "recorded-state",
+  "pilotOnly": false,
+  "frozenPolicySha256": "69c29c78cb153a3294783f57b46aafc9a7bccbe416c314b4b78b6498556af4b7",
+  "frozenConfigSha256": "52fa2e9b24e8b583ae5c96dfba5398a6a1966f884c7820241c3e7b253f081ae5",
+  "frozenEstimateSha256": "e37bbf7f70a497ff0a76bc457d6a4e9a5aa4bd99f87976554c1243b8bde1ef92",
+  "frozenPolicyPath": "frozen/policy.json",
+  "frozenConfigPath": "frozen/config.json",
+  "frozenEstimatePath": "frozen/estimate.json",
+  "frozenAt": "2026-01-01T00:00:00Z",
+  "auditAt": "2026-01-02T00:00:00Z",
+  "tasks": [
+    {
+      "id": "task-001",
+      "class": "bug-repair",
+      "repository": "example/repository",
+      "family": "family-001",
+      "nearDuplicateGroup": "group-001",
+      "partition": "locked-test"
+    }
+  ],
+  "runs": [
+    {
+      "taskId": "task-001",
+      "policy": "pinned",
+      "configuration": "example-config",
+      "repetition": 1,
+      "at": 0,
+      "pool": "",
+      "decision": "accept",
+      "gates": {
+        "capability": true,
+        "authorization": true,
+        "qualityFloor": true,
+        "dataFresh": true
+      },
+      "capacity": 0,
+      "reserved": 0,
+      "required": 0,
+      "quotaStateKnown": false,
+      "outcome": "accepted",
+      "cost": 1.25,
+      "seconds": 90,
+      "quotaBlocked": false,
+      "deadlineMiss": false,
+      "switch": false,
+      "evidenceLabel": "recorded"
+    }
+  ]
+}

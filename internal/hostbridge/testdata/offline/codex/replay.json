@@ -1,0 +1,79 @@
+{
+  "version": "aok-host-bridge/v1",
+  "prepared": {
+    "version": "aok-host-bridge/v1",
+    "host": "codex",
+    "hostVersion": "0.162.1",
+    "assignmentSha256": "",
+    "snapshotSha256": "",
+    "profileSha256": "",
+    "policySha256": "",
+    "configurationId": "",
+    "configuration": {
+      "host": null,
+      "hostVersion": null,
+      "provider": null,
+      "modelId": null,
+      "modelRevision": null,
+      "reasoningMode": null,
+      "effort": null,
+      "reasoningBudgetTokens": null,
+      "generation": null,
+      "serviceTier": null,
+      "authMode": null,
+      "deployment": null,
+      "toolProfile": null
+    },
+    "model": "gpt-6.1-sol",
+    "workspace": "/offline/workspace",
+    "sources": [],
+    "instructions": "",
+    "input": null,
+    "outputSchema": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean",
+          "const": true
+        }
+      },
+      "required": [
+        "ok"
+      ],
+      "additionalProperties": false
+    },
+    "snapshot": null,
+    "nativeTasks": [],
+    "digest": "c5455816ea518d0a61e7e27d5ec422104ecfcad58e156847e9af887eb9b70766"
+  },
+  "frames": [
+    {
+      "path": "frame-1.json",
+      "sha256": "6fd91f6e8f08df836e6af23611b717b9f4ae82506c94b873c8166bf138e86964"
+    },
+    {
+      "path": "frame-2.json",
+      "sha256": "9b37b9a7a1fbb5d3b9bef6f60d48527ee6b6c1e8ac376521a7faf7069a8e9a81"
+    },
+    {
+      "path": "frame-3.json",
+      "sha256": "5cd04b2a59880748390a944b596a4da66c883e6e0a6ce3864d74eb23c00988ce"
+    },
+    {
+      "path": "frame-4.json",
+      "sha256": "9c8485cab54dfa2ace39e8313f9f2b6f219fd0f4a812628918e39a005e5d5dde"
+    },
+    {
+      "path": "frame-5.json",
+      "sha256": "90d508fa70153149f1a0b45990c122da16b02febbb545156ce70b09fbe60a218"
+    },
+    {
+      "path": "frame-6.json",
+      "sha256": "513208aa8b0d4abc3be75612c28df41696bf132fa845904e5252245e97bdb592"
+    },
+    {
+      "path": "frame-7.json",
+      "sha256": "11fa08e7e85f6886798529a8da584a9cd39666fc84b7f302c4fb6c5e6e59b6a5"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "SyncOperation",
+  "metadata": {
+    "id": "sync-operation",
+    "name": "sync-operation",
+    "version": "0.1.0",
+    "description": "Offline contract fixture."
+  },
+  "workItemBindingRef": {
+    "kind": "WorkItemBinding",
+    "id": "issue-42-binding",
+    "version": "0.1.0"
+  },
+  "connectorCapabilityRef": {
+    "kind": "ConnectorCapability",
+    "id": "github-issues",
+    "version": "0.1.0"
+  },
+  "operationId": "op-1",
+  "operationKind": "update-fields",
+  "expectedRevision": "rev-17",
+  "change": {
+    "fields": [
+      {
+        "providerFieldId": "title",
+        "value": "Updated title"
+      }
+    ]
+  },
+  "authority": {
+    "reference": "approval-1",
+    "scope": {
+      "provider": "github",
+      "tenantId": "acme",
+      "containerId": "repo-1",
+      "remoteId": "issue-42",
+      "itemKind": "issue"
+    },
+    "operation": "update-fields",
+    "operationDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "operationDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+}

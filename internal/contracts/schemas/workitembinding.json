@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.invalid/operational/WorkItemBinding.json",
+  "title": "WorkItemBinding",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "WorkItemBinding"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    },
+    "identity": {
+      "$ref": "common.schema.json#/$defs/remoteIdentity"
+    },
+    "displayKey": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "packet": {
+      "$ref": "common.schema.json#/$defs/assetRef"
+    },
+    "observedSourceRevision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mappingVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "fieldMappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "canonicalField": {
+            "type": "string",
+            "minLength": 1
+          },
+          "providerFieldId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "owner": {
+            "enum": [
+              "tracker",
+              "aok",
+              "shared"
+            ]
+          },
+          "supported": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "canonicalField",
+          "providerFieldId",
+          "owner",
+          "supported"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "identity",
+    "packet",
+    "observedSourceRevision",
+    "mappingVersion",
+    "fieldMappings"
+  ],
+  "additionalProperties": false
+}

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/contracts"
+	"github.com/ArmanAvanesyan/agent-operating-kit/internal/modelcatalog"
 )
 
 // Report contains static resolution evidence. A blocked report may include a
@@ -34,6 +35,7 @@ type Evidence struct {
 // Snapshot is the deterministic, declared configuration selected by an
 // assignment. Raw source contents and machine-specific paths are omitted.
 type Snapshot struct {
+	CatalogEvidence       *CatalogEvidence             `json:"catalogEvidence,omitempty"`
 	AssignmentPath        string                       `json:"assignmentPath"`
 	Assignment            contracts.AgentAssignment    `json:"assignment"`
 	Agent                 contracts.Agent              `json:"agent"`
@@ -48,6 +50,16 @@ type Snapshot struct {
 	CompatibilityEvidence []Evidence                   `json:"compatibilityEvidence"`
 	Sources               []Source                     `json:"sources"`
 	Digest                string                       `json:"digest"`
+}
+
+// CatalogEvidence binds static compatibility observations to captured catalog,
+// source-policy and profile bytes. It is never execution permission or readiness.
+type CatalogEvidence struct {
+	CatalogSHA256 string                   `json:"catalogSha256"`
+	PolicySHA256  string                   `json:"policySha256"`
+	ProfileSHA256 string                   `json:"profileSha256"`
+	AsOf          string                   `json:"asOf"`
+	Check         modelcatalog.CheckReport `json:"check"`
 }
 
 func (s Snapshot) digestBytes() ([]byte, error) {

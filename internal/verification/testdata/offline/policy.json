@@ -1,0 +1,18 @@
+{
+  "version": "aok-verification/v1",
+  "id": "fixture-policy",
+  "issuers": [],
+  "verifiers": [],
+  "criteria": [
+    {
+      "id": "deliverable",
+      "kind": "asset-present",
+      "required": true,
+      "allowNotApplicable": false,
+      "expected": "answer.txt"
+    }
+  ],
+  "maxAgeSeconds": 300,
+  "requireQuiescent": false,
+  "reviewMinimum": 0
+}

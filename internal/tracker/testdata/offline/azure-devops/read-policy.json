@@ -1,0 +1,18 @@
+{
+  "version": "aok-tracker/v1",
+  "rules": [
+    {
+      "provider": "azure-devops",
+      "origin": "https://dev.azure.com",
+      "nativeTenantId": "tenant-guid",
+      "containerId": "project-guid",
+      "containerKey": "acme/project",
+      "auth": {
+        "mode": "bearer",
+        "tokenEnv": "AOK_TEST_TOKEN",
+        "usernameEnv": ""
+      },
+      "principalPseudonym": "test-principal"
+    }
+  ]
+}

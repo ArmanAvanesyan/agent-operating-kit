@@ -4,6 +4,7 @@
   "displayName": "Agile Unified Process",
   "description": "Discipline-oriented iterative delivery across architecture, modeling, implementation, testing, and deployment.",
   "supportLevel": "scaffolded",
+  "enforcementStatus": "pending",
   "order": 40,
   "fragment": null,
   "requiredInputs": ["Discipline checklist"],

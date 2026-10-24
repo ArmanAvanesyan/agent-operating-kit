@@ -1,0 +1,23 @@
+{
+  "version": "aok-pilot-policy/v1",
+  "manifestSha256": "f93d659ec373d57703c3621e65beca3bae670077fdd781bc2c076effa519dfdb",
+  "evidence": null,
+  "expiresAt": "2027-01-01T00:00:00Z",
+  "freezeReceipt": {
+    "version": "",
+    "campaignSha256": "",
+    "datasetSha256": "",
+    "frozenAt": "",
+    "issuer": "",
+    "signature": ""
+  },
+  "auditOpenReceipt": {
+    "version": "",
+    "campaignSha256": "",
+    "datasetSha256": "",
+    "freezeReceiptSha256": "",
+    "openedAt": "",
+    "issuer": "",
+    "signature": ""
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "ConnectorCapability",
+  "metadata": {
+    "id": "connector-capability",
+    "name": "connector-capability",
+    "version": "0.1.0",
+    "description": "Offline contract fixture."
+  },
+  "provider": "github",
+  "adapterId": "github-rest",
+  "adapterVersion": "1",
+  "scope": {
+    "provider": "github",
+    "tenantId": "acme",
+    "containerId": "repo-1",
+    "remoteId": "issue-42",
+    "itemKind": "issue"
+  },
+  "operations": [
+    {
+      "operation": "update-fields",
+      "supported": true,
+      "conditionalWrite": true,
+      "idempotent": true,
+      "concurrency": "conditional"
+    }
+  ]
+}

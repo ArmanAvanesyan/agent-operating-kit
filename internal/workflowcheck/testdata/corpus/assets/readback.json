@@ -1,0 +1,15 @@
+{
+  "applied": true,
+  "fields": {
+    "title": "Updated title"
+  },
+  "identity": {
+    "containerId": "repo",
+    "itemKind": "issue",
+    "provider": "github",
+    "remoteId": "issue-17",
+    "tenantId": "org"
+  },
+  "operationDigest": "e981b09d2a10080cbf208f1f4faf0bebc7876474d4d5eefd40484fda681fa293",
+  "revision": "rev-8"
+}

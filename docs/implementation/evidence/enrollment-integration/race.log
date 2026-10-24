@@ -1,0 +1,20 @@
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/enrolled/anchorserver	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/enrolled/artifacts	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/enrolled/authority	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/enrolled/bootstrap	5.365s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/enrolled/codex	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/enrolled/github	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/enrolled/verifier	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/usage	2.093s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/usage/collectors	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/usage/store	9.589s
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/runtime	9.819s
+?   	github.com/ArmanAvanesyan/agent-operating-kit/internal/runtime/records	[no test files]
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/runtime/staging	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/runtime/store	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/runtime/v2	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/writeback	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/connector	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/connector/milestones	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/connector/providers	(cached)
+ok  	github.com/ArmanAvanesyan/agent-operating-kit/internal/verification	(cached)

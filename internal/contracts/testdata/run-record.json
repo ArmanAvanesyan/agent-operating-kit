@@ -1,0 +1,40 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "RunRecord",
+  "metadata": {
+    "id": "run-record",
+    "name": "run-record",
+    "version": "0.1.0",
+    "description": "Offline contract fixture."
+  },
+  "hostTaskBindingRef": {
+    "kind": "HostTaskBinding",
+    "id": "attempt-1-binding",
+    "version": "0.1.0"
+  },
+  "runtime": "codex",
+  "runtimeVersion": "1",
+  "runtimeRunId": "run-1",
+  "attemptId": "attempt-1",
+  "inputRevision": "rev-17",
+  "executionProfileRef": {
+    "kind": "ExecutionProfile",
+    "id": "safe-profile",
+    "version": "0.1.0"
+  },
+  "assignmentSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "policyRefs": [],
+  "checkpointRefs": [],
+  "outputRefs": [
+    {
+      "asset": {
+        "path": "assets/item.json",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "purpose": "dispatch",
+      "observedAt": "2026-10-23T10:00:00Z"
+    }
+  ],
+  "observedAt": "2026-10-23T10:01:00Z",
+  "disposition": "completed"
+}

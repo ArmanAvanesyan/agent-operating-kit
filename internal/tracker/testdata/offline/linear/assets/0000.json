@@ -1,0 +1,1 @@
+{"data":{"organization":{"id":"workspace-guid"},"issue":{"id":"1","identifier":"ENG-1","url":"https://linear.app/acme/issue/ENG-1","title":"Fixture issue","description":"captured","team":{"id":"team-guid","key":"ENG"},"labels":{"nodes":[],"pageInfo":{"hasNextPage":false,"endCursor":null}},"updatedAt":"2026-10-22T10:00:00Z"}}}

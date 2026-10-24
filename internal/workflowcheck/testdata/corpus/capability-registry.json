@@ -1,0 +1,178 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "entries": [
+    {
+      "authorization": "not-implied",
+      "binding": {
+        "adapter": "opencode",
+        "name": "read",
+        "type": "native-tool"
+      },
+      "dependencies": [],
+      "id": "filesystem.read",
+      "installation": "unknown",
+      "type": "tool",
+      "version": "0.1.0"
+    },
+    {
+      "authorization": "not-implied",
+      "binding": {
+        "adapter": "opencode",
+        "name": "search",
+        "type": "native-tool"
+      },
+      "dependencies": [],
+      "id": "repository.search",
+      "installation": "unknown",
+      "type": "tool",
+      "version": "0.1.0"
+    },
+    {
+      "authorization": "not-implied",
+      "binding": {
+        "sourcePath": "assets/skills/project.md",
+        "type": "skill"
+      },
+      "dependencies": [],
+      "id": "project-exploration",
+      "installation": "unknown",
+      "type": "skill",
+      "version": "0.1.0"
+    },
+    {
+      "authorization": "not-implied",
+      "binding": {
+        "sourcePath": "assets/skills/readiness.md",
+        "type": "skill"
+      },
+      "dependencies": [],
+      "id": "environment-readiness",
+      "installation": "unknown",
+      "type": "skill",
+      "version": "0.1.0"
+    },
+    {
+      "authorization": "not-implied",
+      "binding": {
+        "arguments": [
+          "skills/project-exploration/scripts/structure.py"
+        ],
+        "executableRef": "python3",
+        "type": "command"
+      },
+      "dependencies": [],
+      "id": "source.structure",
+      "installation": "unknown",
+      "type": "tool",
+      "version": "0.1.0"
+    },
+    {
+      "authorization": "not-implied",
+      "binding": {
+        "connectionRef": "project-knowledge-connection",
+        "credentialRefs": [
+          "project-knowledge-auth"
+        ],
+        "tools": [
+          "search",
+          "read"
+        ],
+        "type": "mcp"
+      },
+      "dependencies": [],
+      "id": "project-knowledge",
+      "installation": "unknown",
+      "type": "mcp",
+      "version": "0.1.0"
+    },
+    {
+      "authorization": "not-implied",
+      "binding": {
+        "name": "output-schema-valid",
+        "type": "verification"
+      },
+      "dependencies": [],
+      "id": "output-schema-valid",
+      "installation": "not-installed",
+      "type": "verification",
+      "version": "0.1.0"
+    },
+    {
+      "authorization": "not-implied",
+      "binding": {
+        "name": "evidence-references-resolve",
+        "type": "verification"
+      },
+      "dependencies": [],
+      "id": "evidence-references-resolve",
+      "installation": "not-installed",
+      "type": "verification",
+      "version": "0.1.0"
+    },
+    {
+      "authorization": "not-implied",
+      "binding": {
+        "name": "coverage-and-limitations-present",
+        "type": "verification"
+      },
+      "dependencies": [],
+      "id": "coverage-and-limitations-present",
+      "installation": "not-installed",
+      "type": "verification",
+      "version": "0.1.0"
+    },
+    {
+      "authorization": "not-implied",
+      "binding": {
+        "parameterSchema": {
+          "additionalProperties": false,
+          "properties": {
+            "includeEvidence": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "includeEvidence"
+          ],
+          "type": "object"
+        },
+        "sourcePath": "assets/exploration.md",
+        "type": "template"
+      },
+      "dependencies": [],
+      "id": "exploration-report-template",
+      "installation": "unknown",
+      "type": "template",
+      "version": "0.1.0"
+    },
+    {
+      "authorization": "not-implied",
+      "binding": {
+        "adapter": "opencode",
+        "components": [
+          "repository.search"
+        ],
+        "name": "example-exploration-plugin",
+        "type": "plugin"
+      },
+      "dependencies": [
+        {
+          "id": "repository.search",
+          "kind": "Capability",
+          "version": "0.1.0"
+        }
+      ],
+      "id": "example-exploration-plugin",
+      "installation": "not-installed",
+      "type": "plugin",
+      "version": "0.1.0"
+    }
+  ],
+  "kind": "CapabilityRegistry",
+  "metadata": {
+    "description": "Proposed documentation fixture; not operational configuration.",
+    "id": "exploration-capabilities",
+    "name": "Exploration Capabilities",
+    "version": "0.1.0"
+  }
+}

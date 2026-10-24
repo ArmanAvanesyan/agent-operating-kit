@@ -1,0 +1,19 @@
+{
+  "version": "aok-tracker/v1",
+  "identity": {
+    "provider": "linear",
+    "tenantId": "3ac9489f1797702cc93e5fe3f856fcd0a228d3fef2cc7fbb764938277bc349c7",
+    "containerId": "team-guid",
+    "remoteId": "1",
+    "itemKind": "issue"
+  },
+  "expectedRevision": "a8e81a6505ad02e593ab734458dca19a98605fc35b6fc396b56af3107ea29801",
+  "fields": {
+    "title": "Explicit operator-requested update"
+  },
+  "humanOwnedFields": [
+    "title"
+  ],
+  "transitionId": "",
+  "relations": null
+}

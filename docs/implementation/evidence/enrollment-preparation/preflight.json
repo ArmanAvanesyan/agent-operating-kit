@@ -1,0 +1,717 @@
+{
+  "version": "aok-enrollment-preparation/v1",
+  "asOf": "2026-10-24T04:00:31Z",
+  "status": "blocked",
+  "offlineOnly": true,
+  "authorizationGranted": false,
+  "executionReady": false,
+  "productionEligible": false,
+  "findings": [
+    {
+      "id": "accept-worker",
+      "path": "signed/accept-candidate.signed.json",
+      "stage": "postrun",
+      "status": "missing",
+      "detail": "signed bootstrap unavailable or unsafe"
+    },
+    {
+      "id": "anchor-config",
+      "path": "signed/anchor.signed.json",
+      "stage": "qualification",
+      "status": "missing",
+      "detail": "signed bootstrap unavailable or unsafe"
+    },
+    {
+      "id": "anchor-retention",
+      "path": "inputs/anchor-retention.json",
+      "stage": "qualification",
+      "status": "missing",
+      "detail": "required evidence unavailable or unsafe; independent live qualification remains pending"
+    },
+    {
+      "id": "authority-config",
+      "path": "signed/authority.signed.json",
+      "stage": "calibration",
+      "status": "missing",
+      "detail": "signed bootstrap unavailable or unsafe"
+    },
+    {
+      "id": "calibration-worker",
+      "path": "signed/calibration.signed.json",
+      "stage": "calibration",
+      "status": "missing",
+      "detail": "signed bootstrap unavailable or unsafe"
+    },
+    {
+      "id": "capacity",
+      "path": "inputs/capacity.json",
+      "stage": "qualification",
+      "status": "missing",
+      "detail": "required evidence unavailable or unsafe; independent live qualification remains pending"
+    },
+    {
+      "id": "credential-provisioning",
+      "path": "inputs/credential-provisioning.json",
+      "stage": "qualification",
+      "status": "missing",
+      "detail": "required evidence unavailable or unsafe; independent live qualification remains pending"
+    },
+    {
+      "id": "dispatch-worker",
+      "path": "signed/github-dispatch.signed.json",
+      "stage": "postrun",
+      "status": "missing",
+      "detail": "signed bootstrap unavailable or unsafe"
+    },
+    {
+      "id": "draft",
+      "path": "README.md",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/accept-worker.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/acceptance-projection.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/acceptance-receipt.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/anchor-config.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/anchor-service.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/authority-config.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/authority-enrollment.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/authority-service.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/bootstrap-envelope.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/calibration-bounds.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/calibration-grant.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/calibration-request.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/calibration-worker.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/capacity-reservation.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/dispatch-worker.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/experiment-worker.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/handoff-worker.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/host-conformance-record.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/host-control-proof.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/host-policy.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/p8-sync-operation.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/p8-writeback-grant.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/pilot-manifest.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/postrun-execution-grant.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/qualify-codex-quota.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/qualify-comment.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/qualify-github-read.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/qualify-host.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/qualify-verifier.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/reconcile-worker.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/usage-binding.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/usage-demand.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/usage-policy.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/verifier-config.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/verifier-control-proof.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/verifier-policy.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/verifier-service.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/verify-worker.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/workflow-sync-receipt.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "draft",
+      "path": "drafts/writeback-readback.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "immutable draft hash matches"
+    },
+    {
+      "id": "experiment-worker",
+      "path": "signed/experiment.signed.json",
+      "stage": "ordinary-pilot",
+      "status": "missing",
+      "detail": "signed bootstrap unavailable or unsafe"
+    },
+    {
+      "id": "handoff-worker",
+      "path": "signed/handoff-candidate.signed.json",
+      "stage": "postrun",
+      "status": "missing",
+      "detail": "signed bootstrap unavailable or unsafe"
+    },
+    {
+      "id": "host-policy",
+      "path": "inputs/host-policy.json",
+      "stage": "qualification",
+      "status": "missing",
+      "detail": "required evidence unavailable or unsafe; independent live qualification remains pending"
+    },
+    {
+      "id": "input:accountRef",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required operator input is empty"
+    },
+    {
+      "id": "input:codexExecutableSha256",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required operator input is empty"
+    },
+    {
+      "id": "input:configurationId",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required operator input is empty"
+    },
+    {
+      "id": "input:ghExecutableSha256",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required operator input is empty"
+    },
+    {
+      "id": "input:ghVersion",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required operator input is empty"
+    },
+    {
+      "id": "input:immutableIssueId",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required operator input is empty"
+    },
+    {
+      "id": "input:issueNumber",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required operator input is empty"
+    },
+    {
+      "id": "input:modelSelector",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required operator input is empty"
+    },
+    {
+      "id": "input:operator",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required operator input is empty"
+    },
+    {
+      "id": "input:platform",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required operator input is empty"
+    },
+    {
+      "id": "input:poolId",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required operator input is empty"
+    },
+    {
+      "id": "input:profileSha256",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required operator input is empty"
+    },
+    {
+      "id": "input:recoveryOwner",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required operator input is empty"
+    },
+    {
+      "id": "input:repository",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required operator input is empty"
+    },
+    {
+      "id": "input:repositoryId",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required operator input is empty"
+    },
+    {
+      "id": "input:tenantId",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required operator input is empty"
+    },
+    {
+      "id": "live-proofs",
+      "path": "inputs/live-proofs.json",
+      "stage": "calibration",
+      "status": "missing",
+      "detail": "required evidence unavailable or unsafe; independent live qualification remains pending"
+    },
+    {
+      "id": "live:authorization",
+      "stage": "calibration",
+      "status": "pending-external-qualification",
+      "detail": "independent live gate evidence and review remain pending"
+    },
+    {
+      "id": "live:budget",
+      "stage": "calibration",
+      "status": "pending-external-qualification",
+      "detail": "independent live gate evidence and review remain pending"
+    },
+    {
+      "id": "live:capability",
+      "stage": "calibration",
+      "status": "pending-external-qualification",
+      "detail": "independent live gate evidence and review remain pending"
+    },
+    {
+      "id": "live:capacity",
+      "stage": "calibration",
+      "status": "pending-external-qualification",
+      "detail": "independent live gate evidence and review remain pending"
+    },
+    {
+      "id": "live:controls",
+      "stage": "calibration",
+      "status": "pending-external-qualification",
+      "detail": "independent live gate evidence and review remain pending"
+    },
+    {
+      "id": "live:identity",
+      "stage": "calibration",
+      "status": "pending-external-qualification",
+      "detail": "independent live gate evidence and review remain pending"
+    },
+    {
+      "id": "live:platform",
+      "stage": "calibration",
+      "status": "pending-external-qualification",
+      "detail": "independent live gate evidence and review remain pending"
+    },
+    {
+      "id": "live:provider-operation",
+      "stage": "calibration",
+      "status": "pending-external-qualification",
+      "detail": "independent live gate evidence and review remain pending"
+    },
+    {
+      "id": "live:provider-read",
+      "stage": "calibration",
+      "status": "pending-external-qualification",
+      "detail": "independent live gate evidence and review remain pending"
+    },
+    {
+      "id": "live:quality",
+      "stage": "ordinary-pilot",
+      "status": "pending-external-qualification",
+      "detail": "independent ordinary-pilot quality acceptance remains pending"
+    },
+    {
+      "id": "live:runtime",
+      "stage": "calibration",
+      "status": "pending-external-qualification",
+      "detail": "independent live gate evidence and review remain pending"
+    },
+    {
+      "id": "live:stop-monitor",
+      "stage": "calibration",
+      "status": "pending-external-qualification",
+      "detail": "independent live gate evidence and review remain pending"
+    },
+    {
+      "id": "live:verification",
+      "stage": "calibration",
+      "status": "pending-external-qualification",
+      "detail": "independent live gate evidence and review remain pending"
+    },
+    {
+      "id": "live:witness",
+      "stage": "calibration",
+      "status": "pending-external-qualification",
+      "detail": "independent live gate evidence and review remain pending"
+    },
+    {
+      "id": "manifest",
+      "path": "manifest.json",
+      "stage": "qualification",
+      "status": "valid",
+      "detail": "closed manifest and compiled requirements match"
+    },
+    {
+      "id": "native-identity",
+      "path": "inputs/native-identity.json",
+      "stage": "qualification",
+      "status": "missing",
+      "detail": "required evidence unavailable or unsafe; independent live qualification remains pending"
+    },
+    {
+      "id": "production:activation",
+      "stage": "production",
+      "status": "pending-external-qualification",
+      "detail": "production activation is not established by offline inspection"
+    },
+    {
+      "id": "public-root",
+      "path": "inputs/bootstrap-root.ed25519",
+      "stage": "qualification",
+      "status": "missing",
+      "detail": "required public root key unavailable or invalid"
+    },
+    {
+      "id": "qualified-cohorts",
+      "path": "inputs/qualified-cohorts.json",
+      "stage": "ordinary-pilot",
+      "status": "missing",
+      "detail": "required evidence unavailable or unsafe; independent live qualification remains pending"
+    },
+    {
+      "id": "qualify-codex-quota",
+      "path": "signed/qualify-codex-quota.signed.json",
+      "stage": "qualification",
+      "status": "missing",
+      "detail": "signed bootstrap unavailable or unsafe"
+    },
+    {
+      "id": "qualify-comment",
+      "path": "signed/qualify-github-comment.signed.json",
+      "stage": "qualification",
+      "status": "missing",
+      "detail": "signed bootstrap unavailable or unsafe"
+    },
+    {
+      "id": "qualify-github-read",
+      "path": "signed/qualify-github-read.signed.json",
+      "stage": "qualification",
+      "status": "missing",
+      "detail": "signed bootstrap unavailable or unsafe"
+    },
+    {
+      "id": "qualify-host",
+      "path": "signed/qualify-host-conformance.signed.json",
+      "stage": "qualification",
+      "status": "missing",
+      "detail": "signed bootstrap unavailable or unsafe"
+    },
+    {
+      "id": "qualify-verifier",
+      "path": "signed/qualify-verifier-conformance.signed.json",
+      "stage": "qualification",
+      "status": "missing",
+      "detail": "signed bootstrap unavailable or unsafe"
+    },
+    {
+      "id": "reconcile-worker",
+      "path": "signed/github-reconcile.signed.json",
+      "stage": "postrun",
+      "status": "missing",
+      "detail": "signed bootstrap unavailable or unsafe"
+    },
+    {
+      "id": "secret-reference:anchor-bearer",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required opaque reference is missing"
+    },
+    {
+      "id": "secret-reference:anchor-response-key",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required opaque reference is missing"
+    },
+    {
+      "id": "secret-reference:authority-bearer",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required opaque reference is missing"
+    },
+    {
+      "id": "secret-reference:authority-response-key",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required opaque reference is missing"
+    },
+    {
+      "id": "secret-reference:github-read-token",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required opaque reference is missing"
+    },
+    {
+      "id": "secret-reference:github-write-token",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required opaque reference is missing"
+    },
+    {
+      "id": "secret-reference:verifier-bearer",
+      "path": "operator-inputs.json",
+      "stage": "qualification",
+      "status": "missing-value",
+      "detail": "required opaque reference is missing"
+    },
+    {
+      "id": "verifier-config",
+      "path": "signed/verifier.signed.json",
+      "stage": "qualification",
+      "status": "missing",
+      "detail": "signed bootstrap unavailable or unsafe"
+    },
+    {
+      "id": "verify-worker",
+      "path": "signed/verify-candidate.signed.json",
+      "stage": "postrun",
+      "status": "missing",
+      "detail": "signed bootstrap unavailable or unsafe"
+    }
+  ]
+}

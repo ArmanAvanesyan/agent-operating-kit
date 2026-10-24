@@ -1,0 +1,19 @@
+{
+  "version": "aok-tracker/v1",
+  "identity": {
+    "provider": "azure-devops",
+    "tenantId": "d05d1e025d9db6d89802e31690c95d219ea547531a6119af1988e305a076749c",
+    "containerId": "project-guid",
+    "remoteId": "1",
+    "itemKind": "Bug"
+  },
+  "expectedRevision": "2",
+  "fields": {
+    "System.Title": "Explicit operator-requested update"
+  },
+  "humanOwnedFields": [
+    "System.Title"
+  ],
+  "transitionId": "",
+  "relations": null
+}

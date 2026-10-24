@@ -76,6 +76,9 @@ printf 'HTTP/2 200\r\nContent-Type: application/json\r\n\r\n{"id":123,"node_id":
 	if err != nil {
 		t.Fatal(err)
 	}
+	if !capture.Snapshot.Complete {
+		t.Fatalf("capture incomplete: %+v", capture.Snapshot.Report.Diagnostics)
+	}
 	if capture.Snapshot.Source.ReadPolicySHA256 == "" || capture.Snapshot.Source.PrincipalPseudonym != "principal-a" {
 		t.Fatalf("capture lost enrolled source binding: %+v", capture.Snapshot.Source)
 	}

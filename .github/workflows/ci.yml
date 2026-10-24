@@ -28,13 +28,16 @@ jobs:
       - name: Build Go CLI
         run: go build -o "$RUNNER_TEMP/aok" ./cmd/aok
       - name: Test Go packages
-        run: go test ./...
+        # Several conformance tests intentionally enforce short process-stop
+        # deadlines. Serialize packages so runner contention cannot consume a
+        # fixture's safety deadline before its child process is scheduled.
+        run: go test -p 1 ./...
       - name: Build protected service host without a deployment trust root
         run: go build -o "$RUNNER_TEMP/aok-enrolled" ./cmd/aok-enrolled
       - name: Smoke-test inert enrolled service host without credentials
         run: python3 scripts/testing/verify-enrolled-offline.py "$RUNNER_TEMP/aok-enrolled"
       - name: Race-test usage accounting and local reservation conformance
-        run: go test -race ./internal/usage/... ./internal/selection ./internal/evaluation/... ./internal/tracker ./internal/hostbridge/... ./internal/hostdriver ./internal/hostprotocol ./internal/evidence ./internal/runtime/... ./internal/verification ./internal/writeback ./internal/connector/... ./internal/deliverybridge ./internal/readiness/... ./internal/pilot/... ./internal/operations ./internal/campaign ./internal/methodology ./internal/worksystem/... ./internal/windowscert ./internal/enrolled/...
+        run: go test -p 1 -race ./internal/usage/... ./internal/selection ./internal/evaluation/... ./internal/tracker ./internal/hostbridge/... ./internal/hostdriver ./internal/hostprotocol ./internal/evidence ./internal/runtime/... ./internal/verification ./internal/writeback ./internal/connector/... ./internal/deliverybridge ./internal/readiness/... ./internal/pilot/... ./internal/operations ./internal/campaign ./internal/methodology ./internal/worksystem/... ./internal/windowscert ./internal/enrolled/...
       - name: Phase 9 offline commands without credentials or executable discovery
         run: python3 scripts/testing/verify-phase9-offline.py "$RUNNER_TEMP/aok"
       - name: Phase 10 offline extension commands without credentials

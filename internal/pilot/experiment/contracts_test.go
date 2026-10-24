@@ -4,13 +4,15 @@ import (
 	"crypto/ed25519"
 	"crypto/rand"
 	"encoding/json"
-	"github.com/ArmanAvanesyan/agent-operating-kit/internal/modelcatalog"
-	"github.com/ArmanAvanesyan/agent-operating-kit/internal/pilot"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/ArmanAvanesyan/agent-operating-kit/internal/modelcatalog"
+	"github.com/ArmanAvanesyan/agent-operating-kit/internal/pilot"
+	"github.com/ArmanAvanesyan/agent-operating-kit/internal/testutil"
 )
 
 type revoker struct {
@@ -139,7 +141,7 @@ func TestStrictBoundedRead(t *testing.T) {
 	if e != nil {
 		t.Fatal(e)
 	}
-	d, e := os.MkdirTemp("/private/tmp", "aok-experiment-")
+	d, e := os.MkdirTemp(testutil.CanonicalTempRoot(t), "aok-experiment-")
 	if e != nil {
 		t.Fatal(e)
 	}

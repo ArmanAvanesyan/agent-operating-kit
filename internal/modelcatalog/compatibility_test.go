@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/contracts"
+	"github.com/ArmanAvanesyan/agent-operating-kit/internal/testutil"
 )
 
 func TestCheckDoesNotPromoteListingsOrUnknownHostVersion(t *testing.T) {
@@ -199,7 +200,7 @@ func TestExactSuccessfulProbeSupportsOnlyExplicitObservations(t *testing.T) {
 }
 
 func TestImportedProbeSurvivesLoadAndSupportsOnlyPinnedObservation(t *testing.T) {
-	root, err := os.MkdirTemp("/private/tmp", "aok-probe-roundtrip-")
+	root, err := os.MkdirTemp(testutil.CanonicalTempRoot(t), "aok-probe-roundtrip-")
 	if err != nil {
 		t.Fatal(err)
 	}

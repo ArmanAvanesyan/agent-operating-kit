@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/runtime/records"
+	"github.com/ArmanAvanesyan/agent-operating-kit/internal/testutil"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/usage"
 	accounting "github.com/ArmanAvanesyan/agent-operating-kit/internal/usage/store"
 )
@@ -47,7 +48,7 @@ func recoveryAccountingFixture(t *testing.T) (*accounting.Store, usage.Policy, u
 	if err != nil {
 		t.Fatal(err)
 	}
-	root, err := os.MkdirTemp("/private/tmp", "aok-recovery-test-")
+	root, err := os.MkdirTemp(testutil.CanonicalTempRoot(t), "aok-recovery-test-")
 	if err != nil {
 		t.Fatal(err)
 	}

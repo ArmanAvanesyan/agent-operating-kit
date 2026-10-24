@@ -16,6 +16,7 @@ import (
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/contracts"
 	githubcollector "github.com/ArmanAvanesyan/agent-operating-kit/internal/enrolled/github"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/pilot"
+	"github.com/ArmanAvanesyan/agent-operating-kit/internal/testutil"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/tracker"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/usage"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/verification"
@@ -61,7 +62,7 @@ func testConfig(t *testing.T) (string, string, string) {
 
 func testTempDir(t *testing.T) string {
 	t.Helper()
-	dir, err := os.MkdirTemp("/private/tmp", "aok-bootstrap-test-")
+	dir, err := os.MkdirTemp(testutil.CanonicalTempRoot(t), "aok-bootstrap-test-")
 	if err != nil {
 		t.Fatal(err)
 	}

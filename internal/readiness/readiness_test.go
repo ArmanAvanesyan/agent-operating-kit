@@ -9,12 +9,13 @@ import (
 	"testing"
 	"time"
 
+	"github.com/ArmanAvanesyan/agent-operating-kit/internal/testutil"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/verification"
 )
 
 func readyTempDir(t *testing.T) string {
 	t.Helper()
-	d, e := os.MkdirTemp("/private/tmp", "aok-readiness-")
+	d, e := os.MkdirTemp(testutil.CanonicalTempRoot(t), "aok-readiness-")
 	if e != nil {
 		t.Fatal(e)
 	}

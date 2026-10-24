@@ -1,0 +1,5 @@
+{
+  "apiVersion": "aok-writeback/v1",
+  "kind": "ReplayScenario",
+  "events": []
+}

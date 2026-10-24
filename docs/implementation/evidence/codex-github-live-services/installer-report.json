@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "platform": "darwin",
+  "installer": "macos-intel",
+  "existingGoValidationWithoutPython": true,
+  "installedDeliveryFlow": true,
+  "sourceCheckoutRequiredByInstalledHelper": false
+}

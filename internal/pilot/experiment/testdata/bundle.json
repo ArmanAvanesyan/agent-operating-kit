@@ -1,0 +1,78 @@
+{
+  "version": "aok-experiment-bundle/v1",
+  "manifest": {
+    "version": "aok-experiment-manifest/v1",
+    "id": "offline-structure-fixture",
+    "purpose": "controlled-evidence-collection",
+    "risk": "standard",
+    "frozenAt": "2026-10-24T09:55:00Z",
+    "route": {
+      "host": "codex-app-server",
+      "hostVersion": "1.0",
+      "hostSha256": "4444444444444444444444444444444444444444444444444444444444444444",
+      "provider": "github",
+      "platform": "darwin-arm64",
+      "transport": "local",
+      "controlPolicySha256": "7777777777777777777777777777777777777777777777777777777777777777",
+      "configurationSha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "profileSha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "routeManifestSha256": "8888888888888888888888888888888888888888888888888888888888888888",
+      "nativeTenant": "fixture-tenant",
+      "api": "issue-comment",
+      "origin": "github.com",
+      "verifierSha256": "9999999999999999999999999999999999999999999999999999999999999999",
+      "rubricSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "environmentSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "accountScopeSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "account": "fixture-account",
+      "operation": "comment",
+      "authMode": "fixture-only"
+    },
+    "trial": {
+      "id": "fixture-trial",
+      "repository": "example/repo",
+      "account": "fixture-account",
+      "inputSha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "routeSha256": "3cd21572751f170cfd1eaad7b47d1108af889c4ad552342625f20ea4ee79d1df",
+      "maximumAttempts": 1,
+      "maximumSeconds": 30,
+      "maximumConsumption": 5,
+      "consumptionUnit": "tokens"
+    },
+    "configurationSha256": "1111111111111111111111111111111111111111111111111111111111111111",
+    "profileSha256": "2222222222222222222222222222222222222222222222222222222222222222",
+    "protocolSha256": "3333333333333333333333333333333333333333333333333333333333333333",
+    "maximumAttempts": 1,
+    "maximumSteps": 1,
+    "maximumSeconds": 30,
+    "maximumConsumption": 5,
+    "consumptionUnit": "tokens"
+  },
+  "grant": {
+    "version": "aok-experiment-grant/v1",
+    "id": "fixture-grant",
+    "issuer": "fixture-only",
+    "role": "pilot-experiment-authority",
+    "manifestSha256": "5004434789dff20ed5269a0aa58043c086d7b0ad954a6fa552c0891c65a4612d",
+    "trialId": "fixture-trial",
+    "routeSha256": "3cd21572751f170cfd1eaad7b47d1108af889c4ad552342625f20ea4ee79d1df",
+    "inputSha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "configurationSha256": "1111111111111111111111111111111111111111111111111111111111111111",
+    "profileSha256": "2222222222222222222222222222222222222222222222222222222222222222",
+    "protocolSha256": "3333333333333333333333333333333333333333333333333333333333333333",
+    "maximumAttempts": 1,
+    "maximumSeconds": 30,
+    "maximumConsumption": 4,
+    "consumptionUnit": "tokens",
+    "issuedAt": "2026-10-24T09:59:00Z",
+    "expiresAt": "2026-10-24T11:00:00Z",
+    "signature": "AA=="
+  },
+  "evidence": [
+    {
+      "kind": "fixture-only",
+      "sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+      "scopeSha256": "6666666666666666666666666666666666666666666666666666666666666666"
+    }
+  ]
+}

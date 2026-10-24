@@ -17,6 +17,29 @@ func TestDeliveryHelpDoesNotRequirePython(t *testing.T) {
 	}
 }
 
+func TestWindowsPreservationEvaluatorDefaultsPending(t *testing.T) {
+	var out, stderr bytes.Buffer
+	code := Run([]string{"delivery", "windows-preservation-evaluate", "--json"}, &out, &stderr)
+	var result map[string]any
+	if err := json.Unmarshal(out.Bytes(), &result); err != nil {
+		t.Fatalf("invalid JSON: %v %s", err, out.String())
+	}
+	if code != 1 || result["status"] != "pending" || !strings.Contains(result["limit"].(string), "cannot certify") {
+		t.Fatalf("code=%d result=%v stderr=%s", code, result, stderr.String())
+	}
+}
+
+func TestWindowsPreservationEvaluatorRejectsUnknownReportFields(t *testing.T) {
+	p := filepath.Join(t.TempDir(), "report.json")
+	if err := os.WriteFile(p, []byte(`{"version":"aok-windows-preservation/v1","surprise":true}`), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	var out, stderr bytes.Buffer
+	if code := Run([]string{"delivery", "windows-preservation-evaluate", "--report", p, "--json"}, &out, &stderr); code != 1 || !strings.Contains(stderr.String(), "unknown field") {
+		t.Fatalf("code=%d out=%s stderr=%s", code, out.String(), stderr.String())
+	}
+}
+
 func TestDeliveryDoctorJSONDoesNotRequirePython(t *testing.T) {
 	root := fakeKit(t)
 	t.Setenv("AOK_ROOT", root)

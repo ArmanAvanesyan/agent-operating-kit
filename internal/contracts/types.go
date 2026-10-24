@@ -360,6 +360,18 @@ func DecodeTyped(resource Resource) (any, error) {
 		return decodeResource[SDLCTraceability](resource.Document)
 	case "PlanningEvidence":
 		return decodeResource[PlanningEvidence](resource.Document)
+	case "WorkItemBinding":
+		return decodeResource[WorkItemBinding](resource.Document)
+	case "HostTaskBinding":
+		return decodeResource[HostTaskBinding](resource.Document)
+	case "RunRecord":
+		return decodeResource[RunRecord](resource.Document)
+	case "ConnectorCapability":
+		return decodeResource[ConnectorCapability](resource.Document)
+	case "SyncOperation":
+		return decodeResource[SyncOperation](resource.Document)
+	case "SyncReceipt":
+		return decodeResource[SyncReceipt](resource.Document)
 	default:
 		return nil, fmt.Errorf("unsupported resource kind %q", resource.Kind)
 	}

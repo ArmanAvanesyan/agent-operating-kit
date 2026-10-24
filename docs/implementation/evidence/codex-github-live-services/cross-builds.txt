@@ -1,0 +1,12 @@
+PASS aok darwin/amd64
+PASS aok-enrolled darwin/amd64
+PASS aok darwin/arm64
+PASS aok-enrolled darwin/arm64
+PASS aok linux/amd64
+PASS aok-enrolled linux/amd64
+PASS aok linux/arm64
+PASS aok-enrolled linux/arm64
+PASS aok windows/amd64
+PASS aok-enrolled windows/amd64
+PASS aok windows/arm64
+PASS aok-enrolled windows/arm64

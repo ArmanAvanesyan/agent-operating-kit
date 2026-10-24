@@ -1,0 +1,428 @@
+{
+  "version": "aok-pilot/v1",
+  "id": "offline-fixture",
+  "purpose": "production-policy-pilot",
+  "risk": "standard",
+  "frozenAt": "2026-10-01T00:00:00Z",
+  "configurationSha256": "b7d64a9221007dfd5390f7df6cd5b8f3ea4f82faa1237141e35ebf161f5511a1",
+  "datasetSha256": "b277fd623676a525c29b9eb155afc8c9010681814ceafb2d7627f47b9a232576",
+  "protocolSha256": "2ea88c7a30351b12a4dcfc06cdce2af6eab18416176466c2500cb6ef74f745bf",
+  "familyPartitions": {
+    "family-00": "locked-audit",
+    "family-01": "locked-audit",
+    "family-02": "locked-audit",
+    "family-03": "locked-audit",
+    "family-04": "locked-audit",
+    "family-05": "locked-audit",
+    "family-06": "locked-audit",
+    "family-07": "locked-audit",
+    "family-08": "locked-audit",
+    "family-09": "locked-audit",
+    "family-10": "locked-audit",
+    "family-11": "locked-audit",
+    "family-12": "locked-audit",
+    "family-13": "locked-audit",
+    "family-14": "locked-audit",
+    "family-15": "locked-audit",
+    "family-16": "locked-audit",
+    "family-17": "locked-audit",
+    "family-18": "locked-audit",
+    "family-19": "locked-audit",
+    "family-20": "locked-audit",
+    "family-21": "locked-audit",
+    "family-22": "locked-audit",
+    "family-23": "locked-audit",
+    "family-24": "locked-audit",
+    "family-25": "locked-audit",
+    "family-26": "locked-audit",
+    "family-27": "locked-audit",
+    "family-28": "locked-audit",
+    "family-29": "locked-audit"
+  },
+  "repetitionsByFamily": {
+    "family-00": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-01": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-02": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-03": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-04": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-05": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-06": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-07": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-08": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-09": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-10": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-11": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-12": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-13": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-14": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-15": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-16": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-17": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-18": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-19": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-20": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-21": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-22": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-23": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-24": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-25": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-26": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-27": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-28": [
+      "r1",
+      "r2",
+      "r3"
+    ],
+    "family-29": [
+      "r1",
+      "r2",
+      "r3"
+    ]
+  },
+  "metrics": [
+    {
+      "name": "quality",
+      "unit": "proportion",
+      "direction": "minimum",
+      "target": 0.8,
+      "minimumN": 30,
+      "analysisUnit": "independent-family",
+      "denominator": "complete-locked-audit-families",
+      "confidenceMethod": "wilson-one-sided-95",
+      "confidenceLevel": 0.95,
+      "baseline": "pinned",
+      "missingRule": "exclude-and-report",
+      "censoringRule": "retain-and-report-no-imputation",
+      "stopThreshold": 0.9
+    },
+    {
+      "name": "consequential-miss",
+      "unit": "proportion",
+      "direction": "maximum",
+      "target": 0.1,
+      "minimumN": 30,
+      "analysisUnit": "independent-family",
+      "denominator": "complete-locked-audit-families",
+      "confidenceMethod": "wilson-one-sided-95",
+      "confidenceLevel": 0.95,
+      "baseline": "pinned",
+      "missingRule": "exclude-and-report",
+      "censoringRule": "retain-and-report-no-imputation",
+      "stopThreshold": 0.05
+    },
+    {
+      "name": "accepted-result-cost",
+      "unit": "currency-per-accepted",
+      "direction": "maximum",
+      "target": 10,
+      "minimumN": 30,
+      "analysisUnit": "independent-family",
+      "denominator": "accepted-results-in-complete-locked-audit-families",
+      "confidenceMethod": "ratio-delta-normal-approx-95",
+      "confidenceLevel": 0.95,
+      "baseline": "pinned",
+      "missingRule": "exclude-and-report",
+      "censoringRule": "retain-and-report-no-imputation",
+      "stopThreshold": 8
+    },
+    {
+      "name": "accepted-result-time",
+      "unit": "seconds-per-accepted",
+      "direction": "maximum",
+      "target": 10,
+      "minimumN": 30,
+      "analysisUnit": "independent-family",
+      "denominator": "accepted-results-in-complete-locked-audit-families",
+      "confidenceMethod": "ratio-delta-normal-approx-95",
+      "confidenceLevel": 0.95,
+      "baseline": "pinned",
+      "missingRule": "exclude-and-report",
+      "censoringRule": "retain-and-report-no-imputation",
+      "stopThreshold": 8
+    },
+    {
+      "name": "capacity-deferral-rate",
+      "unit": "proportion",
+      "direction": "maximum",
+      "target": 0.1,
+      "minimumN": 30,
+      "analysisUnit": "account-window",
+      "denominator": "eligible-before-capacity",
+      "confidenceMethod": "paired-normal-approx-95",
+      "confidenceLevel": 0.95,
+      "baseline": "pinned",
+      "missingRule": "exclude-and-report",
+      "censoringRule": "retain-and-report-no-imputation",
+      "stopThreshold": 0.05
+    },
+    {
+      "name": "provider-quota-denial-rate",
+      "unit": "proportion",
+      "direction": "maximum",
+      "target": 0.1,
+      "minimumN": 30,
+      "analysisUnit": "account-window",
+      "denominator": "provider-attempts",
+      "confidenceMethod": "paired-normal-approx-95",
+      "confidenceLevel": 0.95,
+      "baseline": "pinned",
+      "missingRule": "exclude-and-report",
+      "censoringRule": "retain-and-report-no-imputation",
+      "stopThreshold": 0.05
+    },
+    {
+      "name": "quota-avoidance",
+      "unit": "proportion",
+      "direction": "minimum",
+      "target": 0.05,
+      "minimumN": 30,
+      "analysisUnit": "account-window",
+      "denominator": "paired-provider-quota-denial-rate-improvement",
+      "confidenceMethod": "paired-normal-approx-95",
+      "confidenceLevel": 0.95,
+      "baseline": "pinned",
+      "missingRule": "exclude-and-report",
+      "censoringRule": "retain-and-report-no-imputation",
+      "stopThreshold": 0.1
+    },
+    {
+      "name": "observation-coverage",
+      "unit": "proportion",
+      "direction": "minimum",
+      "target": 0.8,
+      "minimumN": 30,
+      "analysisUnit": "independent-family",
+      "denominator": "all-locked-audit-repetitions",
+      "confidenceMethod": "wilson-one-sided-95",
+      "confidenceLevel": 0.95,
+      "baseline": "pinned",
+      "missingRule": "exclude-and-report",
+      "censoringRule": "retain-and-report-no-imputation",
+      "stopThreshold": 0.9
+    },
+    {
+      "name": "prediction-coverage",
+      "unit": "proportion",
+      "direction": "minimum",
+      "target": 0.8,
+      "minimumN": 30,
+      "analysisUnit": "independent-family",
+      "denominator": "all-locked-audit-repetitions",
+      "confidenceMethod": "wilson-one-sided-95",
+      "confidenceLevel": 0.95,
+      "baseline": "pinned",
+      "missingRule": "exclude-and-report",
+      "censoringRule": "retain-and-report-no-imputation",
+      "stopThreshold": 0.9
+    },
+    {
+      "name": "operational-safety",
+      "unit": "count",
+      "direction": "maximum",
+      "target": 0,
+      "minimumN": 1,
+      "analysisUnit": "independent-family",
+      "denominator": "six-hard-safety-counters",
+      "confidenceMethod": "deterministic-count",
+      "confidenceLevel": 0.95,
+      "baseline": "pinned",
+      "missingRule": "exclude-and-report",
+      "censoringRule": "retain-and-report-no-imputation",
+      "stopThreshold": 0
+    },
+    {
+      "name": "recovery-latency",
+      "unit": "seconds",
+      "direction": "maximum",
+      "target": 10,
+      "minimumN": 30,
+      "analysisUnit": "independent-family",
+      "denominator": "complete-recovery-drills",
+      "confidenceMethod": "normal-approx-95",
+      "confidenceLevel": 0.95,
+      "baseline": "pinned",
+      "missingRule": "exclude-and-report",
+      "censoringRule": "retain-and-report-no-imputation",
+      "stopThreshold": 8
+    },
+    {
+      "name": "stability",
+      "unit": "proportion",
+      "direction": "maximum",
+      "target": 0.1,
+      "minimumN": 30,
+      "analysisUnit": "independent-family",
+      "denominator": "complete-locked-audit-families",
+      "confidenceMethod": "normal-approx-95",
+      "confidenceLevel": 0.95,
+      "baseline": "pinned",
+      "missingRule": "exclude-and-report",
+      "censoringRule": "retain-and-report-no-imputation",
+      "stopThreshold": 0.05
+    }
+  ],
+  "minimumShadowOpportunities": 100,
+  "routes": [
+    {
+      "host": "codex",
+      "hostVersion": "1",
+      "hostSha256": "4740ae6347b0172c01254ff55bae5aff5199f4446e7f6d643d40185b3f475145",
+      "provider": "local",
+      "platform": "linux-amd64",
+      "transport": "native-fixture",
+      "controlPolicySha256": "0fcd568a5cb9bdb4677b69354b11ee415af8f784519cff3da49a26f84eaee7f2",
+      "configurationSha256": "b7d64a9221007dfd5390f7df6cd5b8f3ea4f82faa1237141e35ebf161f5511a1",
+      "profileSha256": "1900eab6c028483d7126599ee6f50de0d27907b5c65fa90524580b4b0f9852b0",
+      "routeManifestSha256": "caade1a90513d993c4cdde79bbfcba03410f7f6a10f6443a982480218563d148",
+      "nativeTenant": "fixture-tenant",
+      "api": "fixture-api",
+      "origin": "local",
+      "verifierSha256": "88c9eae68eb300b2971a2bec9e5a26ff4179fd661d6b7d861e4c6557b9aaee14",
+      "rubricSha256": "49672f0ef3b3a542b3b86b475936cc9adf1ddf60369e9b120ba33900294c99d8",
+      "environmentSha256": "ba5285161ba6eed0085fb13784ce5c92f70ebc268b94fd66aa1d68a32884204d",
+      "accountScopeSha256": "5f161c9149882e0e10124bc5dd5c11f0fbe8ec452edd52bcec76b01e9252cb33",
+      "account": "fixture-account",
+      "operation": "execute",
+      "authMode": "fixture-only"
+    }
+  ],
+  "allowedRepositories": [
+    "disposable-fixture"
+  ],
+  "allowedAccounts": [
+    "fixture-account"
+  ],
+  "operators": [
+    "fixture-operator"
+  ],
+  "maximumAttempts": 1,
+  "maximumSeconds": 60,
+  "maximumConsumption": 10,
+  "consumptionUnit": "tokens",
+  "retentionDays": 30,
+  "trials": [
+    {
+      "id": "offline-trial",
+      "repository": "disposable-fixture",
+      "account": "fixture-account",
+      "inputSha256": "0d40010beec184aacb7470f9305cfa767562a3d014c6ca24af4b9625f703f532",
+      "routeSha256": "eb22f3ccf40cf91e116133ebd97c36b8a26e9bfffb433fcef3fd36f4b0488039",
+      "maximumAttempts": 1,
+      "maximumSeconds": 60,
+      "maximumConsumption": 10,
+      "consumptionUnit": "tokens"
+    }
+  ]
+}

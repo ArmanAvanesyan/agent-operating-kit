@@ -1,0 +1,276 @@
+{
+  "version": "aok-enrollment-preparation-evidence/v1",
+  "date": "2026-10-24",
+  "liveQualification": "pending",
+  "productionActivation": "pending",
+  "sourceFiles": [
+    {
+      "path": "cmd/aok-enrolled/enrollment.go",
+      "sha256": "8f926e54943285c246915db4fb3d3c2cf57ee360129f8694ecdc6cd92df7f86c"
+    },
+    {
+      "path": "cmd/aok-enrolled/enrollment_test.go",
+      "sha256": "5c7caa272f773009e8858de864949ab09f95a922bd8ed7eec73f7363e01926cb"
+    },
+    {
+      "path": "cmd/aok-enrolled/main.go",
+      "sha256": "9c7b628a6728e8e27631480ead2970c8502d6b3e3a116ff126d42e6e23c1a78f"
+    },
+    {
+      "path": "cmd/aok-enrolled/main_test.go",
+      "sha256": "68aba3bd065084b26c6d396edb8ca8798a0898755a5567d285a5bfca8d78829a"
+    },
+    {
+      "path": "docs/enrolled-live-services.md",
+      "sha256": "61826b0c91f1fd9fe50584e8e1d5ddb8c13261dec0995f8bf08a687f1d21ea72"
+    },
+    {
+      "path": "docs/enrollment-preparation.md",
+      "sha256": "a4c09d5792afc673f967ddda2cda8368df8f41e5c2c199c64e95b19ac2bdacfb"
+    },
+    {
+      "path": "docs/implementation/enrollment-preparation-delivery-evidence.md",
+      "sha256": "aad73e6c20e1b71b5b65298cfe91b4db402ec182dac56b4860bca39ecea15877"
+    },
+    {
+      "path": "docs/implementation/operator-enrollment-first-codex-github-pilot.md",
+      "sha256": "31afa6330add2733cd37746a1039aad6b2c318a41b8af48ac327d75622af512d"
+    },
+    {
+      "path": "internal/enrolled/enrollment/check.go",
+      "sha256": "2990df25677d08a51a24440cbbbed83112f35ee22b8705837badb45a7a2983ad"
+    },
+    {
+      "path": "internal/enrolled/enrollment/check_test.go",
+      "sha256": "74c47c7b1884599ced7572194f11c849120fdd5ad232f3e8305040f5f51da8d8"
+    },
+    {
+      "path": "internal/enrolled/enrollment/drafts.go",
+      "sha256": "a18ea06d999f27782b36d10b41f960d0f5c711c2676f1ff9f42db7e91e9b114b"
+    },
+    {
+      "path": "internal/enrolled/enrollment/drafts_test.go",
+      "sha256": "e1230c3beeeae6ed504dbeda97abbed61a43b9c6f68905df0668a21446ef9d55"
+    },
+    {
+      "path": "internal/enrolled/enrollment/types.go",
+      "sha256": "07b9c2b527e7bfba218df622b847403cb4a456c5bba78c54c944c55276be8dd8"
+    },
+    {
+      "path": "scripts/testing/verify-enrolled-offline.py",
+      "sha256": "1e43a06e2cff34a57a539fd50c4ed7c1982273309e5a7c1dd8cbed7eb922323f"
+    }
+  ],
+  "preparedFiles": [
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/README.md",
+      "sha256": "a2dbb9d0876b217a36693cf4b61bc4b0c53ac670579443b175de33075fe79117"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/accept-worker.json",
+      "sha256": "5a0fe8ca765624a035c5eebdc657f64e378bee0d365eaa5eab14b76d48da812d"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/acceptance-projection.json",
+      "sha256": "639d7816df4bdc46c0940e1fb28f52a5c74328bb65318fb514569e481e716670"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/acceptance-receipt.json",
+      "sha256": "dfe2cd76aa3ced8bff4e631f13e6cebdd03c85e184909ed7f1b4ef65afb4a252"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/anchor-config.json",
+      "sha256": "26b95279a37693b9199a4dbfd6d96169d210874711164f08e78caf52696b0e16"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/anchor-service.json",
+      "sha256": "c648d69e2da4b20cb2f0163d1c6a51fdb3dc67e7fd4a86700a5f81a5bcd8cd87"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/authority-config.json",
+      "sha256": "24d9b78fc31871b6c6dcbfc6cfd41a425f55c146e14b860537e91bc0265c459c"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/authority-enrollment.json",
+      "sha256": "3d8ac87f18d314faebabb9f568fade449caffc8d195450fb02815f1b2b9062a9"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/authority-service.json",
+      "sha256": "35ab8c4cd10f3ff2498de116d81d08a6c153265772c0b768bab1636747902568"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/bootstrap-envelope.json",
+      "sha256": "7183720b8aee9152378e187edc36dd1a72810cd25407f7b1fbd3a61c1f1af32b"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/calibration-bounds.json",
+      "sha256": "2f35bd2f66fa445f78cfc592a37aa0f94861db8b41aff9be36f4ea16ff895245"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/calibration-grant.json",
+      "sha256": "1ebe32d256031d2fd37abe6dda4accd38434afa36cc0205bc3441a821fb3ff77"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/calibration-request.json",
+      "sha256": "ef40eb90cb9c2ace1fb28e9a2baa2f32e635943d6627091ec2731304620d0c06"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/calibration-worker.json",
+      "sha256": "3c308fbd57b0bfa4e87cb61c317c7afbf9cb1dc897919011461bd4f72f83abeb"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/capacity-reservation.json",
+      "sha256": "47c15538eba20d85c3b0407210bb65d99a3c041f1d645d3ee1ee5d0a9cde10ff"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/dispatch-worker.json",
+      "sha256": "565f38c7c5a312129a63e1d7f4c33b50336b1eba852c0e1cdc3a1b70af03a7b0"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/experiment-worker.json",
+      "sha256": "b05689d355667d67c39b266631edc8b8434b05217f408470f5cf302745922ea4"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/handoff-worker.json",
+      "sha256": "cda7e79be72b7b94c123a4a41299afed322f15cd6d76f2cec9e17b6d3f602d51"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/host-conformance-record.json",
+      "sha256": "93f7909efcba6ab083cee575088fe09c79bb34a3570182dca11089aa0489a905"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/host-control-proof.json",
+      "sha256": "7bed21ccd5e4ff06712d9bf953bccf53c8cb28ff2d13f438ed34fdcd0d37c085"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/host-policy.json",
+      "sha256": "dbc9e34cb152a5a8f882b31e471bebbb4457028628d02455f972de825a6c6a20"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/p8-sync-operation.json",
+      "sha256": "b941a212bb70e0441307c54fe828d3fda0a160f5e9e9ee48adf58490cce399cd"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/p8-writeback-grant.json",
+      "sha256": "fece70d11fc213f6930fcd72ce5e72707b3defbb89f09542fd112d49a82bda1e"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/pilot-manifest.json",
+      "sha256": "ff01fef56d59e0cdc3b0b03b751be9351d32f67999ae423db2ac1276a73ae3c5"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/postrun-execution-grant.json",
+      "sha256": "279d5f6444bb57447cc28f4c1aa4ce203c1efb8013438007dfd2307691d454db"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/qualify-codex-quota.json",
+      "sha256": "4fec3a3689f6c6d715cbf67bf3d72a71cfb519b5b8a24cf3dd4bbf876edf820f"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/qualify-comment.json",
+      "sha256": "7cb8c54bbcde7145d8a1619ba4d07446d91a704eb39f25c997e0fe58054d50e8"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/qualify-github-read.json",
+      "sha256": "98c2ae6becf06aefde57f5a1640f4128fd1cad83295acd68bf92cea76b75c4e3"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/qualify-host.json",
+      "sha256": "23bae38180818a6c984fc1c078a2b19ded515f8671348c2ab3347551f632ecb3"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/qualify-verifier.json",
+      "sha256": "b4c83fd9de729bf65f00ba85818fe76e402a3d5aaf88e795cd8ca01db2b61e53"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/reconcile-worker.json",
+      "sha256": "8bb23e9ff9ac3597957439488230adc62ed270465523aeada863b95a3159a47a"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/usage-binding.json",
+      "sha256": "ecc73afd8ee3edd9766b6698741320293918f8514dbafa94340f170a53cacdcb"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/usage-demand.json",
+      "sha256": "b652fd714dae63dd8c1a1f51cd562c603ef9d1e186ee2ef232065fa9f8a69299"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/usage-policy.json",
+      "sha256": "d4422b7e73188a7261ccd42fcf7868a404aa105988875559e6d8a84c6449df69"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/verifier-config.json",
+      "sha256": "d786339a89e1996bf8839a160b2b5d64f30896b6160e13a72a070f64bb7de9db"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/verifier-control-proof.json",
+      "sha256": "0952afa70c591b1117f5513f412601d8492fbe90e3f32a508e23963f2df622fa"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/verifier-policy.json",
+      "sha256": "bbb15b28a309e4cf77327ffe3f506d1b80d37878fe2cb4dfb290ac58db9e0efa"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/verifier-service.json",
+      "sha256": "f02d23c7ed0d6ff0b1eb4b37f8e85ba9c2d8f0eeead23ccfa58d9b40807f2c72"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/verify-worker.json",
+      "sha256": "10bee516e1323cf794ccf31d97d4eca178448cb9a865291afee0671e4c76d68e"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/workflow-sync-receipt.json",
+      "sha256": "210e0826b2bb04b2865511efabf97bcc2341e92c3dbf44d27a83db02081c4a7e"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/drafts/writeback-readback.json",
+      "sha256": "1e5e958d70a884668393ecf675820392f95a99278d5836ae34049176942b30a3"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/manifest.json",
+      "sha256": "575888c470bd570321c873fb443d5cc924a48f699dc88db4ca4f8c35f99e39fb"
+    },
+    {
+      "path": "/Users/armanavanesyan/oss/own/agent-operating-kit/build/enrollment/codex-github-first-live-run/operator-inputs.json",
+      "sha256": "e3b3d58382b2017eda4ccf68ce4ea9312a8dc545c4800ee572d965001b4436aa"
+    }
+  ],
+  "evidenceFiles": [
+    {
+      "path": "docs/implementation/evidence/enrollment-preparation/cross-builds.json",
+      "sha256": "9ac6526d6632105ad0a58856f1272b696220ef2b403e603aa988a6879fb77f28"
+    },
+    {
+      "path": "docs/implementation/evidence/enrollment-preparation/go-full.log",
+      "sha256": "a4dff7f9de91141f529570ce5439dd8e88c5d2e1c9448d1670334e2aeaab548f"
+    },
+    {
+      "path": "docs/implementation/evidence/enrollment-preparation/go-race.log",
+      "sha256": "85fd6d60fd0907bc6aefd0b7b813f45e8c3cae9e883fc8b7071b13c0ec5ba9f9"
+    },
+    {
+      "path": "docs/implementation/evidence/enrollment-preparation/network-denied.log",
+      "sha256": "ec31049c8b8a7664c0cccf724996c80b5f1e0806435b1fd0dfe856df212a18ea"
+    },
+    {
+      "path": "docs/implementation/evidence/enrollment-preparation/offline-smoke.log",
+      "sha256": "ec31049c8b8a7664c0cccf724996c80b5f1e0806435b1fd0dfe856df212a18ea"
+    },
+    {
+      "path": "docs/implementation/evidence/enrollment-preparation/preflight.json",
+      "sha256": "226fdcb3cc04c8f9aba53ff54f23f7c78f38c07eca5dd582046a0d473b6dc2c4"
+    },
+    {
+      "path": "docs/implementation/evidence/enrollment-preparation/prepared-artifacts.json",
+      "sha256": "de3ff1b30369e5dd317eb42a5c2c6f9a9a31f9070d19b690d64be30d99e451f8"
+    },
+    {
+      "path": "docs/implementation/evidence/enrollment-preparation/python-summary.log",
+      "sha256": "eace9aceebba219344143a2c7db700fcbe637564faa775fa05c2c1ef84f9d4e2"
+    },
+    {
+      "path": "docs/implementation/evidence/enrollment-preparation/review.md",
+      "sha256": "8aa08d3a40b2d5a3fc54eaab1a623cb6a79fc8fa319205b2f0394ad3748ba8fe"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "dispatchEvidence": [
+    {
+      "asset": {
+        "path": "assets/dispatch.json",
+        "sha256": "50bd564c59528a5eca06a790b9154b0f24c02c97cd13c2898eea44f7fef34429"
+      },
+      "observedAt": "2026-10-23T10:00:00Z",
+      "purpose": "dispatch"
+    }
+  ],
+  "disposition": "applied",
+  "kind": "SyncReceipt",
+  "metadata": {
+    "description": "workflowcheck fixture",
+    "id": "receipt-17",
+    "name": "receipt-17",
+    "version": "0.1.0"
+  },
+  "observedAt": "2026-10-23T10:00:00Z",
+  "operationDigest": "e981b09d2a10080cbf208f1f4faf0bebc7876474d4d5eefd40484fda681fa293",
+  "operationId": "op-17",
+  "readbackEvidence": [
+    {
+      "asset": {
+        "path": "assets/readback.json",
+        "sha256": "d7f9b563209d7b26d1810f2e05309fd083ecce36fb4ea1c7ed0885e3c7e36420"
+      },
+      "observedAt": "2026-10-23T10:00:00Z",
+      "purpose": "readback"
+    }
+  ],
+  "receiptId": "remote-receipt-17",
+  "syncOperationRef": {
+    "id": "update-issue-17",
+    "kind": "SyncOperation",
+    "version": "0.1.0"
+  }
+}

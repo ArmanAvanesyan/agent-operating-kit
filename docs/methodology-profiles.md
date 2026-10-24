@@ -24,8 +24,8 @@ These axes are deliberately independent. A DSDM project may be in
 Review. An FDD feature may move from `design-by-feature` to
 `build-by-feature` without defining new task phases.
 
-Methodology selection and scaffold commands use the contributor Python CLI
-from the kit checkout (`./scripts/aok`); they are not yet Go binary commands.
+Methodology selection is supported by the contributor Python CLI and the
+opt-in Go CLI.
 
 ## Support
 
@@ -34,17 +34,20 @@ from the kit checkout (`./scripts/aok`); they are not yet Go binary commands.
 | Kanban | flow | active, default |
 | XP | overlay | active |
 | Lean | overlay | active |
-| FDD | flow | scaffolded |
-| DSDM | flow | scaffolded |
-| AUP | flow | scaffolded |
-| AM | overlay | planned |
+| FDD | flow | scaffolded; enforcement pending |
+| DSDM | flow | scaffolded; enforcement pending |
+| AUP | flow | scaffolded; enforcement pending |
+| AM | overlay | active, guidance only |
 
-Only active profiles can be selected. Scaffolded and planned profiles expose
-validated catalog metadata but do not render operational policy.
+Only active profiles can be selected. AM is an explicitly selected lightweight
+modeling overlay; it adds no lifecycle gate or approval authority. Scaffolded
+profiles expose catalog metadata and exportable templates but do not render
+operational policy.
 
 FDD, DSDM, and AUP include structured lifecycle, role, artifact, ceremony,
-gate, and phase-mapping catalogs. They remain non-selectable until lifecycle
-state and enforcement are implemented.
+gate, and phase-mapping catalogs. Their enforcement status is recorded
+separately and remains pending; they remain non-selectable until lifecycle
+state and protected enforcement are implemented.
 
 ## Initialize a Project
 

@@ -1,0 +1,44 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "authority": {
+    "operation": "update-fields",
+    "operationDigest": "e981b09d2a10080cbf208f1f4faf0bebc7876474d4d5eefd40484fda681fa293",
+    "reference": "approval://ticket-1",
+    "scope": {
+      "containerId": "repo",
+      "itemKind": "issue",
+      "provider": "github",
+      "remoteId": "issue-17",
+      "tenantId": "org"
+    }
+  },
+  "change": {
+    "fields": [
+      {
+        "providerFieldId": "title",
+        "value": "Updated title"
+      }
+    ]
+  },
+  "connectorCapabilityRef": {
+    "id": "github-adapter",
+    "kind": "ConnectorCapability",
+    "version": "0.1.0"
+  },
+  "expectedRevision": "rev-7",
+  "kind": "SyncOperation",
+  "metadata": {
+    "description": "workflowcheck fixture",
+    "id": "update-issue-17",
+    "name": "update-issue-17",
+    "version": "0.1.0"
+  },
+  "operationDigest": "e981b09d2a10080cbf208f1f4faf0bebc7876474d4d5eefd40484fda681fa293",
+  "operationId": "op-17",
+  "operationKind": "update-fields",
+  "workItemBindingRef": {
+    "id": "issue-17",
+    "kind": "WorkItemBinding",
+    "version": "0.1.0"
+  }
+}

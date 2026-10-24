@@ -1,0 +1,18 @@
+{
+  "version": "aok-tracker/v1",
+  "rules": [
+    {
+      "provider": "jira",
+      "origin": "https://acme.atlassian.net",
+      "nativeTenantId": "cloud-guid",
+      "containerId": "10001",
+      "containerKey": "ENG",
+      "auth": {
+        "mode": "bearer",
+        "tokenEnv": "AOK_TEST_TOKEN",
+        "usernameEnv": ""
+      },
+      "principalPseudonym": "test-principal"
+    }
+  ]
+}

@@ -25,7 +25,7 @@ jobs:
           ./scripts/aok codex local-env validate templates --json > dist/release/codex-local-environment.json
           ./scripts/aok codex local-env actions templates
           python3 -m py_compile scripts/aok
-          go test ./...
+          go test -p 1 ./...
           ./scripts/aok doctor --json > dist/release/doctor.json || true
           python3 -m json.tool dist/release/index.json >/dev/null
           VERSION="$(python3 -c 'import json; print(json.load(open(".codex-plugin/plugin.json"))["version"])')"

@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aok.invalid/operational/RunRecord.json",
+  "title": "RunRecord",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "aok/v1alpha1"
+    },
+    "kind": {
+      "const": "RunRecord"
+    },
+    "metadata": {
+      "$ref": "common.schema.json#/$defs/metadata"
+    },
+    "hostTaskBindingRef": {
+      "$ref": "common.schema.json#/$defs/pin"
+    },
+    "runtime": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runtimeVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runtimeRunId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "attemptId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputRevision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "executionProfileRef": {
+      "$ref": "common.schema.json#/$defs/pin"
+    },
+    "assignmentSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "leaseId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "fence": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2147483647
+    },
+    "policyRefs": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/pin"
+      }
+    },
+    "checkpointRefs": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/evidenceRef"
+      }
+    },
+    "outputRefs": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/evidenceRef"
+      }
+    },
+    "observedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "disposition": {
+      "enum": [
+        "pending",
+        "running",
+        "blocked",
+        "cancelled",
+        "exhausted",
+        "failed",
+        "completed"
+      ]
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "hostTaskBindingRef",
+    "runtime",
+    "runtimeVersion",
+    "runtimeRunId",
+    "attemptId",
+    "inputRevision",
+    "executionProfileRef",
+    "assignmentSha256",
+    "policyRefs",
+    "checkpointRefs",
+    "outputRefs",
+    "observedAt",
+    "disposition"
+  ],
+  "additionalProperties": false
+}

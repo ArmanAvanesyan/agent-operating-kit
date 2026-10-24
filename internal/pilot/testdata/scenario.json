@@ -1,0 +1,810 @@
+{
+  "version": "aok-pilot/v1",
+  "opportunities": [
+    {
+      "id": "shadow-000",
+      "inputSha256": "f3aeb89a5d23baee99502d1a678feeecf1fdb98f02fec702aa920701b8e1e38b",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": true,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-001",
+      "inputSha256": "0816c60ae54e21339ac73efedb7445592a89a1148f54c650ec50ad2db369a41e",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-002",
+      "inputSha256": "f2c2f8ae4fc4b802a189c6b303cc62dbdc89affd3845bbf0c095a9fbf1bbedb7",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-003",
+      "inputSha256": "70625704e4c387b727496d5098de94bd4b572f4d8e79e564b82b83e8f9a3c29f",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-004",
+      "inputSha256": "819144b6a1d3e468689111e36799daba0718d3fe1b0a583812a5876bde5d3e94",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-005",
+      "inputSha256": "023a4733c8a35a563310c13b464805303aa0714261b9d69132b584b0fc09f5ba",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-006",
+      "inputSha256": "a639d69e5bb196c9ae1090ef3c9cb67df43b069dd1c110a1c5a211f3bfaafdde",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-007",
+      "inputSha256": "8c13d6c00edf4f27b56b366220a76b9549ff63230f3f3d23593fdc637173ddf4",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-008",
+      "inputSha256": "c7d333b188b6b8d07a880af712a12db19ab1316696d3f8e4eb02ff09fbb5481e",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-009",
+      "inputSha256": "17e6541c954dd6c6b5b23848712a7950922e7ff11370be07d96a89b3e48471ae",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-010",
+      "inputSha256": "f4ff2f8ad0bda7a6587361ac610f25ae980b5b50a5a30ffbf26411935c7d9eed",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": true,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-011",
+      "inputSha256": "9e2730d54d83533ca4ceeb04525c0ff469029a85dafc3b730d7da6a1e54a9a75",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-012",
+      "inputSha256": "4e1a7cd5c18227fa64bc3ebd398e41032f37534df949bc92588e45cd36c0cdc0",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-013",
+      "inputSha256": "25e0d5bc88c57d0a16bf629b99c0d2b18e19231d7bc01b221879ca22ad7e771f",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-014",
+      "inputSha256": "d5f1c09ea19f40d87817c6198a8722e55d4e8b97c2c814e957f46b2daf2c4b41",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-015",
+      "inputSha256": "181cb7c5cc1453792fbca3af1a550c8d01dd51f985a37500bfad282e31fb0efa",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-016",
+      "inputSha256": "b86080184106da4e170808a336baf679f4e06018d379dcb8e6d6b94681b440ce",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-017",
+      "inputSha256": "9613e100e39c60b1ce4737f1821bce14d3998e03367eafa27e6f8da8fb0239a0",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-018",
+      "inputSha256": "7db41a630ea1718ac30759711a4262348f262c05ef12faf52497c8978692f7df",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-019",
+      "inputSha256": "77f151a6efab39ffa8a66fe7a261eafef2c1b2f8a9705534f9f1236605871c98",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-020",
+      "inputSha256": "295fc36f33e7bcd9885e18bdac28b2aef5124760a66feb76b51c7cc2f9b19812",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": true,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-021",
+      "inputSha256": "7729a7ecb4d0f6dbb8d278db33f5e77f02b3ba535a20c4dd4ed73f4f1f3d8981",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-022",
+      "inputSha256": "396c69252e98a2aedfb3a6f16b3e8f348299da313c0ab9ddd4d810e15971c79b",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-023",
+      "inputSha256": "00520eae250a7610434030b1cfeeec32c0c42e4823cbf9058cc2f1237c980307",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-024",
+      "inputSha256": "d5bd3714456438f52bb7f78594276078b279d9bcae2303df310009e5af425694",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-025",
+      "inputSha256": "0d63eb3df40035e1066d2bf60295b953dd51a0638efab3091ed7924f021d463d",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-026",
+      "inputSha256": "a2845a7d2200a839ee9a47f223c93857ca18adaf941e5e4b4e445787289a9716",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-027",
+      "inputSha256": "e3d7915db0326709cd7a5e7f48669ed081aae32b7d7c7db1c8ef29c38719d6cf",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-028",
+      "inputSha256": "06f773e042311632dabf8fa4ce4c6ae7697cdd3120be1b3f23d5d65111b28dc0",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-029",
+      "inputSha256": "6df1b0c17831e26dad0b045bc2e43e1fdf1c8697c69f7d8a93f090538db8d15b",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-030",
+      "inputSha256": "1e966a98aa5282ef0d05c9fe77ff8f1b5050e53ff5e449160721bbd918c68efb",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": true,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-031",
+      "inputSha256": "72230cd45a33a5579796b59b5678617f47e206a5dad6c43e02b7f591c0b385c3",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-032",
+      "inputSha256": "ec731c504651f09c05b31006956a1c38ee9f2d0712ea06b6106e9cac987fb8cc",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-033",
+      "inputSha256": "9fdb375e33999d15d551219900698f9d0efd7df72fd724a08b0c821363bf95e9",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-034",
+      "inputSha256": "bb560adc79a758312d7fe70de4e45c153ae66649cf8842f93256c6aa6f18f2f8",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-035",
+      "inputSha256": "b4370cda2bdb7bed55a1a041ab0be87a3a475fdada37b73700aa17cf6f340f7a",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-036",
+      "inputSha256": "ee677b4d83a69d6c07cfd450b4a44771ce553b5afe331dd497f5c762a3df7a06",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-037",
+      "inputSha256": "8d5086cc74ff96781360ac46e9618c92cb27c0263bd0aed782a14bc5e277a6a4",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-038",
+      "inputSha256": "d22cde8bc48e57edc187a8d636a845b267d96ad7e7f8298a64ffd1b0d54f0a7b",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-039",
+      "inputSha256": "1f5580af257d98c800cc7fc7adeb812f267fde170ef7895cef917bf818811193",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-040",
+      "inputSha256": "36a954001602e98d2817d3edb7cddd3bb0c8fb0a7869d910ab0845b586f1df27",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": true,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-041",
+      "inputSha256": "f1867df547a7269438a72e9676170161f17a2f52c34b55a8a8d12e173661b06b",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-042",
+      "inputSha256": "680e2b3d61ddfd278bbb1a63ea60fb90732b8cb6751371420579017456e95c97",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-043",
+      "inputSha256": "8de4930676ced8351744567a8de4bcf7e21eacecd6ac97eab0151f2424c2ff5e",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-044",
+      "inputSha256": "323fd51f4b578c61a2fe34478ee75b5ce0c92cd8ce6e5c09a84650f72a1ac8c7",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-045",
+      "inputSha256": "4994834cf0fba7e819a40ac852e870218424a2793719f4b4e053d84e1de64b20",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-046",
+      "inputSha256": "e8675e47dc130eb82b87aeeaa1372ce102c673b6200d8a059a61e320f38b0dc7",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-047",
+      "inputSha256": "a644e5ff3b02993e8d35a74505b16140e624af1c7a0a6f600003a65cca73f67c",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-048",
+      "inputSha256": "2de296191fd2d7283e6a8e88fe6c101309e3a90f4aa15cb686d20749f12d778e",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-049",
+      "inputSha256": "8c8329a8c7d675688c10fa9a7ead505610fb99539716ec03ae99fc094f7f6b61",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-050",
+      "inputSha256": "986d26fa87b4d7921ac3773219f9fdaffa35ebef915d5411fbc86760d6272f35",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": true,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-051",
+      "inputSha256": "b14a09453b140662e77c30e0bae0706c9f0ad42431adcc6785486d3240eca8cb",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-052",
+      "inputSha256": "03bf61cb62b93e8bdbcbc097d1b4c422d5ad49a33a6fdf8dda54159c6dd94c8e",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-053",
+      "inputSha256": "968d827fb5b3e6ae7f3e96980972d7a988de8f382fffa2c90fff5affe87b0110",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-054",
+      "inputSha256": "7df1944811a0cfaa53f767c8a5fd3cbbda76883ea2d3f72ed832e49254890b1b",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-055",
+      "inputSha256": "ddacf3b8a01c88055b883c6da0c8f055d676bbdea10fb5c5984a397f841ba8f8",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-056",
+      "inputSha256": "a52fa3182102ad1ffcbb2cfa1166f55a1b103e7724f1025fc9d6552b10dbfc32",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-057",
+      "inputSha256": "3941fcce15a964d138a24b8b34e384f1fdb3cfdc1a3f423f53e8658e7807db6a",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-058",
+      "inputSha256": "14a42339cb116bea2b7aa83610d9b53d85f3afb95145dbddf1d9eb6500de2a8b",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-059",
+      "inputSha256": "58de9518f7b5b2a4f93ef87b2d34dbdfa792f6cf17c26b0d9fe26f1438502b41",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-060",
+      "inputSha256": "f9cd03c29ef10b068844b1ad0e04e44abe29c6e24fab50a855b4d77a80ff6ce5",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": true,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-061",
+      "inputSha256": "74bf5e62b588507797a42c49fd83dc6f2c168c1e80760cb974b6c5efd344c3d9",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-062",
+      "inputSha256": "91f2ff37d6ab4d55b553711697e7aaaa513ddbf9396122943a28738c7f87afd3",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-063",
+      "inputSha256": "ef8592ecf46cc87c2b5e31130ec95438c07520aa7130ce297bcf90f9a12fdec0",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-064",
+      "inputSha256": "6a63ec45e36e40a9c1424d70ed3988da50521c7928c72817b349e96eedfe1685",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-065",
+      "inputSha256": "01bddaea1e92e1877e7427d599a40458c6559329b7501b49b482c6f77df382a7",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-066",
+      "inputSha256": "520cda000948c4d300864bea735713143c4f82cef4750ad34c7ae7ff7aa98d49",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-067",
+      "inputSha256": "e08c63133d2ef52344b052db84b60c79db331dd0d2a14b78fb38dc903caea3a4",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-068",
+      "inputSha256": "820b07112177d95383672dd38ee01925f68c72b3152a534cdfe244288bf0d889",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-069",
+      "inputSha256": "1c2662160aeef3ed942e355c91d1aa5ab8a9dc769fda77c8a9bfb2777b672ba2",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-070",
+      "inputSha256": "9e435e1924be0cd85cfc93cc0893be43cf570209229ea1b90053f838a5cbffbb",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": true,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-071",
+      "inputSha256": "5947e58b9f218f6dfedab99dccc65bfca7ddc8bacc8ecba3b1a44ba66df5ce0c",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-072",
+      "inputSha256": "e9f00d620d5275bf694da3fb47f417f62adebf60e291cdafe24c6df3282583d4",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-073",
+      "inputSha256": "540ef88c93cd813c24beb0304bcd726bf8b26df4c3f4d140c0c7bd40c7d744d2",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-074",
+      "inputSha256": "71ba553cd00fbae09137ddc4c7f5e6d850d7bae34700a7eb4bc6fcc8a2b8609e",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-075",
+      "inputSha256": "435950bdb039d28aeaa96d4538771e2a6552d92c3832e4de78f7c92f33687330",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-076",
+      "inputSha256": "b75a7db73a882cd8709179654e6122c482d3c64b7b05eb96e0c6ad16d2fa0f38",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-077",
+      "inputSha256": "534621af9035cc6e97d6edec4af30a6dc43b1d9c5f7f992edda1ae14f90a80df",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-078",
+      "inputSha256": "acf0bada6cbc05a2e1e26075ed8077edc6f9c537de307d376b0658b7a99256a3",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-079",
+      "inputSha256": "55d594878b46930ef7b7929fe46c15756eac0af476df7b3966111545320b2dae",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-080",
+      "inputSha256": "fa5048bffbe1e96b9f51efd854e012aae3e4b651a81d03284b265672195c8322",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": true,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-081",
+      "inputSha256": "95fe19dc08fd7e1c6a64094bd8c5c8c9b0f664f32eec242c343a2df982cbeb4a",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-082",
+      "inputSha256": "4e0196689f0bf2eb5e025f694472b48cade58626c65363211c4fe750288e87da",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-083",
+      "inputSha256": "c12bbeac8949e4449ac5c240a553c5ff3db2b101b965a8d4f691ae8dbf13e796",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-084",
+      "inputSha256": "94a878d9e9c23839fb1ca0199b1fefe448613cbf62333842c1d64ca900d45be3",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-085",
+      "inputSha256": "ef30a739e75b35a826a7206e0328a16b4cde449da77c1e709d22dd37bb0c634b",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-086",
+      "inputSha256": "2e0049054da9790e9873e094cede569766d84a12fc131a197e7a7043a37cc696",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-087",
+      "inputSha256": "83218943ddd832672ff8591269de4a5fcf3290d68e213115a3de3257c62e4521",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-088",
+      "inputSha256": "707d16a3ad75b456df09c0183d99fa2066339f776e9e3905692166d75aea23ee",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-089",
+      "inputSha256": "72dba9014ddb37d0d5876396cd16faf803813a0865b16f3b80ec06511a4fb958",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-090",
+      "inputSha256": "eb34b213302c31b12878c4d7f47d6c031441334f166ed062ba715d5d71830f71",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": true,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-091",
+      "inputSha256": "fa3fd80cd0f248cc0a40fe4dbd8dfe0599a93cdd2dadc469e6a0d1bf25f36608",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-092",
+      "inputSha256": "fe3bb389c066c175acef29b1d1ebb0b39012d9669b7732af5a361838ac0a340c",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-093",
+      "inputSha256": "20fc3409d7215ba0d5554cb7a77c7f8b3df68524310ed306ef97c2923e5cb8f8",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-094",
+      "inputSha256": "e1660cd38ba2d0f9a7fcf084d9d1db85a90bb27b1523fadba1d3b273cfb19b29",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-095",
+      "inputSha256": "3640addcea115fda838cfc13e76c3382992a57c00393217049c44ec3c7ac33c1",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-096",
+      "inputSha256": "d78325874954dc2f248eaba9c53e85992445e8ac46e3390c567d95c3b456f901",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-097",
+      "inputSha256": "3fff09b1c7fc78228e195e59d8de63598499639f800fa036b38410e2fc41a684",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-098",
+      "inputSha256": "f2e4750e47c98df9dab1516cb1112a8300fbc2ce573f8a6154eba65253ff24d1",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    },
+    {
+      "id": "shadow-099",
+      "inputSha256": "09bbf0d4859590f8a22b51bddab818ec7c076075f169147dff8a71b4973a08e8",
+      "observedAt": "2026-10-20T00:00:00Z",
+      "eligible": true,
+      "abstained": false,
+      "dispatched": false
+    }
+  ],
+  "capacityBlocks": 2,
+  "quotaDenials": 1,
+  "admittedStarts": 5,
+  "accepted": 4,
+  "failed": 1
+}

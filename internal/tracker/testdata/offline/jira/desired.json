@@ -1,0 +1,19 @@
+{
+  "version": "aok-tracker/v1",
+  "identity": {
+    "provider": "jira",
+    "tenantId": "08f0e6cadbcec524f468f666c87887f51abb06917aae7b59616a98c2473fcd35",
+    "containerId": "10001",
+    "remoteId": "1",
+    "itemKind": "issue"
+  },
+  "expectedRevision": "eaa55705f5f1db63a96c58fd59ef1017ea4a5db1447a07fbb187d952bc975c0f",
+  "fields": {
+    "summary": "Explicit operator-requested update"
+  },
+  "humanOwnedFields": [
+    "summary"
+  ],
+  "transitionId": "",
+  "relations": null
+}

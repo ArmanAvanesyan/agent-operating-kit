@@ -1,0 +1,1 @@
+{"data":{"issues":{"nodes":[{"id":"partial","identifier":"ENG-8"}],"pageInfo":{"hasNextPage":false,"endCursor":null}}},"errors":[{"message":"forbidden field","path":["issues","nodes",0,"state"]}]}

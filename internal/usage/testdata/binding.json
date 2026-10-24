@@ -1,0 +1,18 @@
+{
+  "id": "fixture-binding",
+  "poolId": "fixture-pool",
+  "provider": "fixture-provider",
+  "service": "fixture-service",
+  "host": "codex",
+  "hostVersion": "test-v1",
+  "authMode": "test",
+  "sourceId": "fixture-source",
+  "streamId": "fixture-stream",
+  "configurationIds": [
+    "opaque-config"
+  ],
+  "constraintIds": [
+    "95a273081a656d439e671ca27199a7d03df56aaa8fdaeb2f50a564880e3a9868"
+  ],
+  "constraintsComplete": true
+}

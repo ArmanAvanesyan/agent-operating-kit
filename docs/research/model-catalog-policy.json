@@ -1,0 +1,47 @@
+{
+  "version": "aok-model-policy/v1",
+  "sources": [
+    {
+      "id": "codex",
+      "artifactSha256": "a8d2fbbe16f75d6b5ede12eb186df36e9849dde052b001e70e7ab04d6e93bc09",
+      "categories": [
+        "published-declaration",
+        "observed-cli-listing",
+        "repository-guidance"
+      ]
+    },
+    {
+      "id": "claude",
+      "artifactSha256": "9410d6030628329058bc0705e5e6575a37d7a4a73c263c49a495e163a8356aff",
+      "categories": [
+        "published-declaration",
+        "observed-cli-listing",
+        "repository-guidance"
+      ]
+    },
+    {
+      "id": "opencode",
+      "artifactSha256": "f0b2a1349d68b7b6cab759924219c767b9482e8de9ecf2bae79cb157d884a84f",
+      "categories": [
+        "published-declaration",
+        "observed-cli-listing",
+        "repository-guidance"
+      ]
+    },
+    {
+      "id": "agy",
+      "artifactSha256": "3d91d04cfe35c83a1bf2c7f31d83ea8e8fa700b1859d02fcf9a43591d619326e",
+      "categories": [
+        "published-declaration",
+        "observed-cli-listing",
+        "repository-guidance"
+      ]
+    }
+  ],
+  "validityHours": {
+    "published-declaration": 720,
+    "observed-cli-listing": 168,
+    "repository-guidance": 2160,
+    "pricing": 24
+  }
+}

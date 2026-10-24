@@ -91,7 +91,6 @@ class MethodologyTests(unittest.TestCase):
         cases = [
             ("--flow", "unknown"),
             ("--flow", "fdd"),
-            ("--flow", "kanban", "--overlay", "am"),
             ("--flow", "kanban", "--overlay", "xp", "--overlay", "xp"),
             ("--overlay", "xp"),
         ]
@@ -278,7 +277,11 @@ class MethodologyTests(unittest.TestCase):
         self.assertEqual(profiles["kanban"]["supportLevel"], "active")
         self.assertEqual(profiles["xp"]["kind"], "overlay")
         self.assertEqual(profiles["fdd"]["supportLevel"], "scaffolded")
-        self.assertEqual(profiles["am"]["supportLevel"], "planned")
+        for name in ("fdd", "dsdm", "aup"):
+            self.assertEqual(profiles[name]["enforcementStatus"], "pending")
+        self.assertEqual(profiles["am"]["supportLevel"], "active")
+        self.assertEqual(profiles["am"]["enforcementStatus"], "not-applicable")
+        self.assertEqual(profiles["am"]["guidanceStatus"], "available")
 
         task_schema = json.loads((ROOT / "schemas" / "task-packet.schema.json").read_text())
         self.assertEqual(
@@ -503,6 +506,23 @@ class MethodologyTests(unittest.TestCase):
         )
         self.assertNotIn("weight", json.dumps(aup_contract))
         self.assertNotIn("moscow", json.dumps(aup_contract).lower())
+
+    def test_am_guidance_is_opt_in_and_does_not_add_a_gate(self) -> None:
+        default = Path(self.temp.name) / "default-project"
+        default.mkdir()
+        default_init = self.run_aok("project", "init", str(default))
+        self.assertEqual(default_init.returncode, 0, default_init.stderr)
+        self.assertNotIn("Lightweight modeling", (default / "agents" / "methodology.md").read_text())
+        target = Path(self.temp.name) / "am-project"
+        target.mkdir()
+        result = self.run_aok(
+            "project", "init", str(target), "--flow", "kanban", "--overlay", "am"
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        content = (target / "agents" / "methodology.md").read_text()
+        self.assertIn("Lightweight modeling", content)
+        self.assertIn("This guidance supplies no lifecycle transition", content)
+        self.assertNotIn("required gate", content.lower())
 
     def test_validate_feature_accepts_short_and_classic_names(self) -> None:
         short = self.run_aok(

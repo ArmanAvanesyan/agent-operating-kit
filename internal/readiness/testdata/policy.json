@@ -1,0 +1,301 @@
+{
+  "version": "aok-readiness/v1",
+  "id": "example-complete-gate-policy",
+  "maxEvidenceAgeSeconds": 3600,
+  "requirements": [
+    {
+      "id": "p6.codex",
+      "validator": "native.host.codex",
+      "required": true,
+      "evidenceOrigin": "live",
+      "applicability": "applicable",
+      "scope": {
+        "host": "codex",
+        "hostVersion": "pinned-example",
+        "hostSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "os": "linux",
+        "arch": "amd64",
+        "transport": "app-server",
+        "controlPolicySha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "account": "example-account",
+        "authMode": "native-login"
+      },
+      "bindings": []
+    },
+    {
+      "id": "p6.claude",
+      "validator": "native.host.claude",
+      "required": true,
+      "evidenceOrigin": "live",
+      "applicability": "not-applicable",
+      "scope": {
+        "host": "claude-code",
+        "hostVersion": "pinned-example",
+        "hostSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "os": "linux",
+        "arch": "amd64",
+        "transport": "app-server",
+        "controlPolicySha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "account": "example-account",
+        "authMode": "native-login"
+      },
+      "bindings": []
+    },
+    {
+      "id": "p6.native-task-variants",
+      "validator": "native.native-task-variants",
+      "required": true,
+      "evidenceOrigin": "live",
+      "applicability": "applicable",
+      "scope": {
+        "host": "codex",
+        "hostVersion": "pinned-example",
+        "hostSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "os": "linux",
+        "arch": "amd64",
+        "transport": "app-server",
+        "controlPolicySha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "configurationSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "profileSha256": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "bindings": []
+    },
+    {
+      "id": "p3.collectors",
+      "validator": "native.collectors",
+      "required": true,
+      "evidenceOrigin": "live",
+      "applicability": "applicable",
+      "scope": {
+        "host": "codex",
+        "hostVersion": "pinned-example",
+        "account": "example-account",
+        "authMode": "native-login",
+        "pool": "example-pool"
+      },
+      "bindings": []
+    },
+    {
+      "id": "p4.quality",
+      "validator": "native.quality",
+      "required": true,
+      "evidenceOrigin": "live",
+      "applicability": "applicable",
+      "scope": {
+        "configurationSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "profileSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "account": "example-account",
+        "verifierSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "rubricSha256": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "bindings": []
+    },
+    {
+      "id": "p6.command-verifier",
+      "validator": "native.command-verifier",
+      "required": true,
+      "evidenceOrigin": "live",
+      "applicability": "applicable",
+      "scope": {
+        "host": "codex",
+        "hostVersion": "pinned-example",
+        "verifierSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "environmentSha256": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "bindings": []
+    },
+    {
+      "id": "p9.identity",
+      "validator": "native.identity",
+      "required": true,
+      "evidenceOrigin": "live",
+      "applicability": "applicable",
+      "scope": {
+        "account": "example-account",
+        "authMode": "native-login"
+      },
+      "bindings": []
+    },
+    {
+      "id": "p5.github",
+      "validator": "native.tracker.github",
+      "required": true,
+      "evidenceOrigin": "live",
+      "applicability": "applicable",
+      "scope": {
+        "provider": "github",
+        "origin": "https://example.invalid",
+        "nativeTenant": "tenant",
+        "container": "repo",
+        "itemKind": "issue",
+        "operation": "update",
+        "api": "v1",
+        "providerAuth": "app",
+        "deliveryMilestone": "merge"
+      },
+      "bindings": []
+    },
+    {
+      "id": "p5.azure",
+      "validator": "native.tracker.azure",
+      "required": true,
+      "evidenceOrigin": "live",
+      "applicability": "applicable",
+      "scope": {
+        "provider": "github",
+        "origin": "https://example.invalid",
+        "nativeTenant": "tenant",
+        "container": "repo",
+        "itemKind": "issue",
+        "operation": "update",
+        "api": "v1",
+        "providerAuth": "app",
+        "deliveryMilestone": "merge"
+      },
+      "bindings": []
+    },
+    {
+      "id": "p5.linear",
+      "validator": "native.tracker.linear",
+      "required": true,
+      "evidenceOrigin": "live",
+      "applicability": "applicable",
+      "scope": {
+        "provider": "github",
+        "origin": "https://example.invalid",
+        "nativeTenant": "tenant",
+        "container": "repo",
+        "itemKind": "issue",
+        "operation": "update",
+        "api": "v1",
+        "providerAuth": "app",
+        "deliveryMilestone": "merge"
+      },
+      "bindings": []
+    },
+    {
+      "id": "p5.jira",
+      "validator": "native.tracker.jira",
+      "required": true,
+      "evidenceOrigin": "live",
+      "applicability": "applicable",
+      "scope": {
+        "provider": "github",
+        "origin": "https://example.invalid",
+        "nativeTenant": "tenant",
+        "container": "repo",
+        "itemKind": "issue",
+        "operation": "update",
+        "api": "v1",
+        "providerAuth": "app",
+        "deliveryMilestone": "merge"
+      },
+      "bindings": []
+    },
+    {
+      "id": "p8.writeback",
+      "validator": "native.writeback",
+      "required": true,
+      "evidenceOrigin": "live",
+      "applicability": "applicable",
+      "scope": {
+        "provider": "github",
+        "origin": "https://example.invalid",
+        "nativeTenant": "tenant",
+        "container": "repo",
+        "itemKind": "issue",
+        "operation": "update",
+        "api": "v1",
+        "providerAuth": "app",
+        "deliveryMilestone": "merge"
+      },
+      "bindings": []
+    },
+    {
+      "id": "p8.acceptance-evidence",
+      "validator": "native.acceptance",
+      "required": true,
+      "evidenceOrigin": "live",
+      "applicability": "applicable",
+      "scope": {
+        "configurationSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "profileSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "account": "example-account",
+        "verifierSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "rubricSha256": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "bindings": []
+    },
+    {
+      "id": "p8.delivery-evidence",
+      "validator": "native.delivery-evidence",
+      "required": true,
+      "evidenceOrigin": "live",
+      "applicability": "applicable",
+      "scope": {
+        "provider": "github",
+        "origin": "https://example.invalid",
+        "nativeTenant": "tenant",
+        "container": "repo",
+        "itemKind": "issue",
+        "operation": "update",
+        "api": "v1",
+        "providerAuth": "app"
+      },
+      "bindings": []
+    },
+    {
+      "id": "p8.publication",
+      "validator": "native.publication",
+      "required": true,
+      "evidenceOrigin": "live",
+      "applicability": "applicable",
+      "scope": {
+        "host": "codex",
+        "configurationSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "environmentSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "provider": "github",
+        "origin": "https://example.invalid",
+        "nativeTenant": "tenant",
+        "container": "repo",
+        "itemKind": "issue",
+        "operation": "update",
+        "api": "v1",
+        "providerAuth": "app",
+        "deliveryMilestone": "merge"
+      },
+      "bindings": []
+    },
+    {
+      "id": "p7.connected-runtime",
+      "validator": "native.connected-runtime",
+      "required": true,
+      "evidenceOrigin": "live",
+      "applicability": "applicable",
+      "scope": {
+        "host": "codex",
+        "hostVersion": "pinned-example",
+        "controlPolicySha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "configurationSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "profileSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "account": "example-account",
+        "authMode": "native-login",
+        "pool": "example-pool"
+      },
+      "bindings": []
+    },
+    {
+      "id": "p9.operational-drills",
+      "validator": "native.operational-drills",
+      "required": true,
+      "evidenceOrigin": "live",
+      "applicability": "applicable",
+      "scope": {
+        "controlPolicySha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "environmentSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "account": "example-account"
+      },
+      "bindings": []
+    }
+  ]
+}

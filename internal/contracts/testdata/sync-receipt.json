@@ -1,0 +1,31 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "SyncReceipt",
+  "metadata": {
+    "id": "sync-receipt",
+    "name": "sync-receipt",
+    "version": "0.1.0",
+    "description": "Offline contract fixture."
+  },
+  "syncOperationRef": {
+    "kind": "SyncOperation",
+    "id": "update-title",
+    "version": "0.1.0"
+  },
+  "operationId": "op-1",
+  "operationDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "receiptId": "receipt-1",
+  "observedAt": "2026-10-23T10:02:00Z",
+  "disposition": "unknown",
+  "dispatchEvidence": [
+    {
+      "asset": {
+        "path": "assets/item.json",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "purpose": "dispatch",
+      "observedAt": "2026-10-23T10:00:00Z"
+    }
+  ],
+  "readbackEvidence": []
+}

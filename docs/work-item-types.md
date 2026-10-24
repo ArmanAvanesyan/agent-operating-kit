@@ -18,9 +18,9 @@ Change. Methodology additions are:
 | DSDM | DSDM Requirement |
 | AUP | Use Case, User Story, Non-Functional Requirement, Business Rule, Defect, Technical Work |
 
-XP and Lean affect active Kanban selections. FDD, DSDM, and AUP remain
-scaffolded flows and may be exported explicitly without selecting them. AM is
-planned and has no work-item types.
+XP, Lean, and AM affect active Kanban selections. AM contributes guidance only
+and has no additional work-item types. FDD, DSDM, and AUP remain scaffolded
+flows and may be exported explicitly without selecting them.
 
 Acceptance criteria remain embedded in each work item. FDD Subject Areas and
 Business Activities, DSDM increments and timeboxes, and AUP iterations remain

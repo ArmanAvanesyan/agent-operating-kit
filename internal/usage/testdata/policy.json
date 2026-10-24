@@ -1,0 +1,1 @@
+{"version":"aok-usage/v1","sources":[{"id":"fixture-source","host":"codex","hostVersion":"test-v1","adapterVersion":"1.0.0","authModes":["test"],"metrics":["requests"],"authority":"fixture-provider/fixture-service","maxAgeSeconds":60,"collectionAllowed":false}],"safetyMargins":{}}

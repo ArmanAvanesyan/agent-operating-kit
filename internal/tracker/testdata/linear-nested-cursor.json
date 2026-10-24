@@ -1,0 +1,1 @@
+{"data":{"organization":{"id":"workspace-uuid"},"issues":{"nodes":[{"id":"issue-uuid","identifier":"ENG-7","url":"https://linear.app/acme/issue/ENG-7","title":"Example","team":{"id":"team-uuid"},"labels":{"nodes":[],"pageInfo":{"hasNextPage":false,"endCursor":null}},"updatedAt":"2026-10-23T10:00:00Z"}],"pageInfo":{"hasNextPage":true,"endCursor":"cursor-2"}}}}

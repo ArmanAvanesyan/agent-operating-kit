@@ -1,0 +1,31 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "assignmentSha256": "9669d03c1363c5964e83dc66d83e5cfd6659f34cf86bbf644845b47d73a39eee",
+  "attemptId": "attempt-1",
+  "checkpointRefs": [],
+  "disposition": "completed",
+  "executionProfileRef": {
+    "id": "opencode-exploration",
+    "kind": "ExecutionProfile",
+    "version": "0.1.0"
+  },
+  "hostTaskBindingRef": {
+    "id": "host-attempt-1",
+    "kind": "HostTaskBinding",
+    "version": "0.1.0"
+  },
+  "inputRevision": "rev-7",
+  "kind": "RunRecord",
+  "metadata": {
+    "description": "workflowcheck fixture",
+    "id": "run-1",
+    "name": "run-1",
+    "version": "0.1.0"
+  },
+  "observedAt": "2026-10-23T10:00:00Z",
+  "outputRefs": [],
+  "policyRefs": [],
+  "runtime": "local",
+  "runtimeRunId": "r-1",
+  "runtimeVersion": "1"
+}

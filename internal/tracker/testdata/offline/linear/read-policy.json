@@ -1,0 +1,18 @@
+{
+  "version": "aok-tracker/v1",
+  "rules": [
+    {
+      "provider": "linear",
+      "origin": "https://api.linear.app",
+      "nativeTenantId": "workspace-guid",
+      "containerId": "team-guid",
+      "containerKey": "ENG",
+      "auth": {
+        "mode": "bearer",
+        "tokenEnv": "AOK_TEST_TOKEN",
+        "usernameEnv": ""
+      },
+      "principalPseudonym": "test-principal"
+    }
+  ]
+}

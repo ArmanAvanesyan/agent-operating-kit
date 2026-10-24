@@ -89,6 +89,10 @@ func TestValidateAndReadyRequirePinnedArtifactBackedEvidence(t *testing.T) {
 	if got.Status != "valid" || got.GoalStatus != "in-progress" || len(got.EligibleSteps) != 1 || got.EligibleSteps[0] != "step1" {
 		t.Fatalf("root eligibility=%+v", got)
 	}
+	trusted := ReadyWithAcceptedDeps(planArg, evidenceArg, root, "2026-06-01T00:00:00Z", []string{"step1"})
+	if trusted.Status != "valid" || len(trusted.EligibleSteps) != 1 || trusted.EligibleSteps[0] != "step2" {
+		t.Fatalf("trusted acceptance did not unlock dependent step: %+v", trusted)
+	}
 	evidence["completedSteps"] = []string{"step1"}
 	writeJSON(t, filepath.Join(root, "evidence.json"), evidence)
 	got = Ready(planArg, evidenceArg, root, "2026-06-01T00:00:00Z")

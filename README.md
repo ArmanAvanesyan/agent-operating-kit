@@ -273,8 +273,10 @@ yet enabled. See `docs/work-system-bootstrap.md`.
 
 ## Methodology Profiles
 
-Methodology, work-item, and work-system commands currently use the contributor
-Python entrypoint (`./scripts/aok`), not the distributed Go binary.
+The Go binary now provides methodology, work-item and work-system commands;
+the contributor Python entrypoint remains available. Connected Go work-system
+discovery requires an explicitly injected read-only provider. See the
+[Phase 10 operator guide](docs/broader-hosts-optional-workflows.md).
 
 Projects use one flow and optional practice overlays independently of their
 GitHub or Azure DevOps binding:
@@ -285,8 +287,9 @@ GitHub or Azure DevOps binding:
 ./scripts/aok methodology validate /path/to/project
 ```
 
-Kanban is the active default flow. XP and Lean are active overlays. FDD, DSDM,
-and AUP are scaffolded catalog entries, and AM is planned. See
+Kanban is the active default flow. XP and Lean are active overlays; AM is an
+optional guidance-only overlay with no lifecycle gate. FDD, DSDM, and AUP are
+scaffolded catalog entries. See
 `docs/methodology-profiles.md`.
 
 ## Work-Item Templates
@@ -409,8 +412,117 @@ source identities and remaining limits. See the
 observable-behavior acceptance and remaining parser-error limitation. agy native
 registration is separate from the seven-target pack renderer. The Python contributor entrypoint is unchanged.
 
+## Model evidence catalog
+
+The Go CLI provides opt-in `aok models import|validate|inspect|diff|refresh|check`
+commands for versioned model evidence catalogs and catalog-aware static agent
+resolution. They preserve source provenance and distinguish declarations,
+listings and guidance. Live probing is pending P6. Offline usage and selection consume these snapshots
+through their separate opt-in commands. See [model catalog](docs/model-catalog.md).
+
+## Usage and shared capacity
+
+The Go CLI provides opt-in offline usage validation, replay, summaries and
+remaining-capacity reports through `aok usage`. The local reference store supports
+atomic accounting reservations across participating CLIs. Live collectors and
+runtime token enforcement remain separate pending gates. See
+[usage accounting](docs/usage-accounting.md).
+
+## Offline workflow contracts
+
+The Go CLI provides `aok workflow validate <corpus-directory> [--json]` for
+work-item/host bindings, run observations, connector capabilities and operation
+receipts. It validates local declarations and evidence hashes without executing
+or authorizing operations. See [workflow contracts](docs/workflow-contracts.md).
+
 ## Repository delivery
 
 The optional [repository-delivery capability](docs/repository-delivery.md) embeds
 preservation, isolated shipping and snapshot-bound evidence. Start with
 `aok delivery doctor --json`; Python 3.11+ is required only by delivery helpers.
+
+## Explainable offline selection
+
+`aok models select` combines exact catalog compatibility, independently signed
+family outcomes and fresh remaining capacity. `aok evaluation` validates evidence,
+builds conservative estimates, replays the selector and compares recorded or
+synthetic traces. Insufficient evidence produces an explanation and abstention.
+Production quality evidence and live/runtime promotion remain separate pending
+gates. See [model selection](docs/model-selection.md) and the
+[Phase 4 delivery evidence](docs/implementation/phase-4-delivery-evidence.md).
+
+
+## Tracker capture and update drafts
+
+The Go CLI provides opt-in `aok tracker` discovery, scoped capture, offline
+import, packet projection, comparison and reviewable update plans for GitHub,
+Azure DevOps, Linear and Jira Cloud. Live reads require an external operator
+read policy; provider conformance is separately pending. Update plans grant no
+write or execution authority. See [tracker adapters](docs/tracker-adapters.md)
+and [Phase 5 delivery evidence](docs/implementation/phase-5-delivery-evidence.md).
+
+## Host execution bridges
+
+The opt-in Go `aok host` commands prepare captured assignments, replay protocol
+fixtures and drive bounded Codex App Server or Claude Code sessions under a
+trusted operator policy. Run and qualification require fresh signed control
+proofs. Host completion is a candidate result; it grants no workflow acceptance
+or runtime readiness. Both required live qualification gates remain blocked
+until those proofs are supplied. See [host bridges](docs/host-bridges.md) and
+[Phase 6 evidence](docs/implementation/phase-6-delivery-evidence.md).
+
+## Durable local runtime
+
+The opt-in Go `aok runtime` commands provide a private durable ledger, fenced
+claims, atomic P3 capacity admission, isolated checkpoints, bounded host handoff,
+synthetic replay and signed recovery. Both Phase 6 live host gates remain
+blocked in the delivered evidence; offline core checks do not qualify live
+execution. P8 verification and tracker writeback remain separate. See the
+[runtime operator guide](docs/runtime-operations.md) and
+[Phase 7 delivery evidence](docs/implementation/phase-7-delivery-evidence.md).
+
+## Verification, delivery and controlled writeback
+
+The Go CLI provides opt-in immutable candidate checks, signed acceptance,
+fenced runtime dependency projections, local repository-delivery receipt handoffs
+and a private one-send tracker outbox. Four provider writers use injected
+fixture transports; production tracker dispatch remains blocked pending each
+provider/operation/authentication gate. Both P6 host live qualification gates
+remain blocked. See [verification and writeback](docs/verification-delivery-writeback.md)
+and [Phase 8 delivery evidence](docs/implementation/phase-8-delivery-evidence.md).
+
+## Controlled pilots and production readiness
+
+The Go CLI provides `aok readiness`, offline `aok pilot` validation/replay/assessment,
+plus inspection-only SQLite snapshots through `aok operations`. Protected embedding
+services can compose native validators and existing runtime/transport boundaries.
+The standard binary installs no qualified production enrollment. Codex/Claude host
+qualification, live collectors, provider operation conformance, actual pilot evidence
+and production promotion remain separate blocked/pending gates. See
+[controlled pilots and readiness](docs/controlled-pilots-production-readiness.md)
+and [Phase 9 delivery evidence](docs/implementation/phase-9-delivery-evidence.md).
+
+The existing P3–P10 [completion implementation](docs/implementation/completion-delivery-evidence.md)
+adds `aok pilot gates`, structurally validated experiment records and protected
+calibration/experiment coordinators. Their observations grant no production or
+tracker authority; the first live end-to-end pilot remains gated on independent
+host, capacity, verifier, provider and operator qualification.
+
+
+## Broader hosts and optional workflows
+
+The Go CLI includes an opt-in compiled host registry, v2 route evidence and P7
+launch bindings, methodology/work-item parity, signed lifecycle checks, separate
+Jira Data Center snapshots, guarded provisioning boundaries and advisory campaign
+tooling. Host/provider live qualification and Windows certification remain
+separate blocked or pending gates. See [operator guide](docs/broader-hosts-optional-workflows.md)
+and [Phase 10 delivery matrix](docs/implementation/phase-10-delivery-evidence.md).
+
+## Protected enrolled services
+
+The optional operator-built `aok-enrolled` executable assembles signed-purpose
+Codex quota collection, GitHub capture/writeback, one-shot evidence trials, and
+protected authority/anchor/verifier services. Its default build cannot start
+services without a compiled operator root pin. Credentials, native enforcement,
+provider conformance, independent acceptance and production promotion remain
+separate gates. See [enrolled service operation](docs/enrolled-live-services.md).

@@ -21,6 +21,12 @@ import (
 const deliveryLauncher = "scripts/repo-delivery"
 
 func runDelivery(args []string, stdout, stderr io.Writer) (int, error) {
+	if len(args) > 0 && args[0] == "windows-preservation-evaluate" {
+		return runWindowsPreservationEvaluate(args[1:], stdout, stderr)
+	}
+	if len(args) > 0 && (args[0] == "handoff" || args[0] == "validate-handoff") {
+		return runDeliveryBridge(args, stdout, stderr)
+	}
 	if len(args) > 0 && args[0] == "doctor" {
 		if len(args) == 1 || (len(args) == 2 && args[1] == "--json") {
 			return runDeliveryDoctor(stdout)
@@ -28,7 +34,7 @@ func runDelivery(args []string, stdout, stderr io.Writer) (int, error) {
 		return 2, fmt.Errorf("Usage: aok delivery doctor --json")
 	}
 	if len(args) == 1 && (args[0] == "--help" || args[0] == "-h") {
-		fmt.Fprintln(stdout, "Usage: aok delivery <repository-delivery arguments>\nRuns the repository-delivery pack using Python 3.11 or newer.\nCommands: doctor, inspect, compare, checkpoint, snapshot, delivery, gates, review, workspace, port, cleanup, issue, pr, backlog, integration, aok, runtime, hook.\nUse aok delivery <command> --help for arguments.")
+		fmt.Fprintln(stdout, "Usage: aok delivery <repository-delivery arguments>\nRuns the repository-delivery pack using Python 3.11 or newer.\nLocal Go receipt bridge: handoff, validate-handoff.\nCommands: doctor, inspect, compare, checkpoint, snapshot, delivery, gates, review, workspace, port, cleanup, issue, pr, backlog, integration, aok, runtime, hook.\nUse aok delivery <command> --help for arguments.")
 		return 0, nil
 	}
 	root, err := requireRoot()

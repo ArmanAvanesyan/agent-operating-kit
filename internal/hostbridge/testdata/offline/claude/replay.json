@@ -1,0 +1,67 @@
+{
+  "version": "aok-host-bridge/v1",
+  "prepared": {
+    "version": "aok-host-bridge/v1",
+    "host": "claude-code",
+    "hostVersion": "2.1.303",
+    "assignmentSha256": "",
+    "snapshotSha256": "",
+    "profileSha256": "",
+    "policySha256": "",
+    "configurationId": "",
+    "configuration": {
+      "host": null,
+      "hostVersion": null,
+      "provider": null,
+      "modelId": null,
+      "modelRevision": null,
+      "reasoningMode": null,
+      "effort": null,
+      "reasoningBudgetTokens": null,
+      "generation": null,
+      "serviceTier": null,
+      "authMode": null,
+      "deployment": null,
+      "toolProfile": null
+    },
+    "model": "claude-test",
+    "workspace": "/offline/workspace",
+    "sources": [],
+    "instructions": "",
+    "input": null,
+    "outputSchema": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean",
+          "const": true
+        }
+      },
+      "required": [
+        "ok"
+      ],
+      "additionalProperties": false
+    },
+    "snapshot": null,
+    "nativeTasks": [],
+    "digest": "b2f4ab7732d7f23bd991484232fb9f3c3f5261c3f1a48877de98b77e39d7bf09"
+  },
+  "frames": [
+    {
+      "path": "frame-1.json",
+      "sha256": "e4ebaacf21f2ffd29c802011b513697e36defe0e0d756d3d5b9a373fef6cbe18"
+    },
+    {
+      "path": "frame-2.json",
+      "sha256": "99e930e430e0665d4729411fce1556b61ed647b0b8102c4aa96767355bb30938"
+    },
+    {
+      "path": "frame-3.json",
+      "sha256": "8fb32ecec518e3397b5e788ff2cec0b0875dcedb87146d5f96ab3490b7b1324d"
+    },
+    {
+      "path": "frame-4.json",
+      "sha256": "1697948608bd0bace3c2c4298d418da7077b7df48f89d30a3aab3db8ae7696c2"
+    }
+  ]
+}

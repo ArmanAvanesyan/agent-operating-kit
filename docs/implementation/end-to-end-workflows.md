@@ -122,6 +122,12 @@ override semantics are defined before execution work begins.
 
 ## P1 — Shared bindings, execution records and connector protocol
 
+Implemented static slice (2026-10-23): six core record kinds, shared semantic
+checks, an offline Go `workflow validate` command and in-memory connector
+conformance tests. See the [Phase 1 delivery plan and evidence](phase-1-shared-contracts.md)
+and [operator guide](../workflow-contracts.md). Usage/quota/selection records remain
+in P2-P4; live connectors and execution remain in their later phases.
+
 Dependencies: P0. Suggested code: new focused packages alongside
 `internal/contracts`, `internal/task` and `internal/evidence`.
 
@@ -149,6 +155,11 @@ claim another item's completion. Old readers fail clearly on unsupported version
 
 ## P2 — Convert model research into an operational catalog
 
+Delivery update (2026-10-23): **P2-core delivered**; the separate live invocation
+gate remains **pending P6**. See [delivery evidence](phase-2-model-catalog.md)
+and the [operator guide](../model-catalog.md). The probe format/importer is
+implemented; executing probes depends on the P6 transport.
+
 Dependencies: P0. Suggested code: `internal/modelcatalog`; embedded definitions
 and external signed/trusted-source policy decided in P0 (hashes alone do not imply trust).
 
@@ -171,6 +182,15 @@ not assigned invented capability scores. Adapter-supported model/effort mapping
 can be checked by the resolver, while enforcement and access remain separate gates.
 
 ## P3 — Per-CLI usage collectors and shared capacity accounting
+
+Detailed implementation plan: [Phase 3 usage and capacity](phase-3-usage-capacity.md).
+Delivery update (2026-10-23): **P3-core delivered**; live collection is pending per
+host/auth mode and runtime admission is pending P6/P7. See
+[delivery evidence](phase-3-delivery-evidence.md) and the
+[operator guide](../usage-accounting.md).
+This separates offline accounting/reference-store conformance, per-host live
+collection gates and later runtime admission enforcement. It includes shared
+account pools, simultaneous windows, remaining allowance and reset uncertainty.
 
 Dependencies: P1 and P2. Suggested code: `internal/usage`, host collector modules;
 runtime-owned private event ledger and reservation service.
@@ -230,6 +250,11 @@ it. Advisory mode cannot launch work, buy credits, switch billing, or update tra
 
 ## P5 — Tracker adapters: read first, write plans second
 
+The fixture-qualified offline core is delivered. Provider live-read qualification
+and remote writeback remain separate pending gates. See the
+[operator guide](../tracker-adapters.md) and
+[delivery evidence](phase-5-delivery-evidence.md).
+
 Dependencies: P1. Each provider gets its own fixtures and independently versioned
 capability matrix; P7/P8 unlock live execution/writeback later.
 
@@ -252,6 +277,11 @@ the API cannot enforce the supplied precondition, use a conservative field polic
 re-read/readback and report unresolved races; do not claim atomic compare-and-swap.
 
 ## P6 — Codex and Claude execution/native task bridges
+
+Implementation update: the opt-in bridge core and protocol fixtures are present.
+Both required connected qualification gates are blocked on trusted external
+control proofs; P6 is not complete. See [Phase 6 delivery evidence](phase-6-delivery-evidence.md).
+
 
 Dependencies: P1; P2 for model compatibility; P3 for run accounting.
 
@@ -281,6 +311,13 @@ deletion/clearing cannot cause false AOK acceptance. Failed/expired leases canno
 publish results. Cloud Codex invocation is marked unsupported until separately tested.
 
 ## P7 — Durable execution and quota reservations
+
+Implementation update: the local runtime core, reservation/host handoff,
+immutable checkpoints and synthetic acceptance fixtures are implemented.
+Both P6 live gates and P7 connected promotion remain blocked/pending. See
+[Phase 7 delivery evidence](phase-7-delivery-evidence.md) and the
+[detailed plan](phase-7-durable-execution-plan.md).
+
 
 Dependencies: P1, P4, one P5 provider and one P6 host.
 
@@ -327,6 +364,14 @@ remain separately scoped capabilities. This document authorizes no live external
 
 Dependencies: P8 for each claimed combination; evaluation gates below.
 
+The [detailed Phase 9 plan](phase-9-controlled-pilots-production-readiness-plan.md)
+defines work packages, blocked live gates, experiment admission, promotion
+criteria and recovery requirements. It separates offline core delivery from
+connected qualification and production promotion.
+The [operator guide](../controlled-pilots-production-readiness.md) and
+[delivery evidence](phase-9-delivery-evidence.md) record the implemented
+offline/injected scope and the remaining host/provider/live pilot gates.
+
 - First pilot: GitHub + Codex with advisory selection, then controlled dispatch.
 - Second pilot: GitHub + Claude with native task availability variants.
 - Next pilots: Azure, Linear and Jira, each with at least one proven host.
@@ -342,6 +387,11 @@ documented optional delivery helpers. No blanket cross-platform certification.
 
 ## P10 — Broader hosts and remaining optional capabilities
 
+Offline opt-in implementations and fixture checks are recorded in the
+[Phase 10 delivery matrix](phase-10-delivery-evidence.md). Live route qualification,
+platform certification and production activation remain separate blocked or
+pending gates.
+
 Dependencies: relevant P3/P6/P9 gates, not merely static adapter registration.
 
 Add OpenCode, agy, Cursor, Gemini, OpenClaw and Hermes execution one host at a time,
@@ -350,7 +400,7 @@ independently. Add evidence-backed campaign planners, outcome evaluators and
 governed optimization only after fixed-DAG execution is reliable.
 
 Keep other backlog separate: selectable FDD/DSDM/AUP require lifecycle enforcement;
-AM needs operational content; remote GitHub/Azure provisioning needs explicit
+AM now has opt-in guidance content; remote GitHub/Azure provisioning needs explicit
 plans, safe provider-specific apply/recovery and inherited-process restrictions;
 methodology/work-item/work-system Go parity needs distribution tests. These are
 not prerequisites for the first end-to-end workflow. Windows delivery preservation
@@ -615,3 +665,23 @@ implementation time. Endpoint existence is not proof of AOK integration.
 - Existing code: `internal/agentresolve/resolve.go`,
   `internal/nativebridge/export.go`, `internal/task/task.go`, `internal/planning/`,
   `scripts/aok` and `packs/repository-delivery/`.
+
+## Phase 4 offline advisory delivery
+
+Phase 4 adds catalog/accepted-outcome/current-capacity selection and offline
+signed evidence preparation, estimation, selector replay and trace comparison.
+See [the operator guide](../model-selection.md) and
+[delivery evidence](phase-4-delivery-evidence.md). Core implementation, production
+quality qualification, live observation and P6/P7 dispatch remain separate gates.
+
+### Phase 8 verification and controlled writeback
+
+Phase 8 adds offline candidate verification, independently signed acceptance,
+a versioned acceptance projection in the local runtime database, translation of
+existing repository-delivery receipts, and a durable narrow-grant tracker outbox.
+See [operator guide](../verification-delivery-writeback.md) and
+[delivery evidence](phase-8-delivery-evidence.md). Historical P7 candidate
+`accepted:false` records remain unchanged. Both P6 live host gates, qualified
+verifier controls and each provider's read/write conformance remain separate.
+The CLI registers no production network writer; fixture conformance does not
+establish end-to-end production delivery.

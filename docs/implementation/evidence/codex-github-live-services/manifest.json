@@ -1,0 +1,222 @@
+{
+  "version": "aok-live-service-delivery-evidence/v1",
+  "date": "2026-10-24",
+  "scope": "P3-P10 completion",
+  "implementation": "implemented-opt-in",
+  "fixtureConformance": "passed",
+  "independentReview": "findings-addressed",
+  "credentialEnrollment": "external-required",
+  "liveQualification": "blocked-pending-measurements",
+  "firstP9Pilot": "not-run",
+  "productionActivation": "disabled",
+  "authorizationGranted": false,
+  "executionReady": false,
+  "goVersion": "1.22.12",
+  "pythonRegression": {
+    "tests": 268,
+    "skipped": 4,
+    "status": "passed"
+  },
+  "buildTargets": 6,
+  "binariesPerTarget": 2,
+  "sourceFiles": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "a6a2f4bb9f152be9f37913950895549b5d79663709543244d305407a7726f33d"
+    },
+    {
+      "path": "cmd/aok-enrolled/main.go",
+      "sha256": "9af1f2e847720d4bff33c4adbd98a2b8d97a6003cd5612e79c5d063dbe7fac43"
+    },
+    {
+      "path": "cmd/aok-enrolled/main_test.go",
+      "sha256": "7f3b1ac2ca56a691544aa1faeeb1b34ae33650760db41a3c1c0f934fbaa8fe36"
+    },
+    {
+      "path": "docs/enrolled-live-services.md",
+      "sha256": "39715f11b6e002d97394997c4ecd709cb9b815566f54e545410e03aa384be643"
+    },
+    {
+      "path": "docs/implementation/codex-github-live-unblocking-delivery-evidence.md",
+      "sha256": "ed870cc2da8f926892ebabc767daa2e7940ab582506ddad511186c458438a041"
+    },
+    {
+      "path": "internal/cli/pilot.go",
+      "sha256": "2ead0ba5750989754a687cbbe4e12383711e8d1fe593f9b3dc1db9a62730cdfa"
+    },
+    {
+      "path": "internal/cli/pilot_completion.go",
+      "sha256": "e7b09df17bbdee7cc5e4de316ef46fd79f9f032dd6eb6b442894f144d287f6c1"
+    },
+    {
+      "path": "internal/cli/verification_connected.go",
+      "sha256": "c57a6e6c8380c3780a6c48718edad213dc06e1bb4ef695a46e36d51366b175ba"
+    },
+    {
+      "path": "internal/cli/writeback.go",
+      "sha256": "5acf6ed3100899431bdbbdfc23c862b2b9a00f9a9ab1a3baac4e50ae4c3d68c2"
+    },
+    {
+      "path": "internal/enrolled/anchorserver/README.md",
+      "sha256": "4636e111c99f9ca2cc62f766ee74eb640936e3627d99295ea634453feddd3087"
+    },
+    {
+      "path": "internal/enrolled/anchorserver/server.go",
+      "sha256": "42e4b2220abe9ee9675aa9c848b575ec190eb32d3e41e86e2c728af12733cd6c"
+    },
+    {
+      "path": "internal/enrolled/anchorserver/server_test.go",
+      "sha256": "9a51084121c56acd2b23f77615550885ff4a9e958ddac0d48b34eb817c7e93a9"
+    },
+    {
+      "path": "internal/enrolled/artifacts/README.md",
+      "sha256": "f814524b77f83add4e8720eaf83ceeab3b5a028ccfc290e549781e5e56a47330"
+    },
+    {
+      "path": "internal/enrolled/artifacts/store.go",
+      "sha256": "e6073a84303352997684cb1f0ba4c65b4d568d36907574580c40b276aa4bd850"
+    },
+    {
+      "path": "internal/enrolled/artifacts/store_test.go",
+      "sha256": "d7cc4c9503ce1bdc282203a288d08a97fbacd9e194fd5319166c90387156f832"
+    },
+    {
+      "path": "internal/enrolled/authority/adapters.go",
+      "sha256": "4fc7423d661048419c38991a66bc003e52fba66001a594aa23533ab487bee45f"
+    },
+    {
+      "path": "internal/enrolled/authority/adapters_test.go",
+      "sha256": "59c0b5bfedbe4633372ee6c2111b0d6b6eca7f97494a8324fb99bc289bcd197e"
+    },
+    {
+      "path": "internal/enrolled/authority/anchor.go",
+      "sha256": "de8d290ebc563574cb872de846e1da2b021c81a271270e28e1580933540c9349"
+    },
+    {
+      "path": "internal/enrolled/authority/anchor_test.go",
+      "sha256": "c3efcb0eaf98d7f6c0b269206b975c305b79046c31b5785617fefcdd292b5c94"
+    },
+    {
+      "path": "internal/enrolled/authority/authority.go",
+      "sha256": "9115e1d0c856466da38329e8493942a8d90b63ba5f95f23611494f250b920012"
+    },
+    {
+      "path": "internal/enrolled/authority/authority_test.go",
+      "sha256": "394ff500bf8c492325daa609cae4be1bce791f6dbd60242081090a2c0f90c8d1"
+    },
+    {
+      "path": "internal/enrolled/authority/collectors.go",
+      "sha256": "0d32bc022770d421d0eb007e882e413e9453df267d295059f90ba9d11dc1a717"
+    },
+    {
+      "path": "internal/enrolled/authority/state.go",
+      "sha256": "88db71ac4f4acbe675d1bc56e2eb2605e6c37275b2a87319b95116ec3f11ea68"
+    },
+    {
+      "path": "internal/enrolled/bootstrap/bootstrap.go",
+      "sha256": "10b7c2dffa6d3b2e0ca76d607a249133fbda0cbeb1fef7716bb9d41ea1f5078f"
+    },
+    {
+      "path": "internal/enrolled/bootstrap/bootstrap_test.go",
+      "sha256": "24ae4a1790b52b486bc33baf427129b1b3b3d2ac40060fd23160ec6218369083"
+    },
+    {
+      "path": "internal/enrolled/bootstrap/worker.go",
+      "sha256": "683ff3dc645fefa5b38354e5f727f3f31c632d064bf787a6183ab625610fb694"
+    },
+    {
+      "path": "internal/enrolled/codex/factory.go",
+      "sha256": "ce8a5946a3477160c7830f088f6567a2970833c6274d337ad4c231e3e1e883c9"
+    },
+    {
+      "path": "internal/enrolled/codex/factory_test.go",
+      "sha256": "efb94c9cce827ec5353ce2c04809a89cd29a969b8bc728ad604c233db751528a"
+    },
+    {
+      "path": "internal/enrolled/codex/process_unix.go",
+      "sha256": "945dc1d98004776d77e9b5b8bf5e222d333e8b88367807855a97c7866a386e0c"
+    },
+    {
+      "path": "internal/enrolled/codex/process_windows.go",
+      "sha256": "be92a41a75f2679df2051269ca3422041ba75a9a58d8c7428be0400566b3a9b5"
+    },
+    {
+      "path": "internal/enrolled/github/collector.go",
+      "sha256": "6fe278c18f2da5e22c0d1d0d2de6756c1819288d6e36611c36e5ee1f782dfc1d"
+    },
+    {
+      "path": "internal/enrolled/github/collector_test.go",
+      "sha256": "14cb98643ad3ae2776276e6efff15de902547aaf6dce09ba30e89392bb7e1362"
+    },
+    {
+      "path": "internal/enrolled/github/process_unix.go",
+      "sha256": "fd3cfc17c47b3a932396dd81484478a4340e4a5541b70eb47c5611c5904e4674"
+    },
+    {
+      "path": "internal/enrolled/github/process_windows.go",
+      "sha256": "f2d4dc3335d1fa0c3402ec3deee2e3b3999b40e14ffbeeadbd577fee0070678f"
+    },
+    {
+      "path": "internal/enrolled/github/services.go",
+      "sha256": "aa30c7d0de90a290a67740bee6ff06b89da4089ad86124e96b93bff558f9680c"
+    },
+    {
+      "path": "internal/enrolled/github/services_test.go",
+      "sha256": "dcf42327aba146c44860cb3012fd5a09f903cfc07cc5bc8ed9824f5d15967073"
+    },
+    {
+      "path": "internal/enrolled/verifier/service.go",
+      "sha256": "dbfb3dd7ec5f3cf00d3ed661621f80ddf68351989009e2902a4bcf7b4a1bd7ec"
+    },
+    {
+      "path": "internal/enrolled/verifier/service_test.go",
+      "sha256": "671b16e490f9e584574cf01b453c11534efd5e5ff40366772773a5d61fa4c651"
+    },
+    {
+      "path": "internal/enrolled/verifier/uploading_controls.go",
+      "sha256": "fe7e27bc2321ed6f346741629d1c59cfab4a3918b405ceb94a6e7bec8bf8236f"
+    },
+    {
+      "path": "internal/enrolled/verifier/uploading_controls_test.go",
+      "sha256": "9e123e41d5e6fc1bff18d1f4513a0a7f3b7cad9abbd8eabd7307381d31928845"
+    },
+    {
+      "path": "internal/verification/verification.go",
+      "sha256": "45d6052177c15fcda540d18dfcd85b034371e3e35db4ed48db0d2217496b394d"
+    },
+    {
+      "path": "scripts/testing/verify-enrolled-offline.py",
+      "sha256": "cae6bcdde47fc52f8f5f38deba6b595ea2aadcbeb36c45329b07af658b253f2e"
+    }
+  ],
+  "logs": [
+    {
+      "path": "cross-builds.txt",
+      "sha256": "fc60801653dfc3a47f2785d0854506ad5263c68d4a56639b82437f5f488d4dbf"
+    },
+    {
+      "path": "go-races.txt",
+      "sha256": "4ee92a80e964a12df43e14e7af821716cb9d15fd909276dec362fc1b0bbcbe8d"
+    },
+    {
+      "path": "go-suite.txt",
+      "sha256": "d067c58215529ae9f32f991fc43ff15bab71abbd3aa4a5d69fb5f246a1387dad"
+    },
+    {
+      "path": "installer-report.json",
+      "sha256": "ea8ca106baac656630cb17ba8f48a9bb2526f7bc2e503be672b5c7b99e23133c"
+    },
+    {
+      "path": "kit-validation.txt",
+      "sha256": "4650d13c1de06db17c45a11f4bba8a939500fd2b8ae9c53983b3959df917e89b"
+    },
+    {
+      "path": "offline-smoke.txt",
+      "sha256": "1c3304de6d90152618b63afd76cbcae291842110541acc716eac0fe4af8b93c4"
+    },
+    {
+      "path": "python-summary.txt",
+      "sha256": "a638e971ad95e483b487fbdf74fa3239fc8e7c20935ed33f897e8702eef47e2a"
+    }
+  ]
+}

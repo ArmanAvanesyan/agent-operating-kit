@@ -140,6 +140,9 @@ class WorkItemTests(unittest.TestCase):
                 result = self.run_aok("work-item", "list", *args)
                 self.assertEqual(result.returncode, 1)
 
+        am = self.run_aok("work-item", "list", "--flow", "kanban", "--overlay", "am")
+        self.assertEqual(am.returncode, 0, am.stderr)
+
     def test_scaffold_all_outputs_is_idempotent_and_preserves_project(self) -> None:
         self.init(
             "--flow",

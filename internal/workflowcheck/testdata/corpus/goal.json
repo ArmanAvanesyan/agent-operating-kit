@@ -1,0 +1,56 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "GoalContract",
+  "metadata": {
+    "id": "explore-goal",
+    "name": "explore-goal",
+    "version": "0.1.0",
+    "description": "Synthetic planning fixture; no execution or native readiness attestation."
+  },
+  "outcome": "Prepare a synthetic exploration report.",
+  "scope": {
+    "repositories": [
+      "workspace"
+    ],
+    "writeRoots": [
+      "reports"
+    ]
+  },
+  "successPredicates": [
+    {
+      "id": "goal-verified",
+      "description": "Synthetic artifact-backed check.",
+      "verifierRef": {
+        "kind": "Capability",
+        "id": "output-schema-valid",
+        "version": "0.1.0"
+      },
+      "required": true
+    }
+  ],
+  "invariants": [
+    {
+      "id": "unchanged",
+      "description": "Synthetic artifact-backed check.",
+      "verifierRef": {
+        "kind": "Capability",
+        "id": "output-schema-valid",
+        "version": "0.1.0"
+      },
+      "required": true
+    }
+  ],
+  "limits": {
+    "maxAttempts": 2,
+    "maxReplans": 0,
+    "timeoutSeconds": 900
+  },
+  "stopConditions": [
+    "verified-success",
+    "cancelled",
+    "budget-exhausted",
+    "blocked",
+    "no-defensible-next-step"
+  ],
+  "verificationPolicy": "all-required-pass-no-required-unknown"
+}

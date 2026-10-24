@@ -18,6 +18,17 @@ import (
 // Ready evaluates one plan against supplied, hash-bound evidence. It performs
 // no dispatch and uses asOf instead of consulting the machine clock.
 func Ready(planPath, evidencePath, corpusRoot, asOf string) Report {
+	return ready(planPath, evidencePath, corpusRoot, asOf, nil)
+}
+
+// ReadyWithAcceptedDeps accepts predecessor IDs only from a caller that has
+// already verified protected P8 runtime projections. Task data and planning
+// evidence remain untrusted completion inputs at the runtime boundary.
+func ReadyWithAcceptedDeps(planPath, evidencePath, corpusRoot, asOf string, acceptedSteps []string) Report {
+	return ready(planPath, evidencePath, corpusRoot, asOf, acceptedSteps)
+}
+
+func ready(planPath, evidencePath, corpusRoot, asOf string, acceptedSteps []string) Report {
 	if corpusRoot == "" {
 		absPlan, err := filepath.Abs(planPath)
 		if err != nil {
@@ -155,6 +166,13 @@ func Ready(planPath, evidencePath, corpusRoot, asOf string) Report {
 	for _, v := range array(evidence.Object["completedSteps"]) {
 		completed[stringValue(v)] = true
 	}
+	accepted := map[string]bool{}
+	for _, id := range acceptedSteps {
+		if id != "" {
+			accepted[id] = true
+			completed[id] = true
+		}
+	}
 	checkPassing := func(id string, required bool) bool {
 		o, ok := outcomes[id]
 		if !ok {
@@ -175,6 +193,9 @@ func Ready(planPath, evidencePath, corpusRoot, asOf string) Report {
 		defer func() { doneKnown[id] = true; doneMemo[id] = done }()
 		if !completed[id] {
 			return false
+		}
+		if accepted[id] {
+			return true
 		}
 		s := stepByID[id]
 		for _, dep := range array(s["dependsOn"]) {

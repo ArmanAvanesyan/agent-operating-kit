@@ -1,0 +1,18 @@
+{
+  "version": "aok-tracker/v1",
+  "rules": [
+    {
+      "provider": "github",
+      "origin": "https://api.github.com",
+      "nativeTenantId": "owner-node",
+      "containerId": "repo-node",
+      "containerKey": "acme/widgets",
+      "auth": {
+        "mode": "gh-session",
+        "tokenEnv": "",
+        "usernameEnv": ""
+      },
+      "principalPseudonym": "test-principal"
+    }
+  ]
+}

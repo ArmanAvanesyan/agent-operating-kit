@@ -1,0 +1,86 @@
+[
+  {
+    "binary": "aok",
+    "os": "darwin",
+    "arch": "amd64",
+    "sha256": "24e96b6c0b73db8e92b88009ee50c354f2aa3f76055e9e2af30cfd10fbe95501",
+    "status": "passed"
+  },
+  {
+    "binary": "aok",
+    "os": "darwin",
+    "arch": "arm64",
+    "sha256": "4eb0a13ed92aa0054692351ef01436936baf7c7e5d94a922aefa08fd985df1a0",
+    "status": "passed"
+  },
+  {
+    "binary": "aok",
+    "os": "linux",
+    "arch": "amd64",
+    "sha256": "8623e014d2012511c1f304be7fc7a9a5e5d764d3d6693ae8b11be02752db71b6",
+    "status": "passed"
+  },
+  {
+    "binary": "aok",
+    "os": "linux",
+    "arch": "arm64",
+    "sha256": "6f5c66bc0fbb9d730919e0fbd55d27ffb450b5627d13cff64abb013161ad6319",
+    "status": "passed"
+  },
+  {
+    "binary": "aok",
+    "os": "windows",
+    "arch": "amd64",
+    "sha256": "64b4f5ccb962ad033c482f93948dfba8859a0d07fc1efef12dbe5a4556c4b410",
+    "status": "passed"
+  },
+  {
+    "binary": "aok",
+    "os": "windows",
+    "arch": "arm64",
+    "sha256": "1ab2035ac572298792789123d6e778d17c4671a850cafa626f919a5c0badaddc",
+    "status": "passed"
+  },
+  {
+    "binary": "aok-enrolled",
+    "os": "darwin",
+    "arch": "amd64",
+    "sha256": "9c02be89d5e794bb8781a3054ece053e277dad4c1861ba67cece0956c50d9bd5",
+    "status": "passed"
+  },
+  {
+    "binary": "aok-enrolled",
+    "os": "darwin",
+    "arch": "arm64",
+    "sha256": "889670b6cdad699f1427a076d4c9281ef8b5933f914d52ae7559d2370daaf6fa",
+    "status": "passed"
+  },
+  {
+    "binary": "aok-enrolled",
+    "os": "linux",
+    "arch": "amd64",
+    "sha256": "b44f9d38810b12919be485d62863156d74a6540bcf100b9ace0fcf90e78b6240",
+    "status": "passed"
+  },
+  {
+    "binary": "aok-enrolled",
+    "os": "linux",
+    "arch": "arm64",
+    "sha256": "47ee136de3334dea04a3550f0fc4d00c77f94c58058f9317087bbeb2f0f4686e",
+    "status": "passed"
+  },
+  {
+    "binary": "aok-enrolled",
+    "os": "windows",
+    "arch": "amd64",
+    "sha256": "7c22cf1895d70c3d6482862eab88765bc7b76b7524ea5d668c7071de8f0f2f88",
+    "status": "passed"
+  },
+  {
+    "binary": "aok-enrolled",
+    "os": "windows",
+    "arch": "arm64",
+    "sha256": "ace03fa8a58b1b844640a768d5a0665292fd8380ae6c44e92b86c9e4cd2ab386",
+    "status": "passed"
+  }
+]

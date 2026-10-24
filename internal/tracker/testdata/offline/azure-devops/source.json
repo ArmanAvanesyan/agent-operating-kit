@@ -1,0 +1,25 @@
+{
+  "version": "aok-tracker/v1",
+  "provider": "azure-devops",
+  "origin": "https://dev.azure.com",
+  "apiVersion": "7.1",
+  "nativeTenantId": "tenant-guid",
+  "containerId": "project-guid",
+  "containerKey": "acme/project",
+  "principalPseudonym": "test-principal",
+  "auth": {
+    "mode": "bearer",
+    "tokenEnv": "AOK_TEST_TOKEN",
+    "usernameEnv": ""
+  },
+  "scope": {
+    "itemIds": [
+      "1"
+    ],
+    "query": "",
+    "comments": false,
+    "relations": false,
+    "projects": false
+  },
+  "mappingVersion": "map-v1"
+}

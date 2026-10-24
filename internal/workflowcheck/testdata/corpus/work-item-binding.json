@@ -1,0 +1,32 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "displayKey": "ORG-17",
+  "fieldMappings": [
+    {
+      "canonicalField": "title",
+      "owner": "tracker",
+      "providerFieldId": "title",
+      "supported": true
+    }
+  ],
+  "identity": {
+    "containerId": "repo",
+    "itemKind": "issue",
+    "provider": "github",
+    "remoteId": "issue-17",
+    "tenantId": "org"
+  },
+  "kind": "WorkItemBinding",
+  "mappingVersion": "github-v1",
+  "metadata": {
+    "description": "workflowcheck fixture",
+    "id": "issue-17",
+    "name": "issue-17",
+    "version": "0.1.0"
+  },
+  "observedSourceRevision": "rev-7",
+  "packet": {
+    "path": "assets/task.json",
+    "sha256": "4f2659fec619c6d1da3e61327e78987f11f6eec9b54d2a398b6a6a8aade32b05"
+  }
+}

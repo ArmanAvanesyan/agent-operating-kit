@@ -1,0 +1,31 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "kind": "WorkItemBinding",
+  "metadata": {
+    "id": "work-item-binding",
+    "name": "work-item-binding",
+    "version": "0.1.0",
+    "description": "Offline contract fixture."
+  },
+  "identity": {
+    "provider": "github",
+    "tenantId": "acme",
+    "containerId": "repo-1",
+    "remoteId": "issue-42",
+    "itemKind": "issue"
+  },
+  "packet": {
+    "path": "assets/item.json",
+    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "observedSourceRevision": "rev-17",
+  "mappingVersion": "1",
+  "fieldMappings": [
+    {
+      "canonicalField": "title",
+      "providerFieldId": "title",
+      "owner": "tracker",
+      "supported": true
+    }
+  ]
+}

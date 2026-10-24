@@ -1,0 +1,25 @@
+{
+  "version": "aok-tracker/v1",
+  "provider": "github",
+  "origin": "https://api.github.com",
+  "apiVersion": "2022-11-28",
+  "nativeTenantId": "owner-node",
+  "containerId": "repo-node",
+  "containerKey": "acme/widgets",
+  "principalPseudonym": "test-principal",
+  "auth": {
+    "mode": "gh-session",
+    "tokenEnv": "",
+    "usernameEnv": ""
+  },
+  "scope": {
+    "itemIds": [
+      "1"
+    ],
+    "query": "",
+    "comments": false,
+    "relations": false,
+    "projects": false
+  },
+  "mappingVersion": "map-v1"
+}

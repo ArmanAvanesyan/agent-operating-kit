@@ -1,0 +1,67 @@
+{
+  "version": "aok-tracker/v1",
+  "source": {
+    "version": "aok-tracker/v1",
+    "provider": "github",
+    "origin": "https://api.github.com",
+    "apiVersion": "2022-11-28",
+    "nativeTenantId": "owner-node",
+    "containerId": "repo-node",
+    "containerKey": "acme/widgets",
+    "principalPseudonym": "test-principal",
+    "auth": {
+      "mode": "gh-session",
+      "tokenEnv": "",
+      "usernameEnv": ""
+    },
+    "scope": {
+      "itemIds": [
+        "1"
+      ],
+      "query": "",
+      "comments": false,
+      "relations": false,
+      "projects": false
+    },
+    "mappingVersion": "map-v1"
+  },
+  "mode": "capture",
+  "pages": [
+    {
+      "request": {
+        "method": "GET",
+        "path": "/repos/acme/widgets",
+        "body": null,
+        "kind": "github-repository",
+        "itemId": ""
+      },
+      "status": 200,
+      "headers": {
+        "etag": "fixture-etag"
+      },
+      "asset": {
+        "path": "assets/0000.json",
+        "sha256": "fe2a45529875ffd70715eb434e3725e708b89dc614026884465c300b4cade447"
+      },
+      "observedAt": "2026-10-24T12:00:00Z"
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/repos/acme/widgets/issues/1",
+        "body": null,
+        "kind": "github-item",
+        "itemId": "1"
+      },
+      "status": 200,
+      "headers": {
+        "etag": "fixture-etag"
+      },
+      "asset": {
+        "path": "assets/0001.json",
+        "sha256": "974711b7ecb8f478bf3bd066a659407afb2a041bb7774e69bcb248aafe25f966"
+      },
+      "observedAt": "2026-10-24T12:00:00Z"
+    }
+  ]
+}

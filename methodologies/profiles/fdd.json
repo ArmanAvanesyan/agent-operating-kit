@@ -4,6 +4,7 @@
   "displayName": "Feature-Driven Development",
   "description": "Feature-list and domain-model-driven planning.",
   "supportLevel": "scaffolded",
+  "enforcementStatus": "pending",
   "order": 20,
   "fragment": null,
   "requiredInputs": ["Feature ID", "Model link"],

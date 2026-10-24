@@ -1,0 +1,65 @@
+{
+  "acceptance": [
+    "All required output and policy checks pass.",
+    "Human assessment confirms source-grounded findings."
+  ],
+  "agent": {
+    "id": "repository-explorer",
+    "kind": "Agent",
+    "version": "0.1.0"
+  },
+  "apiVersion": "aok/v1alpha1",
+  "fixtures": [
+    {
+      "datasetRevision": "abc123",
+      "id": "fixture",
+      "taskPacket": "assets/task.json"
+    }
+  ],
+  "kind": "EvaluationContract",
+  "metadata": {
+    "description": "Proposed documentation fixture; not operational configuration.",
+    "id": "exploration-evaluation",
+    "name": "Exploration Evaluation",
+    "version": "0.1.0"
+  },
+  "metrics": [
+    {
+      "direction": "higher",
+      "id": "required-deliverables-valid",
+      "threshold": 1,
+      "unit": "fraction"
+    },
+    {
+      "direction": "lower",
+      "id": "elapsed-time",
+      "threshold": null,
+      "unit": "seconds"
+    },
+    {
+      "direction": "lower",
+      "id": "cost-per-accepted-task",
+      "threshold": null,
+      "unit": "USD"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "opencode-exploration",
+      "kind": "ExecutionProfile",
+      "version": "0.1.0"
+    }
+  ],
+  "repetitions": 3,
+  "results": [
+    {
+      "evidence": [],
+      "profile": {
+        "id": "opencode-exploration",
+        "kind": "ExecutionProfile",
+        "version": "0.1.0"
+      },
+      "status": "not-run"
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "apiVersion": "aok/v1alpha1",
+  "cancellation": {
+    "recordInflightActions": true,
+    "rollback": "explicit-compensations-only",
+    "stopNewActions": true
+  },
+  "checkpoint": {
+    "enabled": false,
+    "formatVersion": "none",
+    "resumeRequires": [
+      "compatible-manifest",
+      "verified-checkpoint",
+      "trusted-authorization"
+    ]
+  },
+  "kind": "LifecyclePolicy",
+  "metadata": {
+    "description": "Proposed documentation fixture; not operational configuration.",
+    "id": "bounded-analysis",
+    "name": "Bounded Analysis",
+    "version": "0.1.0"
+  },
+  "retry": {
+    "backoffSeconds": 5,
+    "maxAttempts": 2,
+    "retryableErrors": [
+      "transient-provider-unavailable"
+    ],
+    "sideEffects": "reconcile-before-retry"
+  },
+  "states": [
+    "queued",
+    "running",
+    "suspended",
+    "completed",
+    "partial",
+    "blocked",
+    "failed",
+    "cancelled",
+    "timed-out"
+  ],
+  "transitions": [
+    {
+      "condition": "Readiness passes.",
+      "from": "queued",
+      "to": "running"
+    },
+    {
+      "condition": "Required readiness check fails.",
+      "from": "queued",
+      "to": "blocked"
+    },
+    {
+      "condition": "Cancelled before launch.",
+      "from": "queued",
+      "to": "cancelled"
+    },
+    {
+      "condition": "Executor records suspended outcome.",
+      "from": "running",
+      "to": "suspended"
+    },
+    {
+      "condition": "Executor records completed outcome.",
+      "from": "running",
+      "to": "completed"
+    },
+    {
+      "condition": "Executor records partial outcome.",
+      "from": "running",
+      "to": "partial"
+    },
+    {
+      "condition": "Executor records blocked outcome.",
+      "from": "running",
+      "to": "blocked"
+    },
+    {
+      "condition": "Executor records failed outcome.",
+      "from": "running",
+      "to": "failed"
+    },
+    {
+      "condition": "Executor records cancelled outcome.",
+      "from": "running",
+      "to": "cancelled"
+    },
+    {
+      "condition": "Executor records timed-out outcome.",
+      "from": "running",
+      "to": "timed-out"
+    },
+    {
+      "condition": "Checkpoint compatible and trusted resume authorized.",
+      "from": "suspended",
+      "to": "running"
+    },
+    {
+      "condition": "Cancellation requested.",
+      "from": "suspended",
+      "to": "cancelled"
+    }
+  ]
+}

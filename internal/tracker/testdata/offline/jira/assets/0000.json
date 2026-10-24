@@ -1,0 +1,1 @@
+{"id":"1","key":"ENG-1","self":"https://acme.atlassian.net/rest/api/3/issue/1","fields":{"project":{"id":"10001","key":"ENG"},"summary":"Fixture issue","description":{"type":"doc","version":1,"content":[{"type":"paragraph","content":[{"type":"text","text":"captured"}]}]},"updated":"2026-10-22T10:00:00.000+0000"}}

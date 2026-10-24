@@ -11,10 +11,12 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/agentpolicy"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/agentvalidate"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/contracts"
+	"github.com/ArmanAvanesyan/agent-operating-kit/internal/modelcatalog"
 )
 
 const (
@@ -44,6 +46,29 @@ func ResolveWithInstructions(assignmentPath, corpusRoot string) (Report, []Instr
 }
 
 func resolveInstructions(assignmentPath, corpusRoot string) (Report, []InstructionFile) {
+	return resolveInstructionsCatalog(assignmentPath, corpusRoot, nil, time.Time{})
+}
+
+// ResolveWithCatalog captures the explicit catalog and policy once before
+// resolving the corpus. Existing Resolve callers retain the original behavior.
+func ResolveWithCatalog(assignmentPath, corpusRoot, catalogPath, policyPath string, asOf time.Time) Report {
+	if asOf.IsZero() {
+		r := Report{Diagnostics: []contracts.Diagnostic{}}
+		r.add("resolve.catalog.as-of", "", "asOf", "error", "catalog resolution requires an explicit evaluation time")
+		r.finish("invalid")
+		return r
+	}
+	catalog, checked := modelcatalog.Load(catalogPath, policyPath)
+	if catalog == nil || checked.Status != "valid" {
+		r := Report{Diagnostics: checked.Diagnostics}
+		r.finish("invalid")
+		return r
+	}
+	r, _ := resolveInstructionsCatalog(assignmentPath, corpusRoot, catalog, asOf)
+	return r
+}
+
+func resolveInstructionsCatalog(assignmentPath, corpusRoot string, catalog *modelcatalog.Capture, asOf time.Time) (Report, []InstructionFile) {
 	report := Report{Diagnostics: []contracts.Diagnostic{}}
 	capture, err := captureCorpus(assignmentPath, corpusRoot)
 	if err != nil {
@@ -65,7 +90,7 @@ func resolveInstructions(assignmentPath, corpusRoot string) (Report, []Instructi
 		report.finish("invalid")
 		return report, nil
 	}
-	resolved, err := resolveCaptured(corpus, capture, &report)
+	resolved, err := resolveCaptured(corpus, capture, &report, catalog, asOf)
 	if err != nil {
 		if !hasErrors(report.Diagnostics) {
 			report.add("resolve.selection", capture.assignmentRel, "", "error", err.Error())
@@ -74,6 +99,15 @@ func resolveInstructions(assignmentPath, corpusRoot string) (Report, []Instructi
 		return report, nil
 	}
 	report.Snapshot = resolved
+	if resolved.CatalogEvidence != nil {
+		for _, finding := range resolved.CatalogEvidence.Check.Findings {
+			severity := "info"
+			if finding.Status != "supported" {
+				severity = "warning"
+			}
+			report.add("resolve.catalog."+finding.Status, capture.assignmentRel, finding.Field, severity, finding.Message)
+		}
+	}
 	for _, e := range resolved.ReadinessEvidence {
 		report.add("resolve.readiness.unverified", e.Source, e.Field, "warning", e.Message)
 	}
@@ -229,7 +263,7 @@ func captureCorpus(assignmentPath, corpusRoot string) (*capturedCorpus, error) {
 	return c, nil
 }
 
-func resolveCaptured(corpus *agentvalidate.Corpus, capture *capturedCorpus, report *Report) (*Snapshot, error) {
+func resolveCaptured(corpus *agentvalidate.Corpus, capture *capturedCorpus, report *Report, catalog *modelcatalog.Capture, asOf time.Time) (*Snapshot, error) {
 	var assignment contracts.AgentAssignment
 	resourceFound := false
 	for _, loaded := range corpus.Resources {
@@ -344,6 +378,18 @@ func resolveCaptured(corpus *agentvalidate.Corpus, capture *capturedCorpus, repo
 		ReadinessEvidence:     readinessEvidence,
 		CompatibilityEvidence: compatibilityEvidence,
 		Sources:               append([]Source(nil), capture.sources...),
+	}
+	if catalog != nil {
+		for i := range snapshot.CompatibilityEvidence {
+			switch snapshot.CompatibilityEvidence[i].Check {
+			case "adapter", "adapter-interface", "adapter-version", "model", "model-provider":
+				snapshot.CompatibilityEvidence[i].Message = "Static catalog findings are recorded separately in catalogEvidence; live availability and runtime enforcement remain unverified"
+			}
+		}
+		profileResource := byRef[refKey(assignment.ExecutionProfile.Kind, assignment.ExecutionProfile.ID, assignment.ExecutionProfile.Version)]
+		profileHash := modelcatalog.Hash(profileResource.Document)
+		check := modelcatalog.CheckWithProfileDigest(catalog, profile, profileHash, asOf)
+		snapshot.CatalogEvidence = &CatalogEvidence{CatalogSHA256: catalog.CatalogSHA256, PolicySHA256: catalog.PolicySHA256, ProfileSHA256: profileHash, AsOf: asOf.UTC().Format(time.RFC3339Nano), Check: check}
 	}
 	b, err := snapshot.digestBytes()
 	if err != nil {

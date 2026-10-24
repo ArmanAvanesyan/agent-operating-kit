@@ -1,0 +1,17 @@
+{
+  "version": "aok-verification/v1",
+  "id": "fixture-candidate",
+  "origin": "fixture",
+  "repository": "fixture/repository",
+  "baseRevision": "fixture-base",
+  "sourceRevision": "fixture-head",
+  "assets": [
+    {
+      "path": "answer.txt",
+      "sha256": "4458094ceb4e67cadaa511da6233ab86027d372c0281f00adb40489636ba9d84",
+      "executable": false,
+      "role": "deliverable"
+    }
+  ],
+  "evidence": []
+}

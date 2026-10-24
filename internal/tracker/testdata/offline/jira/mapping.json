@@ -1,0 +1,53 @@
+{
+  "relationTypes": null,
+  "version": "aok-tracker/v1",
+  "id": "fixture",
+  "provider": "jira",
+  "mappingVersion": "map-v1",
+  "rules": [
+    {
+      "packetField": "title",
+      "providerFieldId": "summary",
+      "valueMap": null,
+      "owner": "human"
+    },
+    {
+      "packetField": "spec",
+      "providerFieldId": "descriptionText",
+      "valueMap": null,
+      "owner": "human"
+    },
+    {
+      "packetField": "status",
+      "providerFieldId": "",
+      "literal": "inbox",
+      "valueMap": null,
+      "owner": "aok"
+    },
+    {
+      "packetField": "phase",
+      "providerFieldId": "",
+      "literal": "intake",
+      "valueMap": null,
+      "owner": "aok"
+    },
+    {
+      "packetField": "acceptanceCriteria",
+      "providerFieldId": "",
+      "literal": [
+        "explicit acceptance"
+      ],
+      "valueMap": null,
+      "owner": "aok"
+    },
+    {
+      "packetField": "verification.commands",
+      "providerFieldId": "",
+      "literal": [
+        "go test ./..."
+      ],
+      "valueMap": null,
+      "owner": "aok"
+    }
+  ]
+}

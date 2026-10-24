@@ -1,0 +1,4 @@
+Enrolled service offline smoke passed; live and production gates remain blocked.
+Phase 9 empty-PATH/no-credentials offline smoke passed with network denied
+Phase 10 empty-PATH/no-credentials offline smoke passed with network denied
+completion ledger and pilot offline smoke passed with network denied

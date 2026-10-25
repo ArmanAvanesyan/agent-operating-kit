@@ -1,0 +1,29 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "CaptureManifest",
+  "metadata": {
+    "id": "example",
+    "revision": 1
+  },
+  "spec": {
+    "connectionRef": {
+      "kind": "ConnectionProfile",
+      "id": "github-main",
+      "revision": 1,
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "sourceSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "observedAt": "2026-10-24T12:00:00Z",
+    "assets": [
+      {
+        "path": "assets/synthetic.json",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "complete": true,
+    "cursor": null,
+    "coverage": [
+      "selected-items"
+    ]
+  }
+}

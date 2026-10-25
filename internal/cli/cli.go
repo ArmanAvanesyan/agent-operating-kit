@@ -54,6 +54,8 @@ func Run(argv []string, stdout, stderr io.Writer) int {
 		code, err = runCampaign(args, stdout, stderr)
 	case "methodology":
 		code, err = runMethodology(args, stdout, stderr)
+	case "work":
+		return runWorkkit(args, stdout, stderr)
 	case "work-item":
 		code, err = runWorkItem(args, stdout, stderr)
 	case "work-system":
@@ -126,6 +128,7 @@ Commands:
   agent validate/resolve  Validate contracts or emit static resolution evidence
   campaign             Advisory static DAG proposals and frozen policy comparison
   methodology          Inspect catalogs and validate methodology artifacts
+  work                 WorkKit offline workspace validation and inactive import
   work-item            List, scaffold and validate local work items
   work-system          Read-only setup and guarded provisioning plans
   planning validate/ready Validate plans or calculate eligibility from evidence

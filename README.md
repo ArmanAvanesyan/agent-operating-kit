@@ -526,3 +526,7 @@ protected authority/anchor/verifier services. Its default build cannot start
 services without a compiled operator root pin. Credentials, native enforcement,
 provider conformance, independent acceptance and production promotion remain
 separate gates. See [enrolled service operation](docs/enrolled-live-services.md).
+
+## WorkKit offline core
+
+The opt-in `aok work` namespace and standalone WorkKit build provide strict offline workspace validation and inactive AOK imports. Provider connections, native task operations, store migration and live qualification remain separate. See [WorkKit P1](docs/workkit-offline-core.md).

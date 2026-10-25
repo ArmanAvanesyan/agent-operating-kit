@@ -1,0 +1,35 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "CapabilityReport",
+  "metadata": {
+    "id": "example",
+    "revision": 1
+  },
+  "spec": {
+    "connectionRef": {
+      "kind": "ConnectionProfile",
+      "id": "github-main",
+      "revision": 1,
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "adapter": "github",
+    "adapterVersion": "0.1.0",
+    "transportVersion": "synthetic",
+    "observedAt": "2026-10-24T12:00:00Z",
+    "operations": [
+      {
+        "name": "items.read",
+        "support": "supported",
+        "qualification": "fixture-tested",
+        "concurrency": "none",
+        "idempotency": "none",
+        "evidence": [
+          {
+            "path": "assets/synthetic.json",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ]
+      }
+    ]
+  }
+}

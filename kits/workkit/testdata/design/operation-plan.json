@@ -1,0 +1,61 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "OperationPlan",
+  "metadata": {
+    "id": "example",
+    "revision": 1
+  },
+  "spec": {
+    "operationId": "example-op",
+    "connectionRef": {
+      "kind": "ConnectionProfile",
+      "id": "github-main",
+      "revision": 1,
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "target": {
+      "provider": "github",
+      "origin": "https://api.github.com",
+      "basePath": "",
+      "tenantId": "org-1",
+      "containerId": "repo-1",
+      "itemKind": "issue",
+      "nativeId": "item-1"
+    },
+    "operation": "comment",
+    "changes": [
+      {
+        "fieldId": "comment.body",
+        "value": "Synthetic evidence update"
+      }
+    ],
+    "precondition": {
+      "revision": {
+        "kind": "fingerprint",
+        "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "observedAt": "2026-10-24T12:00:00Z"
+      },
+      "requiredConcurrency": "none",
+      "maxAgeSeconds": 300
+    },
+    "policyRef": {
+      "kind": "OperatorPolicy",
+      "id": "default",
+      "revision": 1,
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "capabilityRef": {
+      "kind": "CapabilityReport",
+      "id": "default",
+      "revision": 1,
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "evidence": [
+      {
+        "path": "assets/synthetic.json",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "dependsOn": []
+  }
+}

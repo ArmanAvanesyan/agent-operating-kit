@@ -109,6 +109,19 @@ func TestPackagedKitValidationAndReleaseBuild(t *testing.T) {
 			t.Fatalf("extracted kit Python validation: %v\n%s", err, output)
 		}
 	})
+	t.Run("GoWorkkitBuildAndOfflineRead", func(t *testing.T) {
+		binary := filepath.Join(directory, "workkit")
+		command := exec.Command("go", "build", "-o", binary, "./kits/workkit/cmd/workkit")
+		command.Dir = kitRoot
+		if output, err := command.CombinedOutput(); err != nil {
+			t.Fatalf("extracted WorkKit build: %v\n%s", err, output)
+		}
+		command = exec.Command(binary, "workspace", "validate", "--workspace", filepath.Join(kitRoot, "kits/workkit/testdata/corpora/native-only/workspace.json"), "--json")
+		command.Env = []string{"PATH=" + filepath.Join(directory, "empty-path")}
+		if output, err := command.CombinedOutput(); err != nil {
+			t.Fatalf("extracted WorkKit offline validation: %v\n%s", err, output)
+		}
+	})
 	t.Run("GoReleaseBuilder", func(t *testing.T) {
 		command := exec.Command("go", "build", "-o", filepath.Join(directory, "aok-release"), "./cmd/aok-release")
 		command.Dir = kitRoot

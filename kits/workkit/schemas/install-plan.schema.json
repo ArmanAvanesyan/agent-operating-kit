@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workkit.example/spec/v1alpha1/install-plan.schema.json",
+  "title": "InstallPlan",
+  "description": "Proposed structural contract; semantic validation and authority are separate.",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "workkit/v1alpha1"
+    },
+    "kind": {
+      "const": "InstallPlan"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "toolchainPolicyRef": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/ref"
+        },
+        "platform": {
+          "type": "string",
+          "minLength": 1
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "operationId": {
+                "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+              },
+              "toolId": {
+                "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+              },
+              "action": {
+                "type": "string",
+                "enum": [
+                  "install",
+                  "update",
+                  "extension-add",
+                  "verify"
+                ]
+              },
+              "packageSource": {
+                "type": "string",
+                "minLength": 1
+              },
+              "version": {
+                "type": "string",
+                "minLength": 1
+              },
+              "scope": {
+                "type": "string",
+                "enum": [
+                  "user",
+                  "system"
+                ]
+              },
+              "artifactSha256": {
+                "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/sha"
+              },
+              "dependsOn": {
+                "type": "array",
+                "items": {
+                  "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "operationId",
+              "toolId",
+              "action",
+              "packageSource",
+              "version",
+              "scope",
+              "artifactSha256",
+              "dependsOn"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "createdAt": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/time"
+        }
+      },
+      "required": [
+        "toolchainPolicyRef",
+        "platform",
+        "steps",
+        "createdAt"
+      ],
+      "additionalProperties": false
+    },
+    "extensions": {
+      "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/extensions"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "additionalProperties": false
+}

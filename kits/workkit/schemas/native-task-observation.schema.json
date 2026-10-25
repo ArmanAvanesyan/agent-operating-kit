@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workkit.example/spec/v1alpha1/native-task-observation.schema.json",
+  "title": "NativeTaskObservation",
+  "description": "Proposed structural contract; semantic validation and authority are separate.",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "workkit/v1alpha1"
+    },
+    "kind": {
+      "const": "NativeTaskObservation"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "bindingSha256": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/sha"
+        },
+        "observedAt": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/time"
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "nativeId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "state": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "nativeId",
+              "state"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "complete": {
+          "type": "boolean"
+        },
+        "acceptance": {
+          "const": "not-established"
+        }
+      },
+      "required": [
+        "bindingSha256",
+        "observedAt",
+        "tasks",
+        "complete",
+        "acceptance"
+      ],
+      "additionalProperties": false
+    },
+    "extensions": {
+      "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/extensions"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "additionalProperties": false
+}

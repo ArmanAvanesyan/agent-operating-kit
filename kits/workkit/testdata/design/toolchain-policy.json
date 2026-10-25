@@ -1,0 +1,19 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "ToolchainPolicy",
+  "metadata": {
+    "id": "example",
+    "revision": 1
+  },
+  "spec": {
+    "tools": [
+      {
+        "id": "gh",
+        "source": "official-release",
+        "versionConstraint": "operator-selected-exact-version",
+        "scope": "user"
+      }
+    ],
+    "allowCommunity": false
+  }
+}

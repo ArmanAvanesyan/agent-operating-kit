@@ -1,0 +1,28 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "AuthBinding",
+  "metadata": {
+    "id": "example",
+    "revision": 1
+  },
+  "spec": {
+    "connectionRef": {
+      "kind": "ConnectionProfile",
+      "id": "github-main",
+      "revision": 1,
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "principal": "operator-pseudonym",
+    "mode": "cli-session",
+    "credentialRef": "credentials/github-main",
+    "status": "authenticated",
+    "scope": {
+      "tenantId": "org-1",
+      "containerIds": [
+        "repo-1"
+      ]
+    },
+    "observedAt": "2026-10-24T12:00:00Z",
+    "storageMode": "provider-store"
+  }
+}

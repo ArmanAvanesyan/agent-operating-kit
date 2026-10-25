@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workkit.example/spec/v1alpha1/capability-report.schema.json",
+  "title": "CapabilityReport",
+  "description": "Proposed structural contract; semantic validation and authority are separate.",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "workkit/v1alpha1"
+    },
+    "kind": {
+      "const": "CapabilityReport"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "connectionRef": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/ref"
+        },
+        "adapter": {
+          "type": "string",
+          "minLength": 1
+        },
+        "adapterVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transportVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observedAt": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/time"
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "support": {
+                "type": "string",
+                "enum": [
+                  "supported",
+                  "unsupported",
+                  "partial",
+                  "unknown"
+                ]
+              },
+              "qualification": {
+                "type": "string",
+                "enum": [
+                  "declared",
+                  "fixture-tested",
+                  "live-read-qualified",
+                  "live-write-qualified",
+                  "recovery-qualified"
+                ]
+              },
+              "concurrency": {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "observation-only",
+                  "provider-cas",
+                  "qualified-exclusive"
+                ]
+              },
+              "idempotency": {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "provider-key",
+                  "readback-only"
+                ]
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/asset"
+                }
+              }
+            },
+            "required": [
+              "name",
+              "support",
+              "qualification",
+              "concurrency",
+              "idempotency",
+              "evidence"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "connectionRef",
+        "adapter",
+        "adapterVersion",
+        "transportVersion",
+        "observedAt",
+        "operations"
+      ],
+      "additionalProperties": false
+    },
+    "extensions": {
+      "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/extensions"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "additionalProperties": false
+}

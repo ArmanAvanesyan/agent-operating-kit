@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workkit.example/spec/v1alpha1/native-task-profile.schema.json",
+  "title": "NativeTaskProfile",
+  "description": "Proposed structural contract; semantic validation and authority are separate.",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "workkit/v1alpha1"
+    },
+    "kind": {
+      "const": "NativeTaskProfile"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "type": "string",
+          "enum": [
+            "codex",
+            "claude-code",
+            "cursor",
+            "opencode",
+            "antigravity"
+          ]
+        },
+        "hostVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "protocol": {
+          "type": "string",
+          "minLength": 1
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "mappingRef": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/ref"
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "export-only",
+            "observe",
+            "managed"
+          ]
+        }
+      },
+      "required": [
+        "host",
+        "hostVersion",
+        "protocol",
+        "operations",
+        "mappingRef",
+        "mode"
+      ],
+      "additionalProperties": false
+    },
+    "extensions": {
+      "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/extensions"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "additionalProperties": false
+}

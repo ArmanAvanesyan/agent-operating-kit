@@ -1,0 +1,27 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "Workspace",
+  "metadata": {
+    "id": "multi-provider",
+    "revision": 1
+  },
+  "spec": {
+    "connections": [
+      {
+        "kind": "ConnectionProfile",
+        "id": "github",
+        "revision": 1,
+        "sha256": "4f0eff89d72144057862b8064c58aa57a58c7be067798c8646cacd858e030611"
+      },
+      {
+        "kind": "ConnectionProfile",
+        "id": "jira-cloud",
+        "revision": 1,
+        "sha256": "5e46087458a2d7bdc9a834b40b58390e3ae81c76b39339a1cf8081eb8c8aeb1c"
+      }
+    ],
+    "bindings": [],
+    "syncRoutes": [],
+    "nativeProfiles": []
+  }
+}

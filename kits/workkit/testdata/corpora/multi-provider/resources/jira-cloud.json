@@ -1,0 +1,27 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "ConnectionProfile",
+  "metadata": {
+    "id": "jira-cloud",
+    "revision": 1
+  },
+  "spec": {
+    "provider": "jira-cloud",
+    "origin": "https://jira.example.invalid",
+    "basePath": "",
+    "transport": "rest",
+    "authRef": "credentials/github-main",
+    "scope": {
+      "tenantId": "org-1",
+      "containerIds": [
+        "repo-1"
+      ]
+    },
+    "apiVersion": "3",
+    "limits": {
+      "timeoutSeconds": 30,
+      "maxItems": 1000,
+      "maxBytes": 4194304
+    }
+  }
+}

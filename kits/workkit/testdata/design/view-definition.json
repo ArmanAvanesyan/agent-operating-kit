@@ -1,0 +1,26 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "ViewDefinition",
+  "metadata": {
+    "id": "example",
+    "revision": 1
+  },
+  "spec": {
+    "location": "local",
+    "query": {
+      "dialect": "portable",
+      "expression": "status.category != completed"
+    },
+    "layout": "table",
+    "groupBy": [
+      "provider"
+    ],
+    "sortBy": [
+      "priority"
+    ],
+    "columns": [
+      "title",
+      "status"
+    ]
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workkit.example/spec/v1alpha1/native-task-binding.schema.json",
+  "title": "NativeTaskBinding",
+  "description": "Proposed structural contract; semantic validation and authority are separate.",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "workkit/v1alpha1"
+    },
+    "kind": {
+      "const": "NativeTaskBinding"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "profileRef": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/ref"
+        },
+        "assignmentSha256": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/sha"
+        },
+        "host": {
+          "type": "string",
+          "enum": [
+            "codex",
+            "claude-code",
+            "cursor",
+            "opencode",
+            "antigravity"
+          ]
+        },
+        "hostVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sessionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "nativeTaskIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "workItem": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/identity"
+        },
+        "attemptRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observedAt": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/time"
+        }
+      },
+      "required": [
+        "profileRef",
+        "assignmentSha256",
+        "host",
+        "hostVersion",
+        "sessionId",
+        "nativeTaskIds",
+        "observedAt"
+      ],
+      "additionalProperties": false
+    },
+    "extensions": {
+      "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/extensions"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "additionalProperties": false
+}

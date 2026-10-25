@@ -1,0 +1,40 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "SyncConflict",
+  "metadata": {
+    "id": "example",
+    "revision": 1
+  },
+  "spec": {
+    "routeRef": {
+      "kind": "SyncRoute",
+      "id": "default",
+      "revision": 1,
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "source": {
+      "provider": "github",
+      "origin": "https://api.github.com",
+      "basePath": "",
+      "tenantId": "org-1",
+      "containerId": "repo-1",
+      "itemKind": "issue",
+      "nativeId": "item-1"
+    },
+    "destination": {
+      "provider": "github",
+      "origin": "https://api.github.com",
+      "basePath": "",
+      "tenantId": "org-1",
+      "containerId": "repo-1",
+      "itemKind": "issue",
+      "nativeId": "item-1"
+    },
+    "field": "title",
+    "baseline": "Old",
+    "sourceValue": "Source edit",
+    "destinationValue": "Destination edit",
+    "reason": "both-changed",
+    "status": "open"
+  }
+}

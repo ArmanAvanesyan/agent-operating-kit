@@ -1,0 +1,30 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "InstallPlan",
+  "metadata": {
+    "id": "example",
+    "revision": 1
+  },
+  "spec": {
+    "toolchainPolicyRef": {
+      "kind": "ToolchainPolicy",
+      "id": "default",
+      "revision": 1,
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "platform": "darwin-arm64",
+    "steps": [
+      {
+        "operationId": "install-gh",
+        "toolId": "gh",
+        "action": "install",
+        "packageSource": "official-release",
+        "version": "synthetic",
+        "scope": "user",
+        "artifactSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "dependsOn": []
+      }
+    ],
+    "createdAt": "2026-10-24T12:00:00Z"
+  }
+}

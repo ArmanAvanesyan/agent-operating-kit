@@ -20,6 +20,7 @@ require (
 )
 
 require (
+	github.com/cyberphone/json-canonicalization v0.0.0-20241213102144-19d51d7fe467
 	github.com/pelletier/go-toml/v2 v2.2.3
 	golang.org/x/text v0.14.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1

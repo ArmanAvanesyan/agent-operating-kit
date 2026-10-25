@@ -1,0 +1,27 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "ConnectionProfile",
+  "metadata": {
+    "id": "example",
+    "revision": 1
+  },
+  "spec": {
+    "provider": "linear",
+    "origin": "https://api.github.com",
+    "basePath": "",
+    "transport": "az",
+    "authRef": "credentials/github-main",
+    "scope": {
+      "tenantId": "org-1",
+      "containerIds": [
+        "repo-1"
+      ]
+    },
+    "apiVersion": "2022-11-28",
+    "limits": {
+      "timeoutSeconds": 30,
+      "maxItems": 1000,
+      "maxBytes": 4194304
+    }
+  }
+}

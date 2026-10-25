@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workkit.example/spec/v1alpha1/migration-manifest.schema.json",
+  "title": "MigrationManifest",
+  "description": "Proposed structural contract; semantic validation and authority are separate.",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "workkit/v1alpha1"
+    },
+    "kind": {
+      "const": "MigrationManifest"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "sourceFormat": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceAssets": {
+          "type": "array",
+          "items": {
+            "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/asset"
+          },
+          "minItems": 1
+        },
+        "implementationSha256": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/sha"
+        },
+        "originalObservedAt": {
+          "anyOf": [
+            {
+              "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "destinationFormat": {
+          "const": "workkit/v1alpha1"
+        },
+        "losses": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "unresolvedOperationIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "activate": {
+          "const": false
+        }
+      },
+      "required": [
+        "sourceFormat",
+        "sourceAssets",
+        "implementationSha256",
+        "originalObservedAt",
+        "destinationFormat",
+        "losses",
+        "unresolvedOperationIds",
+        "activate"
+      ],
+      "additionalProperties": false
+    },
+    "extensions": {
+      "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/extensions"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "additionalProperties": false
+}

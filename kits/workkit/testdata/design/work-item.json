@@ -1,0 +1,31 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "WorkItem",
+  "metadata": {
+    "id": "example",
+    "revision": 1
+  },
+  "spec": {
+    "identity": {
+      "provider": "github",
+      "origin": "https://api.github.com",
+      "basePath": "",
+      "tenantId": "org-1",
+      "containerId": "repo-1",
+      "itemKind": "issue",
+      "nativeId": "item-1"
+    },
+    "revision": {
+      "kind": "fingerprint",
+      "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "observedAt": "2026-10-24T12:00:00Z"
+    },
+    "fields": {
+      "title": "Synthetic work"
+    },
+    "memberships": [],
+    "relations": [],
+    "complete": true,
+    "diagnostics": []
+  }
+}

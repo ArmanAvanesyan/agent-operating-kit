@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workkit.example/spec/v1alpha1/command-result.schema.json",
+  "title": "CommandResult",
+  "description": "Proposed structural contract; semantic validation and authority are separate.",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "workkit/v1alpha1"
+    },
+    "kind": {
+      "const": "CommandResult"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "command": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "ok",
+            "partial",
+            "blocked",
+            "conflict",
+            "unknown",
+            "error"
+          ]
+        },
+        "data": {},
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/diagnostic"
+          }
+        },
+        "effects": {
+          "type": "object",
+          "properties": {
+            "local": {
+              "type": "string",
+              "enum": [
+                "none",
+                "possible",
+                "confirmed"
+              ]
+            },
+            "provider": {
+              "type": "string",
+              "enum": [
+                "none",
+                "possible",
+                "confirmed"
+              ]
+            },
+            "native": {
+              "type": "string",
+              "enum": [
+                "none",
+                "possible",
+                "confirmed"
+              ]
+            }
+          },
+          "required": [
+            "local",
+            "provider",
+            "native"
+          ],
+          "additionalProperties": false
+        },
+        "operationIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "nextActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "command",
+        "status",
+        "data",
+        "diagnostics",
+        "effects",
+        "operationIds",
+        "nextActions"
+      ],
+      "additionalProperties": false
+    },
+    "extensions": {
+      "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/extensions"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "additionalProperties": false
+}

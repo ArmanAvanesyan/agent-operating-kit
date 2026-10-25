@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workkit.example/spec/v1alpha1/common.schema.json",
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z][a-z0-9-]{0,63}$"
+    },
+    "sha": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "time": {
+      "type": "string",
+      "minLength": 1,
+      "format": "date-time"
+    },
+    "ref": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/sha"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "revision",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "asset": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/sha"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "identity": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "type": "string",
+          "enum": [
+            "github",
+            "azure-devops",
+            "jira-cloud",
+            "jira-datacenter",
+            "linear",
+            "local"
+          ]
+        },
+        "origin": {
+          "type": "string",
+          "minLength": 1,
+          "format": "uri"
+        },
+        "basePath": {
+          "type": "string"
+        },
+        "tenantId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "containerId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "itemKind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "nativeId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "provider",
+        "origin",
+        "basePath",
+        "tenantId",
+        "containerId",
+        "itemKind",
+        "nativeId"
+      ],
+      "additionalProperties": false
+    },
+    "scope": {
+      "type": "object",
+      "properties": {
+        "tenantId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "containerIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "tenantId",
+        "containerIds"
+      ],
+      "additionalProperties": false
+    },
+    "revision": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "native-revision",
+            "etag",
+            "fingerprint",
+            "none"
+          ]
+        },
+        "value": {
+          "type": "string"
+        },
+        "observedAt": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/time"
+        }
+      },
+      "required": [
+        "kind",
+        "value",
+        "observedAt"
+      ],
+      "additionalProperties": false
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z0-9.-]+/[a-zA-Z0-9_.-]+$"
+      },
+      "additionalProperties": true
+    },
+    "diagnostic": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "field": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "info",
+            "warning",
+            "error"
+          ]
+        }
+      },
+      "required": [
+        "code",
+        "field",
+        "message",
+        "severity"
+      ],
+      "additionalProperties": false
+    },
+    "decimal": {
+      "type": "object",
+      "properties": {
+        "decimal": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+        }
+      },
+      "required": [
+        "decimal"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workkit.example/spec/v1alpha1/auth-binding.schema.json",
+  "title": "AuthBinding",
+  "description": "Proposed structural contract; semantic validation and authority are separate.",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "workkit/v1alpha1"
+    },
+    "kind": {
+      "const": "AuthBinding"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "connectionRef": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/ref"
+        },
+        "principal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "cli-session",
+            "oauth2",
+            "pat",
+            "api-key",
+            "service-identity",
+            "local"
+          ]
+        },
+        "credentialRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "disconnected",
+            "pending",
+            "authenticated",
+            "expired",
+            "revoked",
+            "error"
+          ]
+        },
+        "scope": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/scope"
+        },
+        "observedAt": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/time"
+        },
+        "storageMode": {
+          "type": "string",
+          "enum": [
+            "provider-store",
+            "os-secret-store",
+            "external",
+            "plaintext",
+            "none",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "connectionRef",
+        "principal",
+        "mode",
+        "credentialRef",
+        "status",
+        "scope",
+        "observedAt",
+        "storageMode"
+      ],
+      "additionalProperties": false
+    },
+    "extensions": {
+      "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/extensions"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "additionalProperties": false
+}

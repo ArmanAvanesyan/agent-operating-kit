@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workkit.example/spec/v1alpha1/work-item.schema.json",
+  "title": "WorkItem",
+  "description": "Proposed structural contract; semantic validation and authority are separate.",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "workkit/v1alpha1"
+    },
+    "kind": {
+      "const": "WorkItem"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "identity": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/identity"
+        },
+        "revision": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/revision"
+        },
+        "fields": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "memberships": {
+          "type": "array",
+          "items": {
+            "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/identity"
+          }
+        },
+        "relations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "minLength": 1
+              },
+              "target": {
+                "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/identity"
+              }
+            },
+            "required": [
+              "type",
+              "target"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "complete": {
+          "type": "boolean"
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/diagnostic"
+          }
+        }
+      },
+      "required": [
+        "identity",
+        "revision",
+        "fields",
+        "memberships",
+        "relations",
+        "complete",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    },
+    "extensions": {
+      "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/extensions"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "additionalProperties": false
+}

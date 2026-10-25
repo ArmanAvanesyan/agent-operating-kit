@@ -1,0 +1,22 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "OperationReceipt",
+  "metadata": {
+    "id": "example",
+    "revision": 1
+  },
+  "spec": {
+    "operationId": "example-op",
+    "planSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "status": "unknown",
+    "effects": "possible",
+    "observedAt": "2026-10-24T12:00:00Z",
+    "dispatchEvidence": [
+      {
+        "path": "assets/synthetic.json",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "readbackEvidence": []
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workkit.example/spec/v1alpha1/operation-receipt.schema.json",
+  "title": "OperationReceipt",
+  "description": "Proposed structural contract; semantic validation and authority are separate.",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "workkit/v1alpha1"
+    },
+    "kind": {
+      "const": "OperationReceipt"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "operationId": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+        },
+        "planSha256": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/sha"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "queued",
+            "dispatch-intent",
+            "observed",
+            "confirmed",
+            "rejected",
+            "unknown",
+            "conflict",
+            "blocked"
+          ]
+        },
+        "effects": {
+          "type": "string",
+          "enum": [
+            "none",
+            "possible",
+            "confirmed"
+          ]
+        },
+        "observedAt": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/time"
+        },
+        "dispatchEvidence": {
+          "type": "array",
+          "items": {
+            "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/asset"
+          }
+        },
+        "readbackEvidence": {
+          "type": "array",
+          "items": {
+            "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/asset"
+          }
+        }
+      },
+      "required": [
+        "operationId",
+        "planSha256",
+        "status",
+        "effects",
+        "observedAt",
+        "dispatchEvidence",
+        "readbackEvidence"
+      ],
+      "additionalProperties": false
+    },
+    "extensions": {
+      "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/extensions"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "additionalProperties": false
+}

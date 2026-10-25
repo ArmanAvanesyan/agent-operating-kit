@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workkit.example/spec/v1alpha1/view-definition.schema.json",
+  "title": "ViewDefinition",
+  "description": "Proposed structural contract; semantic validation and authority are separate.",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "workkit/v1alpha1"
+    },
+    "kind": {
+      "const": "ViewDefinition"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": "string",
+          "enum": [
+            "local",
+            "provider"
+          ]
+        },
+        "connectionRef": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/ref"
+        },
+        "query": {
+          "type": "object",
+          "properties": {
+            "dialect": {
+              "type": "string",
+              "enum": [
+                "portable",
+                "provider-native"
+              ]
+            },
+            "expression": {
+              "type": "string",
+              "minLength": 1
+            },
+            "connectionRef": {
+              "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/ref"
+            }
+          },
+          "required": [
+            "dialect",
+            "expression"
+          ],
+          "additionalProperties": false
+        },
+        "layout": {
+          "type": "string",
+          "enum": [
+            "list",
+            "table",
+            "board",
+            "timeline"
+          ]
+        },
+        "groupBy": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "sortBy": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "location",
+        "query",
+        "layout",
+        "groupBy",
+        "sortBy",
+        "columns"
+      ],
+      "additionalProperties": false
+    },
+    "extensions": {
+      "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/extensions"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "additionalProperties": false
+}

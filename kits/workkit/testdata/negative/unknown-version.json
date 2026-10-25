@@ -1,0 +1,27 @@
+{
+  "apiVersion": "workkit/v9",
+  "kind": "Workspace",
+  "metadata": {
+    "id": "example",
+    "revision": 1
+  },
+  "spec": {
+    "connections": [
+      {
+        "kind": "ConnectionProfile",
+        "id": "github-main",
+        "revision": 1,
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "kind": "ConnectionProfile",
+        "id": "jira-internal",
+        "revision": 1,
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "bindings": [],
+    "syncRoutes": [],
+    "nativeProfiles": []
+  }
+}

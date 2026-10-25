@@ -1,0 +1,157 @@
+{
+  "$id": "https://workkit.example/spec/access/v1/policy.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "allowedActions": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "allowedConnections": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "artifacts": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "executable": {
+            "type": "string"
+          },
+          "executableSha256": {
+            "type": "string"
+          },
+          "format": {
+            "type": "string"
+          },
+          "layout": {
+            "type": "string"
+          },
+          "maxBytes": {
+            "type": "integer"
+          },
+          "platform": {
+            "type": "string"
+          },
+          "redirectOrigins": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10000,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "toolId": {
+            "type": "string"
+          },
+          "toolVersion": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "versionOutput": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "redirectOrigins",
+          "executableSha256",
+          "toolId",
+          "toolVersion",
+          "platform",
+          "url",
+          "sha256",
+          "format",
+          "executable",
+          "maxBytes",
+          "versionOutput"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "expiresAt": {
+      "type": "string"
+    },
+    "issuers": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "publicKey": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "publicKey"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "kind": {
+      "type": "string"
+    },
+    "ledgerRoot": {
+      "type": "string"
+    },
+    "notBefore": {
+      "type": "string"
+    },
+    "revokedOperations": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "version": {
+      "const": "workkit-access/v1"
+    }
+  },
+  "required": [
+    "ledgerRoot",
+    "version",
+    "kind",
+    "issuers",
+    "artifacts",
+    "allowedConnections",
+    "allowedActions",
+    "revokedOperations",
+    "notBefore",
+    "expiresAt"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,66 @@
+{
+  "$id": "https://workkit.example/spec/access/v1/registry.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "connections": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "configurationBase64": {
+            "type": "string"
+          },
+          "configurationSha256": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "configurationSha256",
+          "configurationBase64"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "kind": {
+      "type": "string"
+    },
+    "migrationActivated": {
+      "const": false
+    },
+    "observedAt": {
+      "type": "string"
+    },
+    "previousSha256": {
+      "type": "string"
+    },
+    "productionActivated": {
+      "const": false
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "version": {
+      "const": "workkit-access/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "revision",
+    "previousSha256",
+    "observedAt",
+    "connections",
+    "migrationActivated",
+    "productionActivated"
+  ],
+  "type": "object"
+}

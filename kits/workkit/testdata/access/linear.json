@@ -1,0 +1,40 @@
+{
+  "basePath": "",
+  "connectionId": "linear",
+  "containers": [
+    "team-guid"
+  ],
+  "kind": "AuthConfiguration",
+  "mode": "api-key",
+  "nativePrincipal": "synthetic-native-principal",
+  "origin": "https://api.linear.app",
+  "profile": {
+    "apiVersion": "workkit/v1alpha1",
+    "kind": "ConnectionProfile",
+    "metadata": {
+      "id": "linear",
+      "revision": 1
+    },
+    "spec": {
+      "apiVersion": "graphql",
+      "authRef": "credentials/linear",
+      "basePath": "",
+      "origin": "https://api.linear.app",
+      "provider": "linear",
+      "scope": {
+        "containerIds": [
+          "team-guid"
+        ],
+        "tenantId": "workspace-guid"
+      },
+      "transport": "graphql"
+    }
+  },
+  "provider": "linear",
+  "providerLookup": "",
+  "secretReferences": {
+    "token": "WK_P3_DISPOSABLE_TOKEN"
+  },
+  "tenantId": "workspace-guid",
+  "version": "workkit-access/v1"
+}

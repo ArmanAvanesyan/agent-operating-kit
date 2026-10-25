@@ -3,6 +3,7 @@ package engine
 import (
 	"context"
 	"errors"
+	"github.com/ArmanAvanesyan/agent-operating-kit/kits/workkit/internal/platformfs"
 	"io"
 	"io/fs"
 	"os"
@@ -113,6 +114,9 @@ func WriteBundle(ctx context.Context, out string, files map[string][]byte, sourc
 	if e = os.Mkdir(a, 0700); e != nil {
 		return e
 	}
+	if e = platformfs.ProtectNewDirectory(a); e != nil {
+		return e
+	}
 	// A bundle is complete only when its final seal is present.
 	for _, name := range names {
 		if name == "bundle.json" {
@@ -212,6 +216,9 @@ func ReserveBundle(ctx context.Context, out string) (*BundleReservation, error) 
 	if e = os.Mkdir(a, 0700); e != nil {
 		return nil, e
 	}
+	if e = platformfs.ProtectNewDirectory(a); e != nil {
+		return nil, e
+	}
 	st, e := os.Stat(a)
 	if e != nil {
 		return nil, e
@@ -254,4 +261,72 @@ func (w *BundleReservation) Write(ctx context.Context, files map[string][]byte) 
 		return writeOne(ctx, a, "bundle.json", b)
 	}
 	return nil
+}
+
+// Sync seals local evidence durability before a connection lock may be released.
+// A failure retains consumption and uncertainty; it never reports completion.
+func (w *BundleReservation) Sync(ctx context.Context) error {
+	if w == nil {
+		return errors.New("missing output reservation")
+	}
+	root, e := SafePath(w.root)
+	if e != nil {
+		return e
+	}
+	st, e := os.Stat(root)
+	if e != nil || !os.SameFile(w.identity, st) {
+		return errors.New("reserved output changed")
+	}
+	count := 0
+	dirs := []string{}
+	e = filepath.WalkDir(root, func(p string, d os.DirEntry, e error) error {
+		if e != nil {
+			return e
+		}
+		if e = ctx.Err(); e != nil {
+			return e
+		}
+		count++
+		if count > MaxResources {
+			return errors.New("evidence entry bound")
+		}
+		if d.Type()&os.ModeSymlink != 0 {
+			return errors.New("evidence symlink")
+		}
+		if d.IsDir() {
+			dirs = append(dirs, p)
+			return nil
+		}
+		info, e := d.Info()
+		if e != nil || !info.Mode().IsRegular() {
+			return errors.New("unsafe evidence member")
+		}
+		f, e := os.OpenFile(p, os.O_RDWR, 0)
+		if e != nil {
+			return e
+		}
+		e = f.Sync()
+		f.Close()
+		return e
+	})
+	if e != nil {
+		return e
+	}
+	for i := len(dirs) - 1; i >= 0; i-- {
+		f, e := os.Open(dirs[i])
+		if e != nil {
+			return e
+		}
+		e = f.Sync()
+		f.Close()
+		if e != nil {
+			return e
+		}
+	}
+	parent, e := os.Open(filepath.Dir(root))
+	if e != nil {
+		return e
+	}
+	defer parent.Close()
+	return parent.Sync()
 }

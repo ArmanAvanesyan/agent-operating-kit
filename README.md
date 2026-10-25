@@ -534,3 +534,10 @@ The opt-in `aok work` namespace and standalone WorkKit build provide strict offl
 ## WorkKit read capture and federation
 
 WorkKit P2 adds opt-in scoped read capture, catalog inspection and portable local federation through `workkit` and `aok work`. Shared adapters preserve legacy AOK formats; live qualification, migration activation and production activation remain gated. See [operator guide](docs/workkit-read-federation.md) and [delivery evidence](docs/implementation/workkit-phase-2-delivery-evidence.md).
+
+## WorkKit toolchain and authentication
+
+The opt-in [WorkKit P3 toolchain/authentication](docs/workkit-toolchain-auth.md)
+provides scoped tool management, OS credential-broker backends, native drivers,
+Jira/Linear OAuth and broker-backed reads. Source/fixture conformance does not
+qualify native platforms or live routes. Migration and production remain gated.

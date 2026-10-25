@@ -1,0 +1,41 @@
+{
+  "basePath": "",
+  "connectionId": "jira",
+  "containers": [
+    "10001"
+  ],
+  "kind": "AuthConfiguration",
+  "mode": "basic",
+  "nativePrincipal": "synthetic-native-principal",
+  "origin": "https://acme.atlassian.net",
+  "profile": {
+    "apiVersion": "workkit/v1alpha1",
+    "kind": "ConnectionProfile",
+    "metadata": {
+      "id": "jira",
+      "revision": 1
+    },
+    "spec": {
+      "apiVersion": "3",
+      "authRef": "credentials/jira",
+      "basePath": "",
+      "origin": "https://acme.atlassian.net",
+      "provider": "jira-cloud",
+      "scope": {
+        "containerIds": [
+          "10001"
+        ],
+        "tenantId": "cloud-guid"
+      },
+      "transport": "rest"
+    }
+  },
+  "provider": "jira-cloud",
+  "providerLookup": "",
+  "secretReferences": {
+    "token": "WK_P3_DISPOSABLE_TOKEN",
+    "username": "WK_P3_DISPOSABLE_USERNAME"
+  },
+  "tenantId": "cloud-guid",
+  "version": "workkit-access/v1"
+}

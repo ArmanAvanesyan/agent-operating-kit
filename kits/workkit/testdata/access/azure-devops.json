@@ -1,0 +1,40 @@
+{
+  "basePath": "",
+  "connectionId": "azure-devops",
+  "containers": [
+    "project-guid"
+  ],
+  "kind": "AuthConfiguration",
+  "mode": "pat",
+  "nativePrincipal": "synthetic-native-principal",
+  "origin": "https://dev.azure.com",
+  "profile": {
+    "apiVersion": "workkit/v1alpha1",
+    "kind": "ConnectionProfile",
+    "metadata": {
+      "id": "azure-devops",
+      "revision": 1
+    },
+    "spec": {
+      "apiVersion": "7.1",
+      "authRef": "credentials/azure-devops",
+      "basePath": "",
+      "origin": "https://dev.azure.com",
+      "provider": "azure-devops",
+      "scope": {
+        "containerIds": [
+          "project-guid"
+        ],
+        "tenantId": "tenant-guid"
+      },
+      "transport": "rest"
+    }
+  },
+  "provider": "azure-devops",
+  "providerLookup": "acme",
+  "secretReferences": {
+    "token": "WK_P3_DISPOSABLE_TOKEN"
+  },
+  "tenantId": "tenant-guid",
+  "version": "workkit-access/v1"
+}

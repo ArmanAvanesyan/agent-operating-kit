@@ -1,0 +1,42 @@
+{
+  "$id": "https://workkit.example/spec/access/v1/access-state.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "configurationSha256": {
+      "type": "string"
+    },
+    "generation": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "operationId": {
+      "type": "string"
+    },
+    "receiptPath": {
+      "type": "string"
+    },
+    "receiptSha256": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "version": {
+      "const": "workkit-access/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "configurationSha256",
+    "operationId",
+    "status",
+    "generation",
+    "receiptPath",
+    "receiptSha256"
+  ],
+  "type": "object"
+}

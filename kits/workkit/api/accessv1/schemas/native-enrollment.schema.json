@@ -1,0 +1,80 @@
+{
+  "$id": "https://workkit.example/spec/access/v1/native-enrollment.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "controls": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "credentialMode": {
+      "type": "string"
+    },
+    "expiresAt": {
+      "type": "string"
+    },
+    "implementationSha256": {
+      "type": "string"
+    },
+    "issuer": {
+      "type": "string"
+    },
+    "observedAt": {
+      "type": "string"
+    },
+    "operationId": {
+      "type": "string"
+    },
+    "processId": {
+      "type": "integer"
+    },
+    "processSha256": {
+      "type": "string"
+    },
+    "processStart": {
+      "type": "string"
+    },
+    "profileRoot": {
+      "type": "string"
+    },
+    "profileSha256": {
+      "type": "string"
+    },
+    "scopeSha256": {
+      "type": "string"
+    },
+    "signature": {
+      "type": "string"
+    },
+    "statusSha256": {
+      "type": "string"
+    },
+    "toolSha256": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "processStart",
+    "credentialMode",
+    "statusSha256",
+    "profileRoot",
+    "profileSha256",
+    "processId",
+    "processSha256",
+    "toolSha256",
+    "scopeSha256",
+    "operationId",
+    "implementationSha256",
+    "observedAt",
+    "expiresAt",
+    "controls",
+    "issuer",
+    "signature"
+  ],
+  "type": "object"
+}

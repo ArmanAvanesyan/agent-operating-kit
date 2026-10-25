@@ -1,0 +1,150 @@
+{
+  "$id": "https://workkit.example/spec/access/v1/broker-config.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "busAddress": {
+      "type": "string"
+    },
+    "helper": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "configuration": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "sha256": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "sha256"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "extensions": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "layout": {
+                    "type": "string"
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "sha256": {
+                    "type": "string"
+                  },
+                  "version": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "version",
+                  "sha256",
+                  "path"
+                ],
+                "type": "object"
+              },
+              "maxItems": 10000,
+              "type": [
+                "array",
+                "null"
+              ]
+            },
+            "id": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "platform": {
+              "type": "string"
+            },
+            "runtime": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "sha256": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "sha256"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "sha256": {
+              "type": "string"
+            },
+            "versionOutput": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "path",
+            "sha256",
+            "versionOutput",
+            "platform",
+            "extensions"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "kind": {
+      "type": "string"
+    },
+    "ledgerRoot": {
+      "type": "string"
+    },
+    "namespace": {
+      "type": "string"
+    },
+    "store": {
+      "type": "string"
+    },
+    "version": {
+      "const": "workkit-access/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "namespace",
+    "ledgerRoot",
+    "store",
+    "busAddress"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,58 @@
+{
+  "$id": "https://workkit.example/spec/access/v1/grant.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "action": {
+      "type": "string"
+    },
+    "expiresAt": {
+      "type": "string"
+    },
+    "implementationSha256": {
+      "type": "string"
+    },
+    "issuedAt": {
+      "type": "string"
+    },
+    "issuer": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "operationId": {
+      "type": "string"
+    },
+    "output": {
+      "type": "string"
+    },
+    "policySha256": {
+      "type": "string"
+    },
+    "requestSha256": {
+      "type": "string"
+    },
+    "signature": {
+      "type": "string"
+    },
+    "version": {
+      "const": "workkit-access/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "operationId",
+    "action",
+    "requestSha256",
+    "policySha256",
+    "implementationSha256",
+    "output",
+    "issuer",
+    "issuedAt",
+    "expiresAt",
+    "signature"
+  ],
+  "type": "object"
+}

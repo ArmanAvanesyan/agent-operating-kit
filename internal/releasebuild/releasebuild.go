@@ -50,6 +50,7 @@ var (
 		"scripts/workkit",
 		"scripts/testing/verify-workkit-offline.py",
 		"scripts/testing/verify-workkit-read-offline.py",
+		"scripts/testing/verify-workkit-access-offline.py",
 		"go.sum",
 		"go.mod",
 		"scripts/validate.sh",

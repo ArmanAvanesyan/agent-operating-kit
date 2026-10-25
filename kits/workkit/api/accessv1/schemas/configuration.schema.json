@@ -1,0 +1,533 @@
+{
+  "$id": "https://workkit.example/spec/access/v1/configuration.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "basePath": {
+      "type": "string"
+    },
+    "broker": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "configuration": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "sha256": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "sha256"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "extensions": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "layout": {
+                    "type": "string"
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "sha256": {
+                    "type": "string"
+                  },
+                  "version": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "version",
+                  "sha256",
+                  "path"
+                ],
+                "type": "object"
+              },
+              "maxItems": 10000,
+              "type": [
+                "array",
+                "null"
+              ]
+            },
+            "id": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "platform": {
+              "type": "string"
+            },
+            "runtime": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "sha256": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "sha256"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "sha256": {
+              "type": "string"
+            },
+            "versionOutput": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "path",
+            "sha256",
+            "versionOutput",
+            "platform",
+            "extensions"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "connectionId": {
+      "type": "string"
+    },
+    "containers": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "kind": {
+      "type": "string"
+    },
+    "mode": {
+      "type": "string"
+    },
+    "native": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "controls": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "credentialMode": {
+              "type": "string"
+            },
+            "expiresAt": {
+              "type": "string"
+            },
+            "implementationSha256": {
+              "type": "string"
+            },
+            "issuer": {
+              "type": "string"
+            },
+            "observedAt": {
+              "type": "string"
+            },
+            "operationId": {
+              "type": "string"
+            },
+            "processId": {
+              "type": "integer"
+            },
+            "processSha256": {
+              "type": "string"
+            },
+            "processStart": {
+              "type": "string"
+            },
+            "profileRoot": {
+              "type": "string"
+            },
+            "profileSha256": {
+              "type": "string"
+            },
+            "scopeSha256": {
+              "type": "string"
+            },
+            "signature": {
+              "type": "string"
+            },
+            "statusSha256": {
+              "type": "string"
+            },
+            "toolSha256": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "processStart",
+            "credentialMode",
+            "statusSha256",
+            "profileRoot",
+            "profileSha256",
+            "processId",
+            "processSha256",
+            "toolSha256",
+            "scopeSha256",
+            "operationId",
+            "implementationSha256",
+            "observedAt",
+            "expiresAt",
+            "controls",
+            "issuer",
+            "signature"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "nativePrincipal": {
+      "type": "string"
+    },
+    "oauth": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "authorizationUrl": {
+              "type": "string"
+            },
+            "clientId": {
+              "type": "string"
+            },
+            "redirectUri": {
+              "type": "string"
+            },
+            "revokeUrl": {
+              "type": "string"
+            },
+            "scopes": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 10000,
+              "type": [
+                "array",
+                "null"
+              ]
+            },
+            "tokenUrl": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "clientId",
+            "authorizationUrl",
+            "tokenUrl",
+            "revokeUrl",
+            "redirectUri",
+            "scopes"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "origin": {
+      "type": "string"
+    },
+    "profile": {},
+    "provider": {
+      "type": "string"
+    },
+    "providerLookup": {
+      "type": "string"
+    },
+    "read": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "configuration": {
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "type": "object"
+            },
+            "enrollment": {
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "type": "object"
+            },
+            "output": {
+              "type": "string"
+            },
+            "policy": {
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "configuration",
+            "policy",
+            "enrollment",
+            "output"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "secretReferences": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "tenantId": {
+      "type": "string"
+    },
+    "tls": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "caPath": {
+              "type": "string"
+            },
+            "caSha256": {
+              "type": "string"
+            },
+            "serverVersion": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "caPath",
+            "caSha256",
+            "serverVersion"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "tool": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "configuration": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "sha256": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "sha256"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "extensions": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "layout": {
+                    "type": "string"
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "sha256": {
+                    "type": "string"
+                  },
+                  "version": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "version",
+                  "sha256",
+                  "path"
+                ],
+                "type": "object"
+              },
+              "maxItems": 10000,
+              "type": [
+                "array",
+                "null"
+              ]
+            },
+            "id": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "platform": {
+              "type": "string"
+            },
+            "runtime": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "sha256": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "sha256"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "sha256": {
+              "type": "string"
+            },
+            "versionOutput": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "path",
+            "sha256",
+            "versionOutput",
+            "platform",
+            "extensions"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "version": {
+      "const": "workkit-access/v1"
+    }
+  },
+  "required": [
+    "providerLookup",
+    "version",
+    "kind",
+    "connectionId",
+    "profile",
+    "provider",
+    "origin",
+    "basePath",
+    "nativePrincipal",
+    "tenantId",
+    "containers",
+    "mode",
+    "secretReferences"
+  ],
+  "type": "object"
+}

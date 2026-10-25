@@ -1,0 +1,30 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "DesiredSetup",
+  "metadata": {
+    "id": "example",
+    "revision": 1
+  },
+  "spec": {
+    "connectionRef": {
+      "kind": "ConnectionProfile",
+      "id": "github-main",
+      "revision": 1,
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "containerId": "project-1",
+    "fields": [
+      {
+        "logicalId": "risk",
+        "name": "Risk",
+        "type": "single-select",
+        "options": [
+          "Low",
+          "High"
+        ]
+      }
+    ],
+    "views": [],
+    "allowDestructive": false
+  }
+}

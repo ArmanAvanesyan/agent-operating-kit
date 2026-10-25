@@ -1,0 +1,24 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "NativeTaskBinding",
+  "metadata": {
+    "id": "example",
+    "revision": 1
+  },
+  "spec": {
+    "profileRef": {
+      "kind": "NativeTaskProfile",
+      "id": "default",
+      "revision": 1,
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "assignmentSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "host": "claude-code",
+    "hostVersion": "synthetic",
+    "sessionId": "synthetic-session",
+    "nativeTaskIds": [
+      "native-1"
+    ],
+    "observedAt": "2026-10-24T12:00:00Z"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "Workspace",
+  "metadata": {
+    "id": "native-only",
+    "revision": 1
+  },
+  "spec": {
+    "connections": [],
+    "bindings": [],
+    "syncRoutes": [],
+    "nativeProfiles": [
+      {
+        "kind": "NativeTaskProfile",
+        "id": "native",
+        "revision": 1,
+        "sha256": "cee1030ae34bfb801bcb2335ac23c90dc9887e9c358e7fc64c237937d3c1baf3"
+      }
+    ]
+  }
+}

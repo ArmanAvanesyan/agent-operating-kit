@@ -1,0 +1,36 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "WorkBinding",
+  "metadata": {
+    "id": "example",
+    "revision": 1
+  },
+  "spec": {
+    "connectionRef": {
+      "kind": "ConnectionProfile",
+      "id": "github-main",
+      "revision": 1,
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "mappingRef": {
+      "kind": "Mapping",
+      "id": "default",
+      "revision": 1,
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "scope": {
+      "tenantId": "org-1",
+      "containerIds": [
+        "repo-1"
+      ]
+    },
+    "status": "draft",
+    "checks": [
+      {
+        "name": "fields",
+        "status": "unknown"
+      }
+    ],
+    "evidence": []
+  }
+}

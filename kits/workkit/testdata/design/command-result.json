@@ -1,0 +1,23 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "CommandResult",
+  "metadata": {
+    "id": "example",
+    "revision": 1
+  },
+  "spec": {
+    "command": "sync preview",
+    "status": "ok",
+    "data": {
+      "plannedOperations": 0
+    },
+    "diagnostics": [],
+    "effects": {
+      "local": "confirmed",
+      "provider": "none",
+      "native": "none"
+    },
+    "operationIds": [],
+    "nextActions": []
+  }
+}

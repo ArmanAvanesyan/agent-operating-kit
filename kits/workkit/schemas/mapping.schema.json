@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workkit.example/spec/v1alpha1/mapping.schema.json",
+  "title": "Mapping",
+  "description": "Proposed structural contract; semantic validation and authority are separate.",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "workkit/v1alpha1"
+    },
+    "kind": {
+      "const": "Mapping"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "canonical": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sourceFieldId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "targetFieldId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "owner": {
+                "type": "string",
+                "enum": [
+                  "source",
+                  "destination",
+                  "human",
+                  "runtime",
+                  "shared"
+                ]
+              },
+              "valueMap": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "lossPolicy": {
+                "type": "string",
+                "enum": [
+                  "reject",
+                  "preserve-raw",
+                  "explicit-transform"
+                ]
+              }
+            },
+            "required": [
+              "canonical",
+              "sourceFieldId",
+              "targetFieldId",
+              "owner",
+              "valueMap",
+              "lossPolicy"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "lifecycle": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "sourceStateId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "targetStateId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "targetTransitionId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "requiresAcceptance": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "sourceStateId",
+              "targetStateId",
+              "targetTransitionId",
+              "requiresAcceptance"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "personMapping": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "sourceId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "targetId": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "sourceId",
+              "targetId"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "fields",
+        "lifecycle",
+        "personMapping"
+      ],
+      "additionalProperties": false
+    },
+    "extensions": {
+      "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/extensions"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workkit.example/spec/v1alpha1/connection-profile.schema.json",
+  "title": "ConnectionProfile",
+  "description": "Proposed structural contract; semantic validation and authority are separate.",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "workkit/v1alpha1"
+    },
+    "kind": {
+      "const": "ConnectionProfile"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "type": "string",
+          "enum": [
+            "github",
+            "azure-devops",
+            "jira-cloud",
+            "jira-datacenter",
+            "linear",
+            "local"
+          ]
+        },
+        "origin": {
+          "type": "string",
+          "minLength": 1,
+          "format": "uri"
+        },
+        "basePath": {
+          "type": "string",
+          "pattern": "^(/[^?#]*)?$"
+        },
+        "transport": {
+          "type": "string",
+          "enum": [
+            "gh",
+            "az",
+            "acli",
+            "rest",
+            "graphql",
+            "community-cli",
+            "local"
+          ]
+        },
+        "authRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/scope"
+        },
+        "apiVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "deployment": {
+          "type": "object",
+          "properties": {
+            "serverVersion": {
+              "type": "string",
+              "minLength": 1
+            },
+            "tlsTrust": {
+              "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/asset"
+            }
+          },
+          "required": [
+            "serverVersion",
+            "tlsTrust"
+          ],
+          "additionalProperties": false
+        },
+        "limits": {
+          "type": "object",
+          "properties": {
+            "timeoutSeconds": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 300
+            },
+            "maxItems": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100000
+            },
+            "maxBytes": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 67108864
+            }
+          },
+          "required": [
+            "timeoutSeconds",
+            "maxItems",
+            "maxBytes"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "provider",
+        "origin",
+        "basePath",
+        "transport",
+        "scope",
+        "apiVersion"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "provider": {
+                "const": "jira-datacenter"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "deployment"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "provider": {
+                "enum": [
+                  "github",
+                  "azure-devops",
+                  "jira-cloud",
+                  "jira-datacenter",
+                  "linear"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "authRef"
+            ]
+          }
+        }
+      ]
+    },
+    "extensions": {
+      "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/extensions"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "additionalProperties": false
+}

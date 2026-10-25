@@ -1,0 +1,23 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "MigrationManifest",
+  "metadata": {
+    "id": "example",
+    "revision": 1
+  },
+  "spec": {
+    "sourceFormat": "aok-tracker/v2",
+    "sourceAssets": [
+      {
+        "path": "assets/synthetic.json",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "implementationSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "originalObservedAt": "2026-10-24T12:00:00Z",
+    "destinationFormat": "workkit/v1alpha1",
+    "losses": [],
+    "unresolvedOperationIds": [],
+    "activate": false
+  }
+}

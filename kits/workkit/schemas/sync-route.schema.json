@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workkit.example/spec/v1alpha1/sync-route.schema.json",
+  "title": "SyncRoute",
+  "description": "Proposed structural contract; semantic validation and authority are separate.",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "workkit/v1alpha1"
+    },
+    "kind": {
+      "const": "SyncRoute"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "object",
+          "properties": {
+            "connectionRef": {
+              "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/ref"
+            },
+            "scope": {
+              "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/scope"
+            }
+          },
+          "required": [
+            "connectionRef",
+            "scope"
+          ],
+          "additionalProperties": false
+        },
+        "destination": {
+          "type": "object",
+          "properties": {
+            "connectionRef": {
+              "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/ref"
+            },
+            "scope": {
+              "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/scope"
+            }
+          },
+          "required": [
+            "connectionRef",
+            "scope"
+          ],
+          "additionalProperties": false
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "federated-read",
+            "one-way",
+            "linked",
+            "bidirectional",
+            "migration"
+          ]
+        },
+        "selector": {
+          "type": "object",
+          "properties": {
+            "dialect": {
+              "type": "string",
+              "enum": [
+                "portable",
+                "provider-native"
+              ]
+            },
+            "expression": {
+              "type": "string",
+              "minLength": 1
+            },
+            "connectionRef": {
+              "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/ref"
+            }
+          },
+          "required": [
+            "dialect",
+            "expression"
+          ],
+          "additionalProperties": false
+        },
+        "mappingRef": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/ref"
+        },
+        "conflictPolicy": {
+          "type": "string",
+          "enum": [
+            "manual",
+            "qualified-resolver"
+          ]
+        },
+        "deletePolicy": {
+          "type": "string",
+          "enum": [
+            "ignore",
+            "conflict"
+          ]
+        },
+        "trigger": {
+          "type": "string",
+          "enum": [
+            "manual",
+            "poll",
+            "webhook"
+          ]
+        },
+        "enabled": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "source",
+        "destination",
+        "mode",
+        "selector",
+        "mappingRef",
+        "conflictPolicy",
+        "deletePolicy",
+        "trigger",
+        "enabled"
+      ],
+      "additionalProperties": false
+    },
+    "extensions": {
+      "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/extensions"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "additionalProperties": false
+}

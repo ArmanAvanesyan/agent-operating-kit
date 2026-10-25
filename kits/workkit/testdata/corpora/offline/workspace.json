@@ -1,0 +1,14 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "Workspace",
+  "metadata": {
+    "id": "offline",
+    "revision": 1
+  },
+  "spec": {
+    "connections": [],
+    "bindings": [],
+    "syncRoutes": [],
+    "nativeProfiles": []
+  }
+}

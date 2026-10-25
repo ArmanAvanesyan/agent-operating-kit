@@ -1,0 +1,34 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "ConnectionProfile",
+  "metadata": {
+    "id": "jira-internal",
+    "revision": 1
+  },
+  "spec": {
+    "provider": "jira-datacenter",
+    "origin": "https://jira.example.com",
+    "basePath": "/jira",
+    "transport": "rest",
+    "authRef": "credentials/jira-internal",
+    "scope": {
+      "tenantId": "dc-1",
+      "containerIds": [
+        "ENG"
+      ]
+    },
+    "apiVersion": "2",
+    "limits": {
+      "timeoutSeconds": 30,
+      "maxItems": 1000,
+      "maxBytes": 4194304
+    },
+    "deployment": {
+      "serverVersion": "synthetic-pinned-version",
+      "tlsTrust": {
+        "path": "trust/ca.pem",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    }
+  }
+}

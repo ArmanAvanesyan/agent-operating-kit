@@ -240,9 +240,12 @@ func TestSignedRuntimeAcceptanceProjectionUnlocksOnlyCurrentDependency(t *testin
 	if err = c.AttachAcceptance(ctx, receipt, candidateManifest, now); err != nil {
 		t.Fatalf("attach acceptance: %v", err)
 	}
-	accepted := s.AcceptedSteps(ctx, manifest.ID, c.acceptanceGuard)
+	accepted := s.AcceptedStepsAt(ctx, manifest.ID, c.acceptanceGuard, now)
 	if len(accepted) != 1 || accepted[0] != "inspect" {
 		t.Fatalf("accepted projection missing: %v", accepted)
+	}
+	if got := s.AcceptedStepsAt(ctx, manifest.ID, c.acceptanceGuard, now.Add(10*time.Minute)); len(got) != 0 {
+		t.Fatal("expired acceptance projection admitted")
 	}
 	stateAfterAcceptance, err := s.Snapshot(ctx)
 	if err != nil {
@@ -264,7 +267,7 @@ func TestSignedRuntimeAcceptanceProjectionUnlocksOnlyCurrentDependency(t *testin
 	if err = c.RevokeAcceptance(ctx, manifest.ID, "inspect", 2, 5); err != nil {
 		t.Fatal(err)
 	}
-	if got := s.AcceptedSteps(ctx, manifest.ID, c.acceptanceGuard); len(got) != 0 {
+	if got := s.AcceptedStepsAt(ctx, manifest.ID, c.acceptanceGuard, now); len(got) != 0 {
 		t.Fatalf("revoked projection remained active: %v", got)
 	}
 	claimGuard := ledger.AcceptanceGuard{Dependencies: []string{"inspect"}, TrustGeneration: 2, RevocationGeneration: 5, AuthorityValidUntil: now.Add(4 * time.Minute)}

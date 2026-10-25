@@ -1,0 +1,2 @@
+# Preserve the pinned upstream canonicalization vectors and license byte-for-byte.
+kits/workkit/testdata/jcs/** -text whitespace=cr-at-eol

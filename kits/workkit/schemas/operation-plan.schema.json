@@ -1,0 +1,237 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workkit.example/spec/v1alpha1/operation-plan.schema.json",
+  "title": "OperationPlan",
+  "description": "Proposed structural contract; semantic validation and authority are separate.",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "workkit/v1alpha1"
+    },
+    "kind": {
+      "const": "OperationPlan"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "operationId": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+        },
+        "connectionRef": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/ref"
+        },
+        "target": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/identity"
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "create-item",
+            "update-fields",
+            "transition",
+            "comment",
+            "relate",
+            "provision-field",
+            "provision-option",
+            "create-view",
+            "update-view",
+            "native-create",
+            "native-update"
+          ]
+        },
+        "changes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "value": {}
+            },
+            "required": [
+              "fieldId",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "precondition": {
+          "type": "object",
+          "properties": {
+            "revision": {
+              "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/revision"
+            },
+            "requiredConcurrency": {
+              "type": "string",
+              "enum": [
+                "none",
+                "provider-cas",
+                "qualified-exclusive"
+              ]
+            },
+            "maxAgeSeconds": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 86400
+            }
+          },
+          "required": [
+            "revision",
+            "requiredConcurrency",
+            "maxAgeSeconds"
+          ],
+          "additionalProperties": false
+        },
+        "policyRef": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/ref"
+        },
+        "capabilityRef": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/ref"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/asset"
+          }
+        },
+        "dependsOn": {
+          "type": "array",
+          "items": {
+            "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+          },
+          "uniqueItems": true
+        },
+        "nativeTarget": {
+          "type": "object",
+          "properties": {
+            "profileRef": {
+              "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/ref"
+            },
+            "host": {
+              "type": "string",
+              "enum": [
+                "codex",
+                "claude-code",
+                "cursor",
+                "opencode",
+                "antigravity"
+              ]
+            },
+            "sessionId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "assignmentSha256": {
+              "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/sha"
+            },
+            "nativeTaskId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "attemptRef": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "profileRef",
+            "host",
+            "sessionId",
+            "assignmentSha256"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "operationId",
+        "operation",
+        "changes",
+        "precondition",
+        "policyRef",
+        "capabilityRef",
+        "evidence",
+        "dependsOn"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "operation": {
+              "enum": [
+                "native-create",
+                "native-update"
+              ]
+            }
+          },
+          "required": [
+            "nativeTarget"
+          ],
+          "not": {
+            "anyOf": [
+              {
+                "required": [
+                  "target"
+                ]
+              },
+              {
+                "required": [
+                  "connectionRef"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "properties": {
+            "operation": {
+              "not": {
+                "enum": [
+                  "native-create",
+                  "native-update"
+                ]
+              }
+            }
+          },
+          "required": [
+            "target",
+            "connectionRef"
+          ],
+          "not": {
+            "required": [
+              "nativeTarget"
+            ]
+          }
+        }
+      ]
+    },
+    "extensions": {
+      "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/extensions"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "additionalProperties": false
+}

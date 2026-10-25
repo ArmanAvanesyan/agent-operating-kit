@@ -1,0 +1,23 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "SyncCheckpoint",
+  "metadata": {
+    "id": "example",
+    "revision": 1
+  },
+  "spec": {
+    "routeSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "cursor": null,
+    "baseline": {
+      "path": "assets/synthetic.json",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "correlations": {
+      "path": "assets/synthetic.json",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "watermark": "synthetic-1",
+    "complete": true,
+    "observedAt": "2026-10-24T12:00:00Z"
+  }
+}

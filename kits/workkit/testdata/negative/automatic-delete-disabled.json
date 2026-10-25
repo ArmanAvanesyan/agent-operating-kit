@@ -1,0 +1,53 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "SyncRoute",
+  "metadata": {
+    "id": "example",
+    "revision": 1
+  },
+  "spec": {
+    "source": {
+      "connectionRef": {
+        "kind": "ConnectionProfile",
+        "id": "github-main",
+        "revision": 1,
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "scope": {
+        "tenantId": "org-1",
+        "containerIds": [
+          "repo-1"
+        ]
+      }
+    },
+    "destination": {
+      "connectionRef": {
+        "kind": "ConnectionProfile",
+        "id": "jira-internal",
+        "revision": 1,
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "scope": {
+        "tenantId": "dc-1",
+        "containerIds": [
+          "ENG"
+        ]
+      }
+    },
+    "mode": "one-way",
+    "selector": {
+      "dialect": "portable",
+      "expression": "label contains agent-ready"
+    },
+    "mappingRef": {
+      "kind": "Mapping",
+      "id": "default",
+      "revision": 1,
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "conflictPolicy": "manual",
+    "deletePolicy": "delete",
+    "trigger": "manual",
+    "enabled": false
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "NativeTaskProfile",
+  "metadata": {
+    "id": "native",
+    "revision": 1
+  },
+  "spec": {
+    "host": "claude-code",
+    "hostVersion": "synthetic",
+    "protocol": "host-task-bridge",
+    "operations": [
+      "plans.read"
+    ],
+    "mappingRef": {
+      "kind": "Mapping",
+      "id": "mapping",
+      "revision": 1,
+      "sha256": "b7c9b248e98f99025e2fa6cb01ee185dab2614411c3410744f88c191ce354eaa"
+    },
+    "mode": "export-only"
+  }
+}

@@ -32,6 +32,7 @@ type qualificationTestAnchor struct {
 	tip                 string
 	currentCalls        int
 	advanceCalls        int
+	advanceCommits      int
 	loseAdvanceResponse bool
 }
 
@@ -55,10 +56,37 @@ func (a *qualificationTestAnchor) Advance(ctx context.Context, stream, expected,
 		return errors.New("anchor compare-and-append lost")
 	}
 	a.tip = next
+	a.advanceCommits++
 	if a.loseAdvanceResponse {
 		return errors.New("simulated lost anchor response")
 	}
 	return nil
+}
+
+// Force both callers to observe the same tip before either attempts CAS. This
+// exercises the losing append as well as the winner, regardless of scheduling.
+type qualificationContendingAnchor struct {
+	*qualificationTestAnchor
+	observed chan struct{}
+	release  chan struct{}
+}
+
+func (a *qualificationContendingAnchor) Current(ctx context.Context, stream string) (string, error) {
+	tip, err := a.qualificationTestAnchor.Current(ctx, stream)
+	if err != nil {
+		return "", err
+	}
+	select {
+	case a.observed <- struct{}{}:
+	case <-ctx.Done():
+		return "", ctx.Err()
+	}
+	select {
+	case <-a.release:
+		return tip, nil
+	case <-ctx.Done():
+		return "", ctx.Err()
+	}
 }
 
 type qualificationFixture struct {
@@ -281,6 +309,7 @@ func TestQualificationSameParentOperationRenewalAndReplayCannotRepeatIO(t *testi
 
 func TestQualificationParallelSameOperationHasOneAnchorWinner(t *testing.T) {
 	f := newCodexQualificationFixture(t, "qual-op-parallel")
+	anchor := &qualificationContendingAnchor{qualificationTestAnchor: f.anchor, observed: make(chan struct{}, 2), release: make(chan struct{})}
 	// Two independently assembled invocations race on the same immutable stream tip.
 	outputs := []string{filepath.Join(filepath.Dir(f.q.OutputPath), "parallel-a"), filepath.Join(filepath.Dir(f.q.OutputPath), "parallel-b")}
 	runs := make([]*WorkerRun, 2)
@@ -295,20 +324,30 @@ func TestQualificationParallelSameOperationHasOneAnchorWinner(t *testing.T) {
 			t.Fatal(err)
 		}
 		var buildErr error
-		runs[i], buildErr = buildQualification(decoded, f.anchor, configPath, rootPath)
+		runs[i], buildErr = buildQualification(decoded, anchor, configPath, rootPath)
 		if buildErr != nil {
 			t.Fatal(buildErr)
 		}
 	}
 	codes := make(chan int, 2)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 	var wg sync.WaitGroup
 	for i, run := range runs {
 		wg.Add(1)
 		go func(i int, run *WorkerRun) {
 			defer wg.Done()
-			codes <- run.Run(context.Background(), io.Discard, io.Discard)
+			codes <- run.Run(ctx, io.Discard, io.Discard)
 		}(i, run)
 	}
+	for range runs {
+		select {
+		case <-anchor.observed:
+		case <-ctx.Done():
+			t.Fatal("parallel callers did not both reach the same-tip read")
+		}
+	}
+	close(anchor.release)
 	wg.Wait()
 	close(codes)
 	wins := 0
@@ -320,8 +359,8 @@ func TestQualificationParallelSameOperationHasOneAnchorWinner(t *testing.T) {
 	if wins != 1 {
 		t.Fatalf("parallel one-use qualification winners=%d", wins)
 	}
-	if f.anchor.advanceCalls != 1 {
-		t.Fatalf("one-use stream should admit exactly one advance, got %d", f.anchor.advanceCalls)
+	if f.anchor.advanceCalls != 2 || f.anchor.advanceCommits != 1 || f.anchor.tip != qualificationConsumeDigest(*f.q) {
+		t.Fatalf("same-tip contenders: attempts=%d committed=%d tip=%s", f.anchor.advanceCalls, f.anchor.advanceCommits, f.anchor.tip)
 	}
 	if raw, err := os.ReadFile(f.countPath); err != nil || strings.Count(string(raw), "--version") != 1 {
 		t.Fatalf("parallel loser performed host IO: %q (%v)", raw, err)

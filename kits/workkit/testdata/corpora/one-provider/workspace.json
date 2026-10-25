@@ -1,0 +1,21 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "Workspace",
+  "metadata": {
+    "id": "one-provider",
+    "revision": 1
+  },
+  "spec": {
+    "connections": [
+      {
+        "kind": "ConnectionProfile",
+        "id": "github",
+        "revision": 1,
+        "sha256": "4f0eff89d72144057862b8064c58aa57a58c7be067798c8646cacd858e030611"
+      }
+    ],
+    "bindings": [],
+    "syncRoutes": [],
+    "nativeProfiles": []
+  }
+}

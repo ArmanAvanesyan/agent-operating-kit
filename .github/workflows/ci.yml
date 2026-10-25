@@ -27,6 +27,14 @@ jobs:
           go-version: "1.22.x"
       - name: Build Go CLI
         run: go build -o "$RUNNER_TEMP/aok" ./cmd/aok
+      - name: Check WorkKit generated contracts and implementation pin
+        run: |
+          python3 scripts/workkit/sync_contracts.py --check --design kits/workkit
+          python3 scripts/workkit/pin_implementation.py --check
+      - name: Build standalone offline WorkKit
+        run: go build -o "$RUNNER_TEMP/workkit" ./kits/workkit/cmd/workkit
+      - name: WorkKit credential-free offline commands
+        run: python3 scripts/testing/verify-workkit-offline.py "$RUNNER_TEMP/aok" "$RUNNER_TEMP/workkit"
       - name: Test Go packages
         # Several conformance tests intentionally enforce short process-stop
         # deadlines. Serialize packages so runner contention cannot consume a
@@ -37,7 +45,7 @@ jobs:
       - name: Smoke-test inert enrolled service host without credentials
         run: python3 scripts/testing/verify-enrolled-offline.py "$RUNNER_TEMP/aok-enrolled"
       - name: Race-test usage accounting and local reservation conformance
-        run: go test -p 1 -race ./internal/usage/... ./internal/selection ./internal/evaluation/... ./internal/tracker ./internal/hostbridge/... ./internal/hostdriver ./internal/hostprotocol ./internal/evidence ./internal/runtime/... ./internal/verification ./internal/writeback ./internal/connector/... ./internal/deliverybridge ./internal/readiness/... ./internal/pilot/... ./internal/operations ./internal/campaign ./internal/methodology ./internal/worksystem/... ./internal/windowscert ./internal/enrolled/...
+        run: go test -p 1 -race ./kits/workkit/... ./integrations/legacy-aok/workkit ./internal/usage/... ./internal/selection ./internal/evaluation/... ./internal/tracker ./internal/hostbridge/... ./internal/hostdriver ./internal/hostprotocol ./internal/evidence ./internal/runtime/... ./internal/verification ./internal/writeback ./internal/connector/... ./internal/deliverybridge ./internal/readiness/... ./internal/pilot/... ./internal/operations ./internal/campaign ./internal/methodology ./internal/worksystem/... ./internal/windowscert ./internal/enrolled/...
       - name: Phase 9 offline commands without credentials or executable discovery
         run: python3 scripts/testing/verify-phase9-offline.py "$RUNNER_TEMP/aok"
       - name: Phase 10 offline extension commands without credentials
@@ -107,6 +115,7 @@ jobs:
         run: |
           go build -o "$RUNNER_TEMP/aok-${{ matrix.goos }}-${{ matrix.goarch }}" ./cmd/aok
           go build -o "$RUNNER_TEMP/aok-enrolled-${{ matrix.goos }}-${{ matrix.goarch }}" ./cmd/aok-enrolled
+          go build -o "$RUNNER_TEMP/workkit-${{ matrix.goos }}-${{ matrix.goarch }}" ./kits/workkit/cmd/workkit
       - name: Compile accounting store with CGO disabled
         env:
           GOOS: ${{ matrix.goos }}

@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workkit.example/spec/v1alpha1/sync-conflict.schema.json",
+  "title": "SyncConflict",
+  "description": "Proposed structural contract; semantic validation and authority are separate.",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "const": "workkit/v1alpha1"
+    },
+    "kind": {
+      "const": "SyncConflict"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/id"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "routeRef": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/ref"
+        },
+        "source": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/identity"
+        },
+        "destination": {
+          "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/identity"
+        },
+        "field": {
+          "type": "string",
+          "minLength": 1
+        },
+        "baseline": {},
+        "sourceValue": {},
+        "destinationValue": {},
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "open",
+            "resolved",
+            "superseded"
+          ]
+        }
+      },
+      "required": [
+        "routeRef",
+        "source",
+        "destination",
+        "field",
+        "baseline",
+        "sourceValue",
+        "destinationValue",
+        "reason",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "extensions": {
+      "$ref": "https://workkit.example/spec/v1alpha1/common.schema.json#/$defs/extensions"
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "additionalProperties": false
+}

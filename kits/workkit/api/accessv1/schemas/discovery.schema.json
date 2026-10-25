@@ -1,0 +1,40 @@
+{
+  "$id": "https://workkit.example/spec/access/v1/discovery.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "type": "string"
+    },
+    "roots": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "tools": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "version": {
+      "const": "workkit-access/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "roots",
+    "tools"
+  ],
+  "type": "object"
+}

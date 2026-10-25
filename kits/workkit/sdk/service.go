@@ -13,7 +13,7 @@ import (
 	"github.com/ArmanAvanesyan/agent-operating-kit/kits/workkit/internal/engine"
 )
 
-const Version = "0.2.0-read-offline"
+const Version = "0.3.0-access-offline"
 
 type Error struct {
 	Code, Message string
@@ -69,6 +69,7 @@ type WorkspaceReport struct {
 type Service struct {
 	legacy LegacyReader
 	reads  ReadBackend
+	access AccessBackend
 }
 
 func New(legacy LegacyReader) *Service { return &Service{legacy: legacy} }

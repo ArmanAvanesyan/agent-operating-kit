@@ -212,6 +212,7 @@ func TestReadQueryThreeValuedExactAndFederatedScopes(t *testing.T) {
 type readFixtureTransport struct {
 	calls           atomic.Int32
 	timeout         bool
+	cancel          context.CancelFunc
 	malformed       bool
 	interruptSecond bool
 }
@@ -222,8 +223,15 @@ func (t *readFixtureTransport) Do(ctx context.Context, s readsource.Source, req 
 		return readsource.Response{}, context.DeadlineExceeded
 	}
 	if t.timeout {
-		<-ctx.Done()
-		return readsource.Response{}, ctx.Err()
+		// Start the synthetic deadline only after transport admission. A slow
+		// race-instrumented scheduler must not expire before output reservation.
+		timed, cancel := context.WithTimeout(ctx, 20*time.Millisecond)
+		defer cancel()
+		<-timed.Done()
+		if t.cancel != nil {
+			t.cancel()
+		}
+		return readsource.Response{}, timed.Err()
 	}
 	if t.malformed {
 		return readsource.Response{Status: 200, Body: []byte(`{"invalid"`)}, nil
@@ -285,7 +293,8 @@ func TestReadSessionEnrollmentOutputConsumptionAndTimeoutPreservation(t *testing
 			ctx := context.Background()
 			if mode == "timeout" {
 				var cancel context.CancelFunc
-				ctx, cancel = context.WithTimeout(ctx, 20*time.Millisecond)
+				ctx, cancel = context.WithCancel(ctx)
+				backend.transport.cancel = cancel
 				defer cancel()
 			}
 			m, e := service.CaptureRead(ctx, cfg, policy, en, "capture", "", out)

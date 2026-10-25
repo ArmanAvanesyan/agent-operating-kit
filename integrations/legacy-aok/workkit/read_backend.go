@@ -82,10 +82,7 @@ func (b ReadBackend) OpenRead(ctx context.Context, configRaw, policyRaw, enrollm
 			return nil, errors.New("one explicit gh credential route required")
 		}
 		for key, ref := range en.SecretEnvironment {
-			want := "GH_TOKEN"
-			if githubHost(cfg.Source.Origin) != "github.com" {
-				want = "GH_ENTERPRISE_TOKEN"
-			}
+			want := githubTokenKey(githubHost(cfg.Source.Origin))
 			if key != want {
 				return nil, errors.New("unapproved gh child environment")
 			}
@@ -470,4 +467,11 @@ func (b *readBudget) consume(n int) error {
 	}
 	b.bytes -= n
 	return nil
+}
+
+func githubTokenKey(host string) string {
+	if host == "github.com" || strings.HasSuffix(host, ".ghe.com") {
+		return "GH_TOKEN"
+	}
+	return "GH_ENTERPRISE_TOKEN"
 }

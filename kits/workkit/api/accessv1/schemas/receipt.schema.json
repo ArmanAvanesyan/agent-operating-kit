@@ -1,0 +1,311 @@
+{
+  "$id": "https://workkit.example/spec/access/v1/receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "action": {
+      "type": "string"
+    },
+    "binding": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "authorizationGranted": {
+              "type": "boolean"
+            },
+            "configurationSha256": {
+              "type": "string"
+            },
+            "connectionId": {
+              "type": "string"
+            },
+            "evidenceTrust": {
+              "type": "string"
+            },
+            "executionReady": {
+              "type": "boolean"
+            },
+            "generation": {
+              "type": "string"
+            },
+            "kind": {
+              "type": "string"
+            },
+            "liveQualification": {
+              "type": "string"
+            },
+            "mode": {
+              "type": "string"
+            },
+            "observedAt": {
+              "type": "string"
+            },
+            "principal": {
+              "type": "string"
+            },
+            "providerInteraction": {
+              "type": "string"
+            },
+            "scopedReadVerified": {
+              "type": "boolean"
+            },
+            "status": {
+              "type": "string"
+            },
+            "storageMode": {
+              "type": "string"
+            },
+            "tenantId": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "providerInteraction",
+            "evidenceTrust",
+            "version",
+            "kind",
+            "configurationSha256",
+            "connectionId",
+            "principal",
+            "tenantId",
+            "mode",
+            "generation",
+            "status",
+            "observedAt",
+            "storageMode",
+            "scopedReadVerified",
+            "liveQualification",
+            "authorizationGranted",
+            "executionReady"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "diagnostic": {
+      "type": "string"
+    },
+    "extension": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "layout": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "sha256": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "version",
+            "sha256",
+            "path"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "finishedAt": {
+      "type": "string"
+    },
+    "grantSha256": {
+      "type": "string"
+    },
+    "implementationSha256": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "liveQualification": {
+      "type": "string"
+    },
+    "localEffect": {
+      "type": "string"
+    },
+    "migrationActivation": {
+      "type": "string"
+    },
+    "operationId": {
+      "type": "string"
+    },
+    "policySha256": {
+      "type": "string"
+    },
+    "productionActivation": {
+      "type": "string"
+    },
+    "providerEffect": {
+      "type": "string"
+    },
+    "requestSha256": {
+      "type": "string"
+    },
+    "startedAt": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "tool": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "configuration": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "sha256": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "sha256"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "extensions": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "layout": {
+                    "type": "string"
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "sha256": {
+                    "type": "string"
+                  },
+                  "version": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "version",
+                  "sha256",
+                  "path"
+                ],
+                "type": "object"
+              },
+              "maxItems": 10000,
+              "type": [
+                "array",
+                "null"
+              ]
+            },
+            "id": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "platform": {
+              "type": "string"
+            },
+            "runtime": {
+              "anyOf": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "sha256": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path",
+                    "sha256"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "sha256": {
+              "type": "string"
+            },
+            "versionOutput": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "path",
+            "sha256",
+            "versionOutput",
+            "platform",
+            "extensions"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "version": {
+      "const": "workkit-access/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "operationId",
+    "action",
+    "requestSha256",
+    "policySha256",
+    "grantSha256",
+    "implementationSha256",
+    "startedAt",
+    "finishedAt",
+    "status",
+    "localEffect",
+    "providerEffect",
+    "diagnostic",
+    "migrationActivation",
+    "liveQualification",
+    "productionActivation"
+  ],
+  "type": "object"
+}

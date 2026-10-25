@@ -174,7 +174,7 @@ func (s *ReadSession) capture(ctx context.Context, mode string, previous *ReadBu
 	return m, nil
 }
 func (s *Service) WithReadBackend(b ReadBackend) *Service {
-	return &Service{legacy: s.legacy, reads: b}
+	return &Service{legacy: s.legacy, reads: b, access: s.access}
 }
 func (s *Service) CaptureRead(ctx context.Context, configuration, policy, enrollment, mode, previous, out string) (r.Manifest, error) {
 	if s.reads == nil {
@@ -195,6 +195,19 @@ func (s *Service) CaptureRead(ctx context.Context, configuration, policy, enroll
 	if e != nil {
 		return r.Manifest{}, readFailure(e)
 	}
+	return s.CaptureReadSnapshot(ctx, cfg, p, en, mode, previous, out)
+}
+
+// CaptureReadSnapshot consumes already captured immutable inputs. Paths are not
+// reopened, so an independently signed access grant can pin exact P2 bytes.
+func (s *Service) CaptureReadSnapshot(ctx context.Context, cfg, p, en []byte, mode, previous, out string) (r.Manifest, error) {
+	if s.reads == nil || mode != "capture" && mode != "discover" {
+		return r.Manifest{}, failure("read.unavailable", "invalid protected read backend/mode", 3, nil)
+	}
+	cfg = append([]byte{}, cfg...)
+	p = append([]byte{}, p...)
+	en = append([]byte{}, en...)
+	var e error
 	var prior *ReadBundle
 	if previous != "" {
 		prior, e = LoadReadBundle(ctx, previous)

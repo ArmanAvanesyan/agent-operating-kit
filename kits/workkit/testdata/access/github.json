@@ -1,0 +1,40 @@
+{
+  "basePath": "",
+  "connectionId": "github",
+  "containers": [
+    "repo-node"
+  ],
+  "kind": "AuthConfiguration",
+  "mode": "token",
+  "nativePrincipal": "synthetic-native-principal",
+  "origin": "https://api.github.com",
+  "profile": {
+    "apiVersion": "workkit/v1alpha1",
+    "kind": "ConnectionProfile",
+    "metadata": {
+      "id": "github",
+      "revision": 1
+    },
+    "spec": {
+      "apiVersion": "2022-11-28",
+      "authRef": "credentials/github",
+      "basePath": "",
+      "origin": "https://api.github.com",
+      "provider": "github",
+      "scope": {
+        "containerIds": [
+          "repo-node"
+        ],
+        "tenantId": "owner-node"
+      },
+      "transport": "gh"
+    }
+  },
+  "provider": "github",
+  "providerLookup": "",
+  "secretReferences": {
+    "token": "WK_P3_DISPOSABLE_TOKEN"
+  },
+  "tenantId": "owner-node",
+  "version": "workkit-access/v1"
+}

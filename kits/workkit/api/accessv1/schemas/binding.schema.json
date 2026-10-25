@@ -1,0 +1,78 @@
+{
+  "$id": "https://workkit.example/spec/access/v1/binding.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authorizationGranted": {
+      "const": false
+    },
+    "configurationSha256": {
+      "type": "string"
+    },
+    "connectionId": {
+      "type": "string"
+    },
+    "evidenceTrust": {
+      "type": "string"
+    },
+    "executionReady": {
+      "const": false
+    },
+    "generation": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "liveQualification": {
+      "type": "string"
+    },
+    "mode": {
+      "type": "string"
+    },
+    "observedAt": {
+      "type": "string"
+    },
+    "principal": {
+      "type": "string"
+    },
+    "providerInteraction": {
+      "type": "string"
+    },
+    "scopedReadVerified": {
+      "type": "boolean"
+    },
+    "status": {
+      "type": "string"
+    },
+    "storageMode": {
+      "type": "string"
+    },
+    "tenantId": {
+      "type": "string"
+    },
+    "version": {
+      "const": "workkit-access/v1"
+    }
+  },
+  "required": [
+    "providerInteraction",
+    "evidenceTrust",
+    "version",
+    "kind",
+    "configurationSha256",
+    "connectionId",
+    "principal",
+    "tenantId",
+    "mode",
+    "generation",
+    "status",
+    "observedAt",
+    "storageMode",
+    "scopedReadVerified",
+    "liveQualification",
+    "authorizationGranted",
+    "executionReady"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,140 @@
+{
+  "$id": "https://workkit.example/spec/access/v1/tool-observation.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "type": "string"
+    },
+    "liveQualification": {
+      "type": "string"
+    },
+    "observedAt": {
+      "type": "string"
+    },
+    "tool": {
+      "additionalProperties": false,
+      "properties": {
+        "configuration": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "extensions": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "layout": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "sha256": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "version",
+              "sha256",
+              "path"
+            ],
+            "type": "object"
+          },
+          "maxItems": 10000,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "runtime": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sha256": {
+          "type": "string"
+        },
+        "versionOutput": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "path",
+        "sha256",
+        "versionOutput",
+        "platform",
+        "extensions"
+      ],
+      "type": "object"
+    },
+    "verified": {
+      "type": "boolean"
+    },
+    "version": {
+      "const": "workkit-access/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "tool",
+    "observedAt",
+    "verified",
+    "liveQualification"
+  ],
+  "type": "object"
+}

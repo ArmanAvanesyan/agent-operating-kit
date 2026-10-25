@@ -197,3 +197,8 @@ services or authorize production. Cross-buildability is not native certification
 
 See [P2 delivery evidence](implementation/workkit-phase-2-delivery-evidence.md)
 and [extraction decisions](implementation/workkit-phase-2-extraction-decisions.md).
+
+P3's [toolchain/authentication boundary](workkit-toolchain-auth.md) adds explicit
+access observations and guarded tool actions. It preserves this P2 read bootstrap;
+broker-backed reads require their own exact access grant and P2 enrollment.
+Native global credential-cache mutation remains unsupported.

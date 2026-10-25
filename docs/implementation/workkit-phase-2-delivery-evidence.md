@@ -82,3 +82,15 @@ working tree on `codex/workkit-p2-read-federation` before commit and PR
 publication. The original sealed snapshot remains historical evidence; this
 delivery does not activate a route or publish a release.
 The unrelated pre-existing `aok-tool-worker.exe` is excluded and untouched.
+
+### PR validation follow-up
+
+PR #88's first CI race run reached the existing five-second store deadline in
+one of 100 competing reservation processes. The test helper now stops on that
+deadline without retrying; the parent still checks the capacity ceiling and
+requires every persisted hold to match an explicitly successful child. No
+production store behavior or deadline changed. Three repeated local store race
+suites passed after the test-only correction; the implementation pin remains
+unchanged. The original CI failure is retained in
+`build/workkit-p2/pr-88-failed-ci-001.log`; the sealed acceptance bundle remains
+unchanged.

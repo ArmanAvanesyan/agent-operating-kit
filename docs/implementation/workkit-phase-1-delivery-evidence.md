@@ -55,6 +55,14 @@ and additionally rejects expiry; production runtime code is unchanged. Another
 run overlapped a test-file edit and failed compilation; a frozen-tree rerun
 passed. Neither failed log is relabeled as passing.
 
+PR acceptance also exposed a pre-existing concurrency-test assertion that counted
+attempted anchor appends as committed advances. The fixture now forces both
+callers to read the same tip, distinguishes attempts from commits and requires
+two attempts, one committed advance, one successful worker and one host
+invocation. Production anchor and qualification code are unchanged. PR logs are
+preserved separately under `build/workkit-p1/pr-87-*`; the original sealed
+delivery bundle is not rewritten.
+
 Final-source checks use `acceptance-003`:
 
 - Full Go suite under Go 1.22.12, serialized across packages.

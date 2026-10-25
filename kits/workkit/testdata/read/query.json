@@ -1,0 +1,19 @@
+{
+  "version": "workkit-read/v1",
+  "dialect": "portable",
+  "connectionId": "",
+  "expression": "title != \"not-a-fixture-title\"",
+  "fields": {
+    "title": {
+      "type": "string",
+      "providerFields": {
+        "github": "title",
+        "azure-devops": "System.Title",
+        "linear": "title",
+        "jira": "summary"
+      }
+    }
+  },
+  "limit": 100,
+  "maxAgeSeconds": 60
+}

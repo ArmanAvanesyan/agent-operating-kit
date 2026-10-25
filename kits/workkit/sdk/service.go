@@ -1,5 +1,5 @@
-// Package sdk exposes WorkKit's offline application service. It imports no AOK
-// legacy internals, provider transports, credential readers or SQLite stores.
+// Package sdk exposes WorkKit application services. It imports no AOK legacy
+// internals, credential readers or SQLite stores; live transports are injected.
 package sdk
 
 import (
@@ -13,7 +13,7 @@ import (
 	"github.com/ArmanAvanesyan/agent-operating-kit/kits/workkit/internal/engine"
 )
 
-const Version = "0.1.0-offline"
+const Version = "0.2.0-read-offline"
 
 type Error struct {
 	Code, Message string
@@ -66,7 +66,10 @@ type WorkspaceReport struct {
 	ExecutionReady       bool              `json:"executionReady"`
 	LiveQualification    string            `json:"liveQualification"`
 }
-type Service struct{ legacy LegacyReader }
+type Service struct {
+	legacy LegacyReader
+	reads  ReadBackend
+}
 
 func New(legacy LegacyReader) *Service { return &Service{legacy: legacy} }
 func (s *Service) Resolve(ctx context.Context, r WorkspaceRequest) (WorkspaceReport, error) {

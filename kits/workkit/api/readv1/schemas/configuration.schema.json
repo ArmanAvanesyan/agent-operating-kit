@@ -1,0 +1,192 @@
+{
+  "$id": "https://workkit.example/spec/read/v1/configuration.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "connectionId": {
+      "type": "string"
+    },
+    "profile": {},
+    "source": {
+      "additionalProperties": false,
+      "properties": {
+        "apiVersion": {
+          "type": "string"
+        },
+        "auth": {
+          "additionalProperties": false,
+          "properties": {
+            "mode": {
+              "type": "string"
+            },
+            "tokenEnv": {
+              "type": "string"
+            },
+            "usernameEnv": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "mode",
+            "tokenEnv",
+            "usernameEnv"
+          ],
+          "type": "object"
+        },
+        "containerId": {
+          "type": "string"
+        },
+        "containerKey": {
+          "type": "string"
+        },
+        "deployment": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "basePath": {
+                  "type": "string"
+                },
+                "serverVersion": {
+                  "type": "string"
+                },
+                "tlsTrustSha256": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "basePath",
+                "serverVersion",
+                "tlsTrustSha256"
+              ],
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "limits": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "commandSeconds": {
+                  "type": "integer"
+                },
+                "items": {
+                  "type": "integer"
+                },
+                "requestSeconds": {
+                  "type": "integer"
+                },
+                "requests": {
+                  "type": "integer"
+                },
+                "responseBytes": {
+                  "type": "integer"
+                },
+                "totalBytes": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "requestSeconds",
+                "commandSeconds",
+                "requests",
+                "items",
+                "responseBytes",
+                "totalBytes"
+              ],
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "mappingVersion": {
+          "type": "string"
+        },
+        "nativeTenantId": {
+          "type": "string"
+        },
+        "origin": {
+          "type": "string"
+        },
+        "principalPseudonym": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "readPolicySha256": {
+          "type": "string"
+        },
+        "scope": {
+          "additionalProperties": false,
+          "properties": {
+            "comments": {
+              "type": "boolean"
+            },
+            "itemIds": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 10000,
+              "type": [
+                "array",
+                "null"
+              ]
+            },
+            "projects": {
+              "type": "boolean"
+            },
+            "query": {
+              "type": "string"
+            },
+            "relations": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "itemIds",
+            "query",
+            "comments",
+            "relations",
+            "projects"
+          ],
+          "type": "object"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "version",
+        "provider",
+        "origin",
+        "apiVersion",
+        "nativeTenantId",
+        "containerId",
+        "containerKey",
+        "principalPseudonym",
+        "auth",
+        "scope",
+        "mappingVersion"
+      ],
+      "type": "object"
+    },
+    "version": {
+      "const": "workkit-read/v1"
+    }
+  },
+  "required": [
+    "version",
+    "connectionId",
+    "profile",
+    "source"
+  ],
+  "title": "WorkKit read configuration",
+  "type": "object"
+}

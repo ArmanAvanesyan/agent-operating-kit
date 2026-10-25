@@ -1,0 +1,178 @@
+{
+  "$id": "https://workkit.example/spec/read/v1/manifest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "adapterVersion": {
+      "type": "string"
+    },
+    "assets": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "sha256",
+          "role"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "authorizationGranted": {
+      "const": false
+    },
+    "complete": {
+      "type": "boolean"
+    },
+    "configurationSha256": {
+      "type": "string"
+    },
+    "connectionId": {
+      "type": "string"
+    },
+    "diagnostics": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "field": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "field",
+          "message"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "executionReady": {
+      "const": false
+    },
+    "implementationSha256": {
+      "type": "string"
+    },
+    "lastObservedAt": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "liveQualification": {
+      "const": "not-established"
+    },
+    "migrationActivated": {
+      "const": false
+    },
+    "mode": {
+      "type": "string"
+    },
+    "originalObservedAt": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "previousBundleSha256": {
+      "type": "string"
+    },
+    "productionActivated": {
+      "const": false
+    },
+    "readPolicySha256": {
+      "type": "string"
+    },
+    "sourceSha256": {
+      "type": "string"
+    },
+    "transport": {
+      "additionalProperties": false,
+      "properties": {
+        "authMode": {
+          "type": "string"
+        },
+        "executableSha256": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "principal": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "version",
+        "executableSha256",
+        "principal",
+        "authMode"
+      ],
+      "type": "object"
+    },
+    "version": {
+      "const": "workkit-read/v1"
+    }
+  },
+  "required": [
+    "version",
+    "connectionId",
+    "configurationSha256",
+    "sourceSha256",
+    "readPolicySha256",
+    "adapterVersion",
+    "transport",
+    "originalObservedAt",
+    "lastObservedAt",
+    "previousBundleSha256",
+    "mode",
+    "complete",
+    "assets",
+    "diagnostics",
+    "authorizationGranted",
+    "executionReady",
+    "migrationActivated",
+    "liveQualification",
+    "productionActivated",
+    "implementationSha256"
+  ],
+  "title": "WorkKit read manifest",
+  "type": "object"
+}

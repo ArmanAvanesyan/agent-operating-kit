@@ -12,5 +12,5 @@ import (
 func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
-	os.Exit(command.Run(ctx, os.Args[1:], os.Stdout, os.Stderr, sdk.New(&legacy.Reader{})))
+	os.Exit(command.Run(ctx, os.Args[1:], os.Stdout, os.Stderr, sdk.New(&legacy.Reader{}).WithReadBackend(legacy.ReadBackend{})))
 }

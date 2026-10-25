@@ -1,0 +1,36 @@
+{
+  "$id": "https://workkit.example/spec/read/v1/catalog-batch.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "assetSha256": {
+        "type": "string"
+      },
+      "data": {},
+      "jsonPointer": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "provenanceKnown": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "name",
+      "data",
+      "assetSha256",
+      "jsonPointer",
+      "provenanceKnown"
+    ],
+    "type": "object"
+  },
+  "maxItems": 10000,
+  "title": "WorkKit read catalog-batch",
+  "type": [
+    "array",
+    "null"
+  ]
+}

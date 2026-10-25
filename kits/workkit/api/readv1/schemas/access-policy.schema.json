@@ -1,0 +1,41 @@
+{
+  "$id": "https://workkit.example/spec/read/v1/access-policy.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "issuers": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "publicKey": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "publicKey"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "legacyReadPolicy": {},
+    "version": {
+      "const": "workkit-read/v1"
+    }
+  },
+  "required": [
+    "version",
+    "legacyReadPolicy",
+    "issuers"
+  ],
+  "title": "WorkKit read access-policy",
+  "type": "object"
+}

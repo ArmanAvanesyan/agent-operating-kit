@@ -530,3 +530,7 @@ separate gates. See [enrolled service operation](docs/enrolled-live-services.md)
 ## WorkKit offline core
 
 The opt-in `aok work` namespace and standalone WorkKit build provide strict offline workspace validation and inactive AOK imports. Provider connections, native task operations, store migration and live qualification remain separate. See [WorkKit P1](docs/workkit-offline-core.md).
+
+## WorkKit read capture and federation
+
+WorkKit P2 adds opt-in scoped read capture, catalog inspection and portable local federation through `workkit` and `aok work`. Shared adapters preserve legacy AOK formats; live qualification, migration activation and production activation remain gated. See [operator guide](docs/workkit-read-federation.md) and [delivery evidence](docs/implementation/workkit-phase-2-delivery-evidence.md).

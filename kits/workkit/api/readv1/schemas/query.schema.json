@@ -1,0 +1,64 @@
+{
+  "$id": "https://workkit.example/spec/read/v1/query.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "connectionId": {
+      "type": "string"
+    },
+    "dialect": {
+      "type": "string"
+    },
+    "expression": {
+      "type": "string"
+    },
+    "fields": {
+      "additionalProperties": {
+        "additionalProperties": false,
+        "properties": {
+          "providerFields": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "providerFields"
+        ],
+        "type": "object"
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "limit": {
+      "type": "integer"
+    },
+    "maxAgeSeconds": {
+      "type": "integer"
+    },
+    "version": {
+      "const": "workkit-read/v1"
+    }
+  },
+  "required": [
+    "version",
+    "dialect",
+    "connectionId",
+    "expression",
+    "fields",
+    "limit",
+    "maxAgeSeconds"
+  ],
+  "title": "WorkKit read query",
+  "type": "object"
+}

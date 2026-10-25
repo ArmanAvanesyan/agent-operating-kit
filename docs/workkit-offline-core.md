@@ -130,3 +130,5 @@ or other native controls. This phase adds no installer or package publication.
 
 See the [P1 delivery evidence](implementation/workkit-phase-1-delivery-evidence.md)
 for acceptance checks, compatibility decisions and remaining activation gates.
+
+P2 read commands and their separate qualification/activation boundaries are documented in [read capture and federation](workkit-read-federation.md). P1 command semantics remain unchanged.

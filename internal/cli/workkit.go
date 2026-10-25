@@ -13,5 +13,5 @@ import (
 func runWorkkit(args []string, stdout, stderr io.Writer) int {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
-	return command.RunSuite(ctx, args, stdout, stderr, sdk.New(&legacy.Reader{}))
+	return command.RunSuite(ctx, args, stdout, stderr, sdk.New(&legacy.Reader{}).WithReadBackend(legacy.ReadBackend{}))
 }

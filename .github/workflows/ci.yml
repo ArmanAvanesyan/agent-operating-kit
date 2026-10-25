@@ -31,10 +31,14 @@ jobs:
         run: |
           python3 scripts/workkit/sync_contracts.py --check --design kits/workkit
           python3 scripts/workkit/pin_implementation.py --check
+          go run ./scripts/workkit/read-schemas -check
+          python3 scripts/workkit/build_read_fixtures.py --check
       - name: Build standalone offline WorkKit
         run: go build -o "$RUNNER_TEMP/workkit" ./kits/workkit/cmd/workkit
       - name: WorkKit credential-free offline commands
-        run: python3 scripts/testing/verify-workkit-offline.py "$RUNNER_TEMP/aok" "$RUNNER_TEMP/workkit"
+        run: |
+          python3 scripts/testing/verify-workkit-offline.py "$RUNNER_TEMP/aok" "$RUNNER_TEMP/workkit"
+          python3 scripts/testing/verify-workkit-read-offline.py "$RUNNER_TEMP/aok" "$RUNNER_TEMP/workkit"
       - name: Test Go packages
         # Several conformance tests intentionally enforce short process-stop
         # deadlines. Serialize packages so runner contention cannot consume a

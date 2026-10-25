@@ -1,0 +1,285 @@
+{
+  "$id": "https://workkit.example/spec/read/v1/item-batch.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "connectionId": {
+        "type": "string"
+      },
+      "data": {
+        "additionalProperties": false,
+        "properties": {
+          "comments": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "body": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "updatedAt": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "body",
+                "updatedAt"
+              ],
+              "type": "object"
+            },
+            "maxItems": 10000,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "complete": {
+            "type": "boolean"
+          },
+          "displayKey": {
+            "type": "string"
+          },
+          "fields": {
+            "additionalProperties": {},
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "identity": {
+            "additionalProperties": false,
+            "properties": {
+              "containerId": {
+                "type": "string"
+              },
+              "itemKind": {
+                "type": "string"
+              },
+              "provider": {
+                "type": "string"
+              },
+              "remoteId": {
+                "type": "string"
+              },
+              "tenantId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "provider",
+              "tenantId",
+              "containerId",
+              "remoteId",
+              "itemKind"
+            ],
+            "type": "object"
+          },
+          "lossyFields": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10000,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "nativeTenantId": {
+            "type": "string"
+          },
+          "projectFields": {
+            "additionalProperties": {},
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "provenance": {
+            "additionalProperties": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "assetSha256": {
+                    "type": "string"
+                  },
+                  "jsonPointer": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "assetSha256",
+                  "jsonPointer"
+                ],
+                "type": "object"
+              },
+              "maxItems": 10000,
+              "type": [
+                "array",
+                "null"
+              ]
+            },
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "relations": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "supported": {
+                  "type": "boolean"
+                },
+                "targetId": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "type",
+                "targetId",
+                "url",
+                "supported"
+              ],
+              "type": "object"
+            },
+            "maxItems": 10000,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "revision": {
+            "type": "string"
+          },
+          "revisionKind": {
+            "type": "string"
+          },
+          "transitions": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "requiredFields": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "maxItems": 10000,
+                  "type": [
+                    "array",
+                    "null"
+                  ]
+                },
+                "requirementsKnown": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "requiredFields",
+                "requirementsKnown"
+              ],
+              "type": "object"
+            },
+            "maxItems": 10000,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "identity",
+          "nativeTenantId",
+          "displayKey",
+          "url",
+          "revision",
+          "revisionKind",
+          "updatedAt",
+          "fields",
+          "relations",
+          "comments",
+          "projectFields",
+          "transitions",
+          "provenance",
+          "lossyFields",
+          "complete"
+        ],
+        "type": "object"
+      },
+      "identity": {
+        "additionalProperties": false,
+        "properties": {
+          "basePath": {
+            "type": "string"
+          },
+          "containerId": {
+            "type": "string"
+          },
+          "itemKind": {
+            "type": "string"
+          },
+          "nativeId": {
+            "type": "string"
+          },
+          "origin": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "tenantId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "provider",
+          "origin",
+          "basePath",
+          "tenantId",
+          "containerId",
+          "itemKind",
+          "nativeId"
+        ],
+        "type": "object"
+      },
+      "principal": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "connectionId",
+      "principal",
+      "identity",
+      "data"
+    ],
+    "type": "object"
+  },
+  "maxItems": 10000,
+  "title": "WorkKit read item-batch",
+  "type": [
+    "array",
+    "null"
+  ]
+}

@@ -1,0 +1,149 @@
+package readsource
+
+import (
+	"encoding/json"
+	"fmt"
+
+	"github.com/santhosh-tekuri/jsonschema/v6"
+	"reflect"
+	"strings"
+)
+
+// Schema returns the closed, independently versioned wire contract. Provider field
+// values intentionally remain raw JSON; structured AOK control records stay closed.
+func Schema(kind string) (map[string]any, error) {
+	records := map[string]any{"source": Source{}, "read-policy": ReadPolicy{}, "manifest": Manifest{}, "snapshot": Snapshot{}, "checkpoint": Checkpoint{}}
+	r, ok := records[kind]
+	if !ok {
+		return nil, fmt.Errorf("unknown tracker record")
+	}
+	s := schemaType(reflect.TypeOf(r))
+	s["$schema"] = "https://json-schema.org/draft/2020-12/schema"
+	return s, nil
+}
+func schemaType(t reflect.Type) map[string]any {
+	if t == reflect.TypeOf(json.RawMessage{}) {
+		return map[string]any{}
+	}
+	if t == reflect.TypeOf(json.Number("")) {
+		return map[string]any{"type": "number"}
+	}
+	if t.Kind() == reflect.Pointer {
+		return map[string]any{"anyOf": []any{schemaType(t.Elem()), map[string]any{"type": "null"}}}
+	}
+	switch t.Kind() {
+	case reflect.Struct:
+		properties := map[string]any{}
+		required := []string{}
+		for i := 0; i < t.NumField(); i++ {
+			f := t.Field(i)
+			if !f.IsExported() {
+				continue
+			}
+			tag := strings.Split(f.Tag.Get("json"), ",")
+			name := tag[0]
+			if name == "-" {
+				continue
+			}
+			if name == "" {
+				name = f.Name
+			}
+			properties[name] = schemaType(f.Type)
+			optional := false
+			for _, part := range tag[1:] {
+				if part == "omitempty" {
+					optional = true
+				}
+			}
+			if !optional {
+				required = append(required, name)
+			}
+		}
+		if _, ok := properties["version"]; ok {
+			properties["version"] = map[string]any{"const": Version}
+		}
+		for _, f := range []string{"authorizationGranted", "executionReady"} {
+			if _, ok := properties[f]; ok {
+				properties[f] = map[string]any{"const": false}
+			}
+		}
+		return map[string]any{"type": "object", "properties": properties, "required": required, "additionalProperties": false}
+	case reflect.Slice:
+		return map[string]any{"type": []string{"array", "null"}, "items": schemaType(t.Elem()), "maxItems": 10000}
+	case reflect.Map:
+		return map[string]any{"type": []string{"object", "null"}, "additionalProperties": schemaType(t.Elem())}
+	case reflect.Bool:
+		return map[string]any{"type": "boolean"}
+	case reflect.Int, reflect.Int64:
+		return map[string]any{"type": "integer"}
+	default:
+		return map[string]any{"type": "string"}
+	}
+}
+func ValidateJSON(b []byte, kind string) error {
+	if e := validateRaw(b); e != nil {
+		return e
+	}
+	schema, e := Schema(kind)
+	if e != nil {
+		return e
+	}
+	var head struct {
+		Version string `json:"version"`
+	}
+	if e := json.Unmarshal(b, &head); e != nil {
+		return e
+	}
+	if head.Version != Version && head.Version != Version2 {
+		return fmt.Errorf("unsupported tracker version")
+	}
+	adaptTrackerSchema(schema, head.Version)
+	sb, _ := json.Marshal(schema)
+	var s any
+	if e = json.Unmarshal(sb, &s); e != nil {
+		return e
+	}
+	c := jsonschema.NewCompiler()
+	c.UseLoader(denyLoader{})
+	if e = c.AddResource("urn:aok:tracker", s); e != nil {
+		return e
+	}
+	compiled, e := c.Compile("urn:aok:tracker")
+	if e != nil {
+		return e
+	}
+	var v any
+	decoder := json.NewDecoder(strings.NewReader(string(b)))
+	decoder.UseNumber()
+	if e = decoder.Decode(&v); e != nil {
+		return e
+	}
+	return compiled.Validate(v)
+}
+
+type denyLoader struct{}
+
+func (denyLoader) Load(u string) (any, error) {
+	return nil, fmt.Errorf("external schema references forbidden")
+}
+
+func adaptTrackerSchema(v any, version string) {
+	switch x := v.(type) {
+	case map[string]any:
+		if props, ok := x["properties"].(map[string]any); ok {
+			if version == Version {
+				delete(props, "deployment")
+			}
+			if _, ok := props["version"]; ok {
+				props["version"] = map[string]any{"const": version}
+			}
+		}
+		for _, c := range x {
+			adaptTrackerSchema(c, version)
+		}
+	case []any:
+		for _, c := range x {
+			adaptTrackerSchema(c, version)
+		}
+	}
+}

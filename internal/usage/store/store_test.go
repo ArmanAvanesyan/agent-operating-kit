@@ -568,7 +568,7 @@ func TestHundredProcessReservations(t *testing.T) {
 	if cap.Balances[0].Held != json.Number(fmt.Sprint(winners)) {
 		t.Fatalf("lost hold %v", cap)
 	}
-	t.Logf("100 competing processes: %d admitted, remainder blocked/conflicted; no over-admission", winners)
+	t.Logf("100 competing processes: %d admitted, remainder blocked/conflicted/deadline-limited; no over-admission", winners)
 }
 
 func TestStoreChild(t *testing.T) {
@@ -610,6 +610,14 @@ func TestStoreChild(t *testing.T) {
 		}
 		if errors.Is(e, ErrBlocked) {
 			fmt.Println("blocked")
+			return
+		}
+		if errors.Is(e, context.DeadlineExceeded) {
+			// A race-instrumented contender may exhaust the unchanged store
+			// deadline after acquiring the lock. Do not retry an uncertain
+			// result: the parent still requires every persisted hold to match
+			// an explicitly successful child and enforces the capacity ceiling.
+			fmt.Println("deadline")
 			return
 		}
 		if !errors.Is(e, ErrConflict) {

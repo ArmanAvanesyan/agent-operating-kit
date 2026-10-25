@@ -1,0 +1,126 @@
+{
+  "$id": "https://workkit.example/spec/read/v1/enrollment.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "action": {
+      "type": "string"
+    },
+    "commandSeconds": {
+      "type": "integer"
+    },
+    "configurationSha256": {
+      "type": "string"
+    },
+    "executable": {
+      "type": "string"
+    },
+    "githubConfigDirectory": {
+      "type": "string"
+    },
+    "githubConfigSha256": {
+      "type": "string"
+    },
+    "implementationSha256": {
+      "type": "string"
+    },
+    "issuedAt": {
+      "type": "string"
+    },
+    "issuer": {
+      "type": "string"
+    },
+    "nativePrincipalId": {
+      "type": "string"
+    },
+    "outputPath": {
+      "type": "string"
+    },
+    "previousBundleSha256": {
+      "type": "string"
+    },
+    "qualificationOnly": {
+      "const": true
+    },
+    "readPolicySha256": {
+      "type": "string"
+    },
+    "requestSeconds": {
+      "type": "integer"
+    },
+    "secretEnvironment": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "signature": {
+      "type": "string"
+    },
+    "tlsRootsPath": {
+      "type": "string"
+    },
+    "transport": {
+      "additionalProperties": false,
+      "properties": {
+        "authMode": {
+          "type": "string"
+        },
+        "executableSha256": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "principal": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "version",
+        "executableSha256",
+        "principal",
+        "authMode"
+      ],
+      "type": "object"
+    },
+    "validUntil": {
+      "type": "string"
+    },
+    "version": {
+      "const": "workkit-read/v1"
+    }
+  },
+  "required": [
+    "version",
+    "configurationSha256",
+    "readPolicySha256",
+    "transport",
+    "executable",
+    "githubConfigDirectory",
+    "secretEnvironment",
+    "tlsRootsPath",
+    "issuedAt",
+    "validUntil",
+    "requestSeconds",
+    "commandSeconds",
+    "qualificationOnly",
+    "issuer",
+    "signature",
+    "nativePrincipalId",
+    "githubConfigSha256",
+    "outputPath",
+    "previousBundleSha256",
+    "action",
+    "implementationSha256"
+  ],
+  "title": "WorkKit read enrollment",
+  "type": "object"
+}

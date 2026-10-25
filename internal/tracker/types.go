@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/contracts"
+	"github.com/ArmanAvanesyan/agent-operating-kit/kits/workkit/readsource"
 	"time"
 )
 
@@ -12,49 +13,13 @@ const Version = "aok-tracker/v1"
 const Version2 = "aok-tracker/v2"
 const AdapterVersion = "1.0.0"
 
-type Auth struct {
-	Mode        string `json:"mode"`
-	TokenEnv    string `json:"tokenEnv"`
-	UsernameEnv string `json:"usernameEnv"`
-}
-type Scope struct {
-	ItemIDs   []string `json:"itemIds"`
-	Query     string   `json:"query"`
-	Comments  bool     `json:"comments"`
-	Relations bool     `json:"relations"`
-	Projects  bool     `json:"projects"`
-}
-type Limits struct {
-	RequestSeconds int `json:"requestSeconds"`
-	CommandSeconds int `json:"commandSeconds"`
-	Requests       int `json:"requests"`
-	Items          int `json:"items"`
-	ResponseBytes  int `json:"responseBytes"`
-	TotalBytes     int `json:"totalBytes"`
-}
+type Auth = readsource.Auth
+type Scope = readsource.Scope
+type Limits = readsource.Limits
 
 // Deployment pins a Data Center installation independently of Cloud identity.
-type Deployment struct {
-	BasePath       string `json:"basePath"`
-	ServerVersion  string `json:"serverVersion"`
-	TLSTrustSHA256 string `json:"tlsTrustSha256"`
-}
-type Source struct {
-	Deployment         *Deployment `json:"deployment,omitempty"`
-	ReadPolicySHA256   string      `json:"readPolicySha256,omitempty"`
-	Version            string      `json:"version"`
-	Provider           string      `json:"provider"`
-	Origin             string      `json:"origin"`
-	APIVersion         string      `json:"apiVersion"`
-	NativeTenantID     string      `json:"nativeTenantId"`
-	ContainerID        string      `json:"containerId"`
-	ContainerKey       string      `json:"containerKey"`
-	PrincipalPseudonym string      `json:"principalPseudonym"`
-	Auth               Auth        `json:"auth"`
-	Scope              Scope       `json:"scope"`
-	MappingVersion     string      `json:"mappingVersion"`
-	Limits             *Limits     `json:"limits,omitempty"`
-}
+type Deployment = readsource.Deployment
+type Source = readsource.Source
 type Diagnostic struct {
 	Code    string `json:"code"`
 	Field   string `json:"field"`
@@ -69,19 +34,8 @@ type Report struct {
 	LiveReadGate         string       `json:"liveReadGate"`
 	WritebackGate        string       `json:"writebackGate"`
 }
-type Request struct {
-	baseScopeValidated bool
-	Method             string          `json:"method"`
-	Path               string          `json:"path"`
-	Body               json.RawMessage `json:"body"`
-	Kind               string          `json:"kind"`
-	ItemID             string          `json:"itemId"`
-}
-type Response struct {
-	Status  int               `json:"status"`
-	Headers map[string]string `json:"headers"`
-	Body    []byte            `json:"-"`
-}
+type Request = readsource.Request
+type Response = readsource.Response
 type Transport interface {
 	Do(context.Context, Source, Request) (Response, error)
 }
@@ -142,14 +96,7 @@ type Page struct {
 	Asset      contracts.AssetRef `json:"asset"`
 	ObservedAt string             `json:"observedAt"`
 }
-type Checkpoint struct {
-	Version            string    `json:"version"`
-	ScopeSHA256        string    `json:"scopeSha256"`
-	Pending            []Request `json:"pending"`
-	CompletedWatermark string    `json:"completedWatermark"`
-	Complete           bool      `json:"complete"`
-	Digest             string    `json:"digest"`
-}
+type Checkpoint = readsource.Checkpoint
 type Manifest struct {
 	Version    string      `json:"version"`
 	Source     Source      `json:"source"`

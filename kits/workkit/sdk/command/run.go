@@ -14,13 +14,14 @@ import (
 	"github.com/ArmanAvanesyan/agent-operating-kit/kits/workkit/sdk"
 )
 
-const help = `WorkKit P1 offline commands:
+const help = `WorkKit P1 offline commands (P2 read commands are opt-in):
   workspace validate|inspect --workspace FILE [--root DIRECTORY] [--json]
   migrate inspect-aok|plan-aok --source PATH --format FORMAT --as-of RFC3339 [--json]
   migrate import-aok --source PATH --format FORMAT --as-of RFC3339 --out NEW-DIRECTORY [--json]
   migrate verify BUNDLE [--json]
   version
-No provider, authentication, native execution or mutation commands are implemented.
+P2: providers, discover, capture, catalog, browse, items, views (use GROUP --help).
+No login, native execution or mutation commands are implemented.
 `
 
 func Run(ctx context.Context, args []string, stdout, stderr io.Writer, service *sdk.Service) int {
@@ -34,6 +35,9 @@ func RunSuite(ctx context.Context, args []string, stdout, stderr io.Writer, serv
 func run(ctx context.Context, args []string, stdout, stderr io.Writer, service *sdk.Service, suite bool) int {
 	if ctx == nil || stdout == nil || stderr == nil || service == nil {
 		return 2
+	}
+	if len(args) > 0 && isReadGroup(args[0]) {
+		return runRead(ctx, args, stdout, stderr, service, suite)
 	}
 	if len(args) == 0 {
 		fmt.Fprint(stderr, help)

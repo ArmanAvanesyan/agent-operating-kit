@@ -26,8 +26,13 @@ func ReadReadPolicy(path string) (*ReadPolicy, error) {
 	if e != nil {
 		return nil, e
 	}
+	return ReadPolicyFromBytes(b)
+}
+
+// ReadPolicyFromBytes freezes externally supplied policy bytes without file IO.
+func ReadPolicyFromBytes(b []byte) (*ReadPolicy, error) {
 	var p ReadPolicy
-	if e = Decode(b, "read-policy", &p); e != nil {
+	if e := Decode(b, "read-policy", &p); e != nil {
 		return nil, e
 	}
 	if (p.Version != Version && p.Version != Version2) || len(p.Rules) == 0 || len(p.Rules) > 100 {

@@ -82,7 +82,21 @@ func TestGitHubTypedSelectionDoesNotWiden(t *testing.T) {
 	if ValidateRequest(s, p) == nil {
 		t.Fatal("unbound auxiliary read accepted")
 	}
-	p.baseScopeValidated = true
+	s.Scope.Comments = true
+	parent, err := NewGitHub().Decode(s, Request{Method: "GET", Path: "/repos/acme/widgets/pulls/1", Kind: "github-item", ItemID: "pr:1"}, Response{Status: 200, Body: []byte(`{"node_id":"pr-native","number":1,"title":"PR"}`)})
+	if err != nil {
+		t.Fatal(err)
+	}
+	found := false
+	for _, next := range parent.Next {
+		if next.Kind == "github-comments" {
+			p = next
+			found = true
+		}
+	}
+	if !found {
+		t.Fatal("parent response did not produce bound comment read")
+	}
 	if e := ValidateRequest(s, p); e != nil {
 		t.Fatal(e)
 	}

@@ -135,6 +135,9 @@ func writeOne(ctx context.Context, root, name string, b []byte) error {
 	if e := os.MkdirAll(filepath.Dir(p), 0700); e != nil {
 		return e
 	}
+	if _, e := SafePath(filepath.Dir(p)); e != nil {
+		return e
+	}
 	f, e := os.OpenFile(p, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0600)
 	if e != nil {
 		return e
@@ -184,4 +187,71 @@ func ResourcePaths(ctx context.Context, root string) ([]string, error) {
 	})
 	sort.Strings(paths)
 	return paths, e
+}
+
+// BundleReservation consumes a fresh private output directory before external IO.
+// Write is create-only and writes the completion manifest last.
+type BundleReservation struct {
+	root     string
+	identity os.FileInfo
+}
+
+func ReserveBundle(ctx context.Context, out string) (*BundleReservation, error) {
+	if e := ctx.Err(); e != nil {
+		return nil, e
+	}
+	a, e := filepath.Abs(out)
+	if e != nil {
+		return nil, e
+	}
+	parent, e := SafePath(filepath.Dir(a))
+	if e != nil {
+		return nil, e
+	}
+	a = filepath.Join(parent, filepath.Base(a))
+	if e = os.Mkdir(a, 0700); e != nil {
+		return nil, e
+	}
+	st, e := os.Stat(a)
+	if e != nil {
+		return nil, e
+	}
+	return &BundleReservation{a, st}, nil
+}
+func (w *BundleReservation) Write(ctx context.Context, files map[string][]byte) error {
+	if w == nil {
+		return errors.New("missing output reservation")
+	}
+	a, e := SafePath(w.root)
+	if e != nil {
+		return e
+	}
+	st, e := os.Stat(a)
+	if e != nil || !os.SameFile(w.identity, st) {
+		return errors.New("reserved output identity changed")
+	}
+	total := 0
+	names := []string{}
+	for name, b := range files {
+		if name == "" || filepath.IsAbs(name) || strings.ContainsAny(name, "\\:") || filepath.ToSlash(filepath.Clean(name)) != name || name == ".." || strings.HasPrefix(name, "../") || len(b) > MaxDocumentBytes {
+			return errors.New("unsafe reserved output")
+		}
+		total += len(b)
+		names = append(names, name)
+	}
+	if total > MaxTotalBytes || len(files) > MaxResources {
+		return errors.New("reserved output budget")
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		if name != "bundle.json" {
+			if e = writeOne(ctx, a, name, files[name]); e != nil {
+				return e
+			}
+		}
+	}
+	if b, ok := files["bundle.json"]; ok {
+		return writeOne(ctx, a, "bundle.json", b)
+	}
+	return nil
 }

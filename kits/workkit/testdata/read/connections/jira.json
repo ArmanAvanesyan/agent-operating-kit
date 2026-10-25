@@ -1,0 +1,51 @@
+{
+  "version": "workkit-read/v1",
+  "connectionId": "jira",
+  "profile": {
+    "apiVersion": "workkit/v1alpha1",
+    "kind": "ConnectionProfile",
+    "metadata": {
+      "id": "jira",
+      "revision": 1
+    },
+    "spec": {
+      "provider": "jira-cloud",
+      "origin": "https://acme.atlassian.net",
+      "basePath": "",
+      "transport": "rest",
+      "authRef": "credentials/jira",
+      "scope": {
+        "tenantId": "cloud-guid",
+        "containerIds": [
+          "10001"
+        ]
+      },
+      "apiVersion": "3"
+    }
+  },
+  "source": {
+    "version": "aok-tracker/v1",
+    "provider": "jira",
+    "origin": "https://acme.atlassian.net",
+    "apiVersion": "3",
+    "nativeTenantId": "cloud-guid",
+    "containerId": "10001",
+    "containerKey": "ENG",
+    "principalPseudonym": "test-principal",
+    "auth": {
+      "mode": "bearer",
+      "tokenEnv": "AOK_TEST_TOKEN",
+      "usernameEnv": ""
+    },
+    "scope": {
+      "itemIds": [
+        "1"
+      ],
+      "query": "",
+      "comments": false,
+      "relations": false,
+      "projects": false
+    },
+    "mappingVersion": "map-v1"
+  }
+}

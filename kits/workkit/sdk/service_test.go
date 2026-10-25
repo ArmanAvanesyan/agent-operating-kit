@@ -68,7 +68,7 @@ func TestSuiteRenderingPreservesCompleteDomainResult(t *testing.T) {
 	}
 }
 func TestSDKHasNoLegacyImports(t *testing.T) {
-	for _, prefix := range []string{".", "../api/v1alpha1", "../internal/engine"} {
+	for _, prefix := range []string{".", "../api", "../internal", "../readsource"} {
 		filepath.WalkDir(prefix, func(path string, d os.DirEntry, e error) error {
 			if e != nil {
 				return e

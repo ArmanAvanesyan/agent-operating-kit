@@ -13,7 +13,7 @@ import (
 	"github.com/ArmanAvanesyan/agent-operating-kit/kits/workkit/internal/engine"
 )
 
-const Version = "0.6.0-native-observation-offline"
+const Version = "0.7.0-review-first-integration-offline"
 
 type Error struct {
 	Code, Message string
@@ -67,15 +67,17 @@ type WorkspaceReport struct {
 	LiveQualification    string            `json:"liveQualification"`
 }
 type Service struct {
-	legacy          LegacyReader
-	reads           ReadBackend
-	access          AccessBackend
-	setupReader     SetupMetadataReader
-	setupTrust      SetupTrust
-	operations      OperationBackend
-	sync            SyncBackend
-	setupOperations SetupOperationBackend
-	native          NativeReadBackend
+	operationalReads OperationalReadBackend
+	legacy           LegacyReader
+	reads            ReadBackend
+	access           AccessBackend
+	setupReader      SetupMetadataReader
+	setupTrust       SetupTrust
+	operations       OperationBackend
+	sync             SyncBackend
+	setupOperations  SetupOperationBackend
+	native           NativeReadBackend
+	integration      IntegrationBackend
 }
 
 func New(legacy LegacyReader) *Service { return &Service{legacy: legacy} }

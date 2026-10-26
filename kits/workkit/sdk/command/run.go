@@ -27,6 +27,7 @@ Native auth and activation remain gated; writer enrollment is absent from standa
 P4 setup and mappings: setup --help | mappings --help; provider views remain drafts.
 P5 controlled operations and one-way sync: operations --help | sync --help.
 P6 projections, bindings and scoped observations: native --help (native mutations blocked).
+P7 directional reconciliation and review-first worker: sync preview --v2 --help | serve --help.
 Protected writer enrollment, live qualification, migration and production remain separate gates.
 `
 
@@ -41,6 +42,9 @@ func RunSuite(ctx context.Context, args []string, stdout, stderr io.Writer, serv
 func run(ctx context.Context, args []string, stdout, stderr io.Writer, service *sdk.Service, suite bool) int {
 	if ctx == nil || stdout == nil || stderr == nil || service == nil {
 		return 2
+	}
+	if isIntegrationCommand(args) {
+		return runIntegration(ctx, args, stdout, stderr, service, suite)
 	}
 	if len(args) > 0 && args[0] == "native" {
 		return runNative(ctx, args, stdout, stderr, service, suite)

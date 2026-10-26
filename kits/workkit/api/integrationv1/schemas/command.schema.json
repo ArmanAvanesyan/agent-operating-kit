@@ -1,0 +1,217 @@
+{
+  "$id": "https://workkit.example/spec/workkit-integration/v1/command.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "action": {
+      "type": "string"
+    },
+    "afterSequence": {
+      "type": "integer"
+    },
+    "batch": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "action": {
+              "type": "string"
+            },
+            "enrollment": {
+              "type": "string"
+            },
+            "invocation": {
+              "type": "string"
+            },
+            "output": {
+              "type": "string"
+            },
+            "plan": {
+              "type": "string"
+            },
+            "planSha256": {
+              "type": "string"
+            },
+            "policy": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "plan",
+            "planSha256",
+            "invocation",
+            "policy",
+            "enrollment",
+            "output",
+            "action"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "consumer": {
+      "type": "string"
+    },
+    "enrollment": {
+      "contentEncoding": "base64",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "envelope": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "body": {
+              "contentEncoding": "base64",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "kind": {
+              "type": "string"
+            },
+            "provider": {
+              "type": "string"
+            },
+            "receipt": {
+              "additionalProperties": false,
+              "properties": {
+                "bodySha256": {
+                  "type": "string"
+                },
+                "connectionId": {
+                  "type": "string"
+                },
+                "expiresAt": {
+                  "type": "string"
+                },
+                "headers": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "deliveryId": {
+                      "type": "string"
+                    },
+                    "event": {
+                      "type": "string"
+                    },
+                    "signature256": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "deliveryId",
+                    "event",
+                    "signature256"
+                  ],
+                  "type": "object"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "ingress": {
+                  "type": "string"
+                },
+                "issuer": {
+                  "type": "string"
+                },
+                "origin": {
+                  "type": "string"
+                },
+                "receivedAt": {
+                  "type": "string"
+                },
+                "repositoryId": {
+                  "type": "string"
+                },
+                "routeId": {
+                  "type": "string"
+                },
+                "signature": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "routeId",
+                "id",
+                "ingress",
+                "connectionId",
+                "repositoryId",
+                "origin",
+                "bodySha256",
+                "headers",
+                "receivedAt",
+                "expiresAt",
+                "issuer",
+                "signature"
+              ],
+              "type": "object"
+            },
+            "routeId": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "version",
+            "kind",
+            "provider",
+            "routeId",
+            "body",
+            "receipt"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "invocation": {
+      "contentEncoding": "base64",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "kind": {
+      "type": "string"
+    },
+    "policy": {
+      "contentEncoding": "base64",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "routeId": {
+      "type": "string"
+    },
+    "subjectSha256": {
+      "type": "string"
+    },
+    "version": {
+      "const": "workkit-integration/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "action",
+    "routeId",
+    "subjectSha256",
+    "afterSequence",
+    "consumer",
+    "policy",
+    "enrollment"
+  ],
+  "type": "object"
+}

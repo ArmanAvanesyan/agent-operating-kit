@@ -1,0 +1,457 @@
+{
+  "$id": "https://workkit.example/spec/workkit-integration/v1/operational-capture.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authorizationGranted": {
+      "const": false
+    },
+    "enrollment": {
+      "additionalProperties": false,
+      "properties": {
+        "attachedFences": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "callerProcessId": {
+          "type": "integer"
+        },
+        "callerProcessStart": {
+          "type": "string"
+        },
+        "expiresAt": {
+          "type": "string"
+        },
+        "fence": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "string"
+        },
+        "implementationSha256": {
+          "type": "string"
+        },
+        "issuedAt": {
+          "type": "string"
+        },
+        "issuer": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "outputPath": {
+          "type": "string"
+        },
+        "policySha256": {
+          "type": "string"
+        },
+        "processId": {
+          "type": "integer"
+        },
+        "processStart": {
+          "type": "string"
+        },
+        "purpose": {
+          "type": "string"
+        },
+        "routeId": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string"
+        },
+        "store": {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "kind": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            },
+            "owner": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "version",
+            "kind",
+            "path",
+            "id",
+            "namespace",
+            "owner"
+          ],
+          "type": "object"
+        },
+        "subjectSha256": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "workerId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "workerId",
+        "version",
+        "kind",
+        "id",
+        "purpose",
+        "subjectSha256",
+        "policySha256",
+        "implementationSha256",
+        "store",
+        "outputPath",
+        "issuedAt",
+        "expiresAt",
+        "issuer",
+        "signature",
+        "routeId",
+        "fence"
+      ],
+      "type": "object"
+    },
+    "executionReady": {
+      "const": false
+    },
+    "kind": {
+      "type": "string"
+    },
+    "migrationActivated": {
+      "const": false
+    },
+    "observedAt": {
+      "type": "string"
+    },
+    "parserBundleSha256": {
+      "type": "string"
+    },
+    "policy": {
+      "additionalProperties": false,
+      "properties": {
+        "allowedPurposes": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10000,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "expiresAt": {
+          "type": "string"
+        },
+        "issuers": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "publicKey": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "publicKey"
+            ],
+            "type": "object"
+          },
+          "maxItems": 10000,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "kind": {
+          "type": "string"
+        },
+        "limits": {
+          "additionalProperties": false,
+          "properties": {
+            "captureBytes": {
+              "type": "integer"
+            },
+            "cycleSeconds": {
+              "type": "integer"
+            },
+            "inboxBytes": {
+              "type": "integer"
+            },
+            "items": {
+              "type": "integer"
+            },
+            "jitterSeconds": {
+              "type": "integer"
+            },
+            "maxHints": {
+              "type": "integer"
+            },
+            "maxOperations": {
+              "type": "integer"
+            },
+            "pollSeconds": {
+              "type": "integer"
+            },
+            "processSeconds": {
+              "type": "integer"
+            },
+            "requestSeconds": {
+              "type": "integer"
+            },
+            "requests": {
+              "type": "integer"
+            },
+            "responseBytes": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "pollSeconds",
+            "jitterSeconds",
+            "processSeconds",
+            "cycleSeconds",
+            "requestSeconds",
+            "requests",
+            "items",
+            "responseBytes",
+            "captureBytes",
+            "maxOperations",
+            "maxHints",
+            "inboxBytes"
+          ],
+          "type": "object"
+        },
+        "notBefore": {
+          "type": "string"
+        },
+        "revokedIds": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10000,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "routes": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "store": {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "kind": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            },
+            "owner": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "version",
+            "kind",
+            "path",
+            "id",
+            "namespace",
+            "owner"
+          ],
+          "type": "object"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "limits",
+        "routes",
+        "version",
+        "kind",
+        "notBefore",
+        "expiresAt",
+        "issuers",
+        "revokedIds",
+        "allowedPurposes",
+        "store"
+      ],
+      "type": "object"
+    },
+    "productionActivated": {
+      "const": false
+    },
+    "request": {
+      "additionalProperties": false,
+      "properties": {
+        "allowedEndpointSha256": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10000,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "authenticationMode": {
+          "type": "string"
+        },
+        "checkpointSha256": {
+          "type": "string"
+        },
+        "configurationSha256": {
+          "type": "string"
+        },
+        "connectionSha256": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "limits": {
+          "additionalProperties": false,
+          "properties": {
+            "captureBytes": {
+              "type": "integer"
+            },
+            "cycleSeconds": {
+              "type": "integer"
+            },
+            "inboxBytes": {
+              "type": "integer"
+            },
+            "items": {
+              "type": "integer"
+            },
+            "jitterSeconds": {
+              "type": "integer"
+            },
+            "maxHints": {
+              "type": "integer"
+            },
+            "maxOperations": {
+              "type": "integer"
+            },
+            "pollSeconds": {
+              "type": "integer"
+            },
+            "processSeconds": {
+              "type": "integer"
+            },
+            "requestSeconds": {
+              "type": "integer"
+            },
+            "requests": {
+              "type": "integer"
+            },
+            "responseBytes": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "pollSeconds",
+            "jitterSeconds",
+            "processSeconds",
+            "cycleSeconds",
+            "requestSeconds",
+            "requests",
+            "items",
+            "responseBytes",
+            "captureBytes",
+            "maxOperations",
+            "maxHints",
+            "inboxBytes"
+          ],
+          "type": "object"
+        },
+        "origin": {
+          "type": "string"
+        },
+        "principal": {
+          "type": "string"
+        },
+        "querySha256": {
+          "type": "string"
+        },
+        "routeId": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "version",
+        "kind",
+        "routeId",
+        "configurationSha256",
+        "connectionSha256",
+        "principal",
+        "authenticationMode",
+        "origin",
+        "allowedEndpointSha256",
+        "querySha256",
+        "checkpointSha256",
+        "limits"
+      ],
+      "type": "object"
+    },
+    "requestSha256": {
+      "type": "string"
+    },
+    "version": {
+      "const": "workkit-integration/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "requestSha256",
+    "parserBundleSha256",
+    "observedAt",
+    "request",
+    "policy",
+    "enrollment",
+    "authorizationGranted",
+    "executionReady",
+    "migrationActivated",
+    "productionActivated"
+  ],
+  "type": "object"
+}

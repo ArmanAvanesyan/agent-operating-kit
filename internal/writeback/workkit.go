@@ -30,13 +30,17 @@ type WorkkitStoreIdentity struct {
 	Owner     string `json:"owner"`
 }
 type WorkkitJournal struct {
-	Box      *Outbox
-	Identity WorkkitStoreIdentity
+	integrationCommitGate func(*sql.Tx) error
+	Box                   *Outbox
+	Identity              WorkkitStoreIdentity
 }
 
 // OpenWorkkit uses the existing outbox/CAS/nonce/clock implementation with a
 // distinct application identity. It never upgrades or opens a legacy AOK store.
 func OpenWorkkit(ctx context.Context, path, namespace, owner string, initialize bool) (*WorkkitJournal, error) {
+	return openWorkkitFormat(ctx, path, namespace, owner, initialize, workkitApplicationID, WorkkitStoreVersion, "")
+}
+func openWorkkitFormat(ctx context.Context, path, namespace, owner string, initialize bool, app int, version, extra string) (*WorkkitJournal, error) {
 	abs, e := filepath.Abs(path)
 	if e != nil || path != abs || namespace == "" || owner == "" {
 		return nil, errors.New("canonical journal path/namespace/owner required")
@@ -59,16 +63,16 @@ func OpenWorkkit(ctx context.Context, path, namespace, owner string, initialize 
 	}
 	var box *Outbox
 	if initialize {
-		box, e = openProfile(abs, workkitApplicationID)
+		box, e = openProfile(abs, app)
 	} else {
-		box, e = openReadProfile(abs, workkitApplicationID)
+		box, e = openReadProfile(abs, app)
 	}
 	if e != nil {
 		return nil, e
 	}
 	fail := func(e error) (*WorkkitJournal, error) { box.Close(); return nil, e }
 	if initialize {
-		_, e = box.db.ExecContext(ctx, workkitSchemaSQL)
+		_, e = box.db.ExecContext(ctx, workkitSchemaSQL+extra)
 		if e != nil {
 			return fail(e)
 		}
@@ -81,10 +85,10 @@ func OpenWorkkit(ctx context.Context, path, namespace, owner string, initialize 
 			return fail(e)
 		}
 	}
-	if e = validateWorkkitSchema(box.db); e != nil {
+	if e = validateWorkkitSchemaExtra(box.db, extra); e != nil {
 		return fail(e)
 	}
-	identity := WorkkitStoreIdentity{Version: WorkkitStoreVersion, Kind: "IntegrationJournal"}
+	identity := WorkkitStoreIdentity{Version: version, Kind: "IntegrationJournal"}
 	e = box.db.QueryRowContext(ctx, `SELECT id,path,namespace,owner FROM workkit_identity WHERE singleton=1`).Scan(&identity.ID, &identity.Path, &identity.Namespace, &identity.Owner)
 	if e != nil || identity.Path != abs || identity.Namespace != namespace || identity.Owner != owner {
 		return fail(errors.New("journal binding mismatch; copies and ownership transfer require explicit migration"))
@@ -95,7 +99,13 @@ func OpenWorkkit(ctx context.Context, path, namespace, owner string, initialize 
 // OpenWorkkitWritable reopens an already bound WorkKit store without initializing
 // schema or adopting a copied/legacy store. The caller still needs current trust.
 func OpenWorkkitWritable(ctx context.Context, expected WorkkitStoreIdentity) (*WorkkitJournal, error) {
-	ro, e := OpenWorkkit(ctx, expected.Path, expected.Namespace, expected.Owner, false)
+	if expected.Version != WorkkitStoreVersion {
+		return nil, errors.New("exact v1 store required")
+	}
+	return openWorkkitWritableFormat(ctx, expected, workkitApplicationID, "")
+}
+func openWorkkitWritableFormat(ctx context.Context, expected WorkkitStoreIdentity, app int, extra string) (*WorkkitJournal, error) {
+	ro, e := openWorkkitFormat(ctx, expected.Path, expected.Namespace, expected.Owner, false, app, expected.Version, extra)
 	if e != nil {
 		return nil, e
 	}
@@ -111,8 +121,8 @@ func OpenWorkkitWritable(ctx context.Context, expected WorkkitStoreIdentity) (*W
 	}
 	db.SetMaxOpenConns(1)
 	box := &Outbox{db: db}
-	if e = validateStoreIdentityProfile(db, false, workkitApplicationID); e == nil {
-		e = validateWorkkitSchema(db)
+	if e = validateStoreIdentityProfile(db, false, app); e == nil {
+		e = validateWorkkitSchemaExtra(db, extra)
 	}
 	if e != nil {
 		db.Close()
@@ -197,6 +207,11 @@ func (j *WorkkitJournal) CommitRoute(ctx context.Context, id string, expected in
 	if e = checkAndAdvanceTrustedClock(tx, now); e != nil {
 		return e
 	}
+	if j.integrationCommitGate != nil {
+		if err := j.integrationCommitGate(tx); err != nil {
+			return err
+		}
+	}
 	for _, op := range confirmed {
 		var state string
 		if e = tx.QueryRow(`SELECT state FROM outbox WHERE operation_id=?`, op).Scan(&state); e != nil || state != "readback-verified" {
@@ -230,6 +245,11 @@ func (j *WorkkitJournal) CommitRoute(ctx context.Context, id string, expected in
 	if e != nil {
 		return e
 	}
+	if j.Identity.Version == WorkkitStoreVersionV2 {
+		if e = integrationNotify(tx, id, "route-committed", digest, now); e != nil {
+			return e
+		}
+	}
 	return tx.Commit()
 }
 func (j *WorkkitJournal) LocalConsumed(ctx context.Context, id string) bool {
@@ -257,13 +277,14 @@ func (j *WorkkitJournal) ListPlans(ctx context.Context) ([]string, error) {
 	return ids, rows.Err()
 }
 
-func validateWorkkitSchema(db *sql.DB) error {
+func validateWorkkitSchema(db *sql.DB) error { return validateWorkkitSchemaExtra(db, "") }
+func validateWorkkitSchemaExtra(db *sql.DB, extra string) error {
 	normalize := func(v string) string {
 		return strings.ToLower(strings.Join(strings.Fields(strings.ReplaceAll(v, "IF NOT EXISTS ", "")), " "))
 	}
 	expected := map[string]string{}
 	pattern := regexp.MustCompile(`(?is)^CREATE TABLE(?: IF NOT EXISTS)? ([a-z_]+)\(`)
-	for _, stmt := range strings.Split(outboxSchemaSQL+workkitSchemaSQL, ";") {
+	for _, stmt := range strings.Split(outboxSchemaSQL+workkitSchemaSQL+extra, ";") {
 		stmt = strings.TrimSpace(stmt)
 		m := pattern.FindStringSubmatch(stmt)
 		if len(m) > 1 {

@@ -1,0 +1,124 @@
+{
+  "$id": "https://workkit.example/spec/workkit-integration/v1/enrollment.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "attachedFences": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "callerProcessId": {
+      "type": "integer"
+    },
+    "callerProcessStart": {
+      "type": "string"
+    },
+    "expiresAt": {
+      "type": "string"
+    },
+    "fence": {
+      "type": "integer"
+    },
+    "id": {
+      "type": "string"
+    },
+    "implementationSha256": {
+      "type": "string"
+    },
+    "issuedAt": {
+      "type": "string"
+    },
+    "issuer": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "outputPath": {
+      "type": "string"
+    },
+    "policySha256": {
+      "type": "string"
+    },
+    "processId": {
+      "type": "integer"
+    },
+    "processStart": {
+      "type": "string"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "routeId": {
+      "type": "string"
+    },
+    "signature": {
+      "type": "string"
+    },
+    "store": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "version",
+        "kind",
+        "path",
+        "id",
+        "namespace",
+        "owner"
+      ],
+      "type": "object"
+    },
+    "subjectSha256": {
+      "type": "string"
+    },
+    "version": {
+      "const": "workkit-integration/v1"
+    },
+    "workerId": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "workerId",
+    "version",
+    "kind",
+    "id",
+    "purpose",
+    "subjectSha256",
+    "policySha256",
+    "implementationSha256",
+    "store",
+    "outputPath",
+    "issuedAt",
+    "expiresAt",
+    "issuer",
+    "signature",
+    "routeId",
+    "fence"
+  ],
+  "type": "object"
+}

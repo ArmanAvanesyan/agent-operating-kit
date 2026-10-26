@@ -1,0 +1,551 @@
+{
+  "$id": "https://workkit.example/spec/workkit-sync/v2/sync-plan.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "adapterVersion": {
+      "type": "string"
+    },
+    "advances": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "confirmedOperations": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10000,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "correlationId": {
+            "type": "string"
+          },
+          "destination": {
+            "additionalProperties": false,
+            "properties": {
+              "present": {
+                "type": "boolean"
+              },
+              "value": {}
+            },
+            "required": [
+              "present",
+              "value"
+            ],
+            "type": "object"
+          },
+          "ruleId": {
+            "type": "string"
+          },
+          "source": {
+            "additionalProperties": false,
+            "properties": {
+              "present": {
+                "type": "boolean"
+              },
+              "value": {}
+            },
+            "required": [
+              "present",
+              "value"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "correlationId",
+          "ruleId",
+          "source",
+          "destination",
+          "confirmedOperations"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "asOf": {
+      "type": "string"
+    },
+    "authorizationGranted": {
+      "const": false
+    },
+    "candidate": {
+      "additionalProperties": false,
+      "properties": {
+        "baselines": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "confirmedOperations": {
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 10000,
+                "type": [
+                  "array",
+                  "null"
+                ]
+              },
+              "correlationId": {
+                "type": "string"
+              },
+              "destination": {
+                "additionalProperties": false,
+                "properties": {
+                  "present": {
+                    "type": "boolean"
+                  },
+                  "value": {}
+                },
+                "required": [
+                  "present",
+                  "value"
+                ],
+                "type": "object"
+              },
+              "ruleId": {
+                "type": "string"
+              },
+              "source": {
+                "additionalProperties": false,
+                "properties": {
+                  "present": {
+                    "type": "boolean"
+                  },
+                  "value": {}
+                },
+                "required": [
+                  "present",
+                  "value"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "correlationId",
+              "ruleId",
+              "source",
+              "destination",
+              "confirmedOperations"
+            ],
+            "type": "object"
+          },
+          "maxItems": 10000,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "completedWatermark": {
+          "type": "string"
+        },
+        "configurationSha256": {
+          "type": "string"
+        },
+        "initialized": {
+          "type": "boolean"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "paused": {
+          "type": "boolean"
+        },
+        "pendingPlanSha256": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "integer"
+        },
+        "routeId": {
+          "type": "string"
+        },
+        "unresolved": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10000,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "version",
+        "kind",
+        "routeId",
+        "configurationSha256",
+        "revision",
+        "initialized",
+        "paused",
+        "baselines",
+        "pendingPlanSha256",
+        "unresolved",
+        "completedWatermark"
+      ],
+      "type": "object"
+    },
+    "changes": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "correlationId": {
+            "type": "string"
+          },
+          "desired": {
+            "additionalProperties": false,
+            "properties": {
+              "allowCreate": {
+                "type": "boolean"
+              },
+              "dependsOn": {
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 10000,
+                "type": [
+                  "array",
+                  "null"
+                ]
+              },
+              "fields": {
+                "additionalProperties": {},
+                "type": [
+                  "object",
+                  "null"
+                ]
+              },
+              "itemId": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string"
+              },
+              "logicalKey": {
+                "type": "string"
+              },
+              "operation": {
+                "type": "string"
+              },
+              "parentId": {
+                "type": "string"
+              },
+              "schemaSha256": {
+                "type": "string"
+              },
+              "typeId": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "version",
+              "kind",
+              "logicalKey",
+              "operation",
+              "parentId",
+              "itemId",
+              "fields",
+              "dependsOn",
+              "allowCreate",
+              "typeId",
+              "schemaSha256"
+            ],
+            "type": "object"
+          },
+          "direction": {
+            "type": "string"
+          },
+          "next": {
+            "additionalProperties": false,
+            "properties": {
+              "confirmedOperations": {
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 10000,
+                "type": [
+                  "array",
+                  "null"
+                ]
+              },
+              "correlationId": {
+                "type": "string"
+              },
+              "destination": {
+                "additionalProperties": false,
+                "properties": {
+                  "present": {
+                    "type": "boolean"
+                  },
+                  "value": {}
+                },
+                "required": [
+                  "present",
+                  "value"
+                ],
+                "type": "object"
+              },
+              "ruleId": {
+                "type": "string"
+              },
+              "source": {
+                "additionalProperties": false,
+                "properties": {
+                  "present": {
+                    "type": "boolean"
+                  },
+                  "value": {}
+                },
+                "required": [
+                  "present",
+                  "value"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "correlationId",
+              "ruleId",
+              "source",
+              "destination",
+              "confirmedOperations"
+            ],
+            "type": "object"
+          },
+          "ruleId": {
+            "type": "string"
+          },
+          "target": {
+            "additionalProperties": false,
+            "properties": {
+              "basePath": {
+                "type": "string"
+              },
+              "containerId": {
+                "type": "string"
+              },
+              "itemKind": {
+                "type": "string"
+              },
+              "nativeId": {
+                "type": "string"
+              },
+              "origin": {
+                "type": "string"
+              },
+              "provider": {
+                "type": "string"
+              },
+              "tenantId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "provider",
+              "origin",
+              "basePath",
+              "tenantId",
+              "containerId",
+              "itemKind",
+              "nativeId"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "direction",
+          "correlationId",
+          "ruleId",
+          "target",
+          "desired",
+          "next"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "complete": {
+      "type": "boolean"
+    },
+    "configurationSha256": {
+      "type": "string"
+    },
+    "conflicts": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "baselineSha256": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "correlationId": {
+            "type": "string"
+          },
+          "destination": {
+            "additionalProperties": false,
+            "properties": {
+              "present": {
+                "type": "boolean"
+              },
+              "value": {}
+            },
+            "required": [
+              "present",
+              "value"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "type": "string"
+          },
+          "inputsSha256": {
+            "type": "string"
+          },
+          "ruleId": {
+            "type": "string"
+          },
+          "source": {
+            "additionalProperties": false,
+            "properties": {
+              "present": {
+                "type": "boolean"
+              },
+              "value": {}
+            },
+            "required": [
+              "present",
+              "value"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "correlationId",
+          "ruleId",
+          "code",
+          "baselineSha256",
+          "inputsSha256",
+          "source",
+          "destination"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "diagnostics": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "field": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "field",
+          "message",
+          "severity"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "executionReady": {
+      "const": false
+    },
+    "implementationSha256": {
+      "type": "string"
+    },
+    "inputs": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "kind": {
+      "type": "string"
+    },
+    "migrationActivated": {
+      "const": false
+    },
+    "productionActivated": {
+      "const": false
+    },
+    "routeId": {
+      "type": "string"
+    },
+    "stateSha256": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "version": {
+      "const": "workkit-sync/v2"
+    }
+  },
+  "required": [
+    "implementationSha256",
+    "adapterVersion",
+    "version",
+    "kind",
+    "routeId",
+    "configurationSha256",
+    "stateSha256",
+    "asOf",
+    "inputs",
+    "changes",
+    "conflicts",
+    "advances",
+    "candidate",
+    "status",
+    "complete",
+    "diagnostics",
+    "authorizationGranted",
+    "executionReady",
+    "migrationActivated",
+    "productionActivated"
+  ],
+  "type": "object"
+}

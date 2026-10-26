@@ -1,0 +1,118 @@
+{
+  "$id": "https://workkit.example/spec/workkit-integration/v1/operational-read.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "allowedEndpointSha256": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "authenticationMode": {
+      "type": "string"
+    },
+    "checkpointSha256": {
+      "type": "string"
+    },
+    "configurationSha256": {
+      "type": "string"
+    },
+    "connectionSha256": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "limits": {
+      "additionalProperties": false,
+      "properties": {
+        "captureBytes": {
+          "type": "integer"
+        },
+        "cycleSeconds": {
+          "type": "integer"
+        },
+        "inboxBytes": {
+          "type": "integer"
+        },
+        "items": {
+          "type": "integer"
+        },
+        "jitterSeconds": {
+          "type": "integer"
+        },
+        "maxHints": {
+          "type": "integer"
+        },
+        "maxOperations": {
+          "type": "integer"
+        },
+        "pollSeconds": {
+          "type": "integer"
+        },
+        "processSeconds": {
+          "type": "integer"
+        },
+        "requestSeconds": {
+          "type": "integer"
+        },
+        "requests": {
+          "type": "integer"
+        },
+        "responseBytes": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "pollSeconds",
+        "jitterSeconds",
+        "processSeconds",
+        "cycleSeconds",
+        "requestSeconds",
+        "requests",
+        "items",
+        "responseBytes",
+        "captureBytes",
+        "maxOperations",
+        "maxHints",
+        "inboxBytes"
+      ],
+      "type": "object"
+    },
+    "origin": {
+      "type": "string"
+    },
+    "principal": {
+      "type": "string"
+    },
+    "querySha256": {
+      "type": "string"
+    },
+    "routeId": {
+      "type": "string"
+    },
+    "version": {
+      "const": "workkit-integration/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "routeId",
+    "configurationSha256",
+    "connectionSha256",
+    "principal",
+    "authenticationMode",
+    "origin",
+    "allowedEndpointSha256",
+    "querySha256",
+    "checkpointSha256",
+    "limits"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,62 @@
+{
+  "$id": "https://workkit.example/spec/workkit-sync/v2/sync-invocation.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "type": "string"
+    },
+    "operations": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "changeSha256": {
+            "type": "string"
+          },
+          "direction": {
+            "type": "string"
+          },
+          "enrollment": {
+            "type": "string"
+          },
+          "output": {
+            "type": "string"
+          },
+          "plan": {
+            "type": "string"
+          },
+          "policy": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "direction",
+          "changeSha256",
+          "plan",
+          "policy",
+          "enrollment",
+          "output"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "planSha256": {
+      "type": "string"
+    },
+    "version": {
+      "const": "workkit-sync/v2"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "planSha256",
+    "operations"
+  ],
+  "type": "object"
+}

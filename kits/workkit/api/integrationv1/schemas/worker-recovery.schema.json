@@ -1,0 +1,71 @@
+{
+  "$id": "https://workkit.example/spec/workkit-integration/v1/worker-recovery.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "configurationSha256": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "newWorkerId": {
+      "type": "string"
+    },
+    "priorFence": {
+      "type": "integer"
+    },
+    "quiescenceSha256": {
+      "type": "string"
+    },
+    "routeId": {
+      "type": "string"
+    },
+    "store": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "version",
+        "kind",
+        "path",
+        "id",
+        "namespace",
+        "owner"
+      ],
+      "type": "object"
+    },
+    "version": {
+      "const": "workkit-integration/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "store",
+    "routeId",
+    "priorFence",
+    "newWorkerId",
+    "configurationSha256",
+    "quiescenceSha256"
+  ],
+  "type": "object"
+}

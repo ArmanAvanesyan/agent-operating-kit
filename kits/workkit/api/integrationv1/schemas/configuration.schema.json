@@ -1,0 +1,126 @@
+{
+  "$id": "https://workkit.example/spec/workkit-integration/v1/configuration.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "type": "string"
+    },
+    "limits": {
+      "additionalProperties": false,
+      "properties": {
+        "captureBytes": {
+          "type": "integer"
+        },
+        "cycleSeconds": {
+          "type": "integer"
+        },
+        "inboxBytes": {
+          "type": "integer"
+        },
+        "items": {
+          "type": "integer"
+        },
+        "jitterSeconds": {
+          "type": "integer"
+        },
+        "maxHints": {
+          "type": "integer"
+        },
+        "maxOperations": {
+          "type": "integer"
+        },
+        "pollSeconds": {
+          "type": "integer"
+        },
+        "processSeconds": {
+          "type": "integer"
+        },
+        "requestSeconds": {
+          "type": "integer"
+        },
+        "requests": {
+          "type": "integer"
+        },
+        "responseBytes": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "pollSeconds",
+        "jitterSeconds",
+        "processSeconds",
+        "cycleSeconds",
+        "requestSeconds",
+        "requests",
+        "items",
+        "responseBytes",
+        "captureBytes",
+        "maxOperations",
+        "maxHints",
+        "inboxBytes"
+      ],
+      "type": "object"
+    },
+    "listen": {
+      "type": "string"
+    },
+    "routes": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "store": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "version",
+        "kind",
+        "path",
+        "id",
+        "namespace",
+        "owner"
+      ],
+      "type": "object"
+    },
+    "version": {
+      "const": "workkit-integration/v1"
+    },
+    "workspaceSha256": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "store",
+    "workspaceSha256",
+    "listen",
+    "routes",
+    "limits"
+  ],
+  "type": "object"
+}

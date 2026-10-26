@@ -37,6 +37,9 @@ func ReadContractSchema(kind string) (map[string]any, error) {
 	return schema, nil
 }
 func readSchemaType(t reflect.Type) map[string]any {
+	if t == reflect.TypeOf([]byte{}) {
+		return map[string]any{"type": []string{"string", "null"}, "contentEncoding": "base64"}
+	}
 	if t == reflect.TypeOf(json.RawMessage{}) {
 		return map[string]any{}
 	}

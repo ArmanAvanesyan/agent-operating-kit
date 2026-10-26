@@ -8,8 +8,9 @@ import (
 	"os"
 )
 
-func ProcessStart() (string, error) {
-	info, e := unix.SysctlKinfoProc("kern.proc.pid", os.Getpid())
+func ProcessStart() (string, error) { return ProcessStartFor(os.Getpid()) }
+func ProcessStartFor(pid int) (string, error) {
+	info, e := unix.SysctlKinfoProc("kern.proc.pid", pid)
 	if e != nil {
 		return "", e
 	}

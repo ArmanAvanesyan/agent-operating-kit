@@ -10,6 +10,7 @@ import (
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/operations"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/tracker"
 	"github.com/ArmanAvanesyan/agent-operating-kit/internal/writeback"
+	i "github.com/ArmanAvanesyan/agent-operating-kit/kits/workkit/api/integrationv1"
 	o "github.com/ArmanAvanesyan/agent-operating-kit/kits/workkit/api/operationsv1"
 	r "github.com/ArmanAvanesyan/agent-operating-kit/kits/workkit/api/readv1"
 	api "github.com/ArmanAvanesyan/agent-operating-kit/kits/workkit/api/v1alpha1"
@@ -115,20 +116,28 @@ func observation(d o.Draft, digest string, store o.Store, state string, fence in
 }
 
 type operationDriver struct {
-	route      OperationRoute
-	policy     []byte
-	evidence   map[string][]byte
-	enrollment []byte
+	route       OperationRoute
+	policy      []byte
+	evidence    map[string][]byte
+	enrollment  []byte
+	integration bool
 }
 
 func (d *operationDriver) Current(ctx context.Context, p sdk.PreparedOperation, e o.Enrollment, policy []byte) error {
 	if err := sdk.CheckPinnedSyncOperation(ctx, p, policy, d.enrollment); err != nil {
 		return err
 	}
+	if d.integration {
+		route, revision, plan, action := sdk.SyncAdmissionScope(ctx)
+		var original i.Enrollment
+		if sdk.DecodeRead(d.enrollment, &original) != nil || route != original.RouteID || revision < 1 || plan == "" || action != "sync-run" {
+			return errors.New("v2 operations require the shared approved-batch admission context")
+		}
+	}
 	if err := sdk.CheckSyncAdmission(ctx); err != nil {
 		return err
 	}
-	if err := sdk.ValidateOperationAuthority(p, policy, mustJSON(e)); err != nil {
+	if err := d.validateAuthority(p, policy); err != nil {
 		return err
 	}
 	if d.route.Current == nil || d.route.Observe == nil || d.route.Activation == nil || d.route.Activation.ScopeSHA256() != MutationNamespaceSHA256(e.Store) || sdk.SHA256(policy) != sdk.SHA256(d.policy) {
@@ -140,7 +149,7 @@ func (d *operationDriver) Current(ctx context.Context, p sdk.PreparedOperation, 
 	if err := d.route.Activation.Check(ctx); err != nil {
 		return err
 	}
-	j, err := writeback.OpenWorkkit(ctx, e.Store.Path, e.Store.Namespace, e.Store.Owner, false)
+	j, err := d.openStore(ctx, e.Store, false)
 	if err != nil {
 		return err
 	}
@@ -226,7 +235,7 @@ func (d *operationDriver) Apply(ctx context.Context, p sdk.PreparedOperation, e 
 	if err := d.Current(ctx, p, e, d.policy); err != nil {
 		return result, err
 	}
-	j, err := writeback.OpenWorkkitWritable(ctx, storeIdentity(e.Store))
+	j, err := d.openStore(ctx, e.Store, true)
 	if err != nil {
 		return result, err
 	}
@@ -235,7 +244,7 @@ func (d *operationDriver) Apply(ctx context.Context, p sdk.PreparedOperation, e 
 		return result, err
 	}
 	if route, revision, plan, action := sdk.SyncAdmissionScope(ctx); route != "" && action == "sync-run" {
-		if err = j.Box.BindWorkkitAdmission(route, revision, plan, draft.ID); err != nil {
+		if err = d.bindAdmission(ctx, j, e, route, revision, plan, draft.ID); err != nil {
 			return result, err
 		}
 	}
@@ -352,7 +361,7 @@ func (d *operationDriver) Reconcile(ctx context.Context, p sdk.PreparedOperation
 	if err := d.Current(ctx, p, e, d.policy); err != nil {
 		return result, err
 	}
-	j, err := writeback.OpenWorkkitWritable(ctx, storeIdentity(e.Store))
+	j, err := d.openStore(ctx, e.Store, true)
 	if err != nil {
 		return result, err
 	}
@@ -375,7 +384,7 @@ func (d *operationDriver) Cancel(ctx context.Context, p sdk.PreparedOperation, e
 	if err := d.Current(ctx, p, e, d.policy); err != nil {
 		return result, err
 	}
-	j, err := writeback.OpenWorkkitWritable(ctx, storeIdentity(e.Store))
+	j, err := d.openStore(ctx, e.Store, true)
 	if err != nil {
 		return result, err
 	}

@@ -551,3 +551,14 @@ Provider dispatch remains P5; migration is blocked, live qualification remains
 pending and production activation is unauthorized. See the
 [operator guide](docs/workkit-setup-mapping.md) and
 [delivery evidence](docs/implementation/workkit-phase-4-delivery-evidence.md).
+
+## WorkKit controlled operations and sync
+
+WorkKit P5 adds reviewable item drafts, an opt-in protected operation coordinator,
+a fresh path-bound integration journal, read-only reconciliation and bounded
+one-way sync with paired baselines and durable pending obligations. Standard
+binaries install no qualified writer enrollment. Provider/auth/platform live
+qualification remains pending, migration activation is blocked and production
+activation is unauthorized. See the [operator guide](docs/workkit-p5-operations.md),
+[journal ownership decision](docs/adr/workkit-integration-journal.md) and
+[delivery evidence](docs/implementation/workkit-phase-5-delivery-evidence.md).

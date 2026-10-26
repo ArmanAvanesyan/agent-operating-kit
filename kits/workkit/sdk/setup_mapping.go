@@ -203,7 +203,7 @@ func ValidateSetupMapping(ctx context.Context, mapping, bindings, source, dest, 
 // PreviewSetupMapping uses only the source snapshot and explicit catalogs. It
 // never creates a send permit, acceptance receipt or writable runtime proposal.
 func PreviewSetupMapping(ctx context.Context, mapping, bindings, source, dest, snapshot, asOf, out string) (s.Preview, error) {
-	if e := setupOutput(out, source, dest, snapshot); e != nil {
+	if e := setupOutputOptional(out, source, dest, snapshot); e != nil {
 		return s.Preview{}, e
 	}
 	p := s.Preview{Values: []s.ProposedValue{}}

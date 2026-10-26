@@ -5,10 +5,10 @@ ROOT=Path(__file__).resolve().parents[2]
 parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--check',action='store_true');args=parser.parse_args()
 output=ROOT/'kits/workkit/internal/engine/implementation_pin.go'
 paths=[]
-for prefix in ['kits/workkit','integrations/legacy-aok/workkit','internal/contracts','internal/tracker','internal/usage','internal/modelcatalog']:
+for prefix in ['kits/workkit','integrations/legacy-aok/workkit','internal/contracts','internal/tracker','internal/usage','internal/modelcatalog','internal/writeback','internal/connector','internal/operations','internal/worksystem/provision']:
  for p in (ROOT/prefix).rglob('*'):
   if p.is_file() and (p.suffix in ('.go','.swift') or p.suffix=='.json' and p.parent.name=='schemas') and not p.name.endswith('_test.go') and 'testdata' not in p.parts and p!=output:paths.append(p)
-paths += [ROOT/'go.mod',ROOT/'go.sum']
+paths += [ROOT/'go.mod',ROOT/'go.sum',ROOT/'internal/cli/workkit.go']
 if (ROOT/'scripts/workkit/build_broker.py').exists():paths.append(ROOT/'scripts/workkit/build_broker.py')
 preimage=json.dumps([{'path':p.relative_to(ROOT).as_posix(),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(paths)],sort_keys=True,separators=(',',':')).encode()
 digest=hashlib.sha256(preimage).hexdigest()

@@ -1,0 +1,953 @@
+{
+  "$id": "https://workkit.example/spec/sync/v1/sync-plan.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "asOf": {
+      "type": "string"
+    },
+    "authorizationGranted": {
+      "const": false
+    },
+    "candidate": {
+      "additionalProperties": false,
+      "properties": {
+        "baselines": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "confirmedOperationId": {
+                "type": "string"
+              },
+              "correlationId": {
+                "type": "string"
+              },
+              "destination": {
+                "additionalProperties": false,
+                "properties": {
+                  "present": {
+                    "type": "boolean"
+                  },
+                  "value": {}
+                },
+                "required": [
+                  "present",
+                  "value"
+                ],
+                "type": "object"
+              },
+              "field": {
+                "type": "string"
+              },
+              "source": {
+                "additionalProperties": false,
+                "properties": {
+                  "present": {
+                    "type": "boolean"
+                  },
+                  "value": {}
+                },
+                "required": [
+                  "present",
+                  "value"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "correlationId",
+              "field",
+              "source",
+              "destination",
+              "confirmedOperationId"
+            ],
+            "type": "object"
+          },
+          "maxItems": 10000,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "completedWatermark": {
+          "type": "string"
+        },
+        "initialized": {
+          "type": "boolean"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "paused": {
+          "type": "boolean"
+        },
+        "pendingPlanSha256": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "integer"
+        },
+        "routeSha256": {
+          "type": "string"
+        },
+        "unresolved": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10000,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "version",
+        "kind",
+        "routeSha256",
+        "revision",
+        "initialized",
+        "paused",
+        "baselines",
+        "pendingPlanSha256",
+        "completedWatermark",
+        "unresolved"
+      ],
+      "type": "object"
+    },
+    "complete": {
+      "type": "boolean"
+    },
+    "conflicts": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "correlationId": {
+            "type": "string"
+          },
+          "destination": {
+            "additionalProperties": false,
+            "properties": {
+              "present": {
+                "type": "boolean"
+              },
+              "value": {}
+            },
+            "required": [
+              "present",
+              "value"
+            ],
+            "type": "object"
+          },
+          "field": {
+            "type": "string"
+          },
+          "source": {
+            "additionalProperties": false,
+            "properties": {
+              "present": {
+                "type": "boolean"
+              },
+              "value": {}
+            },
+            "required": [
+              "present",
+              "value"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "correlationId",
+          "field",
+          "code",
+          "source",
+          "destination"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "diagnostics": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "field": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "field",
+          "message",
+          "severity"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "executionReady": {
+      "const": false
+    },
+    "initialize": {
+      "type": "boolean"
+    },
+    "inputs": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "kind": {
+      "type": "string"
+    },
+    "migrationActivated": {
+      "const": false
+    },
+    "operations": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "assets": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "sha256": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "type": "object"
+            },
+            "maxItems": 10000,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "authorizationGranted": {
+            "const": false
+          },
+          "changes": {
+            "additionalProperties": {},
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "dependsOn": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10000,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "diagnostics": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "field": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "severity": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "field",
+                "message",
+                "severity"
+              ],
+              "type": "object"
+            },
+            "maxItems": 10000,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "executionReady": {
+            "const": false
+          },
+          "id": {
+            "type": "string"
+          },
+          "inputs": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "kind": {
+            "type": "string"
+          },
+          "logicalKey": {
+            "type": "string"
+          },
+          "migrationActivated": {
+            "const": false
+          },
+          "observedAt": {
+            "type": "string"
+          },
+          "operation": {
+            "type": "string"
+          },
+          "parentId": {
+            "type": "string"
+          },
+          "plan": {
+            "additionalProperties": false,
+            "properties": {
+              "apiVersion": {
+                "type": "string"
+              },
+              "extensions": {
+                "additionalProperties": {},
+                "type": [
+                  "object",
+                  "null"
+                ]
+              },
+              "kind": {
+                "type": "string"
+              },
+              "metadata": {
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "revision": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "id",
+                  "revision"
+                ],
+                "type": "object"
+              },
+              "spec": {
+                "additionalProperties": false,
+                "properties": {
+                  "capabilityRef": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "kind": {
+                        "type": "string"
+                      },
+                      "revision": {
+                        "type": "integer"
+                      },
+                      "sha256": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "id",
+                      "revision",
+                      "sha256"
+                    ],
+                    "type": "object"
+                  },
+                  "changes": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "fieldId": {
+                          "type": "string"
+                        },
+                        "value": {}
+                      },
+                      "required": [
+                        "fieldId",
+                        "value"
+                      ],
+                      "type": "object"
+                    },
+                    "maxItems": 10000,
+                    "type": [
+                      "array",
+                      "null"
+                    ]
+                  },
+                  "connectionRef": {
+                    "anyOf": [
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "kind": {
+                            "type": "string"
+                          },
+                          "revision": {
+                            "type": "integer"
+                          },
+                          "sha256": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "kind",
+                          "id",
+                          "revision",
+                          "sha256"
+                        ],
+                        "type": "object"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "dependsOn": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 10000,
+                    "type": [
+                      "array",
+                      "null"
+                    ]
+                  },
+                  "evidence": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "path": {
+                          "type": "string"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "sha256"
+                      ],
+                      "type": "object"
+                    },
+                    "maxItems": 10000,
+                    "type": [
+                      "array",
+                      "null"
+                    ]
+                  },
+                  "nativeTarget": {
+                    "anyOf": [
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "assignmentSha256": {
+                            "type": "string"
+                          },
+                          "attemptRef": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "host": {
+                            "type": "string"
+                          },
+                          "nativeTaskId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "profileRef": {
+                            "additionalProperties": false,
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "kind": {
+                                "type": "string"
+                              },
+                              "revision": {
+                                "type": "integer"
+                              },
+                              "sha256": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "kind",
+                              "id",
+                              "revision",
+                              "sha256"
+                            ],
+                            "type": "object"
+                          },
+                          "sessionId": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "profileRef",
+                          "host",
+                          "sessionId",
+                          "assignmentSha256"
+                        ],
+                        "type": "object"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "operation": {
+                    "type": "string"
+                  },
+                  "operationId": {
+                    "type": "string"
+                  },
+                  "policyRef": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "kind": {
+                        "type": "string"
+                      },
+                      "revision": {
+                        "type": "integer"
+                      },
+                      "sha256": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "id",
+                      "revision",
+                      "sha256"
+                    ],
+                    "type": "object"
+                  },
+                  "precondition": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "maxAgeSeconds": {
+                        "type": "integer"
+                      },
+                      "requiredConcurrency": {
+                        "type": "string"
+                      },
+                      "revision": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "kind": {
+                            "type": "string"
+                          },
+                          "observedAt": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "kind",
+                          "value",
+                          "observedAt"
+                        ],
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "revision",
+                      "requiredConcurrency",
+                      "maxAgeSeconds"
+                    ],
+                    "type": "object"
+                  },
+                  "target": {
+                    "anyOf": [
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "basePath": {
+                            "type": "string"
+                          },
+                          "containerId": {
+                            "type": "string"
+                          },
+                          "itemKind": {
+                            "type": "string"
+                          },
+                          "nativeId": {
+                            "type": "string"
+                          },
+                          "origin": {
+                            "type": "string"
+                          },
+                          "provider": {
+                            "type": "string"
+                          },
+                          "tenantId": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "provider",
+                          "origin",
+                          "basePath",
+                          "tenantId",
+                          "containerId",
+                          "itemKind",
+                          "nativeId"
+                        ],
+                        "type": "object"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "operationId",
+                  "operation",
+                  "changes",
+                  "precondition",
+                  "policyRef",
+                  "capabilityRef",
+                  "evidence",
+                  "dependsOn"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "apiVersion",
+              "kind",
+              "metadata",
+              "spec"
+            ],
+            "type": "object"
+          },
+          "productionActivated": {
+            "const": false
+          },
+          "requiredConcurrency": {
+            "type": "string"
+          },
+          "revision": {
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "type": "string"
+              },
+              "observedAt": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind",
+              "value",
+              "observedAt"
+            ],
+            "type": "object"
+          },
+          "status": {
+            "type": "string"
+          },
+          "target": {
+            "additionalProperties": false,
+            "properties": {
+              "basePath": {
+                "type": "string"
+              },
+              "containerId": {
+                "type": "string"
+              },
+              "itemKind": {
+                "type": "string"
+              },
+              "nativeId": {
+                "type": "string"
+              },
+              "origin": {
+                "type": "string"
+              },
+              "provider": {
+                "type": "string"
+              },
+              "tenantId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "provider",
+              "origin",
+              "basePath",
+              "tenantId",
+              "containerId",
+              "itemKind",
+              "nativeId"
+            ],
+            "type": "object"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "version",
+          "kind",
+          "id",
+          "logicalKey",
+          "operation",
+          "target",
+          "parentId",
+          "revision",
+          "observedAt",
+          "inputs",
+          "changes",
+          "dependsOn",
+          "status",
+          "requiredConcurrency",
+          "diagnostics",
+          "assets",
+          "plan",
+          "authorizationGranted",
+          "executionReady",
+          "migrationActivated",
+          "productionActivated"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "productionActivated": {
+      "const": false
+    },
+    "proposals": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "allowCreate": {
+            "type": "boolean"
+          },
+          "dependsOn": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10000,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "fields": {
+            "additionalProperties": {},
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "itemId": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "logicalKey": {
+            "type": "string"
+          },
+          "operation": {
+            "type": "string"
+          },
+          "parentId": {
+            "type": "string"
+          },
+          "schemaSha256": {
+            "type": "string"
+          },
+          "typeId": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "version",
+          "kind",
+          "logicalKey",
+          "operation",
+          "parentId",
+          "itemId",
+          "fields",
+          "dependsOn",
+          "allowCreate",
+          "typeId",
+          "schemaSha256"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "routeSha256": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "updates": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "confirmedOperationId": {
+            "type": "string"
+          },
+          "correlationId": {
+            "type": "string"
+          },
+          "destination": {
+            "additionalProperties": false,
+            "properties": {
+              "present": {
+                "type": "boolean"
+              },
+              "value": {}
+            },
+            "required": [
+              "present",
+              "value"
+            ],
+            "type": "object"
+          },
+          "field": {
+            "type": "string"
+          },
+          "source": {
+            "additionalProperties": false,
+            "properties": {
+              "present": {
+                "type": "boolean"
+              },
+              "value": {}
+            },
+            "required": [
+              "present",
+              "value"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "correlationId",
+          "field",
+          "source",
+          "destination",
+          "confirmedOperationId"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "version": {
+      "const": "workkit-sync/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "routeSha256",
+    "inputs",
+    "asOf",
+    "initialize",
+    "status",
+    "proposals",
+    "operations",
+    "conflicts",
+    "updates",
+    "candidate",
+    "complete",
+    "diagnostics",
+    "authorizationGranted",
+    "executionReady",
+    "migrationActivated",
+    "productionActivated"
+  ],
+  "type": "object"
+}

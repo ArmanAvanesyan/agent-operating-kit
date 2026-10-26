@@ -1,0 +1,147 @@
+{
+  "$id": "https://workkit.example/spec/operations/v1/observation.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "attempts": {
+      "type": "integer"
+    },
+    "authorizationGranted": {
+      "const": false
+    },
+    "diagnostics": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "field": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "field",
+          "message",
+          "severity"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "digest": {
+      "type": "string"
+    },
+    "evidence": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "sha256"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "executionReady": {
+      "const": false
+    },
+    "fence": {
+      "type": "integer"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "migrationActivated": {
+      "const": false
+    },
+    "observedAt": {
+      "type": "string"
+    },
+    "operationId": {
+      "type": "string"
+    },
+    "productionActivated": {
+      "const": false
+    },
+    "state": {
+      "type": "string"
+    },
+    "store": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "version",
+        "kind",
+        "path",
+        "id",
+        "namespace",
+        "owner"
+      ],
+      "type": "object"
+    },
+    "version": {
+      "const": "workkit-operations/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "operationId",
+    "digest",
+    "state",
+    "fence",
+    "attempts",
+    "store",
+    "observedAt",
+    "evidence",
+    "diagnostics",
+    "authorizationGranted",
+    "executionReady",
+    "migrationActivated",
+    "productionActivated"
+  ],
+  "type": "object"
+}

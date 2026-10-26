@@ -14,7 +14,7 @@ import (
 func runWorkkit(args []string, stdout, stderr io.Writer) int {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
-	return command.RunSuite(ctx, args, stdout, stderr, sdk.New(&legacy.Reader{}).WithReadBackend(legacy.ReadBackend{}).WithAccessBackend(legacy.AccessBackend{Challenge: func(url string) error {
+	return command.RunSuite(ctx, args, stdout, stderr, sdk.New(&legacy.Reader{}).WithOperationBackend(legacy.OperationBackend{}).WithSyncBackend(legacy.SyncBackend{}).WithSetupOperationBackend(legacy.SetupOperationBackend{}).WithReadBackend(legacy.ReadBackend{}).WithAccessBackend(legacy.AccessBackend{Challenge: func(url string) error {
 		_, e := fmt.Fprintln(stderr, "Open this one-use authorization URL in your browser:", url)
 		return e
 	}}))

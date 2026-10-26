@@ -22,9 +22,11 @@ const help = `WorkKit P1 offline commands (P2 read commands are opt-in):
   version
 P2: providers, discover, capture, catalog, browse, items, views (use GROUP --help).
 P3: tools, auth, connections (use GROUP --help).
-Native auth and activation remain gated; tracker mutation is not exposed.
+Native auth and activation remain gated; writer enrollment is absent from standard binaries.
 
 P4 setup and mappings: setup --help | mappings --help; provider views remain drafts.
+P5 controlled operations and one-way sync: operations --help | sync --help.
+Protected writer enrollment, live qualification, migration and production remain separate gates.
 `
 
 func Run(ctx context.Context, args []string, stdout, stderr io.Writer, service *sdk.Service) int {
@@ -38,6 +40,9 @@ func RunSuite(ctx context.Context, args []string, stdout, stderr io.Writer, serv
 func run(ctx context.Context, args []string, stdout, stderr io.Writer, service *sdk.Service, suite bool) int {
 	if ctx == nil || stdout == nil || stderr == nil || service == nil {
 		return 2
+	}
+	if isOperationCommand(args) {
+		return runOperations(ctx, args, stdout, stderr, service, suite)
 	}
 	if len(args) > 0 && (args[0] == "tools" || args[0] == "auth" || args[0] == "connections") {
 		return runAccess(ctx, args, stdout, stderr, service, suite)

@@ -1,0 +1,33 @@
+{
+  "version": "workkit-operations/v1",
+  "kind": "OperationQualification",
+  "scope": {
+    "provider": "github",
+    "origin": "https://api.github.com",
+    "basePath": "",
+    "tenantId": "OPERATOR_NATIVE_TENANT_ID",
+    "containerId": "OPERATOR_DISPOSABLE_REPOSITORY_ID",
+    "apiVersion": "2022-11-28",
+    "deploymentSha256": "",
+    "principal": "OPERATOR_VERIFIED_PRINCIPAL_PSEUDONYM"
+  },
+  "operation": "comment",
+  "implementationSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "required": [
+    "operator-scope",
+    "credential-reference",
+    "read-identity",
+    "verified-binding",
+    "operation-capability",
+    "protected-authority",
+    "anti-rollback-witness",
+    "one-use-grant",
+    "provider-receipt",
+    "independent-readback"
+  ],
+  "provided": {},
+  "status": "pending",
+  "diagnostics": [],
+  "authorizationGranted": false,
+  "executionReady": false
+}

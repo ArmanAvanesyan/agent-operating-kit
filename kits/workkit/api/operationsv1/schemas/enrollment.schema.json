@@ -1,0 +1,95 @@
+{
+  "$id": "https://workkit.example/spec/operations/v1/enrollment.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "action": {
+      "type": "string"
+    },
+    "expiresAt": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "implementationSha256": {
+      "type": "string"
+    },
+    "issuedAt": {
+      "type": "string"
+    },
+    "issuer": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "operationSha256": {
+      "type": "string"
+    },
+    "outputPath": {
+      "type": "string"
+    },
+    "policySha256": {
+      "type": "string"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "signature": {
+      "type": "string"
+    },
+    "store": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "version",
+        "kind",
+        "path",
+        "id",
+        "namespace",
+        "owner"
+      ],
+      "type": "object"
+    },
+    "version": {
+      "const": "workkit-operations/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "purpose",
+    "id",
+    "issuer",
+    "operationSha256",
+    "store",
+    "action",
+    "policySha256",
+    "implementationSha256",
+    "issuedAt",
+    "expiresAt",
+    "outputPath",
+    "signature"
+  ],
+  "type": "object"
+}

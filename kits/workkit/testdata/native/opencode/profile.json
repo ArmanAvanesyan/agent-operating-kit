@@ -1,0 +1,23 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "NativeTaskProfile",
+  "metadata": {
+    "id": "native-profile",
+    "revision": 1
+  },
+  "spec": {
+    "host": "opencode",
+    "hostVersion": "fixture-only-1",
+    "protocol": "fixture-opencode/v1",
+    "operations": [
+      "todos.read"
+    ],
+    "mappingRef": {
+      "kind": "Mapping",
+      "id": "native-fixture",
+      "revision": 1,
+      "sha256": "4e7739caaf26d2e02fb99af3c479d1215a797f5bae6b93ef5680b5c67e6741c5"
+    },
+    "mode": "observe"
+  }
+}

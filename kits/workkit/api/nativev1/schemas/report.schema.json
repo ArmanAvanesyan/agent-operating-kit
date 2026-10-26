@@ -1,0 +1,348 @@
+{
+  "$id": "https://workkit.example/spec/native/v1/report.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "adapterVersion": {
+      "type": "string"
+    },
+    "asOf": {
+      "type": "string"
+    },
+    "assets": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "sha256"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "authorizationGranted": {
+      "const": false
+    },
+    "complete": {
+      "type": "boolean"
+    },
+    "currentAuthority": {
+      "const": "not-established",
+      "type": "string"
+    },
+    "diagnostics": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "field": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "field",
+          "message",
+          "severity"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "entries": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "nativeId": {
+            "type": "string"
+          },
+          "sourceEventId": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "stepKey": {
+            "type": "string"
+          },
+          "value": {}
+        },
+        "required": [
+          "sourceEventId",
+          "category",
+          "state",
+          "value"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "executionReady": {
+      "const": false
+    },
+    "implementationSha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "type": "string"
+    },
+    "inputs": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "kind": {
+      "enum": [
+        "NativeProjection",
+        "NativeBindingCandidate",
+        "NativeObservation",
+        "NativeReconciliation"
+      ]
+    },
+    "liveQualification": {
+      "const": "not-established",
+      "type": "string"
+    },
+    "migrationActivated": {
+      "const": false
+    },
+    "observedAt": {
+      "type": "string"
+    },
+    "operations": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "logicalId": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "request": {
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "type": "string"
+              },
+              "operation": {
+                "type": "string"
+              },
+              "stepKey": {
+                "type": "string"
+              },
+              "targetNativeId": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "version",
+              "kind",
+              "operation",
+              "stepKey"
+            ],
+            "type": "object"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "logicalId",
+          "request",
+          "status",
+          "reason"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "productionActivated": {
+      "const": false
+    },
+    "scope": {
+      "additionalProperties": false,
+      "properties": {
+        "assignmentSha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "attemptId": {
+          "type": "string"
+        },
+        "deployment": {
+          "type": "string"
+        },
+        "fence": {
+          "type": "string"
+        },
+        "host": {
+          "enum": [
+            "codex",
+            "claude-code",
+            "cursor",
+            "opencode",
+            "antigravity"
+          ],
+          "type": "string"
+        },
+        "hostVersion": {
+          "type": "string"
+        },
+        "mappingSha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "native-only",
+            "managed"
+          ],
+          "type": "string"
+        },
+        "origin": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "principal": {
+          "type": "string"
+        },
+        "profileSha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "protocol": {
+          "type": "string"
+        },
+        "sessionId": {
+          "type": "string"
+        },
+        "workspace": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "host",
+        "hostVersion",
+        "protocol",
+        "deployment",
+        "origin",
+        "principal",
+        "workspace",
+        "sessionId",
+        "owner",
+        "assignmentSha256",
+        "profileSha256",
+        "mappingSha256",
+        "mode"
+      ],
+      "type": "object"
+    },
+    "status": {
+      "type": "string"
+    },
+    "steps": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "dependsOn": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10000,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "description",
+          "dependsOn"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "version": {
+      "const": "workkit-native/v1"
+    }
+  },
+  "required": [
+    "adapterVersion",
+    "implementationSha256",
+    "operations",
+    "version",
+    "kind",
+    "scope",
+    "asOf",
+    "observedAt",
+    "status",
+    "complete",
+    "currentAuthority",
+    "liveQualification",
+    "inputs",
+    "steps",
+    "entries",
+    "diagnostics",
+    "assets",
+    "authorizationGranted",
+    "executionReady",
+    "migrationActivated",
+    "productionActivated"
+  ],
+  "type": "object"
+}

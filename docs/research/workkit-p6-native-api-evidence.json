@@ -1,0 +1,52 @@
+{
+  "version": "workkit-native-api-inventory/v1",
+  "observedAt": "2026-10-26T05:46:51.368341+00:00",
+  "baseline": "af456c4731673568de0396d197e81841148c463a",
+  "verification": "official-documentation-and-version-output-only; no installed protocol or account qualification",
+  "sources": [
+    {
+      "host": "codex",
+      "reference": "https://learn.chatgpt.com/docs/app-server",
+      "resolvedReference": "https://learn.chatgpt.com/docs/app-server",
+      "sourceSha256": "99b5e75c1e3a04cd8ea38ac710d877acc7a35769fc5b03aed92d6e2e106b2f08",
+      "sourceBytes": 981787,
+      "installedVersionObserved": "0.162.1",
+      "operation": "plans.read",
+      "exposure": "owner-evidence-import",
+      "liveQualification": "pending",
+      "directMutation": "not-established",
+      "captureStatus": "captured-hash-only"
+    },
+    {
+      "host": "claude-code",
+      "reference": "https://code.claude.com/docs/en/agent-sdk/todo-tracking",
+      "resolvedReference": "https://code.claude.com/docs/en/agent-sdk/todo-tracking",
+      "sourceSha256": "a04e8ef5ec631dc8c79fcc8e76d68fef07758e7d6375d96efd970927822a5e3a",
+      "sourceBytes": 710040,
+      "installedVersionObserved": "2.1.303",
+      "operation": "events.observe",
+      "exposure": "owner-evidence-import",
+      "liveQualification": "pending",
+      "directMutation": "not-established",
+      "captureStatus": "captured-hash-only"
+    },
+    {
+      "host": "opencode",
+      "reference": "https://opencode.ai/docs/server/",
+      "resolvedReference": "https://opencode.ai/docs/server/",
+      "sourceSha256": "03589bc5467d35be61f5c55774b72c8396701bd0c6bb9ccfa475bfc785f243c7",
+      "sourceBytes": 85314,
+      "installedVersionObserved": "1.18.35",
+      "operation": "todos.read",
+      "exposure": "protected-existing-session-read",
+      "liveQualification": "pending",
+      "directMutation": "not-established",
+      "captureStatus": "captured-hash-only"
+    }
+  ],
+  "projectionOnly": [
+    "cursor",
+    "antigravity"
+  ],
+  "qualificationTransferred": false
+}

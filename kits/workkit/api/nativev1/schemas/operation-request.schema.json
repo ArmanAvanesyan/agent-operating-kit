@@ -1,0 +1,31 @@
+{
+  "$id": "https://workkit.example/spec/native/v1/operation-request.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "enum": [
+        "NativeOperationRequest"
+      ]
+    },
+    "operation": {
+      "type": "string"
+    },
+    "stepKey": {
+      "type": "string"
+    },
+    "targetNativeId": {
+      "type": "string"
+    },
+    "version": {
+      "const": "workkit-native/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "operation",
+    "stepKey"
+  ],
+  "type": "object"
+}

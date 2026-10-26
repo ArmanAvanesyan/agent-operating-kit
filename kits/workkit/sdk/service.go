@@ -13,7 +13,7 @@ import (
 	"github.com/ArmanAvanesyan/agent-operating-kit/kits/workkit/internal/engine"
 )
 
-const Version = "0.5.0-operations-offline"
+const Version = "0.6.0-native-observation-offline"
 
 type Error struct {
 	Code, Message string
@@ -75,6 +75,7 @@ type Service struct {
 	operations      OperationBackend
 	sync            SyncBackend
 	setupOperations SetupOperationBackend
+	native          NativeReadBackend
 }
 
 func New(legacy LegacyReader) *Service { return &Service{legacy: legacy} }

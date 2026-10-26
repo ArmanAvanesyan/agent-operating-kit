@@ -562,3 +562,11 @@ qualification remains pending, migration activation is blocked and production
 activation is unauthorized. See the [operator guide](docs/workkit-p5-operations.md),
 [journal ownership decision](docs/adr/workkit-integration-journal.md) and
 [delivery evidence](docs/implementation/workkit-phase-5-delivery-evidence.md).
+
+## WorkKit native observation
+
+WorkKit P6 adds opt-in native projections, candidate session bindings and scoped
+observation imports, plus a protected OpenCode existing-session read port.
+Native mutation dispatch is blocked. P5 live qualification remains pending,
+migration activation blocked and production activation unauthorized. See the
+[operator guide](docs/workkit-native-observation.md).

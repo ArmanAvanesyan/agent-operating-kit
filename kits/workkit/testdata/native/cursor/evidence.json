@@ -1,0 +1,22 @@
+{
+  "version": "workkit-native/v1",
+  "kind": "CapturedNativeEvidence",
+  "scope": {
+    "host": "cursor",
+    "hostVersion": "fixture-only-1",
+    "protocol": "fixture-cursor/v1",
+    "deployment": "synthetic-disposable",
+    "origin": "http://127.0.0.1:4096",
+    "principal": "fixture-only-principal",
+    "workspace": "/synthetic/workspace",
+    "sessionId": "synthetic-session",
+    "owner": "fixture-only-owner",
+    "assignmentSha256": "fbc384438e6b0bc308667a67b61b0f7bdbea27c5fe265d7c85969c3ade20da73",
+    "profileSha256": "c02a3d6fecf1914fcd74c3de05a23fb1f40822414528b4c21974d83670b360fe",
+    "mappingSha256": "4e7739caaf26d2e02fb99af3c479d1215a797f5bae6b93ef5680b5c67e6741c5",
+    "mode": "native-only"
+  },
+  "observedAt": "2026-10-26T12:00:01Z",
+  "complete": false,
+  "events": []
+}

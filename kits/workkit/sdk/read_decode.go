@@ -187,7 +187,7 @@ func NativeIdentity(c r.Configuration, i readsource.Item) r.Identity {
 	if c.Source.Deployment != nil {
 		base = c.Source.Deployment.BasePath
 	}
-	return r.Identity{providerName(c.Source.Provider), c.Source.Origin, base, c.Source.NativeTenantID, c.Source.ContainerID, i.Identity.ItemKind, i.Identity.RemoteID}
+	return r.Identity{Provider: providerName(c.Source.Provider), Origin: c.Source.Origin, BasePath: base, TenantID: c.Source.NativeTenantID, ContainerID: c.Source.ContainerID, ItemKind: i.Identity.ItemKind, NativeID: i.Identity.RemoteID}
 }
 func zeroDigest(s string) bool { return s == strings.Repeat("0", 64) }
 

@@ -541,3 +541,13 @@ The opt-in [WorkKit P3 toolchain/authentication](docs/workkit-toolchain-auth.md)
 provides scoped tool management, OS credential-broker backends, native drivers,
 Jira/Linear OAuth and broker-backed reads. Source/fixture conformance does not
 qualify native platforms or live routes. Migration and production remain gated.
+
+## WorkKit setup and mapping
+
+Opt-in WorkKit P4 provides scoped setup observations, additive drafts, mapping
+validation/preview, provider-view drafts and guarded local binding verification.
+The shared commands are available as `workkit`, `aok work` and `aok workkit`.
+Provider dispatch remains P5; migration is blocked, live qualification remains
+pending and production activation is unauthorized. See the
+[operator guide](docs/workkit-setup-mapping.md) and
+[delivery evidence](docs/implementation/workkit-phase-4-delivery-evidence.md).

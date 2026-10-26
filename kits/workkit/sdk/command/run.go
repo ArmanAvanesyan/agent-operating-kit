@@ -23,6 +23,8 @@ const help = `WorkKit P1 offline commands (P2 read commands are opt-in):
 P2: providers, discover, capture, catalog, browse, items, views (use GROUP --help).
 P3: tools, auth, connections (use GROUP --help).
 Native auth and activation remain gated; tracker mutation is not exposed.
+
+P4 setup and mappings: setup --help | mappings --help; provider views remain drafts.
 `
 
 func Run(ctx context.Context, args []string, stdout, stderr io.Writer, service *sdk.Service) int {
@@ -39,6 +41,9 @@ func run(ctx context.Context, args []string, stdout, stderr io.Writer, service *
 	}
 	if len(args) > 0 && (args[0] == "tools" || args[0] == "auth" || args[0] == "connections") {
 		return runAccess(ctx, args, stdout, stderr, service, suite)
+	}
+	if isSetupCommand(args) {
+		return runSetup(ctx, args, stdout, stderr, service, suite)
 	}
 	if len(args) > 0 && isReadGroup(args[0]) {
 		return runRead(ctx, args, stdout, stderr, service, suite)

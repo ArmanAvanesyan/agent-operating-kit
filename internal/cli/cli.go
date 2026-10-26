@@ -54,7 +54,7 @@ func Run(argv []string, stdout, stderr io.Writer) int {
 		code, err = runCampaign(args, stdout, stderr)
 	case "methodology":
 		code, err = runMethodology(args, stdout, stderr)
-	case "work":
+	case "work", "workkit":
 		return runWorkkit(args, stdout, stderr)
 	case "work-item":
 		code, err = runWorkItem(args, stdout, stderr)

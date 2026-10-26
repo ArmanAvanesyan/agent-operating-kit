@@ -1,0 +1,1 @@
+{"apiVersion":"workkit/v1alpha1","kind":"ConnectionProfile","metadata":{"id":"jira-cloud","revision":1},"spec":{"provider":"jira-cloud","origin":"https://synthetic.atlassian.net","basePath":"","transport":"rest","authRef":"credentials/jira-cloud","scope":{"tenantId":"tenant-synthetic","containerIds":["container-synthetic"]},"apiVersion":"synthetic-api"}}

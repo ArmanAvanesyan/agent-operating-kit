@@ -1,0 +1,28 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "DesiredSetup",
+  "metadata": {
+    "id": "desired-jira-cloud",
+    "revision": 1
+  },
+  "spec": {
+    "connectionRef": {
+      "kind": "ConnectionProfile",
+      "id": "jira-cloud",
+      "revision": 1,
+      "sha256": "f3b8d826fd15ce5f420fa657638e03fb9afb18b648769b6efe470a54eecd2836"
+    },
+    "containerId": "container-synthetic",
+    "fields": [
+      {
+        "logicalId": "title",
+        "nativeId": "field-title",
+        "name": "Title",
+        "type": "text",
+        "options": []
+      }
+    ],
+    "views": [],
+    "allowDestructive": false
+  }
+}

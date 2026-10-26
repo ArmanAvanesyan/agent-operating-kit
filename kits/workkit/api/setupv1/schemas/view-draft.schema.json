@@ -1,0 +1,189 @@
+{
+  "$id": "https://workkit.example/spec/setup/v1/view-draft.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "definitionSha256": {
+      "type": "string"
+    },
+    "differences": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "existingId": {
+      "type": "string"
+    },
+    "manualInstructions": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "parentId": {
+      "type": "string"
+    },
+    "report": {
+      "additionalProperties": false,
+      "properties": {
+        "asOf": {
+          "type": "string"
+        },
+        "authorizationGranted": {
+          "const": false
+        },
+        "changes": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "logicalId": {
+                "type": "string"
+              },
+              "operation": {
+                "type": "string"
+              },
+              "parentId": {
+                "type": "string"
+              },
+              "value": {}
+            },
+            "required": [
+              "id",
+              "operation",
+              "parentId",
+              "logicalId",
+              "value"
+            ],
+            "type": "object"
+          },
+          "maxItems": 10000,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "checks": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "status"
+            ],
+            "type": "object"
+          },
+          "maxItems": 10000,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "diagnostics": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "field": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "severity": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "field",
+              "message",
+              "severity"
+            ],
+            "type": "object"
+          },
+          "maxItems": 10000,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "executionReady": {
+          "const": false
+        },
+        "inputs": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "kind": {
+          "type": "string"
+        },
+        "liveQualification": {
+          "type": "string"
+        },
+        "migrationActivated": {
+          "const": false
+        },
+        "productionActivated": {
+          "const": false
+        },
+        "status": {
+          "type": "string"
+        },
+        "version": {
+          "const": "workkit-setup/v1"
+        }
+      },
+      "required": [
+        "version",
+        "kind",
+        "status",
+        "asOf",
+        "inputs",
+        "checks",
+        "changes",
+        "diagnostics",
+        "authorizationGranted",
+        "executionReady",
+        "migrationActivated",
+        "productionActivated",
+        "liveQualification"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "report",
+    "definitionSha256",
+    "parentId",
+    "existingId",
+    "differences",
+    "manualInstructions"
+  ],
+  "type": "object"
+}

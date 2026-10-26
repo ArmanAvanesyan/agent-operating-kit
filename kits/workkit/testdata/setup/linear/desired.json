@@ -1,0 +1,28 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "DesiredSetup",
+  "metadata": {
+    "id": "desired-linear",
+    "revision": 1
+  },
+  "spec": {
+    "connectionRef": {
+      "kind": "ConnectionProfile",
+      "id": "linear",
+      "revision": 1,
+      "sha256": "13a21daa8e68c6c2b170298308141a968ae261afdf2a5623645890c78eb5e68f"
+    },
+    "containerId": "container-synthetic",
+    "fields": [
+      {
+        "logicalId": "title",
+        "nativeId": "field-title",
+        "name": "Title",
+        "type": "text",
+        "options": []
+      }
+    ],
+    "views": [],
+    "allowDestructive": false
+  }
+}

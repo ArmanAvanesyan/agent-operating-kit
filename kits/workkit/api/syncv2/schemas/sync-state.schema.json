@@ -1,0 +1,122 @@
+{
+  "$id": "https://workkit.example/spec/workkit-sync/v2/sync-state.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "baselines": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "confirmedOperations": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10000,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "correlationId": {
+            "type": "string"
+          },
+          "destination": {
+            "additionalProperties": false,
+            "properties": {
+              "present": {
+                "type": "boolean"
+              },
+              "value": {}
+            },
+            "required": [
+              "present",
+              "value"
+            ],
+            "type": "object"
+          },
+          "ruleId": {
+            "type": "string"
+          },
+          "source": {
+            "additionalProperties": false,
+            "properties": {
+              "present": {
+                "type": "boolean"
+              },
+              "value": {}
+            },
+            "required": [
+              "present",
+              "value"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "correlationId",
+          "ruleId",
+          "source",
+          "destination",
+          "confirmedOperations"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "completedWatermark": {
+      "type": "string"
+    },
+    "configurationSha256": {
+      "type": "string"
+    },
+    "initialized": {
+      "type": "boolean"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "paused": {
+      "type": "boolean"
+    },
+    "pendingPlanSha256": {
+      "type": "string"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "routeId": {
+      "type": "string"
+    },
+    "unresolved": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "version": {
+      "const": "workkit-sync/v2"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "routeId",
+    "configurationSha256",
+    "revision",
+    "initialized",
+    "paused",
+    "baselines",
+    "pendingPlanSha256",
+    "unresolved",
+    "completedWatermark"
+  ],
+  "type": "object"
+}

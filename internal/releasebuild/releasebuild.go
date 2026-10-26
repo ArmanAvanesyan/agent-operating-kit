@@ -54,6 +54,7 @@ var (
 		"scripts/testing/verify-workkit-setup-offline.py",
 		"scripts/testing/verify-workkit-operations-offline.py",
 		"scripts/testing/verify-workkit-native-offline.py",
+		"scripts/testing/verify-workkit-integration-offline.py",
 		"go.sum",
 		"go.mod",
 		"scripts/validate.sh",

@@ -1,0 +1,62 @@
+{
+  "$id": "https://workkit.example/spec/workkit-integration/v1/checkpoint.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "accountSha256": {
+      "type": "string"
+    },
+    "apiVersion": {
+      "type": "string"
+    },
+    "complete": {
+      "type": "boolean"
+    },
+    "completedWatermark": {
+      "type": "string"
+    },
+    "configurationSha256": {
+      "type": "string"
+    },
+    "connectionId": {
+      "type": "string"
+    },
+    "cursor": {
+      "type": "string"
+    },
+    "gap": {
+      "type": "boolean"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "observedAt": {
+      "type": "string"
+    },
+    "querySha256": {
+      "type": "string"
+    },
+    "routeId": {
+      "type": "string"
+    },
+    "version": {
+      "const": "workkit-integration/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "routeId",
+    "configurationSha256",
+    "connectionId",
+    "accountSha256",
+    "querySha256",
+    "apiVersion",
+    "cursor",
+    "observedAt",
+    "complete",
+    "gap",
+    "completedWatermark"
+  ],
+  "type": "object"
+}

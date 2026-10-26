@@ -1,0 +1,188 @@
+{
+  "$id": "https://workkit.example/spec/workkit-sync/v2/sync-configuration.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "correlations": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "destination": {
+            "additionalProperties": false,
+            "properties": {
+              "basePath": {
+                "type": "string"
+              },
+              "containerId": {
+                "type": "string"
+              },
+              "itemKind": {
+                "type": "string"
+              },
+              "nativeId": {
+                "type": "string"
+              },
+              "origin": {
+                "type": "string"
+              },
+              "provider": {
+                "type": "string"
+              },
+              "tenantId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "provider",
+              "origin",
+              "basePath",
+              "tenantId",
+              "containerId",
+              "itemKind",
+              "nativeId"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "type": "string"
+          },
+          "source": {
+            "additionalProperties": false,
+            "properties": {
+              "basePath": {
+                "type": "string"
+              },
+              "containerId": {
+                "type": "string"
+              },
+              "itemKind": {
+                "type": "string"
+              },
+              "nativeId": {
+                "type": "string"
+              },
+              "origin": {
+                "type": "string"
+              },
+              "provider": {
+                "type": "string"
+              },
+              "tenantId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "provider",
+              "origin",
+              "basePath",
+              "tenantId",
+              "containerId",
+              "itemKind",
+              "nativeId"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "source",
+          "destination"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "destinationBindingSha256": {
+      "type": "string"
+    },
+    "destinationConfigurationSha256": {
+      "type": "string"
+    },
+    "destinationQuerySha256": {
+      "type": "string"
+    },
+    "forwardMappingSha256": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "reverseMappingSha256": {
+      "type": "string"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "rules": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "destinationField": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "sourceField": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "sourceField",
+          "destinationField",
+          "owner",
+          "category"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "sourceBindingSha256": {
+      "type": "string"
+    },
+    "sourceConfigurationSha256": {
+      "type": "string"
+    },
+    "sourceQuerySha256": {
+      "type": "string"
+    },
+    "version": {
+      "const": "workkit-sync/v2"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "id",
+    "revision",
+    "sourceConfigurationSha256",
+    "destinationConfigurationSha256",
+    "sourceBindingSha256",
+    "destinationBindingSha256",
+    "forwardMappingSha256",
+    "reverseMappingSha256",
+    "sourceQuerySha256",
+    "destinationQuerySha256",
+    "rules",
+    "correlations"
+  ],
+  "type": "object"
+}

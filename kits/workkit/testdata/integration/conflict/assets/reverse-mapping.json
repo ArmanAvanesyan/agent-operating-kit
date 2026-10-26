@@ -1,0 +1,1 @@
+{"apiVersion":"workkit/v1alpha1","kind":"Mapping","metadata":{"id":"reverse","revision":1},"spec":{"fields":[{"canonical":"title","sourceFieldId":"System.Title","targetFieldId":"System.Title","owner":"source","valueMap":{},"lossPolicy":"reject"}],"lifecycle":[],"personMapping":[]}}

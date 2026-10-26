@@ -1,0 +1,1 @@
+{"apiVersion":"workkit/v1alpha1","kind":"ConnectionProfile","metadata":{"id":"left","revision":1},"spec":{"apiVersion":"7.1","authRef":"credentials/left","basePath":"","origin":"https://dev.azure.com","provider":"azure-devops","scope":{"containerIds":["left-guid"],"tenantId":"tenant-left"},"transport":"rest"}}

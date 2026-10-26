@@ -4,12 +4,14 @@ package platformfs
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"strings"
 )
 
-func ProcessStart() (string, error) {
-	raw, e := os.ReadFile("/proc/self/stat")
+func ProcessStart() (string, error) { return ProcessStartFor(os.Getpid()) }
+func ProcessStartFor(pid int) (string, error) {
+	raw, e := os.ReadFile(fmt.Sprintf("/proc/%d/stat", pid))
 	if e != nil || len(raw) > 8192 {
 		return "", errors.New("process start unavailable")
 	}

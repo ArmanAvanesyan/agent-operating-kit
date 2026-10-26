@@ -570,3 +570,13 @@ observation imports, plus a protected OpenCode existing-session read port.
 Native mutation dispatch is blocked. P5 live qualification remains pending,
 migration activation blocked and production activation unauthorized. See the
 [operator guide](docs/workkit-native-observation.md).
+
+
+## WorkKit review-first integration
+
+Opt-in WorkKit P7 adds selective bidirectional previews, manual conflict proposals,
+GitHub webhook-envelope verification, a distinct v2 integration journal and bounded
+private worker services through the shared P5 coordinator. Standard binaries install
+no qualified operational bootstrap. Native mutations remain blocked; provider/live
+qualification is pending separately; migration activation is blocked and production
+activation unauthorized. See the [P7 operator guide](docs/workkit-bidirectional-integration.md).

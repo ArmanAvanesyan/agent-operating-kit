@@ -35,6 +35,8 @@ jobs:
           go run ./scripts/workkit/access-schemas -check
           go run ./scripts/workkit/native-schemas -check
           go run ./scripts/workkit/native-fixtures -check
+          go run ./scripts/workkit/integration-schemas -check
+          go run ./scripts/workkit/integration-fixtures -check
           go run ./scripts/workkit/setup-schemas -check
           go run ./scripts/workkit/operations-schemas -check
           go run ./scripts/workkit/setup-fixtures -check
@@ -50,6 +52,7 @@ jobs:
           python3 scripts/testing/verify-workkit-setup-offline.py "$RUNNER_TEMP/aok" "$RUNNER_TEMP/workkit"
           python3 scripts/testing/verify-workkit-operations-offline.py "$RUNNER_TEMP/aok" "$RUNNER_TEMP/workkit"
           python3 scripts/testing/verify-workkit-native-offline.py "$RUNNER_TEMP/aok" "$RUNNER_TEMP/workkit"
+          python3 scripts/testing/verify-workkit-integration-offline.py "$RUNNER_TEMP/aok" "$RUNNER_TEMP/workkit"
       - name: Test Go packages
         # Several conformance tests intentionally enforce short process-stop
         # deadlines. Serialize packages so runner contention cannot consume a

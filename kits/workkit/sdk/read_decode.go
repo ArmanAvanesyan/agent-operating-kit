@@ -195,6 +195,15 @@ func requireReadFields(v any, t reflect.Type) error {
 	if t == nil {
 		return errors.New("typed decode target required")
 	}
+	if t == reflect.TypeOf([]byte{}) {
+		if v == nil {
+			return nil
+		}
+		if _, ok := v.(string); !ok {
+			return errors.New("base64 byte string required")
+		}
+		return nil
+	}
 	if t == reflect.TypeOf(json.RawMessage{}) {
 		return nil
 	}

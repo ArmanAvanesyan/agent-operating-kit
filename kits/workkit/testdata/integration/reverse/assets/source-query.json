@@ -1,0 +1,1 @@
+{"version":"workkit-read/v1","dialect":"portable","connectionId":"","expression":"title != \"excluded\"","fields":{"title":{"type":"string","providerFields":{"left":"System.Title","right":"System.Title"}}},"limit":100,"maxAgeSeconds":300}

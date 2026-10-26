@@ -30,11 +30,13 @@ type OperationDriver interface {
 	Cancel(context.Context, PreparedOperation, o.Enrollment) (o.Observation, error)
 }
 type OperationSession struct {
-	prepared   PreparedOperation
-	policy     []byte
-	enrollment o.Enrollment
-	driver     OperationDriver
-	used       atomic.Bool
+	prepared      PreparedOperation
+	policy        []byte
+	enrollment    o.Enrollment
+	driver        OperationDriver
+	used          atomic.Bool
+	validate      func(PreparedOperation, []byte, []byte, time.Time) (o.Enrollment, error)
+	rawEnrollment []byte
 }
 
 func (s *Service) WithOperationBackend(b OperationBackend) *Service {
@@ -147,7 +149,7 @@ func NewOperationSession(ctx context.Context, p PreparedOperation, policy, enrol
 	if err = driver.Current(ctx, p, e, policy); err != nil {
 		return nil, err
 	}
-	return &OperationSession{prepared: p, policy: append([]byte(nil), policy...), enrollment: e, driver: driver}, nil
+	return &OperationSession{prepared: p, policy: append([]byte(nil), policy...), enrollment: e, driver: driver, validate: validateOperationEnrollment, rawEnrollment: append([]byte(nil), enrollment...)}, nil
 }
 func (s *OperationSession) Run(ctx context.Context) (o.Observation, error) {
 	if s == nil || !s.used.CompareAndSwap(false, true) {
@@ -156,7 +158,7 @@ func (s *OperationSession) Run(ctx context.Context) (o.Observation, error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Minute)
 	defer cancel()
 	before := o.Observation{Version: o.Version, Kind: "OperationObservation", OperationID: s.prepared.draft.ID, Digest: s.prepared.Digest(), Store: s.enrollment.Store, State: "blocked", ObservedAt: time.Now().UTC().Format(time.RFC3339Nano), Evidence: []api.Asset{}, Diagnostics: []api.Diagnostic{}}
-	if _, e := validateOperationEnrollment(s.prepared, s.policy, engine.Encode(s.enrollment), time.Now().UTC()); e != nil {
+	if _, e := s.validate(s.prepared, s.policy, s.rawEnrollment, time.Now().UTC()); e != nil {
 		return before, operationFailure("operation.authority", "authority failed before send admission", 3, e)
 	}
 	if e := s.driver.Current(ctx, s.prepared, s.enrollment, s.policy); e != nil {

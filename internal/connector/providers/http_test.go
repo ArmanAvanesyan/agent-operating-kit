@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -155,5 +156,29 @@ func TestTransportTimeoutAndLostReplyAreAmbiguousErrors(t *testing.T) {
 	tr = route(t, rtFunc(func(*http.Request) (*http.Response, error) { return nil, io.ErrUnexpectedEOF }))
 	if _, err := tr.Dispatch(context.Background(), source(), tracker.WriteRequest{Method: "POST", Path: "/graphql"}); err == nil {
 		t.Fatal("lost reply not surfaced")
+	}
+}
+
+func TestWorkkitFinalAdmissionAfterCredentialDelay(t *testing.T) {
+	ctx := context.Background()
+	checks, resolves, sends := 0, 0, 0
+	allowed := true
+	transport, err := newTransport(Route{Source: source(), AuthReference: "opaque", Admission: func(context.Context) error {
+		checks++
+		if !allowed {
+			return fmt.Errorf("revoked")
+		}
+		return nil
+	}, Resolver: CredentialResolverFunc(func(context.Context, string) (Credential, error) {
+		resolves++
+		allowed = false
+		return Credential{Token: "synthetic-secret"}, nil
+	}), RoundTripper: rtFunc(func(*http.Request) (*http.Response, error) { sends++; return response(200, `{}`), nil })})
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = transport.Dispatch(ctx, source(), tracker.WriteRequest{Method: "POST", Path: "/graphql", ContentType: "application/json", Body: []byte(`{"query":"mutation AOKComment($input: CommentCreateInput!) { commentCreate(input: $input) { success comment { id body issue { id } } } }"}`)})
+	if err == nil || checks != 2 || resolves != 1 || sends != 0 {
+		t.Fatal(err, checks, resolves, sends)
 	}
 }

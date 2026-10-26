@@ -1,0 +1,403 @@
+{
+  "$id": "https://workkit.example/spec/sync/v1/sync-configuration.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "allowCreate": {
+      "type": "boolean"
+    },
+    "correlations": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "destination": {
+            "additionalProperties": false,
+            "properties": {
+              "basePath": {
+                "type": "string"
+              },
+              "containerId": {
+                "type": "string"
+              },
+              "itemKind": {
+                "type": "string"
+              },
+              "nativeId": {
+                "type": "string"
+              },
+              "origin": {
+                "type": "string"
+              },
+              "provider": {
+                "type": "string"
+              },
+              "tenantId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "provider",
+              "origin",
+              "basePath",
+              "tenantId",
+              "containerId",
+              "itemKind",
+              "nativeId"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "type": "string"
+          },
+          "source": {
+            "additionalProperties": false,
+            "properties": {
+              "basePath": {
+                "type": "string"
+              },
+              "containerId": {
+                "type": "string"
+              },
+              "itemKind": {
+                "type": "string"
+              },
+              "nativeId": {
+                "type": "string"
+              },
+              "origin": {
+                "type": "string"
+              },
+              "provider": {
+                "type": "string"
+              },
+              "tenantId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "provider",
+              "origin",
+              "basePath",
+              "tenantId",
+              "containerId",
+              "itemKind",
+              "nativeId"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "source",
+          "destination"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "destinationBindingSha256": {
+      "type": "string"
+    },
+    "destinationObservationSha256": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "mappingContextSha256": {
+      "type": "string"
+    },
+    "maxOperations": {
+      "type": "integer"
+    },
+    "querySha256": {
+      "type": "string"
+    },
+    "route": {
+      "additionalProperties": false,
+      "properties": {
+        "apiVersion": {
+          "type": "string"
+        },
+        "extensions": {
+          "additionalProperties": {},
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "kind": {
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "revision": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "id",
+            "revision"
+          ],
+          "type": "object"
+        },
+        "spec": {
+          "additionalProperties": false,
+          "properties": {
+            "conflictPolicy": {
+              "type": "string"
+            },
+            "deletePolicy": {
+              "type": "string"
+            },
+            "destination": {
+              "additionalProperties": false,
+              "properties": {
+                "connectionRef": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "kind": {
+                      "type": "string"
+                    },
+                    "revision": {
+                      "type": "integer"
+                    },
+                    "sha256": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "id",
+                    "revision",
+                    "sha256"
+                  ],
+                  "type": "object"
+                },
+                "scope": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "containerIds": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "maxItems": 10000,
+                      "type": [
+                        "array",
+                        "null"
+                      ]
+                    },
+                    "tenantId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "tenantId",
+                    "containerIds"
+                  ],
+                  "type": "object"
+                }
+              },
+              "required": [
+                "connectionRef",
+                "scope"
+              ],
+              "type": "object"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "mappingRef": {
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "revision": {
+                  "type": "integer"
+                },
+                "sha256": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind",
+                "id",
+                "revision",
+                "sha256"
+              ],
+              "type": "object"
+            },
+            "mode": {
+              "type": "string"
+            },
+            "selector": {
+              "additionalProperties": false,
+              "properties": {
+                "connectionRef": {
+                  "anyOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "kind": {
+                          "type": "string"
+                        },
+                        "revision": {
+                          "type": "integer"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "id",
+                        "revision",
+                        "sha256"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "dialect": {
+                  "type": "string"
+                },
+                "expression": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "dialect",
+                "expression"
+              ],
+              "type": "object"
+            },
+            "source": {
+              "additionalProperties": false,
+              "properties": {
+                "connectionRef": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "kind": {
+                      "type": "string"
+                    },
+                    "revision": {
+                      "type": "integer"
+                    },
+                    "sha256": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "id",
+                    "revision",
+                    "sha256"
+                  ],
+                  "type": "object"
+                },
+                "scope": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "containerIds": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "maxItems": 10000,
+                      "type": [
+                        "array",
+                        "null"
+                      ]
+                    },
+                    "tenantId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "tenantId",
+                    "containerIds"
+                  ],
+                  "type": "object"
+                }
+              },
+              "required": [
+                "connectionRef",
+                "scope"
+              ],
+              "type": "object"
+            },
+            "trigger": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "source",
+            "destination",
+            "mode",
+            "selector",
+            "mappingRef",
+            "conflictPolicy",
+            "deletePolicy",
+            "trigger",
+            "enabled"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "apiVersion",
+        "kind",
+        "metadata",
+        "spec"
+      ],
+      "type": "object"
+    },
+    "sourceBindingSha256": {
+      "type": "string"
+    },
+    "sourceObservationSha256": {
+      "type": "string"
+    },
+    "version": {
+      "const": "workkit-sync/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "route",
+    "sourceObservationSha256",
+    "destinationObservationSha256",
+    "mappingContextSha256",
+    "sourceBindingSha256",
+    "destinationBindingSha256",
+    "querySha256",
+    "correlations",
+    "allowCreate",
+    "maxOperations"
+  ],
+  "type": "object"
+}

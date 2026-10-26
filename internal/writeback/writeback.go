@@ -579,7 +579,10 @@ type Entry struct {
 	ProviderOrigin string `json:"providerOrigin,omitempty"`
 	LeaseUntil     string `json:"leaseUntil,omitempty"`
 }
-type Outbox struct{ db *sql.DB }
+type Outbox struct {
+	db          *sql.DB
+	workkitGate func(*sql.Tx) error
+}
 
 const (
 	writebackApplicationID = 1095715671 // ASCII "AOKW"
@@ -605,7 +608,10 @@ func checkAndAdvanceTrustedClock(tx *sql.Tx, now time.Time) error {
 	return err
 }
 
-func Open(path string) (*Outbox, error) {
+const outboxSchemaSQL = `PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL; PRAGMA busy_timeout=5000; CREATE TABLE IF NOT EXISTS outbox(operation_id TEXT PRIMARY KEY,digest TEXT NOT NULL,grant_id TEXT NOT NULL,state TEXT NOT NULL,fence INTEGER NOT NULL DEFAULT 0,owner TEXT NOT NULL DEFAULT '',lease_until TEXT NOT NULL DEFAULT '',attempts INTEGER NOT NULL DEFAULT 0,detail TEXT NOT NULL DEFAULT '',grant_expiry TEXT NOT NULL,grant_generation INTEGER NOT NULL,admitted_generation INTEGER NOT NULL DEFAULT 0,grant_nonce TEXT NOT NULL,grant_issuer TEXT NOT NULL,operation_payload BLOB NOT NULL,grant_hash TEXT NOT NULL,policy_hash TEXT NOT NULL,provider_origin TEXT NOT NULL,scope_payload BLOB NOT NULL DEFAULT X'', UNIQUE(grant_id), UNIQUE(grant_issuer,grant_nonce)); CREATE TABLE IF NOT EXISTS create_outbox(correlation_id TEXT PRIMARY KEY,intent_id TEXT NOT NULL UNIQUE,intent_digest TEXT NOT NULL,grant_id TEXT NOT NULL UNIQUE,state TEXT NOT NULL,fence INTEGER NOT NULL DEFAULT 0,owner TEXT NOT NULL DEFAULT '',lease_until TEXT NOT NULL DEFAULT '',attempts INTEGER NOT NULL DEFAULT 0,detail TEXT NOT NULL DEFAULT '',grant_expiry TEXT NOT NULL,grant_generation INTEGER NOT NULL,admitted_generation INTEGER NOT NULL DEFAULT 0,grant_nonce TEXT NOT NULL,grant_issuer TEXT NOT NULL,intent_payload BLOB NOT NULL,grant_hash TEXT NOT NULL,policy_hash TEXT NOT NULL,provider_origin TEXT NOT NULL,response_identity BLOB NOT NULL DEFAULT X'',UNIQUE(grant_issuer,grant_nonce)); CREATE TABLE IF NOT EXISTS authorization_uses(issuer TEXT NOT NULL,nonce TEXT NOT NULL,grant_id TEXT NOT NULL UNIQUE,intent_digest TEXT NOT NULL,PRIMARY KEY(issuer,nonce)); CREATE TABLE IF NOT EXISTS revocation_state(issuer TEXT PRIMARY KEY,generation INTEGER NOT NULL,issued_at TEXT NOT NULL); CREATE TABLE IF NOT EXISTS revoked(issuer TEXT NOT NULL,value TEXT NOT NULL,kind TEXT NOT NULL,PRIMARY KEY(issuer,value,kind)); CREATE TABLE IF NOT EXISTS trusted_clock(singleton INTEGER PRIMARY KEY CHECK(singleton=1),last_at TEXT NOT NULL);`
+
+func Open(path string) (*Outbox, error) { return openProfile(path, writebackApplicationID) }
+func openProfile(path string, applicationID int) (*Outbox, error) {
 	if path == "" || strings.Contains(path, "\x00") {
 		return nil, errors.New("outbox path required")
 	}
@@ -644,20 +650,21 @@ func Open(path string) (*Outbox, error) {
 		db.Close()
 		return nil, e
 	}
-	if e = validateStoreIdentity(db, true); e != nil {
+	if e = validateStoreIdentityProfile(db, true, applicationID); e != nil {
 		db.Close()
 		return nil, e
 	}
-	_, e = db.Exec(`PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL; PRAGMA busy_timeout=5000; CREATE TABLE IF NOT EXISTS outbox(operation_id TEXT PRIMARY KEY,digest TEXT NOT NULL,grant_id TEXT NOT NULL,state TEXT NOT NULL,fence INTEGER NOT NULL DEFAULT 0,owner TEXT NOT NULL DEFAULT '',lease_until TEXT NOT NULL DEFAULT '',attempts INTEGER NOT NULL DEFAULT 0,detail TEXT NOT NULL DEFAULT '',grant_expiry TEXT NOT NULL,grant_generation INTEGER NOT NULL,admitted_generation INTEGER NOT NULL DEFAULT 0,grant_nonce TEXT NOT NULL,grant_issuer TEXT NOT NULL,operation_payload BLOB NOT NULL,grant_hash TEXT NOT NULL,policy_hash TEXT NOT NULL,provider_origin TEXT NOT NULL,scope_payload BLOB NOT NULL DEFAULT X'', UNIQUE(grant_id), UNIQUE(grant_issuer,grant_nonce)); CREATE TABLE IF NOT EXISTS create_outbox(correlation_id TEXT PRIMARY KEY,intent_id TEXT NOT NULL UNIQUE,intent_digest TEXT NOT NULL,grant_id TEXT NOT NULL UNIQUE,state TEXT NOT NULL,fence INTEGER NOT NULL DEFAULT 0,owner TEXT NOT NULL DEFAULT '',lease_until TEXT NOT NULL DEFAULT '',attempts INTEGER NOT NULL DEFAULT 0,detail TEXT NOT NULL DEFAULT '',grant_expiry TEXT NOT NULL,grant_generation INTEGER NOT NULL,admitted_generation INTEGER NOT NULL DEFAULT 0,grant_nonce TEXT NOT NULL,grant_issuer TEXT NOT NULL,intent_payload BLOB NOT NULL,grant_hash TEXT NOT NULL,policy_hash TEXT NOT NULL,provider_origin TEXT NOT NULL,response_identity BLOB NOT NULL DEFAULT X'',UNIQUE(grant_issuer,grant_nonce)); CREATE TABLE IF NOT EXISTS authorization_uses(issuer TEXT NOT NULL,nonce TEXT NOT NULL,grant_id TEXT NOT NULL UNIQUE,intent_digest TEXT NOT NULL,PRIMARY KEY(issuer,nonce)); CREATE TABLE IF NOT EXISTS revocation_state(issuer TEXT PRIMARY KEY,generation INTEGER NOT NULL,issued_at TEXT NOT NULL); CREATE TABLE IF NOT EXISTS revoked(issuer TEXT NOT NULL,value TEXT NOT NULL,kind TEXT NOT NULL,PRIMARY KEY(issuer,value,kind)); CREATE TABLE IF NOT EXISTS trusted_clock(singleton INTEGER PRIMARY KEY CHECK(singleton=1),last_at TEXT NOT NULL);`)
+	_, e = db.Exec(outboxSchemaSQL)
 	if e != nil {
 		db.Close()
 		return nil, e
 	}
-	return &Outbox{db}, nil
+	return &Outbox{db: db}, nil
 }
 
 // OpenReadOnly opens an existing database without permitting creation or writes.
-func OpenReadOnly(path string) (*Outbox, error) {
+func OpenReadOnly(path string) (*Outbox, error) { return openReadProfile(path, writebackApplicationID) }
+func openReadProfile(path string, applicationID int) (*Outbox, error) {
 	abs, e := filepath.Abs(path)
 	if e != nil {
 		return nil, e
@@ -688,11 +695,11 @@ func OpenReadOnly(path string) (*Outbox, error) {
 		db.Close()
 		return nil, e
 	}
-	if e = validateStoreIdentity(db, false); e != nil {
+	if e = validateStoreIdentityProfile(db, false, applicationID); e != nil {
 		db.Close()
 		return nil, e
 	}
-	return &Outbox{db}, nil
+	return &Outbox{db: db}, nil
 }
 
 func checkPrivateSidecars(path string) error {
@@ -712,6 +719,9 @@ func checkPrivateSidecars(path string) error {
 }
 
 func validateStoreIdentity(db *sql.DB, initializeEmpty bool) error {
+	return validateStoreIdentityProfile(db, initializeEmpty, writebackApplicationID)
+}
+func validateStoreIdentityProfile(db *sql.DB, initializeEmpty bool, applicationID int) error {
 	var appID, version int
 	if err := db.QueryRow(`PRAGMA application_id`).Scan(&appID); err != nil {
 		return err
@@ -719,7 +729,7 @@ func validateStoreIdentity(db *sql.DB, initializeEmpty bool) error {
 	if err := db.QueryRow(`PRAGMA user_version`).Scan(&version); err != nil {
 		return err
 	}
-	if appID == writebackApplicationID && version == writebackSchemaVersion {
+	if appID == applicationID && version == writebackSchemaVersion {
 		return nil
 	}
 	if appID != 0 || version != 0 {
@@ -732,7 +742,7 @@ func validateStoreIdentity(db *sql.DB, initializeEmpty bool) error {
 	if !initializeEmpty || tables != 0 {
 		return errors.New("refusing nonempty untagged SQLite database")
 	}
-	if _, err := db.Exec(fmt.Sprintf(`PRAGMA application_id=%d; PRAGMA user_version=%d`, writebackApplicationID, writebackSchemaVersion)); err != nil {
+	if _, err := db.Exec(fmt.Sprintf(`PRAGMA application_id=%d; PRAGMA user_version=%d`, applicationID, writebackSchemaVersion)); err != nil {
 		return err
 	}
 	return nil
@@ -994,6 +1004,11 @@ func (o *Outbox) commitSendIntentCAS(id, owner string, fence int64, now time.Tim
 		return Entry{}, e
 	}
 	defer tx.Rollback()
+	if o.workkitGate != nil {
+		if err := o.workkitGate(tx); err != nil {
+			return Entry{}, err
+		}
+	}
 	var issuer, nonce, grantID, digest, grantHash, policyHash, origin string
 	var sourceGeneration uint64
 	var storedPayload []byte
@@ -1533,6 +1548,11 @@ func (o *Outbox) CommitCreateIntent(id, owner string, fence int64, now time.Time
 		return CreateEntry{}, e
 	}
 	defer tx.Rollback()
+	if o.workkitGate != nil {
+		if err := o.workkitGate(tx); err != nil {
+			return CreateEntry{}, err
+		}
+	}
 	x, e := getCreateTx(tx, id)
 	if e != nil {
 		return x, e

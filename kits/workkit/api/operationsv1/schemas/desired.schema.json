@@ -1,0 +1,65 @@
+{
+  "$id": "https://workkit.example/spec/operations/v1/desired.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "allowCreate": {
+      "type": "boolean"
+    },
+    "dependsOn": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "fields": {
+      "additionalProperties": {},
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "itemId": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "logicalKey": {
+      "type": "string"
+    },
+    "operation": {
+      "type": "string"
+    },
+    "parentId": {
+      "type": "string"
+    },
+    "schemaSha256": {
+      "type": "string"
+    },
+    "typeId": {
+      "type": "string"
+    },
+    "version": {
+      "const": "workkit-operations/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "logicalKey",
+    "operation",
+    "parentId",
+    "itemId",
+    "fields",
+    "dependsOn",
+    "allowCreate",
+    "typeId",
+    "schemaSha256"
+  ],
+  "type": "object"
+}

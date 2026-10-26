@@ -1,0 +1,124 @@
+{
+  "$id": "https://workkit.example/spec/operations/v1/policy.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "allowedActions": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "allowedScopes": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "apiVersion": {
+            "type": "string"
+          },
+          "basePath": {
+            "type": "string"
+          },
+          "containerId": {
+            "type": "string"
+          },
+          "deploymentSha256": {
+            "type": "string"
+          },
+          "origin": {
+            "type": "string"
+          },
+          "principal": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "tenantId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "provider",
+          "origin",
+          "basePath",
+          "tenantId",
+          "containerId",
+          "apiVersion",
+          "deploymentSha256",
+          "principal"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "expiresAt": {
+      "type": "string"
+    },
+    "issuers": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "publicKey": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "publicKey"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "kind": {
+      "type": "string"
+    },
+    "maxOperations": {
+      "type": "integer"
+    },
+    "notBefore": {
+      "type": "string"
+    },
+    "revokedIds": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "version": {
+      "const": "workkit-operations/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "notBefore",
+    "expiresAt",
+    "issuers",
+    "revokedIds",
+    "allowedScopes",
+    "maxOperations",
+    "allowedActions"
+  ],
+  "type": "object"
+}

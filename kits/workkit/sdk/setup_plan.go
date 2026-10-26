@@ -177,6 +177,9 @@ func ValidateSetupPlan(ctx context.Context, root, asOf string) (s.Report, error)
 	if e != nil {
 		return s.Report{}, e
 	}
+	return validateCapturedSetupPlan(files, asOf)
+}
+func validateCapturedSetupPlan(files map[string][]byte, asOf string) (s.Report, error) {
 	var o s.Observation
 	var old s.Report
 	if DecodeRead(files["assets/observation.json"], &o) != nil || DecodeRead(files["report.json"], &old) != nil {
@@ -188,7 +191,7 @@ func ValidateSetupPlan(ctx context.Context, root, asOf string) (s.Report, error)
 			native[strings.TrimPrefix(n, "assets/native/")] = b
 		}
 	}
-	if e = validateSetupProvenance(o, native); e != nil {
+	if e := validateSetupProvenance(o, native); e != nil {
 		return old, e
 	}
 	expected, e := EvaluateSetup(o, files["assets/desired.json"], old.AsOf)

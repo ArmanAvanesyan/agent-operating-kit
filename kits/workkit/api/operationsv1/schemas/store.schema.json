@@ -1,0 +1,34 @@
+{
+  "$id": "https://workkit.example/spec/operations/v1/store.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "namespace": {
+      "type": "string"
+    },
+    "owner": {
+      "type": "string"
+    },
+    "path": {
+      "type": "string"
+    },
+    "version": {
+      "const": "workkit-operations/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "path",
+    "id",
+    "namespace",
+    "owner"
+  ],
+  "type": "object"
+}

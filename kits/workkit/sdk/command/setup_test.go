@@ -39,8 +39,8 @@ func TestSetupCommandsParityAndStrictFlags(t *testing.T) {
 	}
 	for _, op := range []string{"apply", "reconcile"} {
 		stdout.Reset()
-		if c := Run(context.Background(), []string{"setup", op, "--json"}, &stdout, &stderr, svc); c != 3 {
-			t.Fatal("dispatch exposed", c)
+		if c := Run(context.Background(), []string{"setup", op, "--json"}, &stdout, &stderr, svc); c != 2 {
+			t.Fatal("new P5 dispatch requires exact arguments", c)
 		}
 	}
 	tmp, _ := filepath.EvalSymlinks(t.TempDir())

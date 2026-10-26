@@ -13,7 +13,7 @@ import (
 	"github.com/ArmanAvanesyan/agent-operating-kit/kits/workkit/internal/engine"
 )
 
-const Version = "0.4.0-setup-offline"
+const Version = "0.5.0-operations-offline"
 
 type Error struct {
 	Code, Message string
@@ -67,11 +67,14 @@ type WorkspaceReport struct {
 	LiveQualification    string            `json:"liveQualification"`
 }
 type Service struct {
-	legacy      LegacyReader
-	reads       ReadBackend
-	access      AccessBackend
-	setupReader SetupMetadataReader
-	setupTrust  SetupTrust
+	legacy          LegacyReader
+	reads           ReadBackend
+	access          AccessBackend
+	setupReader     SetupMetadataReader
+	setupTrust      SetupTrust
+	operations      OperationBackend
+	sync            SyncBackend
+	setupOperations SetupOperationBackend
 }
 
 func New(legacy LegacyReader) *Service { return &Service{legacy: legacy} }

@@ -40,6 +40,9 @@ func (f CredentialResolverFunc) Resolve(ctx context.Context, ref string) (Creden
 // Route is the exact immutable destination and identity tuple approved outside
 // task data. Source is retained for typed request construction by tracker.
 type Route struct {
+	// Admission rechecks protected current authority before secret resolution and final I/O.
+	// Nil retains legacy behavior; WorkKit requires a nonnil compiled callback.
+	Admission     func(context.Context) error
 	Source        tracker.Source
 	AuthReference string
 	Resolver      CredentialResolver
@@ -85,6 +88,11 @@ func (t *httpTransport) do(ctx context.Context, source tracker.Source, r tracker
 	}
 	ctx, cancel := context.WithTimeout(ctx, time.Duration(limits.RequestSeconds)*time.Second)
 	defer cancel()
+	if t.route.Admission != nil {
+		if err := t.route.Admission(ctx); err != nil {
+			return tracker.Response{}, fmt.Errorf("current provider admission denied")
+		}
+	}
 	secret, err := t.route.Resolver.Resolve(ctx, t.route.AuthReference)
 	if err != nil || secret.Token == "" || strings.ContainsAny(secret.Token+secret.Username, "\r\n") {
 		return tracker.Response{}, fmt.Errorf("provider credential unavailable")
@@ -108,6 +116,11 @@ func (t *httpTransport) do(ctx context.Context, source tracker.Source, r tracker
 		return tracker.Response{}, err
 	}
 	client := http.Client{Transport: t.route.RoundTripper, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}
+	if t.route.Admission != nil {
+		if err := t.route.Admission(ctx); err != nil {
+			return tracker.Response{}, fmt.Errorf("final provider admission denied")
+		}
+	}
 	resp, err := client.Do(hreq)
 	if err != nil {
 		return tracker.Response{}, fmt.Errorf("provider request failed")

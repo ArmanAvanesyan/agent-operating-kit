@@ -1,0 +1,11 @@
+{
+  "version": "workkit-native/v1",
+  "kind": "Assignment",
+  "steps": [
+    {
+      "key": "step-1",
+      "description": "Synthetic observation fixture only",
+      "dependsOn": []
+    }
+  ]
+}

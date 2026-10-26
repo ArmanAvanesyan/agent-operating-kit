@@ -1,0 +1,114 @@
+{
+  "$id": "https://workkit.example/spec/native/v1/handle.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "expiresAt": {
+      "type": "string"
+    },
+    "kind": {
+      "enum": [
+        "SessionHandle"
+      ]
+    },
+    "observedAt": {
+      "type": "string"
+    },
+    "schemaSha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "type": "string"
+    },
+    "scope": {
+      "additionalProperties": false,
+      "properties": {
+        "assignmentSha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "attemptId": {
+          "type": "string"
+        },
+        "deployment": {
+          "type": "string"
+        },
+        "fence": {
+          "type": "string"
+        },
+        "host": {
+          "enum": [
+            "codex",
+            "claude-code",
+            "cursor",
+            "opencode",
+            "antigravity"
+          ],
+          "type": "string"
+        },
+        "hostVersion": {
+          "type": "string"
+        },
+        "mappingSha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "native-only",
+            "managed"
+          ],
+          "type": "string"
+        },
+        "origin": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "principal": {
+          "type": "string"
+        },
+        "profileSha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "protocol": {
+          "type": "string"
+        },
+        "sessionId": {
+          "type": "string"
+        },
+        "workspace": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "host",
+        "hostVersion",
+        "protocol",
+        "deployment",
+        "origin",
+        "principal",
+        "workspace",
+        "sessionId",
+        "owner",
+        "assignmentSha256",
+        "profileSha256",
+        "mappingSha256",
+        "mode"
+      ],
+      "type": "object"
+    },
+    "version": {
+      "const": "workkit-native/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "scope",
+    "observedAt",
+    "expiresAt",
+    "schemaSha256"
+  ],
+  "type": "object"
+}

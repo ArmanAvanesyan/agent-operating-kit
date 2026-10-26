@@ -1,0 +1,51 @@
+{
+  "version": "workkit-native/v1",
+  "kind": "CapturedNativeEvidence",
+  "scope": {
+    "host": "opencode",
+    "hostVersion": "fixture-only-1",
+    "protocol": "fixture-opencode/v1",
+    "deployment": "synthetic-disposable",
+    "origin": "http://127.0.0.1:4096",
+    "principal": "fixture-only-principal",
+    "workspace": "/synthetic/workspace",
+    "sessionId": "synthetic-session",
+    "owner": "fixture-only-owner",
+    "assignmentSha256": "fbc384438e6b0bc308667a67b61b0f7bdbea27c5fe265d7c85969c3ade20da73",
+    "profileSha256": "6fbdf03cd58cac062fafbf1074c0b6ba0a966880a8abcb4193700faa4fc27f89",
+    "mappingSha256": "4e7739caaf26d2e02fb99af3c479d1215a797f5bae6b93ef5680b5c67e6741c5",
+    "mode": "native-only"
+  },
+  "observedAt": "2026-10-26T12:00:01Z",
+  "complete": true,
+  "events": [
+    {
+      "id": "synthetic-event",
+      "sequence": 0,
+      "observedAt": "2026-10-26T12:00:01Z",
+      "scope": {
+        "host": "opencode",
+        "hostVersion": "fixture-only-1",
+        "protocol": "fixture-opencode/v1",
+        "deployment": "synthetic-disposable",
+        "origin": "http://127.0.0.1:4096",
+        "principal": "fixture-only-principal",
+        "workspace": "/synthetic/workspace",
+        "sessionId": "synthetic-session",
+        "owner": "fixture-only-owner",
+        "assignmentSha256": "fbc384438e6b0bc308667a67b61b0f7bdbea27c5fe265d7c85969c3ade20da73",
+        "profileSha256": "6fbdf03cd58cac062fafbf1074c0b6ba0a966880a8abcb4193700faa4fc27f89",
+        "mappingSha256": "4e7739caaf26d2e02fb99af3c479d1215a797f5bae6b93ef5680b5c67e6741c5",
+        "mode": "native-only"
+      },
+      "type": "session.todo.snapshot",
+      "data": [
+        {
+          "content": "synthetic todo",
+          "status": "pending",
+          "priority": "high"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "$id": "https://workkit.example/spec/native/v1/enrollment.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "expiresAt": {
+      "type": "string"
+    },
+    "handleSha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "type": "string"
+    },
+    "implementationSha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "type": "string"
+    },
+    "issuedAt": {
+      "type": "string"
+    },
+    "issuer": {
+      "type": "string"
+    },
+    "kind": {
+      "enum": [
+        "NativeReadEnrollment"
+      ]
+    },
+    "policySha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "type": "string"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "secretReference": {
+      "type": "string"
+    },
+    "signature": {
+      "type": "string"
+    },
+    "version": {
+      "const": "workkit-native/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "purpose",
+    "handleSha256",
+    "policySha256",
+    "implementationSha256",
+    "issuedAt",
+    "expiresAt",
+    "secretReference",
+    "issuer",
+    "signature"
+  ],
+  "type": "object"
+}

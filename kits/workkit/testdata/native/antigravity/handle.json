@@ -1,0 +1,22 @@
+{
+  "version": "workkit-native/v1",
+  "kind": "SessionHandle",
+  "scope": {
+    "host": "antigravity",
+    "hostVersion": "fixture-only-1",
+    "protocol": "fixture-antigravity/v1",
+    "deployment": "synthetic-disposable",
+    "origin": "http://127.0.0.1:4096",
+    "principal": "fixture-only-principal",
+    "workspace": "/synthetic/workspace",
+    "sessionId": "synthetic-session",
+    "owner": "fixture-only-owner",
+    "assignmentSha256": "fbc384438e6b0bc308667a67b61b0f7bdbea27c5fe265d7c85969c3ade20da73",
+    "profileSha256": "22e71a4bf355966123bf4121f3461115c3757eb2a41aae5fe076e2858255f46d",
+    "mappingSha256": "4e7739caaf26d2e02fb99af3c479d1215a797f5bae6b93ef5680b5c67e6741c5",
+    "mode": "native-only"
+  },
+  "observedAt": "2026-10-26T12:00:00Z",
+  "expiresAt": "2026-10-26T12:05:00Z",
+  "schemaSha256": "ef2e5421b4df6c6e22aae8d59f2bb4c5ae8da4f6d63fa225ba07d01d898f9f71"
+}

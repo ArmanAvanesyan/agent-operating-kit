@@ -209,12 +209,18 @@ func PrepareOperation(ctx context.Context, root string) (PreparedOperation, erro
 			return PreparedOperation{}, errors.New("operation differs from deterministic planning inputs")
 		}
 	}
+	if e := validateNativeProgressAssets(files, d.Inputs["asOf"], api.Identity{Provider: d.Target.Provider, Origin: d.Target.Origin, BasePath: d.Target.BasePath, TenantId: d.Target.TenantID, ContainerId: d.Target.ContainerID, ItemKind: d.Target.ItemKind, NativeId: d.Target.NativeID}); e != nil {
+		return PreparedOperation{}, e
+	}
 	return PreparedOperation{d, append([]byte(nil), raw...), files}, nil
 }
 
 type PlanItemRequest struct{ Snapshot, Observation, Desired, Mapping, Binding, BindingRoot, Capability, Policy, AsOf, Out, Operation string }
 
 func PlanItemOperation(ctx context.Context, q PlanItemRequest) (o.Draft, error) {
+	return planItemOperation(ctx, q, nil)
+}
+func planItemOperation(ctx context.Context, q PlanItemRequest, extras map[string][]byte) (o.Draft, error) {
 	if e := setupOutput(q.Out, q.Snapshot, q.Observation); e != nil {
 		return o.Draft{}, e
 	}
@@ -308,6 +314,12 @@ func PlanItemOperation(ctx context.Context, q PlanItemRequest) (o.Draft, error) 
 				files["assets/binding-evidence/"+string(rune('a'+i))+"/"+n] = b
 			}
 		}
+	}
+	for name, raw := range extras {
+		if _, exists := files[name]; exists {
+			return d, errors.New("duplicate operation evidence")
+		}
+		files[name] = append([]byte(nil), raw...)
 	}
 	if e = WriteOperationDraft(ctx, d, files, q.Out); e != nil {
 		return d, e

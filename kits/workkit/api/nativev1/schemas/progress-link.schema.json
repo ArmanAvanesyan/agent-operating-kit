@@ -1,0 +1,107 @@
+{
+  "$id": "https://workkit.example/spec/native/v1/progress-link.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "bindingSha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "type": "string"
+    },
+    "kind": {
+      "enum": [
+        "NativeProgressLink"
+      ]
+    },
+    "mappingSha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "type": "string"
+    },
+    "observationSha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "type": "string"
+    },
+    "rules": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "entryIndex": {
+            "type": "integer"
+          },
+          "expectedState": {
+            "type": "string"
+          },
+          "field": {
+            "type": "string"
+          },
+          "value": {}
+        },
+        "required": [
+          "entryIndex",
+          "expectedState",
+          "field",
+          "value"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "scopeSha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "type": "string"
+    },
+    "target": {
+      "additionalProperties": false,
+      "properties": {
+        "basePath": {
+          "type": "string"
+        },
+        "containerId": {
+          "type": "string"
+        },
+        "itemKind": {
+          "type": "string"
+        },
+        "nativeId": {
+          "type": "string"
+        },
+        "origin": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "tenantId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "provider",
+        "origin",
+        "basePath",
+        "tenantId",
+        "containerId",
+        "itemKind",
+        "nativeId"
+      ],
+      "type": "object"
+    },
+    "version": {
+      "const": "workkit-native/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "observationSha256",
+    "scopeSha256",
+    "bindingSha256",
+    "mappingSha256",
+    "target",
+    "rules"
+  ],
+  "type": "object"
+}

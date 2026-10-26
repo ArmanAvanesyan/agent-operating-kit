@@ -1,0 +1,13 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "Mapping",
+  "metadata": {
+    "id": "native-fixture",
+    "revision": 1
+  },
+  "spec": {
+    "fields": [],
+    "lifecycle": [],
+    "personMapping": []
+  }
+}

@@ -33,6 +33,8 @@ jobs:
           python3 scripts/workkit/pin_implementation.py --check
           go run ./scripts/workkit/read-schemas -check
           go run ./scripts/workkit/access-schemas -check
+          go run ./scripts/workkit/setup-schemas -check
+          go run ./scripts/workkit/setup-fixtures -check
           python3 scripts/workkit/build_read_fixtures.py --check
           python3 scripts/workkit/build_access_fixtures.py --check
       - name: Build standalone offline WorkKit
@@ -42,6 +44,7 @@ jobs:
           python3 scripts/testing/verify-workkit-offline.py "$RUNNER_TEMP/aok" "$RUNNER_TEMP/workkit"
           python3 scripts/testing/verify-workkit-read-offline.py "$RUNNER_TEMP/aok" "$RUNNER_TEMP/workkit"
           python3 scripts/testing/verify-workkit-access-offline.py "$RUNNER_TEMP/aok" "$RUNNER_TEMP/workkit"
+          python3 scripts/testing/verify-workkit-setup-offline.py "$RUNNER_TEMP/aok" "$RUNNER_TEMP/workkit"
       - name: Test Go packages
         # Several conformance tests intentionally enforce short process-stop
         # deadlines. Serialize packages so runner contention cannot consume a

@@ -174,7 +174,9 @@ func (s *ReadSession) capture(ctx context.Context, mode string, previous *ReadBu
 	return m, nil
 }
 func (s *Service) WithReadBackend(b ReadBackend) *Service {
-	return &Service{legacy: s.legacy, reads: b, access: s.access}
+	copy := *s
+	copy.reads = b
+	return &copy
 }
 func (s *Service) CaptureRead(ctx context.Context, configuration, policy, enrollment, mode, previous, out string) (r.Manifest, error) {
 	if s.reads == nil {

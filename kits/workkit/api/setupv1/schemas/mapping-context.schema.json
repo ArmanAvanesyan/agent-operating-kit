@@ -1,0 +1,49 @@
+{
+  "$id": "https://workkit.example/spec/setup/v1/mapping-context.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "destinationContainerId": {
+      "type": "string"
+    },
+    "destinationSha256": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "mappingSha256": {
+      "type": "string"
+    },
+    "requiredFields": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "sourceContainerId": {
+      "type": "string"
+    },
+    "sourceSha256": {
+      "type": "string"
+    },
+    "version": {
+      "const": "workkit-setup/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "mappingSha256",
+    "sourceSha256",
+    "destinationSha256",
+    "requiredFields",
+    "sourceContainerId",
+    "destinationContainerId"
+  ],
+  "type": "object"
+}

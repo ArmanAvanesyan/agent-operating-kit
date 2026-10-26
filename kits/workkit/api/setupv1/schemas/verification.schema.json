@@ -1,0 +1,125 @@
+{
+  "$id": "https://workkit.example/spec/setup/v1/verification.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "candidateSha256": {
+      "type": "string"
+    },
+    "configurationRoot": {
+      "type": "string"
+    },
+    "expiresAt": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "implementationSha256": {
+      "type": "string"
+    },
+    "inputs": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "issuedAt": {
+      "type": "string"
+    },
+    "issuer": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "operationalMetadata": {
+      "type": "boolean"
+    },
+    "outputPath": {
+      "type": "string"
+    },
+    "policySha256": {
+      "type": "string"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "scope": {
+      "additionalProperties": false,
+      "properties": {
+        "apiVersion": {
+          "type": "string"
+        },
+        "basePath": {
+          "type": "string"
+        },
+        "containerId": {
+          "type": "string"
+        },
+        "deploymentSha256": {
+          "type": "string"
+        },
+        "origin": {
+          "type": "string"
+        },
+        "principal": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "tenantId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "provider",
+        "origin",
+        "basePath",
+        "tenantId",
+        "containerId",
+        "apiVersion",
+        "deploymentSha256",
+        "principal"
+      ],
+      "type": "object"
+    },
+    "signature": {
+      "type": "string"
+    },
+    "version": {
+      "const": "workkit-setup/v1"
+    },
+    "workspacePath": {
+      "type": "string"
+    },
+    "workspaceSha256": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "purpose",
+    "id",
+    "issuer",
+    "scope",
+    "inputs",
+    "implementationSha256",
+    "policySha256",
+    "outputPath",
+    "workspaceSha256",
+    "issuedAt",
+    "expiresAt",
+    "operationalMetadata",
+    "signature",
+    "candidateSha256",
+    "workspacePath",
+    "configurationRoot"
+  ],
+  "type": "object"
+}

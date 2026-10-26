@@ -1,0 +1,28 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "DesiredSetup",
+  "metadata": {
+    "id": "desired-jira-datacenter",
+    "revision": 1
+  },
+  "spec": {
+    "connectionRef": {
+      "kind": "ConnectionProfile",
+      "id": "jira-datacenter",
+      "revision": 1,
+      "sha256": "c6f976c13f9adecfbad67b8cf00f7f33d1745a48aed8647f0b210b841dc49e9b"
+    },
+    "containerId": "container-synthetic",
+    "fields": [
+      {
+        "logicalId": "title",
+        "nativeId": "field-title",
+        "name": "Title",
+        "type": "text",
+        "options": []
+      }
+    ],
+    "views": [],
+    "allowDestructive": false
+  }
+}

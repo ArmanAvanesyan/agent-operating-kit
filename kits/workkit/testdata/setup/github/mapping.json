@@ -1,0 +1,22 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "Mapping",
+  "metadata": {
+    "id": "mapping-github",
+    "revision": 1
+  },
+  "spec": {
+    "fields": [
+      {
+        "canonical": "title",
+        "sourceFieldId": "field-title",
+        "targetFieldId": "field-title",
+        "owner": "source",
+        "valueMap": {},
+        "lossPolicy": "reject"
+      }
+    ],
+    "lifecycle": [],
+    "personMapping": []
+  }
+}

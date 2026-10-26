@@ -1,0 +1,12 @@
+{
+  "version": "workkit-setup/v1",
+  "kind": "MappingContext",
+  "mappingSha256": "abb99813d18a447bb4a6e8e83ee23801556f8d87e56122de36eb23c5644ada4d",
+  "sourceSha256": "21c94a0e8eaef7b5203f6e5d81d65b3536bcd5097a1af8b7340346cc70810898",
+  "destinationSha256": "21c94a0e8eaef7b5203f6e5d81d65b3536bcd5097a1af8b7340346cc70810898",
+  "requiredFields": [
+    "title"
+  ],
+  "sourceContainerId": "",
+  "destinationContainerId": ""
+}

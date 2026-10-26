@@ -1,0 +1,351 @@
+{
+  "$id": "https://workkit.example/spec/setup/v1/binding-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "binding": {
+      "additionalProperties": false,
+      "properties": {
+        "apiVersion": {
+          "type": "string"
+        },
+        "extensions": {
+          "additionalProperties": {},
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "kind": {
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "revision": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "id",
+            "revision"
+          ],
+          "type": "object"
+        },
+        "spec": {
+          "additionalProperties": false,
+          "properties": {
+            "checks": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "status"
+                ],
+                "type": "object"
+              },
+              "maxItems": 10000,
+              "type": [
+                "array",
+                "null"
+              ]
+            },
+            "connectionRef": {
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "revision": {
+                  "type": "integer"
+                },
+                "sha256": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind",
+                "id",
+                "revision",
+                "sha256"
+              ],
+              "type": "object"
+            },
+            "evidence": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "sha256": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "path",
+                  "sha256"
+                ],
+                "type": "object"
+              },
+              "maxItems": 10000,
+              "type": [
+                "array",
+                "null"
+              ]
+            },
+            "mappingRef": {
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "revision": {
+                  "type": "integer"
+                },
+                "sha256": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind",
+                "id",
+                "revision",
+                "sha256"
+              ],
+              "type": "object"
+            },
+            "scope": {
+              "additionalProperties": false,
+              "properties": {
+                "containerIds": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "maxItems": 10000,
+                  "type": [
+                    "array",
+                    "null"
+                  ]
+                },
+                "tenantId": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "tenantId",
+                "containerIds"
+              ],
+              "type": "object"
+            },
+            "status": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "connectionRef",
+            "mappingRef",
+            "scope",
+            "status",
+            "checks",
+            "evidence"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "apiVersion",
+        "kind",
+        "metadata",
+        "spec"
+      ],
+      "type": "object"
+    },
+    "candidateSha256": {
+      "type": "string"
+    },
+    "previousWorkspaceSha256": {
+      "type": "string"
+    },
+    "report": {
+      "additionalProperties": false,
+      "properties": {
+        "asOf": {
+          "type": "string"
+        },
+        "authorizationGranted": {
+          "const": false
+        },
+        "changes": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "logicalId": {
+                "type": "string"
+              },
+              "operation": {
+                "type": "string"
+              },
+              "parentId": {
+                "type": "string"
+              },
+              "value": {}
+            },
+            "required": [
+              "id",
+              "operation",
+              "parentId",
+              "logicalId",
+              "value"
+            ],
+            "type": "object"
+          },
+          "maxItems": 10000,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "checks": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "status"
+            ],
+            "type": "object"
+          },
+          "maxItems": 10000,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "diagnostics": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "field": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "severity": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "field",
+              "message",
+              "severity"
+            ],
+            "type": "object"
+          },
+          "maxItems": 10000,
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "executionReady": {
+          "const": false
+        },
+        "inputs": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "kind": {
+          "type": "string"
+        },
+        "liveQualification": {
+          "type": "string"
+        },
+        "migrationActivated": {
+          "const": false
+        },
+        "productionActivated": {
+          "const": false
+        },
+        "status": {
+          "type": "string"
+        },
+        "version": {
+          "const": "workkit-setup/v1"
+        }
+      },
+      "required": [
+        "version",
+        "kind",
+        "status",
+        "asOf",
+        "inputs",
+        "checks",
+        "changes",
+        "diagnostics",
+        "authorizationGranted",
+        "executionReady",
+        "migrationActivated",
+        "productionActivated",
+        "liveQualification"
+      ],
+      "type": "object"
+    },
+    "selected": {
+      "type": "boolean"
+    },
+    "verificationSha256": {
+      "type": "string"
+    },
+    "workspaceSha256": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "report",
+    "binding",
+    "selected",
+    "previousWorkspaceSha256",
+    "workspaceSha256",
+    "verificationSha256",
+    "candidateSha256"
+  ],
+  "type": "object"
+}

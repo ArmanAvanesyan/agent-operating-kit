@@ -1,0 +1,42 @@
+{
+  "complete": true,
+  "entities": [
+    {
+      "id": "container-synthetic",
+      "name": "Synthetic container",
+      "nativeType": "",
+      "options": [],
+      "parentId": "tenant-synthetic"
+    },
+    {
+      "id": "field-title",
+      "name": "Title",
+      "nativeType": "text",
+      "options": [],
+      "parentId": "container-synthetic"
+    },
+    {
+      "id": "field-priority",
+      "name": "Priority",
+      "nativeType": "single_select",
+      "options": [
+        {
+          "id": "opt-low",
+          "name": "Low"
+        },
+        {
+          "id": "opt-high",
+          "name": "High"
+        }
+      ],
+      "parentId": "container-synthetic"
+    },
+    {
+      "id": "process-synthetic",
+      "name": "Synthetic process",
+      "nativeType": "inherited",
+      "options": [],
+      "parentId": "container-synthetic"
+    }
+  ]
+}

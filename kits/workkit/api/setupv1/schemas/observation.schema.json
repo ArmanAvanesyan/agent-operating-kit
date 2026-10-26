@@ -1,0 +1,377 @@
+{
+  "$id": "https://workkit.example/spec/setup/v1/observation.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "adapterVersion": {
+      "type": "string"
+    },
+    "assets": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "sha256"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "captureSha256": {
+      "type": "string"
+    },
+    "configurationSha256": {
+      "type": "string"
+    },
+    "connectionRef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "integer"
+        },
+        "sha256": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "revision",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "coverage": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "complete": {
+            "type": "boolean"
+          },
+          "completePointer": {
+            "type": "string"
+          },
+          "evidence": {
+            "additionalProperties": false,
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "sha256": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "path",
+              "sha256"
+            ],
+            "type": "object"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "category",
+          "status",
+          "complete",
+          "reason",
+          "evidence",
+          "completePointer"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "diagnostics": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "field": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "field",
+          "message",
+          "severity"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "entities": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "fromStateId": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "nativeType": {
+            "type": "string"
+          },
+          "options": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "name"
+              ],
+              "type": "object"
+            },
+            "maxItems": 10000,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "parentId": {
+            "type": "string"
+          },
+          "provenance": {
+            "additionalProperties": false,
+            "properties": {
+              "asset": {
+                "additionalProperties": false,
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "sha256": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "path",
+                  "sha256"
+                ],
+                "type": "object"
+              },
+              "fields": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": [
+                  "object",
+                  "null"
+                ]
+              },
+              "pointer": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "asset",
+              "pointer",
+              "fields"
+            ],
+            "type": "object"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "requiredFields": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10000,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "toStateId": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "id",
+          "parentId",
+          "name",
+          "type",
+          "nativeType",
+          "options",
+          "required",
+          "fromStateId",
+          "toStateId",
+          "requiredFields",
+          "provenance"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "kind": {
+      "type": "string"
+    },
+    "observedAt": {
+      "type": "string"
+    },
+    "qualificationOnly": {
+      "type": "boolean"
+    },
+    "revision": {
+      "type": "string"
+    },
+    "revisionKind": {
+      "type": "string"
+    },
+    "scope": {
+      "additionalProperties": false,
+      "properties": {
+        "apiVersion": {
+          "type": "string"
+        },
+        "basePath": {
+          "type": "string"
+        },
+        "containerId": {
+          "type": "string"
+        },
+        "deploymentSha256": {
+          "type": "string"
+        },
+        "origin": {
+          "type": "string"
+        },
+        "principal": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "tenantId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "provider",
+        "origin",
+        "basePath",
+        "tenantId",
+        "containerId",
+        "apiVersion",
+        "deploymentSha256",
+        "principal"
+      ],
+      "type": "object"
+    },
+    "transport": {
+      "additionalProperties": false,
+      "properties": {
+        "authMode": {
+          "type": "string"
+        },
+        "executableSha256": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "principal": {
+          "type": "string"
+        },
+        "version": {
+          "const": "workkit-setup/v1"
+        }
+      },
+      "required": [
+        "kind",
+        "version",
+        "executableSha256",
+        "principal",
+        "authMode"
+      ],
+      "type": "object"
+    },
+    "version": {
+      "const": "workkit-setup/v1"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "connectionRef",
+    "configurationSha256",
+    "captureSha256",
+    "scope",
+    "observedAt",
+    "adapterVersion",
+    "transport",
+    "revision",
+    "revisionKind",
+    "qualificationOnly",
+    "coverage",
+    "entities",
+    "assets",
+    "diagnostics"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,28 @@
+{
+  "apiVersion": "workkit/v1alpha1",
+  "kind": "DesiredSetup",
+  "metadata": {
+    "id": "desired-github",
+    "revision": 1
+  },
+  "spec": {
+    "connectionRef": {
+      "kind": "ConnectionProfile",
+      "id": "github",
+      "revision": 1,
+      "sha256": "1a65d8091c4b3f0bef7bc48b63ea4899b7e0f702f1817639ee1862490f23a9cb"
+    },
+    "containerId": "container-synthetic",
+    "fields": [
+      {
+        "logicalId": "title",
+        "nativeId": "field-title",
+        "name": "Title",
+        "type": "text",
+        "options": []
+      }
+    ],
+    "views": [],
+    "allowDestructive": false
+  }
+}

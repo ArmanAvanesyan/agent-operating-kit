@@ -1,0 +1,1 @@
+{"apiVersion":"workkit/v1alpha1","kind":"ConnectionProfile","metadata":{"id":"github","revision":1},"spec":{"provider":"github","origin":"https://api.github.com","basePath":"","transport":"gh","authRef":"credentials/github","scope":{"tenantId":"tenant-synthetic","containerIds":["container-synthetic"]},"apiVersion":"synthetic-api"}}
